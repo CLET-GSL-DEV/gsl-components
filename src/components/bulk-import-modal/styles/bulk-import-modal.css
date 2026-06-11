@@ -123,19 +123,42 @@
 .gsl-bulk-import__stepper-item--active .gsl-bulk-import__stepper-marker {
   border-color: var(--gsl-bulk-import-success);
   color: var(--gsl-bulk-import-success);
+  transition:
+    border-color 300ms ease,
+    color 300ms ease,
+    background 300ms ease;
+}
+
+.gsl-bulk-import__stepper-number {
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.gsl-bulk-import__stepper-number--hidden {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.6);
 }
 
 .gsl-bulk-import__stepper-item--complete .gsl-bulk-import__stepper-marker {
   border-color: var(--gsl-bulk-import-success);
   background: var(--gsl-bulk-import-success);
   color: #fff;
-  animation: gsl-bulk-import-check-pop 250ms ease;
+  animation: gsl-bulk-import-check-pop 300ms ease;
+}
+
+.gsl-bulk-import__stepper-check {
+  position: absolute;
+  inset: 0;
+  margin: auto;
 }
 
 .gsl-bulk-import__stepper-check path {
   stroke-dasharray: 16;
   stroke-dashoffset: 16;
-  animation: gsl-bulk-import-check-draw 200ms ease forwards;
+  animation: gsl-bulk-import-check-draw 350ms ease 150ms forwards;
 }
 
 .gsl-bulk-import__stepper-label {
@@ -145,17 +168,33 @@
 }
 
 .gsl-bulk-import__stepper-connector {
+  position: relative;
   flex: 1;
   min-width: 24px;
   height: 2px;
   margin-right: 10px;
-  background: var(--gsl-border);
-  border-radius: 1px;
-  transition: background 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.gsl-bulk-import__stepper-connector--complete {
+.gsl-bulk-import__stepper-connector-track,
+.gsl-bulk-import__stepper-connector-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 1px;
+}
+
+.gsl-bulk-import__stepper-connector-track {
+  background: var(--gsl-border);
+}
+
+.gsl-bulk-import__stepper-connector-fill {
   background: var(--gsl-bulk-import-success);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 450ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gsl-bulk-import__stepper-connector-fill--visible {
+  transform: scaleX(1);
 }
 
 .gsl-bulk-import__stepper-item--active .gsl-bulk-import__stepper-label,
@@ -181,8 +220,18 @@
 
 @media (prefers-reduced-motion: reduce) {
   .gsl-bulk-import__stepper-marker,
-  .gsl-bulk-import__stepper-connector {
+  .gsl-bulk-import__stepper-number,
+  .gsl-bulk-import__stepper-connector-fill {
     transition: none;
+  }
+
+  .gsl-bulk-import__stepper-number--hidden {
+    opacity: 0;
+    transform: none;
+  }
+
+  .gsl-bulk-import__stepper-connector-fill--visible {
+    transform: scaleX(1);
   }
 
   .gsl-bulk-import__stepper-item--complete .gsl-bulk-import__stepper-marker {

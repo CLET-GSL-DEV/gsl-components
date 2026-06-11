@@ -157,21 +157,41 @@ export function BulkImportModal({
                     aria-current={isActive ? "step" : undefined}
                   >
                     <span className="gsl-bulk-import__stepper-marker">
-                      {isComplete ? <CheckmarkIcon /> : step.id}
+                      <span
+                        className={[
+                          "gsl-bulk-import__stepper-number",
+                          isComplete ? "gsl-bulk-import__stepper-number--hidden" : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                        aria-hidden={isComplete}
+                      >
+                        {step.id}
+                      </span>
+                      {isComplete && <CheckmarkIcon />}
                     </span>
                     <span className="gsl-bulk-import__stepper-label">{step.label}</span>
                     {!isLast && (
                       <span
-                        className={[
-                          "gsl-bulk-import__stepper-connector",
-                          isComplete
-                            ? "gsl-bulk-import__stepper-connector--complete"
-                            : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ")}
+                        className="gsl-bulk-import__stepper-connector"
                         aria-hidden="true"
-                      />
+                      >
+                        <span
+                          className="gsl-bulk-import__stepper-connector-track"
+                          aria-hidden="true"
+                        />
+                        <span
+                          className={[
+                            "gsl-bulk-import__stepper-connector-fill",
+                            isComplete
+                              ? "gsl-bulk-import__stepper-connector-fill--visible"
+                              : "",
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
+                          aria-hidden="true"
+                        />
+                      </span>
                     )}
                   </li>
                 );
