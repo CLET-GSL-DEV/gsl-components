@@ -58,6 +58,33 @@ body {
   margin: 0 0 24px;
 }
 
+.demo-dropdowns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.demo-dropdown {
+  width: 220px;
+}
+
+.demo-combobox {
+  width: 280px;
+}
+
+.demo-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  font-size: 14px;
+  color: var(--gsl-text);
+}
+
 .demo-button {
   padding: 10px 18px;
   border: 1px solid var(--gsl-border);

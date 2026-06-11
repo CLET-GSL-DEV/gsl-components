@@ -1,11 +1,12 @@
 {
   "name": "@rfdtech/components",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Shared React component library for Ghana School of Law (GSL) projects",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": ["**/*.css", "./dist/index.css"],
   "exports": {
     ".": {
       "import": {
@@ -16,6 +17,16 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.cjs"
       }
+    },
+    "./style.css": {
+      "import": "./dist/index.css",
+      "require": "./dist/index.css",
+      "default": "./dist/index.css"
+    },
+    "./dist/index.css": {
+      "import": "./dist/index.css",
+      "require": "./dist/index.css",
+      "default": "./dist/index.css"
     }
   },
   "files": [

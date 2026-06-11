@@ -1,6 +1,16 @@
 import { useState } from "react";
-import { AppSwitcher, BulkImportModal } from "@rfdtech/components";
-import type { BulkImportField, BulkImportResult } from "@rfdtech/components";
+import {
+  AppSwitcher,
+  BulkImportModal,
+  Combobox,
+  Dropdown,
+  DropdownMenu,
+} from "@rfdtech/components";
+import type {
+  BulkImportField,
+  BulkImportResult,
+  DropdownOption,
+} from "@rfdtech/components";
 
 const baseUrl =  "";
 const accessToken ="demo-token";
@@ -49,9 +59,36 @@ const importFields: BulkImportField[] = [
   },
 ];
 
+const departmentOptions = [
+  { value: "finance", label: "Finance" },
+  { value: "hr", label: "Human Resources" },
+  { value: "legal", label: "Legal" },
+];
+
+const allUsers: DropdownOption[] = [
+  { value: "u1", label: "Ada Lovelace" },
+  { value: "u2", label: "Grace Hopper" },
+  { value: "u3", label: "Katherine Johnson" },
+  { value: "u4", label: "Alan Turing" },
+];
+
+const loadUsers = (query: string): Promise<DropdownOption[]> =>
+  new Promise((resolve) => {
+    window.setTimeout(() => {
+      const normalizedQuery = query.toLowerCase();
+      resolve(
+        allUsers.filter((user) =>
+          user.label.toLowerCase().includes(normalizedQuery),
+        ),
+      );
+    }, 400);
+  });
+
 export function App() {
   const [importOpen, setImportOpen] = useState(false);
   const [lastImport, setLastImport] = useState<BulkImportResult | null>(null);
+  const [department, setDepartment] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   return (
     <div className="demo-page">
@@ -78,8 +115,47 @@ export function App() {
         <p className="demo-text">
           Shared React components for Ghana School of Law projects. Click the
           9-dot grid icon in the top-right corner to open the AppSwitcher
-          system directory, or try the bulk import modal below.
+          system directory, or try the dropdowns and bulk import modal below.
         </p>
+
+        <div className="demo-dropdowns">
+          <Combobox
+            ariaLabel="User"
+            value={userId}
+            onChange={setUserId}
+            loadOptions={loadUsers}
+            placeholder="Search users..."
+            clearable
+            className="demo-combobox"
+            getOptionLabel={(id) => allUsers.find((user) => user.value === id)?.label}
+          />
+          <Dropdown
+            ariaLabel="Department"
+            value={department}
+            onChange={setDepartment}
+            placeholder="Choose department..."
+            clearable
+            options={departmentOptions}
+            className="demo-dropdown"
+          />
+          <DropdownMenu
+            ariaLabel="Demo actions"
+            trigger={<span className="demo-menu-trigger">Actions</span>}
+            items={[
+              {
+                id: "log",
+                label: "Log selection",
+                onSelect: () =>
+                  console.log("Department:", department ?? "(none)"),
+              },
+              {
+                id: "docs",
+                label: "Documentation",
+                href: "https://github.com",
+              },
+            ]}
+          />
+        </div>
 
         <button
           type="button"

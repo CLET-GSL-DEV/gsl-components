@@ -769,90 +769,9 @@
     background-color 200ms ease;
 }
 
-.gsl-bulk-import__field-select {
+.gsl-bulk-import__target-column-control .gsl-dropdown {
   flex: 1;
   min-width: 0;
-  width: 100%;
-}
-
-.gsl-bulk-import__field-select-trigger {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 40px;
-  padding: 0 32px 0 12px;
-  border: 1px solid var(--gsl-border);
-  border-radius: 8px;
-  background-color: var(--gsl-bg);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%235f6368' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--gsl-text);
-  text-align: left;
-  cursor: pointer;
-  transition:
-    border-color 150ms ease,
-    background-color 150ms ease,
-    box-shadow 150ms ease;
-}
-
-.gsl-bulk-import__field-select-trigger:hover {
-  border-color: var(--gsl-border-strong);
-  background-color: var(--gsl-hover);
-}
-
-.gsl-bulk-import__field-select-trigger--open {
-  border-color: var(--gsl-bulk-import-primary);
-  box-shadow: 0 0 0 1px var(--gsl-bulk-import-primary);
-}
-
-.gsl-bulk-import__field-select-trigger-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: inherit;
-}
-
-.gsl-bulk-import__field-select-trigger--placeholder {
-  color: var(--gsl-text-secondary);
-}
-
-.gsl-bulk-import__field-select-menu {
-  position: fixed;
-  margin: 0;
-  padding: 4px 0;
-  list-style: none;
-  border: 1px solid var(--gsl-border);
-  border-radius: 8px;
-  background: var(--gsl-bg);
-  box-shadow: var(--gsl-shadow-md);
-  overflow-y: auto;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.gsl-bulk-import__field-select-option {
-  padding: 10px 12px;
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--gsl-text);
-  cursor: pointer;
-  transition: background-color 120ms ease;
-}
-
-.gsl-bulk-import__field-select-option:hover {
-  background: var(--gsl-hover);
-}
-
-.gsl-bulk-import__field-select-option--selected {
-  background: var(--gsl-primary-light);
-  font-weight: 500;
 }
 
 .gsl-bulk-import__validate-toolbar {
@@ -1161,7 +1080,6 @@
 .gsl-bulk-import__button:focus-visible,
 .gsl-bulk-import__close:focus-visible,
 .gsl-bulk-import__exclude-column:focus-visible,
-.gsl-bulk-import__field-select-trigger:focus-visible,
 .gsl-bulk-import__radio:focus-visible {
   outline: 2px solid var(--gsl-bulk-import-primary);
   outline-offset: 2px;

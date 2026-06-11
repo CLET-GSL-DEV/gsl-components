@@ -2,7 +2,17 @@
 
 Shared React component library for Ghana School of Law (GSL) projects.
 
-Requires React 18+ and a bundler. Styles are included automatically when you import from `@rfdtech/components` — no separate CSS import is needed.
+Requires React 18+ and a bundler that processes CSS (Vite, Webpack, etc.).
+
+## Styles
+
+Component styles load automatically when you import from `@rfdtech/components` (the JS bundle includes `import './index.css'`). For reliable styling in production, add this once in your app entry (`main.tsx` or `App.tsx`):
+
+```ts
+import "@rfdtech/components/style.css";
+```
+
+After upgrading the package, clear Vite's dependency cache if styles look stale: `rm -rf node_modules/.vite`.
 
 ## Shared theming
 
@@ -226,6 +236,137 @@ Override shared tokens on `.gsl-app-switcher` (see [Shared theming](#shared-them
 ### CORS
 
 When fetching from a remote `baseUrl` in the browser, the API must allow the host application's origin. Configure CORS on your backend or proxy `/v1` through your dev server during local development.
+
+## Dropdown
+
+Single-value select with a combobox trigger and portaled listbox. Use for forms and filters where the user picks one option from a list.
+
+### Usage
+
+```tsx
+import { Dropdown } from "@rfdtech/components";
+
+function DepartmentFilter() {
+  const [department, setDepartment] = useState<string | null>(null);
+
+  return (
+    <Dropdown
+      ariaLabel="Department"
+      value={department}
+      onChange={setDepartment}
+      placeholder="Choose department..."
+      clearable
+      options={[
+        { value: "finance", label: "Finance" },
+        { value: "hr", label: "Human Resources" },
+      ]}
+    />
+  );
+}
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | required | Accessible label for the combobox |
+| `value` | `string \| null` | required | Selected option value |
+| `onChange` | `(value: string \| null) => void` | required | Called when selection changes |
+| `options` | `DropdownOption[]` | required | `{ value, label, disabled? }` items |
+| `placeholder` | `string` | `"Select..."` | Text shown when no value is selected |
+| `clearable` | `boolean` | `false` | Show placeholder as a clear option |
+| `disabled` | `boolean` | `false` | Disable the trigger |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |
+
+## Combobox
+
+Text-input combobox with debounced async search. Use when options are loaded from an API based on what the user types.
+
+### Usage
+
+```tsx
+import { Combobox } from "@rfdtech/components";
+import type { DropdownOption } from "@rfdtech/components";
+
+const loadUsers = (query: string): Promise<DropdownOption[]> =>
+  fetch(`/api/users?q=${encodeURIComponent(query)}`).then((r) => r.json());
+
+function UserPicker() {
+  const [userId, setUserId] = useState<string | null>(null);
+
+  return (
+    <Combobox
+      ariaLabel="User"
+      value={userId}
+      onChange={setUserId}
+      loadOptions={loadUsers}
+      placeholder="Search users..."
+      clearable
+      getOptionLabel={(id) => cachedUsers.get(id)}
+    />
+  );
+}
+```
+
+The component caches the selected option label internally. Pass `getOptionLabel` when the value may be set before options are loaded (e.g. editing an existing record).
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | required | Accessible label for the combobox input |
+| `value` | `string \| null` | required | Selected option value |
+| `onChange` | `(value: string \| null) => void` | required | Called when selection changes |
+| `loadOptions` | `(query: string) => Promise<DropdownOption[]>` | required | Async search function |
+| `placeholder` | `string` | `"Search..."` | Input placeholder |
+| `debounceMs` | `number` | `300` | Debounce delay before calling `loadOptions` |
+| `minSearchLength` | `number` | `0` | Minimum query length before searching |
+| `getOptionLabel` | `(value: string) => string \| undefined` | — | Resolve label for a value not in current results |
+| `noResultsText` | `string` | `"No results"` | Text when search returns no options |
+| `loadingText` | `string` | `"Loading..."` | Accessible label for the loading spinner |
+| `clearable` | `boolean` | `false` | Show a clear button when a value is selected |
+| `disabled` | `boolean` | `false` | Disable the input |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |
+
+## DropdownMenu
+
+Action menu triggered by a custom button. Use for row actions, overflow menus, and navigation shortcuts.
+
+### Usage
+
+```tsx
+import { DropdownMenu } from "@rfdtech/components";
+
+<DropdownMenu
+  ariaLabel="Row actions"
+  trigger={<span>⋮</span>}
+  items={[
+    { id: "edit", label: "Edit", onSelect: () => console.log("edit") },
+    { id: "docs", label: "Docs", href: "https://example.com/docs" },
+    { id: "delete", label: "Delete", onSelect: () => {}, destructive: true },
+  ]}
+/>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `trigger` | `ReactNode \| (state) => ReactNode` | required | Button content or render prop |
+| `items` | `DropdownMenuItem[]` | required | Menu entries |
+| `ariaLabel` | `string` | required | Accessible label for trigger and menu |
+| `placement` | `"bottom-start" \| "bottom-end" \| "bottom"` | `"bottom-end"` | Panel position |
+| `closeOnSelect` | `boolean` | `true` | Close after an item is chosen |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |
 
 ## BulkImportModal
 
