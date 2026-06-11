@@ -4,6 +4,7 @@ import { useMeApps } from "./hooks/useMeApps";
 import type { AppItem, AppSwitcherProps } from "../../types/app-switcher";
 import { AppSwitcherItem } from "./AppSwitcherItem";
 import { GridIcon } from "./GridIcon";
+import "../../styles/theme.css";
 import "./styles/app-switcher.css";
 
 export function AppSwitcher({

@@ -12,7 +12,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@gsl/components": resolve(__dirname, "src/index.ts"),
+      "@rfdtech/components": resolve(__dirname, "src/index.ts"),
     },
   },
 });

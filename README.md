@@ -2,12 +2,40 @@
 
 Shared React component library for Ghana School of Law (GSL) projects.
 
-Requires React 18+ and a bundler. Styles are included automatically when you import from `@gsl/components` — no separate CSS import is needed.
+Requires React 18+ and a bundler. Styles are included automatically when you import from `@rfdtech/components` — no separate CSS import is needed.
+
+## Shared theming
+
+All components share design tokens defined in [`src/styles/theme.css`](src/styles/theme.css). Tokens are applied on `:root` when a component is imported.
+
+| Token | Default | Use |
+|-------|---------|-----|
+| `--gsl-primary` | `#dc2626` | Buttons, focus rings, accents |
+| `--gsl-primary-light` | `#fef2f2` | Selected rows, hover fills |
+| `--gsl-bg` | `#ffffff` | Surfaces |
+| `--gsl-text` | `#3c4043` | Body text |
+| `--gsl-text-secondary` | `#5f6368` | Labels, muted UI |
+| `--gsl-border` | `#dadce0` | Borders |
+| `--gsl-hover` | `#f1f3f4` | Row/cell hover |
+| `--gsl-error` / `--gsl-error-bg` | `#dc2626` / `#fef2f2` | Errors |
+| `--gsl-success` | `#16a34a` | Success states |
+| `--gsl-warning` | `#eab308` | Warnings |
+
+Override on a component root or any ancestor:
+
+```css
+.my-app {
+  --gsl-primary: #1d4ed8;
+  --gsl-primary-light: #eff6ff;
+}
+```
+
+`BulkImportModal` also accepts legacy aliases (`--gsl-bulk-import-primary`, etc.) that map to the shared tokens.
 
 ## Install
 
 ```bash
-npm install @gsl/components react react-dom
+npm install @rfdtech/components react react-dom
 ```
 
 ## AppSwitcher
@@ -19,7 +47,7 @@ Google Apps–style 9-dot launcher for switching between GSL systems. Drop it in
 **Remote fetch** — loads systems from `GET {baseUrl}/v1/me/apps` with a bearer token:
 
 ```tsx
-import { AppSwitcher } from "@gsl/components";
+import { AppSwitcher } from "@rfdtech/components";
 
 function Header({ baseUrl, accessToken }: { baseUrl: string; accessToken: string }) {
   return (
@@ -94,7 +122,7 @@ const apps = [
 
 ### Types
 
-All types are exported from `@gsl/components`.
+All types are exported from `@rfdtech/components`.
 
 ```ts
 interface AppItem {
@@ -132,7 +160,7 @@ Also exported: `AppSwitcherProps`, `UseMeAppsOptions`, `UseMeAppsReturn`, `UseAp
 **`useMeApps`** — fetch and map systems from `/v1/me/apps`:
 
 ```tsx
-import { useMeApps } from "@gsl/components";
+import { useMeApps } from "@rfdtech/components";
 
 const { apps, loading, error, refetch } = useMeApps({
   baseUrl: "https://api.example.com",
@@ -143,7 +171,7 @@ const { apps, loading, error, refetch } = useMeApps({
 **`useAppSwitcher`** — headless open/close state for custom UI:
 
 ```tsx
-import { useAppSwitcher } from "@gsl/components";
+import { useAppSwitcher } from "@rfdtech/components";
 
 const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
 ```
@@ -158,7 +186,7 @@ import {
   mapMeAppToAppItem,
   mapMeAppsToAppItems,
   MeAppsFetchError,
-} from "@gsl/components";
+} from "@rfdtech/components";
 
 const url = buildMeAppsUrl("https://api.example.com");
 const init = createMeAppsRequestInit("<token>");
@@ -185,14 +213,12 @@ Also exported for custom layouts:
 
 ### Theming
 
-Override CSS custom properties on `.gsl-app-switcher`:
+Override shared tokens on `.gsl-app-switcher` (see [Shared theming](#shared-theming)). `--gsl-focus` aliases to `--gsl-primary`.
 
 ```css
 .my-switcher {
-  --gsl-bg: #ffffff;
-  --gsl-text: #3c4043;
+  --gsl-primary: #dc2626;
   --gsl-hover: #f1f3f4;
-  --gsl-focus: #dc2626;
   --gsl-columns: 4;
 }
 ```
@@ -208,7 +234,7 @@ Four-step modal wizard for importing spreadsheet data (.xlsx, .xls, .csv). Parsi
 ### Usage
 
 ```tsx
-import { BulkImportModal } from "@gsl/components";
+import { BulkImportModal } from "@rfdtech/components";
 
 const fields = [
   { key: "email", label: "Email", required: true },
@@ -328,16 +354,18 @@ Also exported: `useBulkImportFlow`, step components, and utilities (`parseSpread
 
 ### Theming
 
-The modal uses a **near full-viewport** layout with a compulsory gutter on all sides (24px desktop, 16px mobile), enforced by overlay padding. Override color tokens on `.gsl-bulk-import` via the `className` prop:
+The modal uses a **near full-viewport** layout with a compulsory gutter on all sides (24px desktop, 16px mobile), enforced by overlay padding. Override shared tokens on `.gsl-bulk-import` via the `className` prop (see [Shared theming](#shared-theming)):
 
 ```css
 .my-import {
-  --gsl-bulk-import-primary: #7c3aed;
-  --gsl-bulk-import-primary-light: #f3e8ff;
-  --gsl-bulk-import-success: #16a34a;
-  --gsl-bulk-import-error-bg: #fce7f3;
+  --gsl-primary: #dc2626;
+  --gsl-primary-light: #fef2f2;
+  --gsl-success: #16a34a;
+  --gsl-error-bg: #fef2f2;
 }
 ```
+
+Legacy aliases (`--gsl-bulk-import-primary`, `--gsl-bulk-import-primary-light`, etc.) still work and map to the shared tokens.
 
 To change the gutter size, override `--gsl-bulk-import-gutter` on `.gsl-bulk-import__overlay` in your app CSS (do not override modal width/height — the dialog always fills the padded overlay area):
 

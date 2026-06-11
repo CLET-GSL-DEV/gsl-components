@@ -39,6 +39,7 @@ export function useBulkImportFlow(
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const [showOnlyErrors, setShowOnlyErrors] = useState(false);
   const [discardedRows, setDiscardedRows] = useState<number[]>([]);
+  const [editableRows, setEditableRows] = useState<Record<string, string>[]>([]);
   const [isParsing, setIsParsing] = useState(false);
 
   const reset = useCallback(() => {
@@ -51,6 +52,7 @@ export function useBulkImportFlow(
     setSelectedRowIds([]);
     setShowOnlyErrors(false);
     setDiscardedRows([]);
+    setEditableRows([]);
     setIsParsing(false);
   }, []);
 
@@ -89,9 +91,11 @@ export function useBulkImportFlow(
     );
   }, [parsed, headerRowIndex, sourceColumnMapping, excludedColumns]);
 
+  const rowsForValidation = step === 4 ? editableRows : mappedRows;
+
   const validationIssues = useMemo(
-    () => validateMappedRows(mappedRows, fields),
-    [mappedRows, fields],
+    () => validateMappedRows(rowsForValidation, fields),
+    [rowsForValidation, fields],
   );
 
   const { errors: validationErrors, warnings: validationWarnings } = useMemo(
@@ -124,10 +128,12 @@ export function useBulkImportFlow(
     excludedColumns,
   ]);
 
+  const resultRows = step === 4 ? editableRows : mappedRows;
+
   const activeRows = useMemo(
     () =>
-      mappedRows.filter((_, index) => !discardedRows.includes(index + 1)),
-    [mappedRows, discardedRows],
+      resultRows.filter((_, index) => !discardedRows.includes(index + 1)),
+    [resultRows, discardedRows],
   );
 
   const activeErrors = useMemo(
@@ -157,6 +163,7 @@ export function useBulkImportFlow(
         setExcludedColumns([]);
         setSelectedRowIds([]);
         setDiscardedRows([]);
+        setEditableRows([]);
       } catch (error) {
         setParsed(null);
         setParseError(
@@ -218,6 +225,17 @@ export function useBulkImportFlow(
     setSelectedRowIds([]);
   }, [selectedRowIds]);
 
+  const updateRowValue = useCallback(
+    (rowId: number, fieldKey: string, value: string) => {
+      setEditableRows((current) =>
+        current.map((row, index) =>
+          index + 1 === rowId ? { ...row, [fieldKey]: value } : row,
+        ),
+      );
+    },
+    [],
+  );
+
   const goNext = useCallback(() => {
     setStep((current) => {
       if (current === 2 && headerRowIndex !== null && parsed) {
@@ -226,9 +244,25 @@ export function useBulkImportFlow(
         setExcludedColumns([]);
       }
 
+      if (current === 3 && headerRowIndex !== null && parsed) {
+        const rows = mapRowsToRecords(
+          parsed.rows,
+          headerRowIndex,
+          sourceColumnMapping,
+          excludedColumns,
+        );
+        setEditableRows(rows.map((row) => ({ ...row })));
+      }
+
       return Math.min(4, current + 1) as BulkImportStep;
     });
-  }, [fields, headerRowIndex, parsed]);
+  }, [
+    excludedColumns,
+    fields,
+    headerRowIndex,
+    parsed,
+    sourceColumnMapping,
+  ]);
 
   const goBack = useCallback(() => {
     setStep((current) => Math.max(1, current - 1) as BulkImportStep);
@@ -251,6 +285,7 @@ export function useBulkImportFlow(
     excludedColumns,
     sourceColumns: activeSourceColumns,
     mappedRows,
+    editableRows,
     validationErrors,
     validationWarnings,
     selectedRowIds,
@@ -267,6 +302,7 @@ export function useBulkImportFlow(
     toggleRowSelection,
     setShowOnlyErrors,
     discardSelectedRows,
+    updateRowValue,
     handleFile,
     goNext,
     goBack,

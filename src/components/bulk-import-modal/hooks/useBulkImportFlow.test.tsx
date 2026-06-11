@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { useBulkImportFlow } from "./useBulkImportFlow";
 
 const fields = [
-  { key: "email", label: "Email", required: true },
+  { key: "email", label: "Email", required: true, type: "email" as const },
   { key: "full_name", label: "Full name", required: true },
 ];
 
@@ -43,6 +43,8 @@ describe("useBulkImportFlow", () => {
 
     expect(result.current.step).toBe(4);
     expect(result.current.mappedRows).toHaveLength(1);
+    expect(result.current.editableRows).toHaveLength(1);
+    expect(result.current.editableRows[0]?.email).toBe("a@example.com");
   });
 
   it("excludes discarded rows from the built result", async () => {
@@ -104,6 +106,42 @@ describe("useBulkImportFlow", () => {
     expect(result.current.step).toBe(1);
     expect(result.current.parsed).toBeNull();
     expect(result.current.parseError).not.toBeNull();
+  });
+
+  it("re-validates editable rows when a cell value is fixed on step 4", async () => {
+    const { result } = renderHook(() =>
+      useBulkImportFlow({
+        fields,
+        open: true,
+      }),
+    );
+
+    const csv =
+      "Email,Full name\na@example.com,Ada Lovelace\nbad,Grace Hopper\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+
+    await act(async () => {
+      await result.current.handleFile(file);
+    });
+
+    act(() => {
+      result.current.goNext();
+    });
+    act(() => {
+      result.current.goNext();
+    });
+
+    expect(result.current.step).toBe(4);
+    expect(result.current.canImport).toBe(false);
+    expect(result.current.validationErrors).toHaveLength(1);
+
+    act(() => {
+      result.current.updateRowValue(2, "email", "grace@example.com");
+    });
+
+    expect(result.current.canImport).toBe(true);
+    expect(result.current.validationErrors).toHaveLength(0);
+    expect(result.current.editableRows[1]?.email).toBe("grace@example.com");
   });
 
   it("resets when the modal closes", async () => {

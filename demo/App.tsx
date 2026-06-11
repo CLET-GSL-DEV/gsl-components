@@ -1,9 +1,9 @@
-import { useState, type CSSProperties } from "react";
-import { AppSwitcher, BulkImportModal } from "@gsl/components";
-import type { BulkImportField, BulkImportResult } from "@gsl/components";
+import { useState } from "react";
+import { AppSwitcher, BulkImportModal } from "@rfdtech/components";
+import type { BulkImportField, BulkImportResult } from "@rfdtech/components";
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL ?? "";
-const accessToken = import.meta.env.VITE_ACCESS_TOKEN ?? "demo-token";
+const baseUrl =  "";
+const accessToken ="demo-token";
 
 const importFields: BulkImportField[] = [
   {
@@ -11,6 +11,14 @@ const importFields: BulkImportField[] = [
     label: "Organisation Name",
     required: true,
     example: "GSL",
+  },
+  {
+    key: "organisation_email",
+    type: "email",
+    label: "Organisation Email",
+    required: true,
+    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    example: "info@gsl.edu.gh",
   },
   {
     key: "document_name",
@@ -46,14 +54,14 @@ export function App() {
   const [lastImport, setLastImport] = useState<BulkImportResult | null>(null);
 
   return (
-    <div style={styles.page}>
-      <header style={styles.header}>
-        <div style={styles.logo}>My Workspace</div>
-        <nav style={styles.nav}>
-          <a href="#" style={styles.navLink}>
+    <div className="demo-page">
+      <header className="demo-header">
+        <div className="demo-logo">My Workspace</div>
+        <nav className="demo-nav">
+          <a href="#" className="demo-nav-link">
             Home
           </a>
-          <a href="#" style={styles.navLink}>
+          <a href="#" className="demo-nav-link">
             Settings
           </a>
           <AppSwitcher
@@ -65,9 +73,9 @@ export function App() {
         </nav>
       </header>
 
-      <main style={styles.main}>
-        <h1 style={styles.heading}>GSL Components Demo</h1>
-        <p style={styles.text}>
+      <main className="demo-main">
+        <h1 className="demo-heading">GSL Components Demo</h1>
+        <p className="demo-text">
           Shared React components for Ghana School of Law projects. Click the
           9-dot grid icon in the top-right corner to open the AppSwitcher
           system directory, or try the bulk import modal below.
@@ -75,14 +83,14 @@ export function App() {
 
         <button
           type="button"
-          style={styles.button}
+          className="demo-button"
           onClick={() => setImportOpen(true)}
         >
           Open bulk import
         </button>
 
         {lastImport && (
-          <p style={styles.result}>
+          <p className="demo-result">
             Last import: {lastImport.rows.length} row(s),{" "}
             {lastImport.errors.length} error(s)
           </p>
@@ -102,68 +110,3 @@ export function App() {
     </div>
   );
 }
-
-const styles: Record<string, CSSProperties> = {
-  page: {
-    minHeight: "100vh",
-    margin: 0,
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    background: "#f8f9fa",
-    color: "#3c4043",
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "12px 24px",
-    background: "#fff",
-    borderBottom: "1px solid #dadce0",
-  },
-  logo: {
-    fontSize: 22,
-    fontWeight: 500,
-    color: "#5f6368",
-  },
-  nav: {
-    display: "flex",
-    alignItems: "center",
-    gap: 16,
-  },
-  navLink: {
-    color: "#5f6368",
-    textDecoration: "none",
-    fontSize: 14,
-  },
-  main: {
-    maxWidth: 640,
-    margin: "80px auto",
-    padding: "0 24px",
-    textAlign: "center",
-  },
-  heading: {
-    fontSize: 28,
-    fontWeight: 400,
-    marginBottom: 16,
-  },
-  text: {
-    fontSize: 16,
-    lineHeight: 1.6,
-    color: "#5f6368",
-    marginBottom: 24,
-  },
-  button: {
-    padding: "10px 18px",
-    border: "1px solid #dadce0",
-    borderRadius: 8,
-    background: "#dc2626",
-    color: "#fff",
-    fontSize: 14,
-    cursor: "pointer",
-  },
-  result: {
-    marginTop: 16,
-    fontSize: 14,
-    color: "#5f6368",
-  },
-};

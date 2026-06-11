@@ -86,6 +86,7 @@ export interface UseBulkImportFlowReturn {
   excludedColumns: number[];
   sourceColumns: SourceColumn[];
   mappedRows: Record<string, string>[];
+  editableRows: Record<string, string>[];
   validationErrors: BulkImportValidationError[];
   validationWarnings: BulkImportValidationError[];
   selectedRowIds: number[];
@@ -102,6 +103,7 @@ export interface UseBulkImportFlowReturn {
   toggleRowSelection: (rowId: number) => void;
   setShowOnlyErrors: (value: boolean) => void;
   discardSelectedRows: () => void;
+  updateRowValue: (rowId: number, fieldKey: string, value: string) => void;
   handleFile: (file: File) => Promise<void>;
   goNext: () => void;
   goBack: () => void;

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { BulkImportModal } from "./BulkImportModal";
@@ -61,6 +61,138 @@ describe("BulkImportModal", () => {
       errors: [],
       warnings: [],
     });
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("closes immediately on step 1 with no uploaded file", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    render(
+      <BulkImportModal
+        open
+        onOpenChange={onOpenChange}
+        fields={fields}
+        onComplete={vi.fn()}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Close" }));
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+  });
+
+  it("shows exit confirmation after a file is uploaded", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    render(
+      <BulkImportModal
+        open
+        onOpenChange={onOpenChange}
+        fields={fields}
+        onComplete={vi.fn()}
+      />,
+    );
+
+    const csv = "Email,Full name\na@example.com,Ada Lovelace\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+    const input = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    await user.upload(input, file);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: "Select header row" }),
+      ).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole("button", { name: "Close" }));
+
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Exit import flow" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Are you sure? Your current information will not be saved.",
+      ),
+    ).toBeInTheDocument();
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("dismisses exit confirmation when Cancel is clicked", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    render(
+      <BulkImportModal
+        open
+        onOpenChange={onOpenChange}
+        fields={fields}
+        onComplete={vi.fn()}
+      />,
+    );
+
+    const csv = "Email,Full name\na@example.com,Ada Lovelace\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+    const input = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    await user.upload(input, file);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: "Select header row" }),
+      ).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole("button", { name: "Close" }));
+
+    const confirmDialog = screen.getByRole("alertdialog");
+    await user.click(
+      within(confirmDialog).getByRole("button", { name: "Cancel" }),
+    );
+
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("closes the modal when Exit flow is confirmed", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    render(
+      <BulkImportModal
+        open
+        onOpenChange={onOpenChange}
+        fields={fields}
+        onComplete={vi.fn()}
+      />,
+    );
+
+    const csv = "Email,Full name\na@example.com,Ada Lovelace\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+    const input = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    await user.upload(input, file);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: "Select header row" }),
+      ).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole("button", { name: "Close" }));
+    await user.click(screen.getByRole("button", { name: "Exit flow" }));
+
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });
