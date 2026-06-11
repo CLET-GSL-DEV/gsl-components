@@ -1,0 +1,110 @@
+export type BulkImportFieldType =
+  | "string"
+  | "email"
+  | "number"
+  | "integer"
+  | "date"
+  | "boolean"
+  | "url"
+  | "phone";
+
+export interface BulkImportField {
+  key: string;
+  label: string;
+  required?: boolean;
+  type?: BulkImportFieldType;
+  pattern?: string | RegExp;
+  patternMessage?: string;
+  minLength?: number;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+  options?: string[];
+  optionsIgnoreCase?: boolean;
+  optionsMessage?: string;
+  description?: string;
+  example?: string;
+  trim?: boolean;
+  validate?: (value: string) => string | null;
+}
+
+export interface BulkImportValidationError {
+  row: number;
+  fieldKey: string;
+  fieldLabel: string;
+  message: string;
+  severity: "error" | "warning";
+}
+
+export interface BulkImportResult {
+  rows: Record<string, string>[];
+  errors: BulkImportValidationError[];
+  warnings: BulkImportValidationError[];
+}
+
+export interface BulkImportModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  fields: BulkImportField[];
+  onComplete: (result: BulkImportResult) => void;
+  title?: string;
+  maxFileSizeBytes?: number;
+  allowImportWithWarnings?: boolean;
+  className?: string;
+}
+
+export interface SourceColumn {
+  index: number;
+  label: string;
+}
+
+export interface ParsedSpreadsheet {
+  rows: string[][];
+  fileName: string;
+}
+
+export type BulkImportStep = 1 | 2 | 3 | 4;
+
+/** Maps source column index to target field key */
+export type SourceColumnMapping = Record<number, string | null>;
+
+/** @deprecated Use SourceColumnMapping — kept for backwards compatibility */
+export type ColumnMapping = Record<string, number | null>;
+
+export interface UseBulkImportFlowOptions {
+  fields: BulkImportField[];
+  maxFileSizeBytes?: number;
+  open: boolean;
+}
+
+export interface UseBulkImportFlowReturn {
+  step: BulkImportStep;
+  parsed: ParsedSpreadsheet | null;
+  parseError: string | null;
+  headerRowIndex: number | null;
+  sourceColumnMapping: SourceColumnMapping;
+  excludedColumns: number[];
+  sourceColumns: SourceColumn[];
+  mappedRows: Record<string, string>[];
+  validationErrors: BulkImportValidationError[];
+  validationWarnings: BulkImportValidationError[];
+  selectedRowIds: number[];
+  showOnlyErrors: boolean;
+  discardedRows: number[];
+  canGoNext: boolean;
+  canImport: boolean;
+  isParsing: boolean;
+  setHeaderRowIndex: (index: number) => void;
+  setSourceColumnMapping: (mapping: SourceColumnMapping) => void;
+  updateSourceMapping: (sourceIndex: number, fieldKey: string | null) => void;
+  toggleExcludedColumn: (sourceIndex: number) => void;
+  setSelectedRowIds: (rowIds: number[]) => void;
+  toggleRowSelection: (rowId: number) => void;
+  setShowOnlyErrors: (value: boolean) => void;
+  discardSelectedRows: () => void;
+  handleFile: (file: File) => Promise<void>;
+  goNext: () => void;
+  goBack: () => void;
+  reset: () => void;
+  buildResult: () => BulkImportResult;
+}
