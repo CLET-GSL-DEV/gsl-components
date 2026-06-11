@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getFieldHint, validateFieldValue } from "./validateFieldValue";
+import {
+  getFieldExampleValue,
+  getFieldHint,
+  validateFieldValue,
+} from "./validateFieldValue";
 
 describe("validateFieldValue", () => {
   it("validates required fields", () => {
@@ -88,6 +92,62 @@ describe("validateFieldValue", () => {
         "a@example.com",
       ),
     ).toBe("Must use a GSL email");
+  });
+});
+
+describe("getFieldExampleValue", () => {
+  it("prefers explicit example over schema defaults", () => {
+    expect(
+      getFieldExampleValue({
+        key: "status",
+        label: "Status",
+        example: "pending",
+        options: ["active", "inactive"],
+        type: "integer",
+        min: 18,
+      }),
+    ).toBe("pending");
+  });
+
+  it("uses the first option when example is omitted", () => {
+    expect(
+      getFieldExampleValue({
+        key: "status",
+        label: "Status",
+        options: ["active", "inactive"],
+      }),
+    ).toBe("active");
+  });
+
+  it("uses min for numeric types", () => {
+    expect(
+      getFieldExampleValue({
+        key: "age",
+        label: "Age",
+        type: "integer",
+        min: 18,
+      }),
+    ).toBe("18");
+  });
+
+  it("extracts a sample from patternMessage format hints", () => {
+    expect(
+      getFieldExampleValue({
+        key: "student_id",
+        label: "Student ID",
+        pattern: "^STU-\\d{4}$",
+        patternMessage: "Use format STU-1234",
+      }),
+    ).toBe("STU-1234");
+  });
+
+  it("falls back to an em dash for bare string fields", () => {
+    expect(
+      getFieldExampleValue({
+        key: "name",
+        label: "Name",
+      }),
+    ).toBe("—");
   });
 });
 

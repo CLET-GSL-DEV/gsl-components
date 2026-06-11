@@ -198,3 +198,41 @@ export function getFieldHint(field: BulkImportField): string | null {
 
   return hints.length > 0 ? hints.join(" · ") : null;
 }
+
+export function getFieldExampleValue(field: BulkImportField): string {
+  if (field.example?.trim()) {
+    return field.example.trim();
+  }
+
+  if (field.options?.length) {
+    return field.options[0];
+  }
+
+  const type = field.type ?? "string";
+  switch (type) {
+    case "email":
+      return "user@example.com";
+    case "number":
+    case "integer":
+      return field.min !== undefined ? String(field.min) : "0";
+    case "date":
+      return "2024-01-15";
+    case "boolean":
+      return "true";
+    case "url":
+      return "https://example.com";
+    case "phone":
+      return "+233 20 000 0000";
+    default:
+      break;
+  }
+
+  if (field.patternMessage) {
+    const formatMatch = field.patternMessage.match(/format\s+(.+)$/i);
+    if (formatMatch?.[1]) {
+      return formatMatch[1].trim();
+    }
+  }
+
+  return "—";
+}

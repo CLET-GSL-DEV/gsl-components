@@ -242,6 +242,15 @@
     animation: none;
     stroke-dashoffset: 0;
   }
+
+  .gsl-bulk-import__mapping-status--complete {
+    animation: none;
+  }
+
+  .gsl-bulk-import__mapping-status-check path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 }
 
 .gsl-bulk-import__body {
@@ -251,8 +260,150 @@
   overflow: auto;
 }
 
+.gsl-bulk-import__body--upload {
+  display: flex;
+  flex-direction: column;
+  padding-top: 32px;
+}
+
+.gsl-bulk-import__body--upload .gsl-bulk-import__step--upload {
+  flex: 1;
+  min-height: 0;
+}
+
+.gsl-bulk-import__step--upload {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  gap: 0;
+}
+
+.gsl-bulk-import__body--header {
+  display: flex;
+  flex-direction: column;
+  padding-top: 32px;
+  overflow: hidden;
+}
+
+.gsl-bulk-import__body--header .gsl-bulk-import__step--header {
+  flex: 1;
+  min-height: 0;
+}
+
+.gsl-bulk-import__step--header {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  gap: 0;
+}
+
+.gsl-bulk-import__step-note {
+  margin: -16px 0 24px;
+  font-size: 14px;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-bulk-import__step--header .gsl-bulk-import__step-title {
+  flex-shrink: 0;
+}
+
+.gsl-bulk-import__step--header .gsl-bulk-import__step-note {
+  flex-shrink: 0;
+}
+
+.gsl-bulk-import__step--header .gsl-bulk-import__table-wrap--header {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+}
+
+.gsl-bulk-import__body--match {
+  display: flex;
+  flex-direction: column;
+  padding-top: 32px;
+  overflow: hidden;
+}
+
+.gsl-bulk-import__body--match .gsl-bulk-import__step--match {
+  flex: 1;
+  min-height: 0;
+}
+
+.gsl-bulk-import__step--match {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  gap: 0;
+}
+
+.gsl-bulk-import__step--match .gsl-bulk-import__step-title {
+  flex-shrink: 0;
+}
+
+.gsl-bulk-import__match-layout {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.gsl-bulk-import__match-board {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--gsl-border);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.gsl-bulk-import__match-board > .gsl-bulk-import__match-heading {
+  padding: 16px 16px 0;
+}
+
+.gsl-bulk-import__match-board > .gsl-bulk-import__match-heading--target {
+  margin-top: 0;
+  padding: 20px 16px 0;
+  border-top: 1px solid var(--gsl-border);
+}
+
+.gsl-bulk-import__match-scroll {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  flex-shrink: 0;
+}
+
+.gsl-bulk-import__match-scroll--target {
+  flex: 1;
+  min-height: 0;
+  padding-bottom: 16px;
+}
+
+.gsl-bulk-import__match-track {
+  display: flex;
+  gap: 0;
+  width: 100%;
+}
+
+.gsl-bulk-import__match-track--source {
+  border-bottom: 1px solid var(--gsl-border);
+}
+
+.gsl-bulk-import__match-column {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 16px;
+  border-right: 1px solid var(--gsl-border);
+}
+
+.gsl-bulk-import__match-column:last-child {
+  border-right: none;
+}
+
 .gsl-bulk-import__step-title {
-  margin: 0 0 20px;
+  margin: 0 0 24px;
   font-size: 28px;
   font-weight: 700;
   color: var(--gsl-text);
@@ -260,6 +411,11 @@
 
 .gsl-bulk-import__expected {
   margin-bottom: 24px;
+}
+
+.gsl-bulk-import__step--upload .gsl-bulk-import__expected {
+  flex-shrink: 0;
+  margin-bottom: 32px;
 }
 
 .gsl-bulk-import__expected-title {
@@ -270,14 +426,16 @@
 }
 
 .gsl-bulk-import__expected-note {
-  margin: 0 0 16px;
+  margin: 0 0 20px;
   font-size: 14px;
   color: var(--gsl-text-secondary);
 }
 
 .gsl-bulk-import__expected-table-wrap {
   overflow: auto;
-  border-top: 1px solid var(--gsl-border);
+  border: 1px solid var(--gsl-border);
+  border-radius: 8px;
+  background: #fff;
 }
 
 .gsl-bulk-import__expected-table {
@@ -288,10 +446,14 @@
 
 .gsl-bulk-import__expected-table th,
 .gsl-bulk-import__expected-table td {
-  padding: 12px 16px;
+  padding: 14px 20px;
   border-bottom: 1px solid var(--gsl-border);
   text-align: left;
   white-space: nowrap;
+}
+
+.gsl-bulk-import__expected-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .gsl-bulk-import__expected-table th {
@@ -316,6 +478,12 @@
   border: 2px dashed var(--gsl-bulk-import-primary);
   border-radius: var(--gsl-radius);
   background: #fafafa;
+}
+
+.gsl-bulk-import__step--upload .gsl-bulk-import__dropzone {
+  flex: 1;
+  min-height: 280px;
+  margin-top: auto;
 }
 
 .gsl-bulk-import__file-input {
@@ -351,8 +519,14 @@
   border-radius: var(--gsl-radius);
 }
 
-.gsl-bulk-import__table-wrap--header {
-  max-height: 420px;
+.gsl-bulk-import__table-wrap--header tbody tr {
+  cursor: pointer;
+}
+
+.gsl-bulk-import__table-wrap--header
+  tbody
+  tr:not(.gsl-bulk-import__table-row--selected):hover {
+  background: var(--gsl-hover);
 }
 
 .gsl-bulk-import__table-wrap--validate {
@@ -390,55 +564,43 @@
   background: var(--gsl-bulk-import-primary-light);
 }
 
-.gsl-bulk-import__match-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-}
-
 .gsl-bulk-import__match-heading {
-  margin: 0 0 16px;
-  font-size: 14px;
-  font-weight: 600;
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
   color: var(--gsl-text);
-}
-
-.gsl-bulk-import__match-columns {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-}
-
-.gsl-bulk-import__source-column,
-.gsl-bulk-import__target-column {
-  min-width: 140px;
+  flex-shrink: 0;
 }
 
 .gsl-bulk-import__source-column-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
   margin-bottom: 12px;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   border-bottom: 1px solid var(--gsl-border);
 }
 
 .gsl-bulk-import__source-column-label {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--gsl-text);
+  line-height: 1.3;
 }
 
 .gsl-bulk-import__exclude-column {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 20px;
   height: 20px;
-  border: none;
+  border: 1px solid var(--gsl-border);
   border-radius: 50%;
-  background: transparent;
+  background: #fff;
   color: var(--gsl-text-secondary);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
   cursor: pointer;
 }
@@ -451,20 +613,25 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.gsl-bulk-import__source-column-preview-row {
+  min-height: 20px;
   color: #9ca3af;
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .gsl-bulk-import__target-column-control {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .gsl-bulk-import__mapping-status {
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
 }
 
@@ -474,23 +641,111 @@
   justify-content: center;
   background: var(--gsl-bulk-import-success);
   color: #fff;
-  font-size: 11px;
-  font-weight: 700;
+  animation: gsl-bulk-import-check-pop 300ms ease;
+}
+
+.gsl-bulk-import__mapping-status-check {
+  display: block;
+}
+
+.gsl-bulk-import__mapping-status-check path {
+  stroke-dasharray: 12;
+  stroke-dashoffset: 12;
+  animation: gsl-bulk-import-check-draw 300ms ease 120ms forwards;
 }
 
 .gsl-bulk-import__mapping-status--pending {
-  border: 2px solid var(--gsl-bulk-import-warning);
+  border: 2px solid #f59e0b;
   background: #fff;
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease;
 }
 
-.gsl-bulk-import__select {
+.gsl-bulk-import__field-select {
+  flex: 1;
+  min-width: 0;
   width: 100%;
-  min-width: 120px;
-  padding: 8px 10px;
+}
+
+.gsl-bulk-import__field-select-trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  padding: 0 32px 0 12px;
+  border: 1px solid var(--gsl-border);
+  border-radius: 8px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--gsl-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.gsl-bulk-import__field-select-trigger:hover {
+  border-color: #d1d5db;
+  background-color: var(--gsl-hover);
+}
+
+.gsl-bulk-import__field-select-trigger--open {
+  border-color: var(--gsl-bulk-import-primary);
+  box-shadow: 0 0 0 1px var(--gsl-bulk-import-primary);
+}
+
+.gsl-bulk-import__field-select-trigger-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.gsl-bulk-import__field-select-trigger--placeholder {
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-bulk-import__field-select-menu {
+  position: fixed;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
   border: 1px solid var(--gsl-border);
   border-radius: 8px;
   background: #fff;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.12);
+  overflow-y: auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
   font-size: 14px;
+  line-height: 1.4;
+}
+
+.gsl-bulk-import__field-select-option {
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--gsl-text);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.gsl-bulk-import__field-select-option:hover {
+  background: var(--gsl-hover);
+}
+
+.gsl-bulk-import__field-select-option--selected {
+  background: #eff6ff;
+  font-weight: 500;
 }
 
 .gsl-bulk-import__validate-header {
@@ -588,7 +843,7 @@
 .gsl-bulk-import__button:focus-visible,
 .gsl-bulk-import__close:focus-visible,
 .gsl-bulk-import__exclude-column:focus-visible,
-.gsl-bulk-import__select:focus-visible,
+.gsl-bulk-import__field-select-trigger:focus-visible,
 .gsl-bulk-import__radio:focus-visible {
   outline: 2px solid var(--gsl-bulk-import-primary);
   outline-offset: 2px;
@@ -622,10 +877,6 @@
 
   .gsl-bulk-import__body {
     padding: 0 20px 20px;
-  }
-
-  .gsl-bulk-import__match-grid {
-    grid-template-columns: 1fr;
   }
 
   .gsl-bulk-import__validate-header {

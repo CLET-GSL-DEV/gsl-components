@@ -45,7 +45,7 @@ describe("BulkImportModal", () => {
     const headerRadio = document.querySelector(
       'input[type="radio"]',
     ) as HTMLInputElement;
-    await user.click(headerRadio);
+    expect(headerRadio).toBeChecked();
     await user.click(screen.getByRole("button", { name: "Next" }));
 
     expect(screen.getByText("Your table")).toBeInTheDocument();

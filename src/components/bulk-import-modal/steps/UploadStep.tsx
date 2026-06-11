@@ -1,29 +1,6 @@
 import type { ChangeEvent, DragEvent } from "react";
 import type { BulkImportField } from "../../../types/bulk-import-modal";
-
-function getExampleValue(field: BulkImportField) {
-  if (field.example) {
-    return field.example;
-  }
-
-  switch (field.type) {
-    case "email":
-      return "student@example.com";
-    case "number":
-    case "integer":
-      return "42";
-    case "date":
-      return "2024-01-15";
-    case "boolean":
-      return "true";
-    case "url":
-      return "https://example.com";
-    case "phone":
-      return "+233 20 000 0000";
-    default:
-      return "—";
-  }
-}
+import { getFieldExampleValue } from "../utils/validateFieldValue";
 
 interface UploadStepProps {
   fields: BulkImportField[];
@@ -56,7 +33,7 @@ export function UploadStep({
   };
 
   return (
-    <div className="gsl-bulk-import__step">
+    <div className="gsl-bulk-import__step gsl-bulk-import__step--upload">
       <h3 className="gsl-bulk-import__step-title">Upload Document</h3>
 
       <div className="gsl-bulk-import__expected">
@@ -77,7 +54,7 @@ export function UploadStep({
             <tbody>
               <tr>
                 {fields.map((field) => (
-                  <td key={field.key}>{getExampleValue(field)}</td>
+                  <td key={field.key}>{getFieldExampleValue(field)}</td>
                 ))}
               </tr>
             </tbody>

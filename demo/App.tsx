@@ -7,26 +7,37 @@ const accessToken = import.meta.env.VITE_ACCESS_TOKEN ?? "demo-token";
 
 const importFields: BulkImportField[] = [
   {
-    key: "email",
-    label: "Email",
+    key: "organisation_name",
+    label: "Organisation Name",
     required: true,
-    type: "email",
-    description: "Student email address",
-    example: "student@gsl.edu.gh",
+    example: "GSL",
   },
   {
-    key: "full_name",
-    label: "Full name",
+    key: "document_name",
+    label: "Document Name",
     required: true,
-    minLength: 2,
-    maxLength: 100,
+    example: "2024 Budget",
   },
   {
-    key: "student_id",
-    label: "Student ID",
-    pattern: "^STU-\\d{4}$",
-    patternMessage: "Use format STU-1234",
-    example: "STU-0042",
+    key: "document_id",
+    label: "Document ID",
+    required: true,
+    example: "INV-2024-001",
+  },
+  {
+    key: "department",
+    label: "Department",
+    example: "Finance",
+  },
+  {
+    key: "month",
+    label: "Month",
+    example: "January",
+  },
+  {
+    key: "year",
+    label: "Year",
+    example: "2024",
   },
 ];
 
@@ -81,7 +92,7 @@ export function App() {
       <BulkImportModal
         open={importOpen}
         onOpenChange={setImportOpen}
-        title="Import students"
+        title="Import documents"
         fields={importFields}
         onComplete={(result) => {
           setLastImport(result);

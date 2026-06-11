@@ -4,24 +4,24 @@ interface SelectHeaderRowStepProps {
   onSelectHeaderRow: (index: number) => void;
 }
 
-const PREVIEW_ROW_LIMIT = 20;
-
 export function SelectHeaderRowStep({
   rows,
   headerRowIndex,
   onSelectHeaderRow,
 }: SelectHeaderRowStepProps) {
-  const previewRows = rows.slice(0, PREVIEW_ROW_LIMIT);
-  const columnCount = Math.max(...previewRows.map((row) => row.length), 1);
+  const columnCount = Math.max(...rows.map((row) => row.length), 1);
 
   return (
-    <div className="gsl-bulk-import__step">
+    <div className="gsl-bulk-import__step gsl-bulk-import__step--header">
       <h3 className="gsl-bulk-import__step-title">Select header row</h3>
+      <p className="gsl-bulk-import__step-note">
+        Click the row that contains your column headers.
+      </p>
 
       <div className="gsl-bulk-import__table-wrap gsl-bulk-import__table-wrap--header">
         <table className="gsl-bulk-import__table">
           <tbody>
-            {previewRows.map((row, rowIndex) => {
+            {rows.map((row, rowIndex) => {
               const isSelected = headerRowIndex === rowIndex;
               const inputId = `gsl-bulk-import-header-row-${rowIndex}`;
 
@@ -34,6 +34,8 @@ export function SelectHeaderRowStep({
                   ]
                     .filter(Boolean)
                     .join(" ")}
+                  aria-selected={isSelected}
+                  onClick={() => onSelectHeaderRow(rowIndex)}
                 >
                   <td className="gsl-bulk-import__radio-cell">
                     <input

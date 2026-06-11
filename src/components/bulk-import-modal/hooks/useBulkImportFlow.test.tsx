@@ -25,10 +25,7 @@ describe("useBulkImportFlow", () => {
 
     expect(result.current.parsed?.rows).toHaveLength(2);
     expect(result.current.step).toBe(2);
-
-    act(() => {
-      result.current.setHeaderRowIndex(0);
-    });
+    expect(result.current.headerRowIndex).toBe(0);
 
     act(() => {
       result.current.goNext();
@@ -66,9 +63,7 @@ describe("useBulkImportFlow", () => {
     await act(async () => {
       await result.current.handleFile(file);
     });
-    act(() => {
-      result.current.setHeaderRowIndex(0);
-    });
+    expect(result.current.headerRowIndex).toBe(0);
     act(() => {
       result.current.goNext();
     });

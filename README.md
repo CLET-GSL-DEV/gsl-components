@@ -312,7 +312,7 @@ const fields = [
 ];
 ```
 
-Schema rules run before any custom `validate` function. Step 1 uses `example` values in the expected-data preview. Step 3 maps each uploaded column to a target field and supports excluding columns with **×**.
+Schema rules run before any custom `validate` function. Step 1 uses `example` when set; otherwise it derives preview values from `options`, `type`, `min`, and `patternMessage`. Step 3 maps each uploaded column to a target field and supports excluding columns with **×**.
 
 ### Types
 
@@ -324,7 +324,7 @@ interface BulkImportResult {
 }
 ```
 
-Also exported: `useBulkImportFlow`, step components, and utilities (`parseSpreadsheetFile`, `mapRowsToRecords`, `validateMappedRows`, `validateFieldValue`, `getFieldHint`, `autoMatchSourceColumns`).
+Also exported: `useBulkImportFlow`, step components, and utilities (`parseSpreadsheetFile`, `mapRowsToRecords`, `validateMappedRows`, `validateFieldValue`, `getFieldExampleValue`, `getFieldHint`, `autoMatchSourceColumns`).
 
 ### Theming
 

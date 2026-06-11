@@ -200,7 +200,20 @@ export function BulkImportModal({
           </nav>
         </header>
 
-        <div className="gsl-bulk-import__body">
+        <div
+          className={[
+            "gsl-bulk-import__body",
+            flow.step === 1
+              ? "gsl-bulk-import__body--upload"
+              : flow.step === 2
+                ? "gsl-bulk-import__body--header"
+                : flow.step === 3
+                  ? "gsl-bulk-import__body--match"
+                  : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           {flow.step === 1 && (
             <UploadStep
               fields={fields}

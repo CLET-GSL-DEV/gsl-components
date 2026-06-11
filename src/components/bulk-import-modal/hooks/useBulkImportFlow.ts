@@ -152,7 +152,7 @@ export function useBulkImportFlow(
         const result = await parseSpreadsheetFile(file, maxFileSizeBytes);
         setParsed(result);
         setStep(2);
-        setHeaderRowIndex(null);
+        setHeaderRowIndex(0);
         setSourceColumnMapping({});
         setExcludedColumns([]);
         setSelectedRowIds([]);

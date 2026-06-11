@@ -23,6 +23,7 @@ export {
   validateMappedRows,
 } from "./utils/validateMappedRows";
 export {
+  getFieldExampleValue,
   getFieldHint,
   validateFieldValue,
 } from "./utils/validateFieldValue";
