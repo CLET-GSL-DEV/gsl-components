@@ -6,6 +6,8 @@ import {
   DataTable,
   Dropdown,
   DropdownMenu,
+  INPUT_MASK_PRESETS,
+  InputMask,
 } from "@rfdtech/components";
 import type {
   BulkImportField,
@@ -114,6 +116,7 @@ export function DemoPage() {
   const [lastImport, setLastImport] = useState<BulkImportResult | null>(null);
   const [department, setDepartment] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [phone, setPhone] = useState("");
   const [exampleStaff, setExampleStaff] = useState<StaffRecord[]>([]);
   const [exampleLoading, setExampleLoading] = useState(true);
 
@@ -173,6 +176,22 @@ export function DemoPage() {
           ]}
         />
       </div>
+
+      <section className="demo-section">
+        <h2 className="demo-section-title">InputMask</h2>
+        <p className="demo-text">
+          Ghana phone format using <code>INPUT_MASK_PRESETS.phoneGh</code>.
+        </p>
+        <InputMask
+          ariaLabel="Phone number"
+          mask={INPUT_MASK_PRESETS.phoneGh}
+          value={phone}
+          onChange={setPhone}
+          placeholder="0XX XXX XXXX"
+          inputMode="tel"
+          className="demo-input-mask"
+        />
+      </section>
 
       <section className="demo-section">
         <h2 className="demo-section-title">Static DataTable</h2>

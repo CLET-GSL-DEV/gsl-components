@@ -80,6 +80,16 @@ body {
   width: 280px;
 }
 
+.demo-input-mask {
+  width: 220px;
+}
+
+.demo-input-masks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .demo-section {
   margin-bottom: 32px;
   text-align: left;

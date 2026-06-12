@@ -1,0 +1,81 @@
+export const meta = {
+  title: "InputMask",
+  description:
+    "Pattern-based masked text input for phone numbers, dates, and other formatted fields.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { InputMaskPreview } from "../previews/code/InputMaskPreview";
+
+# InputMask
+
+Pattern-based masked text input. Use for phone numbers, dates, IDs, and other fields where the user enters a fixed format.
+
+## Mask syntax
+
+| Token | Accepts |
+|-------|---------|
+| `#` | Digit (`0-9`) |
+| `A` | Letter (`a-z`, `A-Z`) |
+| `*` | Alphanumeric |
+| Other characters | Literals inserted automatically (spaces, `-`, `/`, etc.) |
+
+## Example
+
+<ExampleTabs title="Phone and date" preview={<InputMaskPreview />}>
+
+```tsx
+import { INPUT_MASK_PRESETS, InputMask } from "@rfdtech/components";
+
+<InputMask
+  ariaLabel="Phone number"
+  mask={INPUT_MASK_PRESETS.phoneGh}
+  value={phone}
+  onChange={setPhone}
+  onValueChange={setRawPhone}
+  placeholder="0XX XXX XXXX"
+  inputMode="tel"
+/>
+
+<InputMask
+  ariaLabel="Date of birth"
+  mask={INPUT_MASK_PRESETS.date}
+  value={date}
+  onChange={setDate}
+  placeholder="DD/MM/YYYY"
+  inputMode="numeric"
+/>
+```
+
+</ExampleTabs>
+
+## Presets
+
+`INPUT_MASK_PRESETS` exports common patterns:
+
+| Key | Pattern |
+|-----|---------|
+| `phoneGh` | `0## ### ####` |
+| `phoneIntlGh` | `+233 ## ### ####` |
+| `date` | `##/##/####` |
+| `time` | `##:##` |
+
+You can also pass any custom pattern string to `mask`.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mask` | `string` | — | Pattern string (`#`, `A`, `*`, literals) |
+| `value` | `string` | — | Masked display value (controlled) |
+| `defaultValue` | `string` | `""` | Initial masked value (uncontrolled) |
+| `onChange` | `(masked: string) => void` | — | Called with the masked display value |
+| `onValueChange` | `(unmasked: string) => void` | — | Called with raw slot characters only |
+| `ariaLabel` | `string` | — | Accessible label for the input |
+| `placeholder` | `string` | — | Placeholder text |
+| `disabled` | `boolean` | `false` | Disable the input |
+| `id` | `string` | — | Input `id` attribute |
+| `name` | `string` | — | Input `name` attribute |
+| `inputMode` | `string` | `"text"` | Mobile keyboard hint (`tel`, `numeric`, etc.) |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |

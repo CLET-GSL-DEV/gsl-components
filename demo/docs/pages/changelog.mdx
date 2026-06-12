@@ -1,0 +1,63 @@
+export const meta = {
+  title: "Changelog",
+  description: "Release history for @rfdtech/components.",
+};
+
+# Changelog
+
+All notable changes to `@rfdtech/components` are listed here, newest first.
+
+## 1.0.3 — 2026-06-12
+
+### Added
+
+- `InputMask` component with pattern-based masking (`#`, `A`, `*`, literals) and `INPUT_MASK_PRESETS` for common formats
+- Changelog page in docs (`/docs/changelog`) and root `CHANGELOG.md`
+
+### Fixed
+
+- `InputMask` no longer duplicates leading literals in presets such as `phoneGh` (`0## ### ####`)
+
+## 1.0.2 — 2026-06-12
+
+### Added
+
+- `DataTable` component with column sorting, pagination, loading state, and empty state
+- `Pagination` component (standalone; composed by `DataTable`)
+- Interactive documentation site at `/docs` with MDX pages, syntax highlighting, and preview/code tabs
+- Demo app routing split into Demo and Docs pages with a sectioned docs sidebar
+
+### Changed
+
+- `DataTable` is static-only: parents pass `data` and control fetching with a `loading` prop (async `loadData` removed)
+- Demo app refactored into `DemoPage` and `DocsPage` with shared `DemoLayout`
+
+## 1.0.0 — 2026-06-11
+
+### Added
+
+- `Dropdown` single-value select component
+- `DropdownMenu` action menu component
+- `Combobox` async search component with debounced `loadOptions`
+- `prepublishOnly` script to run typecheck, tests, and build before publishing
+
+### Changed
+
+- `BulkImportModal` column mapping now uses `Dropdown` instead of internal `FieldMappingSelect`
+- README expanded with component usage and style import instructions
+
+### Removed
+
+- Internal `FieldMappingSelect` component (replaced by exported `Dropdown`)
+
+## 0.4.0 — 2026-06-11
+
+### Added
+
+- `AppSwitcher` component for switching between GSL systems
+- `BulkImportModal` multi-step import flow with editable rows and exit confirmation
+
+### Changed
+
+- Package renamed to `@rfdtech/components`
+- Bulk import stepper animations, accessibility, and responsive styling improvements

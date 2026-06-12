@@ -4,6 +4,10 @@ Shared React component library for Ghana School of Law (GSL) projects.
 
 Requires React 18+ and a bundler that processes CSS (Vite, Webpack, etc.).
 
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for release history.
+
 ## Styles
 
 Component styles load automatically when you import from `@rfdtech/components` (the JS bundle includes `import './index.css'`). For reliable styling in production, add this once in your app entry (`main.tsx` or `App.tsx`):
@@ -331,6 +335,66 @@ The component caches the selected option label internally. Pass `getOptionLabel`
 | `disabled` | `boolean` | `false` | Disable the input |
 | `open` | `boolean` | — | Controlled open state |
 | `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |
+
+## InputMask
+
+Pattern-based masked text input for phone numbers, dates, and other formatted fields.
+
+### Mask syntax
+
+| Token | Accepts |
+|-------|---------|
+| `#` | Digit (`0-9`) |
+| `A` | Letter (`a-z`, `A-Z`) |
+| `*` | Alphanumeric |
+| Other characters | Literals inserted automatically |
+
+### Usage
+
+```tsx
+import { INPUT_MASK_PRESETS, InputMask } from "@rfdtech/components";
+
+function ContactForm() {
+  const [phone, setPhone] = useState("");
+  const [rawPhone, setRawPhone] = useState("");
+
+  return (
+    <InputMask
+      ariaLabel="Phone number"
+      mask={INPUT_MASK_PRESETS.phoneGh}
+      value={phone}
+      onChange={setPhone}
+      onValueChange={setRawPhone}
+      placeholder="0XX XXX XXXX"
+      inputMode="tel"
+    />
+  );
+}
+```
+
+`onChange` receives the masked display value (e.g. `024 123 4567`). `onValueChange` receives only the slot characters (e.g. `0241234567`).
+
+### Presets
+
+`INPUT_MASK_PRESETS` includes `phoneGh`, `phoneIntlGh`, `date`, and `time`. Pass any custom pattern string to `mask`.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mask` | `string` | required | Pattern string (`#`, `A`, `*`, literals) |
+| `ariaLabel` | `string` | required | Accessible label for the input |
+| `value` | `string` | — | Masked display value (controlled) |
+| `defaultValue` | `string` | `""` | Initial value (uncontrolled) |
+| `onChange` | `(masked: string) => void` | — | Called with masked display value |
+| `onValueChange` | `(unmasked: string) => void` | — | Called with raw slot characters |
+| `placeholder` | `string` | — | Placeholder text |
+| `disabled` | `boolean` | `false` | Disable the input |
+| `id` | `string` | — | Input `id` attribute |
+| `name` | `string` | — | Input `name` attribute |
+| `inputMode` | `string` | `"text"` | Mobile keyboard hint |
 | `className` | `string` | — | Root CSS class |
 | `style` | `CSSProperties` | — | Root inline styles |
 
