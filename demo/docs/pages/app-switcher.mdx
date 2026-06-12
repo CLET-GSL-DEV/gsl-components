@@ -1,0 +1,67 @@
+export const meta = {
+  title: "AppSwitcher",
+  description: "Google Apps–style 9-dot launcher for switching between GSL systems.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { AppSwitcherPreview } from "../previews/code/AppSwitcherPreview";
+
+# AppSwitcher
+
+Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products.
+
+## Examples
+
+<ExampleTabs title="Remote fetch" preview={<AppSwitcherPreview />}>
+
+```tsx
+import { AppSwitcher } from "@rfdtech/components";
+
+<AppSwitcher
+  baseUrl="https://api.example.com"
+  accessToken="<token>"
+  title="System directory"
+  onAppSelect={(app) => console.log(app.name)}
+/>
+```
+
+</ExampleTabs>
+
+<ExampleTabs title="Static apps" preview={<AppSwitcherPreview />}>
+
+```tsx
+<AppSwitcher
+  apps={[
+    { id: "mail", name: "Mail", icon: "https://example.com/mail.png", href: "https://mail.example.com" },
+  ]}
+  title="System directory"
+/>
+```
+
+</ExampleTabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `apps` | `AppItem[]` | — | Static apps to show in the grid |
+| `baseUrl` | `string` | — | API base URL when fetching remotely |
+| `accessToken` | `string` | — | Bearer token for `/v1/me/apps` |
+| `columns` | `number` | `3` | Grid column count |
+| `title` | `string` | — | Panel header title |
+| `onAppSelect` | `(app: AppItem) => void` | — | Called when an app is selected |
+| `placement` | `"bottom-end" \| "bottom-start" \| "bottom"` | `bottom-end` | Panel position |
+
+## Hooks
+
+```tsx
+import { useMeApps, useAppSwitcher } from "@rfdtech/components";
+
+const { apps, loading, error, refetch } = useMeApps({ baseUrl, accessToken });
+const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
+```
+
+## Notes
+
+- Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, and API utilities.
+- When fetching from a remote `baseUrl`, the API must allow your app's origin (CORS).

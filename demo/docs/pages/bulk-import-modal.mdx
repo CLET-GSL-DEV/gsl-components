@@ -1,0 +1,55 @@
+export const meta = {
+  title: "BulkImportModal",
+  description: "Four-step modal wizard for importing spreadsheet data.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { BulkImportPreview } from "../previews/code/BulkImportPreview";
+
+# BulkImportModal
+
+Four-step modal wizard for importing spreadsheet data (`.xlsx`, `.xls`, `.csv`). Parsing and validation run entirely in the browser.
+
+## Example
+
+<ExampleTabs title="Open import wizard" preview={<BulkImportPreview />}>
+
+```tsx
+import { BulkImportModal } from "@rfdtech/components";
+
+<BulkImportModal
+  open={open}
+  onOpenChange={setOpen}
+  title="Import students"
+  fields={fields}
+  onComplete={(result) => {
+    console.log(result.rows, result.errors);
+  }}
+/>
+```
+
+</ExampleTabs>
+
+## Steps
+
+1. **Upload Document** — preview expected columns, then upload `.xlsx`, `.xls`, or `.csv`
+2. **Select header row** — choose the header row with radio buttons
+3. **Match Columns** — map each uploaded column to a target field
+4. **Validate data** — review rows, discard invalid rows, then **Confirm**
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
+| `fields` | `BulkImportField[]` | — | Target field schema for column matching |
+| `onComplete` | `(result: BulkImportResult) => void` | — | Called with mapped rows on import |
+| `title` | `string` | `Bulk import` | Modal title |
+| `maxFileSizeBytes` | `number` | `5242880` | Maximum upload size (5 MB) |
+| `allowImportWithWarnings` | `boolean` | `false` | Allow import when only warnings exist |
+
+## Notes
+
+- Also exported: `useBulkImportFlow`, step components, and spreadsheet utilities.
+- Discarded rows are excluded from `onComplete`.

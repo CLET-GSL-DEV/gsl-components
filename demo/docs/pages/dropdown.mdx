@@ -1,0 +1,47 @@
+export const meta = {
+  title: "Dropdown",
+  description: "Single-value select with a combobox trigger and portaled listbox.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { DropdownPreview } from "../previews/code/DropdownPreview";
+
+# Dropdown
+
+Single-value select with a combobox trigger and portaled listbox. Use for forms and filters where the user picks one option from a list.
+
+## Example
+
+<ExampleTabs title="Department filter" preview={<DropdownPreview />}>
+
+```tsx
+import { Dropdown } from "@rfdtech/components";
+
+<Dropdown
+  ariaLabel="Department"
+  value={department}
+  onChange={setDepartment}
+  placeholder="Choose department..."
+  clearable
+  options={[
+    { value: "finance", label: "Finance" },
+    { value: "hr", label: "Human Resources" },
+  ]}
+/>
+```
+
+</ExampleTabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | — | Accessible label for the combobox |
+| `value` | `string \| null` | — | Selected option value |
+| `onChange` | `(value: string \| null) => void` | — | Called when selection changes |
+| `options` | `DropdownOption[]` | — | List of `{ value, label, disabled? }` |
+| `placeholder` | `string` | `Select...` | Text when no value is selected |
+| `clearable` | `boolean` | `false` | Show placeholder as a clear option |
+| `disabled` | `boolean` | `false` | Disable the trigger |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |

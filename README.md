@@ -334,6 +334,85 @@ The component caches the selected option label internally. Pass `getOptionLabel`
 | `className` | `string` | — | Root CSS class |
 | `style` | `CSSProperties` | — | Root inline styles |
 
+## DataTable
+
+Read-focused data table with column sorting and pagination. Pass `data` for client-side sorting and pagination; use `loading` when data is fetched by the parent.
+
+`DataTable` composes the standalone [`Pagination`](#pagination) component for its footer.
+
+### Usage
+
+```tsx
+import { DataTable } from "@rfdtech/components";
+
+const columns = [
+  { key: "name", label: "Name", sortable: true },
+  { key: "department", label: "Department", sortable: true },
+];
+
+const { data, loading } = useStaff();
+
+<DataTable
+  columns={columns}
+  data={data}
+  loading={loading}
+  emptyText="No staff found."
+  pageSize={10}
+  onRowClick={(row) => console.log(row.name)}
+/>
+```
+
+Sorting and pagination run in the browser against the `data` array you provide.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `DataTableColumn[]` | required | Column definitions |
+| `data` | `T[]` | required | Rows to display |
+| `loading` | `boolean` | `false` | Show loading spinner and disable controls |
+| `getRowId` | `(row, index) => string \| number` | index | Stable row key |
+| `pageSize` | `number` | `10` | Initial rows per page |
+| `pageSizeOptions` | `number[]` | `[10, 25, 50]` | Page size choices |
+| `emptyText` | `string` | `"No results found."` | Empty state message |
+| `loadingLabel` | `string` | `"Loading data"` | Accessible label for loading spinner |
+| `onRowClick` | `(row: T) => void` | — | Row click handler |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |
+
+## Pagination
+
+Standalone pagination footer with result summary, rows-per-page dropdown, and previous/next controls. Used by `DataTable` but can be composed independently.
+
+### Usage
+
+```tsx
+import { Pagination } from "@rfdtech/components";
+
+<Pagination
+  page={page}
+  pageSize={pageSize}
+  total={total}
+  onPageChange={setPage}
+  onPageSizeChange={setPageSize}
+/>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `page` | `number` | required | Current page (1-based) |
+| `pageSize` | `number` | required | Rows per page |
+| `total` | `number` | required | Total row count |
+| `pageSizeOptions` | `number[]` | `[10, 25, 50]` | Page size choices |
+| `loading` | `boolean` | `false` | Disable controls while loading |
+| `emptySummaryText` | `string` | `"Showing 0 results"` | Summary when `total` is 0 |
+| `onPageChange` | `(page: number) => void` | required | Page change callback |
+| `onPageSizeChange` | `(pageSize: number) => void` | required | Page size change callback |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |
+
 ## DropdownMenu
 
 Action menu triggered by a custom button. Use for row actions, overflow menus, and navigation shortcuts.
@@ -520,7 +599,7 @@ To change the gutter size, override `--gsl-bulk-import-gutter` on `.gsl-bulk-imp
 
 ```bash
 npm install
-npm run demo        # Start demo at http://localhost:5173
+npm run demo        # Start demo at http://localhost:5173 — interactive examples at / and MDX docs at /docs
 npm run test        # Run unit and component tests
 npm run test:watch  # Run tests in watch mode
 npm run build       # Build library to dist/

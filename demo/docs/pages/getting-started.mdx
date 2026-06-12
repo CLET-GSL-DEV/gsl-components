@@ -1,0 +1,59 @@
+export const meta = {
+  title: "Getting started",
+  description:
+    "Install @rfdtech/components, import components, and add styles once in your app entry.",
+};
+
+# Getting started
+
+`@rfdtech/components` is a shared React library for Ghana School of Law projects.
+
+## Install
+
+```bash
+npm install @rfdtech/components react react-dom
+```
+
+## Styles
+
+Component styles load automatically when you import from `@rfdtech/components`. For reliable styling in production, add this once in your app entry (`main.tsx` or `App.tsx`):
+
+```ts
+import "@rfdtech/components/style.css";
+```
+
+## Basic usage
+
+```tsx
+import { DataTable } from "@rfdtech/components";
+import "@rfdtech/components/style.css";
+
+const columns = [
+  { key: "name", label: "Name", sortable: true },
+  { key: "department", label: "Department", sortable: true },
+];
+
+<DataTable columns={columns} data={rows} pageSize={10} />;
+```
+
+## Requirements
+
+- React 18+
+- A bundler that processes CSS (Vite, Webpack, etc.)
+
+## Theming
+
+All components share design tokens from `theme.css`. Override on any ancestor:
+
+```css
+.my-app {
+  --gsl-primary: #1d4ed8;
+  --gsl-primary-light: #eff6ff;
+}
+```
+
+## Tips
+
+- After upgrading the package, clear Vite's dependency cache if styles look stale: `rm -rf node_modules/.vite`
+- Browse the component pages in this sidebar for previews, code examples, and props reference
+- Try the interactive [demo](/) for combined examples

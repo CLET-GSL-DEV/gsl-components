@@ -1,7 +1,10 @@
 import type { IncomingMessage, ServerResponse } from "http";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
+import mdx from "@mdx-js/rollup";
 import react from "@vitejs/plugin-react";
+import remarkGfm from "remark-gfm";
+import rehypePrettyCode from "rehype-pretty-code";
 import { resolve } from "path";
 
 const mockMeAppsResponse = {
@@ -65,7 +68,25 @@ function mockMeAppsPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), mockMeAppsPlugin()],
+  plugins: [
+    {
+      enforce: "pre",
+      ...mdx({
+        remarkPlugins: [remarkGfm],
+        rehypePlugins: [
+          [
+            rehypePrettyCode,
+            {
+              theme: "github-light",
+              keepBackground: false,
+            },
+          ],
+        ],
+      }),
+    },
+    react({ include: /\.(jsx|js|mdx|md|tsx|ts)$/ }),
+    mockMeAppsPlugin(),
+  ],
   root: "demo",
   resolve: {
     alias: {
