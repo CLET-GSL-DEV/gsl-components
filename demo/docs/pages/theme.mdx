@@ -1,0 +1,89 @@
+export const meta = {
+  title: "Theme",
+  description:
+    "Use ThemeProvider for light, dark, and system themes across all GSL components.",
+};
+
+# Theme
+
+All components share CSS design tokens and support light and dark modes through `ThemeProvider`.
+
+## Setup
+
+Wrap your app once near the root:
+
+```tsx title="App.tsx"
+import { ThemeProvider } from "@rfdtech/components";
+import "@rfdtech/components/style.css";
+
+<ThemeProvider defaultTheme="system">
+  <App />
+</ThemeProvider>
+```
+
+Theme styles load automatically when you import from `@rfdtech/components`. You still need `@rfdtech/components/style.css` in your app entry for component CSS.
+
+## Modes
+
+| Value | Behavior |
+|-------|----------|
+| `light` | Always use the light palette |
+| `dark` | Always use the dark palette |
+| `system` | Follow `prefers-color-scheme` (default) |
+
+## Toggle at runtime
+
+```tsx title="App.tsx"
+import { useTheme } from "@rfdtech/components";
+
+function ThemeSwitcher() {
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
+  return (
+    <select
+      value={theme}
+      onChange={(event) => setTheme(event.target.value as "light" | "dark" | "system")}
+    >
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="system">System</option>
+    </select>
+  );
+}
+```
+
+`resolvedTheme` is the palette currently applied (`light` or `dark`).
+
+## CSS tokens
+
+Tokens are defined in `theme.css` and applied on `.gsl-theme` and `document.documentElement` (for portaled overlays such as modals and popovers).
+
+| Token | Use |
+|-------|-----|
+| `--gsl-primary` | Buttons, focus rings, accents |
+| `--gsl-bg` | Surfaces |
+| `--gsl-text` | Body text |
+| `--gsl-border` | Borders |
+| `--gsl-hover` | Hover fills |
+| `--gsl-overlay` | Modal backdrops |
+
+Override on any ancestor (including `.gsl-theme`):
+
+```css title="theme.css"
+.my-app {
+  --gsl-primary: #1d4ed8;
+  --gsl-primary-light: #eff6ff;
+}
+```
+
+## Controlled mode
+
+```tsx title="App.tsx"
+const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
+
+<ThemeProvider theme={theme} onThemeChange={setTheme}>
+  <App />
+</ThemeProvider>
+```
+
+When `theme` is passed, the provider is controlled and `setTheme` from `useTheme()` calls `onThemeChange` only.

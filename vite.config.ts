@@ -13,7 +13,11 @@ export default defineConfig({
       fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),
     },
     rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime"],
+      external: (id) =>
+        id === "react" ||
+        id === "react-dom" ||
+        id === "react/jsx-runtime" ||
+        id.startsWith("@radix-ui/"),
       output: {
         globals: {
           react: "React",

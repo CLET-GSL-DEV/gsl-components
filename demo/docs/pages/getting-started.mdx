@@ -10,36 +10,49 @@ export const meta = {
 
 ## Install
 
-```bash
-npm install @rfdtech/components react react-dom
+```bash title="terminal"
+npm install @rfdtech/components
 ```
+
+Requires React 18+. npm 7+ auto-installs `react` and `react-dom` as peer dependencies. Radix UI and other runtime packages are included as dependencies of `@rfdtech/components`.
 
 ## Styles
 
 Component styles load automatically when you import from `@rfdtech/components`. For reliable styling in production, add this once in your app entry (`main.tsx` or `App.tsx`):
 
-```ts
+```ts title="main.tsx"
 import "@rfdtech/components/style.css";
 ```
 
+## Theme
+
+Wrap your app in `ThemeProvider` so all components share light, dark, or system themes:
+
+```tsx title="App.tsx"
+import { ThemeProvider } from "@rfdtech/components";
+
+<ThemeProvider defaultTheme="system">
+  <App />
+</ThemeProvider>
+```
+
+See the [Theme](/docs/theme) page for `useTheme()`, token reference, and controlled mode.
+
 ## Basic usage
 
-```tsx
-import { BulkImportModal } from "@rfdtech/components";
+```tsx title="App.tsx"
+import { BulkImportModal, ThemeProvider } from "@rfdtech/components";
 import "@rfdtech/components/style.css";
 
-const fields = [
-  { key: "email", label: "Email", required: true },
-  { key: "full_name", label: "Full name", required: true },
-];
-
-<BulkImportModal
-  open={open}
-  onOpenChange={setOpen}
-  title="Import students"
-  fields={fields}
-  onComplete={(result) => console.log(result.rows)}
-/>;
+<ThemeProvider defaultTheme="system">
+  <BulkImportModal
+    open={open}
+    onOpenChange={setOpen}
+    title="Import students"
+    fields={fields}
+    onComplete={(result) => console.log(result.rows)}
+  />
+</ThemeProvider>
 ```
 
 ## Requirements
@@ -49,14 +62,7 @@ const fields = [
 
 ## Theming
 
-All components share design tokens from `theme.css`. Override on any ancestor:
-
-```css
-.my-app {
-  --gsl-primary: #1d4ed8;
-  --gsl-primary-light: #eff6ff;
-}
-```
+All components share design tokens from `theme.css`. Use `ThemeProvider` for light, dark, and system modes — see the [Theme](/docs/theme) page.
 
 ## Tips
 

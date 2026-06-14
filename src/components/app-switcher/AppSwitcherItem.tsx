@@ -56,8 +56,6 @@ export function AppSwitcherItem({ app, onSelect }: AppSwitcherItemProps) {
           e.preventDefault();
           onSelect(app);
         }}
-        role="menuitem"
-        tabIndex={0}
         aria-disabled={app.disabled}
       >
         {content}
@@ -72,8 +70,6 @@ export function AppSwitcherItem({ app, onSelect }: AppSwitcherItemProps) {
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       disabled={app.disabled}
-      role="menuitem"
-      tabIndex={0}
     >
       {content}
     </button>

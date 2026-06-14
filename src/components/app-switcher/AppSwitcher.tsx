@@ -1,11 +1,23 @@
 import { useCallback } from "react";
+import * as Popover from "@radix-ui/react-popover";
 import { useAppSwitcher } from "./hooks/useAppSwitcher";
 import { useMeApps } from "./hooks/useMeApps";
 import type { AppItem, AppSwitcherProps } from "../../types/app-switcher";
 import { AppSwitcherItem } from "./AppSwitcherItem";
 import { GridIcon } from "./GridIcon";
-import "../../styles/theme.css";
 import "./styles/app-switcher.css";
+
+function getPopoverPlacement(placement: AppSwitcherProps["placement"]) {
+  switch (placement) {
+    case "bottom-start":
+      return { side: "bottom" as const, align: "start" as const };
+    case "bottom":
+      return { side: "bottom" as const, align: "center" as const };
+    case "bottom-end":
+    default:
+      return { side: "bottom" as const, align: "end" as const };
+  }
+}
 
 export function AppSwitcher({
   apps: appsProp,
@@ -36,10 +48,9 @@ export function AppSwitcher({
   });
   const apps = appsProp ?? fetchedApps;
 
-  const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher({
+  const { open, setOpen, close } = useAppSwitcher({
     open: controlledOpen,
     onOpenChange,
-    closeOnSelect,
   });
 
   const handleAppSelect = useCallback(
@@ -59,77 +70,73 @@ export function AppSwitcher({
   );
 
   const rootClass = ["gsl-app-switcher", className].filter(Boolean).join(" ");
-  const panelClass = [
-    "gsl-app-switcher__panel",
-    `gsl-app-switcher__panel--${placement}`,
-    open ? "gsl-app-switcher__panel--open" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const panelClass = ["gsl-app-switcher__panel"].filter(Boolean).join(" ");
+  const popoverPlacement = getPopoverPlacement(placement);
 
   return (
-    <div className={rootClass} style={style}>
-      <button
-        ref={triggerRef}
-        type="button"
-        className="gsl-app-switcher__trigger"
-        onClick={toggle}
-        aria-label={triggerLabel}
-        aria-expanded={open}
-        aria-haspopup="menu"
-      >
-        {trigger ?? <GridIcon />}
-      </button>
+    <Popover.Root open={open} onOpenChange={setOpen}>
+      <div className={rootClass} style={style}>
+        <Popover.Trigger asChild>
+          <button
+            type="button"
+            className="gsl-app-switcher__trigger"
+            aria-label={triggerLabel}
+          >
+            {trigger ?? <GridIcon />}
+          </button>
+        </Popover.Trigger>
 
-      {open && (
-        <div
-          ref={panelRef}
-          className={panelClass}
-          role="menu"
-          aria-label={title ?? "Apps"}
-        >
-          {title && <div className="gsl-app-switcher__title">{title}</div>}
+        <Popover.Portal>
+          <Popover.Content
+            className={panelClass}
+            side={popoverPlacement.side}
+            align={popoverPlacement.align}
+            sideOffset={8}
+            aria-label={title ?? "Apps"}
+          >
+            {title && <div className="gsl-app-switcher__title">{title}</div>}
 
-          {loading && (
-            <div className="gsl-app-switcher__status">Loading systems...</div>
-          )}
+            {loading && (
+              <div className="gsl-app-switcher__status">Loading systems...</div>
+            )}
 
-          {!loading && error && (
-            <div className="gsl-app-switcher__status gsl-app-switcher__status--error">
-              {error}
-            </div>
-          )}
+            {!loading && error && (
+              <div className="gsl-app-switcher__status gsl-app-switcher__status--error">
+                {error}
+              </div>
+            )}
 
-          {!loading && !error && apps.length === 0 && (
-            <div className="gsl-app-switcher__status">
-              No systems available.
-            </div>
-          )}
+            {!loading && !error && apps.length === 0 && (
+              <div className="gsl-app-switcher__status">
+                No systems available.
+              </div>
+            )}
 
-          {!loading && !error && apps.length > 0 && (
-            <div
-              className="gsl-app-switcher__grid"
-              style={
-                {
-                  "--gsl-columns": columns,
-                } as React.CSSProperties
-              }
-            >
-              {apps.map((app) => (
-                <AppSwitcherItem
-                  key={app.id}
-                  app={app}
-                  onSelect={handleAppSelect}
-                />
-              ))}
-            </div>
-          )}
+            {!loading && !error && apps.length > 0 && (
+              <div
+                className="gsl-app-switcher__grid"
+                style={
+                  {
+                    "--gsl-columns": columns,
+                  } as React.CSSProperties
+                }
+              >
+                {apps.map((app) => (
+                  <AppSwitcherItem
+                    key={app.id}
+                    app={app}
+                    onSelect={handleAppSelect}
+                  />
+                ))}
+              </div>
+            )}
 
-          {footer && (
-            <div className="gsl-app-switcher__footer">{footer}</div>
-          )}
-        </div>
-      )}
-    </div>
+            {footer && (
+              <div className="gsl-app-switcher__footer">{footer}</div>
+            )}
+          </Popover.Content>
+        </Popover.Portal>
+      </div>
+    </Popover.Root>
   );
 }

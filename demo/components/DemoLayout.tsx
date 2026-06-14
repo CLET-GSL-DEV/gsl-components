@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AppSwitcher } from "@rfdtech/components";
+import { ThemeToggle } from "./ThemeToggle";
 
 const baseUrl = "";
 const accessToken = "demo-token";
@@ -8,11 +9,18 @@ const accessToken = "demo-token";
 interface DemoLayoutProps {
   children: ReactNode;
   mainClassName?: string;
+  pageClassName?: string;
 }
 
-export function DemoLayout({ children, mainClassName = "demo-main" }: DemoLayoutProps) {
+export function DemoLayout({
+  children,
+  mainClassName = "demo-main",
+  pageClassName,
+}: DemoLayoutProps) {
+  const pageClass = ["demo-page", pageClassName].filter(Boolean).join(" ");
+
   return (
-    <div className="demo-page">
+    <div className={pageClass}>
       <header className="demo-header">
         <Link to="/" className="demo-logo">
           GSL Components
@@ -39,6 +47,7 @@ export function DemoLayout({ children, mainClassName = "demo-main" }: DemoLayout
           >
             Docs
           </NavLink>
+          <ThemeToggle />
           <AppSwitcher
             baseUrl={baseUrl}
             accessToken={accessToken}

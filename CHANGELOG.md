@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Radix UI packages moved from peer dependencies to dependencies so a single `npm install @rfdtech/components` is sufficient
+
+## [1.3.0] - 2026-06-14
+
+### Added
+
+- `ThemeProvider` and `useTheme()` for light, dark, and system themes
+- Layered theme CSS (`base`, `light`, `dark`) with shared z-index tokens
+- Theme documentation page at `/docs/theme`
+
+### Changed
+
+- Theme CSS loads once from the library entry instead of per-component imports
+- `ThemeProvider` syncs `data-gsl-theme` to `document.documentElement` so portaled modals and popovers inherit the active palette
+
+## [1.2.0] - 2026-06-14
+
+### Added
+
+- Radix UI primitives as peer dependencies (`@radix-ui/react-popover`, `@radix-ui/react-dialog`, `@radix-ui/react-alert-dialog`, `@radix-ui/react-select`, `@radix-ui/react-radio-group`, `@radix-ui/react-slot`)
+
+### Changed
+
+- `AppSwitcher` now uses `@radix-ui/react-popover` for the app grid panel
+- `BulkImportModal` now uses `@radix-ui/react-dialog` and `@radix-ui/react-alert-dialog` for the modal shell and exit confirmation
+- Column mapping in `BulkImportModal` uses `@radix-ui/react-select`
+- Header row selection uses `@radix-ui/react-radio-group`
+
+### Removed
+
+- Custom popover, dialog, and field-mapping dropdown implementations replaced by Radix primitives
+
 ## [1.0.3] - 2026-06-12
 
 ### Added

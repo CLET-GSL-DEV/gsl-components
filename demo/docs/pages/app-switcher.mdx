@@ -14,7 +14,7 @@ Google Apps–style 9-dot launcher for switching between GSL systems. Drop it in
 
 <ExampleTabs title="Remote fetch" preview={<AppSwitcherPreview />}>
 
-```tsx
+```tsx title="App.tsx"
 import { AppSwitcher } from "@rfdtech/components";
 
 <AppSwitcher
@@ -29,7 +29,7 @@ import { AppSwitcher } from "@rfdtech/components";
 
 <ExampleTabs title="Static apps" preview={<AppSwitcherPreview />}>
 
-```tsx
+```tsx title="App.tsx"
 <AppSwitcher
   apps={[
     { id: "mail", name: "Mail", icon: "https://example.com/mail.png", href: "https://mail.example.com" },
@@ -54,7 +54,7 @@ import { AppSwitcher } from "@rfdtech/components";
 
 ## Hooks
 
-```tsx
+```tsx title="App.tsx"
 import { useMeApps, useAppSwitcher } from "@rfdtech/components";
 
 const { apps, loading, error, refetch } = useMeApps({ baseUrl, accessToken });

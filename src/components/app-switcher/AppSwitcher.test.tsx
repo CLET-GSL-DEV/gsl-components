@@ -27,8 +27,8 @@ describe("AppSwitcher", () => {
 
     await user.click(screen.getByRole("button", { name: "Open app switcher" }));
 
-    expect(screen.getByRole("menu", { name: "System directory" })).toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: /Mail/i })).toBeInTheDocument();
+    expect(screen.getByText("System directory")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Mail/i })).toBeInTheDocument();
   });
 
   it("calls onAppSelect when a static app is chosen", async () => {
@@ -44,7 +44,7 @@ describe("AppSwitcher", () => {
     );
 
     await user.click(screen.getByRole("button", { name: "Open app switcher" }));
-    await user.click(screen.getByRole("menuitem", { name: /Mail/i }));
+    await user.click(screen.getByRole("link", { name: /Mail/i }));
 
     expect(onAppSelect).toHaveBeenCalledWith(
       expect.objectContaining({ id: "mail", name: "Mail" }),
@@ -99,9 +99,7 @@ describe("AppSwitcher", () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByRole("menuitem", { name: /Governance Portal/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: /Governance Portal/i })).toBeInTheDocument();
     });
   });
 

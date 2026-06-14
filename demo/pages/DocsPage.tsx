@@ -10,7 +10,7 @@ export function DocsPage() {
   const Content = page?.default;
 
   return (
-    <DemoLayout mainClassName="demo-docs">
+    <DemoLayout mainClassName="demo-docs" pageClassName="demo-docs-page">
       <div className="demo-docs__layout">
         <aside className="demo-docs__sidebar">
           <DocsSidebar />

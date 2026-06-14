@@ -13,6 +13,7 @@ export const docNavSections: DocNavSection[] = [
     title: "Guide",
     items: [
       { slug: "getting-started", title: "Getting started" },
+      { slug: "theme", title: "Theme" },
       { slug: "changelog", title: "Changelog" },
     ],
   },

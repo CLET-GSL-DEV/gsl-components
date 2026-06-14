@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type {
   UseAppSwitcherOptions,
   UseAppSwitcherReturn,
@@ -28,37 +28,6 @@ export function useAppSwitcher(
 
   const toggle = useCallback(() => setOpen(!open), [open, setOpen]);
   const close = useCallback(() => setOpen(false), [setOpen]);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (
-        panelRef.current?.contains(target) ||
-        triggerRef.current?.contains(target)
-      ) {
-        return;
-      }
-      close();
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        close();
-        triggerRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [open, close]);
 
   return {
     open,

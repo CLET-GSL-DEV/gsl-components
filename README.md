@@ -20,10 +20,21 @@ After upgrading the package, clear Vite's dependency cache if styles look stale:
 
 ## Shared theming
 
-All components share design tokens defined in [`src/styles/theme.css`](src/styles/theme.css). Tokens are applied on `:root` when a component is imported.
+Wrap your app in `ThemeProvider` for light, dark, and system themes. Design tokens live in [`src/styles/theme.css`](src/styles/theme.css) and apply to `.gsl-theme`, `document.documentElement`, and all components (including portaled modals and popovers).
 
-| Token | Default | Use |
-|-------|---------|-----|
+```tsx
+import { ThemeProvider } from "@rfdtech/components";
+import "@rfdtech/components/style.css";
+
+<ThemeProvider defaultTheme="system">
+  <App />
+</ThemeProvider>
+```
+
+Use `useTheme()` to read or change the active theme at runtime. See the [Theme](/docs/theme) docs page for token reference and controlled mode.
+
+| Token | Light default | Use |
+|-------|---------------|-----|
 | `--gsl-primary` | `#dc2626` | Buttons, focus rings, accents |
 | `--gsl-primary-light` | `#fef2f2` | Selected rows, hover fills |
 | `--gsl-bg` | `#ffffff` | Surfaces |
@@ -35,7 +46,7 @@ All components share design tokens defined in [`src/styles/theme.css`](src/style
 | `--gsl-success` | `#16a34a` | Success states |
 | `--gsl-warning` | `#eab308` | Warnings |
 
-Override on a component root or any ancestor:
+You can still override tokens on any ancestor without `ThemeProvider`:
 
 ```css
 .my-app {
@@ -49,8 +60,10 @@ Override on a component root or any ancestor:
 ## Install
 
 ```bash
-npm install @rfdtech/components react react-dom
+npm install @rfdtech/components
 ```
+
+Requires React 18+. npm 7+ auto-installs `react` and `react-dom` as peer dependencies. Radix UI and other runtime packages are included as dependencies of `@rfdtech/components`.
 
 ## AppSwitcher
 

@@ -1,10 +1,9 @@
-import { useState } from "react";
 import type {
   BulkImportField,
   SourceColumn,
   SourceColumnMapping,
 } from "../../../types/bulk-import-modal";
-import { FieldMappingDropdown } from "../internal/dropdown/FieldMappingDropdown";
+import { FieldMappingSelect } from "../internal/FieldMappingSelect";
 
 interface MatchColumnsStepProps {
   fields: BulkImportField[];
@@ -63,8 +62,6 @@ export function MatchColumnsStep({
   onSourceMappingChange,
   onToggleExcludedColumn,
 }: MatchColumnsStepProps) {
-  const [openColumnIndex, setOpenColumnIndex] = useState<number | null>(null);
-
   const visibleColumns = allSourceColumns.filter(
     (column) => !excludedColumns.includes(column.index),
   );
@@ -131,16 +128,12 @@ export function MatchColumnsStep({
                     className="gsl-bulk-import__match-column gsl-bulk-import__target-column"
                   >
                     <div className="gsl-bulk-import__target-column-control">
-                      <FieldMappingDropdown
+                      <FieldMappingSelect
                         ariaLabel={`Map ${column.label} to a field`}
                         value={mappedFieldKey}
                         options={fieldOptions}
                         clearable
                         placeholder="Select column..."
-                        open={openColumnIndex === column.index}
-                        onOpenChange={(open) =>
-                          setOpenColumnIndex(open ? column.index : null)
-                        }
                         onChange={(fieldKey) =>
                           onSourceMappingChange(column.index, fieldKey)
                         }
