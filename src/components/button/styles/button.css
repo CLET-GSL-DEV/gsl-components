@@ -1,0 +1,133 @@
+.gsl-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  color: var(--gsl-text);
+  font-family: var(--gsl-font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    filter 0.15s ease;
+}
+
+.gsl-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gsl-button:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-button--sm {
+  min-height: 32px;
+  padding: 4px 12px;
+  font-size: 13px;
+}
+
+.gsl-button--md {
+  min-height: 40px;
+  padding: 8px 16px;
+}
+
+.gsl-button--lg {
+  min-height: 48px;
+  padding: 12px 20px;
+  font-size: 15px;
+}
+
+.gsl-button--primary {
+  border-color: var(--gsl-primary);
+  background: var(--gsl-primary);
+  color: var(--gsl-on-primary);
+}
+
+.gsl-button--primary:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+.gsl-button--secondary:hover:not(:disabled) {
+  background: var(--gsl-hover);
+  border-color: var(--gsl-border-strong);
+}
+
+.gsl-button--outline {
+  border-color: var(--gsl-primary);
+  background: var(--gsl-bg);
+  color: var(--gsl-primary);
+}
+
+.gsl-button--outline:hover:not(:disabled) {
+  background: var(--gsl-primary-light);
+}
+
+.gsl-button--ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--gsl-text);
+}
+
+.gsl-button--ghost:hover:not(:disabled) {
+  background: var(--gsl-hover);
+}
+
+.gsl-button--loading .gsl-button__label {
+  opacity: 0.85;
+}
+
+.gsl-button__spinner {
+  flex-shrink: 0;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: gsl-button-spin 0.65s linear infinite;
+}
+
+.gsl-button__spinner--sm {
+  width: 14px;
+  height: 14px;
+}
+
+.gsl-button__spinner--md {
+  width: 16px;
+  height: 16px;
+}
+
+.gsl-button__spinner--lg {
+  width: 18px;
+  height: 18px;
+}
+
+.gsl-button__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes gsl-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-button__spinner {
+    animation-duration: 1.2s;
+  }
+}

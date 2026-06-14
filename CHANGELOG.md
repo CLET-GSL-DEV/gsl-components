@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `Button` component with primary, secondary, outline, and ghost variants, loading spinner, and disabled state
+- `ButtonClassNames` and `classNames` prop for part-level Tailwind/class overrides (`root`, `label`, `spinner`)
+- Button documentation page at `/docs/button` with props and exported types
+- Cursor rule `.cursor/rules/gsl-component-authoring.mdc` for component conventions
+
 ### Changed
 
 - Radix UI packages moved from peer dependencies to dependencies so a single `npm install @rfdtech/components` is sufficient

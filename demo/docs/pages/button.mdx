@@ -1,0 +1,81 @@
+export const meta = {
+  title: "Button",
+  description: "Shared button with variants, loading spinner, disabled state, and part-level classNames.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { ButtonPreview } from "../previews/code/ButtonPreview";
+
+# Button
+
+Shared button with primary, secondary, outline, and ghost variants, plus loading and disabled states. Use `classNames` to append Tailwind or custom classes to specific parts without replacing GSL base styles.
+
+## Example
+
+<ExampleTabs title="Variants and states" preview={<ButtonPreview />}>
+
+```tsx title="App.tsx"
+import { Button } from "@rfdtech/components";
+
+<Button variant="primary" onClick={() => save()}>
+  Save
+</Button>
+
+<Button loading loadingLabel="Saving">
+  Save
+</Button>
+
+<Button
+  variant="outline"
+  classNames={{ root: "min-w-32", label: "font-semibold" }}
+>
+  Custom
+</Button>
+```
+
+</ExampleTabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `ButtonVariant` | `"secondary"` | Visual style |
+| `size` | `ButtonSize` | `"md"` | Height and padding |
+| `loading` | `boolean` | `false` | Shows spinner and disables the button |
+| `loadingLabel` | `string` | `"Loading"` | Screen reader label while loading |
+| `classNames` | `ButtonClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root (same as `classNames.root`) |
+| `disabled` | `boolean` | `false` | Disables interaction |
+| `children` | `ReactNode` | — | Button label |
+
+Also accepts standard native `button` attributes (`type`, `onClick`, `aria-*`, etc.).
+
+## Types
+
+### `ButtonProps`
+
+Props for `Button`. Extends `ButtonHTMLAttributes<HTMLButtonElement>` with `variant`, `size`, `loading`, `loadingLabel`, and `classNames`.
+
+### `ButtonClassNames`
+
+Part-level class names merged after base `gsl-button*` styles:
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer `<button>` element |
+| `label` | Label span (`.gsl-button__label`) |
+| `spinner` | Loading spinner (`.gsl-button__spinner`) |
+
+### `ButtonVariant`
+
+`"primary" | "secondary" | "outline" | "ghost"`
+
+### `ButtonSize`
+
+`"sm" | "md" | "lg"`
+
+## Notes
+
+- `loading` sets `disabled`, `aria-busy`, and hides the visible label from screen readers while announcing `loadingLabel`.
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Conflicting Tailwind utilities may require [`tailwind-merge`](https://github.com/dcastil/tailwind-merge) in your app if overrides do not win.

@@ -1,0 +1,66 @@
+---
+description: How to create and extend GSL library components
+globs: src/components/**/*,src/types/**/*
+alwaysApply: false
+---
+
+# GSL component authoring
+
+## Module layout
+
+```
+src/components/{name}/
+  {Name}.tsx
+  index.ts
+  styles/{name}.css    # BEM: gsl-{name}__*
+  {Name}.test.tsx
+src/types/{name}.ts    # props, classNames, unions
+```
+
+## Styling
+
+- Use `--gsl-*` tokens from `src/styles/theme/`; no hardcoded theme colors.
+- Prefix classes `gsl-{component}` / `gsl-{component}__part`.
+- Import CSS in the component file.
+
+## Props and classNames
+
+- Types in `src/types/{name}.ts`; re-export from component `index.ts` and `src/index.ts`.
+- Provide **`classNames`** for stylable sub-parts; merge with `cn()` from `src/utils/cn.ts`:
+
+```ts
+export interface ExampleClassNames {
+  root?: string;
+}
+
+export interface ExampleProps {
+  classNames?: ExampleClassNames;
+  className?: string; // merges with classNames.root on native elements
+}
+```
+
+```tsx
+className={cn("gsl-example", classNames?.root, className)}
+```
+
+- Never remove base `gsl-*` classes; append consumer classes (Tailwind-friendly).
+
+## Tests
+
+- Vitest + Testing Library; cover disabled, loading, and key interactions.
+
+## Required on every public API change
+
+Do not finish component work without all three:
+
+1. **CHANGELOG.md** — entry under `[Unreleased]` (`Added` / `Changed` / `Fixed`).
+2. **README.md** — usage summary and link to docs page.
+3. **Docs site** — add or update `demo/docs/pages/{slug}.mdx`:
+   - Examples (ExampleTabs when useful)
+   - **Props** table
+   - **Types** section for every exported type/interface/union
+   - Nav entry in `demo/docs/nav.ts`
+
+## Exports
+
+- Add `export * from "./components/{name}"` to `src/index.ts`.

@@ -65,6 +65,33 @@ npm install @rfdtech/components
 
 Requires React 18+. npm 7+ auto-installs `react` and `react-dom` as peer dependencies. Radix UI and other runtime packages are included as dependencies of `@rfdtech/components`.
 
+## Button
+
+Shared button with primary, secondary, outline, and ghost variants, plus loading and disabled states. See the [Button](/docs/button) docs page for props and exported types.
+
+```tsx
+import { Button } from "@rfdtech/components";
+
+<Button variant="primary" onClick={() => save()}>
+  Save
+</Button>
+
+<Button loading loadingLabel="Saving">
+  Save
+</Button>
+
+<Button disabled>Unavailable</Button>
+
+<Button
+  variant="outline"
+  classNames={{ root: "min-w-32", label: "font-semibold" }}
+>
+  Custom
+</Button>
+```
+
+Props: `variant`, `size`, `loading`, `loadingLabel`, `classNames`, and standard `button` attributes. Exported types: `ButtonProps`, `ButtonClassNames`, `ButtonVariant`, `ButtonSize`.
+
 ## AppSwitcher
 
 Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products.

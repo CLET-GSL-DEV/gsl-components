@@ -20,6 +20,7 @@ export const docNavSections: DocNavSection[] = [
   {
     title: "Components",
     items: [
+      { slug: "button", title: "Button" },
       { slug: "app-switcher", title: "AppSwitcher" },
       { slug: "bulk-import-modal", title: "BulkImportModal" },
     ],
