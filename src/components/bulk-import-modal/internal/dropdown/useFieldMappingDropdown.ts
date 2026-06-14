@@ -5,16 +5,19 @@ import {
   useState,
   type RefObject,
 } from "react";
-import type { UseDropdownOptions, UseDropdownReturn } from "../../../types/dropdown";
+import type {
+  UseFieldMappingDropdownOptions,
+  UseFieldMappingDropdownReturn,
+} from "./types";
 
-export function useDropdown<
+export function useFieldMappingDropdown<
   T extends HTMLElement = HTMLElement,
   U extends HTMLElement = HTMLElement,
 >(
-  options: UseDropdownOptions = {},
+  options: UseFieldMappingDropdownOptions = {},
   panelRefProp?: RefObject<T | null>,
   triggerRefProp?: RefObject<U | null>,
-): UseDropdownReturn<T, U> {
+): UseFieldMappingDropdownReturn<T, U> {
   const { open: controlledOpen, onOpenChange } = options;
 
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
@@ -70,7 +73,7 @@ export function useDropdown<
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [open, close]);
+  }, [open, close, panelRef, triggerRef]);
 
   return {
     open,

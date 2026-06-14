@@ -4,7 +4,7 @@ import type {
   SourceColumn,
   SourceColumnMapping,
 } from "../../../types/bulk-import-modal";
-import { Dropdown } from "../../dropdown/Dropdown";
+import { FieldMappingDropdown } from "../internal/dropdown/FieldMappingDropdown";
 
 interface MatchColumnsStepProps {
   fields: BulkImportField[];
@@ -131,7 +131,7 @@ export function MatchColumnsStep({
                     className="gsl-bulk-import__match-column gsl-bulk-import__target-column"
                   >
                     <div className="gsl-bulk-import__target-column-control">
-                      <Dropdown
+                      <FieldMappingDropdown
                         ariaLabel={`Map ${column.label} to a field`}
                         value={mappedFieldKey}
                         options={fieldOptions}

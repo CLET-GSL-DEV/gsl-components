@@ -81,6 +81,9 @@
     "product-switcher"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "xlsx": "^0.18.5"
   }

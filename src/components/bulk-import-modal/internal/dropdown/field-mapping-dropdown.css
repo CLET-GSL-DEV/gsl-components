@@ -1,0 +1,100 @@
+.gsl-dropdown {
+  position: relative;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  font-family: var(--gsl-font);
+}
+
+.gsl-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  padding: 0 32px 0 12px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background-color: var(--gsl-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%235f6368' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--gsl-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.gsl-dropdown__trigger:hover:not(:disabled) {
+  border-color: var(--gsl-border-strong);
+  background-color: var(--gsl-hover);
+}
+
+.gsl-dropdown__trigger--open {
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 1px var(--gsl-primary);
+}
+
+.gsl-dropdown__trigger--placeholder {
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-dropdown__trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.gsl-dropdown__trigger:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-dropdown__trigger-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.gsl-dropdown__menu {
+  position: fixed;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  box-shadow: var(--gsl-shadow-md);
+  overflow-y: auto;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.gsl-dropdown__option {
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--gsl-text);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.gsl-dropdown__option:hover:not(.gsl-dropdown__option--disabled) {
+  background: var(--gsl-hover);
+}
+
+.gsl-dropdown__option--selected {
+  background: var(--gsl-primary-light);
+  font-weight: 500;
+}
+
+.gsl-dropdown__option--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

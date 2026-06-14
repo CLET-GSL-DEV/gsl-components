@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState, type RefObject } from "react";
-import type { DropdownPosition } from "../../../types/dropdown";
+import type { FieldMappingDropdownPosition } from "./types";
 
-export function useDropdownPosition(
+export function useFieldMappingDropdownPosition(
   open: boolean,
   triggerRef: RefObject<HTMLElement | null>,
-): DropdownPosition | null {
-  const [position, setPosition] = useState<DropdownPosition | null>(null);
+): FieldMappingDropdownPosition | null {
+  const [position, setPosition] = useState<FieldMappingDropdownPosition | null>(
+    null,
+  );
 
   const updatePosition = useCallback(() => {
     const trigger = triggerRef.current;

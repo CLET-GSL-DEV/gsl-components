@@ -9,12 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `InputMask` component with pattern-based masking (`#`, `A`, `*`, literals) and `INPUT_MASK_PRESETS` for common formats
 - Changelog page in docs (`/docs/changelog`) and root `CHANGELOG.md`
-
-### Fixed
-
-- `InputMask` no longer duplicates leading literals in presets such as `phoneGh` (`0## ### ####`)
 
 ## [1.0.2] - 2026-06-12
 
@@ -41,12 +36,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `BulkImportModal` column mapping now uses `Dropdown` instead of internal `FieldMappingSelect`
+- `BulkImportModal` column mapping uses an internal field-mapping dropdown
 - README expanded with component usage and style import instructions
 
 ### Removed
 
-- Internal `FieldMappingSelect` component (replaced by exported `Dropdown`)
+- `Dropdown`, `Combobox`, `DropdownMenu`, `DataTable`, and `Pagination` components
 
 ## [0.4.0] - 2026-06-11
 

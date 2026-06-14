@@ -20,12 +20,6 @@ export const docNavSections: DocNavSection[] = [
     title: "Components",
     items: [
       { slug: "app-switcher", title: "AppSwitcher" },
-      { slug: "dropdown", title: "Dropdown" },
-      { slug: "input-mask", title: "InputMask" },
-      { slug: "combobox", title: "Combobox" },
-      { slug: "data-table", title: "DataTable" },
-      { slug: "pagination", title: "Pagination" },
-      { slug: "dropdown-menu", title: "DropdownMenu" },
       { slug: "bulk-import-modal", title: "BulkImportModal" },
     ],
   },

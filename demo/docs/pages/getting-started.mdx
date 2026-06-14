@@ -25,15 +25,21 @@ import "@rfdtech/components/style.css";
 ## Basic usage
 
 ```tsx
-import { DataTable } from "@rfdtech/components";
+import { BulkImportModal } from "@rfdtech/components";
 import "@rfdtech/components/style.css";
 
-const columns = [
-  { key: "name", label: "Name", sortable: true },
-  { key: "department", label: "Department", sortable: true },
+const fields = [
+  { key: "email", label: "Email", required: true },
+  { key: "full_name", label: "Full name", required: true },
 ];
 
-<DataTable columns={columns} data={rows} pageSize={10} />;
+<BulkImportModal
+  open={open}
+  onOpenChange={setOpen}
+  title="Import students"
+  fields={fields}
+  onComplete={(result) => console.log(result.rows)}
+/>;
 ```
 
 ## Requirements

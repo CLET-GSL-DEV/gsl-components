@@ -1,6 +1,0 @@
-export { DataTable } from "./DataTable";
-export type {
-  DataTableColumn,
-  DataTableProps,
-  DataTableSort,
-} from "../../types/data-table";

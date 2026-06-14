@@ -1,15 +1,14 @@
 import { useId, useRef } from "react";
 import { createPortal } from "react-dom";
-import type { DropdownProps } from "../../types/dropdown";
-import { useDropdown } from "./hooks/useDropdown";
-import { useDropdownPosition } from "./hooks/useDropdownPosition";
-import "../../styles/theme.css";
-import "./styles/dropdown.css";
+import type { FieldMappingDropdownProps } from "./types";
+import { useFieldMappingDropdown } from "./useFieldMappingDropdown";
+import { useFieldMappingDropdownPosition } from "./useFieldMappingDropdownPosition";
+import "./field-mapping-dropdown.css";
 
 const MENU_MAX_HEIGHT = 240;
 const MENU_Z_INDEX = 1200;
 
-export function Dropdown({
+export function FieldMappingDropdown({
   ariaLabel,
   placeholder = "Select...",
   value,
@@ -21,11 +20,11 @@ export function Dropdown({
   onChange,
   className,
   style,
-}: DropdownProps) {
+}: FieldMappingDropdownProps) {
   const listboxId = useId();
   const panelRef = useRef<HTMLUListElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const { open, toggle, close } = useDropdown(
+  const { open, toggle, close } = useFieldMappingDropdown(
     {
       open: controlledOpen,
       onOpenChange,
@@ -34,7 +33,7 @@ export function Dropdown({
     triggerRef,
   );
 
-  const menuPosition = useDropdownPosition(open, triggerRef);
+  const menuPosition = useFieldMappingDropdownPosition(open, triggerRef);
 
   const selectedOption = options.find((option) => option.value === value);
   const displayLabel = selectedOption?.label ?? placeholder;
