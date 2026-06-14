@@ -57,8 +57,8 @@ export function DemoPage() {
       <h1 className="demo-heading">GSL Components Demo</h1>
       <p className="demo-text">
         Shared React components for Ghana School of Law projects. Browse the{" "}
-        <Link to="/docs">component docs</Link>, try the interactive example
-        below, or open the AppSwitcher from the header.
+        <Link to="/docs">component docs</Link> and try the interactive example
+        below.
       </p>
 
       <button

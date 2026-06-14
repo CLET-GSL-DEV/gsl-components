@@ -1,10 +1,6 @@
 import type { ReactNode } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { AppSwitcher } from "@rfdtech/components";
 import { ThemeToggle } from "./ThemeToggle";
-
-const baseUrl = "";
-const accessToken = "demo-token";
 
 interface DemoLayoutProps {
   children: ReactNode;
@@ -48,12 +44,6 @@ export function DemoLayout({
             Docs
           </NavLink>
           <ThemeToggle />
-          <AppSwitcher
-            baseUrl={baseUrl}
-            accessToken={accessToken}
-            title="System directory"
-            onAppSelect={(app) => console.log("Selected:", app.name, app.metadata)}
-          />
         </nav>
       </header>
 

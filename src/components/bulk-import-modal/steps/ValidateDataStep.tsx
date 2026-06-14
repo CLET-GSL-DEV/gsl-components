@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type {
   BulkImportField,
   BulkImportValidationError,
@@ -12,6 +13,7 @@ interface ValidateDataStepProps {
   showOnlyErrors: boolean;
   discardedRows: number[];
   onToggleRowSelection: (rowId: number) => void;
+  onSetVisibleRowsSelection: (rowIds: number[], selected: boolean) => void;
   onShowOnlyErrorsChange: (value: boolean) => void;
   onDiscardSelectedRows: () => void;
   onUpdateRowValue: (rowId: number, fieldKey: string, value: string) => void;
@@ -36,6 +38,7 @@ export function ValidateDataStep({
   showOnlyErrors,
   discardedRows,
   onToggleRowSelection,
+  onSetVisibleRowsSelection,
   onShowOnlyErrorsChange,
   onDiscardSelectedRows,
   onUpdateRowValue,
@@ -50,6 +53,22 @@ export function ValidateDataStep({
     .map((row, index) => ({ row, rowId: index + 1 }))
     .filter(({ rowId }) => !discardedRows.includes(rowId))
     .filter(({ rowId }) => !showOnlyErrors || rowsWithErrors.has(rowId));
+
+  const visibleRowIds = visibleRows.map(({ rowId }) => rowId);
+  const allVisibleSelected =
+    visibleRowIds.length > 0 &&
+    visibleRowIds.every((rowId) => selectedRowIds.includes(rowId));
+  const someVisibleSelected = visibleRowIds.some((rowId) =>
+    selectedRowIds.includes(rowId),
+  );
+  const selectAllRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (selectAllRef.current) {
+      selectAllRef.current.indeterminate =
+        someVisibleSelected && !allVisibleSelected;
+    }
+  }, [allVisibleSelected, someVisibleSelected]);
 
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--validate">
@@ -93,7 +112,19 @@ export function ValidateDataStep({
               <thead>
                 <tr>
                   <th scope="col" className="gsl-bulk-import__checkbox-cell">
-                    <span className="gsl-bulk-import__sr-only">Select row</span>
+                    <input
+                      ref={selectAllRef}
+                      type="checkbox"
+                      checked={allVisibleSelected}
+                      disabled={visibleRowIds.length === 0}
+                      aria-label="Select all rows"
+                      onChange={(event) =>
+                        onSetVisibleRowsSelection(
+                          visibleRowIds,
+                          event.target.checked,
+                        )
+                      }
+                    />
                   </th>
                   {visibleFields.map((field) => (
                     <th key={field.key} scope="col">

@@ -1,0 +1,83 @@
+export const meta = {
+  title: "Dropdown",
+  description:
+    "Select-style dropdown built on Radix Select with clearable support and part-level classNames.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { DropdownPreview } from "../previews/code/DropdownPreview";
+
+# Dropdown
+
+Select-style dropdown for choosing one option from a list. Built on `@radix-ui/react-select` with GSL styling, optional clearable reset, and part-level `classNames`.
+
+## Example
+
+<ExampleTabs title="Basic dropdown" preview={<DropdownPreview />}>
+
+```tsx title="App.tsx"
+import { Dropdown } from "@rfdtech/components";
+
+const options = [
+  { value: "email", label: "Email" },
+  { value: "name", label: "Full name" },
+];
+
+<Dropdown
+  aria-label="Field"
+  value={value}
+  onValueChange={setValue}
+  options={options}
+  placeholder="Select..."
+  clearable
+/>
+```
+
+</ExampleTabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string \| null` | — | Selected option value, or `null` when empty |
+| `onValueChange` | `(value: string \| null) => void` | — | Called when the selection changes |
+| `options` | `DropdownOption[]` | — | Available choices |
+| `placeholder` | `string` | `"Select..."` | Placeholder and clearable reset label |
+| `clearable` | `boolean` | `false` | Adds a menu item that resets to `null` |
+| `disabled` | `boolean` | `false` | Disables the trigger |
+| `aria-label` | `string` | — | Accessible name for the combobox trigger |
+| `classNames` | `DropdownClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root wrapper |
+
+## Types
+
+### `DropdownProps`
+
+Props for `Dropdown`. Controls value, options, placeholder, clearable behavior, disabled state, and styling hooks.
+
+### `DropdownOption`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `value` | `string` | Option value passed to `onValueChange` |
+| `label` | `string` | Visible label in the menu |
+| `disabled` | `boolean` | Optional; disables the option |
+
+### `DropdownClassNames`
+
+Part-level class names merged after base `gsl-dropdown*` styles:
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer wrapper (`.gsl-dropdown`) |
+| `trigger` | Combobox trigger (`.gsl-dropdown__trigger`) |
+| `icon` | Chevron icon (`.gsl-dropdown__trigger-icon`) |
+| `menu` | Menu panel (`.gsl-dropdown__menu`) |
+| `option` | Menu items (`.gsl-dropdown__option`) |
+
+## Notes
+
+- The trigger icon is Lucide `ChevronDown` (16px); it rotates when the menu is open.
+- Use `aria-label` (or an external `<label>` associated with the field) so the combobox has an accessible name.
+- When `clearable` is true, choosing the placeholder item calls `onValueChange(null)`.
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

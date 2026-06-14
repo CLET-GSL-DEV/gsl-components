@@ -1,9 +1,8 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AppSwitcher } from "./AppSwitcher";
 import type { AppItem } from "../../types/app-switcher";
-import { sampleMeAppsResponse } from "../../test/fixtures";
 
 const staticApps: AppItem[] = [
   {
@@ -51,81 +50,55 @@ describe("AppSwitcher", () => {
     );
   });
 
-  it("shows a loading state while remote apps are fetched", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockImplementation(
-        () =>
-          new Promise<Response>(() => {
-            /* never resolves */
-          }),
-      ),
-    );
+  it("shows a loading state when loading is true", async () => {
+    const user = userEvent.setup();
 
     render(
       <AppSwitcher
-        baseUrl="https://api.example.com"
-        accessToken="secret-token"
+        apps={[]}
+        loading
+        loadingLabel="Loading systems..."
         title="System directory"
       />,
     );
 
-    await userEvent.setup().click(
-      screen.getByRole("button", { name: "Open app switcher" }),
-    );
+    await user.click(screen.getByRole("button", { name: "Open app switcher" }));
 
     expect(screen.getByText("Loading systems...")).toBeInTheDocument();
+    expect(document.querySelector(".gsl-app-switcher__spinner")).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("shows fetched apps after a successful API response", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => sampleMeAppsResponse,
-      }),
-    );
+  it("renders round image icons for URL-based app icons", async () => {
+    const user = userEvent.setup();
 
     render(
       <AppSwitcher
-        baseUrl="https://api.example.com"
-        accessToken="secret-token"
+        apps={[
+          {
+            id: "portal",
+            name: "Portal",
+            icon: "https://example.com/icon.png",
+          },
+        ]}
         title="System directory"
       />,
     );
 
-    await userEvent.setup().click(
-      screen.getByRole("button", { name: "Open app switcher" }),
-    );
+    await user.click(screen.getByRole("button", { name: "Open app switcher" }));
 
-    await waitFor(() => {
-      expect(screen.getByRole("link", { name: /Governance Portal/i })).toBeInTheDocument();
-    });
+    const image = document.querySelector(".gsl-app-switcher__icon-image");
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute("src", "https://example.com/icon.png");
   });
 
-  it("shows an error message when the API request fails", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: false,
-        status: 403,
-      }),
-    );
+  it("shows an empty message when not loading and apps is empty", async () => {
+    const user = userEvent.setup();
 
-    render(
-      <AppSwitcher
-        baseUrl="https://api.example.com"
-        accessToken="secret-token"
-        title="System directory"
-      />,
-    );
+    render(<AppSwitcher apps={[]} title="System directory" />);
 
-    await userEvent.setup().click(
-      screen.getByRole("button", { name: "Open app switcher" }),
-    );
+    await user.click(screen.getByRole("button", { name: "Open app switcher" }));
 
-    await waitFor(() => {
-      expect(screen.getByText("Failed to load apps (403)")).toBeInTheDocument();
-    });
+    expect(screen.getByText("No systems available.")).toBeInTheDocument();
   });
 });

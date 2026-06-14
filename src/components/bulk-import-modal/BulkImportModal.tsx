@@ -266,6 +266,7 @@ export function BulkImportModal({
                   showOnlyErrors={flow.showOnlyErrors}
                   discardedRows={flow.discardedRows}
                   onToggleRowSelection={flow.toggleRowSelection}
+                  onSetVisibleRowsSelection={flow.setVisibleRowsSelection}
                   onShowOnlyErrorsChange={flow.setShowOnlyErrors}
                   onDiscardSelectedRows={flow.discardSelectedRows}
                   onUpdateRowValue={flow.updateRowValue}

@@ -218,6 +218,19 @@ export function useBulkImportFlow(
     );
   }, []);
 
+  const setVisibleRowsSelection = useCallback(
+    (rowIds: number[], selected: boolean) => {
+      setSelectedRowIds((current) => {
+        if (selected) {
+          return [...new Set([...current, ...rowIds])];
+        }
+
+        return current.filter((id) => !rowIds.includes(id));
+      });
+    },
+    [],
+  );
+
   const discardSelectedRows = useCallback(() => {
     setDiscardedRows((current) => [
       ...new Set([...current, ...selectedRowIds]),
@@ -300,6 +313,7 @@ export function useBulkImportFlow(
     toggleExcludedColumn,
     setSelectedRowIds,
     toggleRowSelection,
+    setVisibleRowsSelection,
     setShowOnlyErrors,
     discardSelectedRows,
     updateRowValue,

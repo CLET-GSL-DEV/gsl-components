@@ -47,6 +47,44 @@ describe("useBulkImportFlow", () => {
     expect(result.current.editableRows[0]?.email).toBe("a@example.com");
   });
 
+  it("sets visible row selection for select-all behavior", async () => {
+    const { result } = renderHook(() =>
+      useBulkImportFlow({
+        fields: [
+          { key: "email", label: "Email", required: true },
+          { key: "full_name", label: "Full name", required: true },
+        ],
+        open: true,
+      }),
+    );
+
+    const csv =
+      "Email,Full name\na@example.com,Ada Lovelace\nbad,Grace Hopper\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+
+    await act(async () => {
+      await result.current.handleFile(file);
+    });
+    act(() => {
+      result.current.goNext();
+    });
+    act(() => {
+      result.current.goNext();
+    });
+
+    expect(result.current.mappedRows).toHaveLength(2);
+
+    act(() => {
+      result.current.setVisibleRowsSelection([1, 2], true);
+    });
+    expect(result.current.selectedRowIds).toEqual([1, 2]);
+
+    act(() => {
+      result.current.setVisibleRowsSelection([2], false);
+    });
+    expect(result.current.selectedRowIds).toEqual([1]);
+  });
+
   it("excludes discarded rows from the built result", async () => {
     const { result } = renderHook(() =>
       useBulkImportFlow({

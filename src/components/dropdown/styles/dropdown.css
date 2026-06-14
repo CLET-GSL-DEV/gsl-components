@@ -55,9 +55,18 @@
 .gsl-dropdown__trigger-icon {
   position: absolute;
   right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
   color: var(--gsl-text-secondary);
-  font-size: 12px;
-  line-height: 1;
+  pointer-events: none;
+  transition: transform 150ms ease;
+}
+
+.gsl-dropdown__trigger-icon[data-state="open"] {
+  transform: rotate(180deg);
 }
 
 .gsl-dropdown__menu {

@@ -12,11 +12,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Button` component with primary, secondary, outline, and ghost variants, loading spinner, and disabled state
 - `ButtonClassNames` and `classNames` prop for part-level Tailwind/class overrides (`root`, `label`, `spinner`)
 - Button documentation page at `/docs/button` with props and exported types
+- `Checkbox` component with optional label and part-level `classNames`
+- Checkbox documentation page at `/docs/checkbox` with props and exported types
+- `Dropdown` select-style component with clearable support and part-level `classNames`
+- Dropdown documentation page at `/docs/dropdown` with props and exported types
+- `Popover` compound primitives (`Popover`, `PopoverTrigger`, `PopoverContent`, etc.) with styled content surface
+- Popover documentation page at `/docs/popover` with props and exported types
 - Cursor rule `.cursor/rules/gsl-component-authoring.mdc` for component conventions
 
 ### Changed
 
 - Radix UI packages moved from peer dependencies to dependencies so a single `npm install @rfdtech/components` is sufficient
+- `FieldMappingSelect` in BulkImportModal now wraps the public `Dropdown` component
+- Dropdown trigger uses Lucide `ChevronDown` instead of a text glyph; adds `lucide-react` as a dependency
+- Popover docs example demonstrates an action menu pattern with `PopoverClose`; adds menu utility classes (`gsl-popover--menu`, `gsl-popover__menu`, `gsl-popover__menu-item`)
+- AppSwitcher app icons render image URLs as round cropped icons
+- `AppSwitcher` is data-only: pass `apps` directly and control loading with the `loading` prop; panel shows a Lucide spinner while loading
+
+### Removed
+
+- `AppSwitcher` remote fetch via `baseUrl` / `accessToken`
+- `useMeApps`, `fetchMeApps`, `MeAppsFetchError`, `buildMeAppsUrl`, `createMeAppsRequestInit`, `mapMeAppToAppItem`, `mapMeAppsToAppItems`
+- `MeApp`, `MeAppsResponse`, `UseMeAppsOptions`, `UseMeAppsReturn`, and `AppItem.metadata`
 
 ## [1.3.0] - 2026-06-14
 

@@ -15,31 +15,15 @@ export interface AppItem {
   disabled?: boolean;
   /** Optional badge text (e.g. "New") */
   badge?: string;
-  /** Original API payload when loaded from `/v1/me/apps` */
-  metadata?: MeApp;
 }
 
-export interface MeApp {
-  system_id: string;
-  system_name: string;
-  system_code: string;
-  frontend_url: string;
-  role: string;
-  permissions: string[];
-}
-
-export interface MeAppsResponse {
-  success: boolean;
-  message: string;
-  data: {
-    apps: MeApp[];
-  };
-  meta: {
-    count: number;
-  };
-}
-
-export interface AppSwitcherBaseProps {
+export interface AppSwitcherProps {
+  /** Apps to display in the grid */
+  apps: AppItem[];
+  /** Shows a loading state in the panel instead of the grid */
+  loading?: boolean;
+  /** Screen reader label while loading */
+  loadingLabel?: string;
   /** Controlled open state */
   open?: boolean;
   /** Callback when open state changes */
@@ -64,36 +48,6 @@ export interface AppSwitcherBaseProps {
   placement?: "bottom-end" | "bottom-start" | "bottom";
   /** Whether to close the panel when an app is selected */
   closeOnSelect?: boolean;
-}
-
-export interface AppSwitcherWithApps extends AppSwitcherBaseProps {
-  /** Static apps to display in the grid */
-  apps: AppItem[];
-  baseUrl?: never;
-  accessToken?: never;
-}
-
-export interface AppSwitcherWithFetch extends AppSwitcherBaseProps {
-  apps?: never;
-  /** API base URL, e.g. `https://api.example.com` */
-  baseUrl: string;
-  /** Bearer access token for authenticated requests */
-  accessToken: string;
-}
-
-export type AppSwitcherProps = AppSwitcherWithApps | AppSwitcherWithFetch;
-
-export interface UseMeAppsOptions {
-  baseUrl: string;
-  accessToken: string;
-  enabled?: boolean;
-}
-
-export interface UseMeAppsReturn {
-  apps: AppItem[];
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
 }
 
 export interface UseAppSwitcherOptions {

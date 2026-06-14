@@ -1,0 +1,77 @@
+export const meta = {
+  title: "Checkbox",
+  description:
+    "Accessible checkbox with optional label, GSL styling, and part-level classNames.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { CheckboxPreview } from "../previews/code/CheckboxPreview";
+
+# Checkbox
+
+Accessible checkbox built on `@radix-ui/react-checkbox` with GSL styling, optional label, and part-level `classNames`.
+
+## Example
+
+<ExampleTabs title="Checkbox states" preview={<CheckboxPreview />}>
+
+```tsx title="App.tsx"
+import { Checkbox } from "@rfdtech/components";
+
+<Checkbox
+  label="Accept terms and conditions"
+  checked={accepted}
+  onCheckedChange={setAccepted}
+/>
+
+<Checkbox label="Disabled option" disabled />
+
+<Checkbox
+  aria-label="Select row"
+  checked={selected}
+  onCheckedChange={setSelected}
+/>
+```
+
+</ExampleTabs>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `checked` | `boolean` | — | Controlled checked state |
+| `defaultChecked` | `boolean` | — | Initial checked state (uncontrolled) |
+| `onCheckedChange` | `(checked: boolean) => void` | — | Called when checked state changes |
+| `label` | `ReactNode` | — | Visible label beside the control |
+| `disabled` | `boolean` | `false` | Disables the checkbox |
+| `required` | `boolean` | — | Marks the field as required in forms |
+| `name` | `string` | — | Form field name |
+| `value` | `string` | — | Form field value when checked |
+| `id` | `string` | — | Control id (auto-generated if omitted) |
+| `aria-label` | `string` | — | Accessible name when `label` is omitted |
+| `classNames` | `CheckboxClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root wrapper |
+
+## Types
+
+### `CheckboxProps`
+
+Props for `Checkbox`. Supports controlled and uncontrolled usage with an optional visible label.
+
+### `CheckboxClassNames`
+
+Part-level class names merged after base `gsl-checkbox*` styles:
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer wrapper (`.gsl-checkbox`) |
+| `control` | Checkbox control (`.gsl-checkbox__control`) |
+| `indicator` | Checked indicator container |
+| `icon` | Lucide check icon |
+| `label` | Visible label text |
+
+## Notes
+
+- Provide `label` or `aria-label` so the checkbox has an accessible name.
+- Checked state shows a Lucide `Check` icon on the primary background.
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

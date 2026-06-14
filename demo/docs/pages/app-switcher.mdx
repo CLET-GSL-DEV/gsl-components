@@ -8,18 +8,32 @@ import { AppSwitcherPreview } from "../previews/code/AppSwitcherPreview";
 
 # AppSwitcher
 
-Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products.
+Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products. Pass `apps` from your own data layer and use `loading` while data is being fetched.
 
 ## Examples
 
-<ExampleTabs title="Remote fetch" preview={<AppSwitcherPreview />}>
+<ExampleTabs title="With apps" preview={<AppSwitcherPreview />}>
 
 ```tsx title="App.tsx"
 import { AppSwitcher } from "@rfdtech/components";
 
+const apps = [
+  {
+    id: "gov-portal",
+    name: "Governance Portal",
+    icon: "https://example.com/gov-portal.png",
+    href: "https://portal.example.com",
+  },
+  {
+    id: "finance-hub",
+    name: "Finance Hub",
+    icon: "https://example.com/finance-hub.png",
+    href: "https://finance.example.com",
+  },
+];
+
 <AppSwitcher
-  baseUrl="https://api.example.com"
-  accessToken="<token>"
+  apps={apps}
   title="System directory"
   onAppSelect={(app) => console.log(app.name)}
 />
@@ -27,13 +41,15 @@ import { AppSwitcher } from "@rfdtech/components";
 
 </ExampleTabs>
 
-<ExampleTabs title="Static apps" preview={<AppSwitcherPreview />}>
+<ExampleTabs title="Loading state" preview={<AppSwitcherPreview />}>
 
 ```tsx title="App.tsx"
+import { AppSwitcher } from "@rfdtech/components";
+
 <AppSwitcher
-  apps={[
-    { id: "mail", name: "Mail", icon: "https://example.com/mail.png", href: "https://mail.example.com" },
-  ]}
+  apps={[]}
+  loading
+  loadingLabel="Loading systems..."
   title="System directory"
 />
 ```
@@ -44,24 +60,55 @@ import { AppSwitcher } from "@rfdtech/components";
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `apps` | `AppItem[]` | — | Static apps to show in the grid |
-| `baseUrl` | `string` | — | API base URL when fetching remotely |
-| `accessToken` | `string` | — | Bearer token for `/v1/me/apps` |
+| `apps` | `AppItem[]` | — | Apps to show in the grid (use `[]` while loading) |
+| `loading` | `boolean` | `false` | Shows a spinner in the panel instead of the grid |
+| `loadingLabel` | `string` | `"Loading systems..."` | Accessible label while loading |
 | `columns` | `number` | `3` | Grid column count |
 | `title` | `string` | — | Panel header title |
 | `onAppSelect` | `(app: AppItem) => void` | — | Called when an app is selected |
-| `placement` | `"bottom-end" \| "bottom-start" \| "bottom"` | `bottom-end` | Panel position |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
+| `triggerLabel` | `string` | `"Open app switcher"` | Accessible label for the trigger |
+| `trigger` | `ReactNode` | 9-dot icon | Custom trigger element |
+| `footer` | `ReactNode` | — | Footer content below the grid |
+| `placement` | `"bottom-end" \| "bottom-start" \| "bottom"` | `"bottom-end"` | Panel position |
+| `closeOnSelect` | `boolean` | `true` | Close panel after selection |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |
+
+## Types
+
+### `AppItem`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `name` | `string` | Display name below the icon |
+| `icon` | `ReactNode \| string` | Icon node, image URL (rendered as a round image), or emoji |
+| `href` | `string` | Optional navigation URL |
+| `onClick` | `(app: AppItem) => void` | Optional click handler |
+| `disabled` | `boolean` | Disables the app cell |
+| `badge` | `string` | Optional badge text |
+
+### `AppSwitcherProps`
+
+Props for `AppSwitcher`. Requires `apps`; supports `loading`, `loadingLabel`, and panel/trigger customization.
+
+Also exported: `UseAppSwitcherOptions`, `UseAppSwitcherReturn`.
 
 ## Hooks
 
-```tsx title="App.tsx"
-import { useMeApps, useAppSwitcher } from "@rfdtech/components";
+**`useAppSwitcher`** — headless open/close state for custom UI:
 
-const { apps, loading, error, refetch } = useMeApps({ baseUrl, accessToken });
+```tsx title="App.tsx"
+import { useAppSwitcher } from "@rfdtech/components";
+
 const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
 ```
 
 ## Notes
 
-- Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, and API utilities.
-- When fetching from a remote `baseUrl`, the API must allow your app's origin (CORS).
+- Image URLs on `AppItem.icon` render as round cropped icons inside the grid.
+- Fetch apps in your application and pass `apps` + `loading`; AppSwitcher does not call APIs internally.
+- Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`.
+- Override shared tokens on `.gsl-app-switcher` for theming (see [Theme](/docs/theme)).

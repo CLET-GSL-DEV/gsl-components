@@ -92,194 +92,119 @@ import { Button } from "@rfdtech/components";
 
 Props: `variant`, `size`, `loading`, `loadingLabel`, `classNames`, and standard `button` attributes. Exported types: `ButtonProps`, `ButtonClassNames`, `ButtonVariant`, `ButtonSize`.
 
-## AppSwitcher
+## Checkbox
 
-Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products.
-
-### Usage
-
-**Remote fetch** — loads systems from `GET {baseUrl}/v1/me/apps` with a bearer token:
+Accessible checkbox with optional label and part-level `classNames`. See the [Checkbox](/docs/checkbox) docs page for props and exported types.
 
 ```tsx
-import { AppSwitcher } from "@rfdtech/components";
+import { Checkbox } from "@rfdtech/components";
 
-function Header({ baseUrl, accessToken }: { baseUrl: string; accessToken: string }) {
+<Checkbox
+  label="Accept terms and conditions"
+  checked={accepted}
+  onCheckedChange={setAccepted}
+/>
+
+<Checkbox
+  aria-label="Select row"
+  checked={selected}
+  onCheckedChange={setSelected}
+/>
+```
+
+Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `disabled`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `CheckboxProps`, `CheckboxClassNames`.
+
+## Dropdown
+
+Select-style dropdown for choosing one option from a list. See the [Dropdown](/docs/dropdown) docs page for props and exported types.
+
+```tsx
+import { Dropdown } from "@rfdtech/components";
+
+<Dropdown
+  aria-label="Field"
+  value={value}
+  onValueChange={setValue}
+  options={[
+    { value: "email", label: "Email" },
+    { value: "name", label: "Full name" },
+  ]}
+  placeholder="Select..."
+  clearable
+/>
+```
+
+Props: `value`, `onValueChange`, `options`, `placeholder`, `clearable`, `disabled`, `aria-label`, `classNames`, `className`. Exported types: `DropdownProps`, `DropdownOption`, `DropdownClassNames`.
+
+## Popover
+
+Compound popover primitives for floating panels. See the [Popover](/docs/popover) docs page for props and exported types.
+
+```tsx
+import {
+  Button,
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "@rfdtech/components";
+
+<Popover>
+  <PopoverTrigger asChild>
+    <Button variant="secondary">Actions</Button>
+  </PopoverTrigger>
+  <PopoverContent
+    side="bottom"
+    align="end"
+    sideOffset={4}
+    className="gsl-popover--menu"
+  >
+    <div className="gsl-popover__menu" role="menu">
+      <PopoverClose asChild>
+        <button type="button" className="gsl-popover__menu-item" role="menuitem">
+          Edit
+        </button>
+      </PopoverClose>
+      <PopoverClose asChild>
+        <button
+          type="button"
+          className="gsl-popover__menu-item gsl-popover__menu-item--destructive"
+          role="menuitem"
+        >
+          Delete
+        </button>
+      </PopoverClose>
+    </div>
+  </PopoverContent>
+</Popover>
+```
+
+Exports: `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverPortal`, `PopoverAnchor`, `PopoverClose`. Exported types: `PopoverContentProps`, `PopoverContentClassNames`.
+
+## AppSwitcher
+
+Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products. Pass `apps` directly from your own data layer; use `loading` while data is being fetched.
+
+See the [AppSwitcher](/docs/app-switcher) docs page for props and exported types.
+
+```tsx
+import { AppSwitcher, type AppItem } from "@rfdtech/components";
+
+function Header({ apps, loading }: { apps: AppItem[]; loading: boolean }) {
   return (
     <AppSwitcher
-      baseUrl={baseUrl}
-      accessToken={accessToken}
+      apps={apps}
+      loading={loading}
       title="System directory"
-      onAppSelect={(app) => console.log(app.name, app.metadata)}
+      onAppSelect={(app) => console.log(app.name)}
     />
   );
 }
 ```
 
-Expected API response:
+Props: `apps`, `loading`, `loadingLabel`, `columns`, `open`, `onOpenChange`, `onAppSelect`, `triggerLabel`, `trigger`, `title`, `footer`, `placement`, `closeOnSelect`, `className`, `style`. Exported types: `AppSwitcherProps`, `AppItem`, `UseAppSwitcherOptions`, `UseAppSwitcherReturn`.
 
-```json
-{
-  "success": true,
-  "message": "Available systems retrieved.",
-  "data": {
-    "apps": [
-      {
-        "system_id": "gov-portal",
-        "system_name": "Governance Portal",
-        "system_code": "GOV-123456",
-        "frontend_url": "http://178.105.154.224:3001",
-        "role": "registrar",
-        "permissions": ["cases:review"]
-      }
-    ]
-  },
-  "meta": { "count": 1 }
-}
-```
-
-**Static apps** — pass a list directly instead of fetching:
-
-```tsx
-const apps = [
-  {
-    id: "mail",
-    name: "Mail",
-    icon: "https://example.com/mail.png",
-    href: "https://mail.example.com",
-  },
-];
-
-<AppSwitcher apps={apps} title="System directory" />
-```
-
-### Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `apps` | `AppItem[]` | — | Static apps to show in the grid |
-| `baseUrl` | `string` | required* | API base URL, e.g. `https://api.example.com` |
-| `accessToken` | `string` | required* | Bearer access token |
-| `columns` | `number` | `3` | Number of grid columns |
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
-| `onAppSelect` | `(app: AppItem) => void` | — | Called when an app is selected |
-| `triggerLabel` | `string` | `"Open app switcher"` | Accessible label for trigger |
-| `trigger` | `ReactNode` | 9-dot icon | Custom trigger element |
-| `title` | `string` | — | Panel header title |
-| `footer` | `ReactNode` | — | Footer content below the grid |
-| `placement` | `"bottom-end" \| "bottom-start" \| "bottom"` | `"bottom-end"` | Panel position |
-| `closeOnSelect` | `boolean` | `true` | Close panel after selection |
-| `className` | `string` | — | Root CSS class |
-| `style` | `CSSProperties` | — | Root inline styles |
-
-\* Required when `apps` is not provided.
-
-### Types
-
-All types are exported from `@rfdtech/components`.
-
-```ts
-interface AppItem {
-  id: string;
-  name: string;
-  icon: ReactNode | string;
-  href?: string;
-  onClick?: (app: AppItem) => void;
-  disabled?: boolean;
-  badge?: string;
-  metadata?: MeApp;
-}
-
-interface MeApp {
-  system_id: string;
-  system_name: string;
-  system_code: string;
-  frontend_url: string;
-  role: string;
-  permissions: string[];
-}
-
-interface MeAppsResponse {
-  success: boolean;
-  message: string;
-  data: { apps: MeApp[] };
-  meta: { count: number };
-}
-```
-
-Also exported: `AppSwitcherProps`, `UseMeAppsOptions`, `UseMeAppsReturn`, `UseAppSwitcherOptions`, `UseAppSwitcherReturn`.
-
-### Hooks
-
-**`useMeApps`** — fetch and map systems from `/v1/me/apps`:
-
-```tsx
-import { useMeApps } from "@rfdtech/components";
-
-const { apps, loading, error, refetch } = useMeApps({
-  baseUrl: "https://api.example.com",
-  accessToken: "<token>",
-});
-```
-
-**`useAppSwitcher`** — headless open/close state for custom UI:
-
-```tsx
-import { useAppSwitcher } from "@rfdtech/components";
-
-const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
-```
-
-### Utilities
-
-```tsx
-import {
-  buildMeAppsUrl,
-  createMeAppsRequestInit,
-  fetchMeApps,
-  mapMeAppToAppItem,
-  mapMeAppsToAppItems,
-  MeAppsFetchError,
-} from "@rfdtech/components";
-
-const url = buildMeAppsUrl("https://api.example.com");
-const init = createMeAppsRequestInit("<token>");
-const response = await fetchMeApps(url, init);
-const apps = mapMeAppsToAppItems(response.data.apps);
-```
-
-| Export | Description |
-|--------|-------------|
-| `buildMeAppsUrl(baseUrl)` | Builds `{baseUrl}/v1/me/apps`, or `/v1/me/apps` when `baseUrl` is empty |
-| `createMeAppsRequestInit(accessToken)` | Returns fetch options with `Authorization: Bearer ...` |
-| `fetchMeApps(url, init?)` | Fetches and validates the API response; throws `MeAppsFetchError` on failure |
-| `mapMeAppToAppItem(app)` | Maps one `MeApp` to an `AppItem` |
-| `mapMeAppsToAppItems(apps)` | Maps an array of `MeApp` values to `AppItem[]` |
-| `MeAppsFetchError` | Error thrown when the HTTP request fails or `success` is `false` |
-
-### Subcomponents
-
-Also exported for custom layouts:
-
-- `AppSwitcherItem` — single app grid cell
-- `GridIcon` — default 9-dot trigger icon
-- `SystemAppIcon` — initials avatar for API-fetched apps
-
-### Theming
-
-Override shared tokens on `.gsl-app-switcher` (see [Shared theming](#shared-theming)). `--gsl-focus` aliases to `--gsl-primary`.
-
-```css
-.my-switcher {
-  --gsl-primary: #dc2626;
-  --gsl-hover: #f1f3f4;
-  --gsl-columns: 4;
-}
-```
-
-### CORS
-
-When fetching from a remote `baseUrl` in the browser, the API must allow the host application's origin. Configure CORS on your backend or proxy `/v1` through your dev server during local development.
+Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, `useAppSwitcher`.
 
 ## BulkImportModal
 

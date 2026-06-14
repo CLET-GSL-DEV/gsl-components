@@ -31,6 +31,7 @@ const defaultProps = {
   showOnlyErrors: false,
   discardedRows: [],
   onToggleRowSelection: vi.fn(),
+  onSetVisibleRowsSelection: vi.fn(),
   onShowOnlyErrorsChange: vi.fn(),
   onDiscardSelectedRows: vi.fn(),
   onUpdateRowValue: vi.fn(),
@@ -118,5 +119,52 @@ describe("ValidateDataStep", () => {
     const selectedRow = row2Checkbox.closest("tr");
 
     expect(selectedRow).toHaveClass("gsl-bulk-import__table-row--selected");
+  });
+
+  it("selects all visible rows from the header checkbox", () => {
+    const onSetVisibleRowsSelection = vi.fn();
+
+    render(
+      <ValidateDataStep
+        {...defaultProps}
+        onSetVisibleRowsSelection={onSetVisibleRowsSelection}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("checkbox", { name: "Select all rows" }));
+
+    expect(onSetVisibleRowsSelection).toHaveBeenCalledWith([1, 2], true);
+  });
+
+  it("deselects visible rows when the header checkbox is cleared", () => {
+    const onSetVisibleRowsSelection = vi.fn();
+
+    render(
+      <ValidateDataStep
+        {...defaultProps}
+        selectedRowIds={[1, 2]}
+        onSetVisibleRowsSelection={onSetVisibleRowsSelection}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("checkbox", { name: "Select all rows" }));
+
+    expect(onSetVisibleRowsSelection).toHaveBeenCalledWith([1, 2], false);
+  });
+
+  it("selects only visible rows when the error filter is enabled", () => {
+    const onSetVisibleRowsSelection = vi.fn();
+
+    render(
+      <ValidateDataStep
+        {...defaultProps}
+        showOnlyErrors
+        onSetVisibleRowsSelection={onSetVisibleRowsSelection}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("checkbox", { name: "Select all rows" }));
+
+    expect(onSetVisibleRowsSelection).toHaveBeenCalledWith([2], true);
   });
 });

@@ -21,6 +21,9 @@ export const docNavSections: DocNavSection[] = [
     title: "Components",
     items: [
       { slug: "button", title: "Button" },
+      { slug: "checkbox", title: "Checkbox" },
+      { slug: "dropdown", title: "Dropdown" },
+      { slug: "popover", title: "Popover" },
       { slug: "app-switcher", title: "AppSwitcher" },
       { slug: "bulk-import-modal", title: "BulkImportModal" },
     ],

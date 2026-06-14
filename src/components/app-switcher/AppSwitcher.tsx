@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import * as Popover from "@radix-ui/react-popover";
+import { Loader2 } from "lucide-react";
 import { useAppSwitcher } from "./hooks/useAppSwitcher";
-import { useMeApps } from "./hooks/useMeApps";
 import type { AppItem, AppSwitcherProps } from "../../types/app-switcher";
 import { AppSwitcherItem } from "./AppSwitcherItem";
 import { GridIcon } from "./GridIcon";
@@ -20,9 +20,9 @@ function getPopoverPlacement(placement: AppSwitcherProps["placement"]) {
 }
 
 export function AppSwitcher({
-  apps: appsProp,
-  baseUrl,
-  accessToken,
+  apps,
+  loading = false,
+  loadingLabel = "Loading systems...",
   open: controlledOpen,
   onOpenChange,
   onAppSelect,
@@ -36,18 +36,6 @@ export function AppSwitcher({
   placement = "bottom-end",
   closeOnSelect = true,
 }: AppSwitcherProps) {
-  const useRemoteApps = appsProp === undefined;
-  const {
-    apps: fetchedApps,
-    loading,
-    error,
-  } = useMeApps({
-    baseUrl: baseUrl ?? "",
-    accessToken: accessToken ?? "",
-    enabled: useRemoteApps,
-  });
-  const apps = appsProp ?? fetchedApps;
-
   const { open, setOpen, close } = useAppSwitcher({
     open: controlledOpen,
     onOpenChange,
@@ -96,23 +84,31 @@ export function AppSwitcher({
           >
             {title && <div className="gsl-app-switcher__title">{title}</div>}
 
-            {loading && (
-              <div className="gsl-app-switcher__status">Loading systems...</div>
-            )}
-
-            {!loading && error && (
-              <div className="gsl-app-switcher__status gsl-app-switcher__status--error">
-                {error}
+            {loading ? (
+              <div
+                className="gsl-app-switcher__loading"
+                aria-busy="true"
+                aria-label={loadingLabel}
+              >
+                <Loader2
+                  className="gsl-app-switcher__spinner"
+                  size={24}
+                  strokeWidth={2}
+                  aria-hidden
+                />
+                <span className="gsl-app-switcher__loading-text">
+                  {loadingLabel}
+                </span>
               </div>
-            )}
+            ) : null}
 
-            {!loading && !error && apps.length === 0 && (
+            {!loading && apps.length === 0 ? (
               <div className="gsl-app-switcher__status">
                 No systems available.
               </div>
-            )}
+            ) : null}
 
-            {!loading && !error && apps.length > 0 && (
+            {!loading && apps.length > 0 ? (
               <div
                 className="gsl-app-switcher__grid"
                 style={
@@ -129,7 +125,7 @@ export function AppSwitcher({
                   />
                 ))}
               </div>
-            )}
+            ) : null}
 
             {footer && (
               <div className="gsl-app-switcher__footer">{footer}</div>
