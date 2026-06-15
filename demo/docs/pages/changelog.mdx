@@ -9,13 +9,20 @@ All notable changes to `@rfdtech/components` are listed here, newest first.
 
 ## Unreleased
 
+## 1.8.0 — 2026-06-15
+
 ### Changed
 
+- Form docs split into `/docs/form` and `/docs/form-field`
 - Toast rebuilt on Sonner — `ToastProvider`, `Toaster`, and `useToast()` remain the public API
+- `useToast().toasts` deprecated (always `[]`)
+- Dialog, Modal, BulkImportModal, and CommandDialog examples use URL search-param hooks for open state
+- Docs code examples use increased spacing between fenced blocks
 
 ### Removed
 
 - Toast compound Radix parts (`Toast`, `ToastTitle`, etc.) and reducer utilities
+- `ToastProvider` props `swipeDirection` and `label`
 
 ### Added
 
@@ -24,6 +31,7 @@ All notable changes to `@rfdtech/components` are listed here, newest first.
 - `Form`, `FormField`, and `useFormField` for optional react-hook-form integration
 - Form documentation page at `/docs/form` for `Field`, `Input`, and `Textarea`
 - FormField documentation page at `/docs/form-field` for react-hook-form and Zod validation
+- `zod` and `@hookform/resolvers` as optional peer dependencies for schema validation
 - `ToastOptions.icon` for optional leading icons
 - `Draggable` compound primitives with bounded pointer repositioning and optional drag handle
 - Draggable documentation page at `/docs/draggable`
