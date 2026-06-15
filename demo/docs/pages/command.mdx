@@ -9,6 +9,8 @@ import {
   CommandDialogPreview,
   CommandInlinePreview,
 } from "../previews/code/CommandPreview";
+import commandInlineSource from "../previews/examples/command-inline.example.tsx?raw";
+import commandDialogSource from "../previews/examples/command-dialog.example.tsx?raw";
 
 # Command
 
@@ -16,131 +18,19 @@ Compound command menu primitives for searchable, keyboard-navigable action lists
 
 ## Inline example
 
-<ExampleTabs title="Field picker" preview={<CommandInlinePreview />}>
-
-```tsx title="App.tsx"
-import { useEffect, useState } from "react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@rfdtech/components";
-
-function FieldPicker() {
-  const [search, setSearch] = useState("");
-  const [contactResults, setContactResults] = useState([]);
-  const [contactLoading, setContactLoading] = useState(false);
-  const [orgResults, setOrgResults] = useState([]);
-  const [orgLoading, setOrgLoading] = useState(false);
-
-  // Debounced fetch per group (different sources / delays)
-  useEffect(() => { /* fetch contact fields */ }, [search]);
-  useEffect(() => { /* fetch organization fields */ }, [search]);
-
-  const showEmpty =
-    search.trim() &&
-    !contactLoading &&
-    !orgLoading &&
-    contactResults.length + orgResults.length === 0;
-
-  return (
-    <Command label="Field picker" shouldFilter={false}>
-      <CommandInput value={search} onValueChange={setSearch} placeholder="Search fields..." />
-      {search.trim() ? (
-        <CommandList>
-          {showEmpty ? <CommandEmpty>No results.</CommandEmpty> : null}
-          <CommandGroup heading="Contact fields" loading={contactLoading}>
-            {contactResults.map((item) => (
-              <CommandItem key={item.value} value={item.value}>{item.label}</CommandItem>
-            ))}
-          </CommandGroup>
-          <CommandGroup heading="Organization" loading={orgLoading}>
-            {orgResults.map((item) => (
-              <CommandItem key={item.value} value={item.value}>{item.label}</CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      ) : null}
-    </Command>
-  );
-}
-```
-
-</ExampleTabs>
+<ExampleTabs
+  title="Field picker"
+  preview={<CommandInlinePreview />}
+  code={commandInlineSource}
+/>
 
 ## Dialog example
 
-<ExampleTabs title="Command palette" preview={<CommandDialogPreview />}>
-
-```tsx title="App.tsx"
-import { useEffect, useState } from "react";
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from "@rfdtech/components";
-
-function CommandMenu({ open, onOpenChange }) {
-  const [search, setSearch] = useState("");
-  const [navResults, setNavResults] = useState([]);
-  const [navLoading, setNavLoading] = useState(false);
-  const [actionResults, setActionResults] = useState([]);
-  const [actionsLoading, setActionsLoading] = useState(false);
-
-  useEffect(() => { /* fetch navigation */ }, [search]);
-  useEffect(() => { /* fetch actions */ }, [search]);
-
-  const showEmpty =
-    search.trim() &&
-    !navLoading &&
-    !actionsLoading &&
-    navResults.length + actionResults.length === 0;
-
-  return (
-    <CommandDialog
-      open={open}
-      onOpenChange={(next) => {
-        onOpenChange(next);
-        if (!next) setSearch("");
-      }}
-      shortcut
-      label="Command menu"
-      shouldFilter={false}
-    >
-      <CommandInput value={search} onValueChange={setSearch} placeholder="Type a command..." />
-      {search.trim() ? (
-        <CommandList>
-          {showEmpty ? <CommandEmpty>No results found.</CommandEmpty> : null}
-          <CommandGroup heading="Navigation" loading={navLoading}>
-            {navResults.map((item) => (
-              <CommandItem key={item.value} value={item.value}>{item.label}</CommandItem>
-            ))}
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Actions" loading={actionsLoading}>
-            {actionResults.map((item) => (
-              <CommandItem key={item.value} value={item.value}>
-                {item.label}
-                <CommandShortcut><span>⌘</span><span>Q</span></CommandShortcut>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      ) : null}
-    </CommandDialog>
-  );
-}
-```
-
-</ExampleTabs>
+<ExampleTabs
+  title="Command palette"
+  preview={<CommandDialogPreview />}
+  code={commandDialogSource}
+/>
 
 Set `shortcut` to `true` for Cmd/Ctrl+K, or pass a custom combo such as `shortcut="ctrl+shift+p"`. When `shortcut` is set, `CommandInput` inside the dialog automatically shows the matching keyboard badge. Use `useCommandShortcut` directly when you need a toggle outside `CommandDialog`.
 

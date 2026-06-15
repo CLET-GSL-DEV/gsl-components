@@ -6,6 +6,7 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { CheckboxPreview } from "../previews/code/CheckboxPreview";
+import checkboxSource from "../previews/examples/checkbox.example.tsx?raw";
 
 # Checkbox
 
@@ -13,27 +14,11 @@ Accessible checkbox built on `@radix-ui/react-checkbox` with GSL styling, option
 
 ## Example
 
-<ExampleTabs title="Checkbox states" preview={<CheckboxPreview />}>
-
-```tsx title="App.tsx"
-import { Checkbox } from "@rfdtech/components";
-
-<Checkbox
-  label="Accept terms and conditions"
-  checked={accepted}
-  onCheckedChange={setAccepted}
+<ExampleTabs
+  title="Checkbox states"
+  preview={<CheckboxPreview />}
+  code={checkboxSource}
 />
-
-<Checkbox label="Disabled option" disabled />
-
-<Checkbox
-  aria-label="Select row"
-  checked={selected}
-  onCheckedChange={setSelected}
-/>
-```
-
-</ExampleTabs>
 
 ## Props
 

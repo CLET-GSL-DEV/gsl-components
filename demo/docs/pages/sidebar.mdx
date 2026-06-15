@@ -6,6 +6,7 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { SidebarPreview } from "../previews/code/SidebarPreview";
+import sidebarSource from "../previews/examples/sidebar.example.tsx?raw";
 
 # Sidebar
 
@@ -13,54 +14,11 @@ Compound sidebar primitives for app shells and section navigation. Desktop shows
 
 ## Example
 
-<ExampleTabs title="App shell" preview={<SidebarPreview />}>
-
-```tsx title="App.tsx"
-import {
-  Sidebar,
-  SidebarCollapse,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarItem,
-  SidebarLink,
-  SidebarNav,
-  SidebarOverlay,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@rfdtech/components";
-
-<SidebarProvider>
-  <SidebarTrigger>Open menu</SidebarTrigger>
-  <SidebarOverlay />
-  <Sidebar>
-    <SidebarHeader>
-      <div className="gsl-sidebar__header-brand">
-        <span className="gsl-sidebar__header-title">GSL Admin</span>
-      </div>
-      <SidebarCollapse />
-    </SidebarHeader>
-    <SidebarContent>
-      <SidebarNav aria-label="Main">
-        <SidebarGroup>
-          <SidebarGroupLabel>General</SidebarGroupLabel>
-          <SidebarItem>
-            <SidebarLink href="/dashboard" icon={<DashboardIcon />} active={path === "/dashboard"}>
-              Dashboard
-            </SidebarLink>
-          </SidebarItem>
-        </SidebarGroup>
-      </SidebarNav>
-    </SidebarContent>
-    <SidebarFooter>v1.5.0</SidebarFooter>
-  </Sidebar>
-  <main>{children}</main>
-</SidebarProvider>
-```
-
-</ExampleTabs>
+<ExampleTabs
+  title="App shell"
+  preview={<SidebarPreview />}
+  code={sidebarSource}
+/>
 
 ## React Router
 

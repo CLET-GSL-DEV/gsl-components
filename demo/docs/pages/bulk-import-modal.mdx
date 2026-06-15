@@ -5,6 +5,7 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { BulkImportPreview } from "../previews/code/BulkImportPreview";
+import bulkImportSource from "../previews/examples/bulk-import.example.tsx?raw";
 
 # BulkImportModal
 
@@ -12,23 +13,11 @@ Four-step modal wizard for importing spreadsheet data (`.xlsx`, `.xls`, `.csv`).
 
 ## Example
 
-<ExampleTabs title="Open import wizard" preview={<BulkImportPreview />}>
-
-```tsx title="App.tsx"
-import { BulkImportModal } from "@rfdtech/components";
-
-<BulkImportModal
-  open={open}
-  onOpenChange={setOpen}
-  title="Import students"
-  fields={fields}
-  onComplete={(result) => {
-    console.log(result.rows, result.errors);
-  }}
+<ExampleTabs
+  title="Open import wizard"
+  preview={<BulkImportPreview />}
+  code={bulkImportSource}
 />
-```
-
-</ExampleTabs>
 
 ## Steps
 

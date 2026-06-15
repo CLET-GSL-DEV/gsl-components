@@ -1,10 +1,6 @@
-import { useState } from "react";
-import { Checkbox } from "@rfdtech/components";
+import { CheckboxExample } from "../examples/checkbox.example";
 
 export function CheckboxPreview() {
-  const [terms, setTerms] = useState(false);
-  const [updates, setUpdates] = useState(true);
-
   return (
     <div
       style={{
@@ -14,17 +10,7 @@ export function CheckboxPreview() {
         alignItems: "flex-start",
       }}
     >
-      <Checkbox
-        label="Accept terms and conditions"
-        checked={terms}
-        onCheckedChange={setTerms}
-      />
-      <Checkbox
-        label="Send me product updates"
-        checked={updates}
-        onCheckedChange={setUpdates}
-      />
-      <Checkbox label="Disabled option" disabled />
+      <CheckboxExample />
     </div>
   );
 }

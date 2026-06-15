@@ -6,6 +6,7 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { DropdownPreview } from "../previews/code/DropdownPreview";
+import dropdownSource from "../previews/examples/dropdown.example.tsx?raw";
 
 # Dropdown
 
@@ -13,27 +14,11 @@ Select-style dropdown for choosing one option from a list. Built on `@radix-ui/r
 
 ## Example
 
-<ExampleTabs title="Basic dropdown" preview={<DropdownPreview />}>
-
-```tsx title="App.tsx"
-import { Dropdown } from "@rfdtech/components";
-
-const options = [
-  { value: "email", label: "Email" },
-  { value: "name", label: "Full name" },
-];
-
-<Dropdown
-  aria-label="Field"
-  value={value}
-  onValueChange={setValue}
-  options={options}
-  placeholder="Select..."
-  clearable
+<ExampleTabs
+  title="Basic dropdown"
+  preview={<DropdownPreview />}
+  code={dropdownSource}
 />
-```
-
-</ExampleTabs>
 
 ## Props
 

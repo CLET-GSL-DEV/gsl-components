@@ -1,21 +1,5 @@
-import { Dropdown } from "@rfdtech/components";
-
-const options = [
-  { value: "email", label: "Email" },
-  { value: "name", label: "Full name" },
-  { value: "year", label: "Year" },
-];
+import { DropdownExample } from "../examples/dropdown.example";
 
 export function DropdownPreview() {
-  return (
-    <div style={{ width: "240px" }}>
-      <Dropdown
-        aria-label="Field"
-        value="email"
-        onValueChange={() => {}}
-        options={options}
-        clearable
-      />
-    </div>
-  );
+  return <DropdownExample />;
 }

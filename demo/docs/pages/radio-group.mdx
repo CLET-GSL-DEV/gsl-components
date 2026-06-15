@@ -7,6 +7,8 @@ export const meta = {
 import { ExampleTabs } from "../components/ExampleTabs";
 import { RadioGroupPreview } from "../previews/code/RadioGroupPreview";
 import { RadioGroupCardPreview } from "../previews/code/RadioGroupCardPreview";
+import radioGroupSource from "../previews/examples/radio-group.example.tsx?raw";
+import radioGroupCardSource from "../previews/examples/radio-group-card.example.tsx?raw";
 
 # RadioGroup
 
@@ -14,44 +16,21 @@ Accessible single-choice radio group built on `@radix-ui/react-radio-group`. Com
 
 ## Example
 
-<ExampleTabs title="Contact method" preview={<RadioGroupPreview />}>
-
-```tsx title="App.tsx"
-import { Radio, RadioGroup } from "@rfdtech/components";
-
-<RadioGroup value={method} onValueChange={setMethod}>
-  <Radio value="email" label="Email" />
-  <Radio value="sms" label="SMS" />
-  <Radio value="phone" label="Phone" disabled />
-</RadioGroup>
-```
-
-</ExampleTabs>
+<ExampleTabs
+  title="Contact method"
+  preview={<RadioGroupPreview />}
+  code={radioGroupSource}
+/>
 
 ## Choice cards
 
 Use `variant="card"` on `RadioGroup` to render each option as a bordered card with the control on the left and label plus description stacked beside it.
 
-<ExampleTabs title="Plan selection" preview={<RadioGroupCardPreview />}>
-
-```tsx title="App.tsx"
-import { Radio, RadioGroup } from "@rfdtech/components";
-
-<RadioGroup variant="card" value={plan} onValueChange={setPlan}>
-  <Radio
-    value="starter"
-    label="Starter"
-    description="For individuals getting started."
-  />
-  <Radio
-    value="team"
-    label="Team"
-    description="Collaborate with up to 10 members."
-  />
-</RadioGroup>
-```
-
-</ExampleTabs>
+<ExampleTabs
+  title="Plan selection"
+  preview={<RadioGroupCardPreview />}
+  code={radioGroupCardSource}
+/>
 
 ## Components
 

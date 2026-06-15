@@ -5,6 +5,9 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { AppSwitcherPreview } from "../previews/code/AppSwitcherPreview";
+import { AppSwitcherLoadingPreview } from "../previews/code/AppSwitcherLoadingPreview";
+import appSwitcherSource from "../previews/examples/app-switcher.example.tsx?raw";
+import appSwitcherLoadingSource from "../previews/examples/app-switcher-loading.example.tsx?raw";
 
 # AppSwitcher
 
@@ -12,49 +15,17 @@ Google Apps–style 9-dot launcher for switching between GSL systems. Drop it in
 
 ## Examples
 
-<ExampleTabs title="With apps" preview={<AppSwitcherPreview />}>
-
-```tsx title="App.tsx"
-import { AppSwitcher } from "@rfdtech/components";
-
-const apps = [
-  {
-    id: "gov-portal",
-    name: "Governance Portal",
-    icon: "https://example.com/gov-portal.png",
-    href: "https://portal.example.com",
-  },
-  {
-    id: "finance-hub",
-    name: "Finance Hub",
-    icon: "https://example.com/finance-hub.png",
-    href: "https://finance.example.com",
-  },
-];
-
-<AppSwitcher
-  apps={apps}
-  title="System directory"
-  onAppSelect={(app) => console.log(app.name)}
+<ExampleTabs
+  title="With apps"
+  preview={<AppSwitcherPreview />}
+  code={appSwitcherSource}
 />
-```
 
-</ExampleTabs>
-
-<ExampleTabs title="Loading state" preview={<AppSwitcherPreview />}>
-
-```tsx title="App.tsx"
-import { AppSwitcher } from "@rfdtech/components";
-
-<AppSwitcher
-  apps={[]}
-  loading
-  loadingLabel="Loading systems..."
-  title="System directory"
+<ExampleTabs
+  title="Loading state"
+  preview={<AppSwitcherLoadingPreview />}
+  code={appSwitcherLoadingSource}
 />
-```
-
-</ExampleTabs>
 
 ## Props
 

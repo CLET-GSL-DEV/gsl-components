@@ -1,22 +1,5 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
+import { TabsLineExample } from "../examples/tabs-line.example";
 
 export function TabsLinePreview() {
-  return (
-    <Tabs defaultValue="account" variant="line">
-      <TabsList>
-        <TabsTrigger value="account">Account</TabsTrigger>
-        <TabsTrigger value="security">Security</TabsTrigger>
-        <TabsTrigger value="notifications">Notifications</TabsTrigger>
-      </TabsList>
-      <TabsContent value="account">
-        Manage your profile details and contact information.
-      </TabsContent>
-      <TabsContent value="security">
-        Update your password and two-factor authentication settings.
-      </TabsContent>
-      <TabsContent value="notifications">
-        Choose which email and in-app alerts you receive.
-      </TabsContent>
-    </Tabs>
-  );
+  return <TabsLineExample />;
 }

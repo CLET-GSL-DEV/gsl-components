@@ -1,14 +1,21 @@
 import { useId, useState, type ReactNode } from "react";
+import { ExampleCode } from "./ExampleCode";
 
 type TabId = "preview" | "code";
 
 interface ExampleTabsProps {
   title?: string;
   preview: ReactNode;
-  children: ReactNode;
+  code: string;
+  codeTitle?: string;
 }
 
-export function ExampleTabs({ title, preview, children }: ExampleTabsProps) {
+export function ExampleTabs({
+  title,
+  preview,
+  code,
+  codeTitle,
+}: ExampleTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>("preview");
   const baseId = useId();
   const previewPanelId = `${baseId}-preview`;
@@ -70,7 +77,7 @@ export function ExampleTabs({ title, preview, children }: ExampleTabsProps) {
         hidden={activeTab !== "code"}
         className="demo-docs__tab-panel demo-docs__tab-panel--code"
       >
-        {children}
+        <ExampleCode source={code} title={codeTitle} />
       </div>
     </div>
   );

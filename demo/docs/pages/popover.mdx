@@ -6,6 +6,7 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { PopoverPreview } from "../previews/code/PopoverPreview";
+import popoverSource from "../previews/examples/popover.example.tsx?raw";
 
 # Popover
 
@@ -13,53 +14,11 @@ Compound popover primitives for floating panels anchored to a trigger. Wraps `@r
 
 ## Example
 
-<ExampleTabs title="Action menu" preview={<PopoverPreview />}>
-
-```tsx title="App.tsx"
-import {
-  Button,
-  Popover,
-  PopoverClose,
-  PopoverContent,
-  PopoverTrigger,
-} from "@rfdtech/components";
-
-<Popover>
-  <PopoverTrigger asChild>
-    <Button variant="secondary">Actions</Button>
-  </PopoverTrigger>
-  <PopoverContent
-    side="bottom"
-    align="end"
-    sideOffset={4}
-    className="gsl-popover--menu"
-  >
-    <div className="gsl-popover__menu" role="menu">
-      <PopoverClose asChild>
-        <button type="button" className="gsl-popover__menu-item" role="menuitem">
-          Edit
-        </button>
-      </PopoverClose>
-      <PopoverClose asChild>
-        <button type="button" className="gsl-popover__menu-item" role="menuitem">
-          Duplicate
-        </button>
-      </PopoverClose>
-      <PopoverClose asChild>
-        <button
-          type="button"
-          className="gsl-popover__menu-item gsl-popover__menu-item--destructive"
-          role="menuitem"
-        >
-          Delete
-        </button>
-      </PopoverClose>
-    </div>
-  </PopoverContent>
-</Popover>
-```
-
-</ExampleTabs>
+<ExampleTabs
+  title="Action menu"
+  preview={<PopoverPreview />}
+  code={popoverSource}
+/>
 
 ## Components
 

@@ -14,13 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `SidebarBadge` trailing pill for link counts and labels
 - `Command` compound primitives (`Command`, `CommandDialog`, input/list/item parts) built on cmdk
 - `CommandDialog` `shortcut` prop and `useCommandShortcut` hook for Cmd/Ctrl+K palette toggle
-- `CommandShortcut` trailing key hint for command items
+- `CommandShortcut` trailing key hint chip for command items
+- `CommandInput` search icon and optional shortcut badge (inherits from `CommandDialog` when `shortcut` is set)
+- `CommandGroup` `loading` and `loadingLabel` props for per-group async result loading
+- `formatCommandShortcutLabels` helper and `useCommandDialog` hook
 - Sidebar documentation page at `/docs/sidebar` with props and exported types
 - Command documentation page at `/docs/command` with props and exported types
 
 ### Changed
 
 - Sidebar desktop appearance: card panel with neutral active state and collapsible icon rail
+- Command inline results render in a floating popover so the search field height stays fixed
+- Command shortcut badges use a single unified chip (e.g. `⌘` `K`) instead of separate key caps per key
+- Command dialog input shows the keyboard shortcut badge automatically when `shortcut` is set
 - Component authoring rule requires full responsive behavior (320px–desktop, touch targets, reduced motion, docs preview checks)
 
 ## [1.5.0] - 2026-06-15

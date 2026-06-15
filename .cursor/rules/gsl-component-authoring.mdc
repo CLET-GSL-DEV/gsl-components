@@ -75,10 +75,26 @@ Do not finish component work without all three:
 1. **CHANGELOG.md** — entry under `[Unreleased]` (`Added` / `Changed` / `Fixed`).
 2. **README.md** — usage summary and link to docs page (insert the `##` section in alphabetical order among other components).
 3. **Docs site** — add or update `demo/docs/pages/{slug}.mdx`:
-   - Examples (ExampleTabs when useful)
+   - Examples (`ExampleTabs` when useful)
    - **Props** table
    - **Types** section for every exported type/interface/union
    - Nav entry in `demo/docs/nav.ts` (insert in alphabetical order by `slug` in the Components section)
+
+### Doc examples (single source)
+
+Interactive examples must not duplicate JSX between the preview and Code tab:
+
+1. Add or update `demo/docs/previews/examples/{name}.example.tsx` with the full runnable example (export a named component).
+2. Wire `demo/docs/previews/code/*Preview.tsx` to render that example (canvas wrappers only).
+3. In the MDX page, import the same file with `?raw` and pass it to `ExampleTabs` via the `code` prop:
+
+```mdx
+import exampleSource from "../previews/examples/button-variants.example.tsx?raw";
+
+<ExampleTabs title="Variants" preview={<ButtonPreview />} code={exampleSource} />
+```
+
+Do not author separate fenced code blocks for `ExampleTabs` children.
 
 ## Exports
 

@@ -16,13 +16,18 @@ All notable changes to `@rfdtech/components` are listed here, newest first.
 - `SidebarBadge` trailing pill for link counts and labels
 - `Command` compound primitives with inline and dialog palettes built on cmdk
 - `CommandDialog` `shortcut` prop and `useCommandShortcut` for Cmd/Ctrl+K toggle
-- `CommandShortcut` trailing key hint for command items
+- `CommandShortcut` trailing key hint chip for command items
+- `CommandInput` search icon and shortcut badge (auto from `CommandDialog` when `shortcut` is set)
+- `CommandGroup` `loading` and `loadingLabel` for per-group async loading
+- `formatCommandShortcutLabels` and `useCommandDialog`
 - Sidebar documentation page at `/docs/sidebar`
 - Command documentation page at `/docs/command`
 
 ### Changed
 
 - Sidebar desktop appearance: card panel with neutral active state and collapsible icon rail
+- Command inline results float in a popover below the search field
+- Command shortcut badges render as a single unified chip
 - Component authoring rule requires full responsive behavior for public components
 
 ## 1.5.0 — 2026-06-15

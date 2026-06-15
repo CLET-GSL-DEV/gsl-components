@@ -5,6 +5,7 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { ButtonPreview } from "../previews/code/ButtonPreview";
+import buttonVariantsSource from "../previews/examples/button-variants.example.tsx?raw";
 
 # Button
 
@@ -12,28 +13,11 @@ Shared button with primary, secondary, outline, and ghost variants, plus loading
 
 ## Example
 
-<ExampleTabs title="Variants and states" preview={<ButtonPreview />}>
-
-```tsx title="App.tsx"
-import { Button } from "@rfdtech/components";
-
-<Button variant="primary" onClick={() => save()}>
-  Save
-</Button>
-
-<Button loading loadingLabel="Saving">
-  Save
-</Button>
-
-<Button
-  variant="outline"
-  classNames={{ root: "min-w-32", label: "font-semibold" }}
->
-  Custom
-</Button>
-```
-
-</ExampleTabs>
+<ExampleTabs
+  title="Variants and states"
+  preview={<ButtonPreview />}
+  code={buttonVariantsSource}
+/>
 
 ## Props
 

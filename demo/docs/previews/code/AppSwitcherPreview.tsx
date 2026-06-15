@@ -1,12 +1,5 @@
-import { AppSwitcher } from "@rfdtech/components";
-import { demoApps } from "../../../data/demoApps";
+import { AppSwitcherExample } from "../examples/app-switcher.example";
 
 export function AppSwitcherPreview() {
-  return (
-    <AppSwitcher
-      apps={demoApps}
-      title="System directory"
-      onAppSelect={(app) => console.log("Selected:", app.name)}
-    />
-  );
+  return <AppSwitcherExample />;
 }
