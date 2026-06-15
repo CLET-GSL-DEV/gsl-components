@@ -7,6 +7,40 @@ export const meta = {
 
 All notable changes to `@rfdtech/components` are listed here, newest first.
 
+## 1.5.0 — 2026-06-15
+
+### Added
+
+- `RadioGroup` and `Radio` components with optional labels, descriptions, and `variant="card"` choice cards
+- RadioGroup documentation page at `/docs/radio-group`
+- `Tabs` compound primitives with `default` and `line` variants
+- Tabs documentation page at `/docs/tabs`
+
+### Changed
+
+- Tabs panels fade and slide in on switch; line variant uses a sliding underline indicator
+- Docs nav, README, and library exports list components alphabetically
+
+## 1.4.0 — 2026-06-14
+
+### Added
+
+- `Button`, `Checkbox`, `Dropdown`, and `Popover` components with documentation pages
+- `ButtonClassNames` and part-level `classNames` on public components
+- Cursor rule for GSL component authoring conventions
+
+### Changed
+
+- Radix UI packages moved from peer dependencies to dependencies
+- `BulkImportModal` column mapping uses the public `Dropdown` component
+- Dropdown trigger uses Lucide `ChevronDown`; adds `lucide-react` as a dependency
+- Popover docs action-menu example and menu utility classes
+- `AppSwitcher` is data-only (`apps` + `loading` prop); round cropped app icons
+
+### Removed
+
+- `AppSwitcher` remote fetch API (`baseUrl`, `accessToken`, `useMeApps`, and related types)
+
 ## 1.3.0 — 2026-06-14
 
 ### Added
