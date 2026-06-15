@@ -1,0 +1,55 @@
+.gsl-draggable {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.gsl-draggable--dragging {
+  z-index: 1;
+  touch-action: none;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--gsl-text) 12%, transparent);
+}
+
+.gsl-draggable--disabled {
+  opacity: 0.6;
+}
+
+.gsl-draggable__handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--gsl-radius);
+  background: transparent;
+  color: var(--gsl-text-muted);
+  cursor: grab;
+  touch-action: none;
+}
+
+.gsl-draggable__handle:hover:not(:disabled) {
+  color: var(--gsl-text-secondary);
+  background: var(--gsl-hover);
+}
+
+.gsl-draggable__handle:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-draggable__handle--dragging,
+.gsl-draggable__handle:active:not(:disabled) {
+  cursor: grabbing;
+}
+
+.gsl-draggable__handle:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-draggable {
+    transition: none;
+  }
+}

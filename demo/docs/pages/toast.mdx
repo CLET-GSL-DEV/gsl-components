@@ -1,0 +1,135 @@
+export const meta = {
+  title: "Toast",
+  description:
+    "Transient notification primitive with imperative useToast hook, powered by Sonner.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import {
+  ToastIconsPreview,
+  ToastPreview,
+} from "../previews/code/ToastPreview";
+import toastSource from "../previews/examples/toast.example.tsx?raw";
+import toastIconsSource from "../previews/examples/toast-icons.example.tsx?raw";
+
+# Toast
+
+Show brief, accessible notifications from anywhere in your app. Wrap the tree in `ToastProvider`, render `Toaster` once, and trigger toasts with `useToast()`.
+
+## Example
+
+<ExampleTabs
+  title="Trigger variants"
+  preview={<ToastPreview />}
+  code={toastSource}
+/>
+
+## Icons
+
+Pass any `ReactNode` to `icon` in `toast()` to render a leading icon in the `.gsl-toast__icon` slot. Icons sit to the left of the title and description in the toast flex row.
+
+- **Any React node** — SVG components (e.g. Lucide), emoji, or custom markup
+- **Variant tinting** — `success`, `warning`, and `error` variants apply semantic color to the icon slot; `default` uses muted text color
+- **Decorative** — mark icons `aria-hidden` when the title already conveys the message
+- **Optional** — omit `icon` for text-only toasts; variant styling still applies to the toast shell
+
+```tsx
+import { CheckCircle2 } from "lucide-react";
+import { useToast } from "@rfdtech/components";
+
+const { toast } = useToast();
+
+toast({
+  title: "Profile saved",
+  description: "Your changes were applied.",
+  variant: "success",
+  icon: <CheckCircle2 size={18} strokeWidth={2} aria-hidden />,
+});
+```
+
+Icons work with actions, custom durations, and all variants. Use `size={18}` (or similar) for SVG icons to match the toast typography scale.
+
+<ExampleTabs
+  title="Icon patterns"
+  preview={<ToastIconsPreview />}
+  code={toastIconsSource}
+/>
+
+## Setup
+
+```tsx
+import { ToastProvider, Toaster } from "@rfdtech/components";
+
+<ToastProvider>
+  <App />
+  <Toaster />
+</ToastProvider>
+```
+
+## `useToast`
+
+| Return / method | Type | Description |
+|-----------------|------|-------------|
+| `toast(options)` | `(options: ToastOptions) => ToastReturn` | Show or update a toast; returns `{ id, dismiss }` |
+| `dismiss(id?)` | `(id?: string) => void` | Dismiss one toast by id, or all when omitted |
+| `toasts` | `never[]` | **Deprecated.** Always `[]` — Sonner does not expose its queue |
+
+### `ToastOptions`
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `id` | `string` | auto-generated | Stable id for updates |
+| `title` | `ReactNode` | — | Primary message |
+| `description` | `ReactNode` | — | Supporting text |
+| `icon` | `ReactNode` | — | Optional leading icon in `.gsl-toast__icon`; tinted by variant (`success` / `warning` / `error`) |
+| `variant` | `ToastVariant` | `"default"` | Visual style |
+| `duration` | `number` | provider default | Visible time in ms; use `Infinity` to persist |
+| `action` | `ToastAction` | — | Optional action button `{ label, onClick }` |
+
+## Components
+
+### `ToastProvider`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `duration` | `number` | `5000` | Default visible time per toast (ms) |
+| `limit` | `number` | `3` | Maximum visible toasts |
+
+### `Toaster`
+
+Renders the Sonner viewport with GSL styling.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `Pick<ToastClassNames, "viewport">` | — | Viewport class overrides |
+| `className` | `string` | — | Merged onto the viewport |
+
+## Types
+
+### `ToastVariant`
+
+`"default" | "success" | "warning" | "error"`
+
+### `ToastClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `viewport` | `.gsl-toast__viewport` |
+| `toast` | `.gsl-toast` |
+| `icon` | `.gsl-toast__icon` |
+| `title` | `.gsl-toast__title` |
+| `description` | `.gsl-toast__description` |
+| `actionButton` | `.gsl-toast__action` |
+| `closeButton` | `.gsl-toast__close` |
+| `default` / `success` / `warning` / `error` | Variant modifiers on `.gsl-toast` |
+
+## Notes
+
+- Toast notifications are powered by [Sonner](https://sonner.emilkowal.ski/) with GSL styling via `unstyled` class names.
+- Toast layout uses a flex row: optional leading icon (`.gsl-toast__icon`), main content column (title, description, action), and close control.
+- Pass `icon` in `toast()` with any `ReactNode`; use `aria-hidden` on decorative SVGs when the title is sufficient.
+- Render a single `Toaster` near the app root (sibling to your routes is fine).
+- Viewport is bottom-right on desktop and inset full-width on screens `<= 768px`.
+- Respects `prefers-reduced-motion: reduce` (no entry/exit animation).
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes.
+- `swipeDirection` and `label` provider props from the previous Radix implementation are not supported.

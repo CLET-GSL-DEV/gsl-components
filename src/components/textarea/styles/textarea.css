@@ -1,0 +1,57 @@
+.gsl-textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 80px;
+  padding: 8px 12px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background-color: var(--gsl-bg);
+  font-family: var(--gsl-font);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gsl-text);
+  resize: vertical;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.gsl-textarea::placeholder {
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-textarea:hover:not(:disabled) {
+  border-color: var(--gsl-border-strong);
+}
+
+.gsl-textarea:focus-visible {
+  outline: none;
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 1px var(--gsl-primary);
+}
+
+.gsl-textarea--invalid,
+.gsl-textarea[aria-invalid="true"] {
+  border-color: var(--gsl-error);
+}
+
+.gsl-textarea--invalid:focus-visible,
+.gsl-textarea[aria-invalid="true"]:focus-visible {
+  border-color: var(--gsl-error);
+  box-shadow: 0 0 0 1px var(--gsl-error);
+}
+
+.gsl-textarea--disabled,
+.gsl-textarea:disabled {
+  background-color: var(--gsl-hover);
+  color: var(--gsl-text-muted);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-textarea {
+    transition: none;
+  }
+}

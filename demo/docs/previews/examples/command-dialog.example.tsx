@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Button,
   CommandDialog,
@@ -9,6 +9,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
+  useDialogSearchParam,
 } from "@rfdtech/components";
 
 type MockItem = { value: string; label: string };
@@ -64,7 +65,7 @@ function useMockGroupFetch(
 }
 
 export function CommandDialogExample() {
-  const [open, setOpen] = useState(false);
+  const { open, onOpenChange, openWith } = useDialogSearchParam("command-menu");
   const [search, setSearch] = useState("");
   const [lastAction, setLastAction] = useState("Open the command menu");
   const navigation = useMockGroupFetch(search, MOCK_NAV, 350);
@@ -74,16 +75,19 @@ export function CommandDialogExample() {
   const totalResults = navigation.results.length + actions.results.length;
   const showEmpty = hasSearch && !anyLoading && totalResults === 0;
 
-  const handleOpenChange = (nextOpen: boolean) => {
-    setOpen(nextOpen);
-    if (!nextOpen) {
-      setSearch("");
-    }
-  };
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      onOpenChange(nextOpen);
+      if (!nextOpen) {
+        setSearch("");
+      }
+    },
+    [onOpenChange],
+  );
 
   return (
     <div style={{ display: "grid", gap: 12 }}>
-      <Button variant="secondary" onClick={() => setOpen(true)}>
+      <Button variant="secondary" onClick={() => openWith()}>
         Open command menu
       </Button>
       <p style={{ margin: 0, fontSize: 14, color: "var(--gsl-text-secondary)" }}>

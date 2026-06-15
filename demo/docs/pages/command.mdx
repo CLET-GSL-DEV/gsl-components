@@ -187,6 +187,7 @@ Options for `useCommandShortcut` (`shortcut`, `enabled`).
 
 ## Notes
 
+- The `CommandDialog` example uses `useDialogSearchParam("command-menu")` for URL-driven open state (`?dialog=command-menu`). See [Dialog URL state](/docs/dialog#url-state).
 - Set `shortcut` on `CommandDialog` to register Cmd/Ctrl+K without a manual `useEffect`, or use `useCommandShortcut` for custom toggles. The shortcut chip appears automatically in `CommandInput`.
 - `CommandShortcut` renders a unified trailing chip on item rows; pass key segments as `<span>` children.
 - Inline `Command` lists float below the input as a popover so layout height stays fixed.

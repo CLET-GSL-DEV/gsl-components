@@ -22,6 +22,19 @@ Use **Modal** for large workflows or review panels. Use [**Dialog**](/docs/dialo
   code={modalSource}
 />
 
+Click **Review changes** to open the modal with `?modal=review-changes`. Close the modal or use the browser back button to clear the params.
+
+## URL state
+
+Sync open state with URL search params using [`useModalSearchParam`](/docs/hooks). The example above wires `open` and `onOpenChange` from the hook and opens via `openWith()`.
+
+| URL | Meaning |
+|-----|---------|
+| `?modal=review-changes` | Modal `review-changes` is open |
+| `?modal=bulk-import` | Another modal id (e.g. `BulkImportModal`) |
+
+Use a `Button` with `openWith()` instead of `ModalTrigger` when open state is URL-controlled. For React Router or other routers, pass a custom `adapter` — see [Hooks](/docs/hooks#react-router).
+
 ## Components
 
 ### `Modal`
@@ -160,4 +173,4 @@ Extend native `div` / `footer` attributes with optional `classNames`.
 - The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
 - Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
 - Base `gsl-modal*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
-- For URL-driven open state (deep links and back-button close), see [Hooks](/docs/hooks) (`useModalSearchParam`, `openWith`, `data`).
+- **URL-driven open state** is the recommended pattern: use `useModalSearchParam` with `open`, `onOpenChange`, and `openWith` (see [URL state](#url-state) above).

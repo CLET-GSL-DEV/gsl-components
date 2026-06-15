@@ -173,7 +173,7 @@ Four-step modal wizard for importing spreadsheet data (.xlsx, .xls, .csv). Parsi
 ### Usage
 
 ```tsx
-import { BulkImportModal } from "@rfdtech/components";
+import { BulkImportModal, useModalSearchParam } from "@rfdtech/components";
 
 const fields = [
   { key: "email", label: "Email", required: true },
@@ -181,13 +181,18 @@ const fields = [
   { key: "student_id", label: "Student ID" },
 ];
 
+const { open, onOpenChange, openWith } = useModalSearchParam("bulk-import");
+
+<button type="button" onClick={() => openWith()}>Import students</button>
+
 <BulkImportModal
   open={open}
-  onOpenChange={setOpen}
+  onOpenChange={onOpenChange}
   title="Import students"
   fields={fields}
   onComplete={(result) => {
     console.log(result.rows, result.errors);
+    onOpenChange(false);
   }}
 />
 ```
@@ -380,7 +385,7 @@ import {
   CommandItem,
   CommandList,
   CommandShortcut,
-  useCommandShortcut,
+  useDialogSearchParam,
 } from "@rfdtech/components";
 
 <Command label="Field picker">
@@ -395,7 +400,11 @@ import {
   </CommandList>
 </Command>
 
-<CommandDialog open={open} onOpenChange={setOpen} shortcut label="Command menu">
+const { open, onOpenChange, openWith } = useDialogSearchParam("command-menu");
+
+<Button onClick={() => openWith()}>Open command menu</Button>
+
+<CommandDialog open={open} onOpenChange={onOpenChange} shortcut label="Command menu">
   <CommandInput placeholder="Type a command..." />
   <CommandList>
     <CommandItem onSelect={() => go("/dashboard")}>Dashboard</CommandItem>
@@ -457,6 +466,89 @@ import { Dropdown } from "@rfdtech/components";
 Props: `value`, `onValueChange`, `options`, `placeholder`, `clearable`, `disabled`, `aria-label`, `classNames`, `className`. Exported types: `DropdownProps`, `DropdownOption`, `DropdownClassNames`.
 
 
+## Form
+
+Field, Input, and Textarea primitives for accessible form layouts. See the [Form](/docs/form) docs page for props and exported types.
+
+```tsx
+import {
+  Field,
+  FieldControl,
+  FieldDescription,
+  FieldLabel,
+  Input,
+  Textarea,
+} from "@rfdtech/components";
+
+<Field>
+  <FieldLabel>Email</FieldLabel>
+  <FieldControl>
+    <Input type="email" placeholder="you@example.com" />
+  </FieldControl>
+  <FieldDescription>We will never share your email.</FieldDescription>
+</Field>
+```
+
+Exports: `Field`, `FieldLabel`, `FieldDescription`, `FieldError`, `FieldControl`, `Input`, `Textarea`. Types: `FieldProps`, `FieldClassNames`, `InputProps`, `TextareaProps`.
+
+
+## FormField
+
+react-hook-form adapters with Zod validation support. See the [FormField](/docs/form-field) docs page for props and exported types.
+
+```bash
+npm install react-hook-form zod @hookform/resolvers
+```
+
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Button,
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+  Form,
+  FormField,
+  Input,
+} from "@rfdtech/components";
+
+const formSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Enter a valid email address"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+const form = useForm<FormValues>({
+  resolver: zodResolver(formSchema),
+  defaultValues: { email: "" },
+});
+
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field, fieldState }) => (
+        <Field invalid={!!fieldState.error}>
+          <FieldLabel>Email</FieldLabel>
+          <FieldControl>
+            <Input type="email" {...field} />
+          </FieldControl>
+          <FieldError>{fieldState.error?.message}</FieldError>
+        </Field>
+      )}
+    />
+    <Button type="submit">Save</Button>
+  </form>
+</Form>
+```
+
+Exports: `Form`, `FormField`, `useFormField`. Types: `FormProps`, `FormFieldProps`, `UseFormFieldReturn`.
+
+
 ## Dialog
 
 Compound dialog primitives for modal overlays. See the [Dialog](/docs/dialog) docs page for props and exported types.
@@ -470,24 +562,49 @@ import {
   DialogOverlay,
   DialogPortal,
   DialogTitle,
-  DialogTrigger,
+  useDialogSearchParam,
 } from "@rfdtech/components";
 
-<Dialog open={open} onOpenChange={setOpen}>
-  <DialogTrigger asChild>
-    <Button variant="secondary">Edit profile</Button>
-  </DialogTrigger>
+const { open, data, onOpenChange, openWith } = useDialogSearchParam<{
+  userId: string;
+}>("edit-profile");
+
+<Button variant="secondary" onClick={() => openWith({ userId: "42" })}>
+  Edit profile
+</Button>
+
+<Dialog open={open} onOpenChange={onOpenChange}>
   <DialogPortal>
     <DialogOverlay />
     <DialogContent showCloseButton>
       <DialogTitle>Edit profile</DialogTitle>
-      <DialogDescription>Make changes here.</DialogDescription>
+      <DialogDescription>
+        Make changes here. Editing user {data?.userId}.
+      </DialogDescription>
     </DialogContent>
   </DialogPortal>
 </Dialog>
 ```
 
 Props: `Dialog` — `open`, `defaultOpen`, `onOpenChange`. `DialogContent` — `showCloseButton`, `classNames`, `className`. Styled parts also support part-level `classNames`. Exported types: `DialogOverlayProps`, `DialogContentProps`, `DialogTitleProps`, `DialogDescriptionProps`, and related `*ClassNames` interfaces.
+
+
+## Draggable
+
+Repositionable panel primitive with optional handle and bounded pointer dragging. See the [Draggable](/docs/draggable) docs page for props and exported types.
+
+```tsx
+import { Draggable, DraggableHandle } from "@rfdtech/components";
+
+<div style={{ position: "relative", height: 240 }}>
+  <Draggable defaultPosition={{ x: 24, y: 24 }} bounds="parent">
+    <DraggableHandle aria-label="Drag card" />
+    <div>Drag me</div>
+  </Draggable>
+</div>
+```
+
+Exports: `Draggable`, `DraggableHandle`, `useDraggable`, `clampPosition`. Types: `DraggableProps`, `DraggableHandleProps`, `DraggablePosition`, `DraggableBounds`, `DraggableAxis`, `UseDraggableOptions`, `UseDraggableReturn`.
 
 
 ## Modal
@@ -506,13 +623,16 @@ import {
   ModalOverlay,
   ModalPortal,
   ModalTitle,
-  ModalTrigger,
+  useModalSearchParam,
 } from "@rfdtech/components";
 
-<Modal open={open} onOpenChange={setOpen}>
-  <ModalTrigger asChild>
-    <Button variant="secondary">Review changes</Button>
-  </ModalTrigger>
+const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
+
+<Button variant="secondary" onClick={() => openWith()}>
+  Review changes
+</Button>
+
+<Modal open={open} onOpenChange={onOpenChange}>
   <ModalPortal>
     <ModalOverlay />
     <ModalContent showCloseButton>
@@ -522,8 +642,8 @@ import {
       </ModalHeader>
       <ModalBody>{children}</ModalBody>
       <ModalFooter>
-        <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-        <Button onClick={() => setOpen(false)}>Publish</Button>
+        <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+        <Button onClick={() => onOpenChange(false)}>Publish</Button>
       </ModalFooter>
     </ModalContent>
   </ModalPortal>
@@ -687,6 +807,36 @@ import {
 Props: `Sheet` — `open`, `defaultOpen`, `onOpenChange`. `SheetContent` — `side`, `showCloseButton`, `classNames`, `className`. Layout parts support part-level `classNames`. Exported types: `SheetSide`, `SheetOverlayProps`, `SheetContentProps`, `SheetHeaderProps`, `SheetTitleProps`, `SheetDescriptionProps`, `SheetBodyProps`, `SheetFooterProps`, and related `*ClassNames` interfaces.
 
 
+## Sortable
+
+Reorderable list primitive with optional drag handles and keyboard support. See the [Sortable](/docs/sortable) docs page for props and exported types.
+
+```tsx
+import { useState } from "react";
+import {
+  Sortable,
+  SortableHandle,
+  SortableItem,
+  SortableList,
+} from "@rfdtech/components";
+
+const [items, setItems] = useState(["alpha", "beta", "gamma"]);
+
+<Sortable items={items} onReorder={setItems}>
+  <SortableList>
+    {items.map((id) => (
+      <SortableItem key={id} id={id}>
+        <SortableHandle aria-label={`Reorder ${id}`} />
+        <span>{id}</span>
+      </SortableItem>
+    ))}
+  </SortableList>
+</Sortable>
+```
+
+Exports: `Sortable`, `SortableList`, `SortableItem`, `SortableHandle`, `reorderItems`. Types: `SortableProps`, `SortableListProps`, `SortableItemProps`, `SortableHandleProps`, `SortableId`, `SortableStrategy`, `SortableClassNames`.
+
+
 ## Tabs
 
 Compound tabs primitives for switching between related panels. See the [Tabs](/docs/tabs) docs page for props and exported types.
@@ -705,6 +855,33 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
 ```
 
 Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Props: `Tabs` — `value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`, `variant`, `classNames`, `className`, `children`. `TabsTrigger` — `value`, `disabled`, `classNames`, `className`. Exported types: `TabsProps`, `TabsListProps`, `TabsTriggerProps`, `TabsContentProps`, `TabsVariant`, `TabsClassNames`, `TabsListClassNames`, `TabsTriggerClassNames`, `TabsContentClassNames`.
+
+
+## Toast
+
+Transient notifications with an imperative `useToast` hook, powered by Sonner. See the [Toast](/docs/toast) docs page for props and exported types.
+
+```tsx
+import { CheckCircle2 } from "lucide-react";
+import { ToastProvider, Toaster, useToast } from "@rfdtech/components";
+
+<ToastProvider>
+  <App />
+  <Toaster />
+</ToastProvider>
+
+const { toast } = useToast();
+
+toast({
+  title: "Profile saved",
+  description: "Your changes were applied.",
+  variant: "success",
+  icon: <CheckCircle2 size={18} strokeWidth={2} aria-hidden />,
+});
+```
+
+Exports: `ToastProvider`, `Toaster`, `useToast`. Types: `ToastOptions`, `ToastVariant`, `ToastProviderProps`, `ToasterProps`, `UseToastReturn`, `ToastClassNames`, `ToastAction`, `ToastReturn`.
+
 
 ## Development
 

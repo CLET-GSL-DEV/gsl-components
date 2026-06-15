@@ -1,0 +1,100 @@
+export const meta = {
+  title: "Sortable",
+  description:
+    "Reorderable list primitive with optional drag handles and keyboard support.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { SortablePreview } from "../previews/code/SortablePreview";
+import sortableSource from "../previews/examples/sortable.example.tsx?raw";
+
+# Sortable
+
+Reorder items in a vertical or horizontal list via pointer or keyboard. Built on `@dnd-kit` with optional per-item drag handles.
+
+## Example
+
+<ExampleTabs
+  title="Task list"
+  preview={<SortablePreview />}
+  code={sortableSource}
+/>
+
+## Components
+
+### `Sortable`
+
+Root wrapper that owns `DndContext` and calls `onReorder` when a drag completes.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `SortableId[]` | — | Controlled item ids in display order |
+| `onReorder` | `(items) => void` | — | Called with the new order after drag end |
+| `disabled` | `boolean` | `false` | Disables dragging for all items |
+| `classNames` | `SortableClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root |
+
+### `SortableList`
+
+List container with `SortableContext` and a sorting strategy.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `strategy` | `SortableStrategy` | `"vertical"` | `vertical` or `horizontal` list strategy |
+| `classNames` | `Pick<SortableClassNames, "list">` | — | List class overrides |
+| `className` | `string` | — | Merged onto the list |
+
+### `SortableItem`
+
+Sortable row wired to `useSortable` for transform and drag state.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | `SortableId` | — | Unique id matching an entry in `items` |
+| `disabled` | `boolean` | `false` | Disables dragging for this item |
+| `classNames` | `Pick<SortableClassNames, "item">` | — | Item class overrides |
+| `className` | `string` | — | Merged onto the item |
+
+### `SortableHandle`
+
+Optional drag affordance with a 40×40px touch target. When present, only the handle initiates a drag.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `Pick<SortableClassNames, "handle">` | — | Handle class overrides |
+| `className` | `string` | — | Merged onto the handle |
+| `children` | `ReactNode` | grip icon | Handle content |
+
+Also accepts standard `button` attributes (`aria-label`, etc.).
+
+## `reorderItems`
+
+Pure helper exported for advanced use. Returns a new array with the active item moved to the over item's index, or the original array when no reorder occurs.
+
+## Types
+
+### `SortableId`
+
+`string | number`
+
+### `SortableStrategy`
+
+`"vertical" | "horizontal"`
+
+### `SortableClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | `.gsl-sortable` |
+| `list` | `.gsl-sortable__list` |
+| `item` | `.gsl-sortable__item` |
+| `handle` | `.gsl-sortable__handle` |
+
+## Notes
+
+- `items` and `onReorder` are controlled — keep item state in the parent and re-render from the new order.
+- If no `SortableHandle` is rendered inside an item, the entire row initiates dragging.
+- Keyboard reordering is enabled via the built-in `KeyboardSensor`.
+- For repositioning a panel within bounds (not list order), use [Draggable](/docs/draggable).
+- Respects `prefers-reduced-motion: reduce` (no transform transition).
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes.

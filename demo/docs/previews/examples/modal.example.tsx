@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Button,
   Modal,
@@ -10,7 +9,7 @@ import {
   ModalOverlay,
   ModalPortal,
   ModalTitle,
-  ModalTrigger,
+  useModalSearchParam,
 } from "@rfdtech/components";
 
 const reviewItems = [
@@ -25,46 +24,49 @@ const reviewItems = [
 ];
 
 export function ModalExample() {
-  const [open, setOpen] = useState(false);
+  const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
 
   return (
-    <Modal open={open} onOpenChange={setOpen}>
-      <ModalTrigger asChild>
-        <Button variant="secondary">Review changes</Button>
-      </ModalTrigger>
-      <ModalPortal>
-        <ModalOverlay />
-        <ModalContent showCloseButton>
-          <ModalHeader>
-            <ModalTitle>Review changes</ModalTitle>
-            <ModalDescription>
-              Confirm the items below before publishing to the public site.
-            </ModalDescription>
-          </ModalHeader>
-          <ModalBody>
-            <ul
-              style={{
-                margin: 0,
-                paddingLeft: 20,
-                display: "grid",
-                gap: 10,
-                fontSize: 14,
-                lineHeight: 1.5,
-              }}
-            >
-              {reviewItems.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="ghost" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={() => setOpen(false)}>Publish</Button>
-          </ModalFooter>
-        </ModalContent>
-      </ModalPortal>
-    </Modal>
+    <>
+      <Button variant="secondary" onClick={() => openWith()}>
+        Review changes
+      </Button>
+      <Modal open={open} onOpenChange={onOpenChange}>
+        <ModalPortal>
+          <ModalOverlay />
+          <ModalContent showCloseButton>
+            <ModalHeader>
+              <ModalTitle>Review changes</ModalTitle>
+              <ModalDescription>
+                Confirm the items below before publishing to the public site.
+                URL state: <code>?modal=review-changes</code>.
+              </ModalDescription>
+            </ModalHeader>
+            <ModalBody>
+              <ul
+                style={{
+                  margin: 0,
+                  paddingLeft: 20,
+                  display: "grid",
+                  gap: 10,
+                  fontSize: 14,
+                  lineHeight: 1.5,
+                }}
+              >
+                {reviewItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" onClick={() => onOpenChange(false)}>
+                Cancel
+              </Button>
+              <Button onClick={() => onOpenChange(false)}>Publish</Button>
+            </ModalFooter>
+          </ModalContent>
+        </ModalPortal>
+      </Modal>
+    </>
   );
 }

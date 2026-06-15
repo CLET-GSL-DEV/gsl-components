@@ -17,6 +17,8 @@ export default defineConfig({
         id === "react" ||
         id === "react-dom" ||
         id === "react/jsx-runtime" ||
+        id === "react-hook-form" ||
+        id.startsWith("react-hook-form/") ||
         id.startsWith("@radix-ui/"),
       output: {
         globals: {

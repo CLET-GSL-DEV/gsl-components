@@ -1,0 +1,109 @@
+export const meta = {
+  title: "Draggable",
+  description:
+    "Repositionable panel primitive with handle, bounds, and pointer-driven translation.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { DraggablePreview } from "../previews/code/DraggablePreview";
+import { DraggableRootPreview } from "../previews/code/DraggableRootPreview";
+import { SortablePreview } from "../previews/code/SortablePreview";
+import draggableHandleSource from "../previews/examples/draggable.example.tsx?raw";
+import draggableRootSource from "../previews/examples/draggable-root.example.tsx?raw";
+import sortableSource from "../previews/examples/sortable.example.tsx?raw";
+
+# Draggable
+
+Reposition a panel or card by dragging within a bounded area. Uses native pointer events with optional handle, axis lock, and parent or viewport bounds.
+
+## Handle drag
+
+Use `DraggableHandle` when only a grip or custom affordance should start a drag.
+
+<ExampleTabs
+  title="Handle drag"
+  preview={<DraggablePreview />}
+  code={draggableHandleSource}
+/>
+
+## Root drag
+
+Omit `DraggableHandle` to make the entire panel draggable.
+
+<ExampleTabs
+  title="Root drag"
+  preview={<DraggableRootPreview />}
+  code={draggableRootSource}
+/>
+
+## List sort
+
+For reordering items in a list, use [Sortable](/docs/sortable) instead of `Draggable`.
+
+<ExampleTabs
+  title="List sort"
+  preview={<SortablePreview />}
+  code={sortableSource}
+/>
+
+## Components
+
+### `Draggable`
+
+Root wrapper that applies `transform: translate(x, y)` and provides drag context.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `axis` | `DraggableAxis` | `"both"` | Lock drag to `x`, `y`, or both |
+| `bounds` | `DraggableBounds` | `"parent"` | Clamp movement to parent, window, or custom limits |
+| `disabled` | `boolean` | `false` | Disables dragging |
+| `position` | `DraggablePosition` | — | Controlled `{ x, y }` translation |
+| `defaultPosition` | `DraggablePosition` | `{ x: 0, y: 0 }` | Initial translation (uncontrolled) |
+| `onPositionChange` | `(position) => void` | — | Called when translation changes |
+| `classNames` | `DraggableClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root |
+
+### `DraggableHandle`
+
+Drag affordance with a 40×40px touch target. When present, only the handle initiates a drag.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `Pick<DraggableClassNames, "handle">` | — | Handle class overrides |
+| `className` | `string` | — | Merged onto the handle |
+| `children` | `ReactNode` | grip icon | Handle content |
+
+Also accepts standard `button` attributes (`aria-label`, etc.).
+
+## `useDraggable`
+
+Headless hook if you need custom markup. Returns `position`, `dragging`, `rootRef`, `rootStyle`, `handlePointerDown`, and `rootPointerDown`.
+
+## Types
+
+### `DraggablePosition`
+
+`{ x: number; y: number }`
+
+### `DraggableAxis`
+
+`"both" | "x" | "y"`
+
+### `DraggableBounds`
+
+`"parent" | "window" | { left?: number; top?: number; right?: number; bottom?: number }`
+
+### `DraggableClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | `.gsl-draggable` |
+| `handle` | `.gsl-draggable__handle` |
+
+## Notes
+
+- For `bounds="parent"`, place `Draggable` inside a container with `position: relative` (or another positioned ancestor).
+- If no `DraggableHandle` is rendered, the entire root surface initiates dragging.
+- List reordering is handled by [Sortable](/docs/sortable), not `Draggable`.
+- Respects `prefers-reduced-motion: reduce` (no transform transition).
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes.

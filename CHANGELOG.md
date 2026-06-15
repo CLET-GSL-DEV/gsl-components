@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Form docs split into `/docs/form` (Field, Input, Textarea) and `/docs/form-field` (Form, FormField, useFormField, Zod)
+- Dialog, Modal, BulkImportModal, and CommandDialog doc examples and README snippets now use `useDialogSearchParam` / `useModalSearchParam` for URL-driven open state
+- Toast rebuilt on [Sonner](https://sonner.emilkowal.ski/) — `ToastProvider`, `Toaster`, and `useToast()` remain the public API; internal queue and styling now delegate to Sonner with GSL `unstyled` class names
+- `useToast().toasts` is deprecated and always returns `[]` (Sonner does not expose its queue)
+
+### Removed
+
+- Toast compound Radix parts: `Toast`, `ToastTitle`, `ToastDescription`, `ToastAction`, `ToastClose`, `ToastViewport`, `ToastIcon`
+- Toast reducer utilities: `toastReducer`, `createToastRecord`, `enforceToastLimit`, `TOAST_REMOVE_DELAY`, `createToastId`
+- `ToastProvider` props `swipeDirection` and `label` (not supported by Sonner)
+
+### Added
+
+- `Field` compound primitives (`Field`, `FieldLabel`, `FieldDescription`, `FieldError`, `FieldControl`) for accessible label, helper, and error wiring
+- `Input` and `Textarea` forwardRef controls styled for GSL forms
+- `Form`, `FormField`, and `useFormField` adapters for optional `react-hook-form` integration (peer dependency)
+- Form documentation page at `/docs/form` for `Field`, `Input`, and `Textarea` primitives
+- FormField documentation page at `/docs/form-field` for `Form`, `FormField`, `useFormField`, and Zod validation
+- `zod` and `@hookform/resolvers` documented as optional peer dependencies for schema validation
+- `ToastOptions.icon` for optional leading icons with variant-tinted styling
+- `Draggable` compound primitives (`Draggable`, `DraggableHandle`) and `useDraggable` hook for repositioning panels within parent, window, or custom bounds
+- Draggable documentation page at `/docs/draggable` with props and exported types
+- `Sortable` compound primitives (`Sortable`, `SortableList`, `SortableItem`, `SortableHandle`) and `reorderItems` helper for list reordering via `@dnd-kit`
+- Sortable documentation page at `/docs/sortable` with props and exported types
+- `Toast` primitives (`ToastProvider`, `Toaster`) and `useToast` hook for imperative notifications
+- Toast documentation page at `/docs/toast` with props and exported types
+
 ## [1.7.0] - 2026-06-15
 
 ### Added

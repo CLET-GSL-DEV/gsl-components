@@ -1,0 +1,90 @@
+export const meta = {
+  title: "Form",
+  description:
+    "Field, Input, and Textarea primitives for accessible form layouts with GSL styling.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { FieldPreview } from "../previews/code/FieldPreview";
+import fieldSource from "../previews/examples/field.example.tsx?raw";
+
+# Form
+
+Accessible form building blocks with GSL styling. Compose `Field` with `Input` or `Textarea` for labels, helper text, errors, and control wiring.
+
+For [react-hook-form](https://react-hook-form.com/) integration, see [FormField](/docs/form-field).
+
+## Example
+
+<ExampleTabs
+  title="Field layout"
+  preview={<FieldPreview />}
+  code={fieldSource}
+/>
+
+## Field anatomy
+
+```tsx
+<Field invalid={hasError}>
+  <FieldLabel>Email</FieldLabel>
+  <FieldControl>
+    <Input type="email" />
+  </FieldControl>
+  <FieldDescription>Helper text</FieldDescription>
+  <FieldError>Error message</FieldError>
+</Field>
+```
+
+`FieldControl` merges `id`, `aria-invalid`, and `aria-describedby` onto the child control.
+
+## Components
+
+### `Field`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `invalid` | `boolean` | `false` | Marks the field invalid for styling and `aria-invalid` on the control |
+| `classNames` | `FieldClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root |
+
+### `FieldLabel` / `FieldDescription` / `FieldError` / `FieldControl`
+
+Compound parts for label, helper text, error message, and the control slot. Each accepts `classNames` for its part and `className` on the rendered element.
+
+### `Input`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `invalid` | `boolean` | `false` | Error border and `aria-invalid` |
+| `classNames` | `InputClassNames` | — | `{ root }` class override |
+| `className` | `string` | — | Merged onto the `<input>` |
+
+Also accepts standard native `input` attributes. Uses `forwardRef` for library integrations.
+
+### `Textarea`
+
+Same props as `Input`, for `<textarea>`.
+
+## Types
+
+### `FieldClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | `.gsl-field` |
+| `label` | `.gsl-field__label` |
+| `description` | `.gsl-field__description` |
+| `error` | `.gsl-field__error` |
+| `control` | Merged onto the slotted control |
+
+### `InputClassNames` / `TextareaClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | `.gsl-input` / `.gsl-textarea` |
+
+## Notes
+
+- Inputs match Dropdown trigger sizing (`40px` height) and use `--gsl-*` tokens for borders, focus, and error states.
+- `FieldDescription` and `FieldError` only render when they have children.
+- Pair with [FormField](/docs/form-field) for react-hook-form and Zod validation.

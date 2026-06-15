@@ -5,19 +5,19 @@ export const meta = {
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
-import { DialogUrlStatePreview } from "../previews/code/DialogUrlStatePreview";
-import dialogUrlStateSource from "../previews/examples/dialog-url-state.example.tsx?raw";
+import { DialogPreview } from "../previews/code/DialogPreview";
+import dialogSource from "../previews/examples/dialog.example.tsx?raw";
 
 # Hooks
 
-Shared React hooks exported from `@rfdtech/components`. The first hook family syncs `Dialog` and `Modal` open state with URL search params for deep links and back-button dismissal. Optional **flat data params** carry scalar context into overlays (e.g. `dialog.userId=42`).
+Shared React hooks exported from `@rfdtech/components`. The first hook family syncs `Dialog` and `Modal` open state with URL search params for deep links and back-button dismissal. Optional **flat data params** carry scalar context into overlays (e.g. `dialog.userId=42`). For toast notifications, see [`useToast`](/docs/toast) on the Toast docs page.
 
 ## Example
 
 <ExampleTabs
   title="Dialog URL state"
-  preview={<DialogUrlStatePreview />}
-  code={dialogUrlStateSource}
+  preview={<DialogPreview />}
+  code={dialogSource}
 />
 
 Click **Edit profile** to open the dialog with `?dialog=edit-profile&dialog.userId=42`.

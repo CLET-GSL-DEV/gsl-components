@@ -1,0 +1,29 @@
+.gsl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  font-family: var(--gsl-font);
+}
+
+.gsl-field__label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--gsl-text);
+}
+
+.gsl-field__description {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-field__error {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--gsl-error-text);
+}

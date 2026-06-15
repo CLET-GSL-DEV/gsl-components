@@ -1,0 +1,148 @@
+export const meta = {
+  title: "FormField",
+  description:
+    "react-hook-form adapters — Form, FormField, and useFormField with Zod validation support.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { FormFieldPreview } from "../previews/code/FormFieldPreview";
+import formSource from "../previews/examples/form.example.tsx?raw";
+
+# FormField
+
+Thin adapters for [react-hook-form](https://react-hook-form.com/). Use `Form` and `FormField` with the [Form](/docs/form) primitives (`Field`, `Input`, `Textarea`).
+
+Install the optional peer dependencies in your app:
+
+```bash
+npm install react-hook-form zod @hookform/resolvers
+```
+
+## Example
+
+<ExampleTabs
+  title="Contact form with Zod"
+  preview={<FormFieldPreview />}
+  code={formSource}
+/>
+
+## Setup
+
+```tsx
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormField,
+  Field,
+  FieldLabel,
+  FieldControl,
+  FieldError,
+  Input,
+} from "@rfdtech/components";
+
+const form = useForm({ defaultValues: { email: "" } });
+
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>...</form>
+</Form>
+```
+
+## Zod validation
+
+Define a schema with [Zod](https://zod.dev/) and pass `zodResolver` to `useForm`:
+
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Form, FormField, Field, FieldLabel, FieldControl, FieldError, Input } from "@rfdtech/components";
+
+const formSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Enter a valid email address"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+const form = useForm<FormValues>({
+  resolver: zodResolver(formSchema),
+  defaultValues: { email: "" },
+});
+
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field, fieldState }) => (
+        <Field invalid={!!fieldState.error}>
+          <FieldLabel>Email</FieldLabel>
+          <FieldControl>
+            <Input type="email" {...field} />
+          </FieldControl>
+          <FieldError>{fieldState.error?.message}</FieldError>
+        </Field>
+      )}
+    />
+  </form>
+</Form>
+```
+
+Use `fieldState.error?.message` in `FormField` render props for Zod error messages. Omit per-field `rules` when using a schema resolver.
+
+### `register()` shortcut
+
+`Input` and `Textarea` use `forwardRef`, so you can spread `register()` directly without `FormField`:
+
+```tsx
+<Input type="email" {...form.register("email", { required: true })} />
+```
+
+Use `FormField` when you need `Controller` or field-level error messages in the render prop.
+
+## Components
+
+### `Form`
+
+Alias for react-hook-form `FormProvider`. Spread the return value of `useForm()`:
+
+```tsx
+<Form {...form}>...</Form>
+```
+
+### `FormField`
+
+Wraps react-hook-form `Controller`. Accepts the same props as `Controller` (`control`, `name`, `rules`, `render`, etc.).
+
+### `useFormField`
+
+Reads the current `FormField` context and field error state. Returns `{ id, name, invalid, error, formItemId, formDescriptionId, formMessageId }`.
+
+Must be used inside a `FormField`.
+
+## Types
+
+### `FormProps`
+
+Typed wrapper around react-hook-form `FormProviderProps`.
+
+### `FormFieldProps`
+
+Typed wrapper around react-hook-form `ControllerProps`.
+
+### `UseFormFieldReturn`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Generated id for the field item |
+| `name` | `string` | Field name from `FormField` |
+| `invalid` | `boolean` | Whether the field has a validation error |
+| `error` | `FieldError` | react-hook-form field error object |
+| `formItemId` | `string` | Id suffix for the form item |
+| `formDescriptionId` | `string` | Id suffix for description |
+| `formMessageId` | `string` | Id suffix for error message |
+
+## Notes
+
+- `react-hook-form`, `zod`, and `@hookform/resolvers` are **optional peer dependencies**.
+- Compose with [Form](/docs/form) primitives for labels, inputs, and error display.
+- For schema validation beyond Zod, use any resolver supported by `@hookform/resolvers`.

@@ -20,6 +20,21 @@ Compound dialog primitives for modal overlays such as forms, detail panels, and 
   code={dialogSource}
 />
 
+Click **Edit profile** to open the dialog with `?dialog=edit-profile&dialog.userId=42`. Close the dialog or use the browser back button to clear the params.
+
+## URL state
+
+Sync open state with URL search params using [`useDialogSearchParam`](/docs/hooks). The example above wires `open` and `onOpenChange` from the hook and opens via `openWith({ userId: "42" })`.
+
+| URL | Meaning |
+|-----|---------|
+| `?dialog=edit-profile` | Dialog `edit-profile` is open |
+| `?dialog=edit-profile&dialog.userId=42` | Same dialog with `userId` context |
+
+Use a `Button` (or link) with `openWith()` instead of `DialogTrigger` when open state is URL-controlled — Radix triggers manage local state and conflict with search-param sync. Pass optional scalar `data` fields through `openWith`; parsed values are available on `data` as strings.
+
+For React Router or other routers, pass a custom `adapter` — see [Hooks](/docs/hooks#react-router).
+
 ## Components
 
 ### `Dialog`
@@ -123,9 +138,8 @@ Extend Radix title and description props with optional `classNames`.
 ## Notes
 
 - Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
-- Use `DialogTrigger asChild` so focus and keyboard behavior stay on your button or link.
+- **URL-driven open state** is the recommended pattern: use `useDialogSearchParam` with `open`, `onOpenChange`, and `openWith` (see [URL state](#url-state) above). For local-only dialogs, `DialogTrigger asChild` keeps focus and keyboard behavior on your button or link.
 - The panel is centered with `width: min(480px, calc(100vw - 32px))` and scrollable content capped at `min(85vh, calc(100dvh - 32px))` so it fits mobile viewports.
 - The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
 - Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
 - Base `gsl-dialog*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
-- For URL-driven open state (deep links and back-button close), see [Hooks](/docs/hooks) (`useDialogSearchParam`, `openWith`, `data`).

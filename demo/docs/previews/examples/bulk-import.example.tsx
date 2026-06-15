@@ -1,6 +1,5 @@
-import { useState } from "react";
 import type { BulkImportField } from "@rfdtech/components";
-import { BulkImportModal } from "@rfdtech/components";
+import { BulkImportModal, useModalSearchParam } from "@rfdtech/components";
 
 const fields: BulkImportField[] = [
   {
@@ -26,21 +25,21 @@ const fields: BulkImportField[] = [
 ];
 
 export function BulkImportExample() {
-  const [open, setOpen] = useState(false);
+  const { open, onOpenChange, openWith } = useModalSearchParam("bulk-import");
 
   return (
     <>
-      <button type="button" className="demo-button" onClick={() => setOpen(true)}>
+      <button type="button" className="demo-button" onClick={() => openWith()}>
         Open bulk import
       </button>
       <BulkImportModal
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={onOpenChange}
         title="Import documents"
         fields={fields}
         onComplete={(result) => {
           console.log("Import complete:", result);
-          setOpen(false);
+          onOpenChange(false);
         }}
       />
     </>
