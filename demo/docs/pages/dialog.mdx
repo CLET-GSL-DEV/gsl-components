@@ -1,0 +1,130 @@
+export const meta = {
+  title: "Dialog",
+  description:
+    "Compound dialog primitives built on Radix Dialog with styled overlay, content, title, and description.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { DialogPreview } from "../previews/code/DialogPreview";
+import dialogSource from "../previews/examples/dialog.example.tsx?raw";
+
+# Dialog
+
+Compound dialog primitives for modal overlays such as forms, detail panels, and settings. Wraps `@radix-ui/react-dialog`; styled parts apply default GSL surface styles.
+
+## Example
+
+<ExampleTabs
+  title="Edit profile"
+  preview={<DialogPreview />}
+  code={dialogSource}
+/>
+
+## Components
+
+### `Dialog`
+
+Root wrapper. Accepts Radix `Dialog.Root` props such as `open`, `defaultOpen`, and `onOpenChange`.
+
+### `DialogTrigger`
+
+Wraps the element that opens the dialog. Use `asChild` to merge props onto a child such as `Button`.
+
+### `DialogPortal`
+
+Renders overlay and content in a portal. Wrap `DialogOverlay` and `DialogContent` inside the portal.
+
+### `DialogOverlay`
+
+Styled backdrop behind the dialog panel.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `DialogOverlayClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the overlay element |
+
+Also accepts remaining Radix `Dialog.Overlay` props.
+
+### `DialogContent`
+
+Styled centered modal panel.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `showCloseButton` | `boolean` | `false` | Shows a top-right close control with an accessible label |
+| `classNames` | `DialogContentClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the content element |
+
+Also accepts remaining Radix `Dialog.Content` props.
+
+### `DialogTitle`
+
+Accessible dialog heading. Render inside `DialogContent`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `DialogTitleClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the title element |
+
+### `DialogDescription`
+
+Optional supporting text below the title.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `DialogDescriptionClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the description element |
+
+### Other exports
+
+| Export | Radix primitive | Notes |
+|--------|-----------------|-------|
+| `DialogClose` | `Close` | Closes the dialog when activated; used by the built-in close button and custom actions |
+
+## Types
+
+### `DialogOverlayProps`
+
+Extends Radix `DialogOverlayProps` with optional `classNames`.
+
+### `DialogContentProps`
+
+Extends Radix `DialogContentProps` with `showCloseButton` and optional `classNames`.
+
+### `DialogTitleProps` / `DialogDescriptionProps`
+
+Extend Radix title and description props with optional `classNames`.
+
+### `DialogOverlayClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `overlay` | Overlay element (`.gsl-dialog__overlay`) |
+
+### `DialogContentClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `content` | Content element (`.gsl-dialog__content`) |
+| `close` | Built-in close button (`.gsl-dialog__close`) |
+
+### `DialogTitleClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `title` | Title element (`.gsl-dialog__title`) |
+
+### `DialogDescriptionClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `description` | Description element (`.gsl-dialog__description`) |
+
+## Notes
+
+- Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
+- Use `DialogTrigger asChild` so focus and keyboard behavior stay on your button or link.
+- The panel is centered with `width: min(480px, calc(100vw - 32px))` and scrollable content capped at `min(85vh, calc(100dvh - 32px))` so it fits mobile viewports.
+- The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
+- Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
+- Base `gsl-dialog*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

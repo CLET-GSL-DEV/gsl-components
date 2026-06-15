@@ -6,6 +6,7 @@ export * from "./components/button";
 export * from "./components/checkbox";
 export * from "./components/command";
 export * from "./components/dropdown";
+export * from "./components/dialog";
 export * from "./components/popover";
 export * from "./components/radio-group";
 export * from "./components/sidebar";

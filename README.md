@@ -383,6 +383,39 @@ import { Dropdown } from "@rfdtech/components";
 Props: `value`, `onValueChange`, `options`, `placeholder`, `clearable`, `disabled`, `aria-label`, `classNames`, `className`. Exported types: `DropdownProps`, `DropdownOption`, `DropdownClassNames`.
 
 
+## Dialog
+
+Compound dialog primitives for modal overlays. See the [Dialog](/docs/dialog) docs page for props and exported types.
+
+```tsx
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "@rfdtech/components";
+
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogTrigger asChild>
+    <Button variant="secondary">Edit profile</Button>
+  </DialogTrigger>
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogContent showCloseButton>
+      <DialogTitle>Edit profile</DialogTitle>
+      <DialogDescription>Make changes here.</DialogDescription>
+    </DialogContent>
+  </DialogPortal>
+</Dialog>
+```
+
+Props: `Dialog` — `open`, `defaultOpen`, `onOpenChange`. `DialogContent` — `showCloseButton`, `classNames`, `className`. Styled parts also support part-level `classNames`. Exported types: `DialogOverlayProps`, `DialogContentProps`, `DialogTitleProps`, `DialogDescriptionProps`, and related `*ClassNames` interfaces.
+
+
 ## Popover
 
 Compound popover primitives for floating panels. See the [Popover](/docs/popover) docs page for props and exported types.

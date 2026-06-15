@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `CommandInput` search icon and optional shortcut badge (inherits from `CommandDialog` when `shortcut` is set)
 - `CommandGroup` `loading` and `loadingLabel` props for per-group async result loading
 - `formatCommandShortcutLabels` helper and `useCommandDialog` hook
+- `Dialog` compound primitives (`Dialog`, `DialogTrigger`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `DialogClose`) built on Radix Dialog
+- Dialog documentation page at `/docs/dialog` with props and exported types
 - Sidebar documentation page at `/docs/sidebar` with props and exported types
 - Command documentation page at `/docs/command` with props and exported types
 

@@ -1,5 +1,8 @@
 {
   "buildCommand": "npx vite build --config vite.demo.config.ts",
   "outputDirectory": "demo/dist",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

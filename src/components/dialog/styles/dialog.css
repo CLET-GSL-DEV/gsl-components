@@ -1,0 +1,140 @@
+.gsl-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--gsl-z-overlay);
+  background: var(--gsl-overlay);
+}
+
+.gsl-dialog__overlay[data-state="open"] {
+  animation: gsl-dialog-overlay-in 0.15s ease forwards;
+}
+
+.gsl-dialog__overlay[data-state="closed"] {
+  animation: gsl-dialog-overlay-out 0.1s ease forwards;
+}
+
+.gsl-dialog__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: var(--gsl-z-modal);
+  display: flex;
+  width: min(480px, calc(100vw - 32px));
+  max-width: 100%;
+  max-height: min(85vh, calc(100dvh - 32px));
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding: 24px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  box-shadow: var(--gsl-shadow-lg);
+  font-family: var(--gsl-font);
+  color: var(--gsl-text);
+  transform: translate(-50%, -50%);
+}
+
+.gsl-dialog__content[data-state="open"] {
+  animation: gsl-dialog-content-in 0.15s ease forwards;
+}
+
+.gsl-dialog__content[data-state="closed"] {
+  animation: gsl-dialog-content-out 0.1s ease forwards;
+}
+
+.gsl-dialog__title {
+  margin: 0;
+  padding-right: 40px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--gsl-text);
+}
+
+.gsl-dialog__description {
+  margin: -8px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-dialog__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: calc(var(--gsl-radius) - 2px);
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  cursor: pointer;
+}
+
+.gsl-dialog__close:hover {
+  background: var(--gsl-hover);
+  color: var(--gsl-text);
+}
+
+.gsl-dialog__close:focus-visible {
+  outline: 2px solid var(--gsl-primary);
+  outline-offset: 2px;
+}
+
+@keyframes gsl-dialog-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gsl-dialog-overlay-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes gsl-dialog-content-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 8px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes gsl-dialog-content-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 8px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-dialog__overlay[data-state="open"],
+  .gsl-dialog__overlay[data-state="closed"],
+  .gsl-dialog__content[data-state="open"],
+  .gsl-dialog__content[data-state="closed"] {
+    animation: none;
+  }
+}

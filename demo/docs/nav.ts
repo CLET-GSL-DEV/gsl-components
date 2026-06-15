@@ -26,6 +26,7 @@ export const docNavSections: DocNavSection[] = [
       { slug: "checkbox", title: "Checkbox" },
       { slug: "command", title: "Command" },
       { slug: "dropdown", title: "Dropdown" },
+      { slug: "dialog", title: "Dialog" },
       { slug: "popover", title: "Popover" },
       { slug: "radio-group", title: "RadioGroup" },
       { slug: "sidebar", title: "Sidebar" },
