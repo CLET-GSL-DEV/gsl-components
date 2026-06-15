@@ -23,6 +23,25 @@ src/types/{name}.ts    # props, classNames, unions
 - Prefix classes `gsl-{component}` / `gsl-{component}__part`.
 - Import CSS in the component file.
 
+## Responsive
+
+Every public component must work from **320px** through desktop widths.
+
+| Requirement | Guidance |
+|-------------|----------|
+| **Breakpoint** | Default mobile breakpoint: `@media (max-width: 768px)`. Document a different value in the component docs **Notes** when needed. |
+| **Layout** | No horizontal overflow at 320px; use `min-width: 0`, `max-width: 100%`, `flex-wrap`, or stacked layouts on small screens. |
+| **Touch targets** | Interactive controls at least **40×40px** hit area on mobile (padding or min-height), matching Button `md`. |
+| **Portals / overlays** | Popovers, dropdowns, modals, and mobile drawers must fit the viewport (max width/height, scrollable content, dismiss on overlay). |
+| **Motion** | Respect `prefers-reduced-motion: reduce` — disable or shorten animations and transitions. |
+| **Docs preview** | Interactive previews must remain usable in a narrow canvas; layout components need explicit mobile behavior. |
+
+Before marking component work done:
+
+- Spot-check at **320px** and **768px** — no clipped controls or sideways scroll on the component root.
+- Confirm mobile behavior is implemented in CSS or JS, not desktop-only styles.
+- Document non-obvious responsive behavior in the docs **Notes** section.
+
 ## Props and classNames
 
 - Types in `src/types/{name}.ts`; re-export from component `index.ts` and `src/index.ts`.

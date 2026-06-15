@@ -1,0 +1,309 @@
+export const meta = {
+  title: "Command",
+  description:
+    "Compound command menu primitives built on cmdk with inline and dialog palettes.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import {
+  CommandDialogPreview,
+  CommandInlinePreview,
+} from "../previews/code/CommandPreview";
+
+# Command
+
+Compound command menu primitives for searchable, keyboard-navigable action lists. Built on [`cmdk`](https://github.com/pacocoursey/cmdk) with GSL styling. Use inline `Command` for combobox-style pickers or `CommandDialog` for a modal command palette.
+
+## Inline example
+
+<ExampleTabs title="Field picker" preview={<CommandInlinePreview />}>
+
+```tsx title="App.tsx"
+import { useEffect, useState } from "react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@rfdtech/components";
+
+function FieldPicker() {
+  const [search, setSearch] = useState("");
+  const [contactResults, setContactResults] = useState([]);
+  const [contactLoading, setContactLoading] = useState(false);
+  const [orgResults, setOrgResults] = useState([]);
+  const [orgLoading, setOrgLoading] = useState(false);
+
+  // Debounced fetch per group (different sources / delays)
+  useEffect(() => { /* fetch contact fields */ }, [search]);
+  useEffect(() => { /* fetch organization fields */ }, [search]);
+
+  const showEmpty =
+    search.trim() &&
+    !contactLoading &&
+    !orgLoading &&
+    contactResults.length + orgResults.length === 0;
+
+  return (
+    <Command label="Field picker" shouldFilter={false}>
+      <CommandInput value={search} onValueChange={setSearch} placeholder="Search fields..." />
+      {search.trim() ? (
+        <CommandList>
+          {showEmpty ? <CommandEmpty>No results.</CommandEmpty> : null}
+          <CommandGroup heading="Contact fields" loading={contactLoading}>
+            {contactResults.map((item) => (
+              <CommandItem key={item.value} value={item.value}>{item.label}</CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandGroup heading="Organization" loading={orgLoading}>
+            {orgResults.map((item) => (
+              <CommandItem key={item.value} value={item.value}>{item.label}</CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      ) : null}
+    </Command>
+  );
+}
+```
+
+</ExampleTabs>
+
+## Dialog example
+
+<ExampleTabs title="Command palette" preview={<CommandDialogPreview />}>
+
+```tsx title="App.tsx"
+import { useEffect, useState } from "react";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@rfdtech/components";
+
+function CommandMenu({ open, onOpenChange }) {
+  const [search, setSearch] = useState("");
+  const [navResults, setNavResults] = useState([]);
+  const [navLoading, setNavLoading] = useState(false);
+  const [actionResults, setActionResults] = useState([]);
+  const [actionsLoading, setActionsLoading] = useState(false);
+
+  useEffect(() => { /* fetch navigation */ }, [search]);
+  useEffect(() => { /* fetch actions */ }, [search]);
+
+  const showEmpty =
+    search.trim() &&
+    !navLoading &&
+    !actionsLoading &&
+    navResults.length + actionResults.length === 0;
+
+  return (
+    <CommandDialog
+      open={open}
+      onOpenChange={(next) => {
+        onOpenChange(next);
+        if (!next) setSearch("");
+      }}
+      shortcut
+      label="Command menu"
+      shouldFilter={false}
+    >
+      <CommandInput value={search} onValueChange={setSearch} placeholder="Type a command..." />
+      {search.trim() ? (
+        <CommandList>
+          {showEmpty ? <CommandEmpty>No results found.</CommandEmpty> : null}
+          <CommandGroup heading="Navigation" loading={navLoading}>
+            {navResults.map((item) => (
+              <CommandItem key={item.value} value={item.value}>{item.label}</CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Actions" loading={actionsLoading}>
+            {actionResults.map((item) => (
+              <CommandItem key={item.value} value={item.value}>
+                {item.label}
+                <CommandShortcut><span>⌘</span><span>Q</span></CommandShortcut>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      ) : null}
+    </CommandDialog>
+  );
+}
+```
+
+</ExampleTabs>
+
+Set `shortcut` to `true` for Cmd/Ctrl+K, or pass a custom combo such as `shortcut="ctrl+shift+p"`. When `shortcut` is set, `CommandInput` inside the dialog automatically shows the matching keyboard badge. Use `useCommandShortcut` directly when you need a toggle outside `CommandDialog`.
+
+## Components
+
+### `Command`
+
+Root wrapper for inline command menus. Accepts cmdk root props such as `shouldFilter`, `filter`, `value`, and `onValueChange`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | — | Accessible label for the menu |
+| `classNames` | `CommandClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root |
+
+### `CommandDialog`
+
+Modal command palette. Composes cmdk's dialog (Radix Dialog under the hood).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | — | Controlled open state |
+| `defaultOpen` | `boolean` | — | Initial open state (uncontrolled) |
+| `onOpenChange` | `(open: boolean) => void` | — | Called when open state changes |
+| `shortcut` | `boolean \| string` | — | `true` registers Cmd/Ctrl+K; string sets a custom combo (e.g. `ctrl+shift+p`) |
+| `label` | `string` | — | Accessible label for the menu |
+| `classNames` | `CommandDialogClassNames` | — | `dialog`, `overlay`, `content` overrides |
+| `className` | `string` | — | Merged onto the dialog root |
+| `overlayClassName` | `string` | — | Merged onto the overlay |
+| `contentClassName` | `string` | — | Merged onto the dialog panel |
+
+Also accepts cmdk dialog props such as `shouldFilter` and `filter`.
+
+### `CommandInput`
+
+Search row with a leading search icon. Inline results float in a popover below the input. Filters items automatically unless `shouldFilter={false}` on the root.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `shortcut` | `boolean \| string \| false` | — | Show a keyboard badge in the input. `false` hides it. Inherits from `CommandDialog` when omitted. |
+| `classNames` | `CommandInputClassNames` | — | `wrapper` and `input` class overrides |
+| `className` | `string` | — | Merged onto the input |
+
+Also accepts standard `input` attributes and cmdk `onValueChange`.
+
+### `CommandList`
+
+Scrollable results container for items and groups. Inline `Command` lists render as a floating popover so the input height stays fixed.
+
+### `CommandEmpty`
+
+Rendered automatically when no items match the current search query.
+
+### `CommandGroup`
+
+Groups items under an optional `heading`. Set `loading` when fetching items for a single group from an async source; each group can load independently.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `heading` | `string` | — | Group label shown above items |
+| `loading` | `boolean` | `false` | Shows a line loader inside the group; children hidden while true |
+| `loadingLabel` | `string` | `"Loading..."` | Screen reader label while loading |
+| `classNames` | `CommandGroupClassNames` | — | `group` and `groupLoading` overrides |
+| `className` | `string` | — | Merged onto the group |
+
+### `CommandItem`
+
+Selectable row. Prefer a stable `value` prop when label text may change.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Unique item value for filtering and selection |
+| `keywords` | `string[]` | — | Extra terms to match when filtering |
+| `disabled` | `boolean` | `false` | Disables the item |
+| `onSelect` | `(value: string) => void` | — | Called when the item is chosen |
+| `classNames` | `CommandItemClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the item |
+
+### `CommandSeparator`
+
+Divider between groups. Hidden while searching unless `alwaysRender` is set.
+
+### `CommandLoading`
+
+Optional loading slot for async result sets. Use `gsl-command__loading-bar` for an indeterminate line loader and set `label` for screen readers.
+
+### `CommandShortcut`
+
+Trailing keyboard hint chip inside a `CommandItem` row.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `CommandShortcutClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the shortcut chip |
+| `children` | `ReactNode` | — | Key segments as spans inside the chip (e.g. `<span>⌘</span><span>Q</span>`) |
+
+### `useCommandShortcut`
+
+Registers a global keyboard shortcut that calls `onToggle`. Ignores key presses while focus is in an `input`, `textarea`, or `contenteditable` element.
+
+```ts
+useCommandShortcut(onToggle, {
+  shortcut?: string; // default "mod+k"
+  enabled?: boolean; // default true
+});
+```
+
+`mod` maps to Cmd on macOS and Ctrl elsewhere.
+
+## Types
+
+### `CommandProps`
+
+Props for `Command`.
+
+### `CommandDialogProps`
+
+Props for `CommandDialog`.
+
+### `CommandInputProps` / `CommandListProps` / `CommandEmptyProps`
+
+Props for input, list, and empty state parts.
+
+### `CommandGroupProps` / `CommandItemProps` / `CommandSeparatorProps` / `CommandLoadingProps`
+
+Props for grouped items, rows, separators, and loading state.
+
+### `CommandShortcutProps`
+
+Props for `CommandShortcut`.
+
+### `UseCommandShortcutOptions`
+
+Options for `useCommandShortcut` (`shortcut`, `enabled`).
+
+### `*ClassNames`
+
+| Type | Key | Applied to |
+|------|-----|------------|
+| `CommandClassNames` | `root` | Inline root |
+| `CommandDialogClassNames` | `dialog` | Dialog root |
+| `CommandDialogClassNames` | `overlay` | Dialog overlay |
+| `CommandDialogClassNames` | `content` | Dialog panel |
+| `CommandInputClassNames` | `wrapper` | Input row container |
+| `CommandInputClassNames` | `input` | Search input |
+| `CommandListClassNames` | `list` | Results list |
+| `CommandEmptyClassNames` | `empty` | Empty state |
+| `CommandGroupClassNames` | `group` | Group wrapper |
+| `CommandGroupClassNames` | `groupLoading` | Group loading row |
+| `CommandItemClassNames` | `item` | Item row |
+| `CommandSeparatorClassNames` | `separator` | Separator |
+| `CommandLoadingClassNames` | `loading` | Loading slot |
+| `CommandShortcutClassNames` | `shortcut` | Shortcut chip |
+
+## Notes
+
+- Set `shortcut` on `CommandDialog` to register Cmd/Ctrl+K without a manual `useEffect`, or use `useCommandShortcut` for custom toggles. The shortcut chip appears automatically in `CommandInput`.
+- `CommandShortcut` renders a unified trailing chip on item rows; pass key segments as `<span>` children.
+- Inline `Command` lists float below the input as a popover so layout height stays fixed.
+- Use `CommandGroup loading` for per-group async fetches; hide `CommandEmpty` while any group is still loading.
+
+- `CommandDialog` uses a centered panel with `max-width: min(560px, calc(100vw - 32px))` and a scrollable list capped at `50dvh` so the menu fits mobile viewports.
+- Item rows use at least **40px** height for touch-friendly targets on small screens.
+- Dialog enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
+- Provide a stable `value` on `CommandItem` when children change between renders.
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

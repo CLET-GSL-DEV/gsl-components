@@ -1,0 +1,280 @@
+export const meta = {
+  title: "Sidebar",
+  description:
+    "Compound sidebar layout primitives with sticky desktop rail and mobile offcanvas drawer.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { SidebarPreview } from "../previews/code/SidebarPreview";
+
+# Sidebar
+
+Compound sidebar primitives for app shells and section navigation. Desktop shows a sticky card-style rail with optional collapse; mobile uses an offcanvas drawer with a toggle trigger and dismissible overlay.
+
+## Example
+
+<ExampleTabs title="App shell" preview={<SidebarPreview />}>
+
+```tsx title="App.tsx"
+import {
+  Sidebar,
+  SidebarCollapse,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarItem,
+  SidebarLink,
+  SidebarNav,
+  SidebarOverlay,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@rfdtech/components";
+
+<SidebarProvider>
+  <SidebarTrigger>Open menu</SidebarTrigger>
+  <SidebarOverlay />
+  <Sidebar>
+    <SidebarHeader>
+      <div className="gsl-sidebar__header-brand">
+        <span className="gsl-sidebar__header-title">GSL Admin</span>
+      </div>
+      <SidebarCollapse />
+    </SidebarHeader>
+    <SidebarContent>
+      <SidebarNav aria-label="Main">
+        <SidebarGroup>
+          <SidebarGroupLabel>General</SidebarGroupLabel>
+          <SidebarItem>
+            <SidebarLink href="/dashboard" icon={<DashboardIcon />} active={path === "/dashboard"}>
+              Dashboard
+            </SidebarLink>
+          </SidebarItem>
+        </SidebarGroup>
+      </SidebarNav>
+    </SidebarContent>
+    <SidebarFooter>v1.5.0</SidebarFooter>
+  </Sidebar>
+  <main>{children}</main>
+</SidebarProvider>
+```
+
+</ExampleTabs>
+
+## React Router
+
+Use `asChild` on `SidebarLink` to merge styles onto `NavLink`:
+
+```tsx
+<SidebarLink asChild active={isActive}>
+  <NavLink to="/dashboard">Dashboard</NavLink>
+</SidebarLink>
+```
+
+## Components
+
+### `SidebarProvider`
+
+Context wrapper for open state, collapsed state, and mobile detection.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | — | Controlled open state (mobile drawer) |
+| `defaultOpen` | `boolean` | `false` | Initial open state (uncontrolled) |
+| `onOpenChange` | `(open: boolean) => void` | — | Called when open state changes |
+| `collapsed` | `boolean` | — | Controlled collapsed state (desktop) |
+| `defaultCollapsed` | `boolean` | `false` | Initial collapsed state (uncontrolled) |
+| `onCollapsedChange` | `(collapsed: boolean) => void` | — | Called when collapsed state changes |
+| `breakpoint` | `number` | `768` | Max width in px treated as mobile |
+| `classNames` | `SidebarProviderClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the provider wrapper |
+| `children` | `ReactNode` | — | Trigger, overlay, sidebar, and page content |
+
+Also exports `useSidebar()` for programmatic open/close and collapse.
+
+### `Sidebar`
+
+Root `<aside>`. Sticky card panel on desktop; fixed offcanvas panel on mobile when open.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `SidebarClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the aside |
+| `children` | `ReactNode` | — | Header, content, footer |
+
+### `SidebarCollapse`
+
+Desktop collapse toggle. Hidden on mobile. Sets `aria-expanded` and `aria-controls`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `SidebarCollapseClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the button |
+
+Also accepts standard `button` attributes.
+
+### `SidebarTrigger`
+
+Mobile menu button. Hidden on desktop. Sets `aria-expanded` and `aria-controls`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `SidebarTriggerClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the button |
+| `children` | `ReactNode` | — | Button label |
+
+Also accepts standard `button` attributes.
+
+### `SidebarOverlay`
+
+Mobile backdrop. Click closes the drawer. Not rendered on desktop.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `SidebarOverlayClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the overlay button |
+
+### `SidebarHeader`
+
+Top branding or metadata slot. Use `gsl-sidebar__header-brand` and `gsl-sidebar__header-title` for logo + title layout alongside `SidebarCollapse`.
+
+### `SidebarContent`
+
+Scrollable middle section for navigation.
+
+### `SidebarFooter`
+
+Bottom slot separated by a top border.
+
+### `SidebarNav`
+
+Navigation landmark wrapper (`<nav>`).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `aria-label` | `string` | `"Sidebar"` | Accessible name for the nav |
+| `classNames` | `SidebarNavClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the nav |
+
+### `SidebarGroup`
+
+Section wrapper for grouped links.
+
+### `SidebarGroupLabel`
+
+Uppercase section title.
+
+### `SidebarItem`
+
+Row wrapper for a single link.
+
+### `SidebarBadge`
+
+Trailing count or label pill inside `SidebarLink`. Must be a direct child of `SidebarLink`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `SidebarBadgeClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the badge |
+| `children` | `ReactNode` | — | Badge text (e.g. `"New"`, `12`) |
+
+```tsx
+<SidebarLink href="/notifications" icon={<Bell size={20} />}>
+  Notification Templates
+  <SidebarBadge>New</SidebarBadge>
+</SidebarLink>
+```
+
+### `SidebarLink`
+
+Styled navigation link.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `active` | `boolean` | `false` | Applies active link styling |
+| `asChild` | `boolean` | `false` | Merge props onto the child element |
+| `icon` | `ReactNode` | — | Optional leading icon; label wraps in `.gsl-sidebar__link-label` for collapse |
+| `classNames` | `SidebarLinkClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the link |
+| `href` | `string` | — | Link destination |
+
+Also accepts standard anchor attributes when not using `asChild`. When using `asChild`, supply your own icon/label structure; collapse label hiding works best with the `icon` prop pattern. `SidebarBadge` children are not supported with `asChild`.
+
+## Types
+
+### `SidebarProviderProps`
+
+Props for `SidebarProvider`.
+
+### `SidebarProps`
+
+Props for `Sidebar`.
+
+### `SidebarTriggerProps`
+
+Props for `SidebarTrigger`.
+
+### `SidebarCollapseProps`
+
+Props for `SidebarCollapse`.
+
+### `SidebarOverlayProps`
+
+Props for `SidebarOverlay`.
+
+### `SidebarHeaderProps` / `SidebarContentProps` / `SidebarFooterProps`
+
+Props for layout slots.
+
+### `SidebarNavProps` / `SidebarGroupProps` / `SidebarGroupLabelProps` / `SidebarItemProps`
+
+Props for navigation structure parts.
+
+### `SidebarLinkProps`
+
+Props for `SidebarLink`.
+
+### `SidebarBadgeProps`
+
+Props for `SidebarBadge`.
+
+### `SidebarProviderClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Provider wrapper |
+
+### `SidebarClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Aside (`.gsl-sidebar`) |
+
+### Other `*ClassNames`
+
+| Type | Key | Applied to |
+|------|-----|------------|
+| `SidebarOverlayClassNames` | `overlay` | Overlay button |
+| `SidebarTriggerClassNames` | `trigger` | Menu button |
+| `SidebarCollapseClassNames` | `collapse` | Collapse button |
+| `SidebarHeaderClassNames` | `header` | Header slot |
+| `SidebarContentClassNames` | `content` | Content slot |
+| `SidebarFooterClassNames` | `footer` | Footer slot |
+| `SidebarNavClassNames` | `nav` | Nav element |
+| `SidebarGroupClassNames` | `group` | Group wrapper |
+| `SidebarGroupLabelClassNames` | `groupLabel` | Section label |
+| `SidebarItemClassNames` | `item` | Item wrapper |
+| `SidebarBadgeClassNames` | `badge` | Badge pill |
+| `SidebarLinkClassNames` | `link` | Link element |
+
+## Notes
+
+- Desktop renders a **card panel** (`--gsl-surface-subtle` background, 24px radius, icon + label rows). Active links use a neutral gray pill, not primary color.
+- Use `SidebarCollapse` in the header to collapse to a **72px icon rail** on desktop; group labels, link labels, badges, and footer content hide automatically.
+- Mobile breakpoint defaults to **768px**; override with `breakpoint` on `SidebarProvider` if needed.
+- On mobile, the drawer slides in from the left; overlay click and resize back to desktop close the drawer.
+- Link touch targets are at least **40px** tall on mobile.
+- Slide transitions are disabled when `prefers-reduced-motion: reduce` is set.
+- `SidebarBadge` renders a trailing pill on the right of a link row; badges hide automatically when the sidebar is collapsed.
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

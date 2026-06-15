@@ -1,0 +1,314 @@
+.gsl-command {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  font-family: var(--gsl-font);
+  color: var(--gsl-text);
+}
+
+.gsl-command:not(.gsl-command--dialog) {
+  position: relative;
+  z-index: 0;
+  gap: 0;
+}
+
+.gsl-command:not(.gsl-command--dialog):focus-within {
+  z-index: var(--gsl-z-select);
+}
+
+.gsl-command--dialog {
+  flex: 1;
+  min-height: 0;
+  gap: 0;
+}
+
+.gsl-command-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--gsl-z-overlay);
+  background: var(--gsl-overlay);
+}
+
+.gsl-command-dialog__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: var(--gsl-z-modal);
+  display: flex;
+  width: min(560px, calc(100vw - 32px));
+  max-width: 100%;
+  max-height: 85vh;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  box-shadow: var(--gsl-shadow-lg);
+  font-family: var(--gsl-font);
+  color: var(--gsl-text);
+  transform: translate(-50%, -50%);
+}
+
+.gsl-command-dialog__content[data-state="open"] {
+  animation: gsl-command-dialog-in 0.15s ease forwards;
+}
+
+.gsl-command-dialog__content[data-state="closed"] {
+  animation: gsl-command-dialog-out 0.1s ease forwards;
+}
+
+@keyframes gsl-command-dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 8px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes gsl-command-dialog-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 8px));
+  }
+}
+
+.gsl-command__input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 10px 14px;
+  background: var(--gsl-bg);
+}
+
+.gsl-command:not(.gsl-command--dialog) .gsl-command__input-wrapper {
+  box-sizing: border-box;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+}
+
+.gsl-command--dialog .gsl-command__input-wrapper {
+  border-bottom: 1px solid var(--gsl-border);
+}
+
+.gsl-command__input-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-command__input {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--gsl-text);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+}
+
+.gsl-command__input::placeholder {
+  color: var(--gsl-text-muted);
+}
+
+.gsl-command__input:focus-visible {
+  outline: none;
+}
+
+.gsl-command__input-wrapper:focus-within {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: -2px;
+}
+
+.gsl-command:not(.gsl-command--dialog) .gsl-command__input-wrapper:focus-within {
+  outline-offset: 2px;
+}
+
+.gsl-command__input-shortcut,
+.gsl-command__shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--gsl-border);
+  border-radius: 6px;
+  background: var(--gsl-surface-subtle);
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: inherit;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-command__shortcut {
+  margin-left: auto;
+}
+
+.gsl-command__shortcut-key {
+  display: inline;
+}
+
+.gsl-command__list {
+  max-height: min(320px, 50dvh);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 6px;
+  background: var(--gsl-bg);
+}
+
+.gsl-command:not(.gsl-command--dialog) .gsl-command__list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: var(--gsl-z-select);
+  margin: 0;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  box-shadow: var(--gsl-shadow-lg);
+}
+
+.gsl-command--dialog .gsl-command__list {
+  flex: 1;
+  min-height: 0;
+  border: none;
+  border-top: none;
+  border-radius: 0;
+}
+
+.gsl-command__empty {
+  padding: 24px 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-command__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+}
+
+.gsl-command__group-loading {
+  padding: 8px 10px 10px;
+}
+
+.gsl-command__group [cmdk-group-heading] {
+  margin: 0;
+  padding: 6px 10px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-command__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: calc(var(--gsl-radius) - 2px);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--gsl-text);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.gsl-command__item[data-selected="true"] {
+  background: var(--gsl-hover);
+}
+
+.gsl-command__item[data-disabled="true"] {
+  color: var(--gsl-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.gsl-command__item:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: -2px;
+}
+
+.gsl-command__separator {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--gsl-border);
+}
+
+.gsl-command__loading {
+  padding: 12px 10px;
+}
+
+.gsl-command__loading-bar {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--gsl-border);
+}
+
+.gsl-command__loading-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gsl-text-secondary);
+  animation: gsl-command-loading-slide 1s ease-in-out infinite;
+}
+
+@keyframes gsl-command-loading-slide {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(350%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-command-dialog__content[data-state="open"],
+  .gsl-command-dialog__content[data-state="closed"] {
+    animation: none;
+  }
+
+  .gsl-command__loading-bar::after {
+    width: 100%;
+    animation: none;
+    transform: none;
+    opacity: 0.45;
+  }
+}

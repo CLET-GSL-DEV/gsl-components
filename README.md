@@ -292,6 +292,50 @@ import { Checkbox } from "@rfdtech/components";
 Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `disabled`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `CheckboxProps`, `CheckboxClassNames`.
 
 
+## Command
+
+Compound command menu primitives for searchable, keyboard-navigable action lists. Supports inline pickers and modal palettes via `CommandDialog`. See the [Command](/docs/command) docs page for props and exported types.
+
+```tsx
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+  useCommandShortcut,
+} from "@rfdtech/components";
+
+<Command label="Field picker">
+  <CommandInput placeholder="Search fields..." />
+  <CommandList>
+    <CommandEmpty>No results.</CommandEmpty>
+    <CommandGroup heading="Fields">
+      <CommandItem value="email" onSelect={() => setField("email")}>
+        Email
+      </CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>
+
+<CommandDialog open={open} onOpenChange={setOpen} shortcut label="Command menu">
+  <CommandInput placeholder="Type a command..." />
+  <CommandList>
+    <CommandItem onSelect={() => go("/dashboard")}>Dashboard</CommandItem>
+    <CommandItem onSelect={signOut}>
+      Sign out
+      <CommandShortcut><span>⌘</span><span>Q</span></CommandShortcut>
+    </CommandItem>
+  </CommandList>
+</CommandDialog>
+```
+
+Exports: `Command`, `CommandDialog`, `CommandInput`, `CommandList`, `CommandEmpty`, `CommandGroup`, `CommandItem`, `CommandSeparator`, `CommandLoading`, `CommandShortcut`, `useCommandShortcut`. Exported types: `CommandProps`, `CommandDialogProps`, `CommandItemProps`, `CommandShortcutProps`, `UseCommandShortcutOptions`, and related `*ClassNames` types.
+
+
 ## RadioGroup
 
 Single-choice radio group with optional labels and descriptions on each `Radio` item. Use `variant="card"` for bordered choice cards. See the [RadioGroup](/docs/radio-group) docs page for props and exported types.
@@ -383,6 +427,56 @@ import {
 ```
 
 Exports: `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverPortal`, `PopoverAnchor`, `PopoverClose`. Exported types: `PopoverContentProps`, `PopoverContentClassNames`.
+
+
+## Sidebar
+
+Compound sidebar primitives for app shells and section navigation. Desktop uses a sticky card-style rail with optional collapse; mobile uses an offcanvas drawer with trigger and overlay. See the [Sidebar](/docs/sidebar) docs page for props and exported types.
+
+```tsx
+import {
+  Sidebar,
+  SidebarCollapse,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarItem,
+  SidebarLink,
+  SidebarNav,
+  SidebarOverlay,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@rfdtech/components";
+
+<SidebarProvider>
+  <SidebarTrigger>Open menu</SidebarTrigger>
+  <SidebarOverlay />
+  <Sidebar>
+    <SidebarHeader>
+      <div className="gsl-sidebar__header-brand">
+        <span className="gsl-sidebar__header-title">GSL Admin</span>
+      </div>
+      <SidebarCollapse />
+    </SidebarHeader>
+    <SidebarContent>
+      <SidebarNav aria-label="Main">
+        <SidebarGroup>
+          <SidebarGroupLabel>General</SidebarGroupLabel>
+          <SidebarItem>
+            <SidebarLink href="/dashboard" icon={<DashboardIcon />} active={path === "/dashboard"}>
+              Dashboard
+            </SidebarLink>
+          </SidebarItem>
+        </SidebarGroup>
+      </SidebarNav>
+    </SidebarContent>
+  </Sidebar>
+  <main>{children}</main>
+</SidebarProvider>
+```
+
+Exports: `SidebarProvider`, `useSidebar`, `Sidebar`, `SidebarBadge`, `SidebarCollapse`, `SidebarTrigger`, `SidebarOverlay`, `SidebarHeader`, `SidebarContent`, `SidebarFooter`, `SidebarNav`, `SidebarGroup`, `SidebarGroupLabel`, `SidebarItem`, `SidebarLink`. Exported types: `SidebarProviderProps`, `SidebarProps`, `SidebarLinkProps`, `SidebarBadgeProps`, `SidebarCollapseProps`, and related `*ClassNames` types.
 
 
 ## Tabs
