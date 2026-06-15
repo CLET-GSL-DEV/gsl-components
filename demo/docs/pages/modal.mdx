@@ -1,0 +1,162 @@
+export const meta = {
+  title: "Modal",
+  description:
+    "Compound modal primitives for near full-viewport overlays with header, scrollable body, and footer slots.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { ModalPreview } from "../previews/code/ModalPreview";
+import modalSource from "../previews/examples/modal.example.tsx?raw";
+
+# Modal
+
+Compound modal primitives for near full-viewport overlays with header, scrollable body, and footer regions. Built on Radix Dialog with a shell layout similar to `BulkImportModal`, but generic and composable.
+
+Use **Modal** for large workflows or review panels. Use [**Dialog**](/docs/dialog) for smaller centered modals.
+
+## Example
+
+<ExampleTabs
+  title="Review changes"
+  preview={<ModalPreview />}
+  code={modalSource}
+/>
+
+## Components
+
+### `Modal`
+
+Root wrapper. Accepts Radix `Dialog.Root` props such as `open`, `defaultOpen`, and `onOpenChange`.
+
+### `ModalTrigger`
+
+Wraps the element that opens the modal. Use `asChild` to merge props onto a child such as `Button`.
+
+### `ModalPortal`
+
+Renders overlay and content in a portal. Wrap `ModalOverlay` and `ModalContent` inside the portal.
+
+### `ModalOverlay`
+
+Styled backdrop behind the modal shell.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `ModalOverlayClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the overlay element |
+
+Also accepts remaining Radix `Dialog.Overlay` props.
+
+### `ModalContent`
+
+Near full-viewport modal shell with optional close control.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `showCloseButton` | `boolean` | `false` | Shows a top-right close control with an accessible label |
+| `classNames` | `ModalContentClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the shell element |
+
+Also accepts remaining Radix `Dialog.Content` props.
+
+### `ModalHeader`
+
+Top chrome bar for titles and supporting text.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `ModalHeaderClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the header element |
+
+### `ModalTitle`
+
+Accessible modal heading. Render inside `ModalHeader`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `ModalTitleClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the title element |
+
+### `ModalDescription`
+
+Optional supporting text below the title.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `ModalDescriptionClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the description element |
+
+### `ModalBody`
+
+Scrollable main content area.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `ModalBodyClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the body element |
+
+### `ModalFooter`
+
+Bottom action bar. Defaults to end-aligned flex layout for buttons.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `ModalFooterClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the footer element |
+
+### Other exports
+
+| Export | Radix primitive | Notes |
+|--------|-----------------|-------|
+| `ModalClose` | `Close` | Closes the modal when activated; used by the built-in close button and custom actions |
+
+## Types
+
+### `ModalOverlayProps` / `ModalContentProps` / `ModalHeaderProps`
+
+Extend the corresponding element or Radix props with optional `classNames`.
+
+### `ModalTitleProps` / `ModalDescriptionProps`
+
+Extend Radix title and description props with optional `classNames`.
+
+### `ModalBodyProps` / `ModalFooterProps`
+
+Extend native `div` / `footer` attributes with optional `classNames`.
+
+### `ModalOverlayClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `overlay` | Overlay element (`.gsl-modal__overlay`) |
+
+### `ModalContentClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `content` | Shell element (`.gsl-modal`) |
+| `close` | Built-in close button (`.gsl-modal__close`) |
+
+### `ModalHeaderClassNames` / `ModalTitleClassNames` / `ModalDescriptionClassNames`
+
+| Type | Key | Applied to |
+|------|-----|------------|
+| `ModalHeaderClassNames` | `header` | Header element (`.gsl-modal__header`) |
+| `ModalTitleClassNames` | `title` | Title element (`.gsl-modal__title`) |
+| `ModalDescriptionClassNames` | `description` | Description element (`.gsl-modal__description`) |
+
+### `ModalBodyClassNames` / `ModalFooterClassNames`
+
+| Type | Key | Applied to |
+|------|-----|------------|
+| `ModalBodyClassNames` | `body` | Body element (`.gsl-modal__body`) |
+| `ModalFooterClassNames` | `footer` | Footer element (`.gsl-modal__footer`) |
+
+## Notes
+
+- Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
+- The shell uses a compulsory gutter on all sides (`24px` desktop, `16px` at `max-width: 768px`) so the panel never touches the viewport edge.
+- `ModalBody` scrolls internally when content exceeds the available height.
+- The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
+- Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
+- Base `gsl-modal*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

@@ -1,0 +1,61 @@
+export const meta = {
+  title: "Badge",
+  description:
+    "Compact inline label for status, counts, and metadata with semantic color variants.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { BadgePreview } from "../previews/code/BadgePreview";
+import badgeVariantsSource from "../previews/examples/badge-variants.example.tsx?raw";
+
+# Badge
+
+Compact inline label for status, counts, and metadata. Use semantic variants for success, warning, and error states, or `outline` for a bordered neutral badge.
+
+## Example
+
+<ExampleTabs
+  title="Variants and sizes"
+  preview={<BadgePreview />}
+  code={badgeVariantsSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `BadgeVariant` | `"default"` | Visual style |
+| `size` | `BadgeSize` | `"sm"` | Font size and padding |
+| `classNames` | `BadgeClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root (same as `classNames.root`) |
+| `children` | `ReactNode` | — | Badge label |
+
+Also accepts standard native `span` attributes (`id`, `aria-*`, etc.).
+
+## Types
+
+### `BadgeProps`
+
+Props for `Badge`. Extends `HTMLAttributes<HTMLSpanElement>` with `variant`, `size`, and `classNames`.
+
+### `BadgeClassNames`
+
+Part-level class names merged after base `gsl-badge*` styles:
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer `<span>` element |
+
+### `BadgeVariant`
+
+`"default" | "primary" | "success" | "warning" | "error" | "outline"`
+
+### `BadgeSize`
+
+`"sm" | "md"`
+
+## Notes
+
+- Badges are display-only; they do not include interactive hover or focus styles.
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Long labels truncate with an ellipsis when space is constrained (`max-width: 100%`).

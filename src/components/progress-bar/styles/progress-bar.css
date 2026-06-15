@@ -1,0 +1,77 @@
+.gsl-progress-bar {
+  width: 100%;
+  max-width: 100%;
+  font-family: var(--gsl-font);
+}
+
+.gsl-progress-bar--with-value {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gsl-progress-bar__track {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--gsl-hover);
+}
+
+.gsl-progress-bar--sm .gsl-progress-bar__track {
+  height: 4px;
+}
+
+.gsl-progress-bar--md .gsl-progress-bar__track {
+  height: 8px;
+}
+
+.gsl-progress-bar__indicator {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.2s ease;
+}
+
+.gsl-progress-bar--default .gsl-progress-bar__indicator {
+  background: var(--gsl-primary);
+}
+
+.gsl-progress-bar--success .gsl-progress-bar__indicator {
+  background: var(--gsl-success);
+}
+
+.gsl-progress-bar--warning .gsl-progress-bar__indicator {
+  background: var(--gsl-warning);
+}
+
+.gsl-progress-bar--error .gsl-progress-bar__indicator {
+  background: var(--gsl-error);
+}
+
+.gsl-progress-bar__value {
+  color: var(--gsl-text-secondary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.gsl-progress-bar--indeterminate .gsl-progress-bar__indicator {
+  width: 40%;
+  animation: gsl-progress-bar-indeterminate 1.2s ease-in-out infinite;
+}
+
+@keyframes gsl-progress-bar-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-progress-bar--indeterminate .gsl-progress-bar__indicator {
+    width: 50%;
+    animation: none;
+    transform: none;
+  }
+}

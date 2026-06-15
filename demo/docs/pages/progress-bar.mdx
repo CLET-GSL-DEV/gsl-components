@@ -1,0 +1,67 @@
+export const meta = {
+  title: "ProgressBar",
+  description:
+    "Accessible progress indicator for task completion and loading states with semantic variants.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { ProgressBarPreview } from "../previews/code/ProgressBarPreview";
+import progressBarSource from "../previews/examples/progress-bar.example.tsx?raw";
+
+# ProgressBar
+
+Accessible progress indicator for task completion and loading states. Supports determinate values, indeterminate animation, semantic color variants, and optional percentage labels.
+
+## Example
+
+<ExampleTabs
+  title="Variants and modes"
+  preview={<ProgressBarPreview />}
+  code={progressBarSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | `0` | Current progress (clamped to `0`–`max`) |
+| `max` | `number` | `100` | Maximum progress value |
+| `variant` | `ProgressBarVariant` | `"default"` | Indicator color |
+| `size` | `ProgressBarSize` | `"sm"` | Track height |
+| `indeterminate` | `boolean` | `false` | Animated loading state (omits `aria-valuenow`) |
+| `label` | `string` | — | Accessible name (`aria-label`) |
+| `showValue` | `boolean` | `false` | Shows rounded percentage below the track |
+| `classNames` | `ProgressBarClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root (same as `classNames.root`) |
+
+Also accepts standard native `div` attributes (`id`, `aria-*`, etc.). `aria-label` takes precedence over `label` when both are set.
+
+## Types
+
+### `ProgressBarProps`
+
+Props for `ProgressBar`. Extends `HTMLAttributes<HTMLDivElement>` with `value`, `max`, `variant`, `size`, `indeterminate`, `label`, `showValue`, and `classNames`.
+
+### `ProgressBarClassNames`
+
+Part-level class names merged after base `gsl-progress-bar*` styles:
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer `role="progressbar"` element |
+| `indicator` | Fill bar (`.gsl-progress-bar__indicator`) |
+| `value` | Percentage label (`.gsl-progress-bar__value`) |
+
+### `ProgressBarVariant`
+
+`"default" | "success" | "warning" | "error"`
+
+### `ProgressBarSize`
+
+`"sm" | "md"`
+
+## Notes
+
+- Provide `label` (or `aria-label`) when the progress bar is not described by visible surrounding text.
+- Indeterminate animation is disabled under `prefers-reduced-motion: reduce` (static partial fill).
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

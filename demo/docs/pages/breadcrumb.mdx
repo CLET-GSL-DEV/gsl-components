@@ -1,0 +1,130 @@
+export const meta = {
+  title: "Breadcrumb",
+  description:
+    "Compound breadcrumb navigation primitives for hierarchical page trails.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { BreadcrumbPreview } from "../previews/code/BreadcrumbPreview";
+import breadcrumbSource from "../previews/examples/breadcrumb.example.tsx?raw";
+
+# Breadcrumb
+
+Compound breadcrumb primitives for hierarchical page trails. Compose links, separators, and the current page with semantic HTML and accessible landmarks.
+
+## Example
+
+<ExampleTabs
+  title="Page trail"
+  preview={<BreadcrumbPreview />}
+  code={breadcrumbSource}
+/>
+
+## React Router
+
+Use `asChild` on `BreadcrumbLink` to merge styles onto `NavLink`:
+
+```tsx
+<BreadcrumbLink asChild>
+  <NavLink to="/dashboard">Dashboard</NavLink>
+</BreadcrumbLink>
+```
+
+## Components
+
+### `Breadcrumb`
+
+Root `<nav>` landmark.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `BreadcrumbClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root (same as `classNames.root`) |
+| `aria-label` | `string` | `"Breadcrumb"` | Accessible name for the navigation landmark |
+| `children` | `ReactNode` | — | Typically `BreadcrumbList` |
+
+Also accepts standard native `nav` attributes.
+
+### `BreadcrumbList`
+
+Ordered list container (`<ol>`).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `BreadcrumbListClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the list |
+| `children` | `ReactNode` | — | Items and separators |
+
+### `BreadcrumbItem`
+
+List item wrapper (`<li>`).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `BreadcrumbItemClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the item |
+| `children` | `ReactNode` | — | Link, page, or ellipsis content |
+
+### `BreadcrumbLink`
+
+Intermediate crumb link (`<a>`).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `asChild` | `boolean` | `false` | Merge link styles onto the single child element |
+| `classNames` | `BreadcrumbLinkClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the link |
+| `children` | `ReactNode` | — | Link label |
+
+Also accepts standard native `a` attributes (`href`, `onClick`, etc.).
+
+### `BreadcrumbPage`
+
+Current page label (`<span>` with `aria-current="page"`).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `BreadcrumbPageClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the page label |
+| `children` | `ReactNode` | — | Current page label |
+
+### `BreadcrumbSeparator`
+
+Visual divider between items (`<li role="presentation">`).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `BreadcrumbSeparatorClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the separator |
+| `children` | `ReactNode` | — | Custom separator content (default: chevron icon) |
+
+Hidden from assistive technologies via `aria-hidden`.
+
+### `BreadcrumbEllipsis`
+
+Collapsed-path indicator with a screen-reader label.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `srLabel` | `string` | `"More"` | Screen reader label for the ellipsis |
+| `classNames` | `BreadcrumbEllipsisClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the ellipsis |
+| `children` | `ReactNode` | — | Custom ellipsis content (default: more icon) |
+
+## Types
+
+Exported from `@rfdtech/components`:
+
+- `BreadcrumbProps`, `BreadcrumbClassNames`
+- `BreadcrumbListProps`, `BreadcrumbListClassNames`
+- `BreadcrumbItemProps`, `BreadcrumbItemClassNames`
+- `BreadcrumbLinkProps`, `BreadcrumbLinkClassNames`
+- `BreadcrumbPageProps`, `BreadcrumbPageClassNames`
+- `BreadcrumbSeparatorProps`, `BreadcrumbSeparatorClassNames`
+- `BreadcrumbEllipsisProps`, `BreadcrumbEllipsisClassNames`
+
+## Notes
+
+- Place `BreadcrumbSeparator` between `BreadcrumbItem` elements; separators are not announced as crumbs.
+- Use `BreadcrumbEllipsis` inside a `BreadcrumbItem` when manually collapsing long paths.
+- The list wraps on narrow viewports; long current-page labels truncate with an ellipsis.

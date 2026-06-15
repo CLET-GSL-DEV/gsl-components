@@ -19,7 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `CommandGroup` `loading` and `loadingLabel` props for per-group async result loading
 - `formatCommandShortcutLabels` helper and `useCommandDialog` hook
 - `Dialog` compound primitives (`Dialog`, `DialogTrigger`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `DialogClose`) built on Radix Dialog
+- `Modal` compound primitives (`Modal`, `ModalTrigger`, `ModalPortal`, `ModalOverlay`, `ModalContent`, `ModalHeader`, `ModalTitle`, `ModalDescription`, `ModalBody`, `ModalFooter`, `ModalClose`) for near full-viewport shell layouts
+- `Sheet` compound primitives (`Sheet`, `SheetTrigger`, `SheetPortal`, `SheetOverlay`, `SheetContent`, `SheetHeader`, `SheetTitle`, `SheetDescription`, `SheetBody`, `SheetFooter`, `SheetClose`) for edge-sliding panels with `side` (`top`, `right`, `bottom`, `left`)
+- `Badge` component with semantic variants (`default`, `primary`, `success`, `warning`, `error`, `outline`) and `sm` / `md` sizes
+- `Breadcrumb` compound primitives (`Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis`) for hierarchical navigation trails
+- `ProgressBar` component with semantic variants (`default`, `success`, `warning`, `error`), `sm` / `md` sizes, and determinate / indeterminate modes
 - Dialog documentation page at `/docs/dialog` with props and exported types
+- Modal documentation page at `/docs/modal` with props and exported types
+- Sheet documentation page at `/docs/sheet` with props and exported types
+- Badge documentation page at `/docs/badge` with props and exported types
+- Breadcrumb documentation page at `/docs/breadcrumb` with props and exported types
+- ProgressBar documentation page at `/docs/progress-bar` with props and exported types
 - Sidebar documentation page at `/docs/sidebar` with props and exported types
 - Command documentation page at `/docs/command` with props and exported types
 

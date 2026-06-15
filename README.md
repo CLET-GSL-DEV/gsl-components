@@ -92,6 +92,54 @@ Props: `apps`, `loading`, `loadingLabel`, `columns`, `open`, `onOpenChange`, `on
 Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, `useAppSwitcher`.
 
 
+## Badge
+
+Compact inline label for status, counts, and metadata with semantic color variants. See the [Badge](/docs/badge) docs page for props and exported types.
+
+```tsx
+import { Badge } from "@rfdtech/components";
+
+<Badge variant="success">Active</Badge>
+<Badge variant="warning">Pending</Badge>
+<Badge variant="error">Failed</Badge>
+<Badge variant="outline" size="md">
+  Draft
+</Badge>
+```
+
+Props: `variant`, `size`, `classNames`, `className`, and standard `span` attributes. Exported types: `BadgeProps`, `BadgeClassNames`, `BadgeVariant`, `BadgeSize`.
+
+
+## Breadcrumb
+
+Compound breadcrumb primitives for hierarchical page trails. See the [Breadcrumb](/docs/breadcrumb) docs page for props and exported types.
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@rfdtech/components";
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Profile</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+Exported parts: `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis`. Exported types: `BreadcrumbProps`, `BreadcrumbLinkProps`, `BreadcrumbPageProps`, and related `*ClassNames` interfaces.
+
+
 ## BulkImportModal
 
 Four-step modal wizard for importing spreadsheet data (.xlsx, .xls, .csv). Parsing and validation run entirely in the browser.
@@ -416,6 +464,49 @@ import {
 Props: `Dialog` — `open`, `defaultOpen`, `onOpenChange`. `DialogContent` — `showCloseButton`, `classNames`, `className`. Styled parts also support part-level `classNames`. Exported types: `DialogOverlayProps`, `DialogContentProps`, `DialogTitleProps`, `DialogDescriptionProps`, and related `*ClassNames` interfaces.
 
 
+## Modal
+
+Compound modal primitives for near full-viewport overlays with header, body, and footer slots. See the [Modal](/docs/modal) docs page for props and exported types.
+
+```tsx
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  ModalPortal,
+  ModalTitle,
+  ModalTrigger,
+} from "@rfdtech/components";
+
+<Modal open={open} onOpenChange={setOpen}>
+  <ModalTrigger asChild>
+    <Button variant="secondary">Review changes</Button>
+  </ModalTrigger>
+  <ModalPortal>
+    <ModalOverlay />
+    <ModalContent showCloseButton>
+      <ModalHeader>
+        <ModalTitle>Review changes</ModalTitle>
+        <ModalDescription>Confirm before publishing.</ModalDescription>
+      </ModalHeader>
+      <ModalBody>{children}</ModalBody>
+      <ModalFooter>
+        <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+        <Button onClick={() => setOpen(false)}>Publish</Button>
+      </ModalFooter>
+    </ModalContent>
+  </ModalPortal>
+</Modal>
+```
+
+Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
+
+
 ## Popover
 
 Compound popover primitives for floating panels. See the [Popover](/docs/popover) docs page for props and exported types.
@@ -460,6 +551,21 @@ import {
 ```
 
 Exports: `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverPortal`, `PopoverAnchor`, `PopoverClose`. Exported types: `PopoverContentProps`, `PopoverContentClassNames`.
+
+
+## ProgressBar
+
+Accessible progress indicator for task completion and loading states. See the [ProgressBar](/docs/progress-bar) docs page for props and exported types.
+
+```tsx
+import { ProgressBar } from "@rfdtech/components";
+
+<ProgressBar value={60} label="Upload progress" showValue />
+<ProgressBar value={100} variant="success" />
+<ProgressBar indeterminate label="Loading" size="md" />
+```
+
+Props: `value`, `max`, `variant`, `size`, `indeterminate`, `label`, `showValue`, `classNames`, `className`, and standard `div` attributes. Exported types: `ProgressBarProps`, `ProgressBarClassNames`, `ProgressBarVariant`, `ProgressBarSize`.
 
 
 ## Sidebar
@@ -510,6 +616,49 @@ import {
 ```
 
 Exports: `SidebarProvider`, `useSidebar`, `Sidebar`, `SidebarBadge`, `SidebarCollapse`, `SidebarTrigger`, `SidebarOverlay`, `SidebarHeader`, `SidebarContent`, `SidebarFooter`, `SidebarNav`, `SidebarGroup`, `SidebarGroupLabel`, `SidebarItem`, `SidebarLink`. Exported types: `SidebarProviderProps`, `SidebarProps`, `SidebarLinkProps`, `SidebarBadgeProps`, `SidebarCollapseProps`, and related `*ClassNames` types.
+
+
+## Sheet
+
+Compound sheet primitives for edge-sliding panels. See the [Sheet](/docs/sheet) docs page for props and exported types.
+
+```tsx
+import {
+  Button,
+  Sheet,
+  SheetBody,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
+} from "@rfdtech/components";
+
+<Sheet open={open} onOpenChange={setOpen}>
+  <SheetTrigger asChild>
+    <Button variant="secondary">Open filters</Button>
+  </SheetTrigger>
+  <SheetPortal>
+    <SheetOverlay />
+    <SheetContent side="right" showCloseButton>
+      <SheetHeader>
+        <SheetTitle>Filters</SheetTitle>
+        <SheetDescription>Refine the results below.</SheetDescription>
+      </SheetHeader>
+      <SheetBody>{children}</SheetBody>
+      <SheetFooter>
+        <Button variant="ghost" onClick={() => setOpen(false)}>Reset</Button>
+        <Button onClick={() => setOpen(false)}>Apply</Button>
+      </SheetFooter>
+    </SheetContent>
+  </SheetPortal>
+</Sheet>
+```
+
+Props: `Sheet` — `open`, `defaultOpen`, `onOpenChange`. `SheetContent` — `side`, `showCloseButton`, `classNames`, `className`. Layout parts support part-level `classNames`. Exported types: `SheetSide`, `SheetOverlayProps`, `SheetContentProps`, `SheetHeaderProps`, `SheetTitleProps`, `SheetDescriptionProps`, `SheetBodyProps`, `SheetFooterProps`, and related `*ClassNames` interfaces.
 
 
 ## Tabs
