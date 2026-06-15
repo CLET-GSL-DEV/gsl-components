@@ -1,0 +1,128 @@
+export const meta = {
+  title: "RadioGroup",
+  description:
+    "Accessible radio group with optional labels, descriptions, card variant, GSL styling, and part-level classNames.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { RadioGroupPreview } from "../previews/code/RadioGroupPreview";
+import { RadioGroupCardPreview } from "../previews/code/RadioGroupCardPreview";
+
+# RadioGroup
+
+Accessible single-choice radio group built on `@radix-ui/react-radio-group`. Compose a `RadioGroup` root with `Radio` items; each item supports an optional label, optional description, and part-level `classNames`. Use `variant="card"` for bordered choice cards.
+
+## Example
+
+<ExampleTabs title="Contact method" preview={<RadioGroupPreview />}>
+
+```tsx title="App.tsx"
+import { Radio, RadioGroup } from "@rfdtech/components";
+
+<RadioGroup value={method} onValueChange={setMethod}>
+  <Radio value="email" label="Email" />
+  <Radio value="sms" label="SMS" />
+  <Radio value="phone" label="Phone" disabled />
+</RadioGroup>
+```
+
+</ExampleTabs>
+
+## Choice cards
+
+Use `variant="card"` on `RadioGroup` to render each option as a bordered card with the control on the left and label plus description stacked beside it.
+
+<ExampleTabs title="Plan selection" preview={<RadioGroupCardPreview />}>
+
+```tsx title="App.tsx"
+import { Radio, RadioGroup } from "@rfdtech/components";
+
+<RadioGroup variant="card" value={plan} onValueChange={setPlan}>
+  <Radio
+    value="starter"
+    label="Starter"
+    description="For individuals getting started."
+  />
+  <Radio
+    value="team"
+    label="Team"
+    description="Collaborate with up to 10 members."
+  />
+</RadioGroup>
+```
+
+</ExampleTabs>
+
+## Components
+
+### `RadioGroup`
+
+Root wrapper for a set of mutually exclusive options.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Controlled selected value |
+| `defaultValue` | `string` | — | Initial selected value (uncontrolled) |
+| `onValueChange` | `(value: string) => void` | — | Called when selection changes |
+| `name` | `string` | — | Form field name shared by radios |
+| `disabled` | `boolean` | `false` | Disables all radios in the group |
+| `required` | `boolean` | — | Marks the group as required in forms |
+| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | Layout direction |
+| `variant` | `RadioGroupVariant` | `"default"` | `"default"` list or `"card"` choice cards |
+| `classNames` | `RadioGroupClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the group root |
+| `children` | `ReactNode` | — | `Radio` items |
+
+### `Radio`
+
+Individual radio option. Must be rendered inside `RadioGroup`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Option value (required) |
+| `label` | `ReactNode` | — | Visible label beside the control |
+| `description` | `ReactNode` | — | Secondary text under the label |
+| `disabled` | `boolean` | `false` | Disables this option |
+| `id` | `string` | — | Control id (auto-generated if omitted) |
+| `aria-label` | `string` | — | Accessible name when `label` is omitted |
+| `classNames` | `RadioClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the radio wrapper |
+
+## Types
+
+### `RadioGroupProps`
+
+Props for `RadioGroup`. Supports controlled and uncontrolled selection.
+
+### `RadioProps`
+
+Props for `Radio`. Requires `value`; supports optional `label`, `description`, and styling hooks.
+
+### `RadioGroupVariant`
+
+`"default" | "card"` — layout style for the group and its options.
+
+### `RadioGroupClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Group root (`.gsl-radio-group`) |
+
+### `RadioClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer wrapper (`.gsl-radio`) |
+| `control` | Radio control (`.gsl-radio__control`) |
+| `indicator` | Checked dot (`.gsl-radio__indicator`) |
+| `content` | Label and description stack (`.gsl-radio__content`) |
+| `label` | Visible label text |
+| `description` | Secondary description text |
+
+## Notes
+
+- Provide `label` or `aria-label` on each `Radio` so options have accessible names.
+- When `description` is set, it is linked to the control via `aria-describedby`.
+- Checked state shows a primary-colored dot inside the circular control.
+- Card variant highlights the selected option with a primary border and light background.
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

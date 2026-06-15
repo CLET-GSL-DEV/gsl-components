@@ -1,0 +1,170 @@
+export const meta = {
+  title: "Tabs",
+  description:
+    "Compound tabs primitives for switching between related panels, with default and line variants.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { TabsPreview } from "../previews/code/TabsPreview";
+import { TabsLinePreview } from "../previews/code/TabsLinePreview";
+
+# Tabs
+
+Compound tabs primitives built on `@radix-ui/react-tabs`. Compose a `Tabs` root with `TabsList`, `TabsTrigger`, and `TabsContent` to switch between related panels with accessible keyboard support.
+
+## Example
+
+<ExampleTabs title="Settings tabs" preview={<TabsPreview />}>
+
+```tsx title="App.tsx"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
+
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="security">Security</TabsTrigger>
+    <TabsTrigger value="notifications">Notifications</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">
+    Manage your profile details and contact information.
+  </TabsContent>
+  <TabsContent value="security">
+    Update your password and two-factor authentication settings.
+  </TabsContent>
+  <TabsContent value="notifications">
+    Choose which email and in-app alerts you receive.
+  </TabsContent>
+</Tabs>
+```
+
+</ExampleTabs>
+
+## Line variant
+
+Use `variant="line"` on `Tabs` for an underline indicator instead of the enclosed tab bar.
+
+<ExampleTabs title="Line tabs" preview={<TabsLinePreview />}>
+
+```tsx title="App.tsx"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
+
+<Tabs defaultValue="account" variant="line">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="security">Security</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account settings</TabsContent>
+  <TabsContent value="security">Security settings</TabsContent>
+</Tabs>
+```
+
+</ExampleTabs>
+
+## Components
+
+### `Tabs`
+
+Root wrapper. Supports controlled and uncontrolled selection.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Controlled active tab value |
+| `defaultValue` | `string` | — | Initial active tab (uncontrolled) |
+| `onValueChange` | `(value: string) => void` | — | Called when the active tab changes |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
+| `activationMode` | `"automatic" \| "manual"` | `"automatic"` | Whether focus activates a tab |
+| `variant` | `TabsVariant` | `"default"` | Visual style (`default` or `line`) |
+| `classNames` | `TabsClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root |
+| `children` | `ReactNode` | — | `TabsList` and `TabsContent` items |
+
+### `TabsList`
+
+Container for tab triggers. Renders a `tablist` landmark.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `TabsListClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the list |
+| `children` | `ReactNode` | — | `TabsTrigger` items |
+
+Also accepts Radix `Tabs.List` props such as `loop`.
+
+### `TabsTrigger`
+
+Individual tab button. Must be rendered inside `TabsList`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Tab value matching a `TabsContent` (required) |
+| `disabled` | `boolean` | `false` | Disables this tab |
+| `classNames` | `TabsTriggerClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the trigger |
+| `children` | `ReactNode` | — | Tab label |
+
+### `TabsContent`
+
+Panel shown when its matching trigger is active.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Tab value matching a `TabsTrigger` (required) |
+| `forceMount` | `boolean` | — | Keep content mounted when inactive |
+| `classNames` | `TabsContentClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the panel |
+| `children` | `ReactNode` | — | Panel content |
+
+## Types
+
+### `TabsProps`
+
+Props for `Tabs`. Extends Radix root props with `variant`, `classNames`, and `className`.
+
+### `TabsListProps`
+
+Props for `TabsList`. Extends Radix list props with `classNames` and `className`.
+
+### `TabsTriggerProps`
+
+Props for `TabsTrigger`. Extends Radix trigger props with `classNames` and `className`.
+
+### `TabsContentProps`
+
+Props for `TabsContent`. Extends Radix content props with `classNames` and `className`.
+
+### `TabsVariant`
+
+`"default" | "line"` — visual style for the tab bar and triggers.
+
+### `TabsClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root wrapper (`.gsl-tabs`) |
+
+### `TabsListClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `list` | Tab list (`.gsl-tabs__list`) |
+| `indicator` | Sliding line indicator (`.gsl-tabs__indicator`; line variant only) |
+
+### `TabsTriggerClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `trigger` | Tab button (`.gsl-tabs__trigger`) |
+
+### `TabsContentClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `content` | Tab panel (`.gsl-tabs__content`) |
+
+## Notes
+
+- Each `TabsTrigger` `value` must match exactly one `TabsContent` `value`.
+- Radix handles keyboard navigation (arrow keys, Home, End) and ARIA roles (`tablist`, `tab`, `tabpanel`).
+- `variant="line"` uses a sliding indicator that moves between active triggers (bottom underline horizontally, right-edge bar vertically); indicator motion is disabled when `prefers-reduced-motion: reduce` is set.
+- Active panels fade and slide in briefly when switching tabs; animation is disabled when `prefers-reduced-motion: reduce` is set.
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

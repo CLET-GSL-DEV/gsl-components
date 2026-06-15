@@ -1,8 +1,10 @@
 import "./styles/theme.css";
 export * from "./components/theme";
+export * from "./components/app-switcher";
+export * from "./components/bulk-import-modal";
 export * from "./components/button";
 export * from "./components/checkbox";
 export * from "./components/dropdown";
 export * from "./components/popover";
-export * from "./components/app-switcher";
-export * from "./components/bulk-import-modal";
+export * from "./components/radio-group";
+export * from "./components/tabs";

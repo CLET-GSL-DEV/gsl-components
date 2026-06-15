@@ -1,0 +1,117 @@
+.gsl-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--gsl-font);
+}
+
+.gsl-radio-group[data-orientation="horizontal"] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gsl-radio-group--disabled {
+  opacity: 0.6;
+}
+
+.gsl-radio {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--gsl-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.gsl-radio--disabled {
+  cursor: not-allowed;
+}
+
+.gsl-radio__control {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border: 2px solid var(--gsl-border);
+  border-radius: 50%;
+  background: var(--gsl-bg);
+  cursor: inherit;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.gsl-radio__control[data-state="checked"] {
+  border-color: var(--gsl-primary);
+}
+
+.gsl-radio__control:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-radio__control:disabled {
+  cursor: not-allowed;
+}
+
+.gsl-radio__indicator {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gsl-primary);
+}
+
+.gsl-radio__label {
+  line-height: 1.4;
+}
+
+.gsl-radio__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gsl-radio__description {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-radio-group--card {
+  gap: 12px;
+}
+
+.gsl-radio--card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.gsl-radio--card:hover:not(.gsl-radio--disabled) {
+  background: var(--gsl-hover);
+}
+
+.gsl-radio--card:has(.gsl-radio__control[data-state="checked"]) {
+  border-color: var(--gsl-primary);
+  background: var(--gsl-primary-light);
+}
+
+.gsl-radio--card .gsl-radio__control {
+  margin-top: 2px;
+}

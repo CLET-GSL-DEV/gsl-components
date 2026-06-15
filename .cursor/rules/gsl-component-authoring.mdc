@@ -54,13 +54,26 @@ className={cn("gsl-example", classNames?.root, className)}
 Do not finish component work without all three:
 
 1. **CHANGELOG.md** — entry under `[Unreleased]` (`Added` / `Changed` / `Fixed`).
-2. **README.md** — usage summary and link to docs page.
+2. **README.md** — usage summary and link to docs page (insert the `##` section in alphabetical order among other components).
 3. **Docs site** — add or update `demo/docs/pages/{slug}.mdx`:
    - Examples (ExampleTabs when useful)
    - **Props** table
    - **Types** section for every exported type/interface/union
-   - Nav entry in `demo/docs/nav.ts`
+   - Nav entry in `demo/docs/nav.ts` (insert in alphabetical order by `slug` in the Components section)
 
 ## Exports
 
 - Add `export * from "./components/{name}"` to `src/index.ts`.
+- Keep `theme` first; list all other component exports **alphabetically by folder name** (e.g. `app-switcher`, `button`, `checkbox`).
+
+## Component lists (alphabetical)
+
+When adding or editing component inventories, keep **A–Z order** by component folder slug (`src/components/{name}/`):
+
+| Location | Sort by |
+|----------|---------|
+| [`demo/docs/nav.ts`](demo/docs/nav.ts) — `Components` items | `slug` |
+| [`src/index.ts`](src/index.ts) — component exports | folder name (`theme` stays first) |
+| [`README.md`](README.md) — component `##` sections | section title (e.g. AppSwitcher, Button, …) |
+
+Insert new components at the correct alphabetical position; do not append to the end unless it is last alphabetically.

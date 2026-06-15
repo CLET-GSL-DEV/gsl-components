@@ -65,121 +65,6 @@ npm install @rfdtech/components
 
 Requires React 18+. npm 7+ auto-installs `react` and `react-dom` as peer dependencies. Radix UI and other runtime packages are included as dependencies of `@rfdtech/components`.
 
-## Button
-
-Shared button with primary, secondary, outline, and ghost variants, plus loading and disabled states. See the [Button](/docs/button) docs page for props and exported types.
-
-```tsx
-import { Button } from "@rfdtech/components";
-
-<Button variant="primary" onClick={() => save()}>
-  Save
-</Button>
-
-<Button loading loadingLabel="Saving">
-  Save
-</Button>
-
-<Button disabled>Unavailable</Button>
-
-<Button
-  variant="outline"
-  classNames={{ root: "min-w-32", label: "font-semibold" }}
->
-  Custom
-</Button>
-```
-
-Props: `variant`, `size`, `loading`, `loadingLabel`, `classNames`, and standard `button` attributes. Exported types: `ButtonProps`, `ButtonClassNames`, `ButtonVariant`, `ButtonSize`.
-
-## Checkbox
-
-Accessible checkbox with optional label and part-level `classNames`. See the [Checkbox](/docs/checkbox) docs page for props and exported types.
-
-```tsx
-import { Checkbox } from "@rfdtech/components";
-
-<Checkbox
-  label="Accept terms and conditions"
-  checked={accepted}
-  onCheckedChange={setAccepted}
-/>
-
-<Checkbox
-  aria-label="Select row"
-  checked={selected}
-  onCheckedChange={setSelected}
-/>
-```
-
-Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `disabled`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `CheckboxProps`, `CheckboxClassNames`.
-
-## Dropdown
-
-Select-style dropdown for choosing one option from a list. See the [Dropdown](/docs/dropdown) docs page for props and exported types.
-
-```tsx
-import { Dropdown } from "@rfdtech/components";
-
-<Dropdown
-  aria-label="Field"
-  value={value}
-  onValueChange={setValue}
-  options={[
-    { value: "email", label: "Email" },
-    { value: "name", label: "Full name" },
-  ]}
-  placeholder="Select..."
-  clearable
-/>
-```
-
-Props: `value`, `onValueChange`, `options`, `placeholder`, `clearable`, `disabled`, `aria-label`, `classNames`, `className`. Exported types: `DropdownProps`, `DropdownOption`, `DropdownClassNames`.
-
-## Popover
-
-Compound popover primitives for floating panels. See the [Popover](/docs/popover) docs page for props and exported types.
-
-```tsx
-import {
-  Button,
-  Popover,
-  PopoverClose,
-  PopoverContent,
-  PopoverTrigger,
-} from "@rfdtech/components";
-
-<Popover>
-  <PopoverTrigger asChild>
-    <Button variant="secondary">Actions</Button>
-  </PopoverTrigger>
-  <PopoverContent
-    side="bottom"
-    align="end"
-    sideOffset={4}
-    className="gsl-popover--menu"
-  >
-    <div className="gsl-popover__menu" role="menu">
-      <PopoverClose asChild>
-        <button type="button" className="gsl-popover__menu-item" role="menuitem">
-          Edit
-        </button>
-      </PopoverClose>
-      <PopoverClose asChild>
-        <button
-          type="button"
-          className="gsl-popover__menu-item gsl-popover__menu-item--destructive"
-          role="menuitem"
-        >
-          Delete
-        </button>
-      </PopoverClose>
-    </div>
-  </PopoverContent>
-</Popover>
-```
-
-Exports: `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverPortal`, `PopoverAnchor`, `PopoverClose`. Exported types: `PopoverContentProps`, `PopoverContentClassNames`.
 
 ## AppSwitcher
 
@@ -205,6 +90,7 @@ function Header({ apps, loading }: { apps: AppItem[]; loading: boolean }) {
 Props: `apps`, `loading`, `loadingLabel`, `columns`, `open`, `onOpenChange`, `onAppSelect`, `triggerLabel`, `trigger`, `title`, `footer`, `placement`, `closeOnSelect`, `className`, `style`. Exported types: `AppSwitcherProps`, `AppItem`, `UseAppSwitcherOptions`, `UseAppSwitcherReturn`.
 
 Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, `useAppSwitcher`.
+
 
 ## BulkImportModal
 
@@ -353,6 +239,170 @@ To change the gutter size, override `--gsl-bulk-import-gutter` on `.gsl-bulk-imp
   --gsl-bulk-import-gutter: 32px;
 }
 ```
+
+
+## Button
+
+Shared button with primary, secondary, outline, and ghost variants, plus loading and disabled states. See the [Button](/docs/button) docs page for props and exported types.
+
+```tsx
+import { Button } from "@rfdtech/components";
+
+<Button variant="primary" onClick={() => save()}>
+  Save
+</Button>
+
+<Button loading loadingLabel="Saving">
+  Save
+</Button>
+
+<Button disabled>Unavailable</Button>
+
+<Button
+  variant="outline"
+  classNames={{ root: "min-w-32", label: "font-semibold" }}
+>
+  Custom
+</Button>
+```
+
+Props: `variant`, `size`, `loading`, `loadingLabel`, `classNames`, and standard `button` attributes. Exported types: `ButtonProps`, `ButtonClassNames`, `ButtonVariant`, `ButtonSize`.
+
+
+## Checkbox
+
+Accessible checkbox with optional label and part-level `classNames`. See the [Checkbox](/docs/checkbox) docs page for props and exported types.
+
+```tsx
+import { Checkbox } from "@rfdtech/components";
+
+<Checkbox
+  label="Accept terms and conditions"
+  checked={accepted}
+  onCheckedChange={setAccepted}
+/>
+
+<Checkbox
+  aria-label="Select row"
+  checked={selected}
+  onCheckedChange={setSelected}
+/>
+```
+
+Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `disabled`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `CheckboxProps`, `CheckboxClassNames`.
+
+
+## RadioGroup
+
+Single-choice radio group with optional labels and descriptions on each `Radio` item. Use `variant="card"` for bordered choice cards. See the [RadioGroup](/docs/radio-group) docs page for props and exported types.
+
+```tsx
+import { Radio, RadioGroup } from "@rfdtech/components";
+
+<RadioGroup variant="card" value={plan} onValueChange={setPlan}>
+  <Radio
+    value="starter"
+    label="Starter"
+    description="For individuals getting started."
+  />
+  <Radio
+    value="team"
+    label="Team"
+    description="Collaborate with up to 10 members."
+  />
+</RadioGroup>
+```
+
+Props: `RadioGroup` — `value`, `defaultValue`, `onValueChange`, `name`, `disabled`, `required`, `orientation`, `variant`, `classNames`, `className`, `children`. `Radio` — `value`, `label`, `description`, `disabled`, `id`, `aria-label`, `classNames`, `className`. Exported types: `RadioGroupProps`, `RadioProps`, `RadioGroupClassNames`, `RadioClassNames`, `RadioGroupVariant`.
+
+
+## Dropdown
+
+Select-style dropdown for choosing one option from a list. See the [Dropdown](/docs/dropdown) docs page for props and exported types.
+
+```tsx
+import { Dropdown } from "@rfdtech/components";
+
+<Dropdown
+  aria-label="Field"
+  value={value}
+  onValueChange={setValue}
+  options={[
+    { value: "email", label: "Email" },
+    { value: "name", label: "Full name" },
+  ]}
+  placeholder="Select..."
+  clearable
+/>
+```
+
+Props: `value`, `onValueChange`, `options`, `placeholder`, `clearable`, `disabled`, `aria-label`, `classNames`, `className`. Exported types: `DropdownProps`, `DropdownOption`, `DropdownClassNames`.
+
+
+## Popover
+
+Compound popover primitives for floating panels. See the [Popover](/docs/popover) docs page for props and exported types.
+
+```tsx
+import {
+  Button,
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "@rfdtech/components";
+
+<Popover>
+  <PopoverTrigger asChild>
+    <Button variant="secondary">Actions</Button>
+  </PopoverTrigger>
+  <PopoverContent
+    side="bottom"
+    align="end"
+    sideOffset={4}
+    className="gsl-popover--menu"
+  >
+    <div className="gsl-popover__menu" role="menu">
+      <PopoverClose asChild>
+        <button type="button" className="gsl-popover__menu-item" role="menuitem">
+          Edit
+        </button>
+      </PopoverClose>
+      <PopoverClose asChild>
+        <button
+          type="button"
+          className="gsl-popover__menu-item gsl-popover__menu-item--destructive"
+          role="menuitem"
+        >
+          Delete
+        </button>
+      </PopoverClose>
+    </div>
+  </PopoverContent>
+</Popover>
+```
+
+Exports: `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverPortal`, `PopoverAnchor`, `PopoverClose`. Exported types: `PopoverContentProps`, `PopoverContentClassNames`.
+
+
+## Tabs
+
+Compound tabs primitives for switching between related panels. See the [Tabs](/docs/tabs) docs page for props and exported types.
+
+```tsx
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
+
+<Tabs defaultValue="account" variant="line">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="security">Security</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account settings</TabsContent>
+  <TabsContent value="security">Security settings</TabsContent>
+</Tabs>
+```
+
+Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Props: `Tabs` — `value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`, `variant`, `classNames`, `className`, `children`. `TabsTrigger` — `value`, `disabled`, `classNames`, `className`. Exported types: `TabsProps`, `TabsListProps`, `TabsTriggerProps`, `TabsContentProps`, `TabsVariant`, `TabsClassNames`, `TabsListClassNames`, `TabsTriggerClassNames`, `TabsContentClassNames`.
 
 ## Development
 

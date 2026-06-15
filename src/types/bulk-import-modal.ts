@@ -101,6 +101,7 @@ export interface UseBulkImportFlowReturn {
   toggleExcludedColumn: (sourceIndex: number) => void;
   setSelectedRowIds: (rowIds: number[]) => void;
   toggleRowSelection: (rowId: number) => void;
+  setVisibleRowsSelection: (rowIds: number[], selected: boolean) => void;
   setShowOnlyErrors: (value: boolean) => void;
   discardSelectedRows: () => void;
   updateRowValue: (rowId: number, fieldKey: string, value: string) => void;

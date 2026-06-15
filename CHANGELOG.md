@@ -14,10 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Button documentation page at `/docs/button` with props and exported types
 - `Checkbox` component with optional label and part-level `classNames`
 - Checkbox documentation page at `/docs/checkbox` with props and exported types
+- `RadioGroup` and `Radio` components with optional labels and part-level `classNames`
+- RadioGroup documentation page at `/docs/radio-group` with props and exported types
+- `Radio.description` for optional secondary text under each option label
+- `RadioGroup.variant="card"` choice card layout with bordered selectable surfaces
 - `Dropdown` select-style component with clearable support and part-level `classNames`
 - Dropdown documentation page at `/docs/dropdown` with props and exported types
 - `Popover` compound primitives (`Popover`, `PopoverTrigger`, `PopoverContent`, etc.) with styled content surface
 - Popover documentation page at `/docs/popover` with props and exported types
+- `Tabs` compound primitives (`Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`) with `default` and `line` variants
+- Tabs documentation page at `/docs/tabs` with props and exported types
 - Cursor rule `.cursor/rules/gsl-component-authoring.mdc` for component conventions
 
 ### Changed
@@ -28,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Popover docs example demonstrates an action menu pattern with `PopoverClose`; adds menu utility classes (`gsl-popover--menu`, `gsl-popover__menu`, `gsl-popover__menu-item`)
 - AppSwitcher app icons render image URLs as round cropped icons
 - `AppSwitcher` is data-only: pass `apps` directly and control loading with the `loading` prop; panel shows a Lucide spinner while loading
+- Tabs panels animate in with a fade and slide on tab switch; disabled when `prefers-reduced-motion: reduce` is set
+- Line variant tabs use a sliding underline indicator instead of per-trigger borders
 
 ### Removed
 
