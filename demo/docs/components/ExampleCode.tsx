@@ -7,13 +7,20 @@ interface ExampleCodeProps {
   title?: string;
 }
 
+const DUAL_THEME = "github-light github-dark";
+
 function prepareDisplaySource(source: string): string {
   return source.replace(/^export function /m, "function ");
 }
 
+function parseShikiDualThemeHtml(html: string): string {
+  const match = html.match(/^<pre[^>]*><code>([\s\S]*)<\/code><\/pre>$/);
+  return match?.[1] ?? html;
+}
+
 export function ExampleCode({ source, title = "App.tsx" }: ExampleCodeProps) {
   const codeRef = useRef<HTMLElement>(null);
-  const [html, setHtml] = useState<string>("");
+  const [innerHtml, setInnerHtml] = useState<string | null>(null);
   const displaySource = useMemo(() => prepareDisplaySource(source), [source]);
 
   useEffect(() => {
@@ -25,9 +32,10 @@ export function ExampleCode({ source, title = "App.tsx" }: ExampleCodeProps) {
         light: "github-light",
         dark: "github-dark",
       },
+      defaultColor: false,
     }).then((nextHtml) => {
       if (!cancelled) {
-        setHtml(nextHtml);
+        setInnerHtml(parseShikiDualThemeHtml(nextHtml));
       }
     });
 
@@ -46,10 +54,11 @@ export function ExampleCode({ source, title = "App.tsx" }: ExampleCodeProps) {
       </div>
       <figure className="demo-docs__code-figure">
         <pre className="demo-docs__code">
-          {html ? (
+          {innerHtml ? (
             <code
               ref={codeRef}
-              dangerouslySetInnerHTML={{ __html: html }}
+              data-theme={DUAL_THEME}
+              dangerouslySetInnerHTML={{ __html: innerHtml }}
             />
           ) : (
             <code ref={codeRef}>{displaySource}</code>

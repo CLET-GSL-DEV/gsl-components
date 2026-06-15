@@ -421,13 +421,13 @@ body {
 .demo-docs__code code[data-theme*=" "],
 .demo-docs__code code[data-theme*=" "] span {
   color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
+  background-color: transparent;
 }
 
 [data-gsl-theme="dark"] .demo-docs__code code[data-theme*=" "],
 [data-gsl-theme="dark"] .demo-docs__code code[data-theme*=" "] span {
   color: var(--shiki-dark);
-  background-color: var(--shiki-dark-bg);
+  background-color: transparent;
 }
 
 .demo-docs__code code {
