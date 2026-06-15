@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-06-15
+
 ### Added
 
 - `Sidebar` compound primitives (`SidebarProvider`, `Sidebar`, `SidebarTrigger`, `SidebarOverlay`, nav parts) with mobile offcanvas drawer
@@ -24,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Badge` component with semantic variants (`default`, `primary`, `success`, `warning`, `error`, `outline`) and `sm` / `md` sizes
 - `Breadcrumb` compound primitives (`Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis`) for hierarchical navigation trails
 - `ProgressBar` component with semantic variants (`default`, `success`, `warning`, `error`), `sm` / `md` sizes, and determinate / indeterminate modes
-- Hooks module: `useSearchParamOverlay`, `useDialogSearchParam`, and `useModalSearchParam` for URL search-param overlay state, plus `createSearchParamAdapter` and `createBrowserSearchParamAdapter`
+- Hooks module: `useSearchParamOverlay`, `useDialogSearchParam`, and `useModalSearchParam` for URL search-param overlay state with flat prefixed data params (`dialog.userId`, etc.), `data`, `openWith`, and `SearchParamOverlayState`; includes `createSearchParamAdapter`, `createBrowserSearchParamAdapter`, and `readOverlayData` / `writeOverlayData` / `clearOverlayData` utilities
 - Dialog documentation page at `/docs/dialog` with props and exported types
 - Modal documentation page at `/docs/modal` with props and exported types
 - Sheet documentation page at `/docs/sheet` with props and exported types
@@ -37,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Overlay search-param hooks (`useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`) support flat prefixed data params (`dialog.userId`, etc.), `data`, `openWith`, and `SearchParamOverlayState`
+- Sidebar desktop appearance: card panel with neutral active state and collapsible icon rail
 - Command inline results render in a floating popover so the search field height stays fixed
 - Command shortcut badges use a single unified chip (e.g. `⌘` `K`) instead of separate key caps per key
 - Command dialog input shows the keyboard shortcut badge automatically when `shortcut` is set
