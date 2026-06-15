@@ -66,6 +66,32 @@ npm install @rfdtech/components
 Requires React 18+. npm 7+ auto-installs `react` and `react-dom` as peer dependencies. Radix UI and other runtime packages are included as dependencies of `@rfdtech/components`.
 
 
+## Hooks
+
+Shared hooks for URL-driven overlay state and router integration. See the [Hooks](/docs/hooks) docs page for full API reference.
+
+```tsx
+import {
+  Dialog,
+  DialogContent,
+  useDialogSearchParam,
+  useModalSearchParam,
+} from "@rfdtech/components";
+
+const { open, data, onOpenChange, openWith } = useDialogSearchParam<{
+  userId: string;
+}>("edit-profile");
+
+openWith({ userId: "42" });
+
+<Dialog open={open} onOpenChange={onOpenChange}>
+  <DialogContent>Edit user {data?.userId}</DialogContent>
+</Dialog>
+```
+
+Exports: `useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`, `createSearchParamAdapter`, `createBrowserSearchParamAdapter`, `readOverlayData`, `writeOverlayData`, `clearOverlayData`, `getDataPrefix`. Types: `SearchParamOverlayState`, `SearchParamOverlayData`, `SearchParamAdapter`, `UseSearchParamOverlayOptions`, `UseSearchParamOverlayReturn`.
+
+
 ## AppSwitcher
 
 Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products. Pass `apps` directly from your own data layer; use `loading` while data is being fetched.

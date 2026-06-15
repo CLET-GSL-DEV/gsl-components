@@ -1,0 +1,195 @@
+export const meta = {
+  title: "Hooks",
+  description:
+    "Shared React hooks for URL-driven overlay state, routing adapters, and GSL component integration.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { DialogUrlStatePreview } from "../previews/code/DialogUrlStatePreview";
+import dialogUrlStateSource from "../previews/examples/dialog-url-state.example.tsx?raw";
+
+# Hooks
+
+Shared React hooks exported from `@rfdtech/components`. The first hook family syncs `Dialog` and `Modal` open state with URL search params for deep links and back-button dismissal. Optional **flat data params** carry scalar context into overlays (e.g. `dialog.userId=42`).
+
+## Example
+
+<ExampleTabs
+  title="Dialog URL state"
+  preview={<DialogUrlStatePreview />}
+  code={dialogUrlStateSource}
+/>
+
+Click **Edit profile** to open the dialog with `?dialog=edit-profile&dialog.userId=42`.
+
+## `useDialogSearchParam`
+
+Syncs a dialog's open state to a search param (default key `dialog`).
+
+```tsx
+import {
+  Dialog,
+  DialogContent,
+  DialogPortal,
+  DialogOverlay,
+  DialogTitle,
+  useDialogSearchParam,
+} from "@rfdtech/components";
+
+const { open, data, onOpenChange, openWith } = useDialogSearchParam<{
+  userId: string;
+}>("edit-profile");
+
+openWith({ userId: "42" });
+
+<Dialog open={open} onOpenChange={onOpenChange}>
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogContent>
+      <DialogTitle>Edit user {data?.userId}</DialogTitle>
+    </DialogContent>
+  </DialogPortal>
+</Dialog>
+```
+
+| Argument / option | Type | Default | Description |
+|-------------------|------|---------|-------------|
+| `id` | `string \| { id: string }` | — | Overlay id stored as the param value when open |
+| `param` | `string` | `"dialog"` | Query param key |
+| `dataPrefix` | `string` | `` `${param}.` `` | Prefix for flat data keys (e.g. `dialog.userId`) |
+| `replace` | `boolean` | `false` | Use history `replaceState` instead of `pushState` |
+| `adapter` | `SearchParamAdapter` | browser adapter | Custom search-param read/write integration |
+
+Returns `{ open, data, setOpen, onOpenChange, openWith }`. `onOpenChange` is Radix-compatible (`boolean` only). Use `openWith(data)` to open with scalar fields.
+
+## Flat data params
+
+When open, scalar fields are stored as prefixed query keys:
+
+| URL | Meaning |
+|-----|---------|
+| `?dialog=edit-user` | Dialog `edit-user` is open |
+| `?dialog=edit-user&dialog.userId=42` | Same dialog with `userId` context |
+| `?dialog=edit-user&dialog.tab=profile` | Additional scalar field |
+
+Supported value types on write: `string`, `number`, `boolean`. `null` / `undefined` are omitted. Parsed `data` values are always **strings** from the URL — coerce in your UI as needed. Nested objects and arrays are not supported.
+
+- `setOpen(true)` — open id only
+- `setOpen({ id, data })` — open with id and data (`id` must match the hook)
+- `openWith(data)` — shorthand for opening the hook's id with data
+- `onOpenChange(false)` — close and remove the id plus all `${dataPrefix}*` keys
+
+## `useModalSearchParam`
+
+Same API as `useDialogSearchParam` with default param key `modal`.
+
+```tsx
+const { open, data, onOpenChange, openWith } = useModalSearchParam<{
+  importId: string;
+}>("bulk-import");
+
+openWith({ importId: "batch-12" });
+
+<Modal open={open} onOpenChange={onOpenChange}>
+  <ModalContent>Import {data?.importId}</ModalContent>
+</Modal>
+```
+
+## `useSearchParamOverlay`
+
+Lower-level hook for any overlay type (e.g. `Sheet` with `param: "sheet"`).
+
+```tsx
+const { open, data, openWith } = useSearchParamOverlay<{ panel: string }>(
+  "settings",
+  { param: "sheet" },
+);
+```
+
+## React Router
+
+Pass an adapter built from `useSearchParams` so the hook stays in sync with React Router:
+
+```tsx
+import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+import {
+  createSearchParamAdapter,
+  useDialogSearchParam,
+} from "@rfdtech/components";
+
+function EditProfileDialog() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const adapter = useMemo(
+    () =>
+      createSearchParamAdapter({
+        get: () => searchParams,
+        set: (next, options) => setSearchParams(next, options),
+      }),
+    [searchParams, setSearchParams],
+  );
+
+  const { open, data, onOpenChange, openWith } = useDialogSearchParam<{
+    userId: string;
+  }>("edit-profile", { adapter });
+
+  // ...
+}
+```
+
+## Adapters
+
+### `createBrowserSearchParamAdapter`
+
+Default adapter using `window.location` and the History API. Subscribes to `popstate` for back/forward navigation.
+
+### `createSearchParamAdapter`
+
+Factory for custom adapters:
+
+```ts
+createSearchParamAdapter({
+  get: () => searchParams,
+  set: (next, options) => setSearchParams(next, options),
+  subscribe?: (onChange) => () => void,
+});
+```
+
+### Data utilities
+
+`readOverlayData`, `writeOverlayData`, `clearOverlayData`, and `getDataPrefix` for advanced custom integrations.
+
+## Types
+
+### `SearchParamAdapter`
+
+| Member | Description |
+|--------|-------------|
+| `getSearchParams` | Returns current `URLSearchParams` |
+| `setSearchParams` | Writes params; optional `{ replace }` |
+| `subscribe` | Optional listener for external param changes |
+
+### `SearchParamOverlayState<TData>`
+
+`{ id: string; data?: TData }` for `setOpen` and typed overlay context.
+
+### `SearchParamOverlayData`
+
+`Record<string, string | number | boolean | null | undefined>` — scalar fields only.
+
+### `UseSearchParamOverlayReturn<TData>`
+
+| Member | Type | Description |
+|--------|------|-------------|
+| `open` | `boolean` | Whether this overlay id is active |
+| `data` | `Partial<Record<keyof TData, string>> \| null` | Parsed flat params when open |
+| `setOpen` | `boolean \| SearchParamOverlayState<TData>` | Open, close, or open with state |
+| `onOpenChange` | `(open: boolean) => void` | Radix-compatible close handler |
+| `openWith` | `(data?: TData) => void` | Open this overlay id with optional data |
+
+## Notes
+
+- One param key holds one overlay id at a time (`?dialog=edit-profile`).
+- Dialog and modal params are independent (`?dialog=settings&modal=import`).
+- Closing only removes the param and data keys when the current value matches the hook's `id`.
+- Without an adapter, the browser default works for non-router apps; use `createSearchParamAdapter` with your router in SPA apps.

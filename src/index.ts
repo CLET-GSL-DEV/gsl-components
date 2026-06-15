@@ -16,3 +16,4 @@ export * from "./components/radio-group";
 export * from "./components/sheet";
 export * from "./components/sidebar";
 export * from "./components/tabs";
+export * from "./hooks";

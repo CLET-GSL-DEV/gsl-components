@@ -24,18 +24,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Badge` component with semantic variants (`default`, `primary`, `success`, `warning`, `error`, `outline`) and `sm` / `md` sizes
 - `Breadcrumb` compound primitives (`Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis`) for hierarchical navigation trails
 - `ProgressBar` component with semantic variants (`default`, `success`, `warning`, `error`), `sm` / `md` sizes, and determinate / indeterminate modes
+- Hooks module: `useSearchParamOverlay`, `useDialogSearchParam`, and `useModalSearchParam` for URL search-param overlay state, plus `createSearchParamAdapter` and `createBrowserSearchParamAdapter`
 - Dialog documentation page at `/docs/dialog` with props and exported types
 - Modal documentation page at `/docs/modal` with props and exported types
 - Sheet documentation page at `/docs/sheet` with props and exported types
 - Badge documentation page at `/docs/badge` with props and exported types
 - Breadcrumb documentation page at `/docs/breadcrumb` with props and exported types
 - ProgressBar documentation page at `/docs/progress-bar` with props and exported types
+- Hooks documentation page at `/docs/hooks` with URL overlay examples and adapter patterns
 - Sidebar documentation page at `/docs/sidebar` with props and exported types
 - Command documentation page at `/docs/command` with props and exported types
 
 ### Changed
 
-- Sidebar desktop appearance: card panel with neutral active state and collapsible icon rail
+- Overlay search-param hooks (`useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`) support flat prefixed data params (`dialog.userId`, etc.), `data`, `openWith`, and `SearchParamOverlayState`
 - Command inline results render in a floating popover so the search field height stays fixed
 - Command shortcut badges use a single unified chip (e.g. `⌘` `K`) instead of separate key caps per key
 - Command dialog input shows the keyboard shortcut badge automatically when `shortcut` is set
