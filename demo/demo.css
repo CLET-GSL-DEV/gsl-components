@@ -12,8 +12,8 @@ body {
 
 .demo-card {
   padding: 1rem;
-  border-radius: 0.5rem;
-  background-color: var(--gsl-surface-subtle);
+  border-radius: var(--gsl-radius-2xl);
+  background-color: var(--gsl-page-bg);
 }
 .demo-page {
   min-height: 100vh;

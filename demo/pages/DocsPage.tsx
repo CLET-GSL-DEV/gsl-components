@@ -3,7 +3,7 @@ import { DocsLayout } from "../components/DocsLayout";
 import { DocsSidebar } from "../components/DocsSidebar";
 import { mdxComponents } from "../docs/mdx-components";
 import { getDocPage } from "../docs/registry";
-import { ThemeToggle } from "demo/components/ThemeToggle";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 export function DocsPage() {
   const { componentId = "getting-started" } = useParams<{

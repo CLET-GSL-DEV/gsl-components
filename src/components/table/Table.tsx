@@ -371,8 +371,6 @@ export const TableContent = forwardRef(TableContentRender) as <T>(
   props: TableContentInnerProps<T> & { ref?: Ref<HTMLDivElement> },
 ) => React.ReactElement;
 
-/* ── Footer ── */
-
 export const TableFooter = forwardRef<
   HTMLDivElement,
   { className?: string; children?: ReactNode }
@@ -383,8 +381,6 @@ export const TableFooter = forwardRef<
     </div>
   );
 });
-
-/* ── Pagination ── */
 
 export const TablePagination = forwardRef<
   HTMLDivElement,
@@ -400,6 +396,11 @@ export const TablePagination = forwardRef<
 
   return (
     <div ref={ref} className={cn("gsl-table__pagination", className)}>
+      {totalItems != null && (
+        <span className="gsl-table__page-results">
+          Showing {start}&ndash;{end} of {totalItems}
+        </span>
+      )}
       <button
         type="button"
         className="gsl-table__page-btn"
@@ -425,12 +426,6 @@ export const TablePagination = forwardRef<
         Next
         <ChevronRight size={14} strokeWidth={1.5} aria-hidden />
       </button>
-
-      {totalItems != null && (
-        <span className="gsl-table__page-results">
-          Showing {start}&ndash;{end} of {totalItems}
-        </span>
-      )}
     </div>
   );
 });
