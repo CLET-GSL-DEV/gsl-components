@@ -1,37 +1,41 @@
 .gsl-app-layout {
+  --gsl-app-layout-body-gap: 1rem;
+  --gsl-panel-bg: var(--gsl-surface-subtle);
+  --gsl-panel-radius: var(--gsl-radius-2xl);
+
+  box-sizing: border-box;
+
   display: flex;
-  flex-direction: column;
-  min-height: 100dvh;
+  flex-direction: row;
+  gap: var(--gsl-app-layout-gap, 1rem);
   background: var(--gsl-page-bg);
   font-family: var(--gsl-font);
+  padding: var(--gsl-app-layout-gap, 1rem);
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* ── Header ── */
+.gsl-app-layout__content {
+  background: var(--gsl-panel-bg);
+  border-radius: var(--gsl-panel-radius);
+  padding: 20px 24px;
+  box-sizing: border-box;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
 .gsl-app-layout__header {
-  padding: 12px 24px 0;
 }
-
-/* ── Body (sidebar + content) ── */
 
 .gsl-app-layout__body {
   display: flex;
+  flex-direction: column;
+  gap: var(--gsl-app-layout-body-gap);
   flex: 1;
-  gap: 24px;
-  padding: 24px;
-  min-height: 0;
 }
-
-/* ── Sidebar ── */
 
 .gsl-app-layout__sidebar {
   flex-shrink: 0;
   width: max-content;
-}
-
-/* ── Content ── */
-
-.gsl-app-layout__content {
-  flex: 1;
-  min-width: 0;
 }

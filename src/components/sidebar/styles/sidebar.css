@@ -6,6 +6,7 @@
   font-family: var(--gsl-font);
   color: var(--gsl-text);
   box-sizing: border-box;
+  height: 100%;
 }
 
 .gsl-sidebar__header {
@@ -47,7 +48,9 @@
   background: transparent;
   color: var(--gsl-text-secondary);
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .gsl-sidebar__collapse:hover {
@@ -117,7 +120,9 @@
   text-align: left;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .gsl-sidebar__link-icon {
@@ -278,9 +283,11 @@
     top: 24px;
     align-self: start;
     padding: 20px 16px;
-    border-radius: var(--gsl-radius-2xl);
-    background: var(--gsl-surface-subtle);
-    transition: width 200ms ease, padding 200ms ease;
+    border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
+    background: var(--gsl-panel-bg, var(--gsl-surface-subtle));
+    transition:
+      width 200ms ease,
+      padding 200ms ease;
   }
 }
 

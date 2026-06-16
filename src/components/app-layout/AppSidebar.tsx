@@ -8,11 +8,7 @@ export interface AppSidebarProps {
 
 export const AppSidebar = forwardRef<HTMLElement, AppSidebarProps>(
   function AppSidebar({ children, className }, ref) {
-    return (
-      <aside ref={ref} className={cn("gsl-app-sidebar", className)}>
-        {children}
-      </aside>
-    );
+    return <>{children}</>;
   },
 );
 

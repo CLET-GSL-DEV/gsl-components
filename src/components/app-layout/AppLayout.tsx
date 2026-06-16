@@ -4,11 +4,9 @@ import {
   isValidElement,
   forwardRef,
   type ReactNode,
-  type ReactElement,
 } from "react";
 import { cn } from "../../utils/cn";
 import "./styles/app-layout.css";
-import { SidebarProvider } from "../sidebar";
 
 export interface AppLayoutProps {
   children?: ReactNode;
