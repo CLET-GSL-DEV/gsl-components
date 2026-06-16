@@ -1,20 +1,26 @@
 import { useState } from "react";
+import { LayoutDashboard, Users, Settings } from "lucide-react";
+import type { TableColumn } from "@rfdtech/components";
 import {
-  LayoutDashboard,
-  Users,
-  Settings,
-} from "lucide-react";
-import {
-  SidebarProvider,
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarNav,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarLink,
-  TableBuilder,
+  Table,
+  TableHeader,
+  TableSearch,
+  TableFilter,
+  TableContent,
+  TableFooter,
+  TablePagination,
+  AppHeader,
+  AppLayout,
+  AppSidebar,
+  AppBody,
 } from "@rfdtech/components";
-import { DemoLayout } from "../components/DemoLayout";
 
 interface Member {
   id: number;
@@ -26,16 +32,123 @@ interface Member {
 }
 
 const members: Member[] = [
-  { id: 1, name: "Kwame Asante", email: "kwame.asante@gsl.edu.gh", role: "Admin", status: "Active", joined: "2024-01-15" },
-  { id: 2, name: "Abena Mensah", email: "abena.mensah@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-02-03" },
-  { id: 3, name: "Kofi Owusu", email: "kofi.owusu@gsl.edu.gh", role: "Viewer", status: "Inactive", joined: "2024-03-08" },
-  { id: 4, name: "Esi Boateng", email: "esi.boateng@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-03-22" },
-  { id: 5, name: "Yaw Adom", email: "yaw.adom@gsl.edu.gh", role: "Viewer", status: "Pending", joined: "2024-04-01" },
-  { id: 6, name: "Nana Yeboah", email: "nana.yeboah@gsl.edu.gh", role: "Admin", status: "Active", joined: "2024-04-15" },
-  { id: 7, name: "Akua Donkor", email: "akua.donkor@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-05-02" },
-  { id: 8, name: "Kwesi Appiah", email: "kwesi.appiah@gsl.edu.gh", role: "Viewer", status: "Inactive", joined: "2024-05-18" },
-  { id: 9, name: "Adwoa Sarpong", email: "adwoa.sarpong@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-06-10" },
-  { id: 10, name: "Kobina Ennin", email: "kobina.ennin@gsl.edu.gh", role: "Viewer", status: "Pending", joined: "2024-06-25" },
+  {
+    id: 1,
+    name: "Kwame Asante",
+    email: "kwame.asante@gsl.edu.gh",
+    role: "Admin",
+    status: "Active",
+    joined: "2024-01-15",
+  },
+  {
+    id: 2,
+    name: "Abena Mensah",
+    email: "abena.mensah@gsl.edu.gh",
+    role: "Editor",
+    status: "Active",
+    joined: "2024-02-03",
+  },
+  {
+    id: 3,
+    name: "Kofi Owusu",
+    email: "kofi.owusu@gsl.edu.gh",
+    role: "Viewer",
+    status: "Inactive",
+    joined: "2024-03-08",
+  },
+  {
+    id: 4,
+    name: "Esi Boateng",
+    email: "esi.boateng@gsl.edu.gh",
+    role: "Editor",
+    status: "Active",
+    joined: "2024-03-22",
+  },
+  {
+    id: 5,
+    name: "Yaw Adom",
+    email: "yaw.adom@gsl.edu.gh",
+    role: "Viewer",
+    status: "Pending",
+    joined: "2024-04-01",
+  },
+  {
+    id: 6,
+    name: "Nana Yeboah",
+    email: "nana.yeboah@gsl.edu.gh",
+    role: "Admin",
+    status: "Active",
+    joined: "2024-04-15",
+  },
+  {
+    id: 7,
+    name: "Akua Donkor",
+    email: "akua.donkor@gsl.edu.gh",
+    role: "Editor",
+    status: "Active",
+    joined: "2024-05-02",
+  },
+  {
+    id: 8,
+    name: "Kwesi Appiah",
+    email: "kwesi.appiah@gsl.edu.gh",
+    role: "Viewer",
+    status: "Inactive",
+    joined: "2024-05-18",
+  },
+  {
+    id: 9,
+    name: "Adwoa Sarpong",
+    email: "adwoa.sarpong@gsl.edu.gh",
+    role: "Editor",
+    status: "Active",
+    joined: "2024-06-10",
+  },
+  {
+    id: 10,
+    name: "Kobina Ennin",
+    email: "kobina.ennin@gsl.edu.gh",
+    role: "Viewer",
+    status: "Pending",
+    joined: "2024-06-25",
+  },
+];
+
+const columns: TableColumn<Member>[] = [
+  {
+    id: "name",
+    header: "Name",
+    accessorKey: "name",
+    sortable: true,
+    cell: ({ value }) => (
+      <span className="demo-home__cell-name">{String(value)}</span>
+    ),
+  },
+  { id: "email", header: "Email", accessorKey: "email", sortable: true },
+  { id: "role", header: "Role", accessorKey: "role", sortable: true },
+  {
+    id: "status",
+    header: "Status",
+    accessorKey: "status",
+    sortable: true,
+    cell: ({ value }) => {
+      const status = String(value).toLowerCase();
+      return (
+        <span className={`demo-home__status demo-home__status--${status}`}>
+          {String(value)}
+        </span>
+      );
+    },
+  },
+  {
+    id: "joined",
+    header: "Joined",
+    accessorKey: "joined",
+    sortable: true,
+    cell: ({ value }) => (
+      <span className="demo-home__cell-date">{String(value)}</span>
+    ),
+  },
 ];
 
 const navLinks = [
@@ -45,6 +158,8 @@ const navLinks = [
 ];
 
 export function DemoPage() {
+  const pageSize = 5;
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [activeNav, setActiveNav] = useState("dashboard");
@@ -54,8 +169,8 @@ export function DemoPage() {
       m.name.toLowerCase().includes(search.toLowerCase()) ||
       m.email.toLowerCase().includes(search.toLowerCase()),
   );
-  const totalPages = Math.max(1, Math.ceil(filtered.length / 5));
-  const paged = filtered.slice((page - 1) * 5, page * 5);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
   const handleSearch = (value: string) => {
     setSearch(value);
@@ -63,8 +178,18 @@ export function DemoPage() {
   };
 
   return (
-    <DemoLayout mainClassName="demo-home-main">
-      <SidebarProvider className="demo-home__layout">
+    <AppLayout>
+      <AppHeader
+        logoSrc="/gsl-logo.png"
+        brandText="GSL"
+        user={{
+          name: "Kwame Asante",
+          role: "Admin",
+          initials: "KA",
+        }}
+        notificationCount={3}
+      />
+      <AppSidebar>
         <Sidebar>
           <SidebarContent>
             <SidebarNav>
@@ -90,16 +215,26 @@ export function DemoPage() {
               </SidebarGroup>
             </SidebarNav>
           </SidebarContent>
+          <SidebarFooter>
+            <div className="demo-home__user">
+              <div className="demo-home__user-avatar">KA</div>
+              <div className="demo-home__user-info">
+                <span className="demo-home__user-name">Kwame Asante</span>
+                <span className="demo-home__user-email">kwame@gsl.edu.gh</span>
+              </div>
+            </div>
+          </SidebarFooter>
         </Sidebar>
-
-        <main className="demo-home__content">
-          <TableBuilder>
-            <TableBuilder.Header>
-              <TableBuilder.Search
+      </AppSidebar>
+      <AppBody>
+        <div className="demo-card">
+          <Table>
+            <TableHeader>
+              <TableSearch
                 placeholder="Search members..."
                 onSearch={handleSearch}
               />
-              <TableBuilder.Filter>
+              <TableFilter>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Status</label>
                   <select className="demo-home__filter-select">
@@ -118,57 +253,27 @@ export function DemoPage() {
                     <option value="viewer">Viewer</option>
                   </select>
                 </div>
-              </TableBuilder.Filter>
-            </TableBuilder.Header>
+              </TableFilter>
+            </TableHeader>
 
-            <TableBuilder.Content>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Joined</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paged.map((m) => (
-                    <tr key={m.id}>
-                      <td className="demo-home__cell-name">{m.name}</td>
-                      <td>{m.email}</td>
-                      <td>{m.role}</td>
-                      <td>
-                        <span
-                          className={`demo-home__status demo-home__status--${m.status.toLowerCase()}`}
-                        >
-                          {m.status}
-                        </span>
-                      </td>
-                      <td className="demo-home__cell-date">{m.joined}</td>
-                    </tr>
-                  ))}
-                  {paged.length === 0 && (
-                    <tr>
-                      <td colSpan={5} className="demo-home__empty">
-                        No members found
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </TableBuilder.Content>
+            <TableContent
+              columns={columns}
+              data={paged}
+              rowKey={(m: Member) => m.id}
+            />
 
-            <TableBuilder.Footer>
-              <TableBuilder.Pagination
+            <TableFooter>
+              <TablePagination
                 page={page}
                 totalPages={totalPages}
                 onPageChange={setPage}
+                totalItems={filtered.length}
+                pageSize={pageSize}
               />
-            </TableBuilder.Footer>
-          </TableBuilder>
-        </main>
-      </SidebarProvider>
-    </DemoLayout>
+            </TableFooter>
+          </Table>
+        </div>
+      </AppBody>
+    </AppLayout>
   );
 }

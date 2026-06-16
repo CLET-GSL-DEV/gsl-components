@@ -1,0 +1,181 @@
+.gsl-app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 20px;
+  border-radius: var(--gsl-radius-2xl);
+  background: var(--gsl-surface-subtle);
+  font-family: var(--gsl-font);
+}
+
+/* ── Brand ── */
+
+.gsl-app-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gsl-app-header__logo {
+  display: block;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.gsl-app-header__brand-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gsl-text);
+  line-height: 1.2;
+}
+
+/* ── Actions ── */
+
+.gsl-app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Notification button ── */
+
+.gsl-app-header__notif-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.gsl-app-header__notif-btn:hover {
+  background: var(--gsl-surface-dark);
+  color: var(--gsl-text);
+}
+
+.gsl-app-header__notif-btn:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-app-header__notif-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--gsl-primary);
+  color: var(--gsl-on-primary);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ── User profile ── */
+
+.gsl-app-header__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 4px 4px;
+  border-radius: var(--gsl-radius-xl);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.gsl-app-header__user:hover {
+  background: var(--gsl-surface-dark);
+}
+
+.gsl-app-header__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gsl-primary);
+  color: var(--gsl-on-primary);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.gsl-app-header__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gsl-app-header__user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.gsl-app-header__user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gsl-text);
+}
+
+.gsl-app-header__user-role {
+  font-size: 11px;
+  color: var(--gsl-text-muted);
+}
+
+/* ── Search trigger ── */
+
+.gsl-app-header__search .gsl-command-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  color: var(--gsl-text-muted);
+  font-family: var(--gsl-font);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.gsl-app-header__search .gsl-command-trigger:hover {
+  border-color: var(--gsl-border-strong);
+}
+
+.gsl-app-header__search .gsl-command-trigger kbd {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--gsl-border);
+  border-radius: 4px;
+  background: var(--gsl-surface-subtle);
+  font-size: 11px;
+  color: var(--gsl-text-muted);
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-app-header__notif-btn,
+  .gsl-app-header__user {
+    transition: none;
+  }
+}

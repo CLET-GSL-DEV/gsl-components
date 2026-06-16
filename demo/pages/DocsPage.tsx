@@ -1,16 +1,49 @@
-import { Link, useParams } from "react-router-dom";
-import { DemoLayout } from "../components/DemoLayout";
+import { Link, NavLink, useParams } from "react-router-dom";
+import { DocsLayout } from "../components/DocsLayout";
 import { DocsSidebar } from "../components/DocsSidebar";
 import { mdxComponents } from "../docs/mdx-components";
 import { getDocPage } from "../docs/registry";
+import { ThemeToggle } from "demo/components/ThemeToggle";
 
 export function DocsPage() {
-  const { componentId = "getting-started" } = useParams<{ componentId?: string }>();
+  const { componentId = "getting-started" } = useParams<{
+    componentId?: string;
+  }>();
   const page = getDocPage(componentId);
   const Content = page?.default;
 
   return (
-    <DemoLayout mainClassName="demo-docs" pageClassName="demo-docs-page">
+    <DocsLayout mainClassName="demo-docs" pageClassName="demo-docs-page">
+      <header className="demo-header">
+        <Link to="/" className="demo-logo">
+          GSL Components
+        </Link>
+        <nav className="demo-nav">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              ["demo-nav-link", isActive ? "demo-nav-link--active" : ""]
+                .filter(Boolean)
+                .join(" ")
+            }
+          >
+            Demo
+          </NavLink>
+          <NavLink
+            to="/docs"
+            className={({ isActive }) =>
+              ["demo-nav-link", isActive ? "demo-nav-link--active" : ""]
+                .filter(Boolean)
+                .join(" ")
+            }
+          >
+            Docs
+          </NavLink>
+          <ThemeToggle />
+        </nav>
+      </header>
+
       <div className="demo-docs__layout">
         <aside className="demo-docs__sidebar">
           <DocsSidebar />
@@ -35,6 +68,6 @@ export function DocsPage() {
           )}
         </article>
       </div>
-    </DemoLayout>
+    </DocsLayout>
   );
 }

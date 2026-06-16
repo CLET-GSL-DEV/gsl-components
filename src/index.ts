@@ -1,13 +1,15 @@
 import "./styles/theme.css";
 export * from "./components/theme";
 export * from "./components/app-switcher";
+export * from "./components/app-header";
+export * from "./components/app-layout";
 export * from "./components/badge";
 export * from "./components/breadcrumb";
 export * from "./components/bulk-import-modal";
 export * from "./components/button";
 export * from "./components/checkbox";
 export * from "./components/command";
-export * from "./components/table-builder";
+export * from "./components/table";
 export * from "./components/field";
 export * from "./components/form";
 export * from "./components/input";

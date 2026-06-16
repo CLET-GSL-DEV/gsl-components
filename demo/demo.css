@@ -10,10 +10,18 @@ body {
   color: var(--gsl-text);
 }
 
+.demo-card {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--gsl-surface-subtle);
+}
 .demo-page {
   min-height: 100vh;
 }
 
+.demo-home__content {
+  --background-color: var(--gsl-surface-subtle);
+}
 .demo-docs-page {
   font-family: "Geist Variable", "Geist", var(--gsl-font);
 }
@@ -277,18 +285,19 @@ body {
   min-width: 0;
 }
 
-.demo-docs__content > :where(
-  .demo-docs__eyebrow,
-  .demo-docs__title,
-  .demo-docs__section-title,
-  .demo-docs__subsection-title,
-  .demo-docs__paragraph,
-  .demo-docs__notes,
-  .demo-docs__code-block,
-  .demo-docs__example-tabs,
-  .demo-docs__table-wrap,
-  figure[data-rehype-pretty-code-figure]
-) {
+.demo-docs__content
+  > :where(
+    .demo-docs__eyebrow,
+    .demo-docs__title,
+    .demo-docs__section-title,
+    .demo-docs__subsection-title,
+    .demo-docs__paragraph,
+    .demo-docs__notes,
+    .demo-docs__code-block,
+    .demo-docs__example-tabs,
+    .demo-docs__table-wrap,
+    figure[data-rehype-pretty-code-figure]
+  ) {
   margin: 0;
 }
 
@@ -397,7 +406,9 @@ body {
   border-radius: var(--gsl-radius);
 }
 
-.demo-docs__content > figure[data-rehype-pretty-code-figure] + figure[data-rehype-pretty-code-figure],
+.demo-docs__content
+  > figure[data-rehype-pretty-code-figure]
+  + figure[data-rehype-pretty-code-figure],
 .demo-docs__content > .demo-docs__code-block + .demo-docs__code-block,
 .demo-docs__content > .demo-docs__example-tabs + .demo-docs__example-tabs {
   margin-top: var(--docs-space-2);

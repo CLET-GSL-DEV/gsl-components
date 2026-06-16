@@ -1,16 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { TableBuilder } from "./TableBuilder";
+import { Table, TableHeader, TableContent, TableFooter, TableSearch, TableFilter, TablePagination } from "./Table";
 
-describe("TableBuilder", () => {
+describe("Table", () => {
   it("renders header, content, and footer", () => {
     render(
-      <TableBuilder>
-        <TableBuilder.Header>Header</TableBuilder.Header>
-        <TableBuilder.Content>Table content</TableBuilder.Content>
-        <TableBuilder.Footer>Footer</TableBuilder.Footer>
-      </TableBuilder>,
+      <Table>
+        <TableHeader>Header</TableHeader>
+        <TableContent>Table content</TableContent>
+        <TableFooter>Footer</TableFooter>
+      </Table>,
     );
 
     expect(screen.getByText("Header")).toBeInTheDocument();
@@ -21,11 +21,11 @@ describe("TableBuilder", () => {
   it("renders search and accepts input", async () => {
     const user = userEvent.setup();
     render(
-      <TableBuilder>
-        <TableBuilder.Header>
-          <TableBuilder.Search />
-        </TableBuilder.Header>
-      </TableBuilder>,
+      <Table>
+        <TableHeader>
+          <TableSearch />
+        </TableHeader>
+      </Table>,
     );
 
     const input = screen.getByPlaceholderText("Search...");
@@ -39,30 +39,26 @@ describe("TableBuilder", () => {
     const onReset = vi.fn();
 
     render(
-      <TableBuilder>
-        <TableBuilder.Header>
-          <TableBuilder.Filter onApply={onApply} onReset={onReset}>
+      <Table>
+        <TableHeader>
+          <TableFilter onApply={onApply} onReset={onReset}>
             <div>Filter form</div>
-          </TableBuilder.Filter>
-        </TableBuilder.Header>
-      </TableBuilder>,
+          </TableFilter>
+        </TableHeader>
+      </Table>,
     );
 
-    // Open the filter popover
     await user.click(screen.getByText("Filter"));
 
-    // Should show filter content and buttons
     expect(screen.getByText("Filter form")).toBeInTheDocument();
     expect(screen.getByText("Apply Filter")).toBeInTheDocument();
-    expect(screen.getByText("Reset")).toBeInTheDocument();
+    expect(screen.getByText("clear")).toBeInTheDocument();
 
-    // Click Apply
     await user.click(screen.getByText("Apply Filter"));
     expect(onApply).toHaveBeenCalledTimes(1);
 
-    // Open again and click Reset
     await user.click(screen.getByText("Filter"));
-    await user.click(screen.getByText("Reset"));
+    await user.click(screen.getByText("clear"));
     expect(onReset).toHaveBeenCalledTimes(1);
   });
 
@@ -70,15 +66,15 @@ describe("TableBuilder", () => {
     const onPageChange = vi.fn();
 
     render(
-      <TableBuilder>
-        <TableBuilder.Footer>
-          <TableBuilder.Pagination
+      <Table>
+        <TableFooter>
+          <TablePagination
             page={3}
             totalPages={10}
             onPageChange={onPageChange}
           />
-        </TableBuilder.Footer>
-      </TableBuilder>,
+        </TableFooter>
+      </Table>,
     );
 
     expect(screen.getByText("Page 3 of 10")).toBeInTheDocument();
@@ -88,15 +84,15 @@ describe("TableBuilder", () => {
 
   it("disables prev/next at boundaries", () => {
     render(
-      <TableBuilder>
-        <TableBuilder.Footer>
-          <TableBuilder.Pagination
+      <Table>
+        <TableFooter>
+          <TablePagination
             page={1}
             totalPages={1}
             onPageChange={() => {}}
           />
-        </TableBuilder.Footer>
-      </TableBuilder>,
+        </TableFooter>
+      </Table>,
     );
 
     expect(screen.getByLabelText("Previous page")).toBeDisabled();
@@ -108,15 +104,15 @@ describe("TableBuilder", () => {
     const onPageChange = vi.fn();
 
     render(
-      <TableBuilder>
-        <TableBuilder.Footer>
-          <TableBuilder.Pagination
+      <Table>
+        <TableFooter>
+          <TablePagination
             page={2}
             totalPages={5}
             onPageChange={onPageChange}
           />
-        </TableBuilder.Footer>
-      </TableBuilder>,
+        </TableFooter>
+      </Table>,
     );
 
     await user.click(screen.getByLabelText("Previous page"));
@@ -128,7 +124,7 @@ describe("TableBuilder", () => {
 
   it("forwards className to root", () => {
     const { container } = render(
-      <TableBuilder className="custom">Content</TableBuilder>,
+      <Table className="custom">Content</Table>,
     );
     expect(container.firstChild).toHaveClass("custom");
   });
