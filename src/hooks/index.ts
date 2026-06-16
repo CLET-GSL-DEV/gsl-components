@@ -1,3 +1,4 @@
+export { useDebounce } from "./useDebounce";
 export { createBrowserSearchParamAdapter } from "./createBrowserSearchParamAdapter";
 export { createSearchParamAdapter } from "./createSearchParamAdapter";
 export type { CreateSearchParamAdapterOptions } from "./createSearchParamAdapter";

@@ -1,0 +1,96 @@
+/* Override the centered demo-main layout */
+.demo-home-main {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* ── Sidebar + content side-by-side layout ── */
+
+.demo-home__layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  min-height: calc(100vh - 57px); /* viewport minus header */
+}
+
+.demo-home__layout .gsl-sidebar {
+  border-right: 1px solid var(--gsl-border);
+  background: var(--gsl-surface-subtle);
+  padding: 16px 8px;
+}
+
+/* ── Content ── */
+
+.demo-home__content {
+  padding: 24px;
+  overflow-x: auto;
+}
+
+/* ── Filter form fields ── */
+
+.demo-home__filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.demo-home__filter-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gsl-text-secondary);
+}
+
+.demo-home__filter-select {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  color: var(--gsl-text);
+  font-family: var(--gsl-font);
+  font-size: 13px;
+}
+
+/* ── Status badges ── */
+
+.demo-home__status {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.demo-home__status--active {
+  background: color-mix(in srgb, var(--gsl-success) 15%, transparent);
+  color: var(--gsl-success);
+}
+
+.demo-home__status--inactive {
+  background: var(--gsl-hover);
+  color: var(--gsl-text-muted);
+}
+
+.demo-home__status--pending {
+  background: color-mix(in srgb, var(--gsl-warning) 20%, transparent);
+  color: var(--gsl-warning);
+}
+
+.demo-home__cell-name {
+  font-weight: 500;
+}
+
+.demo-home__cell-date {
+  color: var(--gsl-text-secondary);
+  font-size: 13px;
+}
+
+.demo-home__empty {
+  text-align: center;
+  padding: 40px 16px !important;
+  color: var(--gsl-text-muted);
+  font-size: 14px;
+}

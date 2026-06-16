@@ -7,6 +7,7 @@ export * from "./components/bulk-import-modal";
 export * from "./components/button";
 export * from "./components/checkbox";
 export * from "./components/command";
+export * from "./components/table-builder";
 export * from "./components/field";
 export * from "./components/form";
 export * from "./components/input";

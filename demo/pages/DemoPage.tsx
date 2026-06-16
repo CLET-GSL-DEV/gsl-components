@@ -1,91 +1,174 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { BulkImportModal } from "@rfdtech/components";
-import type { BulkImportField, BulkImportResult } from "@rfdtech/components";
+import {
+  LayoutDashboard,
+  Users,
+  Settings,
+} from "lucide-react";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarContent,
+  SidebarNav,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarLink,
+  TableBuilder,
+} from "@rfdtech/components";
 import { DemoLayout } from "../components/DemoLayout";
 
-const importFields: BulkImportField[] = [
-  {
-    key: "organisation_name",
-    label: "Organisation Name",
-    required: true,
-    example: "GSL",
-  },
-  {
-    key: "organisation_email",
-    type: "email",
-    label: "Organisation Email",
-    required: true,
-    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    example: "info@gsl.edu.gh",
-  },
-  {
-    key: "document_name",
-    label: "Document Name",
-    required: true,
-    example: "2024 Budget",
-  },
-  {
-    key: "document_id",
-    label: "Document ID",
-    required: true,
-    example: "INV-2024-001",
-  },
-  {
-    key: "department",
-    label: "Department",
-    example: "Finance",
-  },
-  {
-    key: "month",
-    label: "Month",
-    example: "January",
-  },
-  {
-    key: "year",
-    label: "Year",
-    example: "2024",
-  },
+interface Member {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  status: "Active" | "Inactive" | "Pending";
+  joined: string;
+}
+
+const members: Member[] = [
+  { id: 1, name: "Kwame Asante", email: "kwame.asante@gsl.edu.gh", role: "Admin", status: "Active", joined: "2024-01-15" },
+  { id: 2, name: "Abena Mensah", email: "abena.mensah@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-02-03" },
+  { id: 3, name: "Kofi Owusu", email: "kofi.owusu@gsl.edu.gh", role: "Viewer", status: "Inactive", joined: "2024-03-08" },
+  { id: 4, name: "Esi Boateng", email: "esi.boateng@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-03-22" },
+  { id: 5, name: "Yaw Adom", email: "yaw.adom@gsl.edu.gh", role: "Viewer", status: "Pending", joined: "2024-04-01" },
+  { id: 6, name: "Nana Yeboah", email: "nana.yeboah@gsl.edu.gh", role: "Admin", status: "Active", joined: "2024-04-15" },
+  { id: 7, name: "Akua Donkor", email: "akua.donkor@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-05-02" },
+  { id: 8, name: "Kwesi Appiah", email: "kwesi.appiah@gsl.edu.gh", role: "Viewer", status: "Inactive", joined: "2024-05-18" },
+  { id: 9, name: "Adwoa Sarpong", email: "adwoa.sarpong@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-06-10" },
+  { id: 10, name: "Kobina Ennin", email: "kobina.ennin@gsl.edu.gh", role: "Viewer", status: "Pending", joined: "2024-06-25" },
+];
+
+const navLinks = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, active: true },
+  { id: "members", label: "Members", icon: Users, active: false },
+  { id: "settings", label: "Settings", icon: Settings, active: false },
 ];
 
 export function DemoPage() {
-  const [importOpen, setImportOpen] = useState(false);
-  const [lastImport, setLastImport] = useState<BulkImportResult | null>(null);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [activeNav, setActiveNav] = useState("dashboard");
+
+  const filtered = members.filter(
+    (m) =>
+      m.name.toLowerCase().includes(search.toLowerCase()) ||
+      m.email.toLowerCase().includes(search.toLowerCase()),
+  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / 5));
+  const paged = filtered.slice((page - 1) * 5, page * 5);
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
 
   return (
-    <DemoLayout>
-      <h1 className="demo-heading">GSL Components Demo</h1>
-      <p className="demo-text">
-        Shared React components for Ghana School of Law projects. Browse the{" "}
-        <Link to="/docs">component docs</Link> and try the interactive example
-        below.
-      </p>
+    <DemoLayout mainClassName="demo-home-main">
+      <SidebarProvider className="demo-home__layout">
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav>
+              <SidebarGroup>
+                <SidebarGroupLabel>Main</SidebarGroupLabel>
+                {navLinks.map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <SidebarLink
+                      key={link.id}
+                      active={activeNav === link.id}
+                      icon={<Icon size={18} strokeWidth={1.5} />}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setActiveNav(link.id);
+                      }}
+                    >
+                      {link.label}
+                    </SidebarLink>
+                  );
+                })}
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
 
-      <button
-        type="button"
-        className="demo-button"
-        onClick={() => setImportOpen(true)}
-      >
-        Open bulk import
-      </button>
+        <main className="demo-home__content">
+          <TableBuilder>
+            <TableBuilder.Header>
+              <TableBuilder.Search
+                placeholder="Search members..."
+                onSearch={handleSearch}
+              />
+              <TableBuilder.Filter>
+                <div className="demo-home__filter-field">
+                  <label className="demo-home__filter-label">Status</label>
+                  <select className="demo-home__filter-select">
+                    <option value="">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                  </select>
+                </div>
+                <div className="demo-home__filter-field">
+                  <label className="demo-home__filter-label">Role</label>
+                  <select className="demo-home__filter-select">
+                    <option value="">All</option>
+                    <option value="admin">Admin</option>
+                    <option value="editor">Editor</option>
+                    <option value="viewer">Viewer</option>
+                  </select>
+                </div>
+              </TableBuilder.Filter>
+            </TableBuilder.Header>
 
-      {lastImport && (
-        <p className="demo-result">
-          Last import: {lastImport.rows.length} row(s),{" "}
-          {lastImport.errors.length} error(s)
-        </p>
-      )}
+            <TableBuilder.Content>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paged.map((m) => (
+                    <tr key={m.id}>
+                      <td className="demo-home__cell-name">{m.name}</td>
+                      <td>{m.email}</td>
+                      <td>{m.role}</td>
+                      <td>
+                        <span
+                          className={`demo-home__status demo-home__status--${m.status.toLowerCase()}`}
+                        >
+                          {m.status}
+                        </span>
+                      </td>
+                      <td className="demo-home__cell-date">{m.joined}</td>
+                    </tr>
+                  ))}
+                  {paged.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="demo-home__empty">
+                        No members found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </TableBuilder.Content>
 
-      <BulkImportModal
-        open={importOpen}
-        onOpenChange={setImportOpen}
-        title="Import documents"
-        fields={importFields}
-        onComplete={(result) => {
-          setLastImport(result);
-          console.log("Import complete:", result);
-        }}
-      />
+            <TableBuilder.Footer>
+              <TableBuilder.Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
+            </TableBuilder.Footer>
+          </TableBuilder>
+        </main>
+      </SidebarProvider>
     </DemoLayout>
   );
 }
