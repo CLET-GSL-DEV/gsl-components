@@ -166,3 +166,23 @@
   outline: 2px solid var(--gsl-focus);
   outline-offset: 2px;
 }
+
+.demo-home__sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  margin-bottom: 20px;
+}
+
+.demo-home__sidebar-logo {
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.demo-home__sidebar-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gsl-text);
+  line-height: 1.2;
+}
