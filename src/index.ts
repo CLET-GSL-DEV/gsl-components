@@ -26,4 +26,5 @@ export * from "./components/sortable";
 export * from "./components/tabs";
 export * from "./components/textarea";
 export * from "./components/toast";
+export * from "./components/select";
 export * from "./hooks";

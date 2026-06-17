@@ -1,0 +1,98 @@
+.gsl-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  color: var(--gsl-text);
+  font-family: var(--gsl-font);
+  font-size: 13px;
+  cursor: pointer;
+  line-height: 1;
+  white-space: nowrap;
+  outline: none;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.gsl-select__trigger:hover {
+  border-color: var(--gsl-border-strong);
+}
+
+.gsl-select__trigger:focus-visible {
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 1px var(--gsl-primary);
+}
+
+.gsl-select__trigger--invalid {
+  border-color: var(--gsl-error);
+}
+
+.gsl-select__trigger--invalid:focus-visible {
+  border-color: var(--gsl-error);
+  box-shadow: 0 0 0 1px var(--gsl-error);
+}
+
+.gsl-select__trigger[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.gsl-select__icon {
+  display: flex;
+  align-items: center;
+  color: var(--gsl-text-muted);
+  transition: transform 150ms ease;
+}
+
+.gsl-select__trigger[data-state="open"] .gsl-select__icon {
+  transform: rotate(180deg);
+}
+
+.gsl-select__content {
+  z-index: var(--gsl-z-select, 50);
+  min-width: var(--radix-select-trigger-width);
+  background: var(--gsl-bg);
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  box-shadow: var(--gsl-shadow-md);
+}
+
+.gsl-select__viewport {
+  padding: 4px;
+}
+
+.gsl-select__item {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: calc(var(--gsl-radius) - 2px);
+  font-size: 13px;
+  color: var(--gsl-text);
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition: background-color 100ms ease;
+}
+
+.gsl-select__item:hover,
+.gsl-select__item[data-highlighted] {
+  background: var(--gsl-hover);
+}
+
+.gsl-select__item--selected {
+  font-weight: 600;
+  color: var(--gsl-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-select__trigger,
+  .gsl-select__icon {
+    transition: none;
+  }
+}

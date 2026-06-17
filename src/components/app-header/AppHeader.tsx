@@ -1,18 +1,7 @@
 import { forwardRef, type ReactNode } from "react";
+import type { AppHeaderProps } from "../../types/app-header";
 import { cn } from "../../utils/cn";
 import "./styles/app-header.css";
-
-export interface AppHeaderProps {
-  className?: string;
-  /** Search trigger (AppHeaderSearch) */
-  search?: ReactNode;
-  /** App switcher trigger */
-  appSwitcher?: ReactNode;
-  /** Notifications button (AppHeaderNotifications) */
-  notifications?: ReactNode;
-  /** User profile (AppHeaderProfile) */
-  profile?: ReactNode;
-}
 
 export const AppHeader = forwardRef<HTMLDivElement, AppHeaderProps>(
   function AppHeader(

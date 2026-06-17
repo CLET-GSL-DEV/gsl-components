@@ -1,12 +1,10 @@
 .gsl-app-header {
-  --gsl-header-py: 0;
-  --gsl-header-px: 20px;
+  --gsl-header-py: var(--gsl-app-layout-body-gap);
+  --gsl-header-px: var(--gsl-app-layout-body-gap);
 
   display: flex;
   align-items: center;
-  height: 60px;
   padding: var(--gsl-header-py) var(--gsl-header-px);
-  padding-right: 8px;
   border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
   background: var(--gsl-panel-bg, var(--gsl-surface-subtle));
   font-family: var(--gsl-font);
@@ -31,6 +29,18 @@
 
 /* ── Search trigger ── */
 
+.gsl-app-header-search.gsl-app-header-search.gsl-command {
+  display: flex;
+  height: stretch;
+}
+
+.gsl-app-header-search.gsl-app-header-search.gsl-command
+  .gsl-command__input-wrapper {
+  border-radius: var(--gsl-radius-xl);
+  max-width: 400px;
+  height: stretch;
+}
+
 .gsl-app-header__search-btn {
   display: inline-flex;
   align-items: center;
@@ -38,7 +48,7 @@
   height: 36px;
   padding: 0 12px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-2xl);
+  border-radius: var(--gsl-radius-xl);
   background: var(--gsl-bg);
   color: var(--gsl-text-muted);
   font-family: var(--gsl-font);
@@ -110,9 +120,8 @@
   gap: 10px;
   padding: 8px 12px;
   border-radius: var(--gsl-radius-2xl);
-  background: var(--gsl-surface-dark);
   cursor: pointer;
-  transition: background-color 150ms ease;
+  min-width: max-content;
 }
 
 .gsl-app-header__profile:hover {
@@ -123,8 +132,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--gsl-primary);
   color: var(--gsl-on-primary);
@@ -161,19 +170,34 @@
 /* ── Notifications popover ── */
 
 .gsl-notif-popover {
+  display: flex;
+  flex-direction: column;
   width: 340px;
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-xl);
+  max-height: 420px;
+  overflow: hidden;
+  border-radius: var(--gsl-radius);
   background: var(--gsl-bg);
-  box-shadow: var(--gsl-shadow-lg);
+  box-shadow: var(--gsl-shadow-md);
   z-index: var(--gsl-z-popover);
 }
 
+*[data-gsl-theme="dark"] .gsl-notif-popover {
+  border: 1px solid var(--gsl-border);
+}
+
 .gsl-notif-popover__header {
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
   padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--gsl-border);
+  background: var(--gsl-bg);
+}
+
+.gsl-notif-popover__body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .gsl-notif-popover__title {
@@ -195,9 +219,15 @@
   background: var(--gsl-hover);
 }
 
-.gsl-notif-popover__item + .gsl-notif-popover__item {
-  border-top: 1px solid var(--gsl-border);
+.gsl-notif-popover__item--read {
+  background: var(--gsl-surface-subtle);
 }
+
+.gsl-notif-popover__item--read:hover {
+  background: var(--gsl-hover);
+}
+
+
 
 .gsl-notif-popover__dot {
   width: 8px;
@@ -229,9 +259,196 @@
   margin-top: 2px;
 }
 
+/* ── Notifications loading skeleton ── */
+
+.gsl-notif-popover__loading {
+  padding: 8px 0;
+}
+
+.gsl-notif-popover__skeleton {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.gsl-notif-popover__skeleton-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gsl-hover);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.gsl-notif-popover__skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gsl-notif-popover__skeleton-line {
+  height: 12px;
+  border-radius: 4px;
+  background: var(--gsl-hover);
+  animation: gsl-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes gsl-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.gsl-profile-popover {
+  width: 280px;
+  padding: 6px;
+  background: var(--gsl-bg);
+  border-radius: var(--gsl-radius);
+  box-shadow: var(--gsl-shadow-md);
+  outline: none;
+  z-index: var(--gsl-z-popover);
+}
+
+*[data-gsl-theme="dark"] .gsl-profile-popover {
+  border: 1px solid var(--gsl-border);
+}
+
+.gsl-profile-popover__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 20px 12px;
+  text-align: center;
+}
+
+.gsl-profile-popover__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gsl-surface-subtle);
+  border: 1px solid var(--gsl-border);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.gsl-profile-popover__avatar-letter {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--gsl-text-secondary);
+  line-height: 1;
+}
+
+.gsl-profile-popover__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gsl-profile-popover__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gsl-text);
+  line-height: 1.4;
+}
+
+.gsl-profile-popover__email {
+  font-size: 12px;
+  color: var(--gsl-text-secondary);
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.gsl-profile-popover__actions {
+  background: var(--gsl-surface-subtle);
+  border-radius: var(--gsl-radius);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gsl-profile-popover__action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gsl-text);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 100ms ease;
+}
+
+.gsl-profile-popover__action:hover {
+  background: var(--gsl-hover);
+}
+
+.gsl-profile-popover__action:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: -2px;
+}
+
+.gsl-profile-popover__action--danger {
+  color: var(--gsl-error);
+}
+
+.gsl-profile-popover__action--danger:hover {
+  background: var(--gsl-error-bg);
+}
+
+.gsl-profile-popover__action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-profile-popover__action--danger .gsl-profile-popover__action-icon {
+  color: var(--gsl-error);
+}
+
+.gsl-profile-popover__action-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes gsl-profile-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gsl-profile-popover[data-state="open"] {
+  animation: gsl-profile-popover-in 0.15s ease forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .gsl-app-header__notif-btn,
-  .gsl-app-header__profile {
+  .gsl-app-header__profile,
+  .gsl-profile-popover__action {
     transition: none;
   }
 }

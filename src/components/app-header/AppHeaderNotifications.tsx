@@ -1,15 +1,11 @@
 import { forwardRef, type ReactNode } from "react";
+import type { AppHeaderNotificationsProps } from "../../types/app-header";
 import { Bell } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { cn } from "../../utils/cn";
 
-export interface AppHeaderNotificationsProps {
-  className?: string;
-  children?: ReactNode;
-}
-
 export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNotificationsProps>(
-  function AppHeaderNotifications({ className, children }, ref) {
+  function AppHeaderNotifications({ className, children, loading }, ref) {
     return (
       <Popover.Root>
         <Popover.Trigger asChild>
@@ -32,7 +28,23 @@ export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNot
             <div className="gsl-notif-popover__header">
               <span className="gsl-notif-popover__title">Notifications</span>
             </div>
-            {children}
+            <div className="gsl-notif-popover__body">
+              {loading ? (
+                <div className="gsl-notif-popover__loading">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="gsl-notif-popover__skeleton">
+                      <div className="gsl-notif-popover__skeleton-dot" />
+                      <div className="gsl-notif-popover__skeleton-lines">
+                        <div className="gsl-notif-popover__skeleton-line" style={{ width: "85%" }} />
+                        <div className="gsl-notif-popover__skeleton-line" style={{ width: "50%" }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                children
+              )}
+            </div>
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>

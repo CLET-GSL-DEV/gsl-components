@@ -12,9 +12,16 @@ body {
 
 .demo-card {
   padding: 1rem;
-  border-radius: var(--gsl-radius-2xl);
+  border-radius: var(--gsl-radius-xl);
   background-color: var(--gsl-page-bg);
 }
+
+.demo-filter-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .demo-page {
   min-height: 100vh;
 }

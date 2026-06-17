@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { Table, TableHeader, TableContent, TableFooter, TableSearch, TableFilter, TablePagination } from "./Table";
+import { Table, TableContent, TableFooter } from "./Table";
+import { TableHeader, TableSearch, TableFilter } from "./TableHeader";
+import { TablePagination } from "./TablePagination";
 
 describe("Table", () => {
   it("renders header, content, and footer", () => {
@@ -48,7 +50,7 @@ describe("Table", () => {
       </Table>,
     );
 
-    await user.click(screen.getByText("Filter"));
+    await user.click(screen.getByLabelText("Filter"));
 
     expect(screen.getByText("Filter form")).toBeInTheDocument();
     expect(screen.getByText("Apply Filter")).toBeInTheDocument();
@@ -57,7 +59,7 @@ describe("Table", () => {
     await user.click(screen.getByText("Apply Filter"));
     expect(onApply).toHaveBeenCalledTimes(1);
 
-    await user.click(screen.getByText("Filter"));
+    await user.click(screen.getByLabelText("Filter"));
     await user.click(screen.getByText("clear"));
     expect(onReset).toHaveBeenCalledTimes(1);
   });
@@ -77,9 +79,14 @@ describe("Table", () => {
       </Table>,
     );
 
-    expect(screen.getByText("Page 3 of 10")).toBeInTheDocument();
     expect(screen.getByLabelText("Previous page")).toBeInTheDocument();
     expect(screen.getByLabelText("Next page")).toBeInTheDocument();
+    // current page button has aria-current="page"
+    const currentBtn = screen.getByRole("button", { name: "3" });
+    expect(currentBtn).toHaveAttribute("aria-current", "page");
+    // non-current page buttons exist
+    expect(screen.getByRole("button", { name: "1" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "10" })).toBeInTheDocument();
   });
 
   it("disables prev/next at boundaries", () => {
@@ -99,7 +106,7 @@ describe("Table", () => {
     expect(screen.getByLabelText("Next page")).toBeDisabled();
   });
 
-  it("calls onPageChange when clicking next", async () => {
+  it("calls onPageChange when clicking prev, next, or a page number", async () => {
     const user = userEvent.setup();
     const onPageChange = vi.fn();
 
@@ -120,6 +127,9 @@ describe("Table", () => {
 
     await user.click(screen.getByLabelText("Next page"));
     expect(onPageChange).toHaveBeenCalledWith(3);
+
+    await user.click(screen.getByText("5"));
+    expect(onPageChange).toHaveBeenCalledWith(5);
   });
 
   it("forwards className to root", () => {

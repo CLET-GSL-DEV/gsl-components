@@ -23,7 +23,8 @@
   cursor: text;
   align-items: center;
   gap: 6px;
-  padding: 0 10px;
+  padding: 8px 16px;
+  min-height: 40px;
   height: 34px;
   border: 1px solid var(--gsl-border);
   border-radius: var(--gsl-radius);
@@ -302,47 +303,24 @@
 .gsl-table__pagination {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
   width: 100%;
 }
 
-.gsl-table__page-btn {
+.gsl-table__pagination-pages {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+}
+
+.gsl-table__page-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
   height: 32px;
-  padding: 0 12px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
-  background: transparent;
-  color: var(--gsl-text);
-  font-family: var(--gsl-font);
   font-size: 13px;
-  cursor: pointer;
-  transition:
-    background-color 150ms ease,
-    border-color 150ms ease;
-}
-
-.gsl-table__page-btn:hover:not(:disabled) {
-  background: var(--gsl-hover);
-  border-color: var(--gsl-border-strong);
-}
-
-.gsl-table__page-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.gsl-table__page-btn:focus-visible {
-  outline: 2px solid var(--gsl-focus);
-  outline-offset: 2px;
-}
-
-.gsl-table__page-info {
-  font-size: 13px;
-  color: var(--gsl-text-secondary);
-  white-space: nowrap;
+  color: var(--gsl-text-muted);
+  user-select: none;
 }
 
 .gsl-table__page-results {
@@ -356,8 +334,7 @@
 @media (prefers-reduced-motion: reduce) {
   .gsl-table__search,
   .gsl-table__filter-trigger,
-  .gsl-table__filter-btn,
-  .gsl-table__page-btn {
+  .gsl-table__filter-btn {
     transition: none;
   }
 }

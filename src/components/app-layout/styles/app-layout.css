@@ -18,11 +18,9 @@
 .gsl-app-layout__content {
   background: var(--gsl-panel-bg);
   border-radius: var(--gsl-panel-radius);
-  padding: 20px 24px;
+  padding: var(--gsl-app-layout-body-gap);
   box-sizing: border-box;
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .gsl-app-layout__header {
@@ -33,6 +31,9 @@
   flex-direction: column;
   gap: var(--gsl-app-layout-body-gap);
   flex: 1;
+
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .gsl-app-layout__sidebar {
