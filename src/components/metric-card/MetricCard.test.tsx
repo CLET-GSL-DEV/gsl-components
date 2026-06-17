@@ -58,13 +58,6 @@ describe("MetricCard", () => {
     expect(container.querySelector('[data-testid="icon"]')).toBeInTheDocument();
   });
 
-  it("applies variant class", () => {
-    const { container } = render(
-      <MetricCard label="Errors" value="3" variant="error" />,
-    );
-    expect(container.firstChild).toHaveClass("gsl-metric-card--error");
-  });
-
   it("forwards ref", () => {
     const ref = { current: null };
     render(<MetricCard label="Test" value="0" ref={ref} />);

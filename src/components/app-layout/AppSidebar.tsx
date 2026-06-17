@@ -8,7 +8,7 @@ export interface AppSidebarProps {
 
 export const AppSidebar = forwardRef<HTMLElement, AppSidebarProps>(
   function AppSidebar({ children, className }, ref) {
-    return <>{children}</>;
+    return <aside ref={ref} className={cn(className)}>{children}</aside>;
   },
 );
 

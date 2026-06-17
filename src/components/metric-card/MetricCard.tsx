@@ -19,8 +19,6 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
       description,
       trend,
       trendValue,
-      variant = "default",
-      color,
       className,
       classNames,
       ...props
@@ -32,12 +30,7 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          "gsl-metric-card",
-          variant !== "default" && `gsl-metric-card--${variant}`,
-          classNames?.root,
-          className,
-        )}
+        className={cn("gsl-metric-card", classNames?.root, className)}
         {...props}
       >
         <div className="gsl-metric-card__header">
@@ -63,7 +56,6 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
                 `gsl-metric-card__trend--${trend}`,
                 classNames?.trend,
               )}
-              style={color ? { color } as React.CSSProperties : undefined}
             >
               {TrendIcon ? (
                 <TrendIcon size={14} strokeWidth={2.5} aria-hidden />

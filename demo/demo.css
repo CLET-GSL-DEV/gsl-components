@@ -81,6 +81,26 @@ body {
   font-weight: 500;
 }
 
+.demo-docs-search-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--gsl-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.demo-docs-search-btn:hover {
+  border-color: var(--gsl-border-strong);
+  color: var(--gsl-text);
+}
+
 .demo-theme-toggle {
   display: inline-flex;
   align-items: center;
@@ -161,6 +181,8 @@ body {
 .demo-docs__sidebar {
   position: sticky;
   top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
   padding-right: 24px;
   border-right: 1px solid var(--gsl-border);
 }

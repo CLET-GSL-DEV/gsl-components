@@ -34,6 +34,7 @@ export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
       invalid = false,
       disabled = false,
       value,
+      defaultValue,
       onChange,
       placeholder = "Select operator",
       options = DEFAULT_OPERATORS,
@@ -44,7 +45,7 @@ export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
     ref,
   ) {
     const [open, setOpen] = useState(false);
-    const [internalValue, setInternalValue] = useState<string | null>(null);
+    const [internalValue, setInternalValue] = useState<string | null>(defaultValue ?? null);
     const selectedValue = value !== undefined ? value : internalValue;
     const selected = options.find((o) => o.value === selectedValue) ?? null;
 

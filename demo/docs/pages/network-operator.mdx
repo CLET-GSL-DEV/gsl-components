@@ -1,0 +1,112 @@
+export const meta = {
+  title: "NetworkOperator",
+  description: "Network operator selector with image thumbnails, search filtering, and invalid/disabled states.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { NetworkOperatorPreview } from "../previews/code/NetworkOperatorPreview";
+import networkOperatorSource from "../previews/examples/network-operator.example.tsx?raw";
+
+# NetworkOperator
+
+Network operator selector with operator image thumbnails (MTN, Vodafone, AirtelTigo, Glo), search filtering, and keyboard navigation. Wraps a Radix popover with a trigger that shows the selected operator's logo and name.
+
+## Example
+
+<ExampleTabs title="Variants" preview={<NetworkOperatorPreview />} code={networkOperatorSource} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Controlled selected operator value |
+| `defaultValue` | `string` | — | Initial value for uncontrolled mode |
+| `onChange` | `(value: string \| null) => void` | — | Selection handler |
+| `options` | `NetworkOperatorOption[]` | Default list (MTN, Vodafone, AirtelTigo, Glo) | Custom operator list |
+| `placeholder` | `string` | `"Select operator"` | Trigger placeholder |
+| `invalid` | `boolean` | `false` | Show error border styling |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `classNames` | `NetworkOperatorClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`, excluding `onChange`.
+
+## Usage with react-hook-form
+
+```tsx
+import { useForm } from "react-hook-form";
+import { Form, FormField, Field, FieldControl, FieldLabel, FieldError, NetworkOperator } from "@rfdtech/components";
+
+function OperatorForm() {
+  const form = useForm<{ operator: string }>({ defaultValues: { operator: "mtn" } });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((d) => console.log(d.operator))}>
+        <FormField
+          control={form.control}
+          name="operator"
+          rules={{ required: "Select an operator" }}
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Network operator</FieldLabel>
+              <FieldControl>
+                <NetworkOperator value={field.value} onChange={field.onChange} />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+## Types
+
+### `NetworkOperatorOption`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `value` | `string` | Unique operator value |
+| `label` | `string` | Display name |
+| `image` | `string` | Operator logo URL |
+
+### `NetworkOperatorProps`
+
+See the props table above.
+
+### `NetworkOperatorClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root wrapper (`.gsl-network-operator`) |
+| `trigger` | Trigger button (`.gsl-network-operator__trigger`) |
+| `menu` | Popover menu (`.gsl-network-operator__menu`) |
+| `option` | Option item (`.gsl-network-operator__option`) |
+| `image` | Operator image (`.gsl-network-operator__image`) |
+
+## Design tokens
+
+| Token | Used for |
+|-------|----------|
+| `--gsl-bg` | Popover and trigger background |
+| `--gsl-border` | Trigger and popover border |
+| `--gsl-primary` | Focus ring and hover border |
+| `--gsl-text` | Selected operator name |
+| `--gsl-text-muted` | Placeholder |
+| `--gsl-radius` | Trigger border radius |
+| `--gsl-radius-xl` | Popover menu border radius |
+| `--gsl-shadow-md` | Popover shadow |
+| `--gsl-z-popover` | Popover z-index |
+| `--gsl-hover` | Option hover background |
+| `--gsl-error` | Invalid state border |
+
+## Notes
+
+- Default operators: MTN, Vodafone, AirtelTigo, Glo — with logo image URLs.
+- Pass your own `options` array for a custom list.
+- Uncontrolled mode: use `defaultValue` to set the initial operator. Without it, no operator is pre-selected.
+- Search filters by operator name (case-insensitive).
+- Images render as rounded thumbnails. Falls back to the first letter of the label if no image is provided or if the image fails to load.

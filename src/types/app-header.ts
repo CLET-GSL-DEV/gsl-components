@@ -1,17 +1,15 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 
 // ── AppHeader ──
 
-export interface AppHeaderProps {
+export interface AppHeaderProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
-  /** Search trigger (AppHeaderSearch) */
-  search?: ReactNode;
-  /** App switcher trigger */
-  appSwitcher?: ReactNode;
-  /** Notifications button (AppHeaderNotifications) */
-  notifications?: ReactNode;
-  /** User profile (AppHeaderProfile) */
-  profile?: ReactNode;
+  children?: ReactNode;
+}
+
+export interface AppHeaderActionsProps {
+  className?: string;
+  children?: ReactNode;
 }
 
 // ── AppHeaderSearch ──
@@ -52,6 +50,8 @@ export interface AppHeaderNotificationsProps {
   children?: ReactNode;
   /** Show loading skeleton state */
   loading?: boolean;
+  /** Accessible label for the loading state */
+  loadingLabel?: string;
 }
 
 // ── AppHeaderProfile ──

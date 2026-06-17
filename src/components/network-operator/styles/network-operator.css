@@ -56,7 +56,7 @@
 }
 
 .gsl-network-operator__menu {
-  z-index: var(--gsl-z-popover);
+  z-index: var(--gsl-z-dropdown);
   width: 320px;
   padding: 8px;
   border: 1px solid var(--gsl-border);

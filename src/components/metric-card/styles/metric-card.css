@@ -15,13 +15,6 @@
 
 /* ── Variants — only affect trend colors ─────── */
 
-.gsl-metric-card--primary,
-.gsl-metric-card--success,
-.gsl-metric-card--warning,
-.gsl-metric-card--error {
-  /* no border, no bg tint — variants only influence trend */
-}
-
 /* ── Top row: icon + label ──────────────────────────────── */
 
 .gsl-metric-card__header {

@@ -18,6 +18,7 @@ export interface NetworkOperatorProps extends Omit<HTMLAttributes<HTMLDivElement
   invalid?: boolean;
   disabled?: boolean;
   value?: string;
+  defaultValue?: string;
   onChange?: (value: string | null) => void;
   placeholder?: string;
   options?: NetworkOperatorOption[];

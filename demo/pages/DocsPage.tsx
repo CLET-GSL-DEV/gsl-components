@@ -1,9 +1,19 @@
-import { Link, NavLink, useParams } from "react-router-dom";
+import { useCallback, useMemo, useState } from "react";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { DocsLayout } from "../components/DocsLayout";
 import { DocsSidebar } from "../components/DocsSidebar";
 import { mdxComponents } from "../docs/mdx-components";
-import { getDocPage } from "../docs/registry";
+import { getAllDocSlugs, getDocPage } from "../docs/registry";
 import { ThemeToggle } from "../components/ThemeToggle";
+import {
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from "@rfdtech/components";
+import { Search } from "lucide-react";
 
 export function DocsPage() {
   const { componentId = "getting-started" } = useParams<{
@@ -11,14 +21,68 @@ export function DocsPage() {
   }>();
   const page = getDocPage(componentId);
   const Content = page?.default;
+  const navigate = useNavigate();
+
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const docPages = useMemo(() => {
+    return getAllDocSlugs().map((slug) => {
+      const p = getDocPage(slug);
+      return {
+        slug,
+        title: p?.meta.title ?? slug,
+        description: p?.meta.description ?? "",
+      };
+    });
+  }, []);
+
+  const handleOpenChange = useCallback((open: boolean) => setSearchOpen(open), []);
 
   return (
-    <DocsLayout mainClassName="demo-docs" pageClassName="demo-docs-page">
+    <>
+      <CommandDialog open={searchOpen} onOpenChange={handleOpenChange} shortcut="mod+k">
+        <CommandInput placeholder="Search documentation..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Pages">
+            {docPages.map((doc) => (
+              <CommandItem
+                key={doc.slug}
+                value={`${doc.title} ${doc.slug}`}
+                onSelect={() => {
+                  navigate(`/docs/${doc.slug}`);
+                  setSearchOpen(false);
+                }}
+              >
+                <span style={{ fontWeight: 500 }}>{doc.title}</span>
+                {doc.description && (
+                  <span style={{ color: "var(--gsl-text-muted)", marginLeft: 8, fontSize: 12 }}>
+                    {doc.description}
+                  </span>
+                )}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
+
       <header className="demo-header">
         <Link to="/" className="demo-logo">
           GSL Components
         </Link>
         <nav className="demo-nav">
+          <button
+            type="button"
+            className="demo-nav-link demo-docs-search-btn"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search docs"
+          >
+            <Search size={14} strokeWidth={1.5} />
+            <span style={{ marginLeft: 6, color: "var(--gsl-text-muted)", fontSize: 12 }}>
+              Search docs...
+            </span>
+            <kbd className="gsl-app-header__search-kbd" style={{ marginLeft: 8 }}>⌘K</kbd>
+          </button>
           <NavLink
             to="/"
             end
@@ -44,30 +108,25 @@ export function DocsPage() {
         </nav>
       </header>
 
-      <div className="demo-docs__layout">
-        <aside className="demo-docs__sidebar">
-          <DocsSidebar />
-        </aside>
-
-        <article className="demo-docs__content">
-          {page && Content ? (
-            <>
-              <p className="demo-docs__eyebrow">@rfdtech/components</p>
+      <DocsLayout mainClassName="demo-docs" pageClassName="demo-docs-page">
+        <div className="demo-docs__layout">
+          <aside className="demo-docs__sidebar">
+            <DocsSidebar />
+          </aside>
+          <article className="demo-docs__content">
+            {Content ? (
               <Content components={mdxComponents} />
-            </>
-          ) : (
-            <div className="demo-docs__not-found">
-              <h1 className="demo-docs__title">Page not found</h1>
-              <p className="demo-docs__summary">
-                No documentation page exists for <code>{componentId}</code>.
-              </p>
-              <p>
-                <Link to="/docs/getting-started">Go to getting started</Link>
-              </p>
-            </div>
-          )}
-        </article>
-      </div>
-    </DocsLayout>
+            ) : (
+              <div className="demo-docs__404">
+                <h2>Page not found</h2>
+                <p>
+                  The page <code>{componentId}</code> does not exist.
+                </p>
+              </div>
+            )}
+          </article>
+        </div>
+      </DocsLayout>
+    </>
   );
 }

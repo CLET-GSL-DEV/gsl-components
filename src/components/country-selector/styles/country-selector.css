@@ -62,7 +62,7 @@
 }
 
 .gsl-country-selector__menu {
-  z-index: var(--gsl-z-popover);
+  z-index: var(--gsl-z-dropdown);
   min-width: 260px;
   max-height: 320px;
   border: 1px solid var(--gsl-border);

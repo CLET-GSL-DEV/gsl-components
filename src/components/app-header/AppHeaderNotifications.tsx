@@ -5,7 +5,7 @@ import * as Popover from "@radix-ui/react-popover";
 import { cn } from "../../utils/cn";
 
 export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNotificationsProps>(
-  function AppHeaderNotifications({ className, children, loading }, ref) {
+  function AppHeaderNotifications({ className, children, loading, loadingLabel = "Loading notifications..." }, ref) {
     return (
       <Popover.Root>
         <Popover.Trigger asChild>

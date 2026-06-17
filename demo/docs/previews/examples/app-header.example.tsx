@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   AppHeader,
+  AppHeaderActions,
   AppHeaderSearch,
   AppHeaderNotifications,
   AppHeaderProfile,
@@ -8,21 +9,21 @@ import {
 } from "@rfdtech/components";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
 
-const fakeUser = {
+const user = {
   name: "Kwame Asante",
   role: "Admin",
   initials: "KA",
   email: "kwame@gsl.edu.gh",
 };
 
-const fakeApps = [
+const apps = [
   { id: "dashboard", name: "Dashboard", icon: "📊" },
   { id: "members", name: "Members", icon: "👥" },
   { id: "settings", name: "Settings", icon: "⚙️" },
   { id: "billing", name: "Billing", icon: "💳" },
 ];
 
-const fakeNotifications = [
+const notifications = [
   { id: "1", text: "A new member joined the Ghana chapter.", time: "2m ago", unread: true },
   { id: "2", text: "Your monthly report is ready.", time: "1h ago", unread: true },
   { id: "3", text: "System maintenance scheduled for 2:00 AM.", time: "3h ago", unread: false },
@@ -37,14 +38,26 @@ export function AppHeaderExample() {
         {
           heading: "Members",
           items: [
-            { value: "kwame-asante", label: "Kwame Asante", onSelect: () => alert("Selected Kwame") },
-            { value: "abena-mensah", label: "Abena Mensah", onSelect: () => alert("Selected Abena") },
+            {
+              value: "kwame-asante",
+              label: "Kwame Asante",
+              onSelect: () => console.log("Selected member:", "Kwame Asante"),
+            },
+            {
+              value: "abena-mensah",
+              label: "Abena Mensah",
+              onSelect: () => console.log("Selected member:", "Abena Mensah"),
+            },
           ],
         },
         {
           heading: "Projects",
           items: [
-            { value: "gsl-platform", label: "GSL Platform", onSelect: () => alert("Selected project") },
+            {
+              value: "gsl-platform",
+              label: "GSL Platform",
+              onSelect: () => console.log("Selected project:", "GSL Platform"),
+            },
           ],
         },
       ]
@@ -52,19 +65,17 @@ export function AppHeaderExample() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <AppHeader
-        search={
-          <AppHeaderSearch
-            data={searchGroups}
-            onSearch={setSearch}
-            showEmpty
-            placeholder="Search members, projects…"
-          />
-        }
-        appSwitcher={<AppSwitcher apps={fakeApps} />}
-        notifications={
+      <AppHeader>
+        <AppHeaderSearch
+          data={searchGroups}
+          onSearch={setSearch}
+          showEmpty
+          placeholder="Search members, projects…"
+        />
+        <AppHeaderActions>
+          <AppSwitcher apps={apps} />
           <AppHeaderNotifications>
-            {fakeNotifications.map((n) => (
+            {notifications.map((n) => (
               <div key={n.id} className="gsl-notif-popover__item">
                 {n.unread && <div className="gsl-notif-popover__dot" />}
                 <div className="gsl-notif-popover__body">
@@ -74,9 +85,7 @@ export function AppHeaderExample() {
               </div>
             ))}
           </AppHeaderNotifications>
-        }
-        profile={
-          <AppHeaderProfile user={fakeUser} variant={profileVariant}>
+          <AppHeaderProfile user={user} variant={profileVariant}>
             <button
               type="button"
               className="gsl-profile-popover__action"
@@ -109,8 +118,8 @@ export function AppHeaderExample() {
               <span className="gsl-profile-popover__action-label">Sign out</span>
             </button>
           </AppHeaderProfile>
-        }
-      />
+        </AppHeaderActions>
+      </AppHeader>
       <div
         style={{
           height: 120,

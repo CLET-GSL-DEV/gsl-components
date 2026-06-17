@@ -43,6 +43,7 @@ import {
   SidebarLink,
   SidebarBadge,
   AppHeader,
+  AppHeaderActions,
   AppHeaderSearch,
   AppHeaderNotifications,
   AppHeaderProfile,
@@ -154,24 +155,28 @@ export function DemoLayout() {
   return (
     <SidebarProvider>
       <AppLayout>
-        <AppHeader
-          search={
-            <AppHeaderSearch
-              data={searchData ?? undefined}
-              onSearch={handleSearch}
-              showEmpty
-              placeholder="Search pages and members..."
-            />
-          }
-          appSwitcher={
+        <AppHeader>
+          <AppHeaderSearch
+            data={searchData ?? undefined}
+            onSearch={handleSearch}
+            showEmpty
+            placeholder="Search pages and members..."
+          />
+          <AppHeaderActions>
+            <button
+              type="button"
+              className="gsl-app-header__notif-btn"
+              aria-label="Documentation"
+              onClick={() => navigate("/docs")}
+            >
+              <BookOpen size={18} strokeWidth={1.5} aria-hidden />
+            </button>
             <AppSwitcher
               apps={appsData ?? []}
               loading={appsLoading}
               title="System directory"
               onAppSelect={(app) => console.log("Selected:", app.name)}
             />
-          }
-          notifications={
             <AppHeaderNotifications loading={notifLoading}>
               {notifData?.map((n: typeof notifData[number]) => (
                 <div key={n.id} className={`gsl-notif-popover__item${!n.unread ? " gsl-notif-popover__item--read" : ""}`}>
@@ -183,8 +188,6 @@ export function DemoLayout() {
                 </div>
               ))}
             </AppHeaderNotifications>
-          }
-          profile={
             <AppHeaderProfile
               variant="basic"
               user={{ name: "Kwame Asante", role: "Admin", initials: "KA", email: "kwame@gsl.edu.gh" }}
@@ -222,8 +225,8 @@ export function DemoLayout() {
                 <span className="gsl-profile-popover__action-label">Sign out</span>
               </button>
             </AppHeaderProfile>
-          }
-        />
+          </AppHeaderActions>
+        </AppHeader>
         <AppSidebar>
           <Sidebar>
             <SidebarHeader>

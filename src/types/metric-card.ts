@@ -1,12 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-export type MetricCardVariant =
-  | "default"
-  | "primary"
-  | "success"
-  | "warning"
-  | "error";
-
 export type MetricTrend = "up" | "down" | "neutral";
 
 export interface MetricCardClassNames {
@@ -31,14 +24,6 @@ export interface MetricCardProps extends HTMLAttributes<HTMLDivElement> {
   trend?: MetricTrend;
   /** Formatted trend text (e.g. "+12.5%") */
   trendValue?: string;
-  /** Card accent variant */
-  variant?: MetricCardVariant;
-  /**
-   * Custom accent color (any CSS color value).
-   * When set, the trend indicator uses this color instead of the
-   * built-in variant colors, and adapts automatically for dark mode.
-   */
-  color?: string;
   classNames?: MetricCardClassNames;
   className?: string;
 }

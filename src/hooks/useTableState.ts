@@ -31,9 +31,7 @@ export interface UseTableStateReturn<
   setFilters: (filters: Partial<TFilters>) => void;
   setFilter: <K extends keyof TFilters>(key: K, value: TFilters[K]) => void;
   sort: { column: string; direction: "asc" | "desc" } | null;
-  setSort: (
-    sort: { column: string; direction: "asc" | "desc" } | null,
-  ) => void;
+  setSort: (sort: { column: string; direction: "asc" | "desc" } | null) => void;
   resetAll: () => void;
 }
 
@@ -98,9 +96,7 @@ function writeFilters(
 
 /* ── Hook ── */
 
-export function useTableState<
-  TFilters extends TableFilters = TableFilters,
->(
+export function useTableState<TFilters extends TableFilters = TableFilters>(
   options: UseTableStateOptions<TFilters> = {},
 ): UseTableStateReturn<TFilters> {
   const {
@@ -232,9 +228,7 @@ export function useTableState<
   );
 
   const setSort = useCallback(
-    (
-      nextSort: { column: string; direction: "asc" | "desc" } | null,
-    ) => {
+    (nextSort: { column: string; direction: "asc" | "desc" } | null) => {
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);

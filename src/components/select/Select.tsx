@@ -13,6 +13,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       options,
       placeholder = "Select...",
       className,
+      classNames,
       disabled = false,
       invalid = false,
     },
@@ -29,6 +30,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
           className={cn(
             "gsl-select__trigger",
             invalid && "gsl-select__trigger--invalid",
+            classNames?.trigger,
             className,
           )}
           aria-invalid={invalid || undefined}
@@ -41,7 +43,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
-            className="gsl-select__content"
+            className={cn("gsl-select__content", classNames?.content)}
             position="popper"
             sideOffset={4}
           >
@@ -53,6 +55,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                   className={cn(
                     "gsl-select__item",
                     value === opt.value && "gsl-select__item--selected",
+                    classNames?.item,
                   )}
                 >
                   <SelectPrimitive.ItemText>

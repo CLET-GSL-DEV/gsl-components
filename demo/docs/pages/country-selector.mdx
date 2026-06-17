@@ -1,0 +1,103 @@
+export const meta = {
+  title: "CountrySelector",
+  description: "Country selector with flag emoji, search filtering, and invalid/disabled states.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { CountrySelectorPreview } from "../previews/code/CountrySelectorPreview";
+import countrySelectorSource from "../previews/examples/country-selector.example.tsx?raw";
+
+# CountrySelector
+
+Country selector dropdown with flag emoji, country name, search filtering, and keyboard navigation. Wraps a Radix popover with a trigger that shows the selected flag and country name.
+
+## Example
+
+<ExampleTabs title="Variants" preview={<CountrySelectorPreview />} code={countrySelectorSource} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `"GH"` | Selected country ISO code |
+| `defaultValue` | `string` | `"GH"` | Default value (uncontrolled) |
+| `onChange` | `(code: string) => void` | — | Selection handler |
+| `placeholder` | `string` | `"Select country"` | Placeholder text |
+| `invalid` | `boolean` | `false` | Show error border styling |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `classNames` | `CountrySelectorClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`, excluding `onChange`.
+
+## Usage with react-hook-form
+
+```tsx
+import { useForm } from "react-hook-form";
+import { Form, FormField, Field, FieldControl, FieldLabel, FieldError, CountrySelector } from "@rfdtech/components";
+
+function AddressForm() {
+  const form = useForm<{ country: string }>({ defaultValues: { country: "GH" } });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((d) => console.log(d.country))}>
+        <FormField
+          control={form.control}
+          name="country"
+          rules={{ required: "Country is required" }}
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Country</FieldLabel>
+              <FieldControl>
+                <CountrySelector value={field.value} onChange={field.onChange} />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+## Types
+
+### `CountrySelectorProps`
+
+Inherits from `HTMLAttributes<HTMLDivElement>` (omitting `onChange`). See the props table above.
+
+### `CountrySelectorClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root wrapper (`.gsl-country-selector`) |
+| `trigger` | Trigger button (`.gsl-country-selector__trigger`) |
+| `flag` | Flag emoji (`.gsl-country-selector__flag`) |
+| `name` | Country name (`.gsl-country-selector__name`) |
+| `menu` | Popover menu (`.gsl-country-selector__menu`) |
+| `option` | Option item (`.gsl-country-selector__option`) |
+| `search` | Search input (`.gsl-country-selector__search`) |
+
+## Design tokens
+
+| Token | Used for |
+|-------|----------|
+| `--gsl-bg` | Popover and trigger background |
+| `--gsl-border` | Trigger and popover border |
+| `--gsl-primary` | Focus ring and hover border |
+| `--gsl-text` | Selected country name |
+| `--gsl-text-muted` | Placeholder |
+| `--gsl-radius` | Trigger border radius |
+| `--gsl-radius-xl` | Popover menu border radius |
+| `--gsl-shadow-md` | Popover shadow |
+| `--gsl-z-popover` | Popover z-index |
+| `--gsl-hover` | Option hover background |
+| `--gsl-error` | Invalid state border |
+
+## Notes
+
+- Countries are from the `countries` utility sorted alphabetically by name.
+- Search filters by country name (case-insensitive). Type in the popover input to narrow options.
+- Uses flag emoji — no external flag assets required.

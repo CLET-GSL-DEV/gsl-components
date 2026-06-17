@@ -281,6 +281,14 @@ export function useBulkImportFlow(
     setStep((current) => Math.max(1, current - 1) as BulkImportStep);
   }, []);
 
+  const goToStep = useCallback((target: BulkImportStep) => {
+    setStep((current) => {
+      // Only allow going to completed steps or current step
+      if (target < current) return target;
+      return current;
+    });
+  }, []);
+
   const buildResult = useCallback((): BulkImportResult => {
     return {
       rows: activeRows,
@@ -320,6 +328,7 @@ export function useBulkImportFlow(
     handleFile,
     goNext,
     goBack,
+    goToStep,
     reset,
     buildResult,
   };

@@ -1,22 +1,14 @@
 .gsl-app-header {
-  --gsl-header-py: var(--gsl-app-layout-body-gap);
-  --gsl-header-px: var(--gsl-app-layout-body-gap);
+  --gsl-header-py: var(--gsl-app-layout-body-gap, 1rem);
+  --gsl-header-px: var(--gsl-app-layout-body-gap, 1rem);
 
   display: flex;
   align-items: center;
+  width: 100%;
   padding: var(--gsl-header-py) var(--gsl-header-px);
   border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
   background: var(--gsl-panel-bg, var(--gsl-surface-subtle));
   font-family: var(--gsl-font);
-}
-
-/* ── Actions container ── */
-
-.gsl-app-header__actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
 }
 
 /* ── Right side group ── */
@@ -25,6 +17,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  margin-left: auto;
 }
 
 /* ── Search trigger ── */
@@ -123,8 +116,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  border-radius: var(--gsl-radius-2xl);
+  padding: 8px;
+  border-radius: 999px;
   cursor: pointer;
   min-width: max-content;
 }

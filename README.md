@@ -94,21 +94,24 @@ Exports: `useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`,
 
 ## AppHeader
 
-Composable header bar with slot-based sub-components for search, app switching, notifications, and user profile. Drop `AppHeader` into your layout and compose the right side with `AppHeaderSearch`, `AppHeaderNotifications`, `AppHeaderProfile`, and `AppSwitcher`.
+Compound header bar with `AppHeader`, `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderNotifications`, and `AppHeaderProfile`. Nest search on the left and group switcher, notifications, and profile inside `AppHeaderActions` on the right.
 
 See the [AppHeader](/docs/app-header) docs page for props and exported types.
 
 ```tsx
 import {
   AppHeader,
+  AppHeaderActions,
   AppHeaderSearch,
   AppHeaderNotifications,
   AppHeaderProfile,
+  AppSwitcher,
 } from "@rfdtech/components";
 
-<AppHeader
-  search={<AppHeaderSearch onSearch={setQuery} data={results} />}
-  notifications={
+<AppHeader>
+  <AppHeaderSearch onSearch={setQuery} data={results} />
+  <AppHeaderActions>
+    <AppSwitcher apps={apps} />
     <AppHeaderNotifications loading={loading}>
       {notifications.map((n) => (
         <div key={n.id} className="gsl-notif-popover__item">
@@ -117,16 +120,36 @@ import {
         </div>
       ))}
     </AppHeaderNotifications>
-  }
-  profile={
     <AppHeaderProfile user={{ name: "Kwame", role: "Admin", initials: "KA" }} variant="basic">
       <button className="gsl-profile-popover__action">Settings</button>
     </AppHeaderProfile>
-  }
-/>
+  </AppHeaderActions>
+</AppHeader>
 ```
 
-Props: `search`, `appSwitcher`, `notifications`, `profile`, `className`. Exported types: `AppHeaderProps`, `AppHeaderSearchProps`, `AppHeaderSearchDataGroup`, `AppHeaderSearchItem`, `AppHeaderNotificationsProps`, `AppHeaderProfileProps`, `AppUser`.
+Props: `AppHeader` — `className`, `children`. `AppHeaderActions` — `className`, `children`. Exported types: `AppHeaderProps`, `AppHeaderActionsProps`, `AppHeaderSearchProps`, `AppHeaderSearchDataGroup`, `AppHeaderSearchItem`, `AppHeaderNotificationsProps`, `AppHeaderProfileProps`, `AppUser`.
+
+
+## AppLayout
+
+Application layout container that auto-positions `AppHeader`, `AppSidebar`, and `AppBody` by component type. Sidebar on the left, header sticky at the top, main content filling the rest. See the [AppLayout](/docs/app-layout) docs page for props and exported types.
+
+```tsx
+import { AppLayout, AppSidebar, AppBody } from "@rfdtech/components";
+
+<AppLayout>
+  <AppHeader>
+    <AppHeaderActions>
+      <AppSwitcher apps={apps} />
+    </AppHeaderActions>
+  </AppHeader>
+  <AppSidebar>{/* sidebar */}</AppSidebar>
+  <AppBody>{/* page */}</AppBody>
+</AppLayout>
+```
+
+Props: `AppLayout` — `children`, `className`. `AppSidebar` — `children`, `className`. `AppBody` — `children`, `className`. Exported types: `AppLayoutProps`, `AppSidebarProps`, `AppBodyProps`.
+
 
 ## AppSwitcher
 
@@ -643,6 +666,27 @@ import { Draggable, DraggableHandle } from "@rfdtech/components";
 Exports: `Draggable`, `DraggableHandle`, `useDraggable`, `clampPosition`. Types: `DraggableProps`, `DraggableHandleProps`, `DraggablePosition`, `DraggableBounds`, `DraggableAxis`, `UseDraggableOptions`, `UseDraggableReturn`.
 
 
+## MetricCard
+
+Compact dashboard card for displaying a metric value, label, trend indicator, and optional icon or description. Variants (`default`, `primary`, `success`, `warning`, `error`) only affect the trend color — background and text stay neutral. Use the `color` prop for custom accent colors.
+
+See the [MetricCard](/docs/metric-card) docs page for props and exported types.
+
+```tsx
+import { MetricCard } from "@rfdtech/components";
+
+<MetricCard
+  label="Revenue"
+  value="$128.4k"
+  trend="up"
+  trendValue="+12.5%"
+  description="Total revenue this quarter"
+/>
+```
+
+Props: `label`, `value`, `icon`, `description`, `trend`, `trendValue`, `variant`, `color`, `classNames`, `className`, plus standard `div` attributes. Exported types: `MetricCardProps`, `MetricCardClassNames`, `MetricCardVariant`, `MetricTrend`.
+
+
 ## Modal
 
 Compound modal primitives for near full-viewport overlays with header, body, and footer slots. See the [Modal](/docs/modal) docs page for props and exported types.
@@ -917,6 +961,27 @@ toast({
 ```
 
 Exports: `ToastProvider`, `Toaster`, `useToast`. Types: `ToastOptions`, `ToastVariant`, `ToastProviderProps`, `ToasterProps`, `UseToastReturn`, `ToastClassNames`, `ToastAction`, `ToastReturn`.
+
+
+## UploadField
+
+File upload with drag-and-drop zone, file type icons (PDF, image, video, generic), size formatting, and controlled/uncontrolled value. Supports single and multiple files, accept filters, max size validation, and invalid/disabled states.
+
+See the [UploadField](/docs/upload-field) docs page for props and exported types.
+
+```tsx
+import { UploadField } from "@rfdtech/components";
+
+<UploadField
+  accept="image/*"
+  multiple
+  maxSize={5 * 1024 * 1024}
+  onChange={(file) => console.log(file)}
+  placeholder="Drop images here"
+/>
+```
+
+Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `placeholder`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
 
 
 ## Development
