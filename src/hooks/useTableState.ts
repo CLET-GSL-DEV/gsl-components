@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useTablePagination } from "./useTablePagination";
 
 /* ── Types ── */
 
@@ -9,44 +8,32 @@ export type TableFilters = Record<string, string | null | undefined>;
 export interface UseTableStateOptions<
   TFilters extends TableFilters = TableFilters,
 > {
-  /** Initial page (default 1) */
   defaultPage?: number;
-  /** Initial page size (default 20) */
   defaultPageSize?: number;
-  /** Initial search term */
+  pageSizeOptions?: number[];
   defaultSearch?: string;
-  /** Initial filter values */
   defaultFilters?: Partial<TFilters>;
-  /** Initial sort state */
   defaultSort?: { column: string; direction: "asc" | "desc" } | null;
-  /**
-   * Prefix for URL param keys. Use when multiple tables share the same page.
-   * Example: `"members"` → `?members.page=1&members.search=...`
-   */
   paramPrefix?: string;
 }
 
 export interface UseTableStateReturn<
   TFilters extends TableFilters = TableFilters,
 > {
-  /* Pagination */
   page: number;
   pageSize: number;
+  pageSizeOptions: number[];
   setPage: (page: number) => void;
   setPageSize: (pageSize: number) => void;
-  /* Search */
   search: string;
   setSearch: (search: string) => void;
-  /* Filters */
   filters: Partial<TFilters>;
   setFilters: (filters: Partial<TFilters>) => void;
   setFilter: <K extends keyof TFilters>(key: K, value: TFilters[K]) => void;
-  /* Sort */
   sort: { column: string; direction: "asc" | "desc" } | null;
   setSort: (
     sort: { column: string; direction: "asc" | "desc" } | null,
   ) => void;
-  /* Reset */
   resetAll: () => void;
 }
 
@@ -60,7 +47,16 @@ function paramKey(prefix: string | undefined, key: string): string {
   return prefix ? `${prefix}.${key}` : key;
 }
 
-/* ── URL helpers ── */
+function readInt(
+  params: URLSearchParams,
+  key: string,
+  fallback: number,
+): number {
+  const raw = params.get(key);
+  if (raw == null) return fallback;
+  const n = parseInt(raw, 10);
+  return Number.isNaN(n) ? fallback : n;
+}
 
 function readFilters(
   params: URLSearchParams,
@@ -88,15 +84,11 @@ function writeFilters(
   filters: Record<string, string | null | undefined>,
 ) {
   const filterPrefix = paramKey(prefix, FILTER_PREFIX);
-
-  // Remove existing filter params
   for (const key of [...params.keys()]) {
     if (key.startsWith(filterPrefix)) {
       params.delete(key);
     }
   }
-
-  // Set new filter values (skip null/undefined/empty)
   for (const [key, value] of Object.entries(filters)) {
     if (value != null && value !== "") {
       params.set(`${filterPrefix}${key}`, value);
@@ -113,23 +105,25 @@ export function useTableState<
 ): UseTableStateReturn<TFilters> {
   const {
     defaultPage = 1,
-    defaultPageSize = 20,
+    defaultPageSize = 10,
+    pageSizeOptions = [10, 20, 50, 100],
     defaultSearch = "",
     defaultFilters,
     defaultSort = null,
     paramPrefix,
   } = options;
 
+  const pageKey = paramKey(paramPrefix, "page");
+  const sizeKey = paramKey(paramPrefix, "pageSize");
   const searchKey = paramKey(paramPrefix, "search");
   const sortKey = paramKey(paramPrefix, "sort");
   const dirKey = paramKey(paramPrefix, "direction");
 
-  // Compose pagination from the shared hook
-  const { page, pageSize, setPage, setPageSize, reset: resetPagination } =
-    useTablePagination({ defaultPage, defaultPageSize, paramPrefix });
-
+  // SINGLE useSearchParams call — all state derived from it
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const page = readInt(searchParams, pageKey, defaultPage);
+  const pageSize = readInt(searchParams, sizeKey, defaultPageSize);
   const search = searchParams.get(searchKey) ?? defaultSearch;
 
   const filters = readFilters(
@@ -147,6 +141,35 @@ export function useTableState<
 
   /* ── Setters ── */
 
+  const setPage = useCallback(
+    (p: number) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set(pageKey, String(p));
+          return next;
+        },
+        { replace: false },
+      );
+    },
+    [setSearchParams, pageKey],
+  );
+
+  const setPageSize = useCallback(
+    (ps: number) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set(sizeKey, String(ps));
+          next.set(pageKey, String(defaultPage));
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams, sizeKey, pageKey, defaultPage],
+  );
+
   const setSearch = useCallback(
     (value: string) => {
       setSearchParams(
@@ -157,14 +180,13 @@ export function useTableState<
           } else {
             next.delete(searchKey);
           }
-          // Reset to first page on search
-          next.set(paramKey(paramPrefix, "page"), String(defaultPage));
+          next.set(pageKey, String(defaultPage));
           return next;
         },
         { replace: true },
       );
     },
-    [setSearchParams, searchKey, paramPrefix, defaultPage],
+    [setSearchParams, searchKey, pageKey, defaultPage],
   );
 
   const setFilters = useCallback(
@@ -177,13 +199,13 @@ export function useTableState<
             paramPrefix,
             nextFilters as Record<string, string | null | undefined>,
           );
-          next.set(paramKey(paramPrefix, "page"), String(defaultPage));
+          next.set(pageKey, String(defaultPage));
           return next;
         },
         { replace: true },
       );
     },
-    [setSearchParams, paramPrefix, defaultPage],
+    [setSearchParams, paramPrefix, pageKey, defaultPage],
   );
 
   const setFilter = useCallback(
@@ -200,13 +222,13 @@ export function useTableState<
             next.delete(fullKey);
           }
 
-          next.set(paramKey(paramPrefix, "page"), String(defaultPage));
+          next.set(pageKey, String(defaultPage));
           return next;
         },
         { replace: true },
       );
     },
-    [setSearchParams, paramPrefix, defaultPage],
+    [setSearchParams, paramPrefix, pageKey, defaultPage],
   );
 
   const setSort = useCallback(
@@ -250,6 +272,7 @@ export function useTableState<
     () => ({
       page,
       pageSize,
+      pageSizeOptions,
       setPage,
       setPageSize,
       search,
@@ -264,6 +287,7 @@ export function useTableState<
     [
       page,
       pageSize,
+      pageSizeOptions,
       setPage,
       setPageSize,
       search,

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 import { Table, TableContent, TableFooter } from "./Table";
 import { TableHeader, TableSearch, TableFilter } from "./TableHeader";
 import { TablePagination } from "./TablePagination";
@@ -41,13 +42,15 @@ describe("Table", () => {
     const onReset = vi.fn();
 
     render(
-      <Table>
-        <TableHeader>
-          <TableFilter onApply={onApply} onReset={onReset}>
-            <div>Filter form</div>
-          </TableFilter>
-        </TableHeader>
-      </Table>,
+      <MemoryRouter>
+        <Table>
+          <TableHeader>
+            <TableFilter onApply={onApply} onReset={onReset}>
+              <div>Filter form</div>
+            </TableFilter>
+          </TableHeader>
+        </Table>
+      </MemoryRouter>,
     );
 
     await user.click(screen.getByLabelText("Filter"));
@@ -137,5 +140,41 @@ describe("Table", () => {
       <Table className="custom">Content</Table>,
     );
     expect(container.firstChild).toHaveClass("custom");
+  });
+
+  it("renders skeleton rows when loading", () => {
+    const { container } = render(
+      <Table>
+        <TableContent
+          loading
+          loadingRows={3}
+          columns={[
+            { id: "name", header: "Name" },
+            { id: "email", header: "Email" },
+          ]}
+          data={[]}
+          rowKey={(row: { id: number }) => row.id}
+        />
+      </Table>,
+    );
+
+    // Header labels still render
+    expect(screen.getByText("Name")).toBeInTheDocument();
+    expect(screen.getByText("Email")).toBeInTheDocument();
+    // Skeleton cells render (3 rows × 2 columns = 6 skeleton td)
+    const skeletons = container.querySelectorAll(".gsl-table__skeleton--td");
+    expect(skeletons.length).toBe(6);
+    // No empty state text
+    expect(screen.queryByText("No data")).not.toBeInTheDocument();
+  });
+
+  it("loading takes priority over no data", () => {
+    render(
+      <Table>
+        <TableContent loading columns={[]} data={[]} />
+      </Table>,
+    );
+
+    expect(screen.queryByText("No data")).not.toBeInTheDocument();
   });
 });

@@ -1,0 +1,192 @@
+.gsl-phone-number-input {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 40px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-phone-number-input {
+    transition: none;
+  }
+}
+
+.gsl-phone-number-input:focus-within {
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 1px var(--gsl-primary);
+}
+
+.gsl-phone-number-input--invalid {
+  border-color: var(--gsl-error);
+}
+
+.gsl-phone-number-input--invalid:focus-within {
+  border-color: var(--gsl-error);
+  box-shadow: 0 0 0 1px var(--gsl-error);
+}
+
+.gsl-phone-number-input--disabled {
+  background: var(--gsl-hover);
+  color: var(--gsl-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.gsl-phone-number-input--disabled .gsl-phone-number-input__input {
+  cursor: not-allowed;
+}
+
+.gsl-phone-number-input__prefix {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0 8px 0 12px;
+  border: none;
+  border-right: 1px solid var(--gsl-border);
+  background: transparent;
+  color: var(--gsl-text);
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  outline: none;
+}
+
+.gsl-phone-number-input--disabled .gsl-phone-number-input__prefix {
+  cursor: not-allowed;
+}
+
+.gsl-phone-number-input__prefix:hover:not(:disabled) {
+  background: var(--gsl-hover);
+}
+
+.gsl-phone-number-input__flag {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.gsl-phone-number-input__dial {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.gsl-phone-number-input__chevron {
+  color: var(--gsl-text-secondary);
+  transition: transform 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-phone-number-input__chevron {
+    transition: none;
+  }
+}
+
+.gsl-phone-number-input__chevron--open {
+  transform: rotate(180deg);
+}
+
+.gsl-phone-number-input__input {
+  flex: 1;
+  height: 100%;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--gsl-text);
+  font-size: 14px;
+  font-family: var(--gsl-font);
+  outline: none;
+  min-width: 0;
+}
+
+.gsl-phone-number-input__input::placeholder {
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-phone-number-input__dropdown {
+  z-index: var(--gsl-z-select, 50);
+  width: 320px;
+  max-height: 300px;
+  border-radius: var(--gsl-radius);
+  border: 1px solid var(--gsl-border);
+  background: var(--gsl-bg);
+  box-shadow: var(--gsl-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.gsl-phone-number-input__search {
+  padding: 8px;
+  border-bottom: 1px solid var(--gsl-border);
+}
+
+.gsl-phone-number-input__search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-bg);
+  color: var(--gsl-text);
+  font-size: 14px;
+  font-family: var(--gsl-font);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.gsl-phone-number-input__search-input:focus {
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 1px var(--gsl-primary);
+}
+
+.gsl-phone-number-input__list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.gsl-phone-number-input__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--gsl-text);
+  font-size: 14px;
+  font-family: var(--gsl-font);
+  cursor: pointer;
+  text-align: left;
+}
+
+.gsl-phone-number-input__option:hover {
+  background: var(--gsl-hover);
+}
+
+.gsl-phone-number-input__option--selected {
+  background: var(--gsl-primary-light);
+}
+
+.gsl-phone-number-input__option-flag {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.gsl-phone-number-input__option-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gsl-phone-number-input__option-dial {
+  color: var(--gsl-text-secondary);
+  flex-shrink: 0;
+}

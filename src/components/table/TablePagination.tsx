@@ -68,7 +68,7 @@ export const TablePagination = forwardRef<
     totalPages,
     onPageChange,
     totalItems,
-    pageSize = 20,
+    pageSize = 10,
     pageSizeOptions = [10, 20, 50, 100],
     onPageSizeChange,
     visiblePages = 10,

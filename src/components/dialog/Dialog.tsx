@@ -2,8 +2,11 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { forwardRef } from "react";
 import type {
+  DialogBodyProps,
   DialogContentProps,
   DialogDescriptionProps,
+  DialogFooterProps,
+  DialogHeaderProps,
   DialogOverlayProps,
   DialogTitleProps,
 } from "../../types/dialog";
@@ -87,3 +90,45 @@ export const DialogDescription = forwardRef<
     />
   );
 });
+
+export const DialogHeader = forwardRef<HTMLDivElement, DialogHeaderProps>(
+  function DialogHeader({ className, classNames, children, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        className={cn("gsl-dialog__header", classNames?.header, className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+export const DialogBody = forwardRef<HTMLDivElement, DialogBodyProps>(
+  function DialogBody({ className, classNames, children, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        className={cn("gsl-dialog__body", classNames?.body, className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+export const DialogFooter = forwardRef<HTMLDivElement, DialogFooterProps>(
+  function DialogFooter({ className, classNames, children, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        className={cn("gsl-dialog__footer", classNames?.footer, className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);

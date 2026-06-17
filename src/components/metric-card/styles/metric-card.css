@@ -1,0 +1,119 @@
+.gsl-metric-card {
+  --gsl-default-metric-card-bg: var(--gsl-page-bg);
+  --gsl-metric-card-radius: var(--gsl-radius-xl);
+  --gsl-metric-card-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px;
+  border: none;
+  border-radius: var(--gsl-metric-card-radius);
+  background: var(--gsl-default-metric-card-bg);
+  font-family: var(--gsl-font);
+  box-shadow: var(--gsl-metric-card-shadow);
+}
+
+/* ── Variants — only affect trend colors ─────── */
+
+.gsl-metric-card--primary,
+.gsl-metric-card--success,
+.gsl-metric-card--warning,
+.gsl-metric-card--error {
+  /* no border, no bg tint — variants only influence trend */
+}
+
+/* ── Top row: icon + label ──────────────────────────────── */
+
+.gsl-metric-card__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.gsl-metric-card__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--gsl-text-muted);
+}
+
+/* Icon always muted — no variant coloring */
+
+.gsl-metric-card__label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--gsl-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Value row ──────────────────────────────────────────── */
+
+.gsl-metric-card__value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.gsl-metric-card__value {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--gsl-text);
+  letter-spacing: -0.02em;
+}
+
+/* Value always default text color — no variant coloring */
+
+/* ── Trend ──────────────────────────────────────────────── */
+
+.gsl-metric-card__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.gsl-metric-card__trend--up {
+  color: var(--gsl-success);
+}
+
+.gsl-metric-card__trend--down {
+  color: var(--gsl-error);
+}
+
+.gsl-metric-card__trend--neutral {
+  color: var(--gsl-text-muted);
+}
+
+/* ── Description ────────────────────────────────────────── */
+
+.gsl-metric-card__description {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--gsl-text-muted);
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .gsl-metric-card {
+    padding: 16px;
+  }
+
+  .gsl-metric-card__value {
+    font-size: 24px;
+  }
+}

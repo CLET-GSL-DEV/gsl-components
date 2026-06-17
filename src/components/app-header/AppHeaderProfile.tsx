@@ -7,8 +7,10 @@ import { ChevronDown } from "lucide-react";
 export const AppHeaderProfile = forwardRef<
   HTMLDivElement,
   AppHeaderProfileProps
->(function AppHeaderProfile({ user, children, className }, ref) {
-  const letter = (user.initials ?? user.name).trim().charAt(0).toUpperCase() || "?";
+>(function AppHeaderProfile({ user, children, className, variant = "full" }, ref) {
+  const initials = (user.initials ?? user.name).trim().toUpperCase() || "?";
+  const isBasic = variant === "basic";
+
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
@@ -34,27 +36,48 @@ export const AppHeaderProfile = forwardRef<
 
       <Popover.Portal>
         <Popover.Content
-          className="gsl-profile-popover"
-          side="bottom"
+          className={cn("gsl-profile-popover", isBasic && "gsl-profile-popover--basic")}
+          side="top"
           align="end"
-          sideOffset={8}
+          sideOffset={0}
           role="menu"
         >
-          <div className="gsl-profile-popover__header">
-            <div className="gsl-profile-popover__avatar">
-              {user.avatar ? (
-                <img src={user.avatar} alt="" className="gsl-profile-popover__avatar-img" />
-              ) : (
-                <span className="gsl-profile-popover__avatar-letter">{letter}</span>
+          {isBasic ? (
+            <>
+              <div className="gsl-profile-popover__header">
+                <div className="gsl-profile-popover__avatar">
+                  {user.avatar ? (
+                    <img src={user.avatar} alt="" className="gsl-profile-popover__avatar-img" />
+                  ) : (
+                    <span className="gsl-profile-popover__avatar-letter">{initials}</span>
+                  )}
+                </div>
+                <div className="gsl-profile-popover__header-info">
+                  <span className="gsl-profile-popover__name">{user.name}</span>
+                  <span className="gsl-profile-popover__role">{user.role}</span>
+                </div>
+              </div>
+              {children}
+            </>
+          ) : (
+            <>
+              <div className="gsl-profile-popover__header">
+                <div className="gsl-profile-popover__avatar">
+                  {user.avatar ? (
+                    <img src={user.avatar} alt="" className="gsl-profile-popover__avatar-img" />
+                  ) : (
+                    <span className="gsl-profile-popover__avatar-letter">{initials}</span>
+                  )}
+                </div>
+                <span className="gsl-profile-popover__name">{user.name}</span>
+                {user.email && (
+                  <span className="gsl-profile-popover__email">{user.email}</span>
+                )}
+              </div>
+              {children && (
+                <div className="gsl-profile-popover__actions">{children}</div>
               )}
-            </div>
-            <span className="gsl-profile-popover__name">{user.name}</span>
-            {user.email && (
-              <span className="gsl-profile-popover__email">{user.email}</span>
-            )}
-          </div>
-          {children && (
-            <div className="gsl-profile-popover__actions">{children}</div>
+            </>
           )}
         </Popover.Content>
       </Popover.Portal>

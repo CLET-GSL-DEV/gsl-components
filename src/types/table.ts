@@ -51,6 +51,10 @@ export interface TableContentProps<T = unknown>
   columns?: TableColumn<T>[];
   data?: T[];
   rowKey?: (row: T) => string | number;
+  /** Show skeleton loading rows instead of data (default false) */
+  loading?: boolean;
+  /** Number of skeleton rows to show while loading (default 5) */
+  loadingRows?: number;
 }
 
 export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {
@@ -73,6 +77,11 @@ export interface TableFilterProps {
   applyLabel?: string;
   resetLabel?: string;
   className?: string;
+  /**
+   * When set, filter fields are written to URL as `f_{name}={value}`.
+   * Use the same prefix as useTableState for automatic sync.
+   */
+  paramPrefix?: string;
 }
 
 export interface PaginationControlsProps {

@@ -6,11 +6,11 @@ import { useSearchParams } from "react-router-dom";
 export interface UseTablePaginationOptions {
   /** Initial page (default 1) */
   defaultPage?: number;
-  /** Initial page size (default 20) */
+  /** Initial page size (default 10) */
   defaultPageSize?: number;
   /**
    * Prefix for URL param keys. Use when multiple tables share the same page.
-   * Example: `"members"` → `?members.page=1&members.pageSize=20`
+   * Example: `"members"` → `?members.page=1&members.pageSize=10`
    */
   paramPrefix?: string;
 }
@@ -45,7 +45,7 @@ function readInt(
 export function useTablePagination(
   options: UseTablePaginationOptions = {},
 ): UseTablePaginationReturn {
-  const { defaultPage = 1, defaultPageSize = 20, paramPrefix } = options;
+  const { defaultPage = 1, defaultPageSize = 10, paramPrefix } = options;
   const pageKey = paramKey(paramPrefix, "page");
   const sizeKey = paramKey(paramPrefix, "pageSize");
 

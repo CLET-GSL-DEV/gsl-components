@@ -68,6 +68,8 @@ interface TableContentInnerProps<T = unknown> {
   columns?: TableColumn<T>[];
   data?: T[];
   rowKey?: (row: T) => string | number;
+  loading?: boolean;
+  loadingRows?: number;
 }
 
 function TableContentRender<T>(
@@ -80,6 +82,8 @@ function TableContentRender<T>(
     columns: rawColumns,
     data: rawData,
     rowKey,
+    loading = false,
+    loadingRows = 5,
     ...rest
   } = props;
   const [sort, setSort] = useState<{
@@ -103,7 +107,44 @@ function TableContentRender<T>(
 
   return (
     <div ref={ref} className={cn("gsl-table__content", className)} {...rest}>
-      {hasData ? (
+      {loading ? (
+        <table>
+          <thead>
+            <tr>
+              {columns.length > 0
+                ? columns.map((col) => (
+                    <th key={col.id} style={colStyle(col)}>
+                      <span className="gsl-table__th-label">
+                        {col.header}
+                      </span>
+                    </th>
+                  ))
+                : Array.from({ length: loadingRows }, (_, i) => (
+                    <th key={i}>
+                      <span className="gsl-table__skeleton gsl-table__skeleton--th" />
+                    </th>
+                  ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: loadingRows }, (_, rowIdx) => (
+              <tr key={rowIdx}>
+                {columns.length > 0
+                  ? columns.map((col) => (
+                      <td key={col.id} style={colStyle(col)}>
+                        <span className="gsl-table__skeleton gsl-table__skeleton--td" />
+                      </td>
+                    ))
+                  : Array.from({ length: loadingRows }, (_, cellIdx) => (
+                      <td key={cellIdx}>
+                        <span className="gsl-table__skeleton gsl-table__skeleton--td" />
+                      </td>
+                    ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : hasData ? (
         <table>
           <thead>
             <tr>

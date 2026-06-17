@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export function useMockQuery<T>(data: T, delayMs = 1000): { data: T | null; loading: boolean } {
+export function useMockQuery<T>(data: T, delayMs = 1000, key?: string | number): { data: T | null; loading: boolean } {
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<T | null>(null);
   const dataRef = useRef(data);
@@ -19,7 +19,7 @@ export function useMockQuery<T>(data: T, delayMs = 1000): { data: T | null; load
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [delayMs]);
+  }, [delayMs, key]);
 
   return { data: result, loading };
 }

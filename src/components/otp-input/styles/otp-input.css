@@ -1,0 +1,22 @@
+.gsl-otp-input {
+  display: flex;
+  gap: 8px;
+}
+
+.gsl-otp-input__slot {
+  width: 40px;
+  height: 40px;
+  padding: 0 0;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.gsl-otp-input__slot::-webkit-outer-spin-button,
+.gsl-otp-input__slot::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.gsl-otp-input--disabled {
+  opacity: 0.6;
+}

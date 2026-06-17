@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from "react";
 import type * as DialogPrimitive from "@radix-ui/react-dialog";
 
 export interface DialogOverlayClassNames {
@@ -35,4 +36,31 @@ export interface DialogDescriptionClassNames {
 export interface DialogDescriptionProps
   extends DialogPrimitive.DialogDescriptionProps {
   classNames?: DialogDescriptionClassNames;
+}
+
+export interface DialogHeaderClassNames {
+  header?: string;
+}
+
+export interface DialogHeaderProps
+  extends HTMLAttributes<HTMLDivElement> {
+  classNames?: DialogHeaderClassNames;
+}
+
+export interface DialogBodyClassNames {
+  body?: string;
+}
+
+export interface DialogBodyProps
+  extends HTMLAttributes<HTMLDivElement> {
+  classNames?: DialogBodyClassNames;
+}
+
+export interface DialogFooterClassNames {
+  footer?: string;
+}
+
+export interface DialogFooterProps
+  extends HTMLAttributes<HTMLDivElement> {
+  classNames?: DialogFooterClassNames;
 }

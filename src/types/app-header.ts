@@ -68,4 +68,6 @@ export interface AppHeaderProfileProps {
   user: AppUser;
   children?: ReactNode;
   className?: string;
+  /** Render variant. "full" shows large avatar + email + carded actions. "basic" shows compact inline avatar + name/role + flat actions. */
+  variant?: "full" | "basic";
 }

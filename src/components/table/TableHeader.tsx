@@ -1,16 +1,17 @@
 import {
   forwardRef,
+  useRef,
+  useCallback,
   useState,
   useEffect,
-  useCallback,
   type ReactNode,
   type ChangeEvent,
 } from "react";
 import * as Popover from "@radix-ui/react-popover";
+import { useSearchParams } from "react-router-dom";
 import {
   Search,
   FilterIcon,
-  X,
   XCircle,
 } from "lucide-react";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -21,6 +22,14 @@ import type {
 import { cn } from "../../utils/cn";
 import "./styles/table.css";
 import { Button } from "../button";
+
+/* ── Helpers ── */
+
+const FILTER_PREFIX = "f_";
+
+function paramKey(prefix: string | undefined, key: string): string {
+  return prefix ? `${prefix}.${key}` : key;
+}
 
 /* ── Header ── */
 
@@ -79,7 +88,7 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
     return (
       <div className={cn("gsl-table__search", className)}>
         <Search
-          size={14}
+          size={16}
           strokeWidth={1.5}
           className="gsl-table__search-icon"
           aria-hidden
@@ -100,7 +109,7 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
             onClick={clear}
             aria-label="Clear search"
           >
-            <X size={14} strokeWidth={1.5} aria-hidden />
+            <XCircle size={16} strokeWidth={1.5} aria-hidden />
           </button>
         )}
       </div>
@@ -119,11 +128,65 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
       activeCount,
       applyLabel = "Apply Filter",
       resetLabel = "Reset",
+      paramPrefix,
       className,
     },
     ref,
   ) {
     const [open, setOpen] = useState(false);
+    const formRef = useRef<HTMLFormElement>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const filterPrefix = paramKey(paramPrefix, FILTER_PREFIX);
+
+    const handleApply = useCallback(() => {
+      const form = formRef.current;
+      if (form) {
+        const data = new FormData(form);
+        setSearchParams(
+          (prev) => {
+            const next = new URLSearchParams(prev);
+            // Remove existing filter params
+            for (const key of [...next.keys()]) {
+              if (key.startsWith(filterPrefix)) {
+                next.delete(key);
+              }
+            }
+            // Set new filter values
+            for (const [key, value] of data.entries()) {
+              if (value && typeof value === "string" && value !== "") {
+                next.set(`${filterPrefix}${key}`, value);
+              }
+            }
+            // Reset to first page
+            next.set(paramKey(paramPrefix, "page"), "1");
+            return next;
+          },
+          { replace: true },
+        );
+      }
+      onApply?.();
+      setOpen(false);
+    }, [setSearchParams, filterPrefix, paramPrefix, onApply]);
+
+    const handleReset = useCallback(() => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          for (const key of [...next.keys()]) {
+            if (key.startsWith(filterPrefix)) {
+              next.delete(key);
+            }
+          }
+          return next;
+        },
+        { replace: true },
+      );
+      // Reset form fields
+      formRef.current?.reset();
+      onReset?.();
+      setOpen(false);
+    }, [setSearchParams, filterPrefix, onReset]);
 
     return (
       <div ref={ref} className={cn("gsl-table__filter", className)}>
@@ -150,10 +213,7 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
                 <button
                   type="button"
                   className="gsl-table__filter-btn--reset"
-                  onClick={() => {
-                    onReset?.();
-                    setOpen(false);
-                  }}
+                  onClick={handleReset}
                 >
                   clear
                   <XCircle size={14} strokeWidth={1.5} />
@@ -161,17 +221,16 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
               </div>
 
               {children && (
-                <div className="gsl-table__filter-fields">{children}</div>
+                <form ref={formRef} className="gsl-table__filter-fields">
+                  {children}
+                </form>
               )}
 
               <div className="gsl-table__filter-actions">
                 <button
                   type="button"
                   className="gsl-table__filter-btn gsl-table__filter-btn--apply"
-                  onClick={() => {
-                    onApply?.();
-                    setOpen(false);
-                  }}
+                  onClick={handleApply}
                 >
                   {applyLabel}
                 </button>

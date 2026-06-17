@@ -32,12 +32,12 @@
 .gsl-app-header-search.gsl-app-header-search.gsl-command {
   display: flex;
   height: stretch;
+  max-width: 400px;
 }
 
 .gsl-app-header-search.gsl-app-header-search.gsl-command
   .gsl-command__input-wrapper {
   border-radius: var(--gsl-radius-xl);
-  max-width: 400px;
   height: stretch;
 }
 
@@ -198,6 +198,11 @@
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+  scrollbar-width: none;
+}
+
+.gsl-notif-popover__body::-webkit-scrollbar {
+  display: none;
 }
 
 .gsl-notif-popover__title {
@@ -226,8 +231,6 @@
 .gsl-notif-popover__item--read:hover {
   background: var(--gsl-hover);
 }
-
-
 
 .gsl-notif-popover__dot {
   width: 8px;
@@ -334,16 +337,15 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: var(--gsl-surface-subtle);
-  border: 1px solid var(--gsl-border);
+  background: var(--gsl-primary);
   margin-bottom: 8px;
   overflow: hidden;
 }
 
 .gsl-profile-popover__avatar-letter {
   font-size: 24px;
-  font-weight: 600;
-  color: var(--gsl-text-secondary);
+  font-weight: 700;
+  color: var(--gsl-on-primary);
   line-height: 1;
 }
 
@@ -430,10 +432,59 @@
   text-overflow: ellipsis;
 }
 
+/* ── Basic variant ── */
+
+.gsl-profile-popover--basic {
+  width: auto;
+  min-width: max-content;
+  padding: 4px;
+}
+
+.gsl-profile-popover--basic .gsl-profile-popover__header {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.gsl-profile-popover--basic .gsl-profile-popover__avatar {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.gsl-profile-popover--basic .gsl-profile-popover__avatar-letter {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gsl-on-primary);
+}
+
+.gsl-profile-popover--basic .gsl-profile-popover__header-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.gsl-profile-popover--basic .gsl-profile-popover__name {
+  font-size: 13px;
+}
+
+.gsl-profile-popover--basic .gsl-profile-popover__role {
+  font-size: 11px;
+  color: var(--gsl-text-muted);
+  line-height: 1.4;
+}
+
+.gsl-profile-popover--basic .gsl-profile-popover__action {
+  border-radius: var(--gsl-radius);
+}
+
 @keyframes gsl-profile-popover-in {
   from {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;

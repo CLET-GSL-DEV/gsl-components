@@ -3,16 +3,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  height: 28px;
-  padding: 0 8px;
+  height: 40px;
+  padding: 0 12px;
   border: 1px solid var(--gsl-border);
   border-radius: var(--gsl-radius);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: var(--gsl-font);
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
-  line-height: 1;
+  line-height: 1.4;
   white-space: nowrap;
   outline: none;
   transition:
@@ -72,7 +72,7 @@
   align-items: center;
   padding: 6px 10px;
   border-radius: calc(var(--gsl-radius) - 2px);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--gsl-text);
   cursor: pointer;
   outline: none;
