@@ -14,8 +14,12 @@
     "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@rfdtech/components": ["./src/index.ts"]
+    }
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "demo"]
+  "include": ["src", "demo"],
+  "exclude": ["node_modules", "dist"]
 }

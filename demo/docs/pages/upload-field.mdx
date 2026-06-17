@@ -1,0 +1,143 @@
+export const meta = {
+  title: "UploadField",
+  description:
+    "File upload with drag-and-drop, file type icons, size display, and controlled/uncontrolled value.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { UploadFieldPreview } from "../previews/code/UploadFieldPreview";
+import { UploadFieldRhfPreview } from "../previews/code/UploadFieldRhfPreview";
+import uploadFieldSource from "../previews/examples/upload-field.example.tsx?raw";
+import uploadFieldRhfSource from "../previews/examples/upload-field-rhf.example.tsx?raw";
+
+# UploadField
+
+File upload with drag-and-drop zone, file type icons (PDF, image, video, generic), file size display, and remove button. Supports single and multiple files, accept filters, max size validation, controlled/uncontrolled value, and `react-hook-form` integration.
+
+## Examples
+
+<ExampleTabs
+  title="With react-hook-form"
+  preview={<UploadFieldRhfPreview />}
+  code={uploadFieldRhfSource}
+/>
+
+The example above uses `FormField` with `UploadField`. The file value is stored directly in RHF state — upload an image to see a preview, or a PDF to see the file name displayed. Submit to confirm the value was captured.
+
+<ExampleTabs
+  title="Variants"
+  preview={<UploadFieldPreview />}
+  code={uploadFieldSource}
+/>
+
+## Usage with react-hook-form
+
+`UploadField` integrates with react-hook-form through `FormField`. Pass `field.value` and `field.onChange` directly:
+
+```tsx
+import { useForm } from "react-hook-form";
+import { Form, FormField, Field, FieldControl, FieldLabel, FieldError, UploadField } from "@rfdtech/components";
+
+function UploadForm() {
+  const form = useForm<{ file: File | null }>({
+    defaultValues: { file: null },
+  });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((data) => console.log(data.file))}>
+        <FormField
+          control={form.control}
+          name="file"
+          rules={{ required: "Please select a file" }}
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Document</FieldLabel>
+              <FieldControl>
+                <UploadField
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+`UploadField` also works outside of `FormField` — just pass `onChange` as the controlled callback and `value` as the current file.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `accept` | `string` | — | Accepted MIME types (passed to the file input) |
+| `multiple` | `boolean` | `false` | Allow multiple file selection |
+| `maxSize` | `number` | — | Maximum file size in bytes (files exceeding this are silently filtered) |
+| `value` | `File \| File[] \| null` | — | Controlled value |
+| `onChange` | `(file: File \| File[] \| null) => void` | — | Change handler |
+| `invalid` | `boolean` | `false` | Show error border styling |
+| `disabled` | `boolean` | `false` | Disable interaction and dim appearance |
+| `placeholder` | `string` | `"Drop files here or click to browse"` | Placeholder text in the drop zone |
+| `name` | `string` | — | Form field name (for react-hook-form) |
+| `classNames` | `UploadFieldClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`, excluding `onChange` and `value`.
+
+## File type detection
+
+When files are added, the component detects the file type and shows a matching icon:
+
+| Type | Detection | Icon |
+|------|-----------|------|
+| Image | `type.startsWith("image/")` or extension `.png`, `.jpg`, `.webp`, etc. | `FileImage` |
+| Video | `type.startsWith("video/")` or extension `.mp4`, `.webm`, etc. | `FilePlay` |
+| PDF | `.pdf` extension | Custom PDF icon |
+| Other | Everything else | `FileText` |
+
+File size is formatted automatically: `B`, `KB`, or `MB` as appropriate.
+
+## Types
+
+### `UploadFieldProps`
+
+See the props table above.
+
+### `UploadFieldClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root element (`.gsl-upload-field`) |
+| `dropzone` | Drop zone area (`.gsl-upload-field__dropzone`) |
+| `fileInfo` | File list wrapper (`.gsl-upload-field__file-info`) |
+| `fileName` | File name text (`.gsl-upload-field__file-name`) |
+| `fileSize` | File size text (`.gsl-upload-field__file-size`) |
+| `removeButton` | Remove button (`.gsl-upload-field__remove`) |
+
+## Design tokens
+
+| Token | Used for |
+|-------|----------|
+| `--gsl-bg` | Drop zone background |
+| `--gsl-border` | Drop zone border (dashed) |
+| `--gsl-primary` | Drop zone hover/focus border and active background |
+| `--gsl-primary-light` | Focus ring and active drop state background |
+| `--gsl-hover` | Drop zone hover background; file item background |
+| `--gsl-radius` | Drop zone and file item border radius |
+| `--gsl-error` | Invalid state border and shadow |
+| `--gsl-text` | File name text color |
+| `--gsl-text-secondary` | Placeholder, file size, icon, and remove button color |
+
+## Notes
+
+- Drop zone is keyboard accessible — focus with Tab, activate with Enter or Space.
+- Disabled state dims to `opacity: 0.6` with `cursor: not-allowed` and prevents click/drop.
+- Invalid state applies `--gsl-error` border and a `1px` error box-shadow.
+- When `multiple` is true, selecting or dropping a new set of files **replaces** the current set (no append).
+- Controlled mode: pass `value` and `onChange`. Uncontrolled mode: let the component manage its own state.
+- Files exceeding `maxSize` are silently filtered out. No error message is shown — handle validation externally via `onChange`.

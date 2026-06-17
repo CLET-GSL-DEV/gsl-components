@@ -61,73 +61,72 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
   );
 });
 
-export const SidebarOverlay = forwardRef<HTMLButtonElement, SidebarOverlayProps>(
-  function SidebarOverlay({ classNames, className, ...props }, ref) {
-    const { open, setOpen, isMobile } = useSidebar();
+export const SidebarOverlay = forwardRef<
+  HTMLButtonElement,
+  SidebarOverlayProps
+>(function SidebarOverlay({ classNames, className, ...props }, ref) {
+  const { open, setOpen, isMobile } = useSidebar();
 
-    if (!isMobile) {
-      return null;
-    }
+  if (!isMobile) {
+    return null;
+  }
 
-    return (
-      <button
-        ref={ref}
-        type="button"
-        className={cn(
-          "gsl-sidebar__overlay",
-          open && "gsl-sidebar__overlay--visible",
-          classNames?.overlay,
-          className,
-        )}
-        aria-label="Close sidebar"
-        aria-hidden={!open}
-        tabIndex={open ? 0 : -1}
-        onClick={() => setOpen(false)}
-        {...props}
-      />
-    );
-  },
-);
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={cn(
+        "gsl-sidebar__overlay",
+        open && "gsl-sidebar__overlay--visible",
+        classNames?.overlay,
+        className,
+      )}
+      aria-label="Close sidebar"
+      aria-hidden={!open}
+      tabIndex={open ? 0 : -1}
+      onClick={() => setOpen(false)}
+      {...props}
+    />
+  );
+});
 
-export const SidebarTrigger = forwardRef<HTMLButtonElement, SidebarTriggerProps>(
-  function SidebarTrigger(
-    { classNames, className, children, onClick, ...props },
-    ref,
-  ) {
-    const { open, toggle, isMobile, sidebarId } = useSidebar();
+export const SidebarTrigger = forwardRef<
+  HTMLButtonElement,
+  SidebarTriggerProps
+>(function SidebarTrigger(
+  { classNames, className, children, onClick, ...props },
+  ref,
+) {
+  const { open, toggle, isMobile, sidebarId } = useSidebar();
 
-    if (!isMobile) {
-      return null;
-    }
+  if (!isMobile) {
+    return null;
+  }
 
-    return (
-      <button
-        ref={ref}
-        type="button"
-        className={cn("gsl-sidebar__trigger", classNames?.trigger, className)}
-        aria-expanded={open}
-        aria-controls={sidebarId}
-        onClick={(event) => {
-          onClick?.(event);
-          if (!event.defaultPrevented) {
-            toggle();
-          }
-        }}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  },
-);
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={cn("gsl-sidebar__trigger", classNames?.trigger, className)}
+      aria-expanded={open}
+      aria-controls={sidebarId}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) {
+          toggle();
+        }
+      }}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+});
 
 export const SidebarCollapse = forwardRef<
   HTMLButtonElement,
   SidebarCollapseProps
->(function SidebarCollapse(
-  { classNames, className, onClick, ...props },
-  ref,
-) {
+>(function SidebarCollapse({ classNames, className, onClick, ...props }, ref) {
   const { collapsed, toggleCollapsed, isMobile, sidebarId } = useSidebar();
 
   if (isMobile) {
@@ -198,7 +197,13 @@ export const SidebarFooter = forwardRef<HTMLDivElement, SidebarFooterProps>(
 
 export const SidebarNav = forwardRef<HTMLElement, SidebarNavProps>(
   function SidebarNav(
-    { classNames, className, children, "aria-label": ariaLabel = "Sidebar", ...props },
+    {
+      classNames,
+      className,
+      children,
+      "aria-label": ariaLabel = "Sidebar",
+      ...props
+    },
     ref,
   ) {
     return (
@@ -269,11 +274,7 @@ export const SidebarBadge = forwardRef<HTMLSpanElement, SidebarBadgeProps>(
     return (
       <span
         ref={ref}
-        className={cn(
-          "gsl-sidebar__link-badge",
-          classNames?.badge,
-          className,
-        )}
+        className={cn("gsl-sidebar__link-badge", classNames?.badge, className)}
       >
         {children}
       </span>
@@ -323,9 +324,7 @@ export const SidebarLink = forwardRef<HTMLAnchorElement, SidebarLinkProps>(
     return (
       <SidebarLinkContext.Provider value={true}>
         <a ref={ref} className={linkClassName} {...props}>
-          {icon ? (
-            <span className="gsl-sidebar__link-icon">{icon}</span>
-          ) : null}
+          {icon ? <span className="gsl-sidebar__link-icon">{icon}</span> : null}
           <span className="gsl-sidebar__link-label">{labelItems}</span>
           {badgeElement}
         </a>

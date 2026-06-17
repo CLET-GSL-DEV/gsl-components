@@ -1,0 +1,101 @@
+export const meta = {
+  title: "PhoneNumberInput",
+  description: "Phone number input with country code selector, flag emoji, dial code, and auto-detection from prefix.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { PhoneNumberInputPreview } from "../previews/code/PhoneNumberInputPreview";
+import phoneNumberInputSource from "../previews/examples/phone-number-input.example.tsx?raw";
+
+# PhoneNumberInput
+
+Phone number input with a country code selector (flag + dial code prefix). Auto-detects the country from the number prefix as the user types. Supports controlled and uncontrolled value.
+
+## Example
+
+<ExampleTabs title="Variants" preview={<PhoneNumberInputPreview />} code={phoneNumberInputSource} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Full phone number value (e.g. `"+233501234567"`) |
+| `onChange` | `(value: string) => void` | — | Change handler |
+| `placeholder` | `string` | `"Enter phone number"` | Input placeholder |
+| `defaultCountry` | `string` | — | Default country ISO code (overrides auto-detection) |
+| `invalid` | `boolean` | `false` | Show error border styling |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `name` | `string` | — | Form field name (for react-hook-form) |
+| `classNames` | `PhoneNumberInputClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`, excluding `onChange`, `value`, and `defaultValue`.
+
+## Usage with react-hook-form
+
+```tsx
+import { useForm } from "react-hook-form";
+import { Form, FormField, Field, FieldControl, FieldLabel, FieldError, PhoneNumberInput } from "@rfdtech/components";
+
+function PhoneForm() {
+  const form = useForm<{ phone: string }>({ defaultValues: { phone: "" } });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((d) => console.log(d.phone))}>
+        <FormField
+          control={form.control}
+          name="phone"
+          rules={{ required: "Phone number is required" }}
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Phone number</FieldLabel>
+              <FieldControl>
+                <PhoneNumberInput value={field.value} onChange={field.onChange} />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+## Types
+
+### `PhoneNumberInputProps`
+
+See the props table above.
+
+### `PhoneNumberInputClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root wrapper (`.gsl-phone-number-input`) |
+| `prefix` | Country code prefix (`.gsl-phone-number-input__prefix`) |
+| `input` | Phone number input (`.gsl-phone-number-input__input`) |
+| `dropdown` | Country code dropdown (`.gsl-phone-number-input__dropdown`) |
+
+## Design tokens
+
+| Token | Used for |
+|-------|----------|
+| `--gsl-bg` | Input background |
+| `--gsl-border` | Input border |
+| `--gsl-primary` | Focus ring |
+| `--gsl-text` | Input text |
+| `--gsl-text-muted` | Placeholder |
+| `--gsl-radius` | Input border radius |
+| `--gsl-shadow-md` | Country dropdown shadow |
+| `--gsl-z-popover` | Dropdown z-index |
+| `--gsl-hover` | Dropdown option hover |
+| `--gsl-error` | Invalid state border |
+
+## Notes
+
+- Country auto-detection: as the user types, the component matches the prefix against dial codes and updates the selected country. The sorted check uses longest dial code first to avoid partial matches (e.g., `+233` matches Ghana, not `+23`).
+- Countries are from the `countries` utility — same dataset used by `CountrySelector`.
+- The value includes the full number with the dial code prefix (e.g. `+233501234567`). The `+` prefix is always included.
+- Changing the country dropdown updates the dial code prefix in the input value.

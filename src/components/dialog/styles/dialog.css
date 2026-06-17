@@ -130,6 +130,27 @@
   }
 }
 
+.gsl-dialog__header {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gsl-border);
+}
+
+.gsl-dialog__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.gsl-dialog__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gsl-border);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .gsl-dialog__overlay[data-state="open"],
   .gsl-dialog__overlay[data-state="closed"],

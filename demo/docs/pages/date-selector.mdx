@@ -1,0 +1,112 @@
+export const meta = {
+  title: "DateSelector",
+  description: "Date picker with calendar grid popover, month/year navigation, and native date formatting.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { DateSelectorPreview } from "../previews/code/DateSelectorPreview";
+import dateSelectorSource from "../previews/examples/date-selector.example.tsx?raw";
+
+# DateSelector
+
+Date picker with a calendar grid popover, month/year navigation arrows, weekday headers, and native `Date.toLocaleDateString` formatting. Supports controlled and uncontrolled value.
+
+## Example
+
+<ExampleTabs title="Variants" preview={<DateSelectorPreview />} code={dateSelectorSource} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `Date \| null` | — | Controlled selected date |
+| `defaultValue` | `Date \| null` | — | Default date (uncontrolled) |
+| `onChange` | `(date: Date \| null) => void` | — | Selection handler |
+| `min` | `Date` | — | Minimum selectable date (inclusive) |
+| `max` | `Date` | — | Maximum selectable date (inclusive) |
+| `formatOptions` | `Intl.DateTimeFormatOptions` | — | Options for `Date.toLocaleDateString()` formatting |
+| `placeholder` | `string` | `"Select date"` | Trigger text when no date is selected |
+| `invalid` | `boolean` | `false` | Show error border styling |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `name` | `string` | — | Form field name (for react-hook-form) |
+| `onBlur` | `() => void` | — | Called when the trigger loses focus |
+| `classNames` | `DateSelectorClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
+
+## Usage with react-hook-form
+
+```tsx
+import { useForm } from "react-hook-form";
+import { Form, FormField, Field, FieldControl, FieldLabel, FieldError, DateSelector } from "@rfdtech/components";
+
+function DateForm() {
+  const form = useForm<{ startDate: Date | null }>({ defaultValues: { startDate: null } });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((d) => console.log(d.startDate))}>
+        <FormField
+          control={form.control}
+          name="startDate"
+          rules={{ required: "Start date is required" }}
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Start date</FieldLabel>
+              <FieldControl>
+                <DateSelector value={field.value} onChange={field.onChange} />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+## Types
+
+### `DateSelectorProps`
+
+See the props table above.
+
+### `DateSelectorClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root wrapper (`.gsl-date-selector`) |
+| `trigger` | Trigger button (`.gsl-date-selector__trigger`) |
+| `calendar` | Calendar panel (`.gsl-date-selector__calendar`) |
+| `calendarHeader` | Month/year header row (`.gsl-date-selector__calendar-header`) |
+| `calendarTitle` | Month/year text (`.gsl-date-selector__calendar-title`) |
+| `calendarNav` | Navigation buttons (`.gsl-date-selector__calendar-nav`) |
+| `calendarWeekdays` | Weekday row (`.gsl-date-selector__calendar-weekdays`) |
+| `calendarWeekday` | Individual weekday label (`.gsl-date-selector__calendar-weekday`) |
+| `calendarGrid` | Day grid (`.gsl-date-selector__calendar-grid`) |
+| `calendarDay` | Day cell (`.gsl-date-selector__calendar-day`) |
+
+## Design tokens
+
+| Token | Used for |
+|-------|----------|
+| `--gsl-bg` | Trigger and calendar background |
+| `--gsl-border` | Trigger border |
+| `--gsl-primary` | Selected day, focus ring |
+| `--gsl-font` | Font family |
+| `--gsl-text` | Day text |
+| `--gsl-text-muted` | Inactive/other-month days |
+| `--gsl-hover` | Day hover background |
+| `--gsl-radius` | Trigger and calendar border radius |
+| `--gsl-shadow-md` | Calendar shadow |
+| `--gsl-z-popover` | Calendar z-index |
+| `--gsl-error` | Invalid state border |
+
+## Notes
+
+- Formatting uses `Date.toLocaleDateString()` — locale-aware and does not require a date library.
+- Navigation arrows move by month. Clicking the month/year text resets to today.
+- Days from adjacent months are shown muted and selectable.
+- The popover calendar uses `--gsl-shadow-md` and matches the trigger width.

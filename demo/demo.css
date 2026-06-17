@@ -1,6 +1,7 @@
 @import "@fontsource-variable/geist";
 @import "@fontsource-variable/geist-mono";
 @import "../src/styles/theme.css";
+@import "./styles/demo-home.css";
 
 body {
   margin: 0;
@@ -9,10 +10,30 @@ body {
   color: var(--gsl-text);
 }
 
+.demo-members-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gsl-app-layout-body-gap);
+}
+.demo-card {
+  padding: 1rem;
+  border-radius: var(--gsl-radius-xl);
+  background-color: var(--gsl-page-bg);
+}
+
+.demo-filter-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .demo-page {
   min-height: 100vh;
 }
 
+.demo-home__content {
+  --background-color: var(--gsl-surface-subtle);
+}
 .demo-docs-page {
   font-family: "Geist Variable", "Geist", var(--gsl-font);
 }
@@ -58,6 +79,26 @@ body {
 .demo-nav-link--active {
   color: var(--gsl-primary);
   font-weight: 500;
+}
+
+.demo-docs-search-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--gsl-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.demo-docs-search-btn:hover {
+  border-color: var(--gsl-border-strong);
+  color: var(--gsl-text);
 }
 
 .demo-theme-toggle {
@@ -140,6 +181,8 @@ body {
 .demo-docs__sidebar {
   position: sticky;
   top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
   padding-right: 24px;
   border-right: 1px solid var(--gsl-border);
 }
@@ -276,18 +319,19 @@ body {
   min-width: 0;
 }
 
-.demo-docs__content > :where(
-  .demo-docs__eyebrow,
-  .demo-docs__title,
-  .demo-docs__section-title,
-  .demo-docs__subsection-title,
-  .demo-docs__paragraph,
-  .demo-docs__notes,
-  .demo-docs__code-block,
-  .demo-docs__example-tabs,
-  .demo-docs__table-wrap,
-  figure[data-rehype-pretty-code-figure]
-) {
+.demo-docs__content
+  > :where(
+    .demo-docs__eyebrow,
+    .demo-docs__title,
+    .demo-docs__section-title,
+    .demo-docs__subsection-title,
+    .demo-docs__paragraph,
+    .demo-docs__notes,
+    .demo-docs__code-block,
+    .demo-docs__example-tabs,
+    .demo-docs__table-wrap,
+    figure[data-rehype-pretty-code-figure]
+  ) {
   margin: 0;
 }
 
@@ -396,7 +440,9 @@ body {
   border-radius: var(--gsl-radius);
 }
 
-.demo-docs__content > figure[data-rehype-pretty-code-figure] + figure[data-rehype-pretty-code-figure],
+.demo-docs__content
+  > figure[data-rehype-pretty-code-figure]
+  + figure[data-rehype-pretty-code-figure],
 .demo-docs__content > .demo-docs__code-block + .demo-docs__code-block,
 .demo-docs__content > .demo-docs__example-tabs + .demo-docs__example-tabs {
   margin-top: var(--docs-space-2);

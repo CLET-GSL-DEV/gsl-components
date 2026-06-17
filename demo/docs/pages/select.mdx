@@ -1,0 +1,118 @@
+export const meta = {
+  title: "Select",
+  description: "Radix-based select component with options array, placeholder, invalid/disabled states, and forwardRef.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { SelectPreview } from "../previews/code/SelectPreview";
+import selectSource from "../previews/examples/select.example.tsx?raw";
+
+# Select
+
+Radix-based select dropdown with a trigger button, popover option list, and controlled value. Supports custom options array, placeholder, invalid/disabled states, and ref forwarding.
+
+## Example
+
+<ExampleTabs title="Variants" preview={<SelectPreview />} code={selectSource} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Controlled selected value |
+| `onValueChange` | `(value: string) => void` | — | Selection handler |
+| `options` | `SelectOption[]` | — | Array of `{ value, label }` options |
+| `placeholder` | `string` | `"Select..."` | Trigger text when no option is selected |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `invalid` | `boolean` | `false` | Show error border styling |
+| `classNames` | `SelectClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the trigger button |
+
+The `ref` is forwarded to the trigger `button` element.
+
+## Usage with react-hook-form
+
+```tsx
+import { useForm } from "react-hook-form";
+import { Form, FormField, Field, FieldControl, FieldLabel, FieldError, Select } from "@rfdtech/components";
+
+const roles = [
+  { value: "admin", label: "Admin" },
+  { value: "editor", label: "Editor" },
+  { value: "viewer", label: "Viewer" },
+];
+
+function RoleForm() {
+  const form = useForm<{ role: string }>({ defaultValues: { role: "" } });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((d) => console.log(d.role))}>
+        <FormField
+          control={form.control}
+          name="role"
+          rules={{ required: "Role is required" }}
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Role</FieldLabel>
+              <FieldControl>
+                <Select
+                  options={roles}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  placeholder="Select role"
+                />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+## Types
+
+### `SelectOption`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `value` | `string` | Option value |
+| `label` | `string` | Display text |
+
+### `SelectProps`
+
+See the props table above.
+
+### `SelectClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `trigger` | Trigger button (`.gsl-select__trigger`) |
+| `content` | Popover content (`.gsl-select__content`) |
+| `item` | Option item (`.gsl-select__item`) |
+
+## Design tokens
+
+| Token | Used for |
+|-------|----------|
+| `--gsl-bg` | Trigger and popover background |
+| `--gsl-border` | Trigger border |
+| `--gsl-primary` | Focus ring and hover border |
+| `--gsl-text` | Selected value and option text |
+| `--gsl-text-muted` | Placeholder text |
+| `--gsl-radius` | Trigger border radius |
+| `--gsl-shadow-md` | Popover shadow |
+| `--gsl-z-popover` | Popover z-index |
+| `--gsl-hover` | Option hover background |
+| `--gsl-error` | Invalid state border |
+| `--gsl-font` | Font family |
+
+## Notes
+
+- Wraps `@radix-ui/react-select`. The trigger button matches the standard input height (40px) and padding.
+- The popover uses a styled scrollable list with the same visual surface as other GSL popovers.
+- Keyboard navigation: arrow keys, Enter to select, Escape to close.
+- For custom option rendering, open an issue — the current implementation renders `label` as plain text.

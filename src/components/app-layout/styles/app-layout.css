@@ -1,0 +1,45 @@
+.gsl-app-layout {
+  --gsl-app-layout-body-gap: 1rem;
+  --gsl-panel-bg: var(--gsl-surface-subtle);
+  --gsl-panel-radius: var(--gsl-radius-2xl);
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  gap: var(--gsl-app-layout-gap, 1rem);
+  background: var(--gsl-page-bg);
+  font-family: var(--gsl-font);
+  padding: var(--gsl-app-layout-gap, 1rem);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.gsl-app-layout__content {
+  background: var(--gsl-panel-bg);
+  border-radius: var(--gsl-panel-radius);
+  padding: var(--gsl-app-layout-body-gap);
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.gsl-app-layout__header {
+  position: sticky;
+  top: 0;
+}
+
+.gsl-app-layout__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gsl-app-layout-body-gap);
+  flex: 1;
+
+  border-radius: var(--gsl-panel-radius);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.gsl-app-layout__sidebar {
+  flex-shrink: 0;
+  width: max-content;
+}

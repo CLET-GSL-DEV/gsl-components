@@ -78,72 +78,68 @@ export function MatchColumnsStep({
       <div className="gsl-bulk-import__match-layout">
         <div className="gsl-bulk-import__match-board">
           <p className="gsl-bulk-import__match-heading">Your table</p>
-          <div className="gsl-bulk-import__match-scroll">
-            <div className="gsl-bulk-import__match-track gsl-bulk-import__match-track--source">
-              {visibleColumns.map((column) => (
-                <div
-                  key={column.index}
-                  className="gsl-bulk-import__match-column gsl-bulk-import__source-column"
-                >
-                  <div className="gsl-bulk-import__source-column-header">
-                    <span className="gsl-bulk-import__source-column-label">
-                      {column.label}
-                    </span>
-                    <button
-                      type="button"
-                      className="gsl-bulk-import__exclude-column"
-                      aria-label={`Exclude column ${column.label}`}
-                      onClick={() => onToggleExcludedColumn(column.index)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                  <div className="gsl-bulk-import__source-column-preview">
-                    {previewLimit.map((row, rowIndex) => (
-                      <span
-                        key={rowIndex}
-                        className="gsl-bulk-import__source-column-preview-row"
-                      >
-                        {formatPreviewValue(row[column.index])}
-                      </span>
-                    ))}
-                  </div>
+          <div className="gsl-bulk-import__match-track gsl-bulk-import__match-track--source">
+            {visibleColumns.map((column) => (
+              <div
+                key={column.index}
+                className="gsl-bulk-import__match-column gsl-bulk-import__source-column"
+              >
+                <div className="gsl-bulk-import__source-column-header">
+                  <span className="gsl-bulk-import__source-column-label">
+                    {column.label}
+                  </span>
+                  <button
+                    type="button"
+                    className="gsl-bulk-import__exclude-column"
+                    aria-label={`Exclude column ${column.label}`}
+                    onClick={() => onToggleExcludedColumn(column.index)}
+                  >
+                    ×
+                  </button>
                 </div>
-              ))}
-            </div>
+                <div className="gsl-bulk-import__source-column-preview">
+                  {previewLimit.map((row, rowIndex) => (
+                    <span
+                      key={rowIndex}
+                      className="gsl-bulk-import__source-column-preview-row"
+                    >
+                      {formatPreviewValue(row[column.index])}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
           <p className="gsl-bulk-import__match-heading gsl-bulk-import__match-heading--target">
             Will become
           </p>
-          <div className="gsl-bulk-import__match-scroll gsl-bulk-import__match-scroll--target">
-            <div className="gsl-bulk-import__match-track gsl-bulk-import__match-track--target">
-              {visibleColumns.map((column) => {
-                const mappedFieldKey = sourceColumnMapping[column.index] ?? null;
-                const isMapped = mappedFieldKey !== null;
+          <div className="gsl-bulk-import__match-track gsl-bulk-import__match-track--target">
+            {visibleColumns.map((column) => {
+              const mappedFieldKey = sourceColumnMapping[column.index] ?? null;
+              const isMapped = mappedFieldKey !== null;
 
-                return (
-                  <div
-                    key={column.index}
-                    className="gsl-bulk-import__match-column gsl-bulk-import__target-column"
-                  >
-                    <div className="gsl-bulk-import__target-column-control">
-                      <FieldMappingSelect
-                        ariaLabel={`Map ${column.label} to a field`}
-                        value={mappedFieldKey}
-                        options={fieldOptions}
-                        clearable
-                        placeholder="Select column..."
-                        onChange={(fieldKey) =>
-                          onSourceMappingChange(column.index, fieldKey)
-                        }
-                      />
-                      <MappingStatus mapped={isMapped} />
-                    </div>
+              return (
+                <div
+                  key={column.index}
+                  className="gsl-bulk-import__match-column gsl-bulk-import__target-column"
+                >
+                  <div className="gsl-bulk-import__target-column-control">
+                    <FieldMappingSelect
+                      ariaLabel={`Map ${column.label} to a field`}
+                      value={mappedFieldKey}
+                      options={fieldOptions}
+                      clearable
+                      placeholder="Select column..."
+                      onChange={(fieldKey) =>
+                        onSourceMappingChange(column.index, fieldKey)
+                      }
+                    />
+                    <MappingStatus mapped={isMapped} />
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

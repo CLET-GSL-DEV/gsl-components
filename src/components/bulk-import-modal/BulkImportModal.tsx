@@ -150,37 +150,66 @@ export function BulkImportModal({
             <header className="gsl-bulk-import__header">
               <nav className="gsl-bulk-import__stepper" aria-label="Import steps">
                 <ol className="gsl-bulk-import__stepper-list">
-                  {STEPS.map((step, index) => {
-                    const isActive = flow.step === step.id;
-                    const isComplete = flow.step > step.id;
+                  {STEPS.map((stepItem, index) => {
+                    const isActive = flow.step === stepItem.id;
+                    const isComplete = flow.step > stepItem.id;
                     const isLast = index === STEPS.length - 1;
+                    const canClick = isComplete;
                     return (
                       <li
-                        key={step.id}
+                        key={stepItem.id}
                         className={[
                           "gsl-bulk-import__stepper-item",
                           isActive ? "gsl-bulk-import__stepper-item--active" : "",
                           isComplete ? "gsl-bulk-import__stepper-item--complete" : "",
+                          canClick ? "gsl-bulk-import__stepper-item--clickable" : "",
                         ]
                           .filter(Boolean)
                           .join(" ")}
                         aria-current={isActive ? "step" : undefined}
                       >
-                        <span className="gsl-bulk-import__stepper-marker">
-                          <span
-                            className={[
-                              "gsl-bulk-import__stepper-number",
-                              isComplete ? "gsl-bulk-import__stepper-number--hidden" : "",
-                            ]
-                              .filter(Boolean)
-                              .join(" ")}
-                            aria-hidden={isComplete}
+                        {canClick ? (
+                          <button
+                            type="button"
+                            className="gsl-bulk-import__stepper-button"
+                            onClick={() => flow.goToStep(stepItem.id)}
+                            aria-label={`Go to step ${stepItem.id}: ${stepItem.label}`}
                           >
-                            {step.id}
-                          </span>
-                          {isComplete && <CheckmarkIcon />}
-                        </span>
-                        <span className="gsl-bulk-import__stepper-label">{step.label}</span>
+                            <span className="gsl-bulk-import__stepper-marker">
+                              <span
+                                className={[
+                                  "gsl-bulk-import__stepper-number",
+                                  isComplete ? "gsl-bulk-import__stepper-number--hidden" : "",
+                                ]
+                                  .filter(Boolean)
+                                  .join(" ")}
+                                aria-hidden={isComplete}
+                              >
+                                {stepItem.id}
+                              </span>
+                              {isComplete && <CheckmarkIcon />}
+                            </span>
+                            <span className="gsl-bulk-import__stepper-label">{stepItem.label}</span>
+                          </button>
+                        ) : (
+                          <>
+                            <span className="gsl-bulk-import__stepper-marker">
+                              <span
+                                className={[
+                                  "gsl-bulk-import__stepper-number",
+                                  isComplete ? "gsl-bulk-import__stepper-number--hidden" : "",
+                                ]
+                                  .filter(Boolean)
+                                  .join(" ")}
+                                aria-hidden={isComplete}
+                              >
+                                {stepItem.id}
+                              </span>
+                              {isComplete && <CheckmarkIcon />}
+                            </span>
+                            <span className="gsl-bulk-import__stepper-label">{stepItem.label}</span>
+                          </>
+                        )}
                         {!isLast && (
                           <span
                             className="gsl-bulk-import__stepper-connector"
@@ -276,6 +305,13 @@ export function BulkImportModal({
 
             {flow.step > 1 && (
               <footer className="gsl-bulk-import__footer">
+                <button
+                  type="button"
+                  className="gsl-bulk-import__button gsl-bulk-import__button--outline"
+                  onClick={flow.goBack}
+                >
+                  Back
+                </button>
                 {flow.step < 4 ? (
                   <button
                     type="button"

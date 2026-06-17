@@ -1,0 +1,95 @@
+export const meta = {
+  title: "MetricCard",
+  description:
+    "Metric display card with label, value, trend indicator, and optional icon and description.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { MetricCardPreview } from "../previews/code/MetricCardPreview";
+import metricCardSource from "../previews/examples/metric-card.example.tsx?raw";
+
+# MetricCard
+
+Metric display card for dashboards and overviews. Renders a compact card with a label, large value, optional trend arrow with percentage, icon, and description.
+
+## Example
+
+<ExampleTabs
+  title="Metric cards"
+  preview={<MetricCardPreview />}
+  code={metricCardSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | — | Metric label shown above the value (uppercased via CSS) |
+| `value` | `string \| number` | — | The primary metric value |
+| `icon` | `ReactNode` | — | Optional icon rendered next to the label (always muted tint) |
+| `description` | `string` | — | Subtitle shown below the value row |
+| `trend` | `"up" \| "down" \| "neutral"` | — | Trend direction; renders an arrow icon |
+| `trendValue` | `string` | — | Formatted trend text (e.g. `"+12.5%"`) |
+| `variant` | `"default" \| "primary" \| "success" \| "warning" \| "error"` | `"default"` | Card variant — influences trend color |
+| `color` | `string` | — | Custom CSS color for the trend indicator; overrides variant |
+| `classNames` | `MetricCardClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
+
+## Variants
+
+Variants only affect the **trend indicator color**, not the background or text of the card:
+
+| Variant | Trend color |
+|---------|-------------|
+| `"default"` | `--gsl-success` (up), `--gsl-error` (down), `--gsl-text-muted` (neutral) |
+| `"primary"` | `--gsl-primary` |
+| `"success"` | `--gsl-success` |
+| `"warning"` | `--gsl-warning` |
+| `"error"` | `--gsl-error` |
+
+Override with the `color` prop (any CSS value) for custom accent colors.
+
+## Types
+
+### `MetricCardProps`
+
+See the props table above.
+
+### `MetricCardClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root element (`.gsl-metric-card`) |
+| `icon` | Icon wrapper (`.gsl-metric-card__icon`) |
+| `label` | Label text (`.gsl-metric-card__label`) |
+| `value` | Value text (`.gsl-metric-card__value`) |
+| `description` | Description text (`.gsl-metric-card__description`) |
+| `trend` | Trend indicator (`.gsl-metric-card__trend`) |
+
+Also exported: `MetricCardVariant`, `MetricTrend`.
+
+## Design tokens
+
+| Token | Fallback | Used for |
+|-------|----------|----------|
+| `--gsl-page-bg` | — | Card background (`--gsl-default-metric-card-bg`) |
+| `--gsl-radius-xl` | — | Card border radius (`--gsl-metric-card-radius`) |
+| `--gsl-font` | — | Font family |
+| `--gsl-text` | — | Value text color |
+| `--gsl-text-secondary` | — | Label text color |
+| `--gsl-text-muted` | — | Description, icon, neutral trend color |
+| `--gsl-success` | — | Up trend / success variant color |
+| `--gsl-error` | — | Down trend / error variant color |
+| `--gsl-primary` | — | Primary variant trend color |
+| `--gsl-warning` | — | Warning variant trend color |
+
+Override card background via `--gsl-default-metric-card-bg`, radius via `--gsl-metric-card-radius`, or shadow via `--gsl-metric-card-shadow`.
+
+## Notes
+
+- Background and text remain neutral across all variants — only the trend indicator changes color. Use the `color` prop for full control.
+- The icon always renders in `--gsl-text-muted` regardless of variant.
+- Card width is determined by the parent container. Use a grid or flex wrapper for layout.
+- On mobile (`<= 768px`), padding reduces to 16px and value font size to 24px.

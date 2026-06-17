@@ -1,0 +1,101 @@
+export const meta = {
+  title: "OtpInput",
+  description: "One-time password input with configurable length, paste support, and keyboard navigation.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { OtpInputPreview } from "../previews/code/OtpInputPreview";
+import { OtpInputRhfPreview } from "../previews/code/OtpInputRhfPreview";
+import otpInputSource from "../previews/examples/otp-input.example.tsx?raw";
+import otpInputRhfSource from "../previews/examples/otp-input-rhf.example.tsx?raw";
+
+# OtpInput
+
+One-time password input with configurable digit length, paste-from-any-slot support, keyboard navigation (arrow keys, backspace), auto-focus advancement, and `onComplete` callback. Supports controlled and uncontrolled value.
+
+## Examples
+
+<ExampleTabs title="With react-hook-form" preview={<OtpInputRhfPreview />} code={otpInputRhfSource} />
+
+<ExampleTabs title="Variants" preview={<OtpInputPreview />} code={otpInputSource} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `length` | `number` | `6` | Number of digit slots |
+| `value` | `string` | — | Controlled value (digits only) |
+| `onChange` | `(value: string) => void` | — | Change handler with joined value |
+| `onComplete` | `(value: string) => void` | — | Fires when all slots are filled |
+| `invalid` | `boolean` | `false` | Show error styling |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `name` | `string` | — | Form field name (for react-hook-form) |
+| `classNames` | `OtpInputClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`, excluding `onChange`.
+
+## Usage with react-hook-form
+
+```tsx
+import { useForm } from "react-hook-form";
+import { Form, FormField, Field, FieldControl, FieldError, OtpInput } from "@rfdtech/components";
+
+function VerifyForm() {
+  const form = useForm<{ code: string }>({ defaultValues: { code: "" } });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((d) => console.log(d.code))}>
+        <FormField
+          control={form.control}
+          name="code"
+          rules={{ required: "Code required", minLength: { value: 6, message: "Enter all 6 digits" } }}
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Verification code</FieldLabel>
+              <FieldControl>
+                <OtpInput length={6} value={field.value} onChange={field.onChange} />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+## Types
+
+### `OtpInputProps`
+
+See the props table above.
+
+### `OtpInputClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root flex container (`.gsl-otp-input`) |
+| `slot` | Individual digit input (`.gsl-otp-input__slot`) |
+
+## Design tokens
+
+| Token | Used for |
+|-------|----------|
+| `--gsl-radius` | Slot border radius |
+| `--gsl-border` | Slot border |
+| `--gsl-border-strong` | Slot hover border |
+| `--gsl-primary` | Focus border and ring |
+| `--gsl-bg` | Slot background |
+| `--gsl-text` | Digit text color |
+| `--gsl-error` | Invalid slot border |
+
+## Notes
+
+- **Keyboard navigation**: Type a digit to auto-advance. Backspace clears current slot then moves back. ArrowLeft/Right move between slots.
+- **Paste**: Paste a code into any slot — digits fill forward from that position.
+- `onComplete` fires when `value.length === length` and the value changes.
+- The hidden input is on the first slot (`useImperativeHandle` forwards ref to slot 0).
+- Container blur detection: uses `e.relatedTarget` to detect if focus left the whole component.

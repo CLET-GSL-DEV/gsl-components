@@ -51,20 +51,19 @@ function resolveInputShortcut(
   return contextShortcut;
 }
 
-export const Command = forwardRef<HTMLDivElement, CommandProps>(function Command(
-  { classNames, className, children, ...props },
-  ref,
-) {
-  return (
-    <CommandPrimitive
-      ref={ref}
-      className={cn("gsl-command", classNames?.root, className)}
-      {...props}
-    >
-      {children}
-    </CommandPrimitive>
-  );
-});
+export const Command = forwardRef<HTMLDivElement, CommandProps>(
+  function Command({ classNames, className, children, ...props }, ref) {
+    return (
+      <CommandPrimitive
+        ref={ref}
+        className={cn("gsl-command", classNames?.root, className)}
+        {...props}
+      >
+        {children}
+      </CommandPrimitive>
+    );
+  },
+);
 
 export const CommandDialog = forwardRef<HTMLDivElement, CommandDialogProps>(
   function CommandDialog(
@@ -152,10 +151,7 @@ export const CommandDialog = forwardRef<HTMLDivElement, CommandDialogProps>(
 );
 
 export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
-  function CommandInput(
-    { classNames, className, shortcut, ...props },
-    ref,
-  ) {
+  function CommandInput({ classNames, className, shortcut, ...props }, ref) {
     const dialogContext = useCommandDialog();
     const resolvedShortcut = resolveInputShortcut(
       shortcut,
@@ -163,16 +159,12 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
     );
     const shortcutLabels = useMemo(
       () =>
-        resolvedShortcut
-          ? formatCommandShortcutLabels(resolvedShortcut)
-          : [],
+        resolvedShortcut ? formatCommandShortcutLabels(resolvedShortcut) : [],
       [resolvedShortcut],
     );
 
     return (
-      <div
-        className={cn("gsl-command__input-wrapper", classNames?.wrapper)}
-      >
+      <div className={cn("gsl-command__input-wrapper", classNames?.wrapper)}>
         <Search
           className="gsl-command__input-icon"
           aria-hidden="true"
@@ -285,11 +277,7 @@ export const CommandShortcut = forwardRef<HTMLElement, CommandShortcutProps>(
     return (
       <kbd
         ref={ref}
-        className={cn(
-          "gsl-command__shortcut",
-          classNames?.shortcut,
-          className,
-        )}
+        className={cn("gsl-command__shortcut", classNames?.shortcut, className)}
       >
         {children}
       </kbd>
@@ -304,11 +292,7 @@ export const CommandSeparator = forwardRef<
   return (
     <CommandPrimitive.Separator
       ref={ref}
-      className={cn(
-        "gsl-command__separator",
-        classNames?.separator,
-        className,
-      )}
+      className={cn("gsl-command__separator", classNames?.separator, className)}
       {...props}
     />
   );

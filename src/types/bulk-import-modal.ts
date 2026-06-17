@@ -108,6 +108,7 @@ export interface UseBulkImportFlowReturn {
   handleFile: (file: File) => Promise<void>;
   goNext: () => void;
   goBack: () => void;
+  goToStep: (step: BulkImportStep) => void;
   reset: () => void;
   buildResult: () => BulkImportResult;
 }

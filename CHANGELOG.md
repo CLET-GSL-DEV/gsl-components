@@ -5,7 +5,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.9.0] - 2026-06-17
+
+### Added
+
+- `Table` component with debounced search, filter popover, sortable columns, sort arrow indicators, pagination controls, and data-driven content rendering via `TableColumn[]`
+- `AppHeader` — compound header with `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderNotifications`, and `AppHeaderProfile` sub-components
+- `AppHeaderSearch` — data-driven search using `Command` primitives; `data` prop (groups of items with `label: ReactNode`), debounced `onSearch` for tanstack query integration, `showEmpty`/`emptyLabel` for no-results state, `children` for custom list content; list rendering memoized on `[data]`
+- `AppHeaderNotifications` — bell trigger → Radix popover with loading skeleton (pulse animation), `loadingLabel` prop for accessible loading state, and consumer-rendered notification items
+- `AppHeaderProfile` `variant` prop — `"full"` (default, large centered 64px avatar + email + carded actions) and `"basic"` (compact 32px inline avatar with name/role row, flat actions, `max-content` width, opens flush with trigger, no email)
+- `AppLayout`, `AppSidebar`, `AppBody` — layout container that auto-positions children by component type
+- `CountrySelector` — country dropdown with flag emoji, search filtering, `invalid`/`disabled` states
+- `DateSelector` — date picker with calendar grid popover, month/year navigation, native date formatting
+- `MetricCard` — metric display card with label, value, optional icon/description, and trend indicator (up/down/neutral)
+- `NetworkOperator` — operator selector with image thumbnails (MTN, Vodafone, AirtelTigo, Glo), `defaultValue` prop, `invalid`/`disabled` states
+- `OtpInput` — OTP input with configurable length, paste-from-any-slot support, keyboard navigation, `onComplete` callback, and forwardRef for react-hook-form
+- `PhoneNumberInput` — phone input with country code selector (flag + dial code), auto-detection of country from phone number prefix
+- `UploadField` — file upload with drag-and-drop zone, file type icons (PDF/image/video/generic), remove button, `invalid`/`disabled` states
+- `Select` — Radix-based select with `options` array, `SelectClassNames` part-level overrides, `placeholder`, `invalid`/`disabled` states, forwardRef
+- `useTablePagination` hook — URL search-param based pagination (`page`, `pageSize`) with `react-router-dom`
+- `useTableState` hook — URL search-param based table state (search, pagination, sort, filter) with `react-router-dom`
+- `useDebounce` hook for generic debounced values
+- `DocsLayout` component for documentation pages (split from `DemoLayout`)
+- `countries` utility — full country list with name, flag emoji, dial code, ISO code
+- CSS tokens `--gsl-surface-dark`, `--gsl-radius-xl`, `--gsl-radius-2xl`
+- `AppHeader` doc page with compound component docs, design token reference, and all sub-components
+- `AppLayout` doc page with layout diagram, auto-positioning docs, and design tokens
+- `MetricCard`, `CountrySelector`, `DateSelector`, `NetworkOperator`, `OtpInput`, `PhoneNumberInput`, `Select`, `UploadField` doc pages with interactive examples and react-hook-form usage sections
+- Tests for `CountrySelector`, `NetworkOperator`, `Select`, `AppHeader` (all sub-components), and `AppLayout` (all layout parts) — all with RHF integration coverage
+
+### Changed
+
+- Sidebar uses `--gsl-radius-2xl` for border-radius and `--gsl-surface-dark` for hover/active states
+- Table search shows clear `×` button when non-empty; filter trigger shows active-count badge when `activeCount > 0`
+- Table pagination right-aligned in footer, shows "Showing X–Y of Z" when `totalItems` provided
+- `DemoLayout` simplified to accept header/sidebar/children slots; `DocsPage` uses `DocsLayout`
+- Demo page split into `DemoPage` (dashboard) + `MembersPage` (CRUD table with modals)
+- AppHeaderProfile popover uses `--gsl-primary` bg + `--gsl-on-primary` text for avatar (was `--gsl-surface-subtle` with border)
+- AppHeader uses full width and falls back to `1rem` for `--gsl-app-layout-body-gap` when used outside AppLayout
+- `AppHeaderActionsProps` moved to centralized `src/types/app-header.ts`
+- UploadField disabled drop zone shows `cursor: not-allowed`
+- `AppSidebar` renders as `<aside>` with ref forwarding (was raw Fragment)
+- `CountrySelector`, `NetworkOperator`, `Select`, `AppHeader`, and `AppLayout` now have full test suites with react-hook-form integration coverage
+
 
 ## [1.8.0] - 2026-06-15
 

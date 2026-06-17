@@ -1,0 +1,112 @@
+export const meta = {
+  title: "AppLayout",
+  description: "Application layout container that auto-positions header, sidebar, and body by component type.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { AppLayoutPreview } from "../previews/code/AppLayoutPreview";
+import appLayoutSource from "../previews/examples/app-layout.example.tsx?raw";
+
+# AppLayout
+
+Application layout container that auto-positions `AppHeader`, `AppSidebar`, and `AppBody` by component type. Renders a full-viewport flex layout with sidebar on the left, header at the top, and main content filling the remaining space.
+
+## Example
+
+<ExampleTabs
+  title="Basic layout with sidebar, header, and body"
+  preview={<AppLayoutPreview />}
+  code={appLayoutSource}
+/>
+
+## Components
+
+### `AppLayout`
+
+Root layout container. Scans direct children for `componentId` matching `"AppHeader"`, `"AppSidebar"`, or `"AppBody"` and positions them automatically. Unmatched children are ignored.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `children` | `ReactNode` | Direct children — `<AppHeader>`, `<AppSidebar>`, `<AppBody>` |
+| `className` | `string` | Merged onto the root element |
+
+**Layout structure:**
+
+```
+┌─────────────────────────────────────────┐
+│  ┌──────────────┐ ┌──────────────────┐  │
+│  │              │ │  AppHeader       │  │
+│  │  AppSidebar  │ │  (sticky top)    │  │
+│  │              │ ├──────────────────┤  │
+│  │              │ │                  │  │
+│  │              │ │  AppBody         │  │
+│  │              │ │  (content)       │  │
+│  │              │ │                  │  │
+│  └──────────────┘ └──────────────────┘  │
+└─────────────────────────────────────────┘
+```
+
+### `AppSidebar`
+
+Wrapper for sidebar content. Must be a direct child of `AppLayout`. Renders inside a flex column with `max-content` width. Typically contains `<Sidebar>`.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `children` | `ReactNode` | Sidebar content — typically `<Sidebar>` |
+| `className` | `string` | Merged onto the sidebar wrapper |
+
+`AppSidebar` renders no extra DOM element — it passes children through. The sidebar wrapper div is created by `AppLayout`.
+
+### `AppBody`
+
+Wrapper for main page content. Must be a direct child of `AppLayout`. Renders as `<main>` inside the content area.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `children` | `ReactNode` | Page content — includes `<AppHeader>` if desired, plus body content |
+| `className` | `string` | Merged onto the `<main>` element |
+
+> Note: `AppHeader` renders above `AppBody` when both are direct children of `AppLayout`. If `AppHeader` is placed inside `AppBody`, it renders inline within the content area without the sticky header wrapper.
+
+## Types
+
+### `AppLayoutProps`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `children` | `ReactNode` | Direct children for auto-positioning |
+| `className` | `string` | Root CSS class |
+
+### `AppSidebarProps`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `children` | `ReactNode` | Sidebar content |
+| `className` | `string` | CSS class |
+
+### `AppBodyProps`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `children` | `ReactNode` | Page content |
+| `className` | `string` | Merged onto `<main>` |
+
+## Design tokens
+
+| Token | Fallback | Used for |
+|-------|----------|----------|
+| `--gsl-app-layout-body-gap` | `1rem` | Gap between layout sections |
+| `--gsl-app-layout-gap` | `1rem` | Outer padding and flex gap |
+| `--gsl-panel-bg` | `--gsl-surface-subtle` | Content area background |
+| `--gsl-panel-radius` | `--gsl-radius-2xl` | Content area and body border radius |
+| `--gsl-page-bg` | — | Layout outer background |
+| `--gsl-font` | — | Font family |
+
+## Notes
+
+- The header is sticky (`position: sticky; top: 0`), so it stays visible when the body scrolls.
+- `AppLayout` sets `height: 100vh; overflow: hidden` on itself and `overflow-y: auto` on the body area — the page scrolls within the body while the sidebar stays fixed.
+- The sidebar has `flex-shrink: 0` with `width: max-content`, so it sizes to its content and won't shrink.
+- All three components are optional — you can use only `AppBody` for a simple content shell, or `AppSidebar` + `AppBody` for a sidebar layout without a header.
+- Auto-positioning works by reading `componentId` from the child element's render function — only direct children are scanned.
+- Do NOT wrap children in Fragments, conditionals, or unknown elements — `AppLayout` only auto-positions components with `componentId` matching `"AppHeader"`, `"AppSidebar"`, or `"AppBody"`. Anything else is silently ignored and won't render.

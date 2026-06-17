@@ -1,91 +1,99 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { BulkImportModal } from "@rfdtech/components";
-import type { BulkImportField, BulkImportResult } from "@rfdtech/components";
-import { DemoLayout } from "../components/DemoLayout";
+import type { TableColumn } from "@rfdtech/components";
+import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
+import {
+  Users,
+  UserCheck,
+  CalendarPlus,
+  Activity,
+  Download,
+} from "lucide-react";
+import {
+  Table,
+  TableHeader,
+  TableSearch,
+  TableFilter,
+  TableContent,
+  TableFooter,
+  TablePagination,
+  MetricCard,
+  Button,
+  useTableState,
+} from "@rfdtech/components";
 
-const importFields: BulkImportField[] = [
-  {
-    key: "organisation_name",
-    label: "Organisation Name",
-    required: true,
-    example: "GSL",
-  },
-  {
-    key: "organisation_email",
-    type: "email",
-    label: "Organisation Email",
-    required: true,
-    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    example: "info@gsl.edu.gh",
-  },
-  {
-    key: "document_name",
-    label: "Document Name",
-    required: true,
-    example: "2024 Budget",
-  },
-  {
-    key: "document_id",
-    label: "Document ID",
-    required: true,
-    example: "INV-2024-001",
-  },
-  {
-    key: "department",
-    label: "Department",
-    example: "Finance",
-  },
-  {
-    key: "month",
-    label: "Month",
-    example: "January",
-  },
-  {
-    key: "year",
-    label: "Year",
-    example: "2024",
-  },
+const columns: TableColumn<GslMember>[] = [
+  { id: "name", header: "Name", accessorKey: "name", sortable: true, cell: ({ value }) => <span className="demo-home__cell-name">{String(value)}</span> },
+  { id: "email", header: "Email", accessorKey: "email", sortable: true },
+  { id: "role", header: "Role", accessorKey: "role", sortable: true },
+  { id: "status", header: "Status", accessorKey: "status", sortable: true, cell: ({ value }) => <span className={`demo-home__status demo-home__status--${String(value).toLowerCase()}`}>{String(value)}</span> },
+  { id: "joined", header: "Joined", accessorKey: "joined", sortable: true, cell: ({ value }) => <span className="demo-home__cell-date">{String(value)}</span> },
 ];
 
 export function DemoPage() {
-  const [importOpen, setImportOpen] = useState(false);
-  const [lastImport, setLastImport] = useState<BulkImportResult | null>(null);
+  const { page, pageSize, pageSizeOptions, search, filters } = useTableState({ defaultPageSize: 10 });
+
+  const filtered = gslMembers.filter((m) => {
+    const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase());
+    const matchStatus = !filters.status || m.status.toLowerCase() === filters.status;
+    const matchRole = !filters.role || m.role.toLowerCase() === filters.role;
+    return matchSearch && matchStatus && matchRole;
+  });
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
   return (
-    <DemoLayout>
-      <h1 className="demo-heading">GSL Components Demo</h1>
-      <p className="demo-text">
-        Shared React components for Ghana School of Law projects. Browse the{" "}
-        <Link to="/docs">component docs</Link> and try the interactive example
-        below.
-      </p>
+    <>
+      <div className="demo-home__metrics">
+        <MetricCard label="Total Members" value={gslMembers.length} icon={<Users size={16} strokeWidth={1.5} />} description="Across all departments" trend="up" trendValue="+12%" />
+        <MetricCard label="Active Members" value={gslMembers.filter((m) => m.status === "Active").length} icon={<UserCheck size={16} strokeWidth={1.5} />} description="Currently active" trend="up" trendValue="+5%" />
+        <MetricCard label="New This Month" value={gslMembers.filter((m) => m.joined >= "2025-01-01").length} icon={<CalendarPlus size={16} strokeWidth={1.5} />} description="Joined this year" trend="down" trendValue="-3%" />
+        <MetricCard label="Engagement Rate" value="94.2%" icon={<Activity size={16} strokeWidth={1.5} />} description="Average daily activity" trend="up" trendValue="+1.2%" />
+      </div>
 
-      <button
-        type="button"
-        className="demo-button"
-        onClick={() => setImportOpen(true)}
-      >
-        Open bulk import
-      </button>
-
-      {lastImport && (
-        <p className="demo-result">
-          Last import: {lastImport.rows.length} row(s),{" "}
-          {lastImport.errors.length} error(s)
-        </p>
-      )}
-
-      <BulkImportModal
-        open={importOpen}
-        onOpenChange={setImportOpen}
-        title="Import documents"
-        fields={importFields}
-        onComplete={(result) => {
-          setLastImport(result);
-          console.log("Import complete:", result);
-        }}
-      />
-    </DemoLayout>
+      <div className="demo-card">
+        <Table>
+          <TableHeader>
+            <TableSearch placeholder="Search members..." />
+            <div className="demo-filter-right">
+              <TableFilter>
+                <div className="demo-home__filter-field">
+                  <label className="demo-home__filter-label">Status</label>
+                  <select
+                    name="status"
+                    className="demo-home__filter-select"
+                    defaultValue={filters.status ?? ""}
+                  >
+                    <option value="">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                  </select>
+                </div>
+                <div className="demo-home__filter-field">
+                  <label className="demo-home__filter-label">Role</label>
+                  <select
+                    name="role"
+                    className="demo-home__filter-select"
+                    defaultValue={filters.role ?? ""}
+                  >
+                    <option value="">All</option>
+                    <option value="admin">Admin</option>
+                    <option value="editor">Editor</option>
+                    <option value="viewer">Viewer</option>
+                  </select>
+                </div>
+              </TableFilter>
+              <Button>
+                <Download size={14} strokeWidth={1.5} />
+                Download CSV
+              </Button>
+            </div>
+          </TableHeader>
+          <TableContent columns={columns} data={paged} rowKey={(m: GslMember) => m.id} />
+          <TableFooter>
+            <TablePagination totalPages={totalPages} totalItems={filtered.length} pageSizeOptions={pageSizeOptions} />
+          </TableFooter>
+        </Table>
+      </div>
+    </>
   );
 }

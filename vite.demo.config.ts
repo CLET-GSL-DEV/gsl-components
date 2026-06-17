@@ -31,6 +31,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@rfdtech/components": resolve(__dirname, "src/index.ts"),
+      demo: resolve(__dirname, "demo"),
     },
   },
   server: {
