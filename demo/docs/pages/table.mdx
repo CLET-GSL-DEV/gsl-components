@@ -63,7 +63,6 @@ Search input with debounce and a clear button. Writes the search term to `?searc
 | `debounceMs` | `number` | `300` | Debounce delay in ms |
 | `onSearch` | `(value: string) => void` | — | Callback that fires on the **debounced** search value (not every keystroke) |
 | `onChange` | `(e: ChangeEvent) => void` | — | Raw input change event (fires on every keystroke) |
-| `onChange` | `(e) => void` | — | Raw input change callback |
 | `className` | `string` | — | Merged onto the search wrapper |
 
 ## `<TableFilter>`
@@ -200,6 +199,20 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 ### `PaginationControlsProps`
 
 Props for `TablePagination` — see the props section above.
+
+## Design tokens
+
+The table uses the standard `--gsl-*` palette. The tokens with the most visual impact:
+
+| Token | Effect |
+|-------|--------|
+| `--gsl-surface-subtle` | Header row background |
+| `--gsl-bg` | Search, filter trigger, pagination button background (secondary variant) |
+| `--gsl-hover` | Skeleton pulse fill, button hover backgrounds |
+| `--gsl-primary` | Active page number border, focus ring |
+| `--gsl-border` | All borders (rows, inputs, buttons) |
+| `--gsl-radius` | All border radii |
+| `--gsl-z-popover` | Filter popover z-index |
 
 ## Notes
 
