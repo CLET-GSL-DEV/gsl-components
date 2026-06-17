@@ -92,6 +92,42 @@ openWith({ userId: "42" });
 Exports: `useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`, `createSearchParamAdapter`, `createBrowserSearchParamAdapter`, `readOverlayData`, `writeOverlayData`, `clearOverlayData`, `getDataPrefix`. Types: `SearchParamOverlayState`, `SearchParamOverlayData`, `SearchParamAdapter`, `UseSearchParamOverlayOptions`, `UseSearchParamOverlayReturn`.
 
 
+## AppHeader
+
+Composable header bar with slot-based sub-components for search, app switching, notifications, and user profile. Drop `AppHeader` into your layout and compose the right side with `AppHeaderSearch`, `AppHeaderNotifications`, `AppHeaderProfile`, and `AppSwitcher`.
+
+See the [AppHeader](/docs/app-header) docs page for props and exported types.
+
+```tsx
+import {
+  AppHeader,
+  AppHeaderSearch,
+  AppHeaderNotifications,
+  AppHeaderProfile,
+} from "@rfdtech/components";
+
+<AppHeader
+  search={<AppHeaderSearch onSearch={setQuery} data={results} />}
+  notifications={
+    <AppHeaderNotifications loading={loading}>
+      {notifications.map((n) => (
+        <div key={n.id} className="gsl-notif-popover__item">
+          <div className="gsl-notif-popover__body-text">{n.text}</div>
+          <div className="gsl-notif-popover__body-time">{n.time}</div>
+        </div>
+      ))}
+    </AppHeaderNotifications>
+  }
+  profile={
+    <AppHeaderProfile user={{ name: "Kwame", role: "Admin", initials: "KA" }} variant="basic">
+      <button className="gsl-profile-popover__action">Settings</button>
+    </AppHeaderProfile>
+  }
+/>
+```
+
+Props: `search`, `appSwitcher`, `notifications`, `profile`, `className`. Exported types: `AppHeaderProps`, `AppHeaderSearchProps`, `AppHeaderSearchDataGroup`, `AppHeaderSearchItem`, `AppHeaderNotificationsProps`, `AppHeaderProfileProps`, `AppUser`.
+
 ## AppSwitcher
 
 Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products. Pass `apps` directly from your own data layer; use `loading` while data is being fetched.

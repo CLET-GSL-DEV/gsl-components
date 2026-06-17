@@ -14,7 +14,8 @@
   font-family: var(--gsl-font);
   width: auto;
   height: auto;
-  max-width: none;
+  max-width: 800px;
+  margin: auto;
   max-height: none;
   display: flex;
   flex-direction: column;

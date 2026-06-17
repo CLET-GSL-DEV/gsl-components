@@ -2,6 +2,7 @@ import {
   forwardRef,
   useRef,
   useCallback,
+  useMemo,
   useState,
   useEffect,
   type ReactNode,
@@ -9,18 +10,12 @@ import {
 } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { useSearchParams } from "react-router-dom";
-import {
-  Search,
-  FilterIcon,
-  XCircle,
-} from "lucide-react";
+import { Search, FilterIcon, XCircle } from "lucide-react";
 import { useDebounce } from "../../hooks/useDebounce";
-import type {
-  TableSearchProps,
-  TableFilterProps,
-} from "../../types/table";
+import type { TableSearchProps, TableFilterProps } from "../../types/table";
 import { cn } from "../../utils/cn";
 import "./styles/table.css";
+import { useTableContext } from "./TableContext";
 import { Button } from "../button";
 
 /* ── Helpers ── */
@@ -57,18 +52,51 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
       debounceMs = 300,
       onSearch,
       onChange,
-      value: _value,
       className,
       ...props
     },
     ref,
   ) {
-    const [value, setValue] = useState("");
+    const { paramPrefix } = useTableContext();
+    const searchKey = paramKey(paramPrefix, "search");
+    const pageKey = paramKey(paramPrefix, "page");
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const urlSearch = searchParams.get(searchKey) ?? "";
+
+    const [value, setValue] = useState(urlSearch);
     const debouncedValue = useDebounce(value, debounceMs);
 
+    // Sync URL → input when URL changes externally (e.g. back/forward, external reset)
     useEffect(() => {
+      setValue(urlSearch);
+    }, [urlSearch]);
+
+    // Write to URL on debounced change
+    useEffect(() => {
+      if (debouncedValue === urlSearch) return;
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (debouncedValue) {
+            next.set(searchKey, debouncedValue);
+          } else {
+            next.delete(searchKey);
+          }
+          next.set(pageKey, "1");
+          return next;
+        },
+        { replace: true },
+      );
       onSearch?.(debouncedValue);
-    }, [debouncedValue, onSearch]);
+    }, [
+      debouncedValue,
+      urlSearch,
+      setSearchParams,
+      searchKey,
+      pageKey,
+      onSearch,
+    ]);
 
     const handleChange = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {
@@ -103,14 +131,13 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
           {...props}
         />
         {value && (
-          <button
-            type="button"
+          <div
             className="gsl-table__search-clear"
             onClick={clear}
             aria-label="Clear search"
           >
             <XCircle size={16} strokeWidth={1.5} aria-hidden />
-          </button>
+          </div>
         )}
       </div>
     );
@@ -125,19 +152,26 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
       children,
       onApply,
       onReset,
-      activeCount,
       applyLabel = "Apply Filter",
       resetLabel = "Reset",
-      paramPrefix,
       className,
     },
     ref,
   ) {
+    const { paramPrefix } = useTableContext();
     const [open, setOpen] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
     const [searchParams, setSearchParams] = useSearchParams();
 
     const filterPrefix = paramKey(paramPrefix, FILTER_PREFIX);
+
+    const activeCount = useMemo(() => {
+      let count = 0;
+      for (const key of searchParams.keys()) {
+        if (key.startsWith(filterPrefix)) count++;
+      }
+      return count || undefined;
+    }, [searchParams, filterPrefix]);
 
     const handleApply = useCallback(() => {
       const form = formRef.current;

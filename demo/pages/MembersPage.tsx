@@ -33,8 +33,16 @@ export function MembersPage() {
     1200,
   );
 
-  const { page, pageSize, pageSizeOptions, search, filters, setPage, setPageSize, setSearch } =
-    useTableState({ defaultPageSize: 10 });
+  const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
+    defaultPageSize: 10,
+  });
+
+  const {
+    page: invPage,
+    pageSize: invPageSize,
+    search: invSearch,
+    filters: invFilters,
+  } = useTableState({ defaultPageSize: 5, paramPrefix: "invoices" });
 
   const [selectedMember, setSelectedMember] = useState<DemoMember | null>(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
@@ -159,11 +167,11 @@ export function MembersPage() {
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
   return (
-    <>
+    <div className="demo-members-page">
       <div className="demo-card">
         <Table>
           <TableHeader>
-            <TableSearch placeholder="Search members..." onSearch={setSearch} />
+            <TableSearch placeholder="Search members..." />
             <div className="demo-filter-right">
               <TableFilter>
                 <div className="demo-home__filter-field">
@@ -216,13 +224,70 @@ export function MembersPage() {
           />
           <TableFooter>
             <TablePagination
-              page={page}
               totalPages={totalPages}
-              onPageChange={setPage}
               totalItems={filtered.length}
-              pageSize={pageSize}
               pageSizeOptions={pageSizeOptions}
-              onPageSizeChange={setPageSize}
+            />
+          </TableFooter>
+        </Table>
+      </div>
+
+      <div className="demo-card">
+        <Table paramPrefix="invoices">
+          <TableHeader>
+            <TableSearch placeholder="Search invoices..." />
+            <div className="demo-filter-right">
+              <TableFilter>
+                <div className="demo-home__filter-field">
+                  <label className="demo-home__filter-label">Status</label>
+                  <select
+                    name="status"
+                    className="demo-home__filter-select"
+                    defaultValue={invFilters.status ?? ""}
+                  >
+                    <option value="">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                  </select>
+                </div>
+              </TableFilter>
+            </div>
+          </TableHeader>
+          <TableContent
+            columns={[
+              { id: "name", header: "Name", accessorKey: "name" },
+              { id: "email", header: "Email", accessorKey: "email" },
+              { id: "role", header: "Role", accessorKey: "role" },
+            ]}
+            data={demoMembers
+              .filter(
+                (m) =>
+                  m.name.toLowerCase().includes(invSearch.toLowerCase()) ||
+                  m.email.toLowerCase().includes(invSearch.toLowerCase()),
+              )
+              .slice((invPage - 1) * invPageSize, invPage * invPageSize)}
+            rowKey={(m: DemoMember) => m.id}
+          />
+          <TableFooter>
+            <TablePagination
+              totalPages={Math.max(
+                1,
+                Math.ceil(
+                  demoMembers.filter(
+                    (m) =>
+                      m.name.toLowerCase().includes(invSearch.toLowerCase()) ||
+                      m.email.toLowerCase().includes(invSearch.toLowerCase()),
+                  ).length / invPageSize,
+                ),
+              )}
+              totalItems={
+                demoMembers.filter(
+                  (m) =>
+                    m.name.toLowerCase().includes(invSearch.toLowerCase()) ||
+                    m.email.toLowerCase().includes(invSearch.toLowerCase()),
+                ).length
+              }
             />
           </TableFooter>
         </Table>
@@ -282,6 +347,6 @@ export function MembersPage() {
           console.log("Imported rows:", result.rows.length);
         }}
       />
-    </>
+    </div>
   );
 }

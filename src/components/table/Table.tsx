@@ -19,6 +19,7 @@ import type {
 } from "../../types/table";
 import { cn } from "../../utils/cn";
 import "./styles/table.css";
+import { TableContext } from "./TableContext";
 
 /* ── Helpers ── */
 
@@ -46,17 +47,19 @@ function colStyle(col: {
 /* ── Root ── */
 
 export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
-  { className, classNames, children, ...props },
+  { className, classNames, paramPrefix, children, ...props },
   ref,
 ) {
   return (
-    <div
-      ref={ref}
-      className={cn("gsl-table", classNames?.root, className)}
-      {...props}
-    >
-      {children}
-    </div>
+    <TableContext.Provider value={{ paramPrefix }}>
+      <div
+        ref={ref}
+        className={cn("gsl-table", classNames?.root, className)}
+        {...props}
+      >
+        {children}
+      </div>
+    </TableContext.Provider>
   );
 });
 

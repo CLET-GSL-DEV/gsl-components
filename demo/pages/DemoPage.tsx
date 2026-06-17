@@ -29,9 +29,14 @@ const columns: TableColumn<GslMember>[] = [
 ];
 
 export function DemoPage() {
-  const { page, pageSize, pageSizeOptions, search, filters, setPage, setPageSize, setSearch } = useTableState({ defaultPageSize: 10 });
+  const { page, pageSize, pageSizeOptions, search, filters } = useTableState({ defaultPageSize: 10 });
 
-  const filtered = gslMembers.filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase()));
+  const filtered = gslMembers.filter((m) => {
+    const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase());
+    const matchStatus = !filters.status || m.status.toLowerCase() === filters.status;
+    const matchRole = !filters.role || m.role.toLowerCase() === filters.role;
+    return matchSearch && matchStatus && matchRole;
+  });
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
@@ -47,7 +52,7 @@ export function DemoPage() {
       <div className="demo-card">
         <Table>
           <TableHeader>
-            <TableSearch placeholder="Search members..." onSearch={setSearch} />
+            <TableSearch placeholder="Search members..." />
             <div className="demo-filter-right">
               <TableFilter>
                 <div className="demo-home__filter-field">
@@ -85,7 +90,7 @@ export function DemoPage() {
           </TableHeader>
           <TableContent columns={columns} data={paged} rowKey={(m: GslMember) => m.id} />
           <TableFooter>
-            <TablePagination page={page} totalPages={totalPages} onPageChange={setPage} totalItems={filtered.length} pageSize={pageSize} pageSizeOptions={pageSizeOptions} onPageSizeChange={setPageSize} />
+            <TablePagination totalPages={totalPages} totalItems={filtered.length} pageSizeOptions={pageSizeOptions} />
           </TableFooter>
         </Table>
       </div>

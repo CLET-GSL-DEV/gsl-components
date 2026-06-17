@@ -1,14 +1,37 @@
-import { forwardRef } from "react";
+import { forwardRef, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Select } from "../select/Select";
 import { cn } from "../../utils/cn";
 import { Button } from "../button";
+import { useTableContext } from "./TableContext";
 import type { PaginationControlsProps } from "../../types/table";
 import "./styles/table.css";
 
+/* ── Helpers ── */
+
+function paramKey(prefix: string | undefined, key: string): string {
+  return prefix ? `${prefix}.${key}` : key;
+}
+
+function readInt(
+  params: URLSearchParams,
+  key: string,
+  fallback: number,
+): number {
+  const raw = params.get(key);
+  if (raw == null) return fallback;
+  const n = parseInt(raw, 10);
+  return Number.isNaN(n) ? fallback : n;
+}
+
 /* ── Pagination helpers ── */
 
-function getPageNumbers(current: number, total: number, maxVisible: number): (number | 'ellipsis')[] {
+function getPageNumbers(
+  current: number,
+  total: number,
+  maxVisible: number,
+): (number | "ellipsis")[] {
   if (total <= maxVisible) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
@@ -37,11 +60,11 @@ function getPageNumbers(current: number, total: number, maxVisible: number): (nu
     hasRightEllipsis = true;
   }
 
-  const pages: (number | 'ellipsis')[] = [];
+  const pages: (number | "ellipsis")[] = [];
 
   if (start > 1) {
     pages.push(1);
-    if (hasLeftEllipsis) pages.push('ellipsis' as const);
+    if (hasLeftEllipsis) pages.push("ellipsis" as const);
   }
 
   for (let i = start; i < start + middleSize && i <= total; i++) {
@@ -50,7 +73,7 @@ function getPageNumbers(current: number, total: number, maxVisible: number): (nu
 
   const end = start + middleSize - 1;
   if (end < total) {
-    if (hasRightEllipsis) pages.push('ellipsis' as const);
+    if (hasRightEllipsis) pages.push("ellipsis" as const);
     pages.push(total);
   }
 
@@ -64,18 +87,52 @@ export const TablePagination = forwardRef<
   PaginationControlsProps
 >(function TablePagination(
   {
-    page,
     totalPages,
-    onPageChange,
     totalItems,
-    pageSize = 10,
     pageSizeOptions = [10, 20, 50, 100],
-    onPageSizeChange,
     visiblePages = 10,
     className,
   },
   ref,
 ) {
+  const { paramPrefix } = useTableContext();
+  const pageKey = paramKey(paramPrefix, "page");
+  const sizeKey = paramKey(paramPrefix, "pageSize");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = readInt(searchParams, pageKey, 1);
+  const pageSize = readInt(searchParams, sizeKey, 10);
+
+  const setPage = useCallback(
+    (p: number) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set(pageKey, String(p));
+          return next;
+        },
+        { replace: false },
+      );
+    },
+    [setSearchParams, pageKey],
+  );
+
+  const setPageSize = useCallback(
+    (ps: number) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set(sizeKey, String(ps));
+          next.set(pageKey, "1");
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams, sizeKey, pageKey],
+  );
+
   const canPrev = page > 1;
   const canNext = page < totalPages;
   const start = totalItems ? (page - 1) * pageSize + 1 : null;
@@ -86,19 +143,16 @@ export const TablePagination = forwardRef<
     <div ref={ref} className={cn("gsl-table__pagination", className)}>
       {totalItems != null && (
         <span className="gsl-table__page-results">
-          Showing {start}&ndash;{end} of{" "}
-          {onPageSizeChange ? (
-            <Select
-              value={String(pageSize)}
-              onValueChange={(v) => onPageSizeChange(Number(v))}
-              options={pageSizeOptions.map((s) => ({
-                value: String(s),
-                label: String(s),
-              }))}
-            />
-          ) : (
-            <span>{totalItems}</span>
-          )}
+          Show{" "}
+          <Select
+            value={String(pageSize)}
+            onValueChange={(v) => setPageSize(Number(v))}
+            options={pageSizeOptions.map((s) => ({
+              value: String(s),
+              label: String(s),
+            }))}
+          />{" "}
+          of {totalItems}
         </span>
       )}
 
@@ -107,7 +161,7 @@ export const TablePagination = forwardRef<
           variant="ghost"
           size="sm"
           disabled={!canPrev}
-          onClick={() => onPageChange(page - 1)}
+          onClick={() => setPage(page - 1)}
           aria-label="Previous page"
         >
           <ChevronLeft size={14} strokeWidth={1.5} aria-hidden />
@@ -115,7 +169,7 @@ export const TablePagination = forwardRef<
         </Button>
 
         {pageNumbers.map((p, i) =>
-          p === 'ellipsis' ? (
+          p === "ellipsis" ? (
             <span key={`ellipsis-${i}`} className="gsl-table__page-ellipsis">
               &hellip;
             </span>
@@ -124,7 +178,7 @@ export const TablePagination = forwardRef<
               key={p}
               variant={p === page ? "secondary" : "ghost"}
               size="sm"
-              onClick={() => onPageChange(p)}
+              onClick={() => setPage(p)}
               aria-current={p === page ? "page" : undefined}
             >
               {p}
@@ -136,7 +190,7 @@ export const TablePagination = forwardRef<
           variant="ghost"
           size="sm"
           disabled={!canNext}
-          onClick={() => onPageChange(page + 1)}
+          onClick={() => setPage(page + 1)}
           aria-label="Next page"
         >
           Next

@@ -1,0 +1,211 @@
+export const meta = {
+  title: "Table",
+  description:
+    "Compound table with URL-driven search, pagination, filter, sort, and loading skeletons.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { TablePreview } from "../previews/code/TablePreview";
+import tableSource from "../previews/examples/table.example.tsx?raw";
+
+# Table
+
+Compound table component with built-in URL-driven search, pagination, filters, column sorting, and loading skeletons. All state lives in the URL — components read and write search params internally. Pass `paramPrefix` to `<Table>` to namespace state for multiple tables on one page.
+
+## Example
+
+<ExampleTabs
+  title="Basic table"
+  preview={<TablePreview />}
+  code={tableSource}
+/>
+
+## Architecture
+
+Every child component reads and writes its own URL keys through `useSearchParams`. The root `<Table paramPrefix>` provides a shared namespace via React Context. No prop drilling — pass `totalPages` and `totalItems` to `<TablePagination>`; everything else is fully automatic.
+
+```
+<Table paramPrefix="members">
+  <TableSearch />          → writes ?members.search=term
+  <TableFilter>            → writes ?members.f_role=admin
+    <select name="role">   → FormData captured on Apply
+  </TableFilter>
+  <TableContent />         → renders data + sort headers
+  <TablePagination />      → reads/writes ?members.page=1&members.pageSize=10
+</Table>
+```
+
+Multiple tables on one page share the same URL without collision by using different prefixes:
+
+```tsx
+<Table paramPrefix="members">{/* ... */}</Table>
+<Table paramPrefix="invoices">{/* ... */}</Table>
+// URL: ?members.page=1&invoices.page=2&invoices.search=paid
+```
+
+## `<Table>`
+
+Root wrapper. Accepts a `paramPrefix` that is provided via Context to all children.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `paramPrefix` | `string` | — | URL key namespace shared by all child components |
+| `classNames` | `TableClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root div |
+
+## `<TableSearch>`
+
+Search input with debounce and a clear button. Writes the search term to `?search=` (or `?prefix.search=`) in the URL, resets page to 1 on change.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | `"Search..."` | Placeholder text |
+| `debounceMs` | `number` | `300` | Debounce delay in ms |
+| `onSearch` | `(value: string) => void` | — | Callback that fires on the **debounced** search value (not every keystroke) |
+| `onChange` | `(e: ChangeEvent) => void` | — | Raw input change event (fires on every keystroke) |
+| `onChange` | `(e) => void` | — | Raw input change callback |
+| `className` | `string` | — | Merged onto the search wrapper |
+
+## `<TableFilter>`
+
+Popover with filter fields and Apply / Reset buttons. Wraps children in a `<form>` element. On Apply, reads `FormData` from named fields and writes `f_{name}={value}` to the URL. On Reset, clears all `f_*` params.
+
+Filter fields must have a `name` attribute, e.g. `<select name="status">`. The name becomes the URL key.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | — | Filter form content (inputs with `name` attributes) |
+| `onApply` | `() => void` | — | Optional callback when Apply is clicked (URL write happens first) |
+| `onReset` | `() => void` | — | Optional callback when Reset is clicked (URL clear happens first) |
+| `applyLabel` | `string` | `"Apply Filter"` | Apply button text |
+| `resetLabel` | `string` | `"Reset"` | Reset button aria-label |
+| `className` | `string` | — | Merged onto the root div |
+
+## `<TableContent>`
+
+Renders a `<table>` with columns, data, optional sort, and loading skeletons.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `TableColumn<T>[]` | — | Column definitions |
+| `data` | `T[]` | — | Row data |
+| `rowKey` | `(row: T) => string \| number` | — | Unique key extractor for each row |
+| `loading` | `boolean` | `false` | Show skeleton rows instead of data |
+| `loadingRows` | `number` | `5` | Number of skeleton rows to display |
+| `className` | `string` | — | Merged onto the wrapper div |
+
+### `TableColumn<T>`
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `id` | `string` | — | Unique column identifier |
+| `header` | `string` | — | Column header text |
+| `accessorKey` | `keyof T` | — | Property path on the row |
+| `accessorFn` | `(row: T) => ReactNode` | — | Custom value extractor (takes priority over `accessorKey`) |
+| `cell` | `(info: { row: T; value: ReactNode }) => ReactNode` | — | Custom cell renderer |
+| `width` | `number` | — | Fixed width in px |
+| `minWidth` | `number` | `120` | Minimum width (used when `width` is omitted) |
+| `maxWidth` | `number` | — | Maximum width in px |
+| `sortable` | `boolean` | `false` | Enable column sorting (client-side only) |
+| `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment |
+
+## `<TablePagination>`
+
+Renders page number buttons, Previous / Next, and a page-size selector. Reads `page` and `pageSize` from the URL; writes changes back. Uses a sliding window with ellipsis when total pages exceed `visiblePages`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `totalPages` | `number` | — | Total number of pages |
+| `totalItems` | `number` | — | Total item count (shown as "Showing 1–10 of N") |
+| `pageSizeOptions` | `number[]` | `[10,20,50,100]` | Options in the page-size dropdown |
+| `visiblePages` | `number` | `10` | Max page number buttons before ellipsis |
+| `className` | `string` | — | Merged onto the root div |
+
+## `<TableHeader>`
+
+Layout wrapper for the header bar. Typically contains `<TableSearch>` and `<TableFilter>`.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `children` | `ReactNode` | Header content |
+| `className` | `string` | Merged onto the header bar |
+
+## `<TableFooter>`
+
+Layout wrapper for the footer bar. Typically contains `<TablePagination>`.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `children` | `ReactNode` | Footer content |
+| `className` | `string` | Merged onto the footer bar |
+
+## `useTableState`
+
+Hook that reads all table state from URL params. Use it to derive filtered/paged data from your raw dataset.
+
+```tsx
+const { page, pageSize, search, filters, pageSizeOptions } = useTableState({
+  defaultPageSize: 10,
+  paramPrefix: "members",
+});
+```
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `defaultPage` | `number` | `1` | Initial page when URL has no value |
+| `defaultPageSize` | `number` | `10` | Initial page size |
+| `pageSizeOptions` | `number[]` | `[10,20,50,100]` | Options passed to pagination dropdown |
+| `defaultSearch` | `string` | `""` | Initial search term |
+| `defaultFilters` | `Partial<TFilters>` | — | Initial filter defaults |
+| `defaultSort` | `{ column, direction } \| null` | `null` | Initial sort state |
+| `paramPrefix` | `string` | — | Must match `<Table paramPrefix>` |
+
+**Returns:** `{ page, pageSize, pageSizeOptions, setPage, setPageSize, search, setSearch, filters, setFilters, setFilter, sort, setSort, resetAll }`
+
+Filters are stored as `Record<string, string>`. Values from URL are always strings — coerce in your filtering logic as needed. Use `filters.status ?? ""` to provide a default.
+
+## `useTablePagination`
+
+Standalone hook for URL-driven pagination without search or filters.
+
+```tsx
+const { page, pageSize, setPage, setPageSize, reset } = useTablePagination({
+  defaultPageSize: 10,
+});
+```
+
+| Option | Type | Default |
+|--------|------|---------|
+| `defaultPage` | `number` | `1` |
+| `defaultPageSize` | `number` | `10` |
+| `paramPrefix` | `string` | — |
+
+**Returns:** `{ page, pageSize, setPage, setPageSize, reset }`
+
+## Types
+
+### `TableProps`
+
+Root props including `paramPrefix`, `classNames`, and `className`.
+
+### `TableClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root wrapper (`.gsl-table`) |
+| `header` | Header bar (`.gsl-table__header-bar`) |
+| `content` | Content wrapper (`.gsl-table__content`) |
+| `footer` | Footer bar (`.gsl-table__footer`) |
+
+### `PaginationControlsProps`
+
+Props for `TablePagination` — see the props section above.
+
+## Notes
+
+- All URL writes are `replace: true` except page changes which use `pushState` for back-button support.
+- Changing search, filters, or page size automatically resets to page 1.
+- Sort is client-side only (`localeCompare`). No server integration.
+- Loading skeletons use a pulse animation; reduced-motion users get a static version.
+- Without a `paramPrefix`, keys are plain (`page`, `search`, `f_status`). With one, they are namespaced (`members.page`, `members.search`, `members.f_status`).
+- The filter form captures all elements with a `name` attribute via `FormData`. For custom inputs (date pickers, multi-selects), ensure they set a `name` and participate in `FormData`.

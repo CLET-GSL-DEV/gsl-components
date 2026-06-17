@@ -193,3 +193,56 @@ createSearchParamAdapter({
 - Dialog and modal params are independent (`?dialog=settings&modal=import`).
 - Closing only removes the param and data keys when the current value matches the hook's `id`.
 - Without an adapter, the browser default works for non-router apps; use `createSearchParamAdapter` with your router in SPA apps.
+
+---
+
+## `useTableState`
+
+Reads all table state (page, pageSize, search, filters, sort) from URL search params. Use to derive filtered and paged data.
+
+```tsx
+import { useTableState } from "@rfdtech/components";
+
+const { page, pageSize, search, filters, pageSizeOptions } = useTableState({
+  defaultPageSize: 10,
+  paramPrefix: "members",
+});
+
+const filtered = data.filter((item) =>
+  item.name.toLowerCase().includes(search.toLowerCase()),
+);
+const totalPages = Math.ceil(filtered.length / pageSize);
+const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+```
+
+| Option | Type | Default |
+|--------|------|---------|
+| `defaultPage` | `number` | `1` |
+| `defaultPageSize` | `number` | `10` |
+| `pageSizeOptions` | `number[]` | `[10,20,50,100]` |
+| `defaultSearch` | `string` | `""` |
+| `defaultFilters` | `Partial<TFilters>` | — |
+| `defaultSort` | `{ column, direction } \| null` | `null` |
+| `paramPrefix` | `string` | — |
+
+**Returns:** `{ page, pageSize, pageSizeOptions, setPage, setPageSize, search, setSearch, filters, setFilters, setFilter, sort, setSort, resetAll }`
+
+See the [Table](/docs/table) docs for full component integration.
+
+## `useTablePagination`
+
+Standalone pagination via URL params. Use when you only need page/pageSize, without search or filters.
+
+```tsx
+const { page, pageSize, setPage, setPageSize, reset } = useTablePagination({
+  defaultPageSize: 10,
+});
+```
+
+| Option | Type | Default |
+|--------|------|---------|
+| `defaultPage` | `number` | `1` |
+| `defaultPageSize` | `number` | `10` |
+| `paramPrefix` | `string` | — |
+
+**Returns:** `{ page, pageSize, setPage, setPageSize, reset }`

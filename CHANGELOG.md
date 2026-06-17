@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+-
+
 ### Added
+
 - `Table` component with debounced search, filter popover, sortable columns, pagination, and data-driven content rendering (`TableColumn`, internal sorting)
 - `useDebounce` hook for generic debounced values
 - `AppHeader` component with brand logo, notification bell with badge, and user profile display
@@ -16,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CSS tokens `--gsl-surface-dark`, `--gsl-radius-xl`, `--gsl-radius-2xl`
 
 ### Changed
+
 - Sidebar uses `var(--gsl-radius-2xl)` for border-radius and `var(--gsl-surface-dark)` for hover/active states
 - Search input shows clear `×` button when non-empty
 - Filter trigger shows active-count badge when `activeCount > 0`

@@ -24,11 +24,13 @@ describe("Table", () => {
   it("renders search and accepts input", async () => {
     const user = userEvent.setup();
     render(
-      <Table>
-        <TableHeader>
-          <TableSearch />
-        </TableHeader>
-      </Table>,
+      <MemoryRouter>
+        <Table>
+          <TableHeader>
+            <TableSearch />
+          </TableHeader>
+        </Table>
+      </MemoryRouter>,
     );
 
     const input = screen.getByPlaceholderText("Search...");
@@ -68,71 +70,75 @@ describe("Table", () => {
   });
 
   it("renders pagination controls", () => {
-    const onPageChange = vi.fn();
-
     render(
-      <Table>
-        <TableFooter>
-          <TablePagination
-            page={3}
-            totalPages={10}
-            onPageChange={onPageChange}
-          />
-        </TableFooter>
-      </Table>,
+      <MemoryRouter initialEntries={["/?page=3&pageSize=10"]}>
+        <Table>
+          <TableFooter>
+            <TablePagination totalPages={10} />
+          </TableFooter>
+        </Table>
+      </MemoryRouter>,
     );
 
     expect(screen.getByLabelText("Previous page")).toBeInTheDocument();
     expect(screen.getByLabelText("Next page")).toBeInTheDocument();
-    // current page button has aria-current="page"
     const currentBtn = screen.getByRole("button", { name: "3" });
     expect(currentBtn).toHaveAttribute("aria-current", "page");
-    // non-current page buttons exist
     expect(screen.getByRole("button", { name: "1" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "10" })).toBeInTheDocument();
   });
 
   it("disables prev/next at boundaries", () => {
     render(
-      <Table>
-        <TableFooter>
-          <TablePagination
-            page={1}
-            totalPages={1}
-            onPageChange={() => {}}
-          />
-        </TableFooter>
-      </Table>,
+      <MemoryRouter initialEntries={["/?page=1"]}>
+        <Table>
+          <TableFooter>
+            <TablePagination totalPages={1} />
+          </TableFooter>
+        </Table>
+      </MemoryRouter>,
     );
 
     expect(screen.getByLabelText("Previous page")).toBeDisabled();
     expect(screen.getByLabelText("Next page")).toBeDisabled();
   });
 
-  it("calls onPageChange when clicking prev, next, or a page number", async () => {
+  it("clicking page numbers updates URL", async () => {
     const user = userEvent.setup();
-    const onPageChange = vi.fn();
 
     render(
-      <Table>
-        <TableFooter>
-          <TablePagination
-            page={2}
-            totalPages={5}
-            onPageChange={onPageChange}
-          />
-        </TableFooter>
-      </Table>,
+      <MemoryRouter initialEntries={["/?page=2"]}>
+        <Table>
+          <TableFooter>
+            <TablePagination totalPages={5} />
+          </TableFooter>
+        </Table>
+      </MemoryRouter>,
+    );
+
+    await user.click(screen.getByText("1"));
+    expect(screen.getByRole("button", { name: "1" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+
+    await user.click(screen.getByText("5"));
+    expect(screen.getByRole("button", { name: "5" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+
+    await user.click(screen.getByLabelText("Next page"));
+    expect(screen.getByRole("button", { name: "5" })).toHaveAttribute(
+      "aria-current",
+      "page",
     );
 
     await user.click(screen.getByLabelText("Previous page"));
-    expect(onPageChange).toHaveBeenCalledWith(1);
-
-    await user.click(screen.getByLabelText("Next page"));
-    expect(onPageChange).toHaveBeenCalledWith(3);
-
-    await user.click(screen.getByText("5"));
-    expect(onPageChange).toHaveBeenCalledWith(5);
+    expect(screen.getByRole("button", { name: "4" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
   });
 
   it("forwards className to root", () => {

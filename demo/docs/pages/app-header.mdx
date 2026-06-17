@@ -1,0 +1,183 @@
+export const meta = {
+  title: "AppHeader",
+  description: "Composable header bar with slot-based search, app switcher, notifications, and profile.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { AppHeaderPreview } from "../previews/code/AppHeaderPreview";
+import appHeaderSource from "../previews/examples/app-header.example.tsx?raw";
+
+# AppHeader
+
+Composable header bar with slot-based sub-components for search, app switching, notifications, and user profile. Drop `AppHeader` into your `AppLayout` and compose the right side with `AppHeaderSearch`, `AppHeaderNotifications`, `AppHeaderProfile`, and `AppSwitcher`.
+
+## Example
+
+<ExampleTabs
+  title="App header with all slots"
+  preview={<AppHeaderPreview />}
+  code={appHeaderSource}
+/>
+
+Click the profile avatar to open the profile popover with variant toggle. The search input shows groups when you type. Notifications open on the bell click.
+
+## Components
+
+### `AppHeader`
+
+Root flex container with a left area (search) and a right group (app switcher, notifications, profile).
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `search` | `ReactNode` | Search input — typically `<AppHeaderSearch>` |
+| `appSwitcher` | `ReactNode` | App launcher — typically `<AppSwitcher>` |
+| `notifications` | `ReactNode` | Notification bell — typically `<AppHeaderNotifications>` |
+| `profile` | `ReactNode` | User profile — typically `<AppHeaderProfile>` |
+| `className` | `string` | Merged onto the root element |
+
+Slots render in order: `search` on the left, then `appSwitcher`, `notifications`, `profile` on the right.
+
+### `AppHeaderSearch`
+
+Data-driven search input that renders results in a `Command` popover list. Pass `data` as groups of items; the component maps them to `CommandGroup` → `CommandItem` elements.
+
+Type to search — the component fires `onSearch` with a debounced value (300ms). Drive your data fetch from this callback and pass the result back as `data`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `data` | `AppHeaderSearchDataGroup[]` | — | Groups of items rendered as `CommandGroup` elements |
+| `onSearch` | `(value: string) => void` | — | Debounced search callback — wire to tanstack query here |
+| `showEmpty` | `boolean` | `false` | Show "no results" when search has value but no items |
+| `emptyLabel` | `string` | `"No results"` | Text shown in empty state |
+| `placeholder` | `string` | `"Search..."` | Input placeholder |
+| `label` | `string` | `"Search"` | Accessible label for the input |
+| `children` | `ReactNode` | — | Rendered inside `CommandList` after groups |
+| `className` | `string` | — | Merged onto the root element |
+
+The input has a pill shape (`--gsl-radius-xl`) and caps at `max-width: 400px`.
+
+### `AppHeaderNotifications`
+
+Bell button that opens a Radix popover. Pass notification items as `children`. Use `loading` to show a skeleton placeholder while fetching.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `loading` | `boolean` | `false` | Show 3-row skeleton pulse animation |
+| `children` | `ReactNode` | — | Rendered inside the popover body |
+| `className` | `string` | — | Merged onto the trigger button |
+
+Notification items use existing CSS classes for styling:
+
+```html
+<div class="gsl-notif-popover__item">
+  <div class="gsl-notif-popover__dot" />
+  <div class="gsl-notif-popover__body">
+    <div class="gsl-notif-popover__body-text">Message</div>
+    <div class="gsl-notif-popover__body-time">2m ago</div>
+  </div>
+</div>
+```
+
+### `AppHeaderProfile`
+
+User profile trigger that opens a Radix popover with avatar, name, and actions. Pass action buttons as `children`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `user` | `AppUser` | — | User object with name, role, initials, optional email/avatar |
+| `variant` | `"full" \| "basic"` | `"full"` | Popover layout variant |
+| `children` | `ReactNode` | — | Action buttons rendered in the popover |
+| `className` | `string` | — | Merged onto the trigger |
+
+**`variant="full"`** — centered layout with 64px avatar, name, email, and action buttons wrapped in a card-surface background.
+
+**`variant="basic"`** — compact inline layout with 32px avatar and name/role in a row, no email, flat action buttons (no card background), `min-width: max-content`. Opens flush with the trigger.
+
+#### `AppUser`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | `string` | User's full name |
+| `role` | `string` | Role label shown in the trigger and popover |
+| `initials` | `string` | Shown in the avatar circle when no `avatar` image is set |
+| `email` | `string` | Shown in the `"full"` variant popover |
+| `avatar` | `string` | Image URL — renders as a round avatar |
+
+Action buttons use CSS classes for consistent styling:
+
+```html
+<button class="gsl-profile-popover__action">
+  <span class="gsl-profile-popover__action-icon"><!-- icon --></span>
+  <span class="gsl-profile-popover__action-label">Settings</span>
+</button>
+<button class="gsl-profile-popover__action gsl-profile-popover__action--danger">
+  <span class="gsl-profile-popover__action-icon"><!-- icon --></span>
+  <span class="gsl-profile-popover__action-label">Sign out</span>
+</button>
+```
+
+## Types
+
+### `AppHeaderProps`
+
+Root slot props — see [`AppHeader`](#appheader) props table.
+
+### `AppHeaderSearchProps`
+
+Search props — see [`AppHeaderSearch`](#appheadersearch) props table.
+
+### `AppHeaderSearchDataGroup`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `heading` | `string` | Optional group heading label |
+| `items` | `AppHeaderSearchItem[]` | Items in the group |
+| `loading` | `boolean` | Show loading bar for this group |
+| `loadingLabel` | `string` | Accessible label while loading |
+
+### `AppHeaderSearchItem`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `value` | `string` | Unique item value (used as key and for cmdk filtering) |
+| `label` | `ReactNode` | Rendered content — string or custom JSX |
+| `onSelect` | `() => void` | Fires when the item is selected (click or enter) |
+
+### `AppHeaderNotificationsProps`
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `loading` | `boolean` | `false` | Show skeleton state |
+| `className` | `string` | — | Class on the trigger button |
+| `children` | `ReactNode` | — | Popover content |
+
+### `AppHeaderProfileProps`
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `user` | `AppUser` | — | User data |
+| `variant` | `"full" \| "basic"` | `"full"` | Popover layout |
+| `className` | `string` | — | Class on the trigger element |
+| `children` | `ReactNode` | — | Action buttons |
+
+### `AppUser`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `name` | `string` | Full name |
+| `role` | `string` | Role label |
+| `initials` | `string` | Avatar text fallback |
+| `email` | `string` | Email (optional, shown in `"full"` variant) |
+| `avatar` | `string` | Image URL (optional, overrides initials) |
+
+## Notes
+
+- `AppHeaderSearch` expects consumer-driven data: wire `onSearch` to your query library (tanstack query, SWR, etc.) and pass results back as `data`. The component does no fetching.
+- Groups render in order. Use `loading: true` on a group to show a pulse bar while results load for that section.
+- `AppHeaderSearch` list only shows when the input has text (`data` is defined) — empty input hides the list entirely.
+- Group items are memoized on `[data]` — list rendering does not re-run on every keystroke, only when fetched data changes.
+- Notification items: use `.gsl-notif-popover__item` with `.gsl-notif-popover__dot` (unread indicator), `.gsl-notif-popover__body-text`, and `.gsl-notif-popover__body-time` for consistent styling.
+- Profile actions use `.gsl-profile-popover__action` with `--danger` modifier for destructive actions. Icon and label slots keep consistent spacing.
+- All header components accept `className` and pass it through to their root element for Tailwind/consumer overrides.
+- The header avatar in `"full"` variant uses `--gsl-primary` background with `--gsl-on-primary` text.
+- Basic variant profile popover opens at `side="top"` with no offset — flush against the trigger.

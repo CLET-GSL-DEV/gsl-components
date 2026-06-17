@@ -21,6 +21,7 @@ export const docNavSections: DocNavSection[] = [
   {
     title: "Components",
     items: [
+      { slug: "app-header", title: "AppHeader" },
       { slug: "app-switcher", title: "AppSwitcher" },
       { slug: "badge", title: "Badge" },
       { slug: "breadcrumb", title: "Breadcrumb" },
@@ -41,6 +42,7 @@ export const docNavSections: DocNavSection[] = [
       { slug: "sidebar", title: "Sidebar" },
       { slug: "sortable", title: "Sortable" },
       { slug: "tabs", title: "Tabs" },
+      { slug: "table", title: "Table" },
       { slug: "toast", title: "Toast" },
     ],
   },

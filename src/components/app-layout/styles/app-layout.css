@@ -24,6 +24,8 @@
 }
 
 .gsl-app-layout__header {
+  position: sticky;
+  top: 0;
 }
 
 .gsl-app-layout__body {
@@ -32,6 +34,7 @@
   gap: var(--gsl-app-layout-body-gap);
   flex: 1;
 
+  border-radius: var(--gsl-panel-radius);
   overflow-y: auto;
   overflow-x: hidden;
 }

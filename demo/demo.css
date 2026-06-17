@@ -10,6 +10,11 @@ body {
   color: var(--gsl-text);
 }
 
+.demo-members-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gsl-app-layout-body-gap);
+}
 .demo-card {
   padding: 1rem;
   border-radius: var(--gsl-radius-xl);

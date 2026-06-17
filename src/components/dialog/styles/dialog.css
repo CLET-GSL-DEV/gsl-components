@@ -19,7 +19,7 @@
   left: 50%;
   z-index: var(--gsl-z-modal);
   display: flex;
-  width: min(800px, calc(100vw - 32px));
+  width: min(480px, calc(100vw - 32px));
   max-width: 100%;
   max-height: min(85vh, calc(100dvh - 32px));
   flex-direction: column;

@@ -39,6 +39,8 @@ export interface TableClassNames {
 export interface TableProps extends HTMLAttributes<HTMLDivElement> {
   classNames?: TableClassNames;
   className?: string;
+  /** URL param namespace shared by all child table components */
+  paramPrefix?: string;
 }
 
 export interface TableHeaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -73,25 +75,15 @@ export interface TableFilterProps {
   children?: ReactNode;
   onApply?: () => void;
   onReset?: () => void;
-  activeCount?: number;
   applyLabel?: string;
   resetLabel?: string;
   className?: string;
-  /**
-   * When set, filter fields are written to URL as `f_{name}={value}`.
-   * Use the same prefix as useTableState for automatic sync.
-   */
-  paramPrefix?: string;
 }
 
 export interface PaginationControlsProps {
-  page: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
   totalItems?: number;
-  pageSize?: number;
   pageSizeOptions?: number[];
-  onPageSizeChange?: (pageSize: number) => void;
   visiblePages?: number;
   className?: string;
 }

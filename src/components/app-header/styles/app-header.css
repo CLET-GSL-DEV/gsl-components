@@ -39,6 +39,11 @@
   .gsl-command__input-wrapper {
   border-radius: var(--gsl-radius-xl);
   height: stretch;
+  border: none;
+}
+.gsl-app-header-search.gsl-app-header-search.gsl-command
+  .gsl-command__input-wrapper:hover {
+  border: 1px solid var(--gsl-border);
 }
 
 .gsl-app-header__search-btn {
@@ -125,7 +130,8 @@
 }
 
 .gsl-app-header__profile:hover {
-  opacity: 0.85;
+  background: rgba(0, 0, 0, 0.1);
+  --padding-block: 10px;
 }
 
 .gsl-app-header__avatar {
