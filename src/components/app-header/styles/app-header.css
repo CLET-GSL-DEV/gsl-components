@@ -174,7 +174,7 @@
   width: 340px;
   max-height: 420px;
   overflow: hidden;
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-radius-xl);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-md);
   z-index: var(--gsl-z-popover);
@@ -311,10 +311,11 @@
   width: 280px;
   padding: 6px;
   background: var(--gsl-bg);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-radius-xl);
   box-shadow: var(--gsl-shadow-md);
   outline: none;
   z-index: var(--gsl-z-popover);
+  translate: 0px -48px;
 }
 
 *[data-gsl-theme="dark"] .gsl-profile-popover {
@@ -370,7 +371,7 @@
 
 .gsl-profile-popover__actions {
   background: var(--gsl-surface-subtle);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-radius-base);
   padding: 6px;
   display: flex;
   flex-direction: column;
@@ -477,7 +478,7 @@
 }
 
 .gsl-profile-popover--basic .gsl-profile-popover__action {
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-radius-base);
 }
 
 @keyframes gsl-profile-popover-in {

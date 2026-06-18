@@ -248,7 +248,11 @@ export const CommandGroup = forwardRef<HTMLDivElement, CommandGroupProps>(
             role="status"
             aria-label={loadingLabel}
           >
-            <span className="gsl-command__loading-bar" aria-hidden="true" />
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="gsl-command__skeleton">
+                <div className="gsl-command__skeleton-line" />
+              </div>
+            ))}
           </div>
         ) : (
           children

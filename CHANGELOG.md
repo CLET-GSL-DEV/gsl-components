@@ -5,65 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [1.9.0] - 2026-06-17
 
 ### Added
 
-- `Table` component with debounced search, filter popover, sortable columns, sort arrow indicators, pagination controls, and data-driven content rendering via `TableColumn[]`
-- `AppHeader` — compound header with `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderNotifications`, and `AppHeaderProfile` sub-components
-- `AppHeaderSearch` — data-driven search using `Command` primitives; `data` prop (groups of items with `label: ReactNode`), debounced `onSearch` for tanstack query integration, `showEmpty`/`emptyLabel` for no-results state, `children` for custom list content; list rendering memoized on `[data]`
-- `AppHeaderNotifications` — bell trigger → Radix popover with loading skeleton (pulse animation), `loadingLabel` prop for accessible loading state, and consumer-rendered notification items
-- `AppHeaderProfile` `variant` prop — `"full"` (default, large centered 64px avatar + email + carded actions) and `"basic"` (compact 32px inline avatar with name/role row, flat actions, `max-content` width, opens flush with trigger, no email)
-- `AppLayout`, `AppSidebar`, `AppBody` — layout container that auto-positions children by component type
-- `CountrySelector` — country dropdown with flag emoji, search filtering, `invalid`/`disabled` states
-- `DateSelector` — date picker with calendar grid popover, month/year navigation, native date formatting
-- `MetricCard` — metric display card with label, value, optional icon/description, and trend indicator (up/down/neutral)
-- `NetworkOperator` — operator selector with image thumbnails (MTN, Vodafone, AirtelTigo, Glo), `defaultValue` prop, `invalid`/`disabled` states
-- `OtpInput` — OTP input with configurable length, paste-from-any-slot support, keyboard navigation, `onComplete` callback, and forwardRef for react-hook-form
-- `PhoneNumberInput` — phone input with country code selector (flag + dial code), auto-detection of country from phone number prefix
-- `UploadField` — file upload with drag-and-drop zone, file type icons (PDF/image/video/generic), remove button, `invalid`/`disabled` states
-- `Select` — Radix-based select with `options` array, `SelectClassNames` part-level overrides, `placeholder`, `invalid`/`disabled` states, forwardRef
-- `useTablePagination` hook — URL search-param based pagination (`page`, `pageSize`) with `react-router-dom`
-- `useTableState` hook — URL search-param based table state (search, pagination, sort, filter) with `react-router-dom`
-- `useDebounce` hook for generic debounced values
-- `DocsLayout` component for documentation pages (split from `DemoLayout`)
-- `countries` utility — full country list with name, flag emoji, dial code, ISO code
-- CSS tokens `--gsl-surface-dark`, `--gsl-radius-xl`, `--gsl-radius-2xl`
-- `AppHeader` doc page with compound component docs, design token reference, and all sub-components
-- `AppLayout` doc page with layout diagram, auto-positioning docs, and design tokens
-- `MetricCard`, `CountrySelector`, `DateSelector`, `NetworkOperator`, `OtpInput`, `PhoneNumberInput`, `Select`, `UploadField` doc pages with interactive examples and react-hook-form usage sections
-- Tests for `CountrySelector`, `NetworkOperator`, `Select`, `AppHeader` (all sub-components), and `AppLayout` (all layout parts) — all with RHF integration coverage
+- `AppHeader` compound primitives (`AppHeader`, `AppHeaderActions`, `AppHeaderSearch`, `AppHeaderNotifications`, `AppHeaderProfile`)
+- `AppLayout`, `AppSidebar`, `AppBody` layout container with auto-positioning by `componentId`
+- `Table` compound primitives (`Table`, `TableHeader`, `TableSearch`, `TableFilter`, `TableContent`, `TableFooter`, `TablePagination`) with URL-driven state; `paramPrefix` required; pagination shows "Showing {start} to {select} of {total}"
+- `CountrySelector`, `DateSelector`, `DateRangeSelector`, `MetricCard`, `NetworkOperator`, `OtpInput`, `PhoneNumberInput`, `UploadField` input components
+- `Card` surface wrapper (`header`, `body`, `--gsl-surface-card`, `--gsl-card-padding`)
+- `SidebarBrand` sub-component for collapsed-aware brand area
+- `useTablePagination`, `useTableState`, `useTableFilter`, `useDebounce` hooks
+- `DocsLayout` for documentation pages
+- `countries` utility — country list with name, flag emoji, dial code, ISO code
+- CSS tokens `--gsl-surface-dark`, `--gsl-surface-card`, `--gsl-rounded-base`
+- Documentation pages for all new components with interactive examples
 
 ### Changed
 
-- Sidebar uses `--gsl-radius-2xl` for border-radius and `--gsl-surface-dark` for hover/active states
-- Table search shows clear `×` button when non-empty; filter trigger shows active-count badge when `activeCount > 0`
-- Table pagination right-aligned in footer, shows "Showing X–Y of Z" when `totalItems` provided
-- `DemoLayout` simplified to accept header/sidebar/children slots; `DocsPage` uses `DocsLayout`
-- Demo page split into `DemoPage` (dashboard) + `MembersPage` (CRUD table with modals)
-- AppHeaderProfile popover uses `--gsl-primary` bg + `--gsl-on-primary` text for avatar (was `--gsl-surface-subtle` with border)
-- AppHeader uses full width and falls back to `1rem` for `--gsl-app-layout-body-gap` when used outside AppLayout
-- `AppHeaderActionsProps` moved to centralized `src/types/app-header.ts`
-- UploadField disabled drop zone shows `cursor: not-allowed`
-- `AppSidebar` renders as `<aside>` with ref forwarding (was raw Fragment)
-- `CountrySelector`, `NetworkOperator`, `Select`, `AppHeader`, and `AppLayout` now have full test suites with react-hook-form integration coverage
+- Sidebar uses `--gsl-radius-2xl` and `--gsl-surface-dark` for active states; scrollbar hidden; scroll hint internalized
+- CommandGroup loading replaced with skeleton rows
+- `--gsl-radius` renamed to `--gsl-rounded-base`
+- Added `invalid` prop and `aria-invalid` to `Dropdown`
+- `DemoLayout` and demo pages refactored for new components
+- `DateRangeSelector` refactored to single-trigger display with two-click range selection; start always kept before end (auto-swap); self-contained CSS; simplified `placeholder` prop from `{ start, end }` object to `string`
 
 
 ## [1.8.0] - 2026-06-15
-
-### Changed
-
-- Form docs split into `/docs/form` (Field, Input, Textarea) and `/docs/form-field` (Form, FormField, useFormField, Zod)
-- Dialog, Modal, BulkImportModal, and CommandDialog doc examples and README snippets now use `useDialogSearchParam` / `useModalSearchParam` for URL-driven open state
-- Toast rebuilt on [Sonner](https://sonner.emilkowal.ski/) — `ToastProvider`, `Toaster`, and `useToast()` remain the public API; internal queue and styling now delegate to Sonner with GSL `unstyled` class names
-- `useToast().toasts` is deprecated and always returns `[]` (Sonner does not expose its queue)
-- Docs code examples use increased spacing between fenced blocks and inside highlighted code panels
-
-### Removed
-
-- Toast compound Radix parts: `Toast`, `ToastTitle`, `ToastDescription`, `ToastAction`, `ToastClose`, `ToastViewport`, `ToastIcon`
-- Toast reducer utilities: `toastReducer`, `createToastRecord`, `enforceToastLimit`, `TOAST_REMOVE_DELAY`, `createToastId`
-- `ToastProvider` props `swipeDirection` and `label` (not supported by Sonner)
 
 ### Added
 
@@ -80,6 +50,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sortable documentation page at `/docs/sortable` with props and exported types
 - `Toast` primitives (`ToastProvider`, `Toaster`) and `useToast` hook for imperative notifications
 - Toast documentation page at `/docs/toast` with props and exported types
+
+### Changed
+
+- Form docs split into `/docs/form` (Field, Input, Textarea) and `/docs/form-field` (Form, FormField, useFormField, Zod)
+- Dialog, Modal, BulkImportModal, and CommandDialog doc examples and README snippets now use `useDialogSearchParam` / `useModalSearchParam` for URL-driven open state
+- Toast rebuilt on [Sonner](https://sonner.emilkowal.ski/) — `ToastProvider`, `Toaster`, and `useToast()` remain the public API; internal queue and styling now delegate to Sonner with GSL `unstyled` class names
+- `useToast().toasts` is deprecated and always returns `[]` (Sonner does not expose its queue)
+- Docs code examples use increased spacing between fenced blocks and inside highlighted code panels
+
+### Removed
+
+- Toast compound Radix parts: `Toast`, `ToastTitle`, `ToastDescription`, `ToastAction`, `ToastClose`, `ToastViewport`, `ToastIcon`
+- Toast reducer utilities: `toastReducer`, `createToastRecord`, `enforceToastLimit`, `TOAST_REMOVE_DELAY`, `createToastId`
+- `ToastProvider` props `swipeDirection` and `label` (not supported by Sonner)
 
 ## [1.7.0] - 2026-06-15
 

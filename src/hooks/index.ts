@@ -11,6 +11,11 @@ export {
 export { useDialogSearchParam } from "./useDialogSearchParam";
 export { useModalSearchParam } from "./useModalSearchParam";
 export { useSearchParamOverlay } from "./useSearchParamOverlay";
+export { useTableFilter } from "./useTableFilter";
+export type {
+  UseTableFilterOptions,
+  UseTableFilterReturn,
+} from "./useTableFilter";
 export { useTablePagination } from "./useTablePagination";
 export type {
   UseTablePaginationOptions,

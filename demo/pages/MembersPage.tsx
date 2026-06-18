@@ -13,6 +13,8 @@ import {
   TableFooter,
   TablePagination,
   Button,
+  Card,
+  Dropdown,
   BulkImportModal,
   useTableState,
 } from "@rfdtech/components";
@@ -49,6 +51,10 @@ export function MembersPage() {
   const [editMember, setEditMember] = useState<DemoMember | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [bulkImportOpen, setBulkImportOpen] = useState(false);
+
+  const [statusValue, setStatusValue] = useState(filters.status ?? "");
+  const [roleValue, setRoleValue] = useState(filters.role ?? "");
+  const [invStatusValue, setInvStatusValue] = useState(invFilters.status ?? "");
 
   const handleViewMember = (id: number) => {
     const member = demoMembers.find((m) => m.id === id);
@@ -168,45 +174,45 @@ export function MembersPage() {
 
   return (
     <div className="demo-members-page">
-      <div className="demo-card">
-        <Table>
+      <Card>
+        <Table paramPrefix="members">
           <TableHeader>
             <TableSearch placeholder="Search members..." />
             <div className="demo-filter-right">
               <TableFilter>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Status</label>
-                  <select
-                    name="status"
-                    className="demo-home__filter-select"
-                    defaultValue={filters.status ?? ""}
-                  >
-                    <option value="">All</option>
-                    <option value="active">Active</option>
-                    <option value="suspended">Suspended</option>
-                    <option value="terminated">Terminated</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="pending">Pending</option>
-                  </select>
+                  <input type="hidden" name="status" value={statusValue} />
+                  <Dropdown
+                    value={statusValue}
+                    onValueChange={(v) => setStatusValue(v ?? "")}
+                    options={[
+                      { value: "active", label: "Active" },
+                      { value: "suspended", label: "Suspended" },
+                      { value: "terminated", label: "Terminated" },
+                      { value: "inactive", label: "Inactive" },
+                      { value: "pending", label: "Pending" },
+                    ]}
+                    placeholder="All statuses"
+                  />
                 </div>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Role</label>
-                  <select
-                    name="role"
-                    className="demo-home__filter-select"
-                    defaultValue={filters.role ?? ""}
-                  >
-                    <option value="">All</option>
-                    <option value="nbec member">NBEC Member</option>
-                    <option value="nbec secretariat">NBEC Secretariat</option>
-                    <option value="item writer">Item Writer</option>
-                    <option value="moderator">Moderator</option>
-                    <option value="examiner">Examiner</option>
-                    <option value="candidate">Candidate</option>
-                    <option value="system administrator">
-                      System Administrator
-                    </option>
-                  </select>
+                  <input type="hidden" name="role" value={roleValue} />
+                  <Dropdown
+                    value={roleValue}
+                    onValueChange={(v) => setRoleValue(v ?? "")}
+                    options={[
+                      { value: "nbec member", label: "NBEC Member" },
+                      { value: "nbec secretariat", label: "NBEC Secretariat" },
+                      { value: "item writer", label: "Item Writer" },
+                      { value: "moderator", label: "Moderator" },
+                      { value: "examiner", label: "Examiner" },
+                      { value: "candidate", label: "Candidate" },
+                      { value: "system administrator", label: "System Administrator" },
+                    ]}
+                    placeholder="All roles"
+                  />
                 </div>
               </TableFilter>
               <Button onClick={() => setBulkImportOpen(true)}>
@@ -230,9 +236,9 @@ export function MembersPage() {
             />
           </TableFooter>
         </Table>
-      </div>
+      </Card>
 
-      <div className="demo-card">
+      <Card>
         <Table paramPrefix="invoices">
           <TableHeader>
             <TableSearch placeholder="Search invoices..." />
@@ -240,16 +246,17 @@ export function MembersPage() {
               <TableFilter>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Status</label>
-                  <select
-                    name="status"
-                    className="demo-home__filter-select"
-                    defaultValue={invFilters.status ?? ""}
-                  >
-                    <option value="">All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="pending">Pending</option>
-                  </select>
+                  <input type="hidden" name="status" value={invStatusValue} />
+                  <Dropdown
+                    value={invStatusValue}
+                    onValueChange={(v) => setInvStatusValue(v ?? "")}
+                    options={[
+                      { value: "active", label: "Active" },
+                      { value: "inactive", label: "Inactive" },
+                      { value: "pending", label: "Pending" },
+                    ]}
+                    placeholder="All statuses"
+                  />
                 </div>
               </TableFilter>
             </div>
@@ -291,7 +298,7 @@ export function MembersPage() {
             />
           </TableFooter>
         </Table>
-      </div>
+      </Card>
 
       <ViewMemberModal
         member={selectedMember}

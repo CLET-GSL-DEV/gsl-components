@@ -19,6 +19,7 @@ export interface DropdownProps {
   placeholder?: string;
   clearable?: boolean;
   disabled?: boolean;
+  invalid?: boolean;
   "aria-label"?: string;
   classNames?: DropdownClassNames;
   className?: string;

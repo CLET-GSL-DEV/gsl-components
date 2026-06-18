@@ -17,10 +17,23 @@ const user = {
 };
 
 const apps = [
-  { id: "dashboard", name: "Dashboard", icon: "📊" },
-  { id: "members", name: "Members", icon: "👥" },
-  { id: "settings", name: "Settings", icon: "⚙️" },
-  { id: "billing", name: "Billing", icon: "💳" },
+  {
+    id: "gov-portal",
+    name: "Governance Portal",
+    icon: "https://ui-avatars.com/api/?name=Governance+Portal&background=1d4ed8&color=fff&size=96",
+    href: "https://portal.example.com",
+  },
+  {
+    id: "finance-hub",
+    name: "Finance Hub",
+    icon: "https://ui-avatars.com/api/?name=Finance+Hub&background=047857&color=fff&size=96",
+    href: "https://finance.example.com",
+  },
+  {
+    id: "hr-suite",
+    name: "HR Suite",
+    icon: "https://ui-avatars.com/api/?name=HR+Suite&background=7c3aed&color=fff&size=96",
+  },
 ];
 
 const notifications = [

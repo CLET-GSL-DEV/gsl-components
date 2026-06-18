@@ -37,9 +37,18 @@
   border-radius: var(--gsl-panel-radius);
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.gsl-app-layout__body::-webkit-scrollbar {
+  display: none;
 }
 
 .gsl-app-layout__sidebar {
   flex-shrink: 0;
   width: max-content;
+}
+
+.gsl-app-sidebar {
+  height: 100%;
 }

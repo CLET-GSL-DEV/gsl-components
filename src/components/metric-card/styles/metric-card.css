@@ -1,5 +1,5 @@
 .gsl-metric-card {
-  --gsl-default-metric-card-bg: var(--gsl-page-bg);
+  --gsl-default-metric-card-bg: var(--gsl-surface-card);
   --gsl-metric-card-radius: var(--gsl-radius-xl);
   --gsl-metric-card-shadow: none;
   display: flex;

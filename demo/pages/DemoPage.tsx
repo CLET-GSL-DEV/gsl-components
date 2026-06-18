@@ -1,11 +1,13 @@
-import type { TableColumn } from "@rfdtech/components";
+import type { TableColumn, TableBulkAction } from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
+import { useState } from "react";
 import {
   Users,
   UserCheck,
   CalendarPlus,
   Activity,
-  Download,
+  Trash2,
+  UserX,
 } from "lucide-react";
 import {
   Table,
@@ -13,10 +15,12 @@ import {
   TableSearch,
   TableFilter,
   TableContent,
+  TableBulkActions,
   TableFooter,
   TablePagination,
   MetricCard,
-  Button,
+  Card,
+  Dropdown,
   useTableState,
 } from "@rfdtech/components";
 
@@ -30,8 +34,12 @@ const columns: TableColumn<GslMember>[] = [
 
 export function DemoPage() {
   const { page, pageSize, pageSizeOptions, search, filters } = useTableState({ defaultPageSize: 10 });
+  const [roleValue, setRoleValue] = useState(filters.role ?? "");
+  const [statusValue, setStatusValue] = useState(filters.status ?? "");
+  const [members, setMembers] = useState(gslMembers);
+  const [selected, setSelected] = useState<Set<string | number>>(new Set());
 
-  const filtered = gslMembers.filter((m) => {
+  const filtered = members.filter((m) => {
     const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase());
     const matchStatus = !filters.status || m.status.toLowerCase() === filters.status;
     const matchRole = !filters.role || m.role.toLowerCase() === filters.role;
@@ -40,60 +48,103 @@ export function DemoPage() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
+  const bulkActions: TableBulkAction[] = [
+    {
+      id: "activate",
+      label: "Activate",
+      icon: <UserCheck size={14} strokeWidth={1.5} />,
+      onClick: (ids) => {
+        setMembers((prev) =>
+          prev.map((m) => (ids.has(m.id) ? { ...m, status: "Active" } : m)),
+        );
+        setSelected(new Set());
+      },
+    },
+    {
+      id: "deactivate",
+      label: "Deactivate",
+      icon: <UserX size={14} strokeWidth={1.5} />,
+      onClick: (ids) => {
+        setMembers((prev) =>
+          prev.map((m) => (ids.has(m.id) ? { ...m, status: "Inactive" } : m)),
+        );
+        setSelected(new Set());
+      },
+    },
+    {
+      id: "delete",
+      label: "Delete",
+      icon: <Trash2 size={14} strokeWidth={1.5} />,
+      onClick: (ids) => {
+        setMembers((prev) => prev.filter((m) => !ids.has(m.id)));
+        setSelected(new Set());
+      },
+      destructive: true,
+    },
+  ];
+
   return (
     <>
       <div className="demo-home__metrics">
-        <MetricCard label="Total Members" value={gslMembers.length} icon={<Users size={16} strokeWidth={1.5} />} description="Across all departments" trend="up" trendValue="+12%" />
-        <MetricCard label="Active Members" value={gslMembers.filter((m) => m.status === "Active").length} icon={<UserCheck size={16} strokeWidth={1.5} />} description="Currently active" trend="up" trendValue="+5%" />
-        <MetricCard label="New This Month" value={gslMembers.filter((m) => m.joined >= "2025-01-01").length} icon={<CalendarPlus size={16} strokeWidth={1.5} />} description="Joined this year" trend="down" trendValue="-3%" />
+        <MetricCard label="Total Members" value={members.length} icon={<Users size={16} strokeWidth={1.5} />} description="Across all departments" trend="up" trendValue="+12%" />
+        <MetricCard label="Active Members" value={members.filter((m) => m.status === "Active").length} icon={<UserCheck size={16} strokeWidth={1.5} />} description="Currently active" trend="up" trendValue="+5%" />
+        <MetricCard label="New This Month" value={members.filter((m) => m.joined >= "2025-01-01").length} icon={<CalendarPlus size={16} strokeWidth={1.5} />} description="Joined this year" trend="down" trendValue="-3%" />
         <MetricCard label="Engagement Rate" value="94.2%" icon={<Activity size={16} strokeWidth={1.5} />} description="Average daily activity" trend="up" trendValue="+1.2%" />
       </div>
 
-      <div className="demo-card">
-        <Table>
+      <Card>
+        <Table paramPrefix="members">
           <TableHeader>
             <TableSearch placeholder="Search members..." />
-            <div className="demo-filter-right">
-              <TableFilter>
-                <div className="demo-home__filter-field">
-                  <label className="demo-home__filter-label">Status</label>
-                  <select
-                    name="status"
-                    className="demo-home__filter-select"
-                    defaultValue={filters.status ?? ""}
-                  >
-                    <option value="">All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="pending">Pending</option>
-                  </select>
-                </div>
-                <div className="demo-home__filter-field">
-                  <label className="demo-home__filter-label">Role</label>
-                  <select
-                    name="role"
-                    className="demo-home__filter-select"
-                    defaultValue={filters.role ?? ""}
-                  >
-                    <option value="">All</option>
-                    <option value="admin">Admin</option>
-                    <option value="editor">Editor</option>
-                    <option value="viewer">Viewer</option>
-                  </select>
-                </div>
-              </TableFilter>
-              <Button>
-                <Download size={14} strokeWidth={1.5} />
-                Download CSV
-              </Button>
-            </div>
+            <TableFilter>
+              <div className="demo-home__filter-field">
+                <label className="demo-home__filter-label">Status</label>
+                <input type="hidden" name="status" value={statusValue} />
+                <Dropdown
+                  value={statusValue}
+                  onValueChange={(v) => setStatusValue(v ?? "")}
+                  options={[
+                    { value: "active", label: "Active" },
+                    { value: "inactive", label: "Inactive" },
+                    { value: "pending", label: "Pending" },
+                  ]}
+                  placeholder="All statuses"
+                />
+              </div>
+              <div className="demo-home__filter-field">
+                <label className="demo-home__filter-label">Role</label>
+                <input type="hidden" name="role" value={roleValue} />
+                <Dropdown
+                  value={roleValue}
+                  onValueChange={(v) => setRoleValue(v ?? "")}
+                  options={[
+                    { value: "admin", label: "Admin" },
+                    { value: "editor", label: "Editor" },
+                    { value: "viewer", label: "Viewer" },
+                  ]}
+                  placeholder="All roles"
+                />
+              </div>
+            </TableFilter>
           </TableHeader>
-          <TableContent columns={columns} data={paged} rowKey={(m: GslMember) => m.id} />
+          <TableContent
+            selectable
+            selectedIds={selected}
+            onSelectionChange={setSelected}
+            columns={columns}
+            data={paged}
+            rowKey={(m: GslMember) => m.id}
+          />
+          <TableBulkActions
+            selectedIds={selected}
+            onClear={() => setSelected(new Set())}
+            actions={bulkActions}
+          />
           <TableFooter>
             <TablePagination totalPages={totalPages} totalItems={filtered.length} pageSizeOptions={pageSizeOptions} />
           </TableFooter>
         </Table>
-      </div>
+      </Card>
     </>
   );
 }

@@ -1,5 +1,10 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useTableFilter } from "./useTableFilter";
+
+// Re-export from useTableFilter for convenience
+export type { UseTableFilterOptions, UseTableFilterReturn } from "./useTableFilter";
+export { useTableFilter } from "./useTableFilter";
 
 /* ── Types ── */
 
@@ -35,10 +40,6 @@ export interface UseTableStateReturn<
   resetAll: () => void;
 }
 
-/* ── Constants ── */
-
-const FILTER_PREFIX = "f_";
-
 /* ── Helpers ── */
 
 function paramKey(prefix: string | undefined, key: string): string {
@@ -54,44 +55,6 @@ function readInt(
   if (raw == null) return fallback;
   const n = parseInt(raw, 10);
   return Number.isNaN(n) ? fallback : n;
-}
-
-function readFilters(
-  params: URLSearchParams,
-  prefix: string | undefined,
-  defaults: Record<string, string> | undefined,
-): Record<string, string> {
-  const filterPrefix = paramKey(prefix, FILTER_PREFIX);
-  const filters: Record<string, string> = { ...defaults };
-
-  for (const [key, value] of params.entries()) {
-    if (key.startsWith(filterPrefix)) {
-      const filterKey = key.slice(filterPrefix.length);
-      if (filterKey) {
-        filters[filterKey] = value;
-      }
-    }
-  }
-
-  return filters;
-}
-
-function writeFilters(
-  params: URLSearchParams,
-  prefix: string | undefined,
-  filters: Record<string, string | null | undefined>,
-) {
-  const filterPrefix = paramKey(prefix, FILTER_PREFIX);
-  for (const key of [...params.keys()]) {
-    if (key.startsWith(filterPrefix)) {
-      params.delete(key);
-    }
-  }
-  for (const [key, value] of Object.entries(filters)) {
-    if (value != null && value !== "") {
-      params.set(`${filterPrefix}${key}`, value);
-    }
-  }
 }
 
 /* ── Hook ── */
@@ -115,18 +78,17 @@ export function useTableState<TFilters extends TableFilters = TableFilters>(
   const sortKey = paramKey(paramPrefix, "sort");
   const dirKey = paramKey(paramPrefix, "direction");
 
-  // SINGLE useSearchParams call — all state derived from it
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = readInt(searchParams, pageKey, defaultPage);
   const pageSize = readInt(searchParams, sizeKey, defaultPageSize);
   const search = searchParams.get(searchKey) ?? defaultSearch;
 
-  const filters = readFilters(
-    searchParams,
+  // ── Composed: filter read state from useTableFilter ──
+  const { filters } = useTableFilter({
+    defaults: defaultFilters as Record<string, string> | undefined,
     paramPrefix,
-    defaultFilters as Record<string, string> | undefined,
-  ) as Partial<TFilters>;
+  });
 
   const sortColumn = searchParams.get(sortKey);
   const sortDir = searchParams.get(dirKey) as "asc" | "desc" | null;
@@ -190,11 +152,22 @@ export function useTableState<TFilters extends TableFilters = TableFilters>(
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);
-          writeFilters(
-            next,
-            paramPrefix,
+          // Delegate filter writing to the pattern, then reset page
+          const tempParams = new URLSearchParams();
+          // Manually apply filter writes using the same key pattern
+          const filterPrefix = paramKey(paramPrefix, "f_");
+          for (const key of [...next.keys()]) {
+            if (key.startsWith(filterPrefix)) {
+              next.delete(key);
+            }
+          }
+          for (const [key, value] of Object.entries(
             nextFilters as Record<string, string | null | undefined>,
-          );
+          )) {
+            if (value != null && value !== "") {
+              next.set(`${filterPrefix}${key}`, value);
+            }
+          }
           next.set(pageKey, String(defaultPage));
           return next;
         },
@@ -209,7 +182,7 @@ export function useTableState<TFilters extends TableFilters = TableFilters>(
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);
-          const filterPrefix = paramKey(paramPrefix, FILTER_PREFIX);
+          const filterPrefix = paramKey(paramPrefix, "f_");
           const fullKey = `${filterPrefix}${String(key)}`;
 
           if (value != null && value !== "") {
@@ -271,7 +244,7 @@ export function useTableState<TFilters extends TableFilters = TableFilters>(
       setPageSize,
       search,
       setSearch,
-      filters,
+      filters: filters as Partial<TFilters>,
       setFilters,
       setFilter,
       sort,

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTableState } from "@rfdtech/components";
 import type { TableColumn } from "@rfdtech/components";
 import {
@@ -5,9 +6,11 @@ import {
   TableHeader,
   TableSearch,
   TableContent,
+  TableBulkActions,
   TableFooter,
   TablePagination,
 } from "@rfdtech/components";
+import { Trash2 } from "lucide-react";
 
 interface User {
   id: number;
@@ -17,7 +20,7 @@ interface User {
   status: string;
 }
 
-const users: User[] = [
+const initialUsers: User[] = [
   { id: 1, name: "Kwame Asante", email: "kwame@gsl.edu.gh", role: "Admin", status: "Active" },
   { id: 2, name: "Abena Mensah", email: "abena@gsl.edu.gh", role: "Editor", status: "Active" },
   { id: 3, name: "Kofi Owusu", email: "kofi@gsl.edu.gh", role: "Viewer", status: "Inactive" },
@@ -70,7 +73,10 @@ const columns: TableColumn<User>[] = [
 ];
 
 export function TableExample() {
-  const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
+  const [users, setUsers] = useState(initialUsers);
+  const [selected, setSelected] = useState<Set<string | number>>(new Set());
+
+  const { page, pageSize, pageSizeOptions, search } = useTableState({
     defaultPageSize: 5,
   });
 
@@ -82,12 +88,37 @@ export function TableExample() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
+  const handleDelete = (ids: Set<string | number>) => {
+    setUsers((prev) => prev.filter((u) => !ids.has(u.id)));
+    setSelected(new Set());
+  };
+
   return (
-    <Table>
+    <Table paramPrefix="users">
       <TableHeader>
         <TableSearch placeholder="Search users..." />
       </TableHeader>
-      <TableContent columns={columns} data={paged} rowKey={(u) => u.id} />
+      <TableContent
+        selectable
+        selectedIds={selected}
+        onSelectionChange={setSelected}
+        columns={columns}
+        data={paged}
+        rowKey={(u) => u.id}
+      />
+      <TableBulkActions
+        selectedIds={selected}
+        onClear={() => setSelected(new Set())}
+        actions={[
+          {
+            id: "delete",
+            label: "Delete",
+            icon: <Trash2 size={14} strokeWidth={1.5} />,
+            onClick: handleDelete,
+            destructive: true,
+          },
+        ]}
+      />
       <TableFooter>
         <TablePagination
           totalPages={totalPages}

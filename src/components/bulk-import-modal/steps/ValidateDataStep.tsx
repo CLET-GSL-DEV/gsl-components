@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { Checkbox } from "../../checkbox/Checkbox";
 import type {
   BulkImportField,
   BulkImportValidationError,
@@ -61,14 +61,7 @@ export function ValidateDataStep({
   const someVisibleSelected = visibleRowIds.some((rowId) =>
     selectedRowIds.includes(rowId),
   );
-  const selectAllRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (selectAllRef.current) {
-      selectAllRef.current.indeterminate =
-        someVisibleSelected && !allVisibleSelected;
-    }
-  }, [allVisibleSelected, someVisibleSelected]);
+  const indeterminate = someVisibleSelected && !allVisibleSelected;
 
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--validate">
@@ -112,19 +105,22 @@ export function ValidateDataStep({
               <thead>
                 <tr>
                   <th scope="col" className="gsl-bulk-import__checkbox-cell">
-                    <input
-                      ref={selectAllRef}
-                      type="checkbox"
-                      checked={allVisibleSelected}
-                      disabled={visibleRowIds.length === 0}
-                      aria-label="Select all rows"
-                      onChange={(event) =>
-                        onSetVisibleRowsSelection(
-                          visibleRowIds,
-                          event.target.checked,
-                        )
+                    <span
+                      className={
+                        indeterminate
+                          ? "gsl-bulk-import__checkbox--indeterminate"
+                          : undefined
                       }
-                    />
+                    >
+                      <Checkbox
+                        checked={allVisibleSelected}
+                        disabled={visibleRowIds.length === 0}
+                        aria-label="Select all rows"
+                        onCheckedChange={(checked) =>
+                          onSetVisibleRowsSelection(visibleRowIds, checked)
+                        }
+                      />
+                    </span>
                   </th>
                   {visibleFields.map((field) => (
                     <th key={field.key} scope="col">
@@ -155,11 +151,10 @@ export function ValidateDataStep({
                       }
                     >
                       <td className="gsl-bulk-import__checkbox-cell">
-                        <input
-                          type="checkbox"
+                        <Checkbox
                           checked={selectedRowIds.includes(rowId)}
                           aria-label={`Select row ${rowId}`}
-                          onChange={() => onToggleRowSelection(rowId)}
+                          onCheckedChange={() => onToggleRowSelection(rowId)}
                         />
                       </td>
                       {visibleFields.map((field) => {

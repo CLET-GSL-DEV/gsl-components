@@ -1,5 +1,11 @@
 node_modules
 dist
 *.local
+.local.*
+CHANGELOG-draft.md
+PLAN.md
 .DS_Store
-CHANGELOG-GUIDE.md
+.playwright-mcp/
+llms.txt
+table-demo.png
+AGENTS.md

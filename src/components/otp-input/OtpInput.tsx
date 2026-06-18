@@ -105,6 +105,18 @@ export const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           e.preventDefault();
           inputRefs.current[index + 1]?.focus();
         }
+
+        // Typing the same character that's already in the slot: React won't
+        // fire onChange (DOM value equals prop value), so advance focus here.
+        if (
+          e.key.length === 1 &&
+          /[0-9a-zA-Z]/.test(e.key) &&
+          value[index] === e.key &&
+          index < length - 1
+        ) {
+          e.preventDefault();
+          inputRefs.current[index + 1]?.focus();
+        }
       },
       [disabled, value, length, setValue],
     );
@@ -117,15 +129,15 @@ export const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         const pasted = e.clipboardData
           .getData("text")
           .replace(/[^0-9a-zA-Z]/g, "")
-          .slice(0, length - index);
+          .slice(0, length);
 
         const newDigits = [...value];
         for (let i = 0; i < pasted.length; i++) {
-          newDigits[index + i] = pasted[i];
+          newDigits[i] = pasted[i];
         }
         setValue(newDigits);
 
-        const focusIndex = Math.min(index + pasted.length, length - 1);
+        const focusIndex = Math.min(pasted.length, length - 1);
         inputRefs.current[focusIndex]?.focus();
       },
       [disabled, value, length, setValue],

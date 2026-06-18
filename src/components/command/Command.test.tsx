@@ -162,7 +162,7 @@ describe("Command", () => {
     );
 
     expect(document.querySelector(".gsl-command__group-loading")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-command__loading-bar")).toBeInTheDocument();
+    expect(document.querySelector(".gsl-command__skeleton-line")).toBeInTheDocument();
     expect(screen.queryByText("Email")).not.toBeInTheDocument();
     expect(screen.getByRole("status", { name: "Loading fields" })).toBeInTheDocument();
   });

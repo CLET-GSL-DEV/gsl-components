@@ -9,7 +9,7 @@ import { TablePagination } from "./TablePagination";
 describe("Table", () => {
   it("renders header, content, and footer", () => {
     render(
-      <Table>
+      <Table paramPrefix="test">
         <TableHeader>Header</TableHeader>
         <TableContent>Table content</TableContent>
         <TableFooter>Footer</TableFooter>
@@ -25,7 +25,7 @@ describe("Table", () => {
     const user = userEvent.setup();
     render(
       <MemoryRouter>
-        <Table>
+        <Table paramPrefix="test">
           <TableHeader>
             <TableSearch />
           </TableHeader>
@@ -45,7 +45,7 @@ describe("Table", () => {
 
     render(
       <MemoryRouter>
-        <Table>
+        <Table paramPrefix="test">
           <TableHeader>
             <TableFilter onApply={onApply} onReset={onReset}>
               <div>Filter form</div>
@@ -71,8 +71,8 @@ describe("Table", () => {
 
   it("renders pagination controls", () => {
     render(
-      <MemoryRouter initialEntries={["/?page=3&pageSize=10"]}>
-        <Table>
+      <MemoryRouter initialEntries={["/?test.page=3&test.pageSize=10"]}>
+        <Table paramPrefix="test">
           <TableFooter>
             <TablePagination totalPages={10} />
           </TableFooter>
@@ -91,7 +91,7 @@ describe("Table", () => {
   it("disables prev/next at boundaries", () => {
     render(
       <MemoryRouter initialEntries={["/?page=1"]}>
-        <Table>
+        <Table paramPrefix="test">
           <TableFooter>
             <TablePagination totalPages={1} />
           </TableFooter>
@@ -108,7 +108,7 @@ describe("Table", () => {
 
     render(
       <MemoryRouter initialEntries={["/?page=2"]}>
-        <Table>
+        <Table paramPrefix="test">
           <TableFooter>
             <TablePagination totalPages={5} />
           </TableFooter>
@@ -143,14 +143,14 @@ describe("Table", () => {
 
   it("forwards className to root", () => {
     const { container } = render(
-      <Table className="custom">Content</Table>,
+      <Table paramPrefix="test" className="custom">Content</Table>,
     );
     expect(container.firstChild).toHaveClass("custom");
   });
 
   it("renders skeleton rows when loading", () => {
     const { container } = render(
-      <Table>
+      <Table paramPrefix="test">
         <TableContent
           loading
           loadingRows={3}
@@ -176,11 +176,281 @@ describe("Table", () => {
 
   it("loading takes priority over no data", () => {
     render(
-      <Table>
+      <Table paramPrefix="test">
         <TableContent loading columns={[]} data={[]} />
       </Table>,
     );
 
     expect(screen.queryByText("No data")).not.toBeInTheDocument();
+  });
+
+  it("renders selection column when selectable", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set()}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    expect(screen.getByLabelText("Select all rows")).toBeInTheDocument();
+    expect(screen.getByLabelText("Select row")).toBeInTheDocument();
+  });
+
+  it("toggles individual row selection", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set()}
+          onSelectionChange={onChange}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    await user.click(screen.getByLabelText("Select row"));
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const newSet: Set<string> = onChange.mock.calls[0][0];
+    expect(newSet.has("Alice")).toBe(true);
+  });
+
+  it("select all toggles all rows", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set()}
+          onSelectionChange={onChange}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }, { name: "Bob" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    await user.click(screen.getByLabelText("Select all rows"));
+    const newSet: Set<string> = onChange.mock.calls[0][0];
+    expect(newSet.has("Alice")).toBe(true);
+    expect(newSet.has("Bob")).toBe(true);
+  });
+
+  it("select all deselects when all are selected", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set(["Alice", "Bob"])}
+          onSelectionChange={onChange}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }, { name: "Bob" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    await user.click(screen.getByLabelText("Select all rows"));
+    const newSet: Set<string> = onChange.mock.calls[0][0];
+    expect(newSet.size).toBe(0);
+  });
+
+  it("renders selection skeleton when selectable and loading", () => {
+    const { container } = render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          loading
+          loadingRows={2}
+          columns={[
+            { id: "name", header: "Name" },
+          ]}
+          data={[]}
+          rowKey={(row: { id: number }) => row.id}
+        />
+      </Table>,
+    );
+
+    // One checkbox skeleton in header + 2 rows = 3 checkbox skeletons
+    const cbs = container.querySelectorAll(".gsl-table__skeleton--cb");
+    expect(cbs.length).toBe(3);
+  });
+
+  it("renders selection column alongside data columns", () => {
+    const { container } = render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set()}
+          columns={[
+            { id: "name", header: "Name" },
+            { id: "email", header: "Email" },
+          ]}
+          data={[{ name: "A", email: "a@b.com" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    // Select-all checkbox in header + row checkbox + 2 data cells
+    const checkboxes = container.querySelectorAll(
+      ".gsl-table__checkbox-cell",
+    );
+    expect(checkboxes.length).toBe(2); // header + 1 row
+  });
+
+  it("select-all shows indeterminate when partially selected", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set(["Alice"])}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }, { name: "Bob" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    const selectAll = screen.getByLabelText("Select all rows");
+    expect(selectAll).toHaveAttribute("aria-checked", "false");
+    expect(document.querySelector(".gsl-table__checkbox--indeterminate")).toBeInTheDocument();
+  });
+
+  it("select-all is unchecked when nothing selected", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set()}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }, { name: "Bob" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    const selectAll = screen.getByLabelText("Select all rows");
+    expect(selectAll).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("select-all is checked when all rows selected", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set(["Alice", "Bob"])}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }, { name: "Bob" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    const selectAll = screen.getByLabelText("Select all rows");
+    expect(selectAll).toHaveAttribute("aria-checked", "true");
+  });
+
+  it("works with numeric row keys", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set()}
+          onSelectionChange={onChange}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ id: 42, name: "Alice" }]}
+          rowKey={(row: { id: number }) => row.id}
+        />
+      </Table>,
+    );
+
+    await user.click(screen.getByLabelText("Select row"));
+    const newSet: Set<string | number> = onChange.mock.calls[0][0];
+    expect(newSet.has(42)).toBe(true);
+  });
+
+  it("does not crash when selectable without onSelectionChange", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set()}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    // Clicking checkbox without onSelectionChange should not throw
+    await user.click(screen.getByLabelText("Select row"));
+    await user.click(screen.getByLabelText("Select all rows"));
+    // Just asserting no crash — test passes if it gets here
+  });
+
+  it("deselects individual row from all-selected state", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          selectable
+          selectedIds={new Set(["Alice", "Bob"])}
+          onSelectionChange={onChange}
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ name: "Alice" }, { name: "Bob" }]}
+          rowKey={(row: { name: string }) => row.name}
+        />
+      </Table>,
+    );
+
+    // Click the first row checkbox (Alice) to deselect it
+    const rowCheckboxes = screen.getAllByLabelText("Select row");
+    await user.click(rowCheckboxes[0]);
+
+    const newSet: Set<string | number> = onChange.mock.calls[0][0];
+    expect(newSet.has("Alice")).toBe(false);
+    expect(newSet.has("Bob")).toBe(true);
   });
 });

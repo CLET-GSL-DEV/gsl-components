@@ -25,6 +25,41 @@ export interface TableSortState {
   direction: SortDirection;
 }
 
+/* ── Bulk Actions ── */
+
+export interface TableBulkAction {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  onClick: (selectedIds: Set<string | number>) => void;
+  destructive?: boolean;
+}
+
+export interface TableBulkActionsClassNames {
+  root?: string;
+  count?: string;
+}
+
+export interface TableBulkActionsProps {
+  /** Currently selected row keys */
+  selectedIds: Set<string | number>;
+  /** Override the displayed count (defaults to selectedIds.size) */
+  selectedCount?: number;
+  /** Callback to clear all selections */
+  onClear?: () => void;
+  /** Predefined actions rendered as inline buttons */
+  actions?: TableBulkAction[];
+  /**
+   * Render prop for custom action content.
+   * Receives selectedIds so consumers never need to manage selection state directly.
+   */
+  renderActions?: (params: {
+    selectedIds: Set<string | number>;
+  }) => ReactNode;
+  classNames?: TableBulkActionsClassNames;
+  className?: string;
+}
+
 /* ── ClassNames ── */
 
 export interface TableClassNames {
@@ -32,6 +67,7 @@ export interface TableClassNames {
   header?: string;
   content?: string;
   footer?: string;
+  selectionCell?: string;
 }
 
 /* ── Props ── */
@@ -40,7 +76,7 @@ export interface TableProps extends HTMLAttributes<HTMLDivElement> {
   classNames?: TableClassNames;
   className?: string;
   /** URL param namespace shared by all child table components */
-  paramPrefix?: string;
+  paramPrefix: string;
 }
 
 export interface TableHeaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -57,6 +93,12 @@ export interface TableContentProps<T = unknown>
   loading?: boolean;
   /** Number of skeleton rows to show while loading (default 5) */
   loadingRows?: number;
+  /** Show a checkbox selection column (default false) */
+  selectable?: boolean;
+  /** Set of selected row keys. Required with onSelectionChange when selectable. */
+  selectedIds?: Set<string | number>;
+  /** Called when selection changes. Required with selectedIds when selectable. */
+  onSelectionChange?: (selectedIds: Set<string | number>) => void;
 }
 
 export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {

@@ -1,6 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 import { docNavSections } from "../docs/nav";
-import { githubUrl, npmUrl, packageName, packageVersion } from "../docs/site-meta";
+import {
+  githubUrl,
+  npmUrl,
+  packageName,
+  packageVersion,
+} from "../docs/site-meta";
 
 function GitHubIcon() {
   return (
@@ -50,7 +55,10 @@ export function DocsSidebar() {
                   key={item.slug}
                   to={`/docs/${item.slug}`}
                   className={({ isActive }) =>
-                    ["demo-docs__nav-link", isActive ? "demo-docs__nav-link--active" : ""]
+                    [
+                      "demo-docs__nav-link",
+                      isActive ? "demo-docs__nav-link--active" : "",
+                    ]
                       .filter(Boolean)
                       .join(" ")
                   }
@@ -66,6 +74,10 @@ export function DocsSidebar() {
       <div className="demo-docs__sidebar-footer">
         <Link to="/" className="demo-docs__back-link">
           Back to demo
+        </Link>
+
+        <Link to="/docs/changelog" className="demo-docs__back-link">
+          Changelog
         </Link>
 
         <div className="demo-docs__external-links">

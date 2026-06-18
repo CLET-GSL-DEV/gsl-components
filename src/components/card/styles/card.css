@@ -1,0 +1,25 @@
+.gsl-card {
+  --gsl-card-padding: 20px;
+
+  background: var(--gsl-surface-card);
+  border-radius: var(--gsl-radius-xl);
+  padding: var(--gsl-card-padding);
+  font-family: var(--gsl-font);
+}
+
+.gsl-card__header {
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gsl-text);
+}
+
+.gsl-card__body {
+  color: var(--gsl-text);
+}
+
+@media (max-width: 768px) {
+  .gsl-card {
+    --gsl-card-padding: 16px;
+  }
+}

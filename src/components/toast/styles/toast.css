@@ -20,7 +20,7 @@
   min-width: 0;
   padding: 12px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   box-shadow: 0 8px 24px color-mix(in srgb, var(--gsl-text) 12%, transparent);
   pointer-events: auto;
@@ -126,7 +126,7 @@
   min-height: 32px;
   padding: 4px 12px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: var(--gsl-font);
@@ -159,7 +159,7 @@
   margin: -6px -6px 0 0;
   padding: 4px;
   border: 0;
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-radius-base);
   background: transparent;
   color: var(--gsl-text-muted);
   cursor: pointer;

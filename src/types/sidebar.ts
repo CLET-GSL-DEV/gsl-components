@@ -104,6 +104,12 @@ export interface SidebarHeaderProps {
   children: ReactNode;
 }
 
+export interface SidebarBrandProps {
+  classNames?: { root?: string };
+  className?: string;
+  children: ReactNode;
+}
+
 export interface SidebarContentProps {
   classNames?: SidebarContentClassNames;
   className?: string;

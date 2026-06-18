@@ -1,6 +1,6 @@
 export const meta = {
   title: "PhoneNumberInput",
-  description: "Phone number input with country code selector, flag emoji, dial code, and auto-detection from prefix.",
+  description: "Phone number input built on Radix Popover with country code selector, flag emoji, dial code, and auto-detection from prefix.",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -9,7 +9,7 @@ import phoneNumberInputSource from "../previews/examples/phone-number-input.exam
 
 # PhoneNumberInput
 
-Phone number input with a country code selector (flag + dial code prefix). Auto-detects the country from the number prefix as the user types. Supports controlled and uncontrolled value.
+Phone number input with a country code selector (flag + dial code prefix). Built on `@radix-ui/react-popover` with GSL styling. Auto-detects the country from the number prefix as the user types. Supports controlled and uncontrolled value.
 
 ## Example
 
@@ -19,7 +19,7 @@ Phone number input with a country code selector (flag + dial code prefix). Auto-
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | — | Full phone number value (e.g. `"+233501234567"`) |
+| `value` | `string` | — | Full phone number value (e.g. `"+2332054321022"`) |
 | `onChange` | `(value: string) => void` | — | Change handler |
 | `placeholder` | `string` | `"Enter phone number"` | Input placeholder |
 | `defaultCountry` | `string` | — | Default country ISO code (overrides auto-detection) |
@@ -82,20 +82,11 @@ See the props table above.
 
 | Token | Used for |
 |-------|----------|
-| `--gsl-bg` | Input background |
-| `--gsl-border` | Input border |
-| `--gsl-primary` | Focus ring |
-| `--gsl-text` | Input text |
-| `--gsl-text-muted` | Placeholder |
-| `--gsl-radius` | Input border radius |
-| `--gsl-shadow-md` | Country dropdown shadow |
-| `--gsl-z-popover` | Dropdown z-index |
-| `--gsl-hover` | Dropdown option hover |
-| `--gsl-error` | Invalid state border |
+| `--gsl-radius-base` | Input border radius |
 
 ## Notes
 
 - Country auto-detection: as the user types, the component matches the prefix against dial codes and updates the selected country. The sorted check uses longest dial code first to avoid partial matches (e.g., `+233` matches Ghana, not `+23`).
 - Countries are from the `countries` utility — same dataset used by `CountrySelector`.
-- The value includes the full number with the dial code prefix (e.g. `+233501234567`). The `+` prefix is always included.
+- The value includes the full number with the dial code prefix (e.g. `+2332054321022`). The `+` prefix is always included.
 - Changing the country dropdown updates the dial code prefix in the input value.

@@ -4,7 +4,7 @@
   justify-content: center;
   gap: 8px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: var(--gsl-font);

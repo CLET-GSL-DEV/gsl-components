@@ -2,11 +2,15 @@ import type { HTMLAttributes } from "react";
 
 export interface UploadFieldClassNames {
   root?: string;
-  dropzone?: string;
-  fileInfo?: string;
+  icon?: string;
+  title?: string;
+  subtitle?: string;
+  files?: string;
+  fileCard?: string;
   fileName?: string;
   fileSize?: string;
   removeButton?: string;
+  actionButton?: string;
 }
 
 export interface UploadFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "value" | "defaultValue"> {
@@ -18,6 +22,5 @@ export interface UploadFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   maxSize?: number;
   value?: File | File[] | null;
   onChange?: (file: File | File[] | null) => void;
-  placeholder?: string;
   name?: string;
 }

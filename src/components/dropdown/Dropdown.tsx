@@ -13,6 +13,7 @@ export function Dropdown({
   placeholder = "Select...",
   clearable = false,
   disabled = false,
+  invalid = false,
   "aria-label": ariaLabel,
   classNames,
   className,
@@ -33,9 +34,11 @@ export function Dropdown({
           className={cn(
             "gsl-dropdown__trigger",
             isPlaceholder && "gsl-dropdown__trigger--placeholder",
+            invalid && "gsl-dropdown__trigger--invalid",
             classNames?.trigger,
           )}
           aria-label={ariaLabel}
+          aria-invalid={invalid || undefined}
         >
           <Select.Value placeholder={placeholder}>
             {selectedOption?.label}
