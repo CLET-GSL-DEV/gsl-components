@@ -4,6 +4,7 @@ import type { ToasterProps } from "../../types/toast";
 import { cn } from "../../utils/cn";
 import { ThemeContext } from "../theme/ThemeContext";
 import { ToastDefaultsContext } from "./ToastProvider";
+import "../button/styles/button.css";
 import "./styles/toast.css";
 
 export function Toaster({ classNames, className }: ToasterProps) {
@@ -28,8 +29,8 @@ export function Toaster({ classNames, className }: ToasterProps) {
           toast: "gsl-toast",
           title: "gsl-toast__title",
           description: "gsl-toast__description",
-          actionButton: "gsl-toast__action",
-          closeButton: "gsl-toast__close",
+          actionButton: "gsl-button gsl-button--secondary gsl-button--sm",
+          closeButton: "gsl-button gsl-button--sm gsl-toast__close",
           icon: "gsl-toast__icon",
           default: "gsl-toast--default",
           success: "gsl-toast--success",
