@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-06-18
+
+### Changed
+
+- CommandDialog overlay now fades in/out with animation, matching Dialog and Modal component patterns
+
 ## [1.13.2] - 2026-06-18
 
 ### Changed
