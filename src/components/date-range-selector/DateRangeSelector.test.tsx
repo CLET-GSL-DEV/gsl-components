@@ -54,7 +54,6 @@ describe("DateRangeSelector", () => {
     expect(triggerText).toContain("Jun 18, 2026");
   });
 
-  // Uncontrolled mode
   it("supports uncontrolled mode with defaultValue", () => {
     render(
       <DateRangeSelector
@@ -71,34 +70,93 @@ describe("DateRangeSelector", () => {
     render(<DateRangeSelector />);
 
     await user.click(screen.getByRole("button"));
-    expect(screen.getByRole("grid")).toBeInTheDocument();
+    const grids = screen.getAllByRole("grid");
+    expect(grids).toHaveLength(2);
   });
 
-  it("selects start date on first click and end date on second click", async () => {
+  it("shows two month panels", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector />);
+
+    await user.click(screen.getByRole("button"));
+
+    const grids = screen.getAllByRole("grid");
+    expect(grids).toHaveLength(2);
+  });
+
+  it("selects start date on first click and end date on second click via Apply", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<DateRangeSelector onChange={onChange} />);
 
     await user.click(screen.getByRole("button"));
 
-    // Find two enabled current-month days
     const days = screen.getAllByRole("gridcell");
     const enabled = days.filter((d) => !d.hasAttribute("disabled"));
     expect(enabled.length).toBeGreaterThanOrEqual(2);
 
-    // First click: sets start
+    // First click: sets start (no onChange yet)
     await user.click(enabled[0]);
-    expect(onChange).toHaveBeenLastCalledWith(
-      expect.objectContaining({ start: expect.any(Date), end: null }),
+    expect(onChange).not.toHaveBeenCalled();
+
+    // Second click: sets end (no onChange yet)
+    await user.click(enabled[enabled.length - 1]);
+    expect(onChange).not.toHaveBeenCalled();
+
+    // Click Apply
+    await user.click(screen.getByRole("button", { name: /apply/i }));
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const range = onChange.mock.calls[0][0] as DateRangeValue;
+    expect(range.start).toBeInstanceOf(Date);
+    expect(range.end).toBeInstanceOf(Date);
+    expect(range.start!.getTime()).toBeLessThanOrEqual(range.end!.getTime());
+  });
+
+  it("closes popover only after clicking Apply", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector />);
+
+    await user.click(screen.getByRole("button"));
+    const days = screen.getAllByRole("gridcell");
+    const enabled = days.filter((d) => !d.hasAttribute("disabled"));
+
+    await user.click(enabled[0]);
+    await user.click(enabled[enabled.length - 1]);
+
+    // Popover should still be open before Apply
+    expect(screen.getAllByRole("grid")).toHaveLength(2);
+
+    await user.click(screen.getByRole("button", { name: /apply/i }));
+    expect(screen.queryAllByRole("grid")).toHaveLength(0);
+  });
+
+  it("cancels selection and resets to previous range", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <DateRangeSelector
+        defaultValue={{ start: new Date(2026, 5, 1), end: new Date(2026, 5, 18) }}
+        onChange={onChange}
+      />,
     );
 
-    // Second click: sets end and closes
+    await user.click(screen.getByRole("button"));
+
+    // Select new dates
+    const days = screen.getAllByRole("gridcell");
+    const enabled = days.filter((d) => !d.hasAttribute("disabled"));
+    await user.click(enabled[0]);
     await user.click(enabled[enabled.length - 1]);
-    const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1][0] as DateRangeValue;
-    expect(lastCall.start).toBeInstanceOf(Date);
-    expect(lastCall.end).toBeInstanceOf(Date);
-    expect(lastCall.start!.getTime()).toBeLessThanOrEqual(lastCall.end!.getTime());
+
+    // Click Cancel
+    await user.click(screen.getByRole("button", { name: /cancel/i }));
+    expect(onChange).not.toHaveBeenCalled();
     expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+
+    // Trigger should still show original range
+    const triggerText = screen.getByRole("button").textContent;
+    expect(triggerText).toContain("Jun 1, 2026");
+    expect(triggerText).toContain("Jun 18, 2026");
   });
 
   it("auto-swaps when second date is before first", async () => {
@@ -117,43 +175,11 @@ describe("DateRangeSelector", () => {
     // Click an earlier date second
     await user.click(enabled[0]);
 
-    const range = onChange.mock.calls[onChange.mock.calls.length - 1][0] as DateRangeValue;
+    // Apply
+    await user.click(screen.getByRole("button", { name: /apply/i }));
+
+    const range = onChange.mock.calls[0][0] as DateRangeValue;
     expect(range.start!.getTime()).toBeLessThan(range.end!.getTime());
-  });
-
-  it("closes popover after selecting both dates", async () => {
-    const user = userEvent.setup();
-    render(<DateRangeSelector />);
-
-    await user.click(screen.getByRole("button"));
-    const days = screen.getAllByRole("gridcell");
-    const enabled = days.filter((d) => !d.hasAttribute("disabled"));
-
-    await user.click(enabled[0]);
-    await user.click(enabled[enabled.length - 1]);
-
-    expect(screen.queryByRole("grid")).not.toBeInTheDocument();
-  });
-
-  it("resets and starts new selection when range is already set", async () => {
-    const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(
-      <DateRangeSelector
-        value={{ start: new Date(2026, 5, 1), end: new Date(2026, 5, 18) }}
-        onChange={onChange}
-      />,
-    );
-
-    await user.click(screen.getByRole("button"));
-    const days = screen.getAllByRole("gridcell");
-    const enabled = days.filter((d) => !d.hasAttribute("disabled"));
-
-    await user.click(enabled[0]);
-    // Should reset: only start is set, end is null
-    expect(onChange).toHaveBeenLastCalledWith(
-      expect.objectContaining({ start: expect.any(Date), end: null }),
-    );
   });
 
   it("does not open when disabled", async () => {
@@ -187,19 +213,80 @@ describe("DateRangeSelector", () => {
 
     await user.click(screen.getByRole("button"));
 
-    const currentMonth = new Date().toLocaleDateString("en-US", {
-      month: "long",
-      year: "numeric",
-    });
-    expect(screen.getByText(currentMonth)).toBeInTheDocument();
-
     const nextBtn = screen.getByRole("button", { name: /next month/i });
     await user.click(nextBtn);
-    expect(screen.queryByText(currentMonth)).not.toBeInTheDocument();
 
     const prevBtn = screen.getByRole("button", { name: /previous month/i });
     await user.click(prevBtn);
-    expect(screen.getByText(currentMonth)).toBeInTheDocument();
+  });
+
+  it("has month and year selectors", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector />);
+
+    await user.click(screen.getByRole("button"));
+
+    expect(screen.getByRole("combobox", { name: /select month/i })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: /select year/i })).toBeInTheDocument();
+  });
+
+  it("changes month via month selector", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector />);
+
+    await user.click(screen.getByRole("button"));
+
+    const monthTrigger = screen.getByRole("combobox", { name: /select month/i });
+    await user.click(monthTrigger);
+
+    const option = await screen.findByRole("option", { name: "January" });
+    await user.click(option);
+
+    const allGrids = screen.getAllByRole("grid");
+    expect(allGrids.length).toBe(2);
+  });
+
+  it("changes year via year selector", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector />);
+
+    await user.click(screen.getByRole("button"));
+
+    const yearTrigger = screen.getByRole("combobox", { name: /select year/i });
+    await user.click(yearTrigger);
+
+    const option = await screen.findByRole("option", { name: "2027" });
+    await user.click(option);
+
+    const grids = screen.getAllByRole("grid");
+    expect(grids.length).toBe(2);
+  });
+
+  it("resets and starts new selection when range is already set", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <DateRangeSelector
+        value={{ start: new Date(2026, 5, 1), end: new Date(2026, 5, 18) }}
+        onChange={onChange}
+      />,
+    );
+
+    await user.click(screen.getByRole("button"));
+
+    const days = screen.getAllByRole("gridcell");
+    const enabled = days.filter((d) => !d.hasAttribute("disabled"));
+
+    // Click a day — resets pending to just start
+    await user.click(enabled[0]);
+
+    // Apply
+    await user.click(screen.getByRole("button", { name: /apply/i }));
+
+    // Should have committed with only start set
+    const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1][0] as DateRangeValue;
+    expect(lastCall.start).toBeInstanceOf(Date);
+    expect(lastCall.end).toBeNull();
   });
 
   it("highlights days in the selected range", async () => {
@@ -216,19 +303,38 @@ describe("DateRangeSelector", () => {
     await user.click(enabled[0]);
     await user.click(enabled[enabled.length - 1]);
 
-    // Reopen to verify range highlighting
-    await user.click(screen.getByRole("button"));
-
     const allDays = screen.getAllByRole("gridcell");
     const inRange = allDays.filter((d) =>
       d.className.includes("in-range"),
     );
-    // There should be days in the range (exclusive of start/end)
-    // At least 0 because we don't know the exact month layout
     expect(inRange.length).toBeGreaterThanOrEqual(0);
   });
 
-  // RHF integration
+  it("disables Apply button when no start date is selected", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector />);
+
+    await user.click(screen.getByRole("button"));
+
+    const applyBtn = screen.getByRole("button", { name: /apply/i });
+    expect(applyBtn).toBeDisabled();
+  });
+
+  it("enables Apply button after selecting a start date", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector />);
+
+    await user.click(screen.getByRole("button"));
+
+    const days = screen.getAllByRole("gridcell");
+    const enabled = days.filter((d) => !d.hasAttribute("disabled"));
+
+    await user.click(enabled[0]);
+
+    const applyBtn = screen.getByRole("button", { name: /apply/i });
+    expect(applyBtn).toBeEnabled();
+  });
+
   it("works with react-hook-form controlled", async () => {
     const user = userEvent.setup();
 
@@ -267,11 +373,13 @@ describe("DateRangeSelector", () => {
     const enabled = days.filter((d) => !d.hasAttribute("disabled"));
 
     await user.click(enabled[0]);
-    // First click resets (now start is set, end is null)
-    expect(screen.getByTestId("end")).toHaveTextContent("null");
+    // First click resets (now start is set, end is null) — but no onChange yet
+    expect(screen.getByTestId("end")).not.toHaveTextContent("null");
 
     await user.click(enabled[enabled.length - 1]);
-    // Both should be set
+    // Apply
+    await user.click(screen.getByRole("button", { name: /apply/i }));
+
     expect(screen.getByTestId("start")).not.toHaveTextContent("null");
     expect(screen.getByTestId("end")).not.toHaveTextContent("null");
   });

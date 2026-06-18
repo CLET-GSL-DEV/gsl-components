@@ -10,10 +10,20 @@ import type {
   DateRangeSelectorProps,
   DateRangeValue,
 } from "../../types/date-range-selector";
+
+export type { DateRangeValue };
+import { Button } from "../button";
+import { Dropdown } from "../dropdown";
+import type { DropdownOption } from "../../types/dropdown";
 import { cn } from "../../utils/cn";
 import "./styles/date-range-selector.css";
 
 const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
+
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+] as const;
 
 const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -80,6 +90,138 @@ function computeCalendarDays(year: number, month: number): Date[] {
   return days;
 }
 
+interface MonthPanelProps {
+  year: number;
+  month: number;
+  pendingRange: DateRangeValue;
+  today: Date;
+  min?: Date;
+  max?: Date;
+  disabled: boolean;
+  classNames?: DateRangeSelectorProps["classNames"];
+  onSelect: (day: Date) => void;
+}
+
+function MonthPanel({
+  year,
+  month,
+  pendingRange,
+  today,
+  min,
+  max,
+  disabled,
+  classNames,
+  onSelect,
+}: MonthPanelProps) {
+  const calendarDays = useMemo(
+    () => computeCalendarDays(year, month),
+    [year, month],
+  );
+
+  const monthLabel = useMemo(() => {
+    const d = new Date(year, month, 1);
+    return d.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+  }, [year, month]);
+
+  return (
+    <div className="gsl-date-selector__month-panel">
+      <div
+        className={cn(
+          "gsl-date-selector__calendar-title",
+          classNames?.calendarTitle,
+        )}
+      >
+        {monthLabel}
+      </div>
+
+      <div
+        className={cn(
+          "gsl-date-selector__calendar-weekdays",
+          classNames?.calendarWeekdays,
+        )}
+        role="row"
+      >
+        {WEEKDAYS.map((day) => (
+          <div
+            key={day}
+            className={cn(
+              "gsl-date-selector__calendar-weekday",
+              classNames?.calendarWeekday,
+            )}
+            role="columnheader"
+            aria-label={day}
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+
+      <div
+        className={cn(
+          "gsl-date-selector__calendar-grid",
+          classNames?.calendarGrid,
+        )}
+        role="grid"
+      >
+        {calendarDays.map((day, i) => {
+          const isCurrentMonth = day.getMonth() === month;
+          const isToday = isSameDay(day, today);
+          const isStart = pendingRange.start
+            ? isSameDay(day, pendingRange.start)
+            : false;
+          const isEnd = pendingRange.end
+            ? isSameDay(day, pendingRange.end)
+            : false;
+          const inRange = isInSelectedRange(
+            day,
+            pendingRange.start,
+            pendingRange.end,
+          );
+          const isDisabled = disabled || !isDateInRange(day, min, max);
+
+          return (
+            <button
+              key={i}
+              type="button"
+              role="gridcell"
+              disabled={isDisabled || !isCurrentMonth}
+              aria-selected={isStart || isEnd}
+              aria-label={day.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+              className={cn(
+                "gsl-date-selector__calendar-day",
+                !isCurrentMonth &&
+                  "gsl-date-selector__calendar-day--outside",
+                isToday && "gsl-date-selector__calendar-day--today",
+                isStart && "gsl-date-selector__calendar-day--selected",
+                isEnd && "gsl-date-selector__calendar-day--selected",
+                inRange &&
+                  "gsl-date-selector__calendar-day--in-range",
+                classNames?.calendarDay,
+              )}
+              onClick={() => onSelect(day)}
+            >
+              {day.getDate()}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const monthOptions: DropdownOption[] = MONTHS.map((name, idx) => ({
+  value: String(idx),
+  label: name,
+}));
+
 export const DateRangeSelector = forwardRef<
   HTMLDivElement,
   DateRangeSelectorProps
@@ -106,6 +248,7 @@ export const DateRangeSelector = forwardRef<
   const range = isControlled ? (controlledValue ?? { start: null, end: null }) : internalValue;
 
   const [open, setOpen] = useState(false);
+  const [pendingRange, setPendingRange] = useState<DateRangeValue>({ start: null, end: null });
 
   const today = useMemo(() => {
     const d = new Date();
@@ -113,20 +256,10 @@ export const DateRangeSelector = forwardRef<
   }, []);
 
   const [viewYear, setViewYear] = useState(today.getFullYear());
-  const [viewMonth, setViewMonth] = useState(today.getMonth());
+  const [leftMonth, setLeftMonth] = useState(today.getMonth());
 
-  const calendarDays = useMemo(
-    () => computeCalendarDays(viewYear, viewMonth),
-    [viewYear, viewMonth],
-  );
-
-  const monthLabel = useMemo(() => {
-    const d = new Date(viewYear, viewMonth, 1);
-    return d.toLocaleDateString("en-US", {
-      month: "long",
-      year: "numeric",
-    });
-  }, [viewYear, viewMonth]);
+  const rightMonth = leftMonth === 11 ? 0 : leftMonth + 1;
+  const rightYear = leftMonth === 11 ? viewYear + 1 : viewYear;
 
   const formatDate = useCallback(
     (date: Date | null) =>
@@ -151,6 +284,8 @@ export const DateRangeSelector = forwardRef<
     [isControlled, onChange],
   );
 
+  const hasSelection = pendingRange.start !== null;
+
   const handleSelect = useCallback(
     (day: Date) => {
       if (disabled) return;
@@ -161,21 +296,30 @@ export const DateRangeSelector = forwardRef<
         day.getDate(),
       );
 
-      if (!range.start) {
-        setRange({ start: normalized, end: null });
-      } else if (!range.end) {
-        if (normalized < range.start) {
-          setRange({ start: normalized, end: range.start });
+      if (!pendingRange.start) {
+        setPendingRange({ start: normalized, end: null });
+      } else if (!pendingRange.end) {
+        if (normalized < pendingRange.start) {
+          setPendingRange({ start: normalized, end: pendingRange.start });
         } else {
-          setRange({ start: range.start, end: normalized });
+          setPendingRange({ start: pendingRange.start, end: normalized });
         }
-        setOpen(false);
       } else {
-        setRange({ start: normalized, end: null });
+        setPendingRange({ start: normalized, end: null });
       }
     },
-    [disabled, min, max, range, setRange],
+    [disabled, min, max, pendingRange],
   );
+
+  const handleApply = useCallback(() => {
+    setRange(pendingRange);
+    setOpen(false);
+  }, [pendingRange, setRange]);
+
+  const handleCancel = useCallback(() => {
+    setPendingRange(range);
+    setOpen(false);
+  }, [range]);
 
   const handleOpenChange = useCallback(
     (next: boolean) => {
@@ -183,22 +327,32 @@ export const DateRangeSelector = forwardRef<
       if (next) {
         const refDate = range.start ?? today;
         setViewYear(refDate.getFullYear());
-        setViewMonth(refDate.getMonth());
+        setLeftMonth(refDate.getMonth());
+        setPendingRange(range);
       }
       setOpen(next);
     },
-    [disabled, range.start, today],
+    [disabled, range, today],
   );
 
   const prevMonth = useCallback(() => {
-    setViewMonth((m) => (m === 0 ? 11 : m - 1));
-    if (viewMonth === 0) setViewYear((y) => y - 1);
-  }, [viewMonth]);
+    setLeftMonth((m) => (m === 0 ? 11 : m - 1));
+    if (leftMonth === 0) setViewYear((y) => y - 1);
+  }, [leftMonth]);
 
   const nextMonth = useCallback(() => {
-    setViewMonth((m) => (m === 11 ? 0 : m + 1));
-    if (viewMonth === 11) setViewYear((y) => y + 1);
-  }, [viewMonth]);
+    setLeftMonth((m) => (m === 11 ? 0 : m + 1));
+    if (leftMonth === 11) setViewYear((y) => y + 1);
+  }, [leftMonth]);
+
+  const yearDropdownOptions: DropdownOption[] = useMemo(() => {
+    const current = today.getFullYear();
+    const years: DropdownOption[] = [];
+    for (let y = current - 10; y <= current + 10; y++) {
+      years.push({ value: String(y), label: String(y) });
+    }
+    return years;
+  }, [today]);
 
   return (
     <div
@@ -241,6 +395,7 @@ export const DateRangeSelector = forwardRef<
           <Popover.Content
             className={cn(
               "gsl-date-selector__calendar",
+              "gsl-date-selector__calendar--double",
               classNames?.calendar,
             )}
             side="bottom"
@@ -254,113 +409,94 @@ export const DateRangeSelector = forwardRef<
                 classNames?.calendarHeader,
               )}
             >
-              <button
-                type="button"
-                className={cn(
-                  "gsl-date-selector__calendar-nav",
-                  classNames?.calendarNav,
-                )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(classNames?.calendarNav)}
                 onClick={prevMonth}
                 aria-label="Previous month"
               >
                 <ChevronLeft size={16} strokeWidth={2} aria-hidden />
-              </button>
-              <span
-                className={cn(
-                  "gsl-date-selector__calendar-title",
-                  classNames?.calendarTitle,
-                )}
-              >
-                {monthLabel}
-              </span>
-              <button
-                type="button"
-                className={cn(
-                  "gsl-date-selector__calendar-nav",
-                  classNames?.calendarNav,
-                )}
+              </Button>
+
+              <div className="gsl-date-selector__calendar-header-center">
+                <Dropdown
+                  value={String(leftMonth)}
+                  onValueChange={(v: string | null) => {
+                    if (v !== null) setLeftMonth(Number(v));
+                  }}
+                  options={monthOptions}
+                  aria-label="Select month"
+                />
+                <Dropdown
+                  value={String(viewYear)}
+                  onValueChange={(v: string | null) => {
+                    if (v !== null) setViewYear(Number(v));
+                  }}
+                  options={yearDropdownOptions}
+                  aria-label="Select year"
+                />
+              </div>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(classNames?.calendarNav)}
                 onClick={nextMonth}
                 aria-label="Next month"
               >
                 <ChevronRight size={16} strokeWidth={2} aria-hidden />
-              </button>
+              </Button>
+            </div>
+
+            <div className="gsl-date-selector__calendar-months">
+              <MonthPanel
+                year={viewYear}
+                month={leftMonth}
+                pendingRange={pendingRange}
+                today={today}
+                min={min}
+                max={max}
+                disabled={disabled}
+                classNames={classNames}
+                onSelect={handleSelect}
+              />
+              <MonthPanel
+                year={rightYear}
+                month={rightMonth}
+                pendingRange={pendingRange}
+                today={today}
+                min={min}
+                max={max}
+                disabled={disabled}
+                classNames={classNames}
+                onSelect={handleSelect}
+              />
             </div>
 
             <div
               className={cn(
-                "gsl-date-selector__calendar-weekdays",
-                classNames?.calendarWeekdays,
+                "gsl-date-selector__calendar-footer",
+                classNames?.calendarFooter,
               )}
-              role="row"
             >
-              {WEEKDAYS.map((day) => (
-                <div
-                  key={day}
-                  className={cn(
-                    "gsl-date-selector__calendar-weekday",
-                    classNames?.calendarWeekday,
-                  )}
-                  role="columnheader"
-                  aria-label={day}
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
-
-            <div
-              className={cn(
-                "gsl-date-selector__calendar-grid",
-                classNames?.calendarGrid,
-              )}
-              role="grid"
-            >
-              {calendarDays.map((day, i) => {
-                const isCurrentMonth = day.getMonth() === viewMonth;
-                const isToday = isSameDay(day, today);
-                const isStart = range.start
-                  ? isSameDay(day, range.start)
-                  : false;
-                const isEnd = range.end
-                  ? isSameDay(day, range.end)
-                  : false;
-                const inRange = isInSelectedRange(
-                  day,
-                  range.start,
-                  range.end,
-                );
-                const isDisabled = !isDateInRange(day, min, max);
-
-                return (
-                  <button
-                    key={i}
-                    type="button"
-                    role="gridcell"
-                    disabled={isDisabled || !isCurrentMonth}
-                    aria-selected={isStart || isEnd}
-                    aria-label={day.toLocaleDateString("en-US", {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                    className={cn(
-                      "gsl-date-selector__calendar-day",
-                      !isCurrentMonth &&
-                        "gsl-date-selector__calendar-day--outside",
-                      isToday && "gsl-date-selector__calendar-day--today",
-                      isStart && "gsl-date-selector__calendar-day--selected",
-                      isEnd && "gsl-date-selector__calendar-day--selected",
-                      inRange &&
-                        "gsl-date-selector__calendar-day--in-range",
-                      classNames?.calendarDay,
-                    )}
-                    onClick={() => handleSelect(day)}
-                  >
-                    {day.getDate()}
-                  </button>
-                );
-              })}
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(classNames?.cancelButton)}
+                onClick={handleCancel}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                className={cn(classNames?.applyButton)}
+                onClick={handleApply}
+                disabled={!hasSelection}
+              >
+                Apply
+              </Button>
             </div>
           </Popover.Content>
         </Popover.Portal>

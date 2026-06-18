@@ -31,6 +31,14 @@
   background: var(--gsl-overlay);
 }
 
+.gsl-command-dialog__overlay[data-state="open"] {
+  animation: gsl-command-dialog-overlay-in 0.15s ease forwards;
+}
+
+.gsl-command-dialog__overlay[data-state="closed"] {
+  animation: gsl-command-dialog-overlay-out 0.1s ease forwards;
+}
+
 .gsl-command-dialog__content {
   position: fixed;
   top: 50%;
@@ -57,6 +65,26 @@
 
 .gsl-command-dialog__content[data-state="closed"] {
   animation: gsl-command-dialog-out 0.1s ease forwards;
+}
+
+@keyframes gsl-command-dialog-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gsl-command-dialog-overlay-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes gsl-command-dialog-in {
@@ -291,6 +319,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gsl-command-dialog__overlay[data-state="open"],
+  .gsl-command-dialog__overlay[data-state="closed"],
   .gsl-command-dialog__content[data-state="open"],
   .gsl-command-dialog__content[data-state="closed"] {
     animation: none;

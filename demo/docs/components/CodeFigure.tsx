@@ -38,7 +38,7 @@ function getTextContent(node: ReactNode): string {
   return "";
 }
 
-function isTitleNode(node: ReactNode): node is ReactElement {
+function isTitleNode(node: ReactNode): node is ReactElement<{ children?: ReactNode }> {
   return (
     isValidElement(node) &&
     typeof node.props === "object" &&
@@ -111,7 +111,7 @@ function attachCodeRef(node: ReactNode, codeRef: React.RefObject<HTMLElement | n
   return element;
 }
 
-function findHighlightedFigure(children: ReactNode): ReactElement | null {
+function findHighlightedFigure(children: ReactNode): ReactElement<ComponentPropsWithoutRef<"figure">> | null {
   for (const child of Children.toArray(children)) {
     if (isValidElement(child) && child.type === "figure") {
       return child as ReactElement<ComponentPropsWithoutRef<"figure">>;

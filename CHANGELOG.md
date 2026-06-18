@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-06-18
+
+### Added
+
+- `DateRangeSelector` year/month dropdown selectors for quick navigation
+- `DateRangeSelector` Apply/Cancel confirmation buttons (pending range committed on Apply)
+- `DateRangeSelector` side-by-side two-month calendar layout
+- `DateRangeSelectorClassNames` keys: `calendarFooter`, `applyButton`, `cancelButton`
+
+### Changed
+
+- `DateRangeSelector` months/selects use project `Dropdown` component
+- `DateRangeSelector` navigation and footer buttons use project `Button` component
+- `--gsl-z-select` bumped from 1200 to 1400 for correct stacking inside popovers
+
+## [1.12.0] - 2026-06-18
+
+### Fixed
+
+- TypeScript strict errors in `CodeFigure`, `PopoverExample`, `SidebarExample`, `SortableExample`, and `DateRangeSelector.test`
+- Export `DateRangeValue` type from `DateRangeSelector` component module
+- `onReorder` callback type compatibility in `Sortable` example
+- Union type destructuring for optional `destructive` and `badge` props in docs examples
+
+### Changed
+
+- Replace native inputs with internal `Input` component across `Table`, `ValidateDataStep`, `ThemeToggle`
+- Rename `--gsl-rounded-base` token back to `--gsl-radius-base`
+- Date pickers use `--gsl-z-dropdown` token instead of dedicated `--gsl-z-datepicker`
+- Refactor `DateRangeSelector` and `UploadField` design
+- Add uncontrolled/RHF tests for all input components
+
+## [1.11.0] - 2026-06-18
+
+### Added
+
+- UploadField docs: Zod file validation section with `z.instanceof(File)`, `.refine()` for type/size, and multi-file array example
+
+## [1.10.0] - 2026-06-18
+
 ## [1.9.0] - 2026-06-17
 
 ### Added

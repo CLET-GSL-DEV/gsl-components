@@ -24,6 +24,8 @@ File upload with a dashed-border dropzone, cloud upload icon, auto-generated sup
 
 `UploadField` integrates with react-hook-form through `FormField`. Pass `field.value` and `field.onChange` directly:
 
+### Native validation
+
 ```tsx
 import { useForm } from "react-hook-form";
 import { Form, FormField, Field, FieldControl, FieldLabel, FieldError, UploadField } from "@rfdtech/components";
@@ -57,6 +59,100 @@ function UploadForm() {
     </Form>
   );
 }
+```
+
+### Zod validation
+
+Install the optional peer dependencies:
+
+```bash
+npm install react-hook-form zod @hookform/resolvers
+```
+
+Define a Zod schema with `z.instanceof(File)` and refine for file type and size:
+
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Button,
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+  Form,
+  FormField,
+  UploadField,
+} from "@rfdtech/components";
+
+const ACCEPTED_TYPES = ["image/png", "image/jpeg", "application/pdf"];
+const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+
+const uploadSchema = z.object({
+  file: z
+    .instanceof(File, { message: "Please select a file" })
+    .refine((f) => ACCEPTED_TYPES.includes(f.type), {
+      message: "Only PNG, JPEG, and PDF files are accepted",
+    })
+    .refine((f) => f.size <= MAX_SIZE, {
+      message: "File size must be 5 MB or less",
+    }),
+});
+
+type UploadFormValues = z.infer<typeof uploadSchema>;
+
+function UploadForm() {
+  const form = useForm<UploadFormValues>({
+    resolver: zodResolver(uploadSchema),
+    defaultValues: { file: null },
+  });
+
+  const onSubmit = (data: UploadFormValues) => console.log(data.file?.name);
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="file"
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Upload file</FieldLabel>
+              <FieldControl>
+                <UploadField
+                  accept=".png,.jpg,.jpeg,.pdf"
+                  maxSize={MAX_SIZE}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+        <Button type="submit" variant="primary">
+          Submit
+        </Button>
+      </form>
+    </Form>
+  );
+}
+```
+
+Omit per-field `rules` when using a Zod schema resolver — Zod handles all validation.
+
+For multiple files use `z.array(z.instanceof(File))`:
+
+```tsx
+const uploadSchema = z.object({
+  files: z
+    .array(z.instanceof(File))
+    .min(1, "Select at least one file")
+    .refine((files) => files.every((f) => f.size <= MAX_SIZE), {
+      message: "Each file must be 5 MB or less",
+    }),
+});
 ```
 
 ## Props

@@ -27,27 +27,27 @@ import {
 } from "@rfdtech/components";
 
 const mainLinks = [
-  { href: "#dashboard", label: "Dashboard", icon: LayoutGrid },
-  { href: "#users", label: "Users", icon: Users },
-  { href: "#roles", label: "Roles & Permissions", icon: Shield },
+  { href: "#dashboard", label: "Dashboard", icon: LayoutGrid, badge: undefined },
+  { href: "#users", label: "Users", icon: Users, badge: undefined },
+  { href: "#roles", label: "Roles & Permissions", icon: Shield, badge: undefined },
   {
     href: "#notifications",
     label: "Notification Templates",
     icon: Bell,
     badge: "New",
   },
-  { href: "#workflow", label: "Workflow Parameters", icon: GitBranch },
-  { href: "#integrations", label: "Integrations", icon: Plug },
+  { href: "#workflow", label: "Workflow Parameters", icon: GitBranch, badge: undefined },
+  { href: "#integrations", label: "Integrations", icon: Plug, badge: undefined },
 ] as const;
 
 const cbtLinks = [
-  { href: "#secure-browser", label: "Secure Browser Policy", icon: ScrollText },
-  { href: "#exam-monitoring", label: "Exam Monitoring Settings", icon: Monitor },
+  { href: "#secure-browser", label: "Secure Browser Policy", icon: ScrollText, badge: undefined },
+  { href: "#exam-monitoring", label: "Exam Monitoring Settings", icon: Monitor, badge: undefined },
 ] as const;
 
 const monitoringLinks = [
   { href: "#audit-logs", label: "Audit Logs", icon: ScrollText, badge: "12" },
-  { href: "#system-health", label: "System Health", icon: Workflow },
+  { href: "#system-health", label: "System Health", icon: Workflow, badge: undefined },
 ] as const;
 
 export function SidebarExample() {

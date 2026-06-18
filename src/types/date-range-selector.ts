@@ -11,6 +11,9 @@ export interface DateRangeSelectorClassNames {
   calendarWeekday?: string;
   calendarGrid?: string;
   calendarDay?: string;
+  calendarFooter?: string;
+  applyButton?: string;
+  cancelButton?: string;
 }
 
 export interface DateRangeValue {

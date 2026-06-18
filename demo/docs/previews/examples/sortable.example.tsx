@@ -27,7 +27,7 @@ export function SortableExample() {
         background: "var(--gsl-surface-subtle)",
       }}
     >
-      <Sortable items={items} onReorder={setItems}>
+      <Sortable items={items} onReorder={(ids) => setItems(ids as string[])}>
         <SortableList>
           {items.map((id) => (
             <SortableItem key={id} id={id}>

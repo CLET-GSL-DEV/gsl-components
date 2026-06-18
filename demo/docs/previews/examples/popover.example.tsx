@@ -8,8 +8,8 @@ import {
 import { Copy, Pencil, Trash2 } from "lucide-react";
 
 const menuItems = [
-  { label: "Edit", icon: Pencil },
-  { label: "Duplicate", icon: Copy },
+  { label: "Edit", icon: Pencil, destructive: false },
+  { label: "Duplicate", icon: Copy, destructive: false },
   { label: "Delete", icon: Trash2, destructive: true },
 ] as const;
 

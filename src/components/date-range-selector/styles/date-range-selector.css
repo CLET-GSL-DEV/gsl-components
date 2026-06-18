@@ -102,6 +102,53 @@
   animation: gsl-date-selector-calendar-out 100ms ease forwards;
 }
 
+/* ── Double-month layout ── */
+
+.gsl-date-selector__calendar--double {
+  min-width: 480px;
+}
+
+.gsl-date-selector__calendar-months {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.gsl-date-selector__month-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.gsl-date-selector__month-panel .gsl-date-selector__calendar-title {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* ── Month/Year selects ── */
+
+.gsl-date-selector__calendar-header-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gsl-date-selector__calendar-header-center .gsl-dropdown {
+  width: auto;
+  min-width: 100px;
+}
+
+/* ── Calendar footer ── */
+
+.gsl-date-selector__calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gsl-border);
+}
+
 /* ── Calendar header ── */
 
 .gsl-date-selector__calendar-header {
@@ -116,30 +163,6 @@
   font-weight: 500;
   color: var(--gsl-text);
   user-select: none;
-}
-
-.gsl-date-selector__calendar-nav {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  min-height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: calc(var(--gsl-radius-base) - 2px);
-  background: transparent;
-  color: var(--gsl-text-secondary);
-  cursor: pointer;
-}
-
-.gsl-date-selector__calendar-nav:hover {
-  background: var(--gsl-hover);
-  color: var(--gsl-text);
-}
-
-.gsl-date-selector__calendar-nav:focus-visible {
-  outline: 2px solid var(--gsl-primary);
-  outline-offset: 2px;
 }
 
 /* ── Weekday labels ── */
@@ -270,9 +293,13 @@
     padding: 16px;
   }
 
-  .gsl-date-selector__calendar-nav {
-    min-width: 40px;
-    min-height: 40px;
+  .gsl-date-selector__calendar--double {
+    min-width: 280px;
+  }
+
+  .gsl-date-selector__calendar-months {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .gsl-date-selector__calendar-weekday {

@@ -1,7 +1,7 @@
 export const meta = {
   title: "DateRangeSelector",
   description:
-    "Date range picker built on Radix Popover with calendar popover, two-click range selection, auto-swap start/end, and part-level classNames.",
+    "Date range picker built on Radix Popover with side-by-side month calendar, year/month dropdown selectors, Apply/Cancel confirmation, and part-level classNames.",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -10,7 +10,7 @@ import dateRangeSource from "../previews/examples/date-range-selector.example.ts
 
 # DateRangeSelector
 
-Date range picker for choosing a start and end date from a calendar popover. Built on `@radix-ui/react-popover` with GSL styling, auto-swap to keep start before end, and part-level `classNames`.
+Date range picker for choosing a start and end date from a two-month calendar popover. Built on `@radix-ui/react-popover` with GSL styling, auto-swap to keep start before end, year/month dropdown selectors for quick navigation, Apply/Cancel buttons for explicit confirmation, and part-level `classNames`.
 
 ## Example
 
@@ -26,7 +26,7 @@ Date range picker for choosing a start and end date from a calendar popover. Bui
 |------|------|---------|-------------|
 | `value` | `DateRangeValue` | — | Controlled range (`{ start, end }`) |
 | `defaultValue` | `DateRangeValue` | — | Default range when uncontrolled |
-| `onChange` | `(range: DateRangeValue) => void` | — | Called when the range changes |
+| `onChange` | `(range: DateRangeValue) => void` | — | Called when the range is confirmed via Apply |
 | `placeholder` | `string` | `"Select date range"` | Shown in the trigger when no dates are selected |
 | `formatOptions` | `Intl.DateTimeFormatOptions` | `{ year: "numeric", month: "short", day: "numeric" }` | Controls how dates are formatted in the trigger display |
 | `invalid` | `boolean` | `false` | Show error border styling |
@@ -96,19 +96,25 @@ Part-level class names merged after base `gsl-date-selector*` styles:
 | `root` | Outer wrapper (`.gsl-date-range-selector`) |
 | `trigger` | Trigger button (`.gsl-date-selector__trigger`) |
 | `calendar` | Calendar panel (`.gsl-date-selector__calendar`) |
-| `calendarHeader` | Month/year header row (`.gsl-date-selector__calendar-header`) |
+| `calendarHeader` | Month/year navigation row (`.gsl-date-selector__calendar-header`) |
 | `calendarNav` | Previous/next month arrows (`.gsl-date-selector__calendar-nav`) |
-| `calendarTitle` | Month/year label (`.gsl-date-selector__calendar-title`) |
+| `calendarTitle` | Month label above each month panel (`.gsl-date-selector__calendar-title`) |
 | `calendarWeekdays` | Weekday labels container (`.gsl-date-selector__calendar-weekdays`) |
 | `calendarWeekday` | Individual weekday label (`.gsl-date-selector__calendar-weekday`) |
 | `calendarGrid` | Calendar day grid (`.gsl-date-selector__calendar-grid`) |
 | `calendarDay` | Individual day button (`.gsl-date-selector__calendar-day`) |
+| `calendarFooter` | Apply/Cancel button row (`.gsl-date-selector__calendar-footer`) |
+| `applyButton` | Apply button (`.gsl-date-selector__calendar-btn--apply`) |
+| `cancelButton` | Cancel button (`.gsl-date-selector__calendar-btn--cancel`) |
 
 ## Notes
 
-- Click the trigger to open the calendar. First click picks the start date; a second click picks the end date and closes the popover.
+- Click the trigger to open a two-month calendar popover. Year and month dropdowns at the top allow quick navigation; previous/next arrows shift by one month.
+- First click picks the start date; a second click picks the end date. **No dates are committed until Apply is clicked.**
+- Click Cancel or press Escape to discard the pending selection and restore the previous range.
 - **Start is always the earlier date**—if the second pick is before the first, they swap automatically so `start < end`.
 - Selecting the same day for both picks produces a single-day range where `start === end`.
-- Clicking a new date when a range is already set clears the current range and starts a new selection.
+- Clicking a new date when a range is already set clears the pending range and starts a new selection.
 - Days strictly between start and end are highlighted with a subtle background in the calendar.
-- Uses the same calendar design and styling as `DateSelector`.
+- The Apply button is disabled until at least a start date is selected.
+- On mobile (below 768px), the two months stack vertically.
