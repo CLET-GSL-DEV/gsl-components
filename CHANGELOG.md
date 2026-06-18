@@ -7,11 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.14.0] - 2026-06-18
+## [1.13.1] - 2026-06-18
 
-### Fixed
+### Added
 
-- `CommandDialog` overlay now fades in/out instead of appearing/disappearing instantly
+- `PhoneNumberInput` Zod validation form example with success/failure dialog
+- `UploadField` Zod validation form example with file type, min/max size, and name length checks
+
+### Changed
+
+- CommandDialog: border radius changed from xl to base; inline Command input uses xl
+- CommandDialog input wrapper: focus outline now follows border radius
+- UploadField Zod validation made stricter with minimum file size and filename length checks
+
+### Cleanups
+
+- Shortened all MDX page meta descriptions to 3--5 words for compact docs search results
+
+### Fixes
+
+- UploadField Zod form example: dialog styling matches PhoneNumberInput form pattern
 
 ## [1.13.0] - 2026-06-18
 

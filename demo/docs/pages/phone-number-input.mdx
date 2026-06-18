@@ -1,11 +1,13 @@
 export const meta = {
   title: "PhoneNumberInput",
-  description: "Phone number input built on Radix Popover with country code selector, flag emoji, dial code, and auto-detection from prefix.",
+  description: "Phone input with country codes",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { PhoneNumberInputPreview } from "../previews/code/PhoneNumberInputPreview";
 import phoneNumberInputSource from "../previews/examples/phone-number-input.example.tsx?raw";
+import { PhoneNumberInputFormPreview } from "../previews/code/PhoneNumberInputFormPreview";
+import phoneNumberInputFormSource from "../previews/examples/phone-number-input-form.example.tsx?raw";
 
 # PhoneNumberInput
 
@@ -30,6 +32,10 @@ Phone number input with a country code selector (flag + dial code prefix). Built
 | `className` | `string` | — | Merged onto the root element |
 
 Also accepts remaining `HTMLAttributes<HTMLDivElement>`, excluding `onChange`, `value`, and `defaultValue`.
+
+## Form validation
+
+<ExampleTabs title="Zod validation" preview={<PhoneNumberInputFormPreview />} code={phoneNumberInputFormSource} />
 
 ## Usage with react-hook-form
 
