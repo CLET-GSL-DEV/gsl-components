@@ -6,7 +6,9 @@
   border: 1px solid var(--gsl-border);
   border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -55,6 +57,7 @@
   white-space: nowrap;
   flex-shrink: 0;
   outline: none;
+  border-radius: var(--gsl-radius-base);
 }
 
 .gsl-phone-number-input--disabled .gsl-phone-number-input__prefix {
