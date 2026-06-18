@@ -2,10 +2,15 @@ import type { HTMLAttributes } from "react";
 
 export interface DateRangeSelectorClassNames {
   root?: string;
-  field?: string;
-  fieldLabel?: string;
   trigger?: string;
   calendar?: string;
+  calendarHeader?: string;
+  calendarNav?: string;
+  calendarTitle?: string;
+  calendarWeekdays?: string;
+  calendarWeekday?: string;
+  calendarGrid?: string;
+  calendarDay?: string;
 }
 
 export interface DateRangeValue {
@@ -17,7 +22,8 @@ export interface DateRangeSelectorProps extends Omit<HTMLAttributes<HTMLDivEleme
   value?: DateRangeValue;
   defaultValue?: DateRangeValue;
   onChange?: (range: DateRangeValue) => void;
-  placeholder?: { start?: string; end?: string };
+  placeholder?: string;
+  formatOptions?: Intl.DateTimeFormatOptions;
   invalid?: boolean;
   disabled?: boolean;
   min?: Date;

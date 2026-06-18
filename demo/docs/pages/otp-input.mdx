@@ -5,19 +5,15 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { OtpInputPreview } from "../previews/code/OtpInputPreview";
-import { OtpInputRhfPreview } from "../previews/code/OtpInputRhfPreview";
 import otpInputSource from "../previews/examples/otp-input.example.tsx?raw";
-import otpInputRhfSource from "../previews/examples/otp-input-rhf.example.tsx?raw";
 
 # OtpInput
 
 One-time password input with configurable digit length, paste-from-any-slot support, keyboard navigation (arrow keys, backspace), auto-focus advancement, and `onComplete` callback. Supports controlled and uncontrolled value.
 
-## Examples
+## Example
 
-<ExampleTabs title="With react-hook-form" preview={<OtpInputRhfPreview />} code={otpInputRhfSource} />
-
-<ExampleTabs title="Variants" preview={<OtpInputPreview />} code={otpInputSource} />
+<ExampleTabs title="Basic OTP" preview={<OtpInputPreview />} code={otpInputSource} />
 
 ## Props
 

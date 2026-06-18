@@ -30,21 +30,7 @@ Root layout container. Scans direct children for `componentId` matching `"AppHea
 | `children` | `ReactNode` | Direct children — `<AppHeader>`, `<AppSidebar>`, `<AppBody>` |
 | `className` | `string` | Merged onto the root element |
 
-**Layout structure:**
 
-```
-┌─────────────────────────────────────────┐
-│  ┌──────────────┐ ┌──────────────────┐  │
-│  │              │ │  AppHeader       │  │
-│  │  AppSidebar  │ │  (sticky top)    │  │
-│  │              │ ├──────────────────┤  │
-│  │              │ │                  │  │
-│  │              │ │  AppBody         │  │
-│  │              │ │  (content)       │  │
-│  │              │ │                  │  │
-│  └──────────────┘ └──────────────────┘  │
-└─────────────────────────────────────────┘
-```
 
 ### `AppSidebar`
 

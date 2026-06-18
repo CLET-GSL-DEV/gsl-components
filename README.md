@@ -445,6 +445,57 @@ import { Checkbox } from "@rfdtech/components";
 Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `disabled`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `CheckboxProps`, `CheckboxClassNames`.
 
 
+## CountrySelector
+
+Country selector dropdown with flag emoji, country name, search filtering, and keyboard navigation. Built on `@radix-ui/react-popover`. See the [CountrySelector](/docs/country-selector) docs page for props and exported types.
+
+```tsx
+import { CountrySelector } from "@rfdtech/components";
+
+<CountrySelector onChange={(code) => console.log(code)} />
+
+<CountrySelector defaultValue="US" />
+```
+
+Props: `value`, `defaultValue`, `onChange`, `placeholder`, `invalid`, `disabled`, `classNames`, `className`. Exported types: `CountrySelectorProps`, `CountrySelectorClassNames`.
+
+
+## DateRangeSelector
+
+Date range picker with a single trigger showing the selected range, a calendar popover for two-click range selection, and auto-swap to keep start before end. See the [DateRangeSelector](/docs/date-range-selector) docs page for props and exported types.
+
+```tsx
+import { DateRangeSelector } from "@rfdtech/components";
+
+<DateRangeSelector onChange={(range) => console.log(range)} />
+
+<DateRangeSelector
+  defaultValue={{ start: new Date(2026, 5, 1), end: new Date(2026, 5, 18) }}
+/>
+```
+
+Props: `value`, `defaultValue`, `onChange`, `placeholder`, `formatOptions`, `invalid`, `disabled`, `min`, `max`, `classNames`, `className`. Exported types: `DateRangeSelectorProps`, `DateRangeSelectorClassNames`, `DateRangeValue`.
+
+
+## DateSelector
+
+Date picker for choosing a single date from a calendar grid. Built on `@radix-ui/react-popover`. See the [DateSelector](/docs/date-selector) docs page for props and exported types.
+
+```tsx
+import { DateSelector } from "@rfdtech/components";
+
+<DateSelector onChange={(date) => console.log(date)} />
+
+<DateSelector
+  placeholder="Pick a date"
+  min={new Date(2025, 0, 1)}
+  max={new Date(2026, 11, 31)}
+/>
+```
+
+Props: `value`, `defaultValue`, `onChange`, `placeholder`, `formatOptions`, `invalid`, `disabled`, `min`, `max`, `classNames`, `className`. Exported types: `DateSelectorProps`, `DateSelectorClassNames`.
+
+
 ## Command
 
 Compound command menu primitives for searchable, keyboard-navigable action lists. Supports inline pickers and modal palettes via `CommandDialog`. See the [Command](/docs/command) docs page for props and exported types.
@@ -748,6 +799,51 @@ const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
 Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
 
 
+## NetworkOperator
+
+Network operator selector with operator image thumbnails (MTN, Vodafone, AirtelTigo, Glo), search filtering, and keyboard navigation. Built on `@radix-ui/react-popover`. See the [NetworkOperator](/docs/network-operator) docs page for props and exported types.
+
+```tsx
+import { NetworkOperator } from "@rfdtech/components";
+
+<NetworkOperator onChange={(value) => console.log(value)} />
+
+<NetworkOperator defaultValue="mtn" />
+```
+
+Props: `value`, `defaultValue`, `onChange`, `options`, `placeholder`, `invalid`, `disabled`, `classNames`, `className`. Exported types: `NetworkOperatorProps`, `NetworkOperatorOption`, `NetworkOperatorClassNames`.
+
+
+## OtpInput
+
+One-time password input with configurable digit length, paste support, keyboard navigation (arrow keys, backspace), auto-focus advancement, and `onComplete` callback. See the [OtpInput](/docs/otp-input) docs page for props and exported types.
+
+```tsx
+import { OtpInput } from "@rfdtech/components";
+
+<OtpInput onChange={(val) => console.log(val)} />
+
+<OtpInput length={4} onComplete={(val) => console.log("Done:", val)} />
+```
+
+Props: `length`, `value`, `onChange`, `onComplete`, `invalid`, `disabled`, `name`, `classNames`, `className`. Exported types: `OtpInputProps`, `OtpInputClassNames`.
+
+
+## PhoneNumberInput
+
+Phone number input with a country code selector (flag + dial code prefix) that auto-detects the country from the number prefix as the user types. Built on `@radix-ui/react-popover`. See the [PhoneNumberInput](/docs/phone-number-input) docs page for props and exported types.
+
+```tsx
+import { PhoneNumberInput } from "@rfdtech/components";
+
+<PhoneNumberInput defaultCountry="GH" onChange={(val) => console.log(val)} />
+
+<PhoneNumberInput value="+2332054321022" />
+```
+
+Props: `value`, `defaultValue`, `onChange`, `invalid`, `disabled`, `classNames`, `className`. Exported types: `PhoneNumberInputProps`, `PhoneNumberInputClassNames`.
+
+
 ## Popover
 
 Compound popover primitives for floating panels. See the [Popover](/docs/popover) docs page for props and exported types.
@@ -1021,21 +1117,21 @@ Exports: `ToastProvider`, `Toaster`, `useToast`. Types: `ToastOptions`, `ToastVa
 
 ## UploadField
 
-File upload with drag-and-drop zone, file type icons (PDF, image, video, generic), size formatting, and controlled/uncontrolled value. Supports single and multiple files, accept filters, max size validation, and invalid/disabled states.
-
-See the [UploadField](/docs/upload-field) docs page for props and exported types.
+File upload with dashed-border dropzone, cloud upload icon, auto-generated file type/size support text, file cards with type icons, and a primary action button. See the [UploadField](/docs/upload-field) docs page for props and exported types.
 
 ```tsx
 import { UploadField } from "@rfdtech/components";
 
 <UploadField
-  accept="image/*"
-  multiple
-  maxSize={5 * 1024 * 1024}
+  accept=".csv"
+  maxSize={10 * 1024 * 1024}
   onChange={(file) => console.log(file)}
-  placeholder="Drop images here"
 />
+
+<UploadField accept="image/*" maxSize={5 * 1024 * 1024} />
 ```
+
+Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `name`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
 
 Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `placeholder`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
 

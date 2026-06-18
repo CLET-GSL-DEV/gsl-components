@@ -1,86 +1,125 @@
+/* ── Root (dropzone) ── */
+
 .gsl-upload-field {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
   gap: 8px;
+  border: 1px dashed var(--gsl-border);
+  border-radius: var(--gsl-rounded-base);
+  background: var(--gsl-bg);
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+  outline: none;
 }
 
-.gsl-upload-field--invalid .gsl-upload-field__dropzone {
-  border-color: var(--gsl-error);
-  box-shadow: 0 0 0 1px var(--gsl-error);
+.gsl-upload-field:focus-visible {
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 2px var(--gsl-primary-light);
 }
+
+.gsl-upload-field:hover {
+  border-color: var(--gsl-primary);
+}
+
+.gsl-upload-field--drag-over {
+  border-color: var(--gsl-primary);
+  background: var(--gsl-primary-light);
+}
+
+.gsl-upload-field--has-files {
+  background: var(--gsl-primary-light);
+}
+
+.gsl-upload-field__input {
+  display: none;
+}
+
+/* ── Invalid ── */
+
+.gsl-upload-field--invalid {
+  border-color: var(--gsl-error);
+}
+
+.gsl-upload-field--invalid:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gsl-error) 25%, transparent);
+}
+
+/* ── Disabled ── */
 
 .gsl-upload-field--disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.gsl-upload-field--disabled .gsl-upload-field__dropzone {
-  cursor: not-allowed;
-}
+/* ── Icon ── */
 
-.gsl-upload-field__dropzone {
+.gsl-upload-field__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 80px;
-  padding: 12px;
-  border: 2px dashed var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
-  background: var(--gsl-bg);
-  transition: border-color 0.15s, background 0.15s;
-  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: var(--gsl-surface-subtle);
   color: var(--gsl-text-secondary);
+  flex-shrink: 0;
+}
+.gsl-upload-field--has-files .gsl-upload-field__icon {
+  background: var(--gsl-page-bg);
+  box-shadow: var(--gsl-shadow-md);
+}
+
+/* ── Title ── */
+
+.gsl-upload-field__title {
+  margin: 0;
+  font-family: var(--gsl-font);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  color: var(--gsl-text);
+}
+
+/* ── Subtitle ── */
+
+.gsl-upload-field__subtitle {
+  margin: 0;
+  font-family: var(--gsl-font);
+  font-weight: 400;
   font-size: 14px;
-  line-height: 1.4;
-  outline: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .gsl-upload-field__dropzone {
-    transition: none;
-  }
-}
-
-.gsl-upload-field__dropzone:focus-visible {
-  border-color: var(--gsl-primary);
-  box-shadow: 0 0 0 2px var(--gsl-primary-light);
-}
-
-.gsl-upload-field__dropzone:hover {
-  border-color: var(--gsl-primary);
-  background: var(--gsl-hover);
-}
-
-.gsl-upload-field__dropzone--active {
-  border-color: var(--gsl-primary);
-  background: var(--gsl-primary-light);
-}
-
-.gsl-upload-field__placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  line-height: 20px;
+  text-align: center;
   color: var(--gsl-text-secondary);
+  margin-bottom: 16px;
 }
 
-.gsl-upload-field__file-info {
+/* ── File cards ── */
+
+.gsl-upload-field__files {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
+  margin-bottom: 16px;
 }
 
-.gsl-upload-field__file {
+.gsl-upload-field__file-card {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: calc(var(--gsl-rounded-base) - 2px);
-  background: var(--gsl-hover);
+  padding: 6px 12px;
+  gap: 8px;
+  background: var(--gsl-bg);
+  border-radius: var(--gsl-rounded-base);
 }
 
-.gsl-upload-field__file-icon {
+.gsl-upload-field__file-card-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,42 +127,102 @@
   color: var(--gsl-text-secondary);
 }
 
-.gsl-upload-field__file-info {
+.gsl-upload-field__file-card-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   flex: 1;
   min-width: 0;
 }
 
-.gsl-upload-field__file-name {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--gsl-text);
+.gsl-upload-field__file-card-name {
+  font-family: var(--gsl-font);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--gsl-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.gsl-upload-field__file-size {
+.gsl-upload-field__file-card-size {
+  font-family: var(--gsl-font);
+  font-weight: 400;
   font-size: 12px;
+  line-height: 16px;
   color: var(--gsl-text-secondary);
+  flex-shrink: 0;
 }
 
-.gsl-upload-field__remove {
+.gsl-upload-field__file-card-remove {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
-  border-radius: 4px;
+  padding: 0;
   border: none;
+  border-radius: 4px;
   background: transparent;
   color: var(--gsl-text-secondary);
   cursor: pointer;
   flex-shrink: 0;
-  padding: 0;
 }
 
-.gsl-upload-field__remove:hover {
-  background: var(--gsl-hover);
+.gsl-upload-field__file-card-remove:hover {
+  background: color-mix(in srgb, var(--gsl-error) 10%, transparent);
   color: var(--gsl-error);
+}
+
+/* ── Action button ── */
+
+.gsl-upload-field__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--gsl-rounded-base);
+  background: var(--gsl-primary);
+  color: var(--gsl-on-primary);
+  font-family: var(--gsl-font);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.gsl-upload-field__action:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.gsl-upload-field__action:focus-visible {
+  outline: 2px solid var(--gsl-primary);
+  outline-offset: 2px;
+}
+
+.gsl-upload-field__action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gsl-upload-field--invalid .gsl-upload-field__action {
+  background: var(--gsl-error);
+}
+
+/* ── Reduced motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-upload-field {
+    transition: none;
+  }
+
+  .gsl-upload-field__action {
+    transition: none;
+  }
 }

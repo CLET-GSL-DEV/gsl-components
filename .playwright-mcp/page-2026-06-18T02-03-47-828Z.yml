@@ -1,0 +1,223 @@
+- article [ref=e2]:
+  - banner:
+    - navigation [ref=e3]:
+      - button "Show language menu" [ref=e4]
+      - generic "Pick one of the 28 translations" [ref=e5]: "Languages (28):"
+      - combobox "Choose a language" [ref=e6]:
+        - option "1.0 العربية"
+        - option "1.1 Čeština"
+        - option "1.1 Dansk"
+        - option "1.1 Deutsch"
+        - option "1.1 English" [selected]
+        - option "1.1 Español"
+        - option "1.1 Français"
+        - option "1.0 Hrvatski"
+        - option "1.0 Indonesia"
+        - option "1.1 Italiano"
+        - option "1.1 日本語"
+        - option "1.1 Norsk (Bokmål)"
+        - option "1.1 Nederlands"
+        - option "1.1 polski"
+        - option "1.1 Português (BR)"
+        - option "1.1 română"
+        - option "1.1 Pyccкий"
+        - option "1.0 Slovenčina"
+        - option "1.0 ქართული"
+        - option "1.1 Slovenščina"
+        - option "1.0 Srpski"
+        - option "1.1 Svenska"
+        - option "1.1 Türkçe"
+        - option "1.1 Українська"
+        - option "1.1 简体中文"
+        - option "1.1 正體中文"
+        - option "1.1 한국어"
+        - option "1.1 فارسی"
+  - main [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - heading "Keep a Changelog" [level=1] [ref=e10]
+        - heading "Don’t let your friends dump git logs into changelogs." [level=2] [ref=e11]
+      - link "Version 1.1.0" [ref=e12] [cursor=pointer]:
+        - /url: https://github.com/olivierlacan/keep-a-changelog/blob/main/CHANGELOG.md
+        - text: Version
+        - strong [ref=e13]: 1.1.0
+      - generic [ref=e14]: "# Changelog All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/2.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). ## [Unreleased] ## [2.0.0] - 2026-06-07 2.0.0 is the first major revision of Keep a Changelog. It breaks the guidance, not the format: the six change types, `YYYY-MM-DD` dates, and the `Unreleased` and `[YANKED]` markers are all unchanged, so your existing changelog stays valid. What breaks is the surface around it. The page is restructured so some older section links no longer resolve, the recommended guidance has shifted, and existing translations are out of date until they catch up. The breaking changes are marked below. ### Added - New guidance answering long-standing community questions: - Format: the `# Changelog` header preamble; marking breaking changes and where upgrade steps belong; choosing between Changed, Fixed, and Security; leading a Security entry with its CVE; why the six change types don't grow. - Versioning: schemes beyond SemVer, and linking each version to a `compare` diff with reference links. - Changelogs vs. release notes: how to derive one from the other without duplicate work, and why a host's generated notes are vendor lock-in. - Automation: LLM-drafted changelogs with a brief for an `AGENTS.md`; Conventional Commits; CI/CD; linking issues and pull requests; crediting contributors. - Scale: very large changelogs and monorepos. - Optional per-release summaries, and a statement of what Keep a Changelog deliberately won't do. - A redesigned, accessible site (WCAG 2.1 AA) with light and dark themes. ### Changed - **Breaking:** Retired the tagline \"Don't let your friends dump git logs into changelogs\" for \"Clearly document the evolution of your projects.\" Earlier versions keep the original. - **Breaking:** Restructured the page from a flat FAQ into integrated guidance, in a plainer, less first-person voice. Some older section links no longer resolve. - Reframed the \"GitHub Releases\" answer as \"Is a changelog the same as release notes?\", broadened beyond GitHub to any host. - Set page titles and descriptions from frontmatter, and fixed OpenGraph metadata so shared links render correctly and language-appropriately. ### Removed - Outdated specifics (the Vandamme gem reference and a GitHub-Releases discoverability note) in favor of more general guidance. - **Breaking:** The FAQ scaffolding and most first-person framing, whose section anchors no longer resolve; the podcast note now lives in the References section. ## [1.1.2] - 2024-09-27 ### Added - v1.1 German translation. - v1.1 Italian translation. - v1.1 Simplified Chinese translation. - v1.1 Persian translation. - v1.1 Polish translation. - v1.1 Slovenian translation. - v1.1 Traditional Chinese translation. - v1.1 Spanish translation. - v1.1 Brazilian Portuguese translation. - v1.1 Czech translation. - v1.1 Romanian translation. - v1.1 Swedish translation. - v1.1 Ukrainian translation. - v1.1 Korean translation. - v1.1 Indonesian translation. ### Fixed - Improve French translation. - Improve Dutch translation. ## [1.1.1] - 2023-03-05 ### Added - v1.1 Arabic translation. - v1.1 French translation. - v1.1 Dutch translation. - v1.1 Russian translation. - v1.1 Japanese translation. - v1.1 Norwegian Bokmål translation. - v1.1 \"Inconsistent Changes\" Turkish translation. - Default to most recent versions available for each languages. - Display count of available translations (26 to date!). - Centralize all links into `/data/links.json` so they can be updated easily. ### Fixed - Improve French translation. - Improve id-ID translation. - Improve Persian translation. - Improve Russian translation. - Improve Swedish title. - Improve zh-CN translation. - Improve French translation. - Improve zh-TW translation. - Improve Spanish (es-ES) transltion. - Foldout menu in Dutch translation. - Missing periods at the end of each change. - Fix missing logo in 1.1 pages. - Display notice when translation isn't for most recent version. - Various broken links, page versions, and indentations. ### Changed - Upgrade dependencies: Ruby 3.2.1, Middleman, etc. ### Removed - Unused normalize.css file. - Identical links assigned in each translation file. - Duplicate index file for the english version. ## [1.1.0] - 2019-02-15 ### Added - Danish translation. - Georgian translation from. - Changelog inconsistency section in Bad Practices. ### Fixed - Italian translation. - Indonesian translation. ## [1.0.0] - 2017-06-20 ### Added - New visual identity by [@tylerfortune8]. - Version navigation. - Links to latest released version in previous versions. - \"Why keep a changelog?\" section. - \"Who needs a changelog?\" section. - \"How do I make a changelog?\" section. - \"Frequently Asked Questions\" section. - New \"Guiding Principles\" sub-section to \"How do I make a changelog?\". - Simplified and Traditional Chinese translations from [@tianshuo]. - German translation from [@mpbzh] & [@Art4]. - Italian translation from [@azkidenz]. - Swedish translation from [@magol]. - Turkish translation from [@emreerkan]. - French translation from [@zapashcanon]. - Brazilian Portuguese translation from [@Webysther]. - Polish translation from [@amielucha] & [@m-aciek]. - Russian translation from [@aishek]. - Czech translation from [@h4vry]. - Slovak translation from [@jkostolansky]. - Korean translation from [@pierceh89]. - Croatian translation from [@porx]. - Persian translation from [@Hameds]. - Ukrainian translation from [@osadchyi-s]. ### Changed - Start using \"changelog\" over \"change log\" since it's the common usage. - Start versioning based on the current English version at 0.3.0 to help translation authors keep things up-to-date. - Rewrite \"What makes unicorns cry?\" section. - Rewrite \"Ignoring Deprecations\" sub-section to clarify the ideal scenario. - Improve \"Commit log diffs\" sub-section to further argument against them. - Merge \"Why can’t people just use a git log diff?\" with \"Commit log diffs\". - Fix typos in Simplified Chinese and Traditional Chinese translations. - Fix typos in Brazilian Portuguese translation. - Fix typos in Turkish translation. - Fix typos in Czech translation. - Fix typos in Swedish translation. - Improve phrasing in French translation. - Fix phrasing and spelling in German translation. ### Removed - Section about \"changelog\" vs \"CHANGELOG\". ## [0.3.0] - 2015-12-03 ### Added - RU translation from [@aishek]. - pt-BR translation from [@tallesl]. - es-ES translation from [@ZeliosAriex]. ## [0.2.0] - 2015-10-06 ### Changed - Remove exclusionary mentions of \"open source\" since this project can benefit both \"open\" and \"closed\" source projects equally. ## [0.1.0] - 2015-10-06 ### Added - Answer \"Should you ever rewrite a change log?\". ### Changed - Improve argument against commit logs. - Start following [SemVer] properly. ## [0.0.8] - 2015-02-17 ### Changed - Update year to match in every README example. - Reluctantly stop making fun of Brits only, since most of the world writes dates in a strange way. ### Fixed - Fix typos in recent README changes. - Update outdated unreleased diff link. ## [0.0.7] - 2015-02-16 ### Added - Link, and make it obvious that date format is ISO 8601. ### Changed - Clarified the section on \"Is there a standard change log format?\". ### Fixed - Fix Markdown links to tag comparison URL with footnote-style links. ## [0.0.6] - 2014-12-12 ### Added - README section on \"yanked\" releases. ## [0.0.5] - 2014-08-09 ### Added - Markdown links to version tags on release headings. - Unreleased section to gather unreleased changes and encourage note keeping prior to releases. ## [0.0.4] - 2014-08-09 ### Added - Better explanation of the difference between the file (\"CHANGELOG\") and its function \"the change log\". ### Changed - Refer to a \"change log\" instead of a \"CHANGELOG\" throughout the site to differentiate between the file and the purpose of the file — the logging of changes. ### Removed - Remove empty sections from CHANGELOG, they occupy too much space and create too much noise in the file. People will have to assume that the missing sections were intentionally left out because they contained no notable changes. ## [0.0.3] - 2014-08-09 ### Added - \"Why should I care?\" section mentioning The Changelog podcast. ## [0.0.2] - 2014-07-10 ### Added - Explanation of the recommended reverse chronological release ordering. ## [0.0.1] - 2014-05-31 ### Added - This CHANGELOG file to hopefully serve as an evolving example of a standardized open source project CHANGELOG. - CNAME file to enable GitHub Pages custom domain. - README now contains answers to common questions about CHANGELOGs. - Good examples and basic guidelines, including proper date formatting. - Counter-examples: \"What makes unicorns cry?\". [unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v2.0.0...HEAD [2.0.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.1.2...v2.0.0 [1.1.2]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.1.1...v1.1.2 [1.1.1]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.1.0...v1.1.1 [1.1.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.0...v1.1.0 [1.0.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.3.0...v1.0.0 [0.3.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.2.0...v0.3.0 [0.2.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.0...v0.2.0 [0.1.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.8...v0.1.0 [0.0.8]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.7...v0.0.8 [0.0.7]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.6...v0.0.7 [0.0.6]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.5...v0.0.6 [0.0.5]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.4...v0.0.5 [0.0.4]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.3...v0.0.4 [0.0.3]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.2...v0.0.3 [0.0.2]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.1...v0.0.2 [0.0.1]: https://github.com/olivierlacan/keep-a-changelog/releases/tag/v0.0.1 [SemVer]: https://semver.org [@tylerfortune8]: https://github.com/tylerfortune8 [@tianshuo]: https://github.com/tianshuo [@mpbzh]: https://github.com/mpbzh [@Art4]: https://github.com/Art4 [@azkidenz]: https://github.com/azkidenz [@magol]: https://github.com/magol [@emreerkan]: https://github.com/emreerkan [@zapashcanon]: https://github.com/zapashcanon [@Webysther]: https://github.com/Webysther [@amielucha]: https://github.com/amielucha [@m-aciek]: https://github.com/m-aciek [@aishek]: https://github.com/aishek [@h4vry]: https://github.com/h4vry [@jkostolansky]: https://github.com/jkostolansky [@pierceh89]: https://github.com/pierceh89 [@porx]: https://github.com/porx [@Hameds]: https://github.com/Hameds [@osadchyi-s]: https://github.com/osadchyi-s [@tallesl]: https://github.com/tallesl [@ZeliosAriex]: https://github.com/ZeliosAriex"
+    - generic [ref=e15]:
+      - heading "What is a changelog?" [level=3] [ref=e16]: ∞ What is a changelog?
+      - paragraph [ref=e17]: A changelog is a file which contains a curated, chronologically ordered list of notable changes for each version of a project.
+      - heading "Why keep a changelog?" [level=3] [ref=e18]: ∞ Why keep a changelog?
+      - paragraph [ref=e19]: To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.
+      - heading "Who needs a changelog?" [level=3] [ref=e20]: ∞ Who needs a changelog?
+      - paragraph [ref=e21]: People do. Whether consumers or developers, the end users of software are human beings who care about what's in the software. When the software changes, people want to know why and how.
+    - generic [ref=e22]:
+      - heading "How do I make a good changelog?" [level=3] [ref=e23]: ∞ How do I make a good changelog?
+      - heading "Guiding Principles" [level=4] [ref=e24]: ∞ Guiding Principles
+      - list [ref=e25]:
+        - listitem [ref=e26]:
+          - text: Changelogs are
+          - emphasis [ref=e27]: for humans
+          - text: ", not machines."
+        - listitem [ref=e28]: There should be an entry for every single version.
+        - listitem [ref=e29]: The same types of changes should be grouped.
+        - listitem [ref=e30]: Versions and sections should be linkable.
+        - listitem [ref=e31]: The latest version comes first.
+        - listitem [ref=e32]: The release date of each version is displayed.
+        - listitem [ref=e33]:
+          - text: Mention whether you follow
+          - link "Semantic Versioning" [ref=e34] [cursor=pointer]:
+            - /url: https://semver.org/
+          - text: .
+      - text: ∞
+      - heading "Types of changes" [level=4] [ref=e35]
+      - list [ref=e36]:
+        - listitem [ref=e37]:
+          - code [ref=e38]: Added
+          - text: for new features.
+        - listitem [ref=e39]:
+          - code [ref=e40]: Changed
+          - text: for changes in existing functionality.
+        - listitem [ref=e41]:
+          - code [ref=e42]: Deprecated
+          - text: for soon-to-be removed features.
+        - listitem [ref=e43]:
+          - code [ref=e44]: Removed
+          - text: for now removed features.
+        - listitem [ref=e45]:
+          - code [ref=e46]: Fixed
+          - text: for any bug fixes.
+        - listitem [ref=e47]:
+          - code [ref=e48]: Security
+          - text: in case of vulnerabilities.
+    - generic [ref=e49]:
+      - heading "How can I reduce the effort required to maintain a changelog?" [level=3] [ref=e50]: ∞ How can I reduce the effort required to maintain a changelog?
+      - paragraph [ref=e51]:
+        - text: Keep an
+        - code [ref=e52]: Unreleased
+        - text: section at the top to track upcoming changes.
+      - paragraph [ref=e53]: "This serves two purposes:"
+      - list [ref=e54]:
+        - listitem [ref=e55]: People can see what changes they might expect in upcoming releases
+        - listitem [ref=e56]:
+          - text: At release time, you can move the
+          - code [ref=e57]: Unreleased
+          - text: section changes into a new release version section.
+    - generic [ref=e58]:
+      - heading "Can changelogs be bad?" [level=3] [ref=e59]: ∞ Can changelogs be bad?
+      - paragraph [ref=e60]: Yes. Here are a few ways they can be less than useful.
+      - heading "Commit log diffs" [level=4] [ref=e61]: ∞ Commit log diffs
+      - paragraph [ref=e62]: "Using commit log diffs as changelogs is a bad idea: they're full of noise. Things like merge commits, commits with obscure titles, documentation changes, etc."
+      - paragraph [ref=e63]: The purpose of a commit is to document a step in the evolution of the source code. Some projects clean up commits, some don't.
+      - paragraph [ref=e64]: The purpose of a changelog entry is to document the noteworthy difference, often across multiple commits, to communicate them clearly to end users.
+      - heading "Ignoring Deprecations" [level=4] [ref=e65]: ∞ Ignoring Deprecations
+      - paragraph [ref=e66]: When people upgrade from one version to another, it should be painfully clear when something will break. It should be possible to upgrade to a version that lists deprecations, remove what's deprecated, then upgrade to the version where the deprecations become removals.
+      - paragraph [ref=e67]: If you do nothing else, list deprecations, removals, and any breaking changes in your changelog.
+      - heading "Confusing Dates" [level=4] [ref=e68]: ∞ Confusing Dates
+      - paragraph [ref=e69]:
+        - text: Regional date formats vary throughout the world and it's often difficult to find a human-friendly date format that feels intuitive to everyone. The advantage of dates formatted like
+        - code [ref=e70]: 2017-07-17
+        - text: "is that they follow the order of largest to smallest units: year, month, and day. This format also doesn't overlap in ambiguous ways with other date formats, unlike some regional formats that switch the position of month and day numbers. These reasons, and the fact this date format is an"
+        - link "ISO standard" [ref=e71] [cursor=pointer]:
+          - /url: https://www.iso.org/iso-8601-date-and-time-format.html
+        - text: ", are why it is the recommended date format for changelog entries."
+      - heading "Inconsistent Changes" [level=4] [ref=e72]: ∞ Inconsistent Changes
+      - paragraph [ref=e73]: A changelog which only mentions some of the changes can be as dangerous as not having a changelog. While many of the changes may not be relevant - for instance, removing a single whitespace may not need to be recorded in all instances - any important changes should be mentioned in the changelog. By inconsistently applying changes, your users may mistakenly think that the changelog is the single source of truth. It ought to be. With great power comes great responsibility - having a good changelog means having a consistently updated changelog.
+      - complementary [ref=e74]:
+        - text: There’s more. Help me collect these antipatterns by
+        - link "opening an issue" [ref=e75] [cursor=pointer]:
+          - /url: https://github.com/olivierlacan/keep-a-changelog/issues
+        - text: or a pull request.
+    - generic [ref=e76]:
+      - heading "Frequently Asked Questions" [level=3] [ref=e77]: ∞ Frequently Asked Questions
+      - heading "Is there a standard changelog format?" [level=4] [ref=e78] [cursor=pointer]: ∞ Is there a standard changelog format?
+      - paragraph [ref=e79]:
+        - text: Not really. There's the
+        - link "GNU changelog style guide" [ref=e80] [cursor=pointer]:
+          - /url: https://www.gnu.org/prep/standards/html_node/Style-of-Change-Logs.html#Style-of-Change-Logs
+        - text: ", or the"
+        - link "two-paragraph-long GNU NEWS file" [ref=e81] [cursor=pointer]:
+          - /url: https://www.gnu.org/prep/standards/html_node/NEWS-File.html#NEWS-File
+        - text: "\"guideline\". Both are inadequate or insufficient."
+      - paragraph [ref=e82]:
+        - text: This project aims to be
+        - link "a better changelog convention." [ref=e83] [cursor=pointer]:
+          - /url: https://github.com/olivierlacan/keep-a-changelog/blob/main/CHANGELOG.md
+        - text: It comes from observing good practices in the open source community and gathering them.
+      - paragraph [ref=e84]:
+        - text: Healthy criticism, discussion and suggestions for improvements
+        - link "are welcome." [ref=e85] [cursor=pointer]:
+          - /url: https://github.com/olivierlacan/keep-a-changelog/issues
+      - heading "What should the changelog file be named?" [level=4] [ref=e86] [cursor=pointer]: ∞ What should the changelog file be named?
+      - paragraph [ref=e87]:
+        - text: Call it
+        - code [ref=e88]: CHANGELOG.md
+        - text: . Some projects use
+        - code [ref=e89]: HISTORY
+        - text: ","
+        - code [ref=e90]: NEWS
+        - text: or
+        - code [ref=e91]: RELEASES
+        - text: .
+      - paragraph [ref=e92]: While it's easy to think that the name of your changelog file doesn't matter that much, why make it harder for your end users to consistently find notable changes?
+      - heading "What about GitHub Releases?" [level=4] [ref=e93] [cursor=pointer]: ∞ What about GitHub Releases?
+      - paragraph [ref=e94]:
+        - text: It's a great initiative.
+        - link "Releases" [ref=e95] [cursor=pointer]:
+          - /url: https://docs.github.com/en/github/administering-a-repository/releasing-projects-on-github/managing-releases-in-a-repository
+        - text: can be used to turn simple git tags (for example a tag named
+        - code [ref=e96]: v1.0.0
+        - text: ) into rich release notes by manually adding release notes or it can pull annotated git tag messages and turn them into notes.
+      - paragraph [ref=e97]: GitHub Releases create a non-portable changelog that can only be displayed to users within the context of GitHub. It's possible to make them look very much like the Keep a Changelog format, but it tends to be a bit more involved.
+      - paragraph [ref=e98]:
+        - text: The current version of GitHub releases is also arguably not very discoverable by end-users, unlike the typical uppercase files (
+        - code [ref=e99]: README
+        - text: ","
+        - code [ref=e100]: CONTRIBUTING
+        - text: ", etc.). Another minor issue is that the interface doesn't currently offer links to commit logs between each release."
+      - heading "Can changelogs be automatically parsed?" [level=4] [ref=e101] [cursor=pointer]: ∞ Can changelogs be automatically parsed?
+      - paragraph [ref=e102]: It’s difficult, because people follow wildly different formats and file names.
+      - paragraph [ref=e103]:
+        - link "Vandamme" [ref=e104] [cursor=pointer]:
+          - /url: https://github.com/tech-angels/vandamme/
+        - text: is a Ruby gem created by the Gemnasium team and which parses many (but not all) open source project changelogs.
+      - heading "What about yanked releases?" [level=4] [ref=e105] [cursor=pointer]: ∞ What about yanked releases?
+      - paragraph [ref=e106]: "Yanked releases are versions that had to be pulled because of a serious bug or security issue. Often these versions don't even appear in change logs. They should. This is how you should display them:"
+      - paragraph [ref=e107]:
+        - code [ref=e108]: "## [0.0.5] - 2014-12-13 [YANKED]"
+      - paragraph [ref=e109]:
+        - text: The
+        - code [ref=e110]: "[YANKED]"
+        - text: tag is loud for a reason. It's important for people to notice it. Since it's surrounded by brackets it's also easier to parse programmatically.
+      - heading "Should you ever rewrite a changelog?" [level=4] [ref=e111] [cursor=pointer]: ∞ Should you ever rewrite a changelog?
+      - paragraph [ref=e112]: Sure. There are always good reasons to improve a changelog. I regularly open pull requests to add missing releases to open source projects with unmaintained changelogs.
+      - paragraph [ref=e113]: It's also possible you may discover that you forgot to address a breaking change in the notes for a version. It's obviously important for you to update your changelog in this case.
+      - heading "How can I contribute?" [level=4] [ref=e114] [cursor=pointer]: ∞ How can I contribute?
+      - paragraph [ref=e115]:
+        - text: This document is not the
+        - strong [ref=e116]: truth
+        - text: ; it’s my carefully considered opinion, along with information and examples I gathered.
+      - paragraph [ref=e117]: This is because I want our community to reach a consensus. I believe the discussion is as important as the end result.
+      - paragraph [ref=e118]:
+        - text: So please
+        - strong [ref=e119]:
+          - link "pitch in" [ref=e120] [cursor=pointer]:
+            - /url: https://github.com/olivierlacan/keep-a-changelog
+        - text: .
+    - generic [ref=e121]:
+      - heading "Conversations" [level=3] [ref=e122]
+      - paragraph [ref=e123]:
+        - text: I went on
+        - link "The Changelog podcast" [ref=e124] [cursor=pointer]:
+          - /url: https://changelog.com/podcast/127
+        - text: to talk about why maintainers and contributors should care about changelogs, and also about the motivations behind this project.
+  - contentinfo [ref=e125]:
+    - paragraph [ref=e126]:
+      - text: Keep a Changelog is
+      - link "MIT licensed" [ref=e127] [cursor=pointer]:
+        - /url: https://choosealicense.com/licenses/mit/
+      - text: ","
+      - link "created and maintained" [ref=e128] [cursor=pointer]:
+        - /url: https://github.com/olivierlacan/keep-a-changelog/
+      - text: by
+      - link "Olivier Lacan" [ref=e129] [cursor=pointer]:
+        - /url: https://olivierlacan.com/
+      - text: ", and designed by Tyler Fortune."

@@ -50,7 +50,7 @@ function isInSelectedRange(
   const d = new Date(day.getFullYear(), day.getMonth(), day.getDate());
   const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
   const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-  return d >= s && d <= e;
+  return d > s && d < e;
 }
 
 function computeCalendarDays(year: number, month: number): Date[] {
@@ -88,11 +88,12 @@ export const DateRangeSelector = forwardRef<
     value: controlledValue,
     defaultValue,
     onChange,
-    placeholder,
+    placeholder = "Select date range",
     invalid = false,
     disabled = false,
     min,
     max,
+    formatOptions,
     classNames,
     className,
   },
@@ -104,7 +105,7 @@ export const DateRangeSelector = forwardRef<
   );
   const range = isControlled ? (controlledValue ?? { start: null, end: null }) : internalValue;
 
-  const [openField, setOpenField] = useState<"start" | "end" | null>(null);
+  const [open, setOpen] = useState(false);
 
   const today = useMemo(() => {
     const d = new Date();
@@ -130,10 +131,17 @@ export const DateRangeSelector = forwardRef<
   const formatDate = useCallback(
     (date: Date | null) =>
       date
-        ? date.toLocaleDateString("en-US", DEFAULT_FORMAT)
+        ? date.toLocaleDateString("en-US", formatOptions ?? DEFAULT_FORMAT)
         : "",
-    [],
+    [formatOptions],
   );
+
+  const displayText = useMemo(() => {
+    if (!range.start && !range.end) return "";
+    const from = range.start ? formatDate(range.start) : "...";
+    const to = range.end ? formatDate(range.end) : "...";
+    return `${from} \u2014 ${to}`;
+  }, [range, formatDate]);
 
   const setRange = useCallback(
     (next: DateRangeValue) => {
@@ -153,42 +161,33 @@ export const DateRangeSelector = forwardRef<
         day.getDate(),
       );
 
-      if (openField === "start") {
-        const newEnd =
-          range.end && normalized > range.end ? normalized : range.end;
-        setRange({ start: normalized, end: newEnd });
-        setOpenField(newEnd && normalized > newEnd ? null : "end");
-      } else if (openField === "end") {
-        if (range.start && normalized < range.start) {
+      if (!range.start) {
+        setRange({ start: normalized, end: null });
+      } else if (!range.end) {
+        if (normalized < range.start) {
           setRange({ start: normalized, end: range.start });
         } else {
           setRange({ start: range.start, end: normalized });
         }
-        setOpenField(null);
+        setOpen(false);
+      } else {
+        setRange({ start: normalized, end: null });
       }
     },
-    [disabled, min, max, openField, range, setRange],
+    [disabled, min, max, range, setRange],
   );
 
   const handleOpenChange = useCallback(
     (next: boolean) => {
       if (disabled) return;
-      if (!next) setOpenField(null);
-    },
-    [disabled],
-  );
-
-  const openFieldPicker = useCallback(
-    (field: "start" | "end") => {
-      if (disabled) return;
-      const refDate = field === "start" ? range.start : range.end;
-      if (refDate) {
+      if (next) {
+        const refDate = range.start ?? today;
         setViewYear(refDate.getFullYear());
         setViewMonth(refDate.getMonth());
       }
-      setOpenField(openField === field ? null : field);
+      setOpen(next);
     },
-    [disabled, openField, range],
+    [disabled, range.start, today],
   );
 
   const prevMonth = useCallback(() => {
@@ -212,99 +211,31 @@ export const DateRangeSelector = forwardRef<
         className,
       )}
     >
-      <Popover.Root
-        open={openField !== null}
-        onOpenChange={handleOpenChange}
-      >
-        <div className="gsl-date-range-selector__fields">
-          <div
+      <Popover.Root open={open} onOpenChange={handleOpenChange}>
+        <Popover.Trigger asChild>
+          <button
+            type="button"
+            disabled={disabled}
             className={cn(
-              "gsl-date-range-selector__field",
-              classNames?.field,
+              "gsl-date-selector__trigger",
+              !range.start && !range.end && "gsl-date-selector__trigger--placeholder",
+              classNames?.trigger,
             )}
+            aria-invalid={invalid || undefined}
+            aria-haspopup="dialog"
+            aria-expanded={open}
           >
-            <span
-              className={cn(
-                "gsl-date-range-selector__field-label",
-                classNames?.fieldLabel,
-              )}
-            >
-              From
+            <Calendar
+              size={16}
+              strokeWidth={1.75}
+              className="gsl-date-selector__trigger-icon"
+              aria-hidden
+            />
+            <span className="gsl-date-selector__trigger-text">
+              {range.start || range.end ? displayText : placeholder}
             </span>
-            <Popover.Trigger asChild>
-              <button
-                type="button"
-                disabled={disabled}
-                className={cn(
-                  "gsl-date-selector__trigger",
-                  !range.start && "gsl-date-selector__trigger--placeholder",
-                  classNames?.trigger,
-                )}
-                aria-invalid={invalid || undefined}
-                onClick={(e) => {
-                  e.preventDefault();
-                  openFieldPicker("start");
-                }}
-              >
-                <Calendar
-                  size={16}
-                  strokeWidth={1.75}
-                  className="gsl-date-selector__trigger-icon"
-                  aria-hidden
-                />
-                <span className="gsl-date-selector__trigger-text">
-                  {range.start
-                    ? formatDate(range.start)
-                    : placeholder?.start ?? "Start date"}
-                </span>
-              </button>
-            </Popover.Trigger>
-          </div>
-
-          <div
-            className={cn(
-              "gsl-date-range-selector__field",
-              classNames?.field,
-            )}
-          >
-            <span
-              className={cn(
-                "gsl-date-range-selector__field-label",
-                classNames?.fieldLabel,
-              )}
-            >
-              To
-            </span>
-            <Popover.Trigger asChild>
-              <button
-                type="button"
-                disabled={disabled}
-                className={cn(
-                  "gsl-date-selector__trigger",
-                  !range.end && "gsl-date-selector__trigger--placeholder",
-                  classNames?.trigger,
-                )}
-                aria-invalid={invalid || undefined}
-                onClick={(e) => {
-                  e.preventDefault();
-                  openFieldPicker("end");
-                }}
-              >
-                <Calendar
-                  size={16}
-                  strokeWidth={1.75}
-                  className="gsl-date-selector__trigger-icon"
-                  aria-hidden
-                />
-                <span className="gsl-date-selector__trigger-text">
-                  {range.end
-                    ? formatDate(range.end)
-                    : placeholder?.end ?? "End date"}
-                </span>
-              </button>
-            </Popover.Trigger>
-          </div>
-        </div>
+          </button>
+        </Popover.Trigger>
 
         <Popover.Portal>
           <Popover.Content
@@ -315,23 +246,39 @@ export const DateRangeSelector = forwardRef<
             side="bottom"
             align="start"
             sideOffset={4}
-            aria-label="Date picker"
+            aria-label="Date range picker"
           >
-            <div className="gsl-date-selector__calendar-header">
+            <div
+              className={cn(
+                "gsl-date-selector__calendar-header",
+                classNames?.calendarHeader,
+              )}
+            >
               <button
                 type="button"
-                className="gsl-date-selector__calendar-nav"
+                className={cn(
+                  "gsl-date-selector__calendar-nav",
+                  classNames?.calendarNav,
+                )}
                 onClick={prevMonth}
                 aria-label="Previous month"
               >
                 <ChevronLeft size={16} strokeWidth={2} aria-hidden />
               </button>
-              <span className="gsl-date-selector__calendar-title">
+              <span
+                className={cn(
+                  "gsl-date-selector__calendar-title",
+                  classNames?.calendarTitle,
+                )}
+              >
                 {monthLabel}
               </span>
               <button
                 type="button"
-                className="gsl-date-selector__calendar-nav"
+                className={cn(
+                  "gsl-date-selector__calendar-nav",
+                  classNames?.calendarNav,
+                )}
                 onClick={nextMonth}
                 aria-label="Next month"
               >
@@ -339,11 +286,20 @@ export const DateRangeSelector = forwardRef<
               </button>
             </div>
 
-            <div className="gsl-date-selector__calendar-weekdays" role="row">
+            <div
+              className={cn(
+                "gsl-date-selector__calendar-weekdays",
+                classNames?.calendarWeekdays,
+              )}
+              role="row"
+            >
               {WEEKDAYS.map((day) => (
                 <div
                   key={day}
-                  className="gsl-date-selector__calendar-weekday"
+                  className={cn(
+                    "gsl-date-selector__calendar-weekday",
+                    classNames?.calendarWeekday,
+                  )}
                   role="columnheader"
                   aria-label={day}
                 >
@@ -352,7 +308,13 @@ export const DateRangeSelector = forwardRef<
               ))}
             </div>
 
-            <div className="gsl-date-selector__calendar-grid" role="grid">
+            <div
+              className={cn(
+                "gsl-date-selector__calendar-grid",
+                classNames?.calendarGrid,
+              )}
+              role="grid"
+            >
               {calendarDays.map((day, i) => {
                 const isCurrentMonth = day.getMonth() === viewMonth;
                 const isToday = isSameDay(day, today);
@@ -375,21 +337,25 @@ export const DateRangeSelector = forwardRef<
                     type="button"
                     role="gridcell"
                     disabled={isDisabled || !isCurrentMonth}
+                    aria-selected={isStart || isEnd}
+                    aria-label={day.toLocaleDateString("en-US", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
                     className={cn(
                       "gsl-date-selector__calendar-day",
-                      isCurrentMonth && "gsl-date-selector__calendar-day--current",
+                      !isCurrentMonth &&
+                        "gsl-date-selector__calendar-day--outside",
                       isToday && "gsl-date-selector__calendar-day--today",
                       isStart && "gsl-date-selector__calendar-day--selected",
                       isEnd && "gsl-date-selector__calendar-day--selected",
                       inRange &&
-                        !isStart &&
-                        !isEnd &&
                         "gsl-date-selector__calendar-day--in-range",
-                      (isDisabled || !isCurrentMonth) &&
-                        "gsl-date-selector__calendar-day--disabled",
+                      classNames?.calendarDay,
                     )}
                     onClick={() => handleSelect(day)}
-                    tabIndex={isCurrentMonth && day.getDate() === 1 ? 0 : -1}
                   >
                     {day.getDate()}
                   </button>

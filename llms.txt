@@ -1,0 +1,75 @@
+# GSL Components — User Guide
+
+## Overview
+React component library (@rfdtech/components) for admin dashboards. Themed with CSS custom properties, built on Radix UI + cmdk.
+
+## Layout
+- **AppLayout** — auto-positioning shell. Wrap AppHeader, AppSidebar, AppBody as direct children.
+- **AppHeader** — top bar with AppHeaderSearch, AppHeaderActions, AppHeaderNotifications, AppHeaderProfile
+- **Sidebar** — collapsible nav with SidebarLink, SidebarGroup, SidebarBrand, mobile overlay
+- **Card** — surface wrapper with header prop, --gsl-surface-card background
+
+## Inputs
+All support controlled/uncontrolled via value/onChange and RHF via FormField.
+
+- **CountrySelector** — country dropdown with flag emoji and search
+- **DateSelector** — date picker with calendar popover
+- **DateRangeSelector** — From/To date range with shared calendar
+- **Dropdown** — select with clearable, invalid, aria-label
+- **NetworkOperator** — operator selector with images (MTN, Vodafone, AirtelTigo, Glo)
+- **OtpInput** — 6-digit OTP with paste, keyboard nav, onComplete
+- **PhoneNumberInput** — phone input with country code prefix and auto-detection
+- **UploadField** — drag-and-drop file upload with type icons
+
+## Data
+- **Table** — URL-driven table with TableSearch, TableFilter, TableContent, TablePagination. Requires paramPrefix.
+- **MetricCard** — dashboard metric with trend indicator (up/down/neutral)
+- **ProgressBar** — determinate/indeterminate with variants
+
+## Overlays
+- **Command** — cmd+k palette with search, groups, keyboard shortcuts
+- **Dialog** — modal with overlay, title, description, close button
+- **Modal** — full-viewport shell with header, body, footer
+- **Popover** — floating panel anchored to trigger
+- **Sheet** — edge-sliding panel (top/right/bottom/left)
+- **Toast** — notification toasts via Sonner
+
+## Navigation
+- **AppSwitcher** — 9-dot app launcher grid
+- **Breadcrumb** — hierarchical trail
+- **Tabs** — default and line variants with animated indicator
+- **SidebarLink** — nav items with icon, label, badge, active state
+
+## Form
+- **Field** — accessible wrapper with FieldLabel, FieldControl, FieldDescription, FieldError
+- **Form** — RHF adapter with FormField
+- **Input** — text input with invalid/disabled states
+- **Textarea** — multiline input
+- **Checkbox** — with optional label
+- **RadioGroup** — default and card variants
+- **Button** — primary, secondary, outline, ghost variants with loading
+- **Badge** — inline label with semantic variants
+- **BulkImportModal** — multi-step CSV import wizard
+
+## Interaction
+- **Draggable** — repositionable panel with handle
+- **Sortable** — drag-and-drop list reordering
+
+## Theme
+- Light/dark/system modes via ThemeProvider
+- CSS tokens: --gsl-bg, --gsl-text, --gsl-primary, --gsl-border, --gsl-hover, --gsl-error, --gsl-success, --gsl-warning, --gsl-rounded-base, --gsl-radius-xl, --gsl-radius-2xl, --gsl-surface-card, --gsl-z-*
+- Override tokens on any ancestor to theme
+
+## Hooks
+- **useDebounce** — debounced value
+- **useTableState** — URL-driven table state (page, search, filters, sort)
+- **useTablePagination** — URL-driven pagination
+- **useTableFilter** — URL-driven filter state
+- **useDialogSearchParam** / **useModalSearchParam** — URL-driven overlay state
+- **useSidebar** — sidebar open/collapsed/mobile state
+
+## Patterns
+- Every component accepts className and classNames (part-level overrides)
+- All inputs: value/onChange for controlled, or omit for uncontrolled
+- RHF: FormField → Field → FieldControl → component
+- No emojis in library code or docs (flag emojis in CountrySelector only)

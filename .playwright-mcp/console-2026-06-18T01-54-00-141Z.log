@@ -1,0 +1,5 @@
+[     154ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/@fs/Users/user/mm/gsl-components/node_modules/.vite/deps/react-dom_client.js?v=97c09f5e:20102
+[     185ms] [ERROR] Functions are not valid as a React child. This may happen if you return %s instead of <%s /> from render. Or maybe you meant to call this function rather than return it.
+  <%s>{%s}</%s> MDXContent MDXContent pre MDXContent pre @ http://localhost:5173/@fs/Users/user/mm/gsl-components/node_modules/.vite/deps/react-dom_client.js?v=97c09f5e:4614
+[   17668ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5173/docs/changelog-raw.ts:0
+[   17668ms] [ERROR] [vite] Failed to reload /docs/pages/changelog.mdx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5173/@vite/client:881

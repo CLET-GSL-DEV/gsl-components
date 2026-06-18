@@ -2,6 +2,7 @@ import { MetricCard } from "@rfdtech/components";
 
 export function MetricCardExample() {
   return (
+    <div style={{ background: "var(--gsl-page-bg)", padding: 20, borderRadius: "var(--gsl-radius-xl)" }}>
     <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
       <div style={{ minWidth: 200, flex: 1 }}>
         <MetricCard
@@ -28,6 +29,7 @@ export function MetricCardExample() {
           description="Average API response time"
         />
       </div>
+    </div>
     </div>
   );
 }

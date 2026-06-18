@@ -1,0 +1,1017 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "GSL Components" [ref=e5] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=e6]:
+      - button "Search docs" [ref=e7] [cursor=pointer]:
+        - img [ref=e8]
+        - generic [ref=e11]: Search docs...
+        - generic [ref=e12]: ⌘K
+      - link "Demo" [ref=e13] [cursor=pointer]:
+        - /url: /
+      - link "Docs" [ref=e14] [cursor=pointer]:
+        - /url: /docs
+      - generic [ref=e15]:
+        - generic [ref=e16]: Theme
+        - combobox "Color theme" [ref=e17]:
+          - option "Light"
+          - option "Dark"
+          - option "System" [selected]
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - complementary [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]: "@rfdtech/components"
+          - generic [ref=e24]: v1.8.0
+        - navigation "Component documentation" [ref=e25]:
+          - generic [ref=e26]:
+            - paragraph [ref=e27]: Guide
+            - generic [ref=e28]:
+              - link "Changelog" [ref=e29] [cursor=pointer]:
+                - /url: /docs/changelog
+              - link "Getting started" [ref=e30] [cursor=pointer]:
+                - /url: /docs/getting-started
+              - link "Hooks" [ref=e31] [cursor=pointer]:
+                - /url: /docs/hooks
+              - link "Theme" [ref=e32] [cursor=pointer]:
+                - /url: /docs/theme
+          - generic [ref=e33]:
+            - paragraph [ref=e34]: Components
+            - generic [ref=e35]:
+              - link "AppHeader" [ref=e36] [cursor=pointer]:
+                - /url: /docs/app-header
+              - link "AppLayout" [ref=e37] [cursor=pointer]:
+                - /url: /docs/app-layout
+              - link "AppSwitcher" [ref=e38] [cursor=pointer]:
+                - /url: /docs/app-switcher
+              - link "Badge" [ref=e39] [cursor=pointer]:
+                - /url: /docs/badge
+              - link "Breadcrumb" [ref=e40] [cursor=pointer]:
+                - /url: /docs/breadcrumb
+              - link "BulkImportModal" [ref=e41] [cursor=pointer]:
+                - /url: /docs/bulk-import-modal
+              - link "Button" [ref=e42] [cursor=pointer]:
+                - /url: /docs/button
+              - link "Card" [ref=e43] [cursor=pointer]:
+                - /url: /docs/card
+              - link "Checkbox" [ref=e44] [cursor=pointer]:
+                - /url: /docs/checkbox
+              - link "Command" [ref=e45] [cursor=pointer]:
+                - /url: /docs/command
+              - link "CountrySelector" [ref=e46] [cursor=pointer]:
+                - /url: /docs/country-selector
+              - link "DateSelector" [ref=e47] [cursor=pointer]:
+                - /url: /docs/date-selector
+              - link "Dialog" [ref=e48] [cursor=pointer]:
+                - /url: /docs/dialog
+              - link "Draggable" [ref=e49] [cursor=pointer]:
+                - /url: /docs/draggable
+              - link "Dropdown" [ref=e50] [cursor=pointer]:
+                - /url: /docs/dropdown
+              - link "Form" [ref=e51] [cursor=pointer]:
+                - /url: /docs/form
+              - link "FormField" [ref=e52] [cursor=pointer]:
+                - /url: /docs/form-field
+              - link "MetricCard" [ref=e53] [cursor=pointer]:
+                - /url: /docs/metric-card
+              - link "Modal" [ref=e54] [cursor=pointer]:
+                - /url: /docs/modal
+              - link "NetworkOperator" [ref=e55] [cursor=pointer]:
+                - /url: /docs/network-operator
+              - link "OtpInput" [ref=e56] [cursor=pointer]:
+                - /url: /docs/otp-input
+              - link "PhoneNumberInput" [ref=e57] [cursor=pointer]:
+                - /url: /docs/phone-number-input
+              - link "Popover" [ref=e58] [cursor=pointer]:
+                - /url: /docs/popover
+              - link "ProgressBar" [ref=e59] [cursor=pointer]:
+                - /url: /docs/progress-bar
+              - link "RadioGroup" [ref=e60] [cursor=pointer]:
+                - /url: /docs/radio-group
+              - link "Sheet" [ref=e61] [cursor=pointer]:
+                - /url: /docs/sheet
+              - link "Sidebar" [ref=e62] [cursor=pointer]:
+                - /url: /docs/sidebar
+              - link "Sortable" [ref=e63] [cursor=pointer]:
+                - /url: /docs/sortable
+              - link "Table" [ref=e64] [cursor=pointer]:
+                - /url: /docs/table
+              - link "Tabs" [ref=e65] [cursor=pointer]:
+                - /url: /docs/tabs
+              - link "Toast" [ref=e66] [cursor=pointer]:
+                - /url: /docs/toast
+              - link "UploadField" [ref=e67] [cursor=pointer]:
+                - /url: /docs/upload-field
+        - generic [ref=e68]:
+          - link "Back to demo" [ref=e69] [cursor=pointer]:
+            - /url: /
+          - generic [ref=e70]:
+            - link "GitHub" [ref=e71] [cursor=pointer]:
+              - /url: https://github.com/RFD-TECH/gsl-components
+              - img [ref=e72]
+              - text: GitHub
+            - link "npm" [ref=e74] [cursor=pointer]:
+              - /url: https://www.npmjs.com/package/@rfdtech/components
+              - img [ref=e75]
+              - text: npm
+      - article [ref=e77]:
+        - heading "Table" [level=1] [ref=e78]
+        - paragraph [ref=e79]:
+          - text: Compound table component with built-in URL-driven search, pagination, filters, column sorting, selection, and loading skeletons. All state lives in the URL — components read and write search params internally. Pass
+          - code [ref=e80]: paramPrefix
+          - text: to
+          - code [ref=e81]: <Table>
+          - text: to namespace state for multiple tables on one page.
+        - heading "Example" [level=2] [ref=e82]
+        - generic [ref=e83]:
+          - paragraph [ref=e84]: Basic table with selection
+          - tablist "Basic table with selection" [ref=e85]:
+            - tab "Preview" [selected] [ref=e86] [cursor=pointer]
+            - tab "Code" [ref=e87] [cursor=pointer]
+          - tabpanel "Preview" [ref=e88]:
+            - generic [ref=e90]:
+              - generic [ref=e92]:
+                - img [ref=e93]
+                - textbox "Search users..." [ref=e96]
+              - table [ref=e98]:
+                - rowgroup [ref=e99]:
+                  - row "Select all rows Name Email Role Status" [ref=e100]:
+                    - columnheader "Select all rows" [ref=e101]:
+                      - checkbox "Select all rows" [ref=e102] [cursor=pointer]
+                    - columnheader "Name" [ref=e103] [cursor=pointer]:
+                      - text: Name
+                      - img [ref=e105]
+                    - columnheader "Email" [ref=e108] [cursor=pointer]:
+                      - text: Email
+                      - img [ref=e110]
+                    - columnheader "Role" [ref=e113] [cursor=pointer]:
+                      - text: Role
+                      - img [ref=e115]
+                    - columnheader "Status" [ref=e118] [cursor=pointer]:
+                      - text: Status
+                      - img [ref=e120]
+                - rowgroup [ref=e123]:
+                  - row "Select row Kwame Asante kwame@gsl.edu.gh Admin Active" [ref=e124]:
+                    - cell "Select row" [ref=e125]:
+                      - checkbox "Select row" [ref=e126] [cursor=pointer]
+                    - cell "Kwame Asante" [ref=e127]
+                    - cell "kwame@gsl.edu.gh" [ref=e128]
+                    - cell "Admin" [ref=e129]
+                    - cell "Active" [ref=e130]:
+                      - generic [ref=e131]: Active
+                  - row "Select row Abena Mensah abena@gsl.edu.gh Editor Active" [ref=e133]:
+                    - cell "Select row" [ref=e134]:
+                      - checkbox "Select row" [ref=e135] [cursor=pointer]
+                    - cell "Abena Mensah" [ref=e136]
+                    - cell "abena@gsl.edu.gh" [ref=e137]
+                    - cell "Editor" [ref=e138]
+                    - cell "Active" [ref=e139]:
+                      - generic [ref=e140]: Active
+                  - row "Select row Kofi Owusu kofi@gsl.edu.gh Viewer Inactive" [ref=e142]:
+                    - cell "Select row" [ref=e143]:
+                      - checkbox "Select row" [ref=e144] [cursor=pointer]
+                    - cell "Kofi Owusu" [ref=e145]
+                    - cell "kofi@gsl.edu.gh" [ref=e146]
+                    - cell "Viewer" [ref=e147]
+                    - cell "Inactive" [ref=e148]:
+                      - generic [ref=e149]: Inactive
+                  - row "Select row Esi Boateng esi@gsl.edu.gh Editor Active" [ref=e151]:
+                    - cell "Select row" [ref=e152]:
+                      - checkbox "Select row" [ref=e153] [cursor=pointer]
+                    - cell "Esi Boateng" [ref=e154]
+                    - cell "esi@gsl.edu.gh" [ref=e155]
+                    - cell "Editor" [ref=e156]
+                    - cell "Active" [ref=e157]:
+                      - generic [ref=e158]: Active
+                  - row "Select row Yaw Adom yaw@gsl.edu.gh Viewer Pending" [ref=e160]:
+                    - cell "Select row" [ref=e161]:
+                      - checkbox "Select row" [ref=e162] [cursor=pointer]
+                    - cell "Yaw Adom" [ref=e163]
+                    - cell "yaw@gsl.edu.gh" [ref=e164]
+                    - cell "Viewer" [ref=e165]
+                    - cell "Pending" [ref=e166]:
+                      - generic [ref=e167]: Pending
+              - generic [ref=e170]:
+                - generic [ref=e171]:
+                  - text: Showing 1–10 of 12
+                  - combobox [ref=e173] [cursor=pointer]:
+                    - generic: 10 per page
+                    - generic:
+                      - img
+                - generic [ref=e174]:
+                  - button "Previous page" [disabled] [ref=e175]:
+                    - generic [ref=e176]:
+                      - img [ref=e177]
+                      - text: Previous
+                  - button "1" [ref=e179] [cursor=pointer]:
+                    - generic [ref=e180]: "1"
+                  - button "2" [ref=e181] [cursor=pointer]:
+                    - generic [ref=e182]: "2"
+                  - button "3" [ref=e183] [cursor=pointer]:
+                    - generic [ref=e184]: "3"
+                  - button "Next page" [ref=e185] [cursor=pointer]:
+                    - generic [ref=e186]:
+                      - text: Next
+                      - img [ref=e187]
+        - heading "Architecture" [level=2] [ref=e189]
+        - paragraph [ref=e190]:
+          - text: Every child component reads and writes its own URL keys through
+          - code [ref=e191]: useSearchParams
+          - text: . The root
+          - code [ref=e192]: <Table paramPrefix>
+          - text: provides a shared namespace via React Context. No prop drilling — pass
+          - code [ref=e193]: totalPages
+          - text: and
+          - code [ref=e194]: totalItems
+          - text: to
+          - code [ref=e195]: <TablePagination>
+          - text: ; everything else is fully automatic.
+        - code [ref=e197]: <Table paramPrefix="members"> <TableSearch /> → writes ?members.search=term <TableFilter> → writes ?members.f_role=admin <select name="role"> → FormData captured on Apply </TableFilter> <TableContent /> → renders data + sort headers <TablePagination /> → reads/writes ?members.page=1&members.pageSize=10 </Table>
+        - paragraph [ref=e198]: "Multiple tables on one page share the same URL without collision by using different prefixes:"
+        - generic [ref=e199]:
+          - generic [ref=e200]:
+            - generic [ref=e201]: example.tsx
+            - button "Copy code to clipboard" [ref=e203] [cursor=pointer]: Copy
+          - figure [ref=e204]:
+            - code [ref=e206]:
+              - generic [ref=e207]: "<Table paramPrefix=\"members\">{/* ... */}</Table>"
+              - generic [ref=e208]: "<Table paramPrefix=\"invoices\">{/* ... */}</Table>"
+              - generic [ref=e209]: "// URL: ?members.page=1&invoices.page=2&invoices.search=paid"
+        - heading "<Table>" [level=2] [ref=e210]:
+          - code [ref=e211]: <Table>
+        - paragraph [ref=e212]:
+          - text: Root wrapper. Accepts a
+          - code [ref=e213]: paramPrefix
+          - text: that is provided via Context to all children.
+        - table [ref=e215]:
+          - rowgroup [ref=e216]:
+            - row "Prop Type Default Description" [ref=e217]:
+              - columnheader "Prop" [ref=e218]
+              - columnheader "Type" [ref=e219]
+              - columnheader "Default" [ref=e220]
+              - columnheader "Description" [ref=e221]
+          - rowgroup [ref=e222]:
+            - row "paramPrefix string — Required. URL key namespace shared by all child components" [ref=e223]:
+              - cell "paramPrefix" [ref=e224]:
+                - code [ref=e225]: paramPrefix
+              - cell "string" [ref=e226]:
+                - code [ref=e227]: string
+              - cell "—" [ref=e228]
+              - cell "Required. URL key namespace shared by all child components" [ref=e229]:
+                - strong [ref=e230]: Required.
+                - text: URL key namespace shared by all child components
+            - row "classNames TableClassNames — Part-level class overrides" [ref=e231]:
+              - cell "classNames" [ref=e232]:
+                - code [ref=e233]: classNames
+              - cell "TableClassNames" [ref=e234]:
+                - code [ref=e235]: TableClassNames
+              - cell "—" [ref=e236]
+              - cell "Part-level class overrides" [ref=e237]
+            - row "className string — Merged onto the root div" [ref=e238]:
+              - cell "className" [ref=e239]:
+                - code [ref=e240]: className
+              - cell "string" [ref=e241]:
+                - code [ref=e242]: string
+              - cell "—" [ref=e243]
+              - cell "Merged onto the root div" [ref=e244]
+        - heading "<TableSearch>" [level=2] [ref=e245]:
+          - code [ref=e246]: <TableSearch>
+        - paragraph [ref=e247]:
+          - text: Search input with debounce and a clear button. Writes the search term to
+          - code [ref=e248]: "?search="
+          - text: (or
+          - code [ref=e249]: "?prefix.search="
+          - text: ) in the URL, resets page to 1 on change.
+        - table [ref=e251]:
+          - rowgroup [ref=e252]:
+            - row "Prop Type Default Description" [ref=e253]:
+              - columnheader "Prop" [ref=e254]
+              - columnheader "Type" [ref=e255]
+              - columnheader "Default" [ref=e256]
+              - columnheader "Description" [ref=e257]
+          - rowgroup [ref=e258]:
+            - row "placeholder string \"Search...\" Placeholder text" [ref=e259]:
+              - cell "placeholder" [ref=e260]:
+                - code [ref=e261]: placeholder
+              - cell "string" [ref=e262]:
+                - code [ref=e263]: string
+              - cell "\"Search...\"" [ref=e264]:
+                - code [ref=e265]: "\"Search...\""
+              - cell "Placeholder text" [ref=e266]
+            - row "debounceMs number 300 Debounce delay in ms" [ref=e267]:
+              - cell "debounceMs" [ref=e268]:
+                - code [ref=e269]: debounceMs
+              - cell "number" [ref=e270]:
+                - code [ref=e271]: number
+              - cell "300" [ref=e272]:
+                - code [ref=e273]: "300"
+              - cell "Debounce delay in ms" [ref=e274]
+            - 'row "onSearch (value: string) => void — Callback that fires on the debounced search value (not every keystroke)" [ref=e275]':
+              - cell "onSearch" [ref=e276]:
+                - code [ref=e277]: onSearch
+              - 'cell "(value: string) => void" [ref=e278]':
+                - code [ref=e279]: "(value: string) => void"
+              - cell "—" [ref=e280]
+              - cell "Callback that fires on the debounced search value (not every keystroke)" [ref=e281]:
+                - text: Callback that fires on the
+                - strong [ref=e282]: debounced
+                - text: search value (not every keystroke)
+            - 'row "onChange (e: ChangeEvent) => void — Raw input change event (fires on every keystroke)" [ref=e283]':
+              - cell "onChange" [ref=e284]:
+                - code [ref=e285]: onChange
+              - 'cell "(e: ChangeEvent) => void" [ref=e286]':
+                - code [ref=e287]: "(e: ChangeEvent) => void"
+              - cell "—" [ref=e288]
+              - cell "Raw input change event (fires on every keystroke)" [ref=e289]
+            - row "className string — Merged onto the search wrapper" [ref=e290]:
+              - cell "className" [ref=e291]:
+                - code [ref=e292]: className
+              - cell "string" [ref=e293]:
+                - code [ref=e294]: string
+              - cell "—" [ref=e295]
+              - cell "Merged onto the search wrapper" [ref=e296]
+        - heading "<TableFilter>" [level=2] [ref=e297]:
+          - code [ref=e298]: <TableFilter>
+        - paragraph [ref=e299]:
+          - text: Popover with filter fields and Apply / Reset buttons. Wraps children in a
+          - code [ref=e300]: <form>
+          - text: element. On Apply, reads
+          - code [ref=e301]: FormData
+          - text: from named fields and writes
+          - code [ref=e302]: "f_{name}={value}"
+          - text: to the URL. On Reset, clears all
+          - code [ref=e303]: f_*
+          - text: params.
+        - paragraph [ref=e304]:
+          - text: Filter fields must have a
+          - code [ref=e305]: name
+          - text: attribute, e.g.
+          - code [ref=e306]: <select name="status">
+          - text: . The name becomes the URL key.
+        - table [ref=e308]:
+          - rowgroup [ref=e309]:
+            - row "Prop Type Default Description" [ref=e310]:
+              - columnheader "Prop" [ref=e311]
+              - columnheader "Type" [ref=e312]
+              - columnheader "Default" [ref=e313]
+              - columnheader "Description" [ref=e314]
+          - rowgroup [ref=e315]:
+            - row "children ReactNode — Filter form content (inputs with name attributes)" [ref=e316]:
+              - cell "children" [ref=e317]:
+                - code [ref=e318]: children
+              - cell "ReactNode" [ref=e319]:
+                - code [ref=e320]: ReactNode
+              - cell "—" [ref=e321]
+              - cell "Filter form content (inputs with name attributes)" [ref=e322]:
+                - text: Filter form content (inputs with
+                - code [ref=e323]: name
+                - text: attributes)
+            - row "onApply () => void — Optional callback when Apply is clicked (URL write happens first)" [ref=e324]:
+              - cell "onApply" [ref=e325]:
+                - code [ref=e326]: onApply
+              - cell "() => void" [ref=e327]:
+                - code [ref=e328]: () => void
+              - cell "—" [ref=e329]
+              - cell "Optional callback when Apply is clicked (URL write happens first)" [ref=e330]
+            - row "onReset () => void — Optional callback when Reset is clicked (URL clear happens first)" [ref=e331]:
+              - cell "onReset" [ref=e332]:
+                - code [ref=e333]: onReset
+              - cell "() => void" [ref=e334]:
+                - code [ref=e335]: () => void
+              - cell "—" [ref=e336]
+              - cell "Optional callback when Reset is clicked (URL clear happens first)" [ref=e337]
+            - row "applyLabel string \"Apply Filter\" Apply button text" [ref=e338]:
+              - cell "applyLabel" [ref=e339]:
+                - code [ref=e340]: applyLabel
+              - cell "string" [ref=e341]:
+                - code [ref=e342]: string
+              - cell "\"Apply Filter\"" [ref=e343]:
+                - code [ref=e344]: "\"Apply Filter\""
+              - cell "Apply button text" [ref=e345]
+            - row "resetLabel string \"Reset\" Reset button aria-label" [ref=e346]:
+              - cell "resetLabel" [ref=e347]:
+                - code [ref=e348]: resetLabel
+              - cell "string" [ref=e349]:
+                - code [ref=e350]: string
+              - cell "\"Reset\"" [ref=e351]:
+                - code [ref=e352]: "\"Reset\""
+              - cell "Reset button aria-label" [ref=e353]
+            - row "className string — Merged onto the root div" [ref=e354]:
+              - cell "className" [ref=e355]:
+                - code [ref=e356]: className
+              - cell "string" [ref=e357]:
+                - code [ref=e358]: string
+              - cell "—" [ref=e359]
+              - cell "Merged onto the root div" [ref=e360]
+        - heading "<TableContent>" [level=2] [ref=e361]:
+          - code [ref=e362]: <TableContent>
+        - paragraph [ref=e363]:
+          - text: Renders a
+          - code [ref=e364]: <table>
+          - text: with columns, data, optional sort, row selection, and loading skeletons.
+        - table [ref=e366]:
+          - rowgroup [ref=e367]:
+            - row "Prop Type Default Description" [ref=e368]:
+              - columnheader "Prop" [ref=e369]
+              - columnheader "Type" [ref=e370]
+              - columnheader "Default" [ref=e371]
+              - columnheader "Description" [ref=e372]
+          - rowgroup [ref=e373]:
+            - row "columns TableColumn<T>[] — Column definitions" [ref=e374]:
+              - cell "columns" [ref=e375]:
+                - code [ref=e376]: columns
+              - cell "TableColumn<T>[]" [ref=e377]:
+                - code [ref=e378]: TableColumn<T>[]
+              - cell "—" [ref=e379]
+              - cell "Column definitions" [ref=e380]
+            - row "data T[] — Row data" [ref=e381]:
+              - cell "data" [ref=e382]:
+                - code [ref=e383]: data
+              - cell "T[]" [ref=e384]:
+                - code [ref=e385]: T[]
+              - cell "—" [ref=e386]
+              - cell "Row data" [ref=e387]
+            - 'row "rowKey (row: T) => string | number — Unique key extractor for each row" [ref=e388]':
+              - cell "rowKey" [ref=e389]:
+                - code [ref=e390]: rowKey
+              - 'cell "(row: T) => string | number" [ref=e391]':
+                - code [ref=e392]: "(row: T) => string | number"
+              - cell "—" [ref=e393]
+              - cell "Unique key extractor for each row" [ref=e394]
+            - row "loading boolean false Show skeleton rows instead of data" [ref=e395]:
+              - cell "loading" [ref=e396]:
+                - code [ref=e397]: loading
+              - cell "boolean" [ref=e398]:
+                - code [ref=e399]: boolean
+              - cell "false" [ref=e400]:
+                - code [ref=e401]: "false"
+              - cell "Show skeleton rows instead of data" [ref=e402]
+            - row "loadingRows number 5 Number of skeleton rows to display" [ref=e403]:
+              - cell "loadingRows" [ref=e404]:
+                - code [ref=e405]: loadingRows
+              - cell "number" [ref=e406]:
+                - code [ref=e407]: number
+              - cell "5" [ref=e408]:
+                - code [ref=e409]: "5"
+              - cell "Number of skeleton rows to display" [ref=e410]
+            - row "selectable boolean false Show a checkbox selection column with select-all in the header" [ref=e411]:
+              - cell "selectable" [ref=e412]:
+                - code [ref=e413]: selectable
+              - cell "boolean" [ref=e414]:
+                - code [ref=e415]: boolean
+              - cell "false" [ref=e416]:
+                - code [ref=e417]: "false"
+              - cell "Show a checkbox selection column with select-all in the header" [ref=e418]
+            - row "selectedIds Set<string | number> — Set of selected row keys. Pass with onSelectionChange when selectable is true" [ref=e419]:
+              - cell "selectedIds" [ref=e420]:
+                - code [ref=e421]: selectedIds
+              - cell "Set<string | number>" [ref=e422]:
+                - code [ref=e423]: Set<string | number>
+              - cell "—" [ref=e424]
+              - cell "Set of selected row keys. Pass with onSelectionChange when selectable is true" [ref=e425]:
+                - text: Set of selected row keys. Pass with
+                - code [ref=e426]: onSelectionChange
+                - text: when
+                - code [ref=e427]: selectable
+                - text: is true
+            - 'row "onSelectionChange (selectedIds: Set<string | number>) => void — Called with a new Set on any selection toggle" [ref=e428]':
+              - cell "onSelectionChange" [ref=e429]:
+                - code [ref=e430]: onSelectionChange
+              - 'cell "(selectedIds: Set<string | number>) => void" [ref=e431]':
+                - code [ref=e432]: "(selectedIds: Set<string | number>) => void"
+              - cell "—" [ref=e433]
+              - cell "Called with a new Set on any selection toggle" [ref=e434]:
+                - text: Called with a new
+                - code [ref=e435]: Set
+                - text: on any selection toggle
+            - row "className string — Merged onto the wrapper div" [ref=e436]:
+              - cell "className" [ref=e437]:
+                - code [ref=e438]: className
+              - cell "string" [ref=e439]:
+                - code [ref=e440]: string
+              - cell "—" [ref=e441]
+              - cell "Merged onto the wrapper div" [ref=e442]
+        - paragraph [ref=e443]:
+          - text: When
+          - code [ref=e444]: selectable
+          - text: is true, a checkbox column is prepended to the table. The header checkbox toggles all visible rows (shows indeterminate state when partially selected). Individual row checkboxes toggle that row by its
+          - code [ref=e445]: rowKey
+          - text: "value. Selection is fully controlled: provide"
+          - code [ref=e446]: selectedIds
+          - text: and
+          - code [ref=e447]: onSelectionChange
+          - text: "to manage state externally. Sample usage:"
+        - generic [ref=e448]:
+          - generic [ref=e449]:
+            - generic [ref=e450]: example.tsx
+            - button "Copy code to clipboard" [ref=e452] [cursor=pointer]: Copy
+          - figure [ref=e453]:
+            - code [ref=e455]:
+              - generic [ref=e456]: const [selected, setSelected] = useState<Set<string | number>>(new Set());
+              - generic [ref=e458]: <Table paramPrefix="users">
+              - generic [ref=e459]: <TableHeader>
+              - generic [ref=e460]: <TableSearch />
+              - generic [ref=e461]: "{selected.size > 0 && ("
+              - generic [ref=e462]: "<Button variant=\"outline\" onClick={handleBulkDelete}>"
+              - generic [ref=e463]: "Delete {selected.size}"
+              - generic [ref=e464]: </Button>
+              - generic [ref=e465]: ")}"
+              - generic [ref=e466]: </TableHeader>
+              - generic [ref=e467]: <TableContent
+              - generic [ref=e468]: selectable
+              - generic [ref=e469]: "selectedIds={selected}"
+              - generic [ref=e470]: "onSelectionChange={setSelected}"
+              - generic [ref=e471]: "columns={columns}"
+              - generic [ref=e472]: "data={users}"
+              - generic [ref=e473]: "rowKey={(u) => u.id}"
+              - generic [ref=e474]: />
+              - generic [ref=e475]: </Table>
+        - heading "TableColumn<T>" [level=3] [ref=e476]:
+          - code [ref=e477]: TableColumn<T>
+        - table [ref=e479]:
+          - rowgroup [ref=e480]:
+            - row "Key Type Default Description" [ref=e481]:
+              - columnheader "Key" [ref=e482]
+              - columnheader "Type" [ref=e483]
+              - columnheader "Default" [ref=e484]
+              - columnheader "Description" [ref=e485]
+          - rowgroup [ref=e486]:
+            - row "id string — Unique column identifier" [ref=e487]:
+              - cell "id" [ref=e488]:
+                - code [ref=e489]: id
+              - cell "string" [ref=e490]:
+                - code [ref=e491]: string
+              - cell "—" [ref=e492]
+              - cell "Unique column identifier" [ref=e493]
+            - row "header string — Column header text" [ref=e494]:
+              - cell "header" [ref=e495]:
+                - code [ref=e496]: header
+              - cell "string" [ref=e497]:
+                - code [ref=e498]: string
+              - cell "—" [ref=e499]
+              - cell "Column header text" [ref=e500]
+            - row "accessorKey keyof T — Property path on the row" [ref=e501]:
+              - cell "accessorKey" [ref=e502]:
+                - code [ref=e503]: accessorKey
+              - cell "keyof T" [ref=e504]:
+                - code [ref=e505]: keyof T
+              - cell "—" [ref=e506]
+              - cell "Property path on the row" [ref=e507]
+            - 'row "accessorFn (row: T) => ReactNode — Custom value extractor (takes priority over accessorKey)" [ref=e508]':
+              - cell "accessorFn" [ref=e509]:
+                - code [ref=e510]: accessorFn
+              - 'cell "(row: T) => ReactNode" [ref=e511]':
+                - code [ref=e512]: "(row: T) => ReactNode"
+              - cell "—" [ref=e513]
+              - cell "Custom value extractor (takes priority over accessorKey)" [ref=e514]:
+                - text: Custom value extractor (takes priority over
+                - code [ref=e515]: accessorKey
+                - text: )
+            - 'row "cell (info: { row: T; value: ReactNode }) => ReactNode — Custom cell renderer" [ref=e516]':
+              - cell "cell" [ref=e517]:
+                - code [ref=e518]: cell
+              - 'cell "(info: { row: T; value: ReactNode }) => ReactNode" [ref=e519]':
+                - code [ref=e520]: "(info: { row: T; value: ReactNode }) => ReactNode"
+              - cell "—" [ref=e521]
+              - cell "Custom cell renderer" [ref=e522]
+            - row "width number — Fixed width in px" [ref=e523]:
+              - cell "width" [ref=e524]:
+                - code [ref=e525]: width
+              - cell "number" [ref=e526]:
+                - code [ref=e527]: number
+              - cell "—" [ref=e528]
+              - cell "Fixed width in px" [ref=e529]
+            - row "minWidth number 120 Minimum width (used when width is omitted)" [ref=e530]:
+              - cell "minWidth" [ref=e531]:
+                - code [ref=e532]: minWidth
+              - cell "number" [ref=e533]:
+                - code [ref=e534]: number
+              - cell "120" [ref=e535]:
+                - code [ref=e536]: "120"
+              - cell "Minimum width (used when width is omitted)" [ref=e537]:
+                - text: Minimum width (used when
+                - code [ref=e538]: width
+                - text: is omitted)
+            - row "maxWidth number — Maximum width in px" [ref=e539]:
+              - cell "maxWidth" [ref=e540]:
+                - code [ref=e541]: maxWidth
+              - cell "number" [ref=e542]:
+                - code [ref=e543]: number
+              - cell "—" [ref=e544]
+              - cell "Maximum width in px" [ref=e545]
+            - row "sortable boolean false Enable column sorting (client-side only)" [ref=e546]:
+              - cell "sortable" [ref=e547]:
+                - code [ref=e548]: sortable
+              - cell "boolean" [ref=e549]:
+                - code [ref=e550]: boolean
+              - cell "false" [ref=e551]:
+                - code [ref=e552]: "false"
+              - cell "Enable column sorting (client-side only)" [ref=e553]
+            - row "align \"left\" | \"center\" | \"right\" \"left\" Text alignment" [ref=e554]:
+              - cell "align" [ref=e555]:
+                - code [ref=e556]: align
+              - cell "\"left\" | \"center\" | \"right\"" [ref=e557]:
+                - code [ref=e558]: "\"left\" | \"center\" | \"right\""
+              - cell "\"left\"" [ref=e559]:
+                - code [ref=e560]: "\"left\""
+              - cell "Text alignment" [ref=e561]
+        - heading "<TablePagination>" [level=2] [ref=e562]:
+          - code [ref=e563]: <TablePagination>
+        - paragraph [ref=e564]:
+          - text: Renders "Showing X-Y of Z" on the left, a "N per page" dropdown, and page number buttons with Previous/Next on the right. Reads
+          - code [ref=e565]: page
+          - text: and
+          - code [ref=e566]: pageSize
+          - text: from the URL; writes changes back. Uses a sliding window with ellipsis when total pages exceed
+          - code [ref=e567]: visiblePages
+          - text: .
+        - table [ref=e569]:
+          - rowgroup [ref=e570]:
+            - row "Prop Type Default Description" [ref=e571]:
+              - columnheader "Prop" [ref=e572]
+              - columnheader "Type" [ref=e573]
+              - columnheader "Default" [ref=e574]
+              - columnheader "Description" [ref=e575]
+          - rowgroup [ref=e576]:
+            - row "totalPages number — Total number of pages" [ref=e577]:
+              - cell "totalPages" [ref=e578]:
+                - code [ref=e579]: totalPages
+              - cell "number" [ref=e580]:
+                - code [ref=e581]: number
+              - cell "—" [ref=e582]
+              - cell "Total number of pages" [ref=e583]
+            - row "totalItems number — Total item count (shown as \"Showing X–Y of N\")" [ref=e584]:
+              - cell "totalItems" [ref=e585]:
+                - code [ref=e586]: totalItems
+              - cell "number" [ref=e587]:
+                - code [ref=e588]: number
+              - cell "—" [ref=e589]
+              - cell "Total item count (shown as \"Showing X–Y of N\")" [ref=e590]
+            - row "pageSizeOptions number[] [10,20,50,100] Options in the page-size dropdown" [ref=e591]:
+              - cell "pageSizeOptions" [ref=e592]:
+                - code [ref=e593]: pageSizeOptions
+              - cell "number[]" [ref=e594]:
+                - code [ref=e595]: number[]
+              - cell "[10,20,50,100]" [ref=e596]:
+                - code [ref=e597]: "[10,20,50,100]"
+              - cell "Options in the page-size dropdown" [ref=e598]
+            - row "visiblePages number 10 Max page number buttons before ellipsis" [ref=e599]:
+              - cell "visiblePages" [ref=e600]:
+                - code [ref=e601]: visiblePages
+              - cell "number" [ref=e602]:
+                - code [ref=e603]: number
+              - cell "10" [ref=e604]:
+                - code [ref=e605]: "10"
+              - cell "Max page number buttons before ellipsis" [ref=e606]
+            - row "className string — Merged onto the root div" [ref=e607]:
+              - cell "className" [ref=e608]:
+                - code [ref=e609]: className
+              - cell "string" [ref=e610]:
+                - code [ref=e611]: string
+              - cell "—" [ref=e612]
+              - cell "Merged onto the root div" [ref=e613]
+        - heading "<TableHeader>" [level=2] [ref=e614]:
+          - code [ref=e615]: <TableHeader>
+        - paragraph [ref=e616]:
+          - text: Layout wrapper for the header bar. Typically contains
+          - code [ref=e617]: <TableSearch>
+          - text: and
+          - code [ref=e618]: <TableFilter>
+          - text: .
+        - table [ref=e620]:
+          - rowgroup [ref=e621]:
+            - row "Prop Type Description" [ref=e622]:
+              - columnheader "Prop" [ref=e623]
+              - columnheader "Type" [ref=e624]
+              - columnheader "Description" [ref=e625]
+          - rowgroup [ref=e626]:
+            - row "children ReactNode Header content" [ref=e627]:
+              - cell "children" [ref=e628]:
+                - code [ref=e629]: children
+              - cell "ReactNode" [ref=e630]:
+                - code [ref=e631]: ReactNode
+              - cell "Header content" [ref=e632]
+            - row "className string Merged onto the header bar" [ref=e633]:
+              - cell "className" [ref=e634]:
+                - code [ref=e635]: className
+              - cell "string" [ref=e636]:
+                - code [ref=e637]: string
+              - cell "Merged onto the header bar" [ref=e638]
+        - heading "<TableFooter>" [level=2] [ref=e639]:
+          - code [ref=e640]: <TableFooter>
+        - paragraph [ref=e641]:
+          - text: Layout wrapper for the footer bar with
+          - code [ref=e642]: border-top
+          - text: . Typically contains
+          - code [ref=e643]: <TablePagination>
+          - text: .
+        - table [ref=e645]:
+          - rowgroup [ref=e646]:
+            - row "Prop Type Description" [ref=e647]:
+              - columnheader "Prop" [ref=e648]
+              - columnheader "Type" [ref=e649]
+              - columnheader "Description" [ref=e650]
+          - rowgroup [ref=e651]:
+            - row "children ReactNode Footer content" [ref=e652]:
+              - cell "children" [ref=e653]:
+                - code [ref=e654]: children
+              - cell "ReactNode" [ref=e655]:
+                - code [ref=e656]: ReactNode
+              - cell "Footer content" [ref=e657]
+            - row "className string Merged onto the footer bar" [ref=e658]:
+              - cell "className" [ref=e659]:
+                - code [ref=e660]: className
+              - cell "string" [ref=e661]:
+                - code [ref=e662]: string
+              - cell "Merged onto the footer bar" [ref=e663]
+        - heading "useTableState" [level=2] [ref=e664]:
+          - code [ref=e665]: useTableState
+        - paragraph [ref=e666]: Hook that reads all table state from URL params. Use it to derive filtered/paged data from your raw dataset.
+        - generic [ref=e667]:
+          - generic [ref=e668]:
+            - generic [ref=e669]: example.tsx
+            - button "Copy code to clipboard" [ref=e671] [cursor=pointer]: Copy
+          - figure [ref=e672]:
+            - code [ref=e674]:
+              - generic [ref=e675]: "const { page, pageSize, search, filters, pageSizeOptions } = useTableState({"
+              - generic [ref=e676]: "defaultPageSize: 10,"
+              - generic [ref=e677]: "paramPrefix: \"members\","
+              - generic [ref=e678]: "});"
+        - table [ref=e680]:
+          - rowgroup [ref=e681]:
+            - row "Option Type Default Description" [ref=e682]:
+              - columnheader "Option" [ref=e683]
+              - columnheader "Type" [ref=e684]
+              - columnheader "Default" [ref=e685]
+              - columnheader "Description" [ref=e686]
+          - rowgroup [ref=e687]:
+            - row "defaultPage number 1 Initial page when URL has no value" [ref=e688]:
+              - cell "defaultPage" [ref=e689]:
+                - code [ref=e690]: defaultPage
+              - cell "number" [ref=e691]:
+                - code [ref=e692]: number
+              - cell "1" [ref=e693]:
+                - code [ref=e694]: "1"
+              - cell "Initial page when URL has no value" [ref=e695]
+            - row "defaultPageSize number 10 Initial page size" [ref=e696]:
+              - cell "defaultPageSize" [ref=e697]:
+                - code [ref=e698]: defaultPageSize
+              - cell "number" [ref=e699]:
+                - code [ref=e700]: number
+              - cell "10" [ref=e701]:
+                - code [ref=e702]: "10"
+              - cell "Initial page size" [ref=e703]
+            - row "pageSizeOptions number[] [10,20,50,100] Options passed to pagination dropdown" [ref=e704]:
+              - cell "pageSizeOptions" [ref=e705]:
+                - code [ref=e706]: pageSizeOptions
+              - cell "number[]" [ref=e707]:
+                - code [ref=e708]: number[]
+              - cell "[10,20,50,100]" [ref=e709]:
+                - code [ref=e710]: "[10,20,50,100]"
+              - cell "Options passed to pagination dropdown" [ref=e711]
+            - row "defaultSearch string \"\" Initial search term" [ref=e712]:
+              - cell "defaultSearch" [ref=e713]:
+                - code [ref=e714]: defaultSearch
+              - cell "string" [ref=e715]:
+                - code [ref=e716]: string
+              - cell "\"\"" [ref=e717]:
+                - code [ref=e718]: "\"\""
+              - cell "Initial search term" [ref=e719]
+            - row "defaultFilters Partial<TFilters> — Initial filter defaults" [ref=e720]:
+              - cell "defaultFilters" [ref=e721]:
+                - code [ref=e722]: defaultFilters
+              - cell "Partial<TFilters>" [ref=e723]:
+                - code [ref=e724]: Partial<TFilters>
+              - cell "—" [ref=e725]
+              - cell "Initial filter defaults" [ref=e726]
+            - 'row "defaultSort { column, direction } | null null Initial sort state" [ref=e727]':
+              - cell "defaultSort" [ref=e728]:
+                - code [ref=e729]: defaultSort
+              - 'cell "{ column, direction } | null" [ref=e730]':
+                - code [ref=e731]: "{ column, direction } | null"
+              - cell "null" [ref=e732]:
+                - code [ref=e733]: "null"
+              - cell "Initial sort state" [ref=e734]
+            - row "paramPrefix string — Must match <Table paramPrefix>" [ref=e735]:
+              - cell "paramPrefix" [ref=e736]:
+                - code [ref=e737]: paramPrefix
+              - cell "string" [ref=e738]:
+                - code [ref=e739]: string
+              - cell "—" [ref=e740]
+              - cell "Must match <Table paramPrefix>" [ref=e741]:
+                - text: Must match
+                - code [ref=e742]: <Table paramPrefix>
+        - paragraph [ref=e743]:
+          - strong [ref=e744]: "Returns:"
+          - code [ref=e745]: "{ page, pageSize, pageSizeOptions, setPage, setPageSize, search, setSearch, filters, setFilters, setFilter, sort, setSort, resetAll }"
+        - paragraph [ref=e746]:
+          - text: Filters are stored as
+          - code [ref=e747]: Record<string, string>
+          - text: . Values from URL are always strings — coerce in your filtering logic as needed. Use
+          - code [ref=e748]: filters.status ?? ""
+          - text: to provide a default.
+        - heading "useTableFilter" [level=2] [ref=e749]:
+          - code [ref=e750]: useTableFilter
+        - paragraph [ref=e751]: Standalone hook for URL-driven filter state without search, pagination, or sort.
+        - generic [ref=e752]:
+          - generic [ref=e753]:
+            - generic [ref=e754]: example.tsx
+            - button "Copy code to clipboard" [ref=e756] [cursor=pointer]: Copy
+          - figure [ref=e757]:
+            - code [ref=e759]:
+              - generic [ref=e760]: "import { useTableFilter } from \"@rfdtech/components\";"
+              - generic [ref=e762]: "const { filters, setFilter, setFilters, resetFilters } = useTableFilter({"
+              - generic [ref=e763]: "defaults: { role: \"admin\" },"
+              - generic [ref=e764]: "paramPrefix: \"members\","
+              - generic [ref=e765]: "});"
+        - table [ref=e767]:
+          - rowgroup [ref=e768]:
+            - row "Option Type Default" [ref=e769]:
+              - columnheader "Option" [ref=e770]
+              - columnheader "Type" [ref=e771]
+              - columnheader "Default" [ref=e772]
+          - rowgroup [ref=e773]:
+            - row "defaults Record<string, string> —" [ref=e774]:
+              - cell "defaults" [ref=e775]:
+                - code [ref=e776]: defaults
+              - cell "Record<string, string>" [ref=e777]:
+                - code [ref=e778]: Record<string, string>
+              - cell "—" [ref=e779]
+            - row "paramPrefix string —" [ref=e780]:
+              - cell "paramPrefix" [ref=e781]:
+                - code [ref=e782]: paramPrefix
+              - cell "string" [ref=e783]:
+                - code [ref=e784]: string
+              - cell "—" [ref=e785]
+        - paragraph [ref=e786]:
+          - strong [ref=e787]: "Returns:"
+          - code [ref=e788]: "{ filters, setFilter, setFilters, resetFilters }"
+        - heading "useTablePagination" [level=2] [ref=e789]:
+          - code [ref=e790]: useTablePagination
+        - paragraph [ref=e791]: Standalone hook for URL-driven pagination without search or filters.
+        - generic [ref=e792]:
+          - generic [ref=e793]:
+            - generic [ref=e794]: example.tsx
+            - button "Copy code to clipboard" [ref=e796] [cursor=pointer]: Copy
+          - figure [ref=e797]:
+            - code [ref=e799]:
+              - generic [ref=e800]: "const { page, pageSize, setPage, setPageSize, reset } = useTablePagination({"
+              - generic [ref=e801]: "defaultPageSize: 10,"
+              - generic [ref=e802]: "});"
+        - table [ref=e804]:
+          - rowgroup [ref=e805]:
+            - row "Option Type Default" [ref=e806]:
+              - columnheader "Option" [ref=e807]
+              - columnheader "Type" [ref=e808]
+              - columnheader "Default" [ref=e809]
+          - rowgroup [ref=e810]:
+            - row "defaultPage number 1" [ref=e811]:
+              - cell "defaultPage" [ref=e812]:
+                - code [ref=e813]: defaultPage
+              - cell "number" [ref=e814]:
+                - code [ref=e815]: number
+              - cell "1" [ref=e816]:
+                - code [ref=e817]: "1"
+            - row "defaultPageSize number 10" [ref=e818]:
+              - cell "defaultPageSize" [ref=e819]:
+                - code [ref=e820]: defaultPageSize
+              - cell "number" [ref=e821]:
+                - code [ref=e822]: number
+              - cell "10" [ref=e823]:
+                - code [ref=e824]: "10"
+            - row "paramPrefix string —" [ref=e825]:
+              - cell "paramPrefix" [ref=e826]:
+                - code [ref=e827]: paramPrefix
+              - cell "string" [ref=e828]:
+                - code [ref=e829]: string
+              - cell "—" [ref=e830]
+        - paragraph [ref=e831]:
+          - strong [ref=e832]: "Returns:"
+          - code [ref=e833]: "{ page, pageSize, setPage, setPageSize, reset }"
+        - heading "Types" [level=2] [ref=e834]
+        - heading "TableProps" [level=3] [ref=e835]:
+          - code [ref=e836]: TableProps
+        - paragraph [ref=e837]:
+          - text: Root props including
+          - code [ref=e838]: paramPrefix
+          - text: ","
+          - code [ref=e839]: classNames
+          - text: ", and"
+          - code [ref=e840]: className
+          - text: .
+        - heading "TableClassNames" [level=3] [ref=e841]:
+          - code [ref=e842]: TableClassNames
+        - table [ref=e844]:
+          - rowgroup [ref=e845]:
+            - row "Key Applied to" [ref=e846]:
+              - columnheader "Key" [ref=e847]
+              - columnheader "Applied to" [ref=e848]
+          - rowgroup [ref=e849]:
+            - row "root Root wrapper (.gsl-table)" [ref=e850]:
+              - cell "root" [ref=e851]:
+                - code [ref=e852]: root
+              - cell "Root wrapper (.gsl-table)" [ref=e853]:
+                - text: Root wrapper (
+                - code [ref=e854]: .gsl-table
+                - text: )
+            - row "header Header bar (.gsl-table__header-bar)" [ref=e855]:
+              - cell "header" [ref=e856]:
+                - code [ref=e857]: header
+              - cell "Header bar (.gsl-table__header-bar)" [ref=e858]:
+                - text: Header bar (
+                - code [ref=e859]: .gsl-table__header-bar
+                - text: )
+            - row "content Content wrapper (.gsl-table__content)" [ref=e860]:
+              - cell "content" [ref=e861]:
+                - code [ref=e862]: content
+              - cell "Content wrapper (.gsl-table__content)" [ref=e863]:
+                - text: Content wrapper (
+                - code [ref=e864]: .gsl-table__content
+                - text: )
+            - row "footer Footer bar (.gsl-table__footer)" [ref=e865]:
+              - cell "footer" [ref=e866]:
+                - code [ref=e867]: footer
+              - cell "Footer bar (.gsl-table__footer)" [ref=e868]:
+                - text: Footer bar (
+                - code [ref=e869]: .gsl-table__footer
+                - text: )
+            - row "selectionCell Selection checkbox cells (.gsl-table__checkbox-cell)" [ref=e870]:
+              - cell "selectionCell" [ref=e871]:
+                - code [ref=e872]: selectionCell
+              - cell "Selection checkbox cells (.gsl-table__checkbox-cell)" [ref=e873]:
+                - text: Selection checkbox cells (
+                - code [ref=e874]: .gsl-table__checkbox-cell
+                - text: )
+        - heading "PaginationControlsProps" [level=3] [ref=e875]:
+          - code [ref=e876]: PaginationControlsProps
+        - paragraph [ref=e877]:
+          - text: Props for
+          - code [ref=e878]: TablePagination
+          - text: — see the props section above.
+        - heading "Design tokens" [level=2] [ref=e879]
+        - paragraph [ref=e880]:
+          - text: The table uses the standard
+          - code [ref=e881]: "--gsl-*"
+          - text: "palette. The tokens with the most visual impact:"
+        - table [ref=e883]:
+          - rowgroup [ref=e884]:
+            - row "Token Effect" [ref=e885]:
+              - columnheader "Token" [ref=e886]
+              - columnheader "Effect" [ref=e887]
+          - rowgroup [ref=e888]:
+            - row "--gsl-rounded-base All border radii" [ref=e889]:
+              - cell "--gsl-rounded-base" [ref=e890]:
+                - code [ref=e891]: "--gsl-rounded-base"
+              - cell "All border radii" [ref=e892]
+        - heading "Notes" [level=2] [ref=e893]
+        - list [ref=e894]:
+          - listitem [ref=e895]:
+            - text: All URL writes are
+            - code [ref=e896]: "replace: true"
+            - text: except page changes which use
+            - code [ref=e897]: pushState
+            - text: for back-button support.
+          - listitem [ref=e898]: Changing search, filters, or page size automatically resets to page 1.
+          - listitem [ref=e899]:
+            - text: Sort is client-side only (
+            - code [ref=e900]: localeCompare
+            - text: ). No server integration.
+          - listitem [ref=e901]: Loading skeletons use a pulse animation; reduced-motion users get a static version.
+          - listitem [ref=e902]:
+            - text: Without a
+            - code [ref=e903]: paramPrefix
+            - text: ", keys are plain ("
+            - code [ref=e904]: page
+            - text: ","
+            - code [ref=e905]: search
+            - text: ","
+            - code [ref=e906]: f_status
+            - text: ). With one, they are namespaced (
+            - code [ref=e907]: members.page
+            - text: ","
+            - code [ref=e908]: members.search
+            - text: ","
+            - code [ref=e909]: members.f_status
+            - text: ).
+          - listitem [ref=e910]:
+            - code [ref=e911]: paramPrefix
+            - text: is required on
+            - code [ref=e912]: <Table>
+            - text: — every table must have a unique namespace to avoid URL collisions.
+          - listitem [ref=e913]:
+            - text: The filter form captures all elements with a
+            - code [ref=e914]: name
+            - text: attribute via
+            - code [ref=e915]: FormData
+            - text: . For custom inputs (date pickers, multi-selects), ensure they set a
+            - code [ref=e916]: name
+            - text: and participate in
+            - code [ref=e917]: FormData
+            - text: .
+          - listitem [ref=e918]:
+            - text: "Selection is page-local: \"select all\" only selects rows on the current page. Selected state is fully controlled via"
+            - code [ref=e919]: selectedIds
+            - text: /
+            - code [ref=e920]: onSelectionChange
+            - text: .
+          - listitem [ref=e921]: The select-all checkbox shows an indeterminate dash when some (but not all) rows on the page are selected. Clicking it selects all visible rows; clicking again deselects them.

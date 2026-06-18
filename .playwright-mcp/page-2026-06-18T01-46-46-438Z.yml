@@ -1,0 +1,1157 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "GSL Components" [ref=e5] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=e6]:
+      - button "Search docs" [ref=e7] [cursor=pointer]:
+        - img [ref=e8]
+        - generic [ref=e11]: Search docs...
+        - generic [ref=e12]: ⌘K
+      - link "Demo" [ref=e13] [cursor=pointer]:
+        - /url: /
+      - link "Docs" [ref=e14] [cursor=pointer]:
+        - /url: /docs
+      - generic [ref=e15]:
+        - generic [ref=e16]: Theme
+        - combobox "Color theme" [ref=e17]:
+          - option "Light"
+          - option "Dark"
+          - option "System" [selected]
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - complementary [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]: "@rfdtech/components"
+          - generic [ref=e24]: v1.8.0
+        - navigation "Component documentation" [ref=e25]:
+          - generic [ref=e26]:
+            - paragraph [ref=e27]: Guide
+            - generic [ref=e28]:
+              - link "Getting started" [ref=e29] [cursor=pointer]:
+                - /url: /docs/getting-started
+              - link "Hooks" [ref=e30] [cursor=pointer]:
+                - /url: /docs/hooks
+              - link "Theme" [ref=e31] [cursor=pointer]:
+                - /url: /docs/theme
+          - generic [ref=e32]:
+            - paragraph [ref=e33]: Components
+            - generic [ref=e34]:
+              - link "AppHeader" [ref=e35] [cursor=pointer]:
+                - /url: /docs/app-header
+              - link "AppLayout" [ref=e36] [cursor=pointer]:
+                - /url: /docs/app-layout
+              - link "AppSwitcher" [ref=e37] [cursor=pointer]:
+                - /url: /docs/app-switcher
+              - link "Badge" [ref=e38] [cursor=pointer]:
+                - /url: /docs/badge
+              - link "Breadcrumb" [ref=e39] [cursor=pointer]:
+                - /url: /docs/breadcrumb
+              - link "BulkImportModal" [ref=e40] [cursor=pointer]:
+                - /url: /docs/bulk-import-modal
+              - link "Button" [ref=e41] [cursor=pointer]:
+                - /url: /docs/button
+              - link "Card" [ref=e42] [cursor=pointer]:
+                - /url: /docs/card
+              - link "Checkbox" [ref=e43] [cursor=pointer]:
+                - /url: /docs/checkbox
+              - link "Command" [ref=e44] [cursor=pointer]:
+                - /url: /docs/command
+              - link "CountrySelector" [ref=e45] [cursor=pointer]:
+                - /url: /docs/country-selector
+              - link "DateSelector" [ref=e46] [cursor=pointer]:
+                - /url: /docs/date-selector
+              - link "DateRangeSelector" [ref=e47] [cursor=pointer]:
+                - /url: /docs/date-range-selector
+              - link "Dialog" [ref=e48] [cursor=pointer]:
+                - /url: /docs/dialog
+              - link "Draggable" [ref=e49] [cursor=pointer]:
+                - /url: /docs/draggable
+              - link "Dropdown" [ref=e50] [cursor=pointer]:
+                - /url: /docs/dropdown
+              - link "Form" [ref=e51] [cursor=pointer]:
+                - /url: /docs/form
+              - link "FormField" [ref=e52] [cursor=pointer]:
+                - /url: /docs/form-field
+              - link "MetricCard" [ref=e53] [cursor=pointer]:
+                - /url: /docs/metric-card
+              - link "Modal" [ref=e54] [cursor=pointer]:
+                - /url: /docs/modal
+              - link "NetworkOperator" [ref=e55] [cursor=pointer]:
+                - /url: /docs/network-operator
+              - link "OtpInput" [ref=e56] [cursor=pointer]:
+                - /url: /docs/otp-input
+              - link "PhoneNumberInput" [ref=e57] [cursor=pointer]:
+                - /url: /docs/phone-number-input
+              - link "Popover" [ref=e58] [cursor=pointer]:
+                - /url: /docs/popover
+              - link "ProgressBar" [ref=e59] [cursor=pointer]:
+                - /url: /docs/progress-bar
+              - link "RadioGroup" [ref=e60] [cursor=pointer]:
+                - /url: /docs/radio-group
+              - link "Sheet" [ref=e61] [cursor=pointer]:
+                - /url: /docs/sheet
+              - link "Sidebar" [ref=e62] [cursor=pointer]:
+                - /url: /docs/sidebar
+              - link "Sortable" [ref=e63] [cursor=pointer]:
+                - /url: /docs/sortable
+              - link "Table" [ref=e64] [cursor=pointer]:
+                - /url: /docs/table
+              - link "Tabs" [ref=e65] [cursor=pointer]:
+                - /url: /docs/tabs
+              - link "Toast" [ref=e66] [cursor=pointer]:
+                - /url: /docs/toast
+              - link "UploadField" [ref=e67] [cursor=pointer]:
+                - /url: /docs/upload-field
+        - generic [ref=e68]:
+          - link "Back to demo" [ref=e69] [cursor=pointer]:
+            - /url: /
+          - link "Changelog" [active] [ref=e70] [cursor=pointer]:
+            - /url: /docs/changelog
+          - generic [ref=e71]:
+            - link "GitHub" [ref=e72] [cursor=pointer]:
+              - /url: https://github.com/RFD-TECH/gsl-components
+              - img [ref=e73]
+              - text: GitHub
+            - link "npm" [ref=e75] [cursor=pointer]:
+              - /url: https://www.npmjs.com/package/@rfdtech/components
+              - img [ref=e76]
+              - text: npm
+      - article [ref=e78]:
+        - heading "Changelog" [level=1] [ref=e79]
+        - paragraph [ref=e80]:
+          - text: All notable changes to
+          - code [ref=e81]: "@rfdtech/components"
+          - text: are listed here, newest first.
+        - heading "1.9.0 — 2026-06-17" [level=2] [ref=e82]
+        - heading "Added" [level=3] [ref=e83]
+        - list [ref=e84]:
+          - listitem [ref=e85]:
+            - code [ref=e86]: Table
+            - text: component with debounced search, filter popover, sortable columns, sort arrow indicators, pagination controls, row selection with select-all/indeterminate checkbox, and data-driven content rendering via
+            - code [ref=e87]: TableColumn[]
+          - listitem [ref=e88]:
+            - code [ref=e89]: AppHeader
+            - text: — compound header with
+            - code [ref=e90]: AppHeaderSearch
+            - text: ","
+            - code [ref=e91]: AppHeaderActions
+            - text: ","
+            - code [ref=e92]: AppHeaderNotifications
+            - text: ", and"
+            - code [ref=e93]: AppHeaderProfile
+            - text: sub-components
+          - listitem [ref=e94]:
+            - code [ref=e95]: AppHeaderSearch
+            - text: — data-driven search using
+            - code [ref=e96]: Command
+            - text: primitives;
+            - code [ref=e97]: data
+            - text: prop (groups of items with
+            - code [ref=e98]: "label: ReactNode"
+            - text: ), debounced
+            - code [ref=e99]: onSearch
+            - text: for tanstack query integration,
+            - code [ref=e100]: showEmpty
+            - text: /
+            - code [ref=e101]: emptyLabel
+            - text: for no-results state,
+            - code [ref=e102]: children
+            - text: for custom list content; list rendering memoized on
+            - code [ref=e103]: "[data]"
+          - listitem [ref=e104]:
+            - code [ref=e105]: AppHeaderNotifications
+            - text: — bell trigger → Radix popover with loading skeleton (pulse animation),
+            - code [ref=e106]: loadingLabel
+            - text: prop for accessible loading state, and consumer-rendered notification items
+          - listitem [ref=e107]:
+            - code [ref=e108]: AppHeaderProfile
+            - code [ref=e109]: variant
+            - text: prop —
+            - code [ref=e110]: "\"full\""
+            - text: (default, large centered 64px avatar + email + carded actions) and
+            - code [ref=e111]: "\"basic\""
+            - text: (compact 32px inline avatar with name/role row, flat actions,
+            - code [ref=e112]: max-content
+            - text: width, opens flush with trigger, no email)
+          - listitem [ref=e113]:
+            - code [ref=e114]: AppLayout
+            - text: ","
+            - code [ref=e115]: AppSidebar
+            - text: ","
+            - code [ref=e116]: AppBody
+            - text: — layout container that auto-positions children by component type
+          - listitem [ref=e117]:
+            - code [ref=e118]: CountrySelector
+            - text: — country dropdown with flag emoji, search filtering,
+            - code [ref=e119]: invalid
+            - text: /
+            - code [ref=e120]: disabled
+            - text: states
+          - listitem [ref=e121]:
+            - code [ref=e122]: DateSelector
+            - text: — date picker with calendar grid popover, month/year navigation, native date formatting
+          - listitem [ref=e123]:
+            - code [ref=e124]: MetricCard
+            - text: — metric display card with label, value, optional icon/description, and trend indicator (up/down/neutral)
+          - listitem [ref=e125]:
+            - code [ref=e126]: NetworkOperator
+            - text: — operator selector with image thumbnails (MTN, Vodafone, AirtelTigo, Glo),
+            - code [ref=e127]: defaultValue
+            - text: prop,
+            - code [ref=e128]: invalid
+            - text: /
+            - code [ref=e129]: disabled
+            - text: states
+          - listitem [ref=e130]:
+            - code [ref=e131]: OtpInput
+            - text: — OTP input with configurable length, paste-from-any-slot support, keyboard navigation,
+            - code [ref=e132]: onComplete
+            - text: callback, and forwardRef for react-hook-form
+          - listitem [ref=e133]:
+            - code [ref=e134]: PhoneNumberInput
+            - text: — phone input with country code selector (flag + dial code), auto-detection of country from phone number prefix
+          - listitem [ref=e135]:
+            - code [ref=e136]: UploadField
+            - text: — file upload with drag-and-drop zone, file type icons (PDF/image/video/generic), remove button,
+            - code [ref=e137]: invalid
+            - text: /
+            - code [ref=e138]: disabled
+            - text: states
+          - listitem [ref=e139]:
+            - code [ref=e140]: Dropdown
+            - text: — gained
+            - code [ref=e141]: invalid
+            - text: prop and
+            - code [ref=e142]: aria-invalid
+            - text: support
+          - listitem [ref=e143]:
+            - code [ref=e144]: Card
+            - text: — surface wrapper with
+            - code [ref=e145]: header
+            - text: slot,
+            - code [ref=e146]: "--gsl-surface-card"
+            - text: background,
+            - code [ref=e147]: "--gsl-card-padding"
+            - text: token, and
+            - code [ref=e148]: CardClassNames
+          - listitem [ref=e149]:
+            - code [ref=e150]: DateRangeSelector
+            - text: — date range picker with linked From/To inputs, shared calendar, range highlighting
+          - listitem [ref=e151]:
+            - code [ref=e152]: SidebarBrand
+            - text: — compound sub-component for sidebar brand area, auto-hides on collapse
+          - listitem [ref=e153]:
+            - code [ref=e154]: useTableFilter
+            - text: hook — URL search-param based filter state
+          - listitem [ref=e155]:
+            - code [ref=e156]: useTablePagination
+            - text: hook — URL search-param based pagination (
+            - code [ref=e157]: page
+            - text: ","
+            - code [ref=e158]: pageSize
+            - text: ) with
+            - code [ref=e159]: react-router-dom
+          - listitem [ref=e160]:
+            - code [ref=e161]: useTableState
+            - text: hook — URL search-param based table state (search, pagination, sort, filter) with
+            - code [ref=e162]: react-router-dom
+          - listitem [ref=e163]:
+            - code [ref=e164]: useDebounce
+            - text: hook for generic debounced values
+          - listitem [ref=e165]:
+            - code [ref=e166]: DocsLayout
+            - text: component for documentation pages (split from
+            - code [ref=e167]: DemoLayout
+            - text: )
+          - listitem [ref=e168]:
+            - code [ref=e169]: countries
+            - text: utility — full country list with name, flag emoji, dial code, ISO code
+          - listitem [ref=e170]:
+            - text: CSS tokens
+            - code [ref=e171]: "--gsl-surface-dark"
+            - text: ","
+            - code [ref=e172]: "--gsl-surface-card"
+            - text: ","
+            - code [ref=e173]: "--gsl-rounded-base"
+            - text: (replaces
+            - code [ref=e174]: "--gsl-radius"
+            - text: ),
+            - code [ref=e175]: "--gsl-radius-xl"
+            - text: ","
+            - code [ref=e176]: "--gsl-radius-2xl"
+          - listitem [ref=e177]:
+            - code [ref=e178]: AppHeader
+            - text: doc page with compound component docs, design token reference, and all sub-components
+          - listitem [ref=e179]:
+            - code [ref=e180]: AppLayout
+            - text: doc page with layout diagram, auto-positioning docs, and design tokens
+          - listitem [ref=e181]:
+            - code [ref=e182]: Card
+            - text: ","
+            - code [ref=e183]: CountrySelector
+            - text: ","
+            - code [ref=e184]: DateSelector
+            - text: ","
+            - code [ref=e185]: DateRangeSelector
+            - text: ","
+            - code [ref=e186]: NetworkOperator
+            - text: ","
+            - code [ref=e187]: OtpInput
+            - text: ","
+            - code [ref=e188]: PhoneNumberInput
+            - text: ","
+            - code [ref=e189]: UploadField
+            - text: doc pages with interactive examples and react-hook-form usage sections
+          - listitem [ref=e190]:
+            - text: Tests for
+            - code [ref=e191]: CountrySelector
+            - text: ","
+            - code [ref=e192]: NetworkOperator
+            - text: ","
+            - code [ref=e193]: AppHeader
+            - text: (all sub-components),
+            - code [ref=e194]: AppLayout
+            - text: ","
+            - code [ref=e195]: Card
+            - text: — all with RHF integration coverage
+        - heading "Changed" [level=3] [ref=e196]
+        - list [ref=e197]:
+          - listitem [ref=e198]:
+            - text: Sidebar uses
+            - code [ref=e199]: "--gsl-radius-2xl"
+            - text: for border-radius and
+            - code [ref=e200]: "--gsl-surface-dark"
+            - text: for hover/active states
+          - listitem [ref=e201]:
+            - text: Table search shows clear
+            - code [ref=e202]: ×
+            - text: button when non-empty; filter trigger shows active-count badge when
+            - code [ref=e203]: activeCount > 0
+          - listitem [ref=e204]: "Table pagination shows \"Showing {start} to {select} of {total}\" with inline page-size dropdown"
+          - listitem [ref=e205]:
+            - text: Table
+            - code [ref=e206]: paramPrefix
+            - text: now required on
+            - code [ref=e207]: <Table>
+          - listitem [ref=e208]:
+            - code [ref=e209]: DemoLayout
+            - text: simplified to accept header/sidebar/children slots;
+            - code [ref=e210]: DocsPage
+            - text: uses
+            - code [ref=e211]: DocsLayout
+          - listitem [ref=e212]:
+            - text: Demo page split into
+            - code [ref=e213]: DemoPage
+            - text: (dashboard) +
+            - code [ref=e214]: MembersPage
+            - text: (CRUD table with modals)
+          - listitem [ref=e215]:
+            - text: AppHeaderProfile popover uses
+            - code [ref=e216]: "--gsl-primary"
+            - text: bg +
+            - code [ref=e217]: "--gsl-on-primary"
+            - text: text for avatar
+          - listitem [ref=e218]:
+            - text: AppHeader uses full width and falls back to
+            - code [ref=e219]: 1rem
+            - text: for
+            - code [ref=e220]: "--gsl-app-layout-body-gap"
+          - listitem [ref=e221]:
+            - code [ref=e222]: AppHeaderActionsProps
+            - text: moved to centralized
+            - code [ref=e223]: src/types/app-header.ts
+          - listitem [ref=e224]:
+            - text: UploadField disabled drop zone shows
+            - code [ref=e225]: "cursor: not-allowed"
+          - listitem [ref=e226]:
+            - code [ref=e227]: AppSidebar
+            - text: renders as
+            - code [ref=e228]: <aside>
+            - text: with ref forwarding
+          - listitem [ref=e229]: CommandGroup loading replaced with 3-row skeleton (was thin loading bar)
+          - listitem [ref=e230]: SidebarContent scrollbar hidden; scroll hint and gradients internalized
+          - listitem [ref=e231]:
+            - text: Sidebar links show
+            - code [ref=e232]: title
+            - text: tooltip when collapsed
+          - listitem [ref=e233]:
+            - code [ref=e234]: "--gsl-radius"
+            - text: token renamed to
+            - code [ref=e235]: "--gsl-rounded-base"
+          - listitem [ref=e236]: Design tokens sections on docs pages now only list component-specific tokens
+          - listitem [ref=e237]: Bulk-import template download removed
+          - listitem [ref=e238]: Demo sidebar footer opens Modal with DateRangeSelector playground
+        - heading "Removed" [level=3] [ref=e239]
+        - list [ref=e240]:
+          - listitem [ref=e241]:
+            - code [ref=e242]: Select
+            - text: component removed (redundant with
+            - code [ref=e243]: Dropdown
+            - text: )
+        - heading "1.8.0 — 2026-06-15" [level=2] [ref=e244]
+        - heading "Changed" [level=3] [ref=e245]
+        - list [ref=e246]:
+          - listitem [ref=e247]:
+            - text: Form docs split into
+            - code [ref=e248]: /docs/form
+            - text: (Field, Input, Textarea) and
+            - code [ref=e249]: /docs/form-field
+            - text: (Form, FormField, useFormField, Zod)
+          - listitem [ref=e250]:
+            - text: Dialog, Modal, BulkImportModal, and CommandDialog doc examples and README snippets now use
+            - code [ref=e251]: useDialogSearchParam
+            - text: /
+            - code [ref=e252]: useModalSearchParam
+            - text: for URL-driven open state
+          - listitem [ref=e253]:
+            - text: Toast rebuilt on
+            - link "Sonner" [ref=e254] [cursor=pointer]:
+              - /url: https://sonner.emilkowal.ski/
+            - text: —
+            - code [ref=e255]: ToastProvider
+            - text: ","
+            - code [ref=e256]: Toaster
+            - text: ", and"
+            - code [ref=e257]: useToast()
+            - text: remain the public API; internal queue and styling now delegate to Sonner with GSL
+            - code [ref=e258]: unstyled
+            - text: class names
+          - listitem [ref=e259]:
+            - code [ref=e260]: useToast().toasts
+            - text: is deprecated and always returns
+            - code [ref=e261]: "[]"
+            - text: (Sonner does not expose its queue)
+          - listitem [ref=e262]: Docs code examples use increased spacing between fenced blocks and inside highlighted code panels
+        - heading "Removed" [level=3] [ref=e263]
+        - list [ref=e264]:
+          - listitem [ref=e265]:
+            - text: "Toast compound Radix parts:"
+            - code [ref=e266]: Toast
+            - text: ","
+            - code [ref=e267]: ToastTitle
+            - text: ","
+            - code [ref=e268]: ToastDescription
+            - text: ","
+            - code [ref=e269]: ToastAction
+            - text: ","
+            - code [ref=e270]: ToastClose
+            - text: ","
+            - code [ref=e271]: ToastViewport
+            - text: ","
+            - code [ref=e272]: ToastIcon
+          - listitem [ref=e273]:
+            - text: "Toast reducer utilities:"
+            - code [ref=e274]: toastReducer
+            - text: ","
+            - code [ref=e275]: createToastRecord
+            - text: ","
+            - code [ref=e276]: enforceToastLimit
+            - text: ","
+            - code [ref=e277]: TOAST_REMOVE_DELAY
+            - text: ","
+            - code [ref=e278]: createToastId
+          - listitem [ref=e279]:
+            - code [ref=e280]: ToastProvider
+            - text: props
+            - code [ref=e281]: swipeDirection
+            - text: and
+            - code [ref=e282]: label
+            - text: (not supported by Sonner)
+        - heading "Added" [level=3] [ref=e283]
+        - list [ref=e284]:
+          - listitem [ref=e285]:
+            - code [ref=e286]: Field
+            - text: compound primitives (
+            - code [ref=e287]: Field
+            - text: ","
+            - code [ref=e288]: FieldLabel
+            - text: ","
+            - code [ref=e289]: FieldDescription
+            - text: ","
+            - code [ref=e290]: FieldError
+            - text: ","
+            - code [ref=e291]: FieldControl
+            - text: ) for accessible label, helper, and error wiring
+          - listitem [ref=e292]:
+            - code [ref=e293]: Input
+            - text: and
+            - code [ref=e294]: Textarea
+            - text: forwardRef controls styled for GSL forms
+          - listitem [ref=e295]:
+            - code [ref=e296]: Form
+            - text: ","
+            - code [ref=e297]: FormField
+            - text: ", and"
+            - code [ref=e298]: useFormField
+            - text: adapters for optional
+            - code [ref=e299]: react-hook-form
+            - text: integration (peer dependency)
+          - listitem [ref=e300]:
+            - text: Form documentation page at
+            - code [ref=e301]: /docs/form
+            - text: for
+            - code [ref=e302]: Field
+            - text: ","
+            - code [ref=e303]: Input
+            - text: ", and"
+            - code [ref=e304]: Textarea
+            - text: primitives
+          - listitem [ref=e305]:
+            - text: FormField documentation page at
+            - code [ref=e306]: /docs/form-field
+            - text: for
+            - code [ref=e307]: Form
+            - text: ","
+            - code [ref=e308]: FormField
+            - text: ","
+            - code [ref=e309]: useFormField
+            - text: ", and Zod validation"
+          - listitem [ref=e310]:
+            - code [ref=e311]: zod
+            - text: and
+            - code [ref=e312]: "@hookform/resolvers"
+            - text: documented as optional peer dependencies for schema validation
+          - listitem [ref=e313]:
+            - code [ref=e314]: ToastOptions.icon
+            - text: for optional leading icons with variant-tinted styling
+          - listitem [ref=e315]:
+            - code [ref=e316]: Draggable
+            - text: compound primitives (
+            - code [ref=e317]: Draggable
+            - text: ","
+            - code [ref=e318]: DraggableHandle
+            - text: ) and
+            - code [ref=e319]: useDraggable
+            - text: hook for repositioning panels within parent, window, or custom bounds
+          - listitem [ref=e320]:
+            - text: Draggable documentation page at
+            - code [ref=e321]: /docs/draggable
+            - text: with props and exported types
+          - listitem [ref=e322]:
+            - code [ref=e323]: Sortable
+            - text: compound primitives (
+            - code [ref=e324]: Sortable
+            - text: ","
+            - code [ref=e325]: SortableList
+            - text: ","
+            - code [ref=e326]: SortableItem
+            - text: ","
+            - code [ref=e327]: SortableHandle
+            - text: ) and
+            - code [ref=e328]: reorderItems
+            - text: helper for list reordering via
+            - code [ref=e329]: "@dnd-kit"
+          - listitem [ref=e330]:
+            - text: Sortable documentation page at
+            - code [ref=e331]: /docs/sortable
+            - text: with props and exported types
+          - listitem [ref=e332]:
+            - code [ref=e333]: Toast
+            - text: primitives (
+            - code [ref=e334]: ToastProvider
+            - text: ","
+            - code [ref=e335]: Toaster
+            - text: ) and
+            - code [ref=e336]: useToast
+            - text: hook for imperative notifications
+          - listitem [ref=e337]:
+            - text: Toast documentation page at
+            - code [ref=e338]: /docs/toast
+            - text: with props and exported types
+        - heading "1.7.0 — 2026-06-15" [level=2] [ref=e339]
+        - heading "Added" [level=3] [ref=e340]
+        - list [ref=e341]:
+          - listitem [ref=e342]:
+            - code [ref=e343]: Sidebar
+            - text: compound primitives (
+            - code [ref=e344]: SidebarProvider
+            - text: ","
+            - code [ref=e345]: Sidebar
+            - text: ","
+            - code [ref=e346]: SidebarTrigger
+            - text: ","
+            - code [ref=e347]: SidebarOverlay
+            - text: ", nav parts) with mobile offcanvas drawer"
+          - listitem [ref=e348]:
+            - code [ref=e349]: SidebarCollapse
+            - text: desktop collapse toggle and
+            - code [ref=e350]: SidebarLink
+            - code [ref=e351]: icon
+            - text: prop for icon + label rows
+          - listitem [ref=e352]:
+            - code [ref=e353]: SidebarBadge
+            - text: trailing pill for link counts and labels
+          - listitem [ref=e354]:
+            - code [ref=e355]: Command
+            - text: compound primitives (
+            - code [ref=e356]: Command
+            - text: ","
+            - code [ref=e357]: CommandDialog
+            - text: ", input/list/item parts) built on cmdk"
+          - listitem [ref=e358]:
+            - code [ref=e359]: CommandDialog
+            - code [ref=e360]: shortcut
+            - text: prop and
+            - code [ref=e361]: useCommandShortcut
+            - text: hook for Cmd/Ctrl+K palette toggle
+          - listitem [ref=e362]:
+            - code [ref=e363]: CommandShortcut
+            - text: trailing key hint chip for command items
+          - listitem [ref=e364]:
+            - code [ref=e365]: CommandInput
+            - text: search icon and optional shortcut badge (inherits from
+            - code [ref=e366]: CommandDialog
+            - text: when
+            - code [ref=e367]: shortcut
+            - text: is set)
+          - listitem [ref=e368]:
+            - code [ref=e369]: CommandGroup
+            - code [ref=e370]: loading
+            - text: and
+            - code [ref=e371]: loadingLabel
+            - text: props for per-group async result loading
+          - listitem [ref=e372]:
+            - code [ref=e373]: formatCommandShortcutLabels
+            - text: helper and
+            - code [ref=e374]: useCommandDialog
+            - text: hook
+          - listitem [ref=e375]:
+            - code [ref=e376]: Dialog
+            - text: compound primitives (
+            - code [ref=e377]: Dialog
+            - text: ","
+            - code [ref=e378]: DialogTrigger
+            - text: ","
+            - code [ref=e379]: DialogPortal
+            - text: ","
+            - code [ref=e380]: DialogOverlay
+            - text: ","
+            - code [ref=e381]: DialogContent
+            - text: ","
+            - code [ref=e382]: DialogTitle
+            - text: ","
+            - code [ref=e383]: DialogDescription
+            - text: ","
+            - code [ref=e384]: DialogClose
+            - text: ) built on Radix Dialog
+          - listitem [ref=e385]:
+            - code [ref=e386]: Modal
+            - text: compound primitives (
+            - code [ref=e387]: Modal
+            - text: ","
+            - code [ref=e388]: ModalTrigger
+            - text: ","
+            - code [ref=e389]: ModalPortal
+            - text: ","
+            - code [ref=e390]: ModalOverlay
+            - text: ","
+            - code [ref=e391]: ModalContent
+            - text: ","
+            - code [ref=e392]: ModalHeader
+            - text: ","
+            - code [ref=e393]: ModalTitle
+            - text: ","
+            - code [ref=e394]: ModalDescription
+            - text: ","
+            - code [ref=e395]: ModalBody
+            - text: ","
+            - code [ref=e396]: ModalFooter
+            - text: ","
+            - code [ref=e397]: ModalClose
+            - text: ) for near full-viewport shell layouts
+          - listitem [ref=e398]:
+            - code [ref=e399]: Sheet
+            - text: compound primitives (
+            - code [ref=e400]: Sheet
+            - text: ","
+            - code [ref=e401]: SheetTrigger
+            - text: ","
+            - code [ref=e402]: SheetPortal
+            - text: ","
+            - code [ref=e403]: SheetOverlay
+            - text: ","
+            - code [ref=e404]: SheetContent
+            - text: ","
+            - code [ref=e405]: SheetHeader
+            - text: ","
+            - code [ref=e406]: SheetTitle
+            - text: ","
+            - code [ref=e407]: SheetDescription
+            - text: ","
+            - code [ref=e408]: SheetBody
+            - text: ","
+            - code [ref=e409]: SheetFooter
+            - text: ","
+            - code [ref=e410]: SheetClose
+            - text: ) for edge-sliding panels with
+            - code [ref=e411]: side
+            - text: (
+            - code [ref=e412]: top
+            - text: ","
+            - code [ref=e413]: right
+            - text: ","
+            - code [ref=e414]: bottom
+            - text: ","
+            - code [ref=e415]: left
+            - text: )
+          - listitem [ref=e416]:
+            - code [ref=e417]: Badge
+            - text: component with semantic variants (
+            - code [ref=e418]: default
+            - text: ","
+            - code [ref=e419]: primary
+            - text: ","
+            - code [ref=e420]: success
+            - text: ","
+            - code [ref=e421]: warning
+            - text: ","
+            - code [ref=e422]: error
+            - text: ","
+            - code [ref=e423]: outline
+            - text: ) and
+            - code [ref=e424]: sm
+            - text: /
+            - code [ref=e425]: md
+            - text: sizes
+          - listitem [ref=e426]:
+            - code [ref=e427]: Breadcrumb
+            - text: compound primitives (
+            - code [ref=e428]: Breadcrumb
+            - text: ","
+            - code [ref=e429]: BreadcrumbList
+            - text: ","
+            - code [ref=e430]: BreadcrumbItem
+            - text: ","
+            - code [ref=e431]: BreadcrumbLink
+            - text: ","
+            - code [ref=e432]: BreadcrumbPage
+            - text: ","
+            - code [ref=e433]: BreadcrumbSeparator
+            - text: ","
+            - code [ref=e434]: BreadcrumbEllipsis
+            - text: ) for hierarchical navigation trails
+          - listitem [ref=e435]:
+            - code [ref=e436]: ProgressBar
+            - text: component with semantic variants (
+            - code [ref=e437]: default
+            - text: ","
+            - code [ref=e438]: success
+            - text: ","
+            - code [ref=e439]: warning
+            - text: ","
+            - code [ref=e440]: error
+            - text: ),
+            - code [ref=e441]: sm
+            - text: /
+            - code [ref=e442]: md
+            - text: sizes, and determinate / indeterminate modes
+          - listitem [ref=e443]:
+            - text: "Hooks module:"
+            - code [ref=e444]: useSearchParamOverlay
+            - text: ","
+            - code [ref=e445]: useDialogSearchParam
+            - text: ", and"
+            - code [ref=e446]: useModalSearchParam
+            - text: for URL search-param overlay state with flat prefixed data params (
+            - code [ref=e447]: dialog.userId
+            - text: ", etc.),"
+            - code [ref=e448]: data
+            - text: ","
+            - code [ref=e449]: openWith
+            - text: ", and"
+            - code [ref=e450]: SearchParamOverlayState
+            - text: ; includes
+            - code [ref=e451]: createSearchParamAdapter
+            - text: ","
+            - code [ref=e452]: createBrowserSearchParamAdapter
+            - text: ", and"
+            - code [ref=e453]: readOverlayData
+            - text: /
+            - code [ref=e454]: writeOverlayData
+            - text: /
+            - code [ref=e455]: clearOverlayData
+            - text: utilities
+          - listitem [ref=e456]:
+            - text: Dialog documentation page at
+            - code [ref=e457]: /docs/dialog
+            - text: with props and exported types
+          - listitem [ref=e458]:
+            - text: Modal documentation page at
+            - code [ref=e459]: /docs/modal
+            - text: with props and exported types
+          - listitem [ref=e460]:
+            - text: Sheet documentation page at
+            - code [ref=e461]: /docs/sheet
+            - text: with props and exported types
+          - listitem [ref=e462]:
+            - text: Badge documentation page at
+            - code [ref=e463]: /docs/badge
+            - text: with props and exported types
+          - listitem [ref=e464]:
+            - text: Breadcrumb documentation page at
+            - code [ref=e465]: /docs/breadcrumb
+            - text: with props and exported types
+          - listitem [ref=e466]:
+            - text: ProgressBar documentation page at
+            - code [ref=e467]: /docs/progress-bar
+            - text: with props and exported types
+          - listitem [ref=e468]:
+            - text: Hooks documentation page at
+            - code [ref=e469]: /docs/hooks
+            - text: with URL overlay examples and adapter patterns
+          - listitem [ref=e470]:
+            - text: Sidebar documentation page at
+            - code [ref=e471]: /docs/sidebar
+            - text: with props and exported types
+          - listitem [ref=e472]:
+            - text: Command documentation page at
+            - code [ref=e473]: /docs/command
+            - text: with props and exported types
+        - heading "Changed" [level=3] [ref=e474]
+        - list [ref=e475]:
+          - listitem [ref=e476]: "Sidebar desktop appearance: card panel with neutral active state and collapsible icon rail"
+          - listitem [ref=e477]: Command inline results render in a floating popover so the search field height stays fixed
+          - listitem [ref=e478]:
+            - text: Command shortcut badges use a single unified chip (e.g.
+            - code [ref=e479]: ⌘
+            - code [ref=e480]: K
+            - text: ) instead of separate key caps per key
+          - listitem [ref=e481]:
+            - text: Command dialog input shows the keyboard shortcut badge automatically when
+            - code [ref=e482]: shortcut
+            - text: is set
+          - listitem [ref=e483]: Component authoring rule requires full responsive behavior (320px–desktop, touch targets, reduced motion, docs preview checks)
+        - heading "1.5.0 — 2026-06-15" [level=2] [ref=e484]
+        - heading "Added" [level=3] [ref=e485]
+        - list [ref=e486]:
+          - listitem [ref=e487]:
+            - code [ref=e488]: RadioGroup
+            - text: and
+            - code [ref=e489]: Radio
+            - text: components with optional labels and part-level
+            - code [ref=e490]: classNames
+          - listitem [ref=e491]:
+            - text: RadioGroup documentation page at
+            - code [ref=e492]: /docs/radio-group
+            - text: with props and exported types
+          - listitem [ref=e493]:
+            - code [ref=e494]: Radio.description
+            - text: for optional secondary text under each option label
+          - listitem [ref=e495]:
+            - code [ref=e496]: RadioGroup.variant="card"
+            - text: choice card layout with bordered selectable surfaces
+          - listitem [ref=e497]:
+            - code [ref=e498]: Tabs
+            - text: compound primitives (
+            - code [ref=e499]: Tabs
+            - text: ","
+            - code [ref=e500]: TabsList
+            - text: ","
+            - code [ref=e501]: TabsTrigger
+            - text: ","
+            - code [ref=e502]: TabsContent
+            - text: ) with
+            - code [ref=e503]: default
+            - text: and
+            - code [ref=e504]: line
+            - text: variants
+          - listitem [ref=e505]:
+            - text: Tabs documentation page at
+            - code [ref=e506]: /docs/tabs
+            - text: with props and exported types
+        - heading "Changed" [level=3] [ref=e507]
+        - list [ref=e508]:
+          - listitem [ref=e509]:
+            - text: Tabs panels animate in with a fade and slide on tab switch; disabled when
+            - code [ref=e510]: "prefers-reduced-motion: reduce"
+            - text: is set
+          - listitem [ref=e511]: Line variant tabs use a sliding underline indicator instead of per-trigger borders
+          - listitem [ref=e512]:
+            - text: Docs nav, README component sections, and
+            - code [ref=e513]: src/index.ts
+            - text: exports list components alphabetically
+          - listitem [ref=e514]: Component authoring rule requires alphabetical ordering when adding components to nav, README, and exports
+        - heading "1.4.0 — 2026-06-14" [level=2] [ref=e515]
+        - heading "Added" [level=3] [ref=e516]
+        - list [ref=e517]:
+          - listitem [ref=e518]:
+            - code [ref=e519]: Button
+            - text: component with primary, secondary, outline, and ghost variants, loading spinner, and disabled state
+          - listitem [ref=e520]:
+            - code [ref=e521]: ButtonClassNames
+            - text: and
+            - code [ref=e522]: classNames
+            - text: prop for part-level Tailwind/class overrides (
+            - code [ref=e523]: root
+            - text: ","
+            - code [ref=e524]: label
+            - text: ","
+            - code [ref=e525]: spinner
+            - text: )
+          - listitem [ref=e526]:
+            - text: Button documentation page at
+            - code [ref=e527]: /docs/button
+            - text: with props and exported types
+          - listitem [ref=e528]:
+            - code [ref=e529]: Checkbox
+            - text: component with optional label and part-level
+            - code [ref=e530]: classNames
+          - listitem [ref=e531]:
+            - text: Checkbox documentation page at
+            - code [ref=e532]: /docs/checkbox
+            - text: with props and exported types
+          - listitem [ref=e533]:
+            - code [ref=e534]: Dropdown
+            - text: select-style component with clearable support and part-level
+            - code [ref=e535]: classNames
+          - listitem [ref=e536]:
+            - text: Dropdown documentation page at
+            - code [ref=e537]: /docs/dropdown
+            - text: with props and exported types
+          - listitem [ref=e538]:
+            - code [ref=e539]: Popover
+            - text: compound primitives (
+            - code [ref=e540]: Popover
+            - text: ","
+            - code [ref=e541]: PopoverTrigger
+            - text: ","
+            - code [ref=e542]: PopoverContent
+            - text: ", etc.) with styled content surface"
+          - listitem [ref=e543]:
+            - text: Popover documentation page at
+            - code [ref=e544]: /docs/popover
+            - text: with props and exported types
+          - listitem [ref=e545]:
+            - text: Cursor rule
+            - code [ref=e546]: .cursor/rules/gsl-component-authoring.mdc
+            - text: for component conventions
+        - heading "Changed" [level=3] [ref=e547]
+        - list [ref=e548]:
+          - listitem [ref=e549]:
+            - text: Radix UI packages moved from peer dependencies to dependencies so a single
+            - code [ref=e550]: npm install @rfdtech/components
+            - text: is sufficient
+          - listitem [ref=e551]:
+            - code [ref=e552]: FieldMappingSelect
+            - text: in BulkImportModal now wraps the public
+            - code [ref=e553]: Dropdown
+            - text: component
+          - listitem [ref=e554]:
+            - text: Dropdown trigger uses Lucide
+            - code [ref=e555]: ChevronDown
+            - text: instead of a text glyph; adds
+            - code [ref=e556]: lucide-react
+            - text: as a dependency
+          - listitem [ref=e557]:
+            - text: Popover docs example demonstrates an action menu pattern with
+            - code [ref=e558]: PopoverClose
+            - text: ; adds menu utility classes (
+            - code [ref=e559]: gsl-popover--menu
+            - text: ","
+            - code [ref=e560]: gsl-popover__menu
+            - text: ","
+            - code [ref=e561]: gsl-popover__menu-item
+            - text: )
+          - listitem [ref=e562]: AppSwitcher app icons render image URLs as round cropped icons
+          - listitem [ref=e563]:
+            - code [ref=e564]: AppSwitcher
+            - text: "is data-only: pass"
+            - code [ref=e565]: apps
+            - text: directly and control loading with the
+            - code [ref=e566]: loading
+            - text: prop; panel shows a Lucide spinner while loading
+        - heading "Removed" [level=3] [ref=e567]
+        - list [ref=e568]:
+          - listitem [ref=e569]:
+            - code [ref=e570]: AppSwitcher
+            - text: remote fetch via
+            - code [ref=e571]: baseUrl
+            - text: /
+            - code [ref=e572]: accessToken
+          - listitem [ref=e573]:
+            - code [ref=e574]: useMeApps
+            - text: ","
+            - code [ref=e575]: fetchMeApps
+            - text: ","
+            - code [ref=e576]: MeAppsFetchError
+            - text: ","
+            - code [ref=e577]: buildMeAppsUrl
+            - text: ","
+            - code [ref=e578]: createMeAppsRequestInit
+            - text: ","
+            - code [ref=e579]: mapMeAppToAppItem
+            - text: ","
+            - code [ref=e580]: mapMeAppsToAppItems
+          - listitem [ref=e581]:
+            - code [ref=e582]: MeApp
+            - text: ","
+            - code [ref=e583]: MeAppsResponse
+            - text: ","
+            - code [ref=e584]: UseMeAppsOptions
+            - text: ","
+            - code [ref=e585]: UseMeAppsReturn
+            - text: ", and"
+            - code [ref=e586]: AppItem.metadata
+        - heading "1.3.0 — 2026-06-14" [level=2] [ref=e587]
+        - heading "Added" [level=3] [ref=e588]
+        - list [ref=e589]:
+          - listitem [ref=e590]:
+            - code [ref=e591]: ThemeProvider
+            - text: and
+            - code [ref=e592]: useTheme()
+            - text: for light, dark, and system themes
+          - listitem [ref=e593]:
+            - text: Layered theme CSS (
+            - code [ref=e594]: base
+            - text: ","
+            - code [ref=e595]: light
+            - text: ","
+            - code [ref=e596]: dark
+            - text: ) with shared z-index tokens
+          - listitem [ref=e597]:
+            - text: Theme documentation page at
+            - code [ref=e598]: /docs/theme
+        - heading "Changed" [level=3] [ref=e599]
+        - list [ref=e600]:
+          - listitem [ref=e601]: Theme CSS loads once from the library entry instead of per-component imports
+          - listitem [ref=e602]:
+            - code [ref=e603]: ThemeProvider
+            - text: syncs
+            - code [ref=e604]: data-gsl-theme
+            - text: to
+            - code [ref=e605]: document.documentElement
+            - text: so portaled modals and popovers inherit the active palette
+        - heading "1.2.0 — 2026-06-14" [level=2] [ref=e606]
+        - heading "Added" [level=3] [ref=e607]
+        - list [ref=e608]:
+          - listitem [ref=e609]:
+            - text: Radix UI primitives as peer dependencies (
+            - code [ref=e610]: "@radix-ui/react-popover"
+            - text: ","
+            - code [ref=e611]: "@radix-ui/react-dialog"
+            - text: ","
+            - code [ref=e612]: "@radix-ui/react-alert-dialog"
+            - text: ","
+            - code [ref=e613]: "@radix-ui/react-select"
+            - text: ","
+            - code [ref=e614]: "@radix-ui/react-radio-group"
+            - text: ","
+            - code [ref=e615]: "@radix-ui/react-slot"
+            - text: )
+        - heading "Changed" [level=3] [ref=e616]
+        - list [ref=e617]:
+          - listitem [ref=e618]:
+            - code [ref=e619]: AppSwitcher
+            - text: now uses
+            - code [ref=e620]: "@radix-ui/react-popover"
+            - text: for the app grid panel
+          - listitem [ref=e621]:
+            - code [ref=e622]: BulkImportModal
+            - text: now uses
+            - code [ref=e623]: "@radix-ui/react-dialog"
+            - text: and
+            - code [ref=e624]: "@radix-ui/react-alert-dialog"
+            - text: for the modal shell and exit confirmation
+          - listitem [ref=e625]:
+            - text: Column mapping in
+            - code [ref=e626]: BulkImportModal
+            - text: uses
+            - code [ref=e627]: "@radix-ui/react-select"
+          - listitem [ref=e628]:
+            - text: Header row selection uses
+            - code [ref=e629]: "@radix-ui/react-radio-group"
+        - heading "Removed" [level=3] [ref=e630]
+        - list [ref=e631]:
+          - listitem [ref=e632]: Custom popover, dialog, and field-mapping dropdown implementations replaced by Radix primitives
+        - heading "1.0.3 — 2026-06-12" [level=2] [ref=e633]
+        - heading "Added" [level=3] [ref=e634]
+        - list [ref=e635]:
+          - listitem [ref=e636]:
+            - text: Changelog page in docs (
+            - code [ref=e637]: /docs/changelog
+            - text: ) and root
+            - code [ref=e638]: CHANGELOG.md
+        - heading "1.0.2 — 2026-06-12" [level=2] [ref=e639]
+        - heading "Added" [level=3] [ref=e640]
+        - list [ref=e641]:
+          - listitem [ref=e642]:
+            - code [ref=e643]: DataTable
+            - text: component with column sorting, pagination, loading state, and empty state
+          - listitem [ref=e644]:
+            - code [ref=e645]: Pagination
+            - text: component (standalone; composed by
+            - code [ref=e646]: DataTable
+            - text: )
+          - listitem [ref=e647]:
+            - text: Interactive documentation site at
+            - code [ref=e648]: /docs
+            - text: with MDX pages, syntax highlighting, and preview/code tabs
+          - listitem [ref=e649]: Demo app routing split into Demo and Docs pages with a sectioned docs sidebar
+        - heading "Changed" [level=3] [ref=e650]
+        - list [ref=e651]:
+          - listitem [ref=e652]:
+            - code [ref=e653]: DataTable
+            - text: "is static-only: parents pass"
+            - code [ref=e654]: data
+            - text: and control fetching with a
+            - code [ref=e655]: loading
+            - text: prop (async
+            - code [ref=e656]: loadData
+            - text: removed)
+          - listitem [ref=e657]:
+            - text: Demo app refactored into
+            - code [ref=e658]: DemoPage
+            - text: and
+            - code [ref=e659]: DocsPage
+            - text: with shared
+            - code [ref=e660]: DemoLayout
+        - heading "1.0.0 — 2026-06-11" [level=2] [ref=e661]
+        - heading "Added" [level=3] [ref=e662]
+        - list [ref=e663]:
+          - listitem [ref=e664]:
+            - code [ref=e665]: Dropdown
+            - text: single-value select component
+          - listitem [ref=e666]:
+            - code [ref=e667]: DropdownMenu
+            - text: action menu component
+          - listitem [ref=e668]:
+            - code [ref=e669]: Combobox
+            - text: async search component with debounced
+            - code [ref=e670]: loadOptions
+          - listitem [ref=e671]:
+            - code [ref=e672]: prepublishOnly
+            - text: script to run typecheck, tests, and build before publishing
+        - heading "Changed" [level=3] [ref=e673]
+        - list [ref=e674]:
+          - listitem [ref=e675]:
+            - code [ref=e676]: BulkImportModal
+            - text: column mapping uses an internal field-mapping dropdown
+          - listitem [ref=e677]: README expanded with component usage and style import instructions
+        - heading "Removed" [level=3] [ref=e678]
+        - list [ref=e679]:
+          - listitem [ref=e680]:
+            - code [ref=e681]: Dropdown
+            - text: ","
+            - code [ref=e682]: Combobox
+            - text: ","
+            - code [ref=e683]: DropdownMenu
+            - text: ","
+            - code [ref=e684]: DataTable
+            - text: ", and"
+            - code [ref=e685]: Pagination
+            - text: components
+        - heading "0.4.0 — 2026-06-11" [level=2] [ref=e686]
+        - heading "Added" [level=3] [ref=e687]
+        - list [ref=e688]:
+          - listitem [ref=e689]:
+            - code [ref=e690]: AppSwitcher
+            - text: component for switching between GSL systems
+          - listitem [ref=e691]:
+            - code [ref=e692]: BulkImportModal
+            - text: multi-step import flow with editable rows and exit confirmation
+        - heading "Changed" [level=3] [ref=e693]
+        - list [ref=e694]:
+          - listitem [ref=e695]:
+            - text: Package renamed to
+            - code [ref=e696]: "@rfdtech/components"
+          - listitem [ref=e697]: Bulk import stepper animations, accessibility, and responsive styling improvements

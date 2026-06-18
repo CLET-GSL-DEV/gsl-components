@@ -1,0 +1,120 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "GSL Components" [ref=e5] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=e6]:
+      - button "Search docs" [ref=e7] [cursor=pointer]:
+        - img [ref=e8]
+        - generic [ref=e11]: Search docs...
+        - generic [ref=e12]: ⌘K
+      - link "Demo" [ref=e13] [cursor=pointer]:
+        - /url: /
+      - link "Docs" [ref=e14] [cursor=pointer]:
+        - /url: /docs
+      - generic [ref=e15]:
+        - generic [ref=e16]: Theme
+        - combobox "Color theme" [ref=e17]:
+          - option "Light"
+          - option "Dark"
+          - option "System" [selected]
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - complementary [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]: "@rfdtech/components"
+          - generic [ref=e24]: v1.8.0
+        - navigation "Component documentation" [ref=e25]:
+          - generic [ref=e26]:
+            - paragraph [ref=e27]: Guide
+            - generic [ref=e28]:
+              - link "Getting started" [ref=e29] [cursor=pointer]:
+                - /url: /docs/getting-started
+              - link "Hooks" [ref=e30] [cursor=pointer]:
+                - /url: /docs/hooks
+              - link "Theme" [ref=e31] [cursor=pointer]:
+                - /url: /docs/theme
+          - generic [ref=e32]:
+            - paragraph [ref=e33]: Components
+            - generic [ref=e34]:
+              - link "AppHeader" [ref=e35] [cursor=pointer]:
+                - /url: /docs/app-header
+              - link "AppLayout" [ref=e36] [cursor=pointer]:
+                - /url: /docs/app-layout
+              - link "AppSwitcher" [ref=e37] [cursor=pointer]:
+                - /url: /docs/app-switcher
+              - link "Badge" [ref=e38] [cursor=pointer]:
+                - /url: /docs/badge
+              - link "Breadcrumb" [ref=e39] [cursor=pointer]:
+                - /url: /docs/breadcrumb
+              - link "BulkImportModal" [ref=e40] [cursor=pointer]:
+                - /url: /docs/bulk-import-modal
+              - link "Button" [ref=e41] [cursor=pointer]:
+                - /url: /docs/button
+              - link "Card" [ref=e42] [cursor=pointer]:
+                - /url: /docs/card
+              - link "Checkbox" [ref=e43] [cursor=pointer]:
+                - /url: /docs/checkbox
+              - link "Command" [ref=e44] [cursor=pointer]:
+                - /url: /docs/command
+              - link "CountrySelector" [ref=e45] [cursor=pointer]:
+                - /url: /docs/country-selector
+              - link "DateSelector" [ref=e46] [cursor=pointer]:
+                - /url: /docs/date-selector
+              - link "DateRangeSelector" [ref=e47] [cursor=pointer]:
+                - /url: /docs/date-range-selector
+              - link "Dialog" [ref=e48] [cursor=pointer]:
+                - /url: /docs/dialog
+              - link "Draggable" [ref=e49] [cursor=pointer]:
+                - /url: /docs/draggable
+              - link "Dropdown" [ref=e50] [cursor=pointer]:
+                - /url: /docs/dropdown
+              - link "Form" [ref=e51] [cursor=pointer]:
+                - /url: /docs/form
+              - link "FormField" [ref=e52] [cursor=pointer]:
+                - /url: /docs/form-field
+              - link "MetricCard" [ref=e53] [cursor=pointer]:
+                - /url: /docs/metric-card
+              - link "Modal" [ref=e54] [cursor=pointer]:
+                - /url: /docs/modal
+              - link "NetworkOperator" [ref=e55] [cursor=pointer]:
+                - /url: /docs/network-operator
+              - link "OtpInput" [ref=e56] [cursor=pointer]:
+                - /url: /docs/otp-input
+              - link "PhoneNumberInput" [ref=e57] [cursor=pointer]:
+                - /url: /docs/phone-number-input
+              - link "Popover" [ref=e58] [cursor=pointer]:
+                - /url: /docs/popover
+              - link "ProgressBar" [ref=e59] [cursor=pointer]:
+                - /url: /docs/progress-bar
+              - link "RadioGroup" [ref=e60] [cursor=pointer]:
+                - /url: /docs/radio-group
+              - link "Sheet" [ref=e61] [cursor=pointer]:
+                - /url: /docs/sheet
+              - link "Sidebar" [ref=e62] [cursor=pointer]:
+                - /url: /docs/sidebar
+              - link "Sortable" [ref=e63] [cursor=pointer]:
+                - /url: /docs/sortable
+              - link "Table" [ref=e64] [cursor=pointer]:
+                - /url: /docs/table
+              - link "Tabs" [ref=e65] [cursor=pointer]:
+                - /url: /docs/tabs
+              - link "Toast" [ref=e66] [cursor=pointer]:
+                - /url: /docs/toast
+              - link "UploadField" [ref=e67] [cursor=pointer]:
+                - /url: /docs/upload-field
+        - generic [ref=e68]:
+          - link "Back to demo" [ref=e69] [cursor=pointer]:
+            - /url: /
+          - link "Changelog" [ref=e70] [cursor=pointer]:
+            - /url: /docs/changelog
+          - generic [ref=e71]:
+            - link "GitHub" [ref=e72] [cursor=pointer]:
+              - /url: https://github.com/RFD-TECH/gsl-components
+              - img [ref=e73]
+              - text: GitHub
+            - link "npm" [ref=e75] [cursor=pointer]:
+              - /url: https://www.npmjs.com/package/@rfdtech/components
+              - img [ref=e76]
+              - text: npm
+      - article [ref=e78]:
+        - heading "Changelog" [level=1] [ref=e79]

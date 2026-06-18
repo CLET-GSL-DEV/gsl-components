@@ -1,4 +1,5 @@
 import { createRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -184,5 +185,64 @@ describe("OtpInput", () => {
     expect(inputs[1]).toHaveValue("2");
     expect(inputs[2]).toHaveValue("");
     expect(inputs[3]).toHaveValue("");
+  });
+
+  // Uncontrolled mode
+  it("manages internal state in uncontrolled mode", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<OtpInput length={4} onChange={onChange} />);
+
+    const inputs = screen.getAllByRole("textbox");
+    await user.type(inputs[0], "9");
+
+    expect(onChange).toHaveBeenCalledWith("9");
+    expect(inputs[0]).toHaveValue("9");
+  });
+
+  it("clears and updates internal state on backspace", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<OtpInput length={4} onChange={onChange} />);
+
+    const inputs = screen.getAllByRole("textbox");
+    await user.type(inputs[0], "5");
+    expect(inputs[0]).toHaveValue("5");
+
+    await user.click(inputs[0]);
+    await user.keyboard("{Backspace}");
+
+    expect(onChange).toHaveBeenCalledWith("");
+  });
+
+  // RHF integration
+  it("works with react-hook-form controlled", async () => {
+    const user = userEvent.setup();
+
+    function Form() {
+      const form = useForm<{ code: string }>({
+        defaultValues: { code: "12" },
+      });
+      return (
+        <form onSubmit={form.handleSubmit(() => {})}>
+          <OtpInput
+            length={4}
+            value={form.watch("code")}
+            onChange={(v) => form.setValue("code", v)}
+          />
+          <span data-testid="value">{form.watch("code")}</span>
+        </form>
+      );
+    }
+
+    render(<Form />);
+
+    const inputs = screen.getAllByRole("textbox");
+    expect(inputs[0]).toHaveValue("1");
+    expect(inputs[1]).toHaveValue("2");
+    expect(screen.getByTestId("value")).toHaveTextContent("12");
+
+    await user.type(inputs[2], "3");
+    expect(screen.getByTestId("value")).toHaveTextContent("123");
   });
 });

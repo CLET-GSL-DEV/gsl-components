@@ -1,3 +1,5 @@
+import { createRef } from "react";
+import { useForm } from "react-hook-form";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -11,8 +13,8 @@ describe("DateSelector", () => {
   });
 
   it("forwards ref", () => {
-    const ref = { current: null };
-    render(<DateSelector ref={ref as any} />);
+    const ref = createRef<HTMLDivElement>();
+    render(<DateSelector ref={ref} />);
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
@@ -121,5 +123,61 @@ describe("DateSelector", () => {
 
     // Title text should have changed
     expect(screen.queryByText(currentMonth)).not.toBeInTheDocument();
+  });
+
+  // Uncontrolled mode
+  it("supports uncontrolled mode with defaultValue", () => {
+    const date = new Date(2026, 5, 15);
+    render(<DateSelector defaultValue={date} />);
+    expect(screen.getByText("Jun 15, 2026")).toBeInTheDocument();
+  });
+
+  it("updates display when selecting in uncontrolled mode", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<DateSelector onChange={onChange} />);
+
+    await user.click(screen.getByRole("button", { name: /select date/i }));
+
+    const days = screen.getAllByRole("gridcell");
+    const enabledDay = days.find((d) => !d.hasAttribute("disabled"));
+    await user.click(enabledDay!);
+
+    expect(onChange).toHaveBeenCalledWith(expect.any(Date));
+    // Trigger should now show the selected date
+    expect(screen.queryByText(/select date/i)).not.toBeInTheDocument();
+  });
+
+  // RHF integration
+  it("works with react-hook-form controlled", async () => {
+    const user = userEvent.setup();
+
+    function Form() {
+      const form = useForm<{ date: Date | null }>({
+        defaultValues: { date: new Date(2026, 5, 1) },
+      });
+      return (
+        <form onSubmit={form.handleSubmit(() => {})}>
+          <DateSelector
+            value={form.watch("date") ?? undefined}
+            onChange={(d) => form.setValue("date", d)}
+          />
+          <span data-testid="value">
+            {form.watch("date")?.toISOString() ?? "null"}
+          </span>
+        </form>
+      );
+    }
+
+    render(<Form />);
+    expect(screen.getByTestId("value")).not.toHaveTextContent("null");
+
+    // Open and pick a different date
+    await user.click(screen.getByRole("button"));
+    const days = screen.getAllByRole("gridcell");
+    const enabledDay = days.find((d) => !d.hasAttribute("disabled"));
+    await user.click(enabledDay!);
+
+    expect(screen.getByTestId("value")).not.toHaveTextContent("null");
   });
 });

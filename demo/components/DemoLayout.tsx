@@ -478,7 +478,6 @@ export function DemoLayout() {
           <ModalBody>
             <DateRangeSelector
               onChange={(range) => console.log(range)}
-              placeholder={{ start: "Start date", end: "End date" }}
             />
           </ModalBody>
         </ModalContent>

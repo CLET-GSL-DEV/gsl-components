@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `--gsl-radius` renamed to `--gsl-rounded-base`
 - Added `invalid` prop and `aria-invalid` to `Dropdown`
 - `DemoLayout` and demo pages refactored for new components
+- `DateRangeSelector` refactored to single-trigger display with two-click range selection; start always kept before end (auto-swap); self-contained CSS; simplified `placeholder` prop from `{ start, end }` object to `string`
 
 
 ## [1.8.0] - 2026-06-15

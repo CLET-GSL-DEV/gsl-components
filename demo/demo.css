@@ -267,6 +267,8 @@ body {
   margin-top: 24px;
   padding-top: 16px;
   border-top: 1px solid var(--gsl-border);
+  display: flex;
+  flex-direction: column;
 }
 
 .demo-docs__back-link {

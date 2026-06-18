@@ -1,4 +1,5 @@
 import { createRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -296,5 +297,74 @@ describe("PhoneNumberInput", () => {
       name: /United Kingdom/,
     });
     expect(selectedOption).toHaveAttribute("aria-selected", "true");
+  });
+
+  // Uncontrolled mode
+  it("manages internal state in uncontrolled mode", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<PhoneNumberInput onChange={onChange} />);
+
+    const input = screen.getByPlaceholderText("(555) 000-0000");
+    await user.type(input, "2025551234");
+
+    expect(onChange).toHaveBeenLastCalledWith("+12025551234");
+  });
+
+  it("initializes country from defaultCountry in uncontrolled mode", () => {
+    render(<PhoneNumberInput defaultCountry="GH" />);
+    expect(screen.getByText("+233")).toBeInTheDocument();
+  });
+
+  it("preserves leading zero in local number when dialing with Ghana", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<PhoneNumberInput defaultCountry="GH" onChange={onChange} />);
+
+    const input = screen.getByPlaceholderText("(555) 000-0000");
+    await user.type(input, "02054321022");
+
+    // Leading 0 is preserved in the local part; dial code is prepended
+    expect(onChange).toHaveBeenLastCalledWith("+23302054321022");
+  });
+
+  it("displays controlled Ghana number without leading zero", () => {
+    render(<PhoneNumberInput value="+2332054321022" onChange={() => {}} />);
+
+    // Ghana flag and dial code
+    expect(screen.getByText("+233")).toBeInTheDocument();
+    // Input shows local number stripped of dial code (no leading 0)
+    expect(screen.getByPlaceholderText("(555) 000-0000")).toHaveValue(
+      "2054321022",
+    );
+  });
+
+  // RHF integration
+  it("works with react-hook-form controlled", async () => {
+    const user = userEvent.setup();
+
+    function Form() {
+      const form = useForm<{ phone: string }>({
+        defaultValues: { phone: "+12025551234" },
+      });
+      return (
+        <form onSubmit={form.handleSubmit(() => {})}>
+          <PhoneNumberInput
+            value={form.watch("phone")}
+            onChange={(v) => form.setValue("phone", v ?? "")}
+          />
+          <span data-testid="value">{form.watch("phone")}</span>
+        </form>
+      );
+    }
+
+    render(<Form />);
+    expect(screen.getByTestId("value")).toHaveTextContent("+12025551234");
+
+    const input = screen.getByPlaceholderText("(555) 000-0000");
+    await user.clear(input);
+    await user.type(input, "5550000");
+
+    expect(screen.getByTestId("value")).toHaveTextContent("+15550000");
   });
 });
