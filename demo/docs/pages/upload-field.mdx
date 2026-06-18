@@ -1,12 +1,13 @@
 export const meta = {
   title: "UploadField",
-  description:
-    "File upload with drag-and-drop zone, file type icons, size display, and controlled/uncontrolled value.",
+  description: "File upload",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { UploadFieldPreview } from "../previews/code/UploadFieldPreview";
 import uploadFieldSource from "../previews/examples/upload-field.example.tsx?raw";
+import { UploadFieldFormPreview } from "../previews/code/UploadFieldFormPreview";
+import uploadFieldFormSource from "../previews/examples/upload-field-form.example.tsx?raw";
 
 # UploadField
 
@@ -19,6 +20,10 @@ File upload with a dashed-border dropzone, cloud upload icon, auto-generated sup
   preview={<UploadFieldPreview />}
   code={uploadFieldSource}
 />
+
+## Form validation
+
+<ExampleTabs title="Zod validation" preview={<UploadFieldFormPreview />} code={uploadFieldFormSource} />
 
 ## Usage with react-hook-form
 
