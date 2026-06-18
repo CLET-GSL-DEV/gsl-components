@@ -26,6 +26,5 @@
   --gsl-z-alert: 1200;
   --gsl-z-alert-content: 1201;
   --gsl-z-dropdown: 1300;
-  --gsl-z-datepicker: 1400;
   --gsl-surface-card: var(--gsl-bg);
 }

@@ -1,8 +1,0 @@
-[     176ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/@fs/Users/user/mm/gsl-components/node_modules/.vite/deps/react-dom_client.js?v=97c09f5e:20102
-[   93668ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:963
-[   93670ms] [ERROR] WebSocket connection to 'ws://localhost:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:5173/@vite/client:1034
-[   94672ms] [ERROR] WebSocket connection to 'ws://localhost:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:5173/@vite/client:1034
-[   97992ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/@fs/Users/user/mm/gsl-components/node_modules/.vite/deps/react-dom_client.js?v=7b824d72:20102
-[   99365ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/@fs/Users/user/mm/gsl-components/node_modules/.vite/deps/react-dom_client.js?v=97c09f5e:20102
-[  505325ms] [ERROR] Functions are not valid as a React child. This may happen if you return %s instead of <%s /> from render. Or maybe you meant to call this function rather than return it.
-  <%s>{%s}</%s> MDXContent MDXContent pre MDXContent pre @ http://localhost:5173/@fs/Users/user/mm/gsl-components/node_modules/.vite/deps/react-dom_client.js?v=97c09f5e:4614

@@ -208,7 +208,7 @@ Layout wrapper for the footer bar with `border-top`. Typically contains `<TableP
 
 ## `useTableState`
 
-Hook that reads all table state from URL params. Use it to derive filtered/paged data from your raw dataset.
+**Recommended** — the single hook for all table state. Reads page, pageSize, search, filters, and sort from URL params. Use it to derive filtered/paged data from your raw dataset. Prefer this over `useTableFilter` and `useTablePagination` individually.
 
 ```tsx
 const { page, pageSize, search, filters, pageSizeOptions } = useTableState({

@@ -83,7 +83,7 @@
 /* ── Calendar popover ── */
 
 .gsl-date-selector__calendar {
-  z-index: var(--gsl-z-datepicker);
+  z-index: var(--gsl-z-dropdown);
   min-width: 256px;
   padding: 12px;
   border: 1px solid var(--gsl-border);

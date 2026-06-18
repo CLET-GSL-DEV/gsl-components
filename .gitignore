@@ -5,3 +5,6 @@ dist
 CHANGELOG-draft.md
 PLAN.md
 .DS_Store
+.playwright-mcp/
+llms.txt
+table-demo.png
