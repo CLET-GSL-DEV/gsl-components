@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.2] - 2026-06-18
+
+### Changed
+
+- Toast: restyled with popover background, border, and shadow; action button uses Button secondary sm classes; close button is transparent ghost; title text matches semantic variant color; border-radius xl; glass background with backdrop blur
+
 ## [1.13.1] - 2026-06-18
 
 ### Added
