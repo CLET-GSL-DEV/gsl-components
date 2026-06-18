@@ -7,114 +7,194 @@ export const meta = {
 
 All notable changes to `@rfdtech/components` are listed here, newest first.
 
-## Unreleased
+## 1.9.0 — 2026-06-17
+
+### Added
+
+- `Table` component with debounced search, filter popover, sortable columns, sort arrow indicators, pagination controls, row selection with select-all/indeterminate checkbox, and data-driven content rendering via `TableColumn[]`
+- `AppHeader` — compound header with `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderNotifications`, and `AppHeaderProfile` sub-components
+- `AppHeaderSearch` — data-driven search using `Command` primitives; `data` prop (groups of items with `label: ReactNode`), debounced `onSearch` for tanstack query integration, `showEmpty`/`emptyLabel` for no-results state, `children` for custom list content; list rendering memoized on `[data]`
+- `AppHeaderNotifications` — bell trigger → Radix popover with loading skeleton (pulse animation), `loadingLabel` prop for accessible loading state, and consumer-rendered notification items
+- `AppHeaderProfile` `variant` prop — `"full"` (default, large centered 64px avatar + email + carded actions) and `"basic"` (compact 32px inline avatar with name/role row, flat actions, `max-content` width, opens flush with trigger, no email)
+- `AppLayout`, `AppSidebar`, `AppBody` — layout container that auto-positions children by component type
+- `CountrySelector` — country dropdown with flag emoji, search filtering, `invalid`/`disabled` states
+- `DateSelector` — date picker with calendar grid popover, month/year navigation, native date formatting
+- `MetricCard` — metric display card with label, value, optional icon/description, and trend indicator (up/down/neutral)
+- `NetworkOperator` — operator selector with image thumbnails (MTN, Vodafone, AirtelTigo, Glo), `defaultValue` prop, `invalid`/`disabled` states
+- `OtpInput` — OTP input with configurable length, paste-from-any-slot support, keyboard navigation, `onComplete` callback, and forwardRef for react-hook-form
+- `PhoneNumberInput` — phone input with country code selector (flag + dial code), auto-detection of country from phone number prefix
+- `UploadField` — file upload with drag-and-drop zone, file type icons (PDF/image/video/generic), remove button, `invalid`/`disabled` states
+- `Dropdown` — gained `invalid` prop and `aria-invalid` support
+- `Card` — surface wrapper with `header` slot, `--gsl-surface-card` background, `--gsl-card-padding` token, and `CardClassNames`
+- `DateRangeSelector` — date range picker with linked From/To inputs, shared calendar, range highlighting
+- `SidebarBrand` — compound sub-component for sidebar brand area, auto-hides on collapse
+- `useTableFilter` hook — URL search-param based filter state
+- `useTablePagination` hook — URL search-param based pagination (`page`, `pageSize`) with `react-router-dom`
+- `useTableState` hook — URL search-param based table state (search, pagination, sort, filter) with `react-router-dom`
+- `useDebounce` hook for generic debounced values
+- `DocsLayout` component for documentation pages (split from `DemoLayout`)
+- `countries` utility — full country list with name, flag emoji, dial code, ISO code
+- CSS tokens `--gsl-surface-dark`, `--gsl-surface-card`, `--gsl-rounded-base` (replaces `--gsl-radius`), `--gsl-radius-xl`, `--gsl-radius-2xl`
+- `AppHeader` doc page with compound component docs, design token reference, and all sub-components
+- `AppLayout` doc page with layout diagram, auto-positioning docs, and design tokens
+- `Card`, `CountrySelector`, `DateSelector`, `DateRangeSelector`, `NetworkOperator`, `OtpInput`, `PhoneNumberInput`, `UploadField` doc pages with interactive examples and react-hook-form usage sections
+- Tests for `CountrySelector`, `NetworkOperator`, `AppHeader` (all sub-components), `AppLayout`, `Card` — all with RHF integration coverage
+
+### Changed
+
+- Sidebar uses `--gsl-radius-2xl` for border-radius and `--gsl-surface-dark` for hover/active states
+- Table search shows clear `×` button when non-empty; filter trigger shows active-count badge when `activeCount > 0`
+- Table pagination shows "Showing {start} to {select} of {total}" with inline page-size dropdown
+- Table `paramPrefix` now required on `<Table>`
+- `DemoLayout` simplified to accept header/sidebar/children slots; `DocsPage` uses `DocsLayout`
+- Demo page split into `DemoPage` (dashboard) + `MembersPage` (CRUD table with modals)
+- AppHeaderProfile popover uses `--gsl-primary` bg + `--gsl-on-primary` text for avatar
+- AppHeader uses full width and falls back to `1rem` for `--gsl-app-layout-body-gap`
+- `AppHeaderActionsProps` moved to centralized `src/types/app-header.ts`
+- UploadField disabled drop zone shows `cursor: not-allowed`
+- `AppSidebar` renders as `<aside>` with ref forwarding
+- CommandGroup loading replaced with 3-row skeleton (was thin loading bar)
+- SidebarContent scrollbar hidden; scroll hint and gradients internalized
+- Sidebar links show `title` tooltip when collapsed
+- `--gsl-radius` token renamed to `--gsl-rounded-base`
+- Design tokens sections on docs pages now only list component-specific tokens
+- Bulk-import template download removed
+- Demo sidebar footer opens Modal with DateRangeSelector playground
+
+### Removed
+
+- `Select` component removed (redundant with `Dropdown`)
 
 ## 1.8.0 — 2026-06-15
 
 ### Changed
 
-- Form docs split into `/docs/form` and `/docs/form-field`
-- Toast rebuilt on Sonner — `ToastProvider`, `Toaster`, and `useToast()` remain the public API
-- `useToast().toasts` deprecated (always `[]`)
-- Dialog, Modal, BulkImportModal, and CommandDialog examples use URL search-param hooks for open state
-- Docs code examples use increased spacing between fenced blocks
+- Form docs split into `/docs/form` (Field, Input, Textarea) and `/docs/form-field` (Form, FormField, useFormField, Zod)
+- Dialog, Modal, BulkImportModal, and CommandDialog doc examples and README snippets now use `useDialogSearchParam` / `useModalSearchParam` for URL-driven open state
+- Toast rebuilt on [Sonner](https://sonner.emilkowal.ski/) — `ToastProvider`, `Toaster`, and `useToast()` remain the public API; internal queue and styling now delegate to Sonner with GSL `unstyled` class names
+- `useToast().toasts` is deprecated and always returns `[]` (Sonner does not expose its queue)
+- Docs code examples use increased spacing between fenced blocks and inside highlighted code panels
 
 ### Removed
 
-- Toast compound Radix parts (`Toast`, `ToastTitle`, etc.) and reducer utilities
-- `ToastProvider` props `swipeDirection` and `label`
+- Toast compound Radix parts: `Toast`, `ToastTitle`, `ToastDescription`, `ToastAction`, `ToastClose`, `ToastViewport`, `ToastIcon`
+- Toast reducer utilities: `toastReducer`, `createToastRecord`, `enforceToastLimit`, `TOAST_REMOVE_DELAY`, `createToastId`
+- `ToastProvider` props `swipeDirection` and `label` (not supported by Sonner)
 
 ### Added
 
-- `Field` compound primitives for accessible label, helper, and error wiring
-- `Input` and `Textarea` forwardRef controls for GSL forms
-- `Form`, `FormField`, and `useFormField` for optional react-hook-form integration
-- Form documentation page at `/docs/form` for `Field`, `Input`, and `Textarea`
-- FormField documentation page at `/docs/form-field` for react-hook-form and Zod validation
-- `zod` and `@hookform/resolvers` as optional peer dependencies for schema validation
-- `ToastOptions.icon` for optional leading icons
-- `Draggable` compound primitives with bounded pointer repositioning and optional drag handle
-- Draggable documentation page at `/docs/draggable`
-- `Sortable` compound primitives for list reordering with optional drag handles and keyboard support
-- Sortable documentation page at `/docs/sortable`
-- `Toast` primitives (`ToastProvider`, `Toaster`) with `useToast` hook for imperative notifications
-- Toast documentation page at `/docs/toast`
+- `Field` compound primitives (`Field`, `FieldLabel`, `FieldDescription`, `FieldError`, `FieldControl`) for accessible label, helper, and error wiring
+- `Input` and `Textarea` forwardRef controls styled for GSL forms
+- `Form`, `FormField`, and `useFormField` adapters for optional `react-hook-form` integration (peer dependency)
+- Form documentation page at `/docs/form` for `Field`, `Input`, and `Textarea` primitives
+- FormField documentation page at `/docs/form-field` for `Form`, `FormField`, `useFormField`, and Zod validation
+- `zod` and `@hookform/resolvers` documented as optional peer dependencies for schema validation
+- `ToastOptions.icon` for optional leading icons with variant-tinted styling
+- `Draggable` compound primitives (`Draggable`, `DraggableHandle`) and `useDraggable` hook for repositioning panels within parent, window, or custom bounds
+- Draggable documentation page at `/docs/draggable` with props and exported types
+- `Sortable` compound primitives (`Sortable`, `SortableList`, `SortableItem`, `SortableHandle`) and `reorderItems` helper for list reordering via `@dnd-kit`
+- Sortable documentation page at `/docs/sortable` with props and exported types
+- `Toast` primitives (`ToastProvider`, `Toaster`) and `useToast` hook for imperative notifications
+- Toast documentation page at `/docs/toast` with props and exported types
 
 ## 1.7.0 — 2026-06-15
 
 ### Added
 
-- `Sidebar` compound primitives with mobile offcanvas drawer and sticky desktop card rail
-- `SidebarCollapse` desktop collapse toggle and `SidebarLink` `icon` prop
+- `Sidebar` compound primitives (`SidebarProvider`, `Sidebar`, `SidebarTrigger`, `SidebarOverlay`, nav parts) with mobile offcanvas drawer
+- `SidebarCollapse` desktop collapse toggle and `SidebarLink` `icon` prop for icon + label rows
 - `SidebarBadge` trailing pill for link counts and labels
-- `Command` compound primitives with inline and dialog palettes built on cmdk
-- `CommandDialog` `shortcut` prop and `useCommandShortcut` for Cmd/Ctrl+K toggle
+- `Command` compound primitives (`Command`, `CommandDialog`, input/list/item parts) built on cmdk
+- `CommandDialog` `shortcut` prop and `useCommandShortcut` hook for Cmd/Ctrl+K palette toggle
 - `CommandShortcut` trailing key hint chip for command items
-- `CommandInput` search icon and shortcut badge (auto from `CommandDialog` when `shortcut` is set)
-- `CommandGroup` `loading` and `loadingLabel` for per-group async loading
-- `formatCommandShortcutLabels` and `useCommandDialog`
-- `Dialog` compound primitives built on Radix Dialog with styled overlay and content
-- `Modal` compound primitives for near full-viewport shell layouts with header, body, and footer
-- `Sheet` compound primitives for edge-sliding panels with `side` (`top`, `right`, `bottom`, `left`)
-- `Badge` component with semantic variants and `sm` / `md` sizes
-- `Breadcrumb` compound primitives for hierarchical navigation trails
-- `ProgressBar` component with semantic variants, sizes, and determinate / indeterminate modes
-- Hooks for URL-driven `Dialog` / `Modal` state (`useDialogSearchParam`, `useModalSearchParam`, `useSearchParamOverlay`) with flat prefixed data params, `openWith`, and router adapters
-- Documentation pages at `/docs/dialog`, `/docs/modal`, `/docs/sheet`, `/docs/badge`, `/docs/breadcrumb`, `/docs/progress-bar`, `/docs/hooks`, `/docs/sidebar`, and `/docs/command`
+- `CommandInput` search icon and optional shortcut badge (inherits from `CommandDialog` when `shortcut` is set)
+- `CommandGroup` `loading` and `loadingLabel` props for per-group async result loading
+- `formatCommandShortcutLabels` helper and `useCommandDialog` hook
+- `Dialog` compound primitives (`Dialog`, `DialogTrigger`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `DialogClose`) built on Radix Dialog
+- `Modal` compound primitives (`Modal`, `ModalTrigger`, `ModalPortal`, `ModalOverlay`, `ModalContent`, `ModalHeader`, `ModalTitle`, `ModalDescription`, `ModalBody`, `ModalFooter`, `ModalClose`) for near full-viewport shell layouts
+- `Sheet` compound primitives (`Sheet`, `SheetTrigger`, `SheetPortal`, `SheetOverlay`, `SheetContent`, `SheetHeader`, `SheetTitle`, `SheetDescription`, `SheetBody`, `SheetFooter`, `SheetClose`) for edge-sliding panels with `side` (`top`, `right`, `bottom`, `left`)
+- `Badge` component with semantic variants (`default`, `primary`, `success`, `warning`, `error`, `outline`) and `sm` / `md` sizes
+- `Breadcrumb` compound primitives (`Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis`) for hierarchical navigation trails
+- `ProgressBar` component with semantic variants (`default`, `success`, `warning`, `error`), `sm` / `md` sizes, and determinate / indeterminate modes
+- Hooks module: `useSearchParamOverlay`, `useDialogSearchParam`, and `useModalSearchParam` for URL search-param overlay state with flat prefixed data params (`dialog.userId`, etc.), `data`, `openWith`, and `SearchParamOverlayState`; includes `createSearchParamAdapter`, `createBrowserSearchParamAdapter`, and `readOverlayData` / `writeOverlayData` / `clearOverlayData` utilities
+- Dialog documentation page at `/docs/dialog` with props and exported types
+- Modal documentation page at `/docs/modal` with props and exported types
+- Sheet documentation page at `/docs/sheet` with props and exported types
+- Badge documentation page at `/docs/badge` with props and exported types
+- Breadcrumb documentation page at `/docs/breadcrumb` with props and exported types
+- ProgressBar documentation page at `/docs/progress-bar` with props and exported types
+- Hooks documentation page at `/docs/hooks` with URL overlay examples and adapter patterns
+- Sidebar documentation page at `/docs/sidebar` with props and exported types
+- Command documentation page at `/docs/command` with props and exported types
 
 ### Changed
 
 - Sidebar desktop appearance: card panel with neutral active state and collapsible icon rail
-- Command inline results float in a popover below the search field
-- Command shortcut badges render as a single unified chip
-- Component authoring rule requires full responsive behavior for public components
+- Command inline results render in a floating popover so the search field height stays fixed
+- Command shortcut badges use a single unified chip (e.g. `⌘` `K`) instead of separate key caps per key
+- Command dialog input shows the keyboard shortcut badge automatically when `shortcut` is set
+- Component authoring rule requires full responsive behavior (320px–desktop, touch targets, reduced motion, docs preview checks)
 
 ## 1.5.0 — 2026-06-15
 
 ### Added
 
-- `RadioGroup` and `Radio` components with optional labels, descriptions, and `variant="card"` choice cards
-- RadioGroup documentation page at `/docs/radio-group`
-- `Tabs` compound primitives with `default` and `line` variants
-- Tabs documentation page at `/docs/tabs`
+- `RadioGroup` and `Radio` components with optional labels and part-level `classNames`
+- RadioGroup documentation page at `/docs/radio-group` with props and exported types
+- `Radio.description` for optional secondary text under each option label
+- `RadioGroup.variant="card"` choice card layout with bordered selectable surfaces
+- `Tabs` compound primitives (`Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`) with `default` and `line` variants
+- Tabs documentation page at `/docs/tabs` with props and exported types
 
 ### Changed
 
-- Tabs panels fade and slide in on switch; line variant uses a sliding underline indicator
-- Docs nav, README, and library exports list components alphabetically
+- Tabs panels animate in with a fade and slide on tab switch; disabled when `prefers-reduced-motion: reduce` is set
+- Line variant tabs use a sliding underline indicator instead of per-trigger borders
+- Docs nav, README component sections, and `src/index.ts` exports list components alphabetically
+- Component authoring rule requires alphabetical ordering when adding components to nav, README, and exports
 
 ## 1.4.0 — 2026-06-14
 
 ### Added
 
-- `Button`, `Checkbox`, `Dropdown`, and `Popover` components with documentation pages
-- `ButtonClassNames` and part-level `classNames` on public components
-- Cursor rule for GSL component authoring conventions
+- `Button` component with primary, secondary, outline, and ghost variants, loading spinner, and disabled state
+- `ButtonClassNames` and `classNames` prop for part-level Tailwind/class overrides (`root`, `label`, `spinner`)
+- Button documentation page at `/docs/button` with props and exported types
+- `Checkbox` component with optional label and part-level `classNames`
+- Checkbox documentation page at `/docs/checkbox` with props and exported types
+- `Dropdown` select-style component with clearable support and part-level `classNames`
+- Dropdown documentation page at `/docs/dropdown` with props and exported types
+- `Popover` compound primitives (`Popover`, `PopoverTrigger`, `PopoverContent`, etc.) with styled content surface
+- Popover documentation page at `/docs/popover` with props and exported types
+- Cursor rule `.cursor/rules/gsl-component-authoring.mdc` for component conventions
 
 ### Changed
 
-- Radix UI packages moved from peer dependencies to dependencies
-- `BulkImportModal` column mapping uses the public `Dropdown` component
-- Dropdown trigger uses Lucide `ChevronDown`; adds `lucide-react` as a dependency
-- Popover docs action-menu example and menu utility classes
-- `AppSwitcher` is data-only (`apps` + `loading` prop); round cropped app icons
+- Radix UI packages moved from peer dependencies to dependencies so a single `npm install @rfdtech/components` is sufficient
+- `FieldMappingSelect` in BulkImportModal now wraps the public `Dropdown` component
+- Dropdown trigger uses Lucide `ChevronDown` instead of a text glyph; adds `lucide-react` as a dependency
+- Popover docs example demonstrates an action menu pattern with `PopoverClose`; adds menu utility classes (`gsl-popover--menu`, `gsl-popover__menu`, `gsl-popover__menu-item`)
+- AppSwitcher app icons render image URLs as round cropped icons
+- `AppSwitcher` is data-only: pass `apps` directly and control loading with the `loading` prop; panel shows a Lucide spinner while loading
 
 ### Removed
 
-- `AppSwitcher` remote fetch API (`baseUrl`, `accessToken`, `useMeApps`, and related types)
+- `AppSwitcher` remote fetch via `baseUrl` / `accessToken`
+- `useMeApps`, `fetchMeApps`, `MeAppsFetchError`, `buildMeAppsUrl`, `createMeAppsRequestInit`, `mapMeAppToAppItem`, `mapMeAppsToAppItems`
+- `MeApp`, `MeAppsResponse`, `UseMeAppsOptions`, `UseMeAppsReturn`, and `AppItem.metadata`
 
 ## 1.3.0 — 2026-06-14
 
 ### Added
 
 - `ThemeProvider` and `useTheme()` for light, dark, and system themes
-- Layered theme CSS with shared z-index tokens
+- Layered theme CSS (`base`, `light`, `dark`) with shared z-index tokens
 - Theme documentation page at `/docs/theme`
 
 ### Changed
 
 - Theme CSS loads once from the library entry instead of per-component imports
-- `ThemeProvider` syncs `data-gsl-theme` to `document.documentElement` for portaled overlays
+- `ThemeProvider` syncs `data-gsl-theme` to `document.documentElement` so portaled modals and popovers inherit the active palette
 
 ## 1.2.0 — 2026-06-14
 

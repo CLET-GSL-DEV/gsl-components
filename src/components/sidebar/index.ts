@@ -1,6 +1,7 @@
 export {
   Sidebar,
   SidebarBadge,
+  SidebarBrand,
   SidebarCollapse,
   SidebarContent,
   SidebarFooter,
@@ -18,6 +19,7 @@ export {
 export type {
   SidebarBadgeClassNames,
   SidebarBadgeProps,
+  SidebarBrandProps,
   SidebarClassNames,
   SidebarCollapseClassNames,
   SidebarCollapseProps,

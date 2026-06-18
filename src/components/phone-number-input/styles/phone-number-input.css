@@ -4,7 +4,7 @@
   position: relative;
   height: 40px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   background: var(--gsl-bg);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
@@ -111,7 +111,7 @@
   z-index: var(--gsl-z-select, 50);
   width: 320px;
   max-height: 300px;
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   border: 1px solid var(--gsl-border);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-lg);
@@ -130,7 +130,7 @@
   height: 36px;
   padding: 0 10px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-size: 14px;

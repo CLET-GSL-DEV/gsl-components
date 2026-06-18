@@ -68,6 +68,10 @@ export function DocsSidebar() {
           Back to demo
         </Link>
 
+        <Link to="/docs/changelog" className="demo-docs__back-link">
+          Changelog
+        </Link>
+
         <div className="demo-docs__external-links">
           <a
             href={githubUrl}

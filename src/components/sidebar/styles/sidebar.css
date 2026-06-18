@@ -44,7 +44,7 @@
   height: 32px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--gsl-radius) - 2px);
+  border-radius: calc(var(--gsl-rounded-base) - 2px);
   background: transparent;
   color: var(--gsl-text-secondary);
   cursor: pointer;
@@ -68,6 +68,11 @@
   min-height: 0;
   position: relative;
   overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.gsl-sidebar__content::-webkit-scrollbar {
+  display: none;
 }
 
 .gsl-sidebar__content::before {
@@ -100,7 +105,7 @@
   bottom: 0;
   display: block;
   width: 100%;
-  height: 60px;
+  height: 80px;
   flex-shrink: 0;
   background: linear-gradient(
     to top,
@@ -111,13 +116,14 @@
 }
 
 .gsl-sidebar__scroll-hint {
-  position: relative;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  bottom: 0;
   height: 28px;
-  margin-top: -28px;
+  margin-top: -5px;
   border: none;
   background: transparent;
   color: var(--gsl-text);
@@ -248,7 +254,7 @@
   margin-bottom: 16px;
   padding: 8px 14px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: var(--gsl-font);

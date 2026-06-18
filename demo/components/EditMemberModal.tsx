@@ -9,7 +9,7 @@ import {
   ModalClose,
   Button,
   Input,
-  Select,
+  Dropdown,
   CountrySelector,
   NetworkOperator,
   PhoneNumberInput,
@@ -211,9 +211,9 @@ export function EditMemberModal({
                         <Field invalid={!!fieldState.error}>
                           <FieldLabel>Primary Role</FieldLabel>
                           <FieldControl>
-                            <Select
-                              value={field.value}
-                              onValueChange={field.onChange}
+                            <Dropdown
+                              value={field.value || null}
+                              onValueChange={(v) => field.onChange(v ?? "")}
                               options={ROLE_OPTIONS}
                               placeholder="Select role..."
                               invalid={!!fieldState.error}

@@ -58,14 +58,70 @@ function ThemeSwitcher() {
 
 Tokens are defined in `theme.css` and applied on `.gsl-theme` and `document.documentElement` (for portaled overlays such as modals and popovers).
 
+### Colors
+
 | Token | Use |
 |-------|-----|
-| `--gsl-primary` | Buttons, focus rings, accents |
-| `--gsl-bg` | Surfaces |
+| `--gsl-bg` | Input, popover, and card backgrounds |
 | `--gsl-text` | Body text |
+| `--gsl-text-secondary` | Secondary text, icons |
+| `--gsl-text-muted` | Muted/placeholder text |
 | `--gsl-border` | Borders |
-| `--gsl-hover` | Hover fills |
-| `--gsl-overlay` | Modal backdrops |
+| `--gsl-border-strong` | Hover borders, active borders |
+| `--gsl-hover` | Hover backgrounds |
+| `--gsl-surface-subtle` | Sidebar, panel backgrounds |
+| `--gsl-surface-dark` | Active sidebar states |
+| `--gsl-surface-card` | Card component background (defaults to `--gsl-bg`) |
+| `--gsl-page-bg` | Page/app layout background |
+| `--gsl-overlay` | Modal/dialog backdrops |
+
+### Semantic
+
+| Token | Use |
+|-------|-----|
+| `--gsl-primary` | Buttons, focus rings, accents, avatar bg |
+| `--gsl-primary-light` | Focus ring background, selected backgrounds |
+| `--gsl-on-primary` | Text on primary backgrounds |
+| `--gsl-focus` | Focus ring color (defaults to `--gsl-primary`) |
+| `--gsl-error` | Invalid borders, error text, destructive actions |
+| `--gsl-error-text` | Error message text |
+| `--gsl-error-bg` | Destructive action hover background |
+| `--gsl-success` | Success trend, success variant color |
+| `--gsl-warning` | Warning trend, warning variant color |
+
+### Radius
+
+| Token | Default | Use |
+|-------|---------|-----|
+| `--gsl-rounded-base` | `8px` | Default border radius for inputs, menus, cards |
+| `--gsl-radius-xl` | `16px` | Pill inputs, header search bar, popovers |
+| `--gsl-radius-2xl` | `24px` | Sidebar, app layout panels |
+
+### Shadow
+
+| Token | Use |
+|-------|-----|
+| `--gsl-shadow-sm` | Subtle elevation |
+| `--gsl-shadow-md` | Medium popovers, dropdowns |
+| `--gsl-shadow-lg` | Large popovers, command dialog |
+
+### Z-index
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `--gsl-z-popover` | `1000` | Popovers, dropdowns |
+| `--gsl-z-overlay` | `1100` | Modal/dialog overlays |
+| `--gsl-z-modal` | `1101` | Modal content |
+| `--gsl-z-select` | `1200` | Radix select popovers |
+| `--gsl-z-alert` | `1200` | Alert dialogs |
+| `--gsl-z-alert-content` | `1201` | Alert dialog content |
+| `--gsl-z-dropdown` | `1300` | Dropdown menus (highest) |
+
+### Other
+
+| Token | Use |
+|-------|-----|
+| `--gsl-font` | Font family stack |
 
 Override on any ancestor (including `.gsl-theme`):
 

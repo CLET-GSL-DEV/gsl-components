@@ -38,7 +38,7 @@ function Preview({ file }: { file: File | null }) {
           style={{
             maxWidth: "100%",
             maxHeight: 160,
-            borderRadius: "var(--gsl-radius)",
+            borderRadius: "var(--gsl-rounded-base)",
             objectFit: "cover",
           }}
         />

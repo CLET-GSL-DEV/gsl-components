@@ -1,0 +1,31 @@
+.gsl-date-range-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gsl-date-range-selector__fields {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gsl-date-range-selector__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.gsl-date-range-selector__field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gsl-text-secondary);
+  padding-left: 2px;
+}
+
+.gsl-date-selector__calendar-day--in-range {
+  background: var(--gsl-primary-light);
+  border-radius: 0;
+}

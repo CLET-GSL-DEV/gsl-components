@@ -1,7 +1,7 @@
 import { forwardRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Select } from "../select/Select";
+import { Dropdown } from "../dropdown/Dropdown";
 import { cn } from "../../utils/cn";
 import { Button } from "../button";
 import { useTableContext } from "./TableContext";
@@ -142,61 +142,61 @@ export const TablePagination = forwardRef<
   return (
     <div ref={ref} className={cn("gsl-table__pagination", className)}>
       {totalItems != null && (
-        <span className="gsl-table__page-results">
-          Show{" "}
-          <Select
+        <div className="gsl-table__page-results">
+          Showing {start}&ndash;{end} of {totalItems}
+          <Dropdown
+            className="gsl-table__page-size"
             value={String(pageSize)}
-            onValueChange={(v) => setPageSize(Number(v))}
+            onValueChange={(v) => v && setPageSize(Number(v))}
             options={pageSizeOptions.map((s) => ({
               value: String(s),
-              label: String(s),
+              label: `${s} per page`,
             }))}
-          />{" "}
-          of {totalItems}
-        </span>
+          />
+        </div>
       )}
 
       <div className="gsl-table__pagination-pages">
-        <Button
-          variant="ghost"
-          size="sm"
-          disabled={!canPrev}
-          onClick={() => setPage(page - 1)}
-          aria-label="Previous page"
-        >
-          <ChevronLeft size={14} strokeWidth={1.5} aria-hidden />
-          Previous
-        </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={!canPrev}
+            onClick={() => setPage(page - 1)}
+            aria-label="Previous page"
+          >
+            <ChevronLeft size={14} strokeWidth={1.5} aria-hidden />
+            Previous
+          </Button>
 
-        {pageNumbers.map((p, i) =>
-          p === "ellipsis" ? (
-            <span key={`ellipsis-${i}`} className="gsl-table__page-ellipsis">
-              &hellip;
-            </span>
-          ) : (
-            <Button
-              key={p}
-              variant={p === page ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setPage(p)}
-              aria-current={p === page ? "page" : undefined}
-            >
-              {p}
-            </Button>
-          ),
-        )}
+          {pageNumbers.map((p, i) =>
+            p === "ellipsis" ? (
+              <span key={`ellipsis-${i}`} className="gsl-table__page-ellipsis">
+                &hellip;
+              </span>
+            ) : (
+              <Button
+                key={p}
+                variant={p === page ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setPage(p)}
+                aria-current={p === page ? "page" : undefined}
+              >
+                {p}
+              </Button>
+            ),
+          )}
 
-        <Button
-          variant="ghost"
-          size="sm"
-          disabled={!canNext}
-          onClick={() => setPage(page + 1)}
-          aria-label="Next page"
-        >
-          Next
-          <ChevronRight size={14} strokeWidth={1.5} aria-hidden />
-        </Button>
-      </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={!canNext}
+            onClick={() => setPage(page + 1)}
+            aria-label="Next page"
+          >
+            Next
+            <ChevronRight size={14} strokeWidth={1.5} aria-hidden />
+          </Button>
+        </div>
     </div>
   );
 });

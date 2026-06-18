@@ -407,6 +407,21 @@ import { Button } from "@rfdtech/components";
 Props: `variant`, `size`, `loading`, `loadingLabel`, `classNames`, and standard `button` attributes. Exported types: `ButtonProps`, `ButtonClassNames`, `ButtonVariant`, `ButtonSize`.
 
 
+## Card
+
+Surface card wrapper with optional header and design tokens for padding and background. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for inner spacing. See the [Card](/docs/card) docs page for props and exported types.
+
+```tsx
+import { Card } from "@rfdtech/components";
+
+<Card header="Profile">
+  <p>Content goes here.</p>
+</Card>
+```
+
+Props: `header`, `children`, `classNames`, `className`, plus standard `div` attributes. Exported types: `CardProps`, `CardClassNames`.
+
+
 ## Checkbox
 
 Accessible checkbox with optional label and part-level `classNames`. See the [Checkbox](/docs/checkbox) docs page for props and exported types.
@@ -915,6 +930,47 @@ const [items, setItems] = useState(["alpha", "beta", "gamma"]);
 ```
 
 Exports: `Sortable`, `SortableList`, `SortableItem`, `SortableHandle`, `reorderItems`. Types: `SortableProps`, `SortableListProps`, `SortableItemProps`, `SortableHandleProps`, `SortableId`, `SortableStrategy`, `SortableClassNames`.
+
+
+## Table
+
+Compound table with URL-driven search, pagination, filter, sort, row selection, and loading skeletons. See the [Table](/docs/table) docs page for props and exported types.
+
+```tsx
+import { useState } from "react";
+import {
+  Table,
+  TableHeader,
+  TableSearch,
+  TableContent,
+  TableFooter,
+  TablePagination,
+} from "@rfdtech/components";
+
+const [selected, setSelected] = useState<Set<string | number>>(new Set());
+
+<Table paramPrefix="users">
+  <TableHeader>
+    <TableSearch placeholder="Search users..." />
+  </TableHeader>
+  <TableContent
+    selectable
+    selectedIds={selected}
+    onSelectionChange={setSelected}
+    columns={[
+      { id: "name", header: "Name", accessorKey: "name", sortable: true },
+      { id: "email", header: "Email", accessorKey: "email", sortable: true },
+    ]}
+    data={users}
+    rowKey={(u) => u.id}
+  />
+  <TableFooter>
+    <TablePagination totalPages={5} totalItems={50} />
+  </TableFooter>
+</Table>
+```
+
+Props: `paramPrefix`, `classNames`, `className`. Exports: `Table`, `TableHeader`, `TableSearch`, `TableFilter`, `TableContent`, `TableFooter`, `TablePagination`. Types: `TableProps`, `TableHeaderProps`, `TableContentProps`, `TableFooterProps`, `TableSearchProps`, `TableFilterProps`, `TableClassNames`, `PaginationControlsProps`, `TableColumn`.
 
 
 ## Tabs

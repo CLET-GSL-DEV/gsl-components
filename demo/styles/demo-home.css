@@ -70,7 +70,7 @@
   height: 34px;
   padding: 0 10px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: var(--gsl-font);
@@ -174,7 +174,7 @@
   height: 28px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--gsl-radius) - 2px);
+  border-radius: calc(var(--gsl-rounded-base) - 2px);
   background: transparent;
   color: var(--gsl-text-muted);
   cursor: pointer;
@@ -413,4 +413,18 @@
 .demo-member-actions__btn:hover {
   background: var(--gsl-hover);
   color: var(--gsl-text);
+}
+
+/* ── Selection bar ── */
+
+.demo-home__selected-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-home__selected-count {
+  font-size: 13px;
+  color: var(--gsl-text-secondary);
+  white-space: nowrap;
 }

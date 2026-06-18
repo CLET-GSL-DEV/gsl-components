@@ -18,6 +18,10 @@ References: [`.cursor/rules/gsl-component-authoring.mdc`](.cursor/rules/gsl-comp
 
 **Do NOT add new npm packages.** The project avoids dependency bloat. Use native APIs, existing Radix primitives, or lucide-react for icons. Date formatting uses `Date.toLocaleDateString()`, calendar grids use native `Date` arithmetic.
 
+## No emojis
+
+**NEVER use emoji characters in any code, docs, examples, or MDX pages.** The only exception is country flag emojis (e.g. in `CountrySelector`). Everywhere else — icons, examples, docs, comments, commit messages — use lucide-react icons, inline SVGs, or plain text. No 🚀, no ✅, no 📊, no ⚙️, no none of that shit.
+
 ## Component architecture
 
 Every input-like component follows this pattern:

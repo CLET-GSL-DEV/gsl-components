@@ -39,7 +39,7 @@
   padding: 8px 0;
   background: var(--gsl-bg);
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   box-shadow: var(--gsl-shadow);
   opacity: 0;
   transform: translateY(-4px);
@@ -95,7 +95,7 @@
   height: var(--gsl-item-size);
   padding: 8px;
   border: none;
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   background: transparent;
   color: var(--gsl-text);
   text-decoration: none;

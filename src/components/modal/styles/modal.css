@@ -11,7 +11,7 @@
   max-height: none;
   flex-direction: column;
   overflow: hidden;
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-lg);
   font-family: var(--gsl-font);
@@ -53,7 +53,7 @@
   min-height: 40px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--gsl-radius) - 2px);
+  border-radius: calc(var(--gsl-rounded-base) - 2px);
   background: transparent;
   color: var(--gsl-text-secondary);
   cursor: pointer;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@rfdtech/components";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
@@ -15,7 +15,6 @@ import {
   ChevronDown,
   FileText,
   BarChart3,
-  ClipboardList,
   Shield,
   Bell,
   HelpCircle,
@@ -23,6 +22,7 @@ import {
   ScrollText,
   GraduationCap,
   BookOpen,
+  Grid3X3,
   Building2,
   Globe,
   Database,
@@ -36,13 +36,16 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarCollapse,
   SidebarFooter,
   SidebarHeader,
   SidebarNav,
+  SidebarTrigger,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarLink,
   SidebarBadge,
+  SidebarBrand,
   AppHeader,
   AppHeaderActions,
   AppHeaderSearch,
@@ -53,6 +56,12 @@ import {
   AppSidebar,
   AppBody,
   SidebarProvider,
+  DateRangeSelector,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalTitle,
+  ModalBody,
 } from "@rfdtech/components";
 
 export function DemoLayout() {
@@ -67,6 +76,7 @@ export function DemoLayout() {
   );
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [componentsModal, setComponentsModal] = useState(false);
   const handleSearch = useCallback(
     (value: string) => setSearchQuery(value),
     [],
@@ -125,10 +135,10 @@ export function DemoLayout() {
           badge: "check",
         },
         {
-          id: "exams",
-          label: "Examinations",
-          href: "#",
-          icon: ClipboardList,
+          id: "docs",
+          label: "Documentation",
+          href: "/docs",
+          icon: BookOpen,
           badge: "New",
         },
         {
@@ -238,35 +248,6 @@ export function DemoLayout() {
       ],
     },
   ];
-
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [showScrollHint, setShowScrollHint] = useState(false);
-  const [scrolledToBottom, setScrolledToBottom] = useState(false);
-  const [scrolledDown, setScrolledDown] = useState(false);
-
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-    const check = () => {
-      const hasOverflow = el.scrollHeight > el.clientHeight + 2;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
-      setShowScrollHint(hasOverflow && !atBottom);
-      setScrolledToBottom(atBottom);
-      setScrolledDown(el.scrollTop > 60);
-    };
-    check();
-    el.addEventListener("scroll", check, { passive: true });
-    const ro = new ResizeObserver(check);
-    ro.observe(el);
-    return () => {
-      el.removeEventListener("scroll", check);
-      ro.disconnect();
-    };
-  }, []);
-
-  const handleScrollDown = useCallback(() => {
-    contentRef.current?.scrollBy({ top: 200, behavior: "smooth" });
-  }, []);
 
   return (
     <SidebarProvider>
@@ -419,7 +400,7 @@ export function DemoLayout() {
         <AppSidebar>
           <Sidebar>
             <SidebarHeader>
-              <div className="demo-home__sidebar-brand">
+              <SidebarBrand>
                 <img
                   src="/gsl-logo.png"
                   alt=""
@@ -428,13 +409,11 @@ export function DemoLayout() {
                   className="demo-home__sidebar-logo"
                 />
                 <span className="demo-home__sidebar-title">GSL</span>
-              </div>
+              </SidebarBrand>
+              <SidebarTrigger>Menu</SidebarTrigger>
+              <SidebarCollapse />
             </SidebarHeader>
             <SidebarContent
-              ref={contentRef}
-              className={
-                scrolledDown ? "gsl-sidebar__content--scrolled" : undefined
-              }
             >
               <SidebarNav>
                 {navGroups.map((group) => (
@@ -470,20 +449,14 @@ export function DemoLayout() {
                 ))}
               </SidebarNav>
             </SidebarContent>
-            {showScrollHint && (
+            <SidebarFooter>
               <button
                 type="button"
-                className="gsl-sidebar__scroll-hint"
-                onClick={handleScrollDown}
-                aria-label="Scroll down"
+                className="demo-home__sidebar-footer-btn"
+                onClick={() => setComponentsModal(true)}
               >
-                <ChevronDown size={16} strokeWidth={2} />
-              </button>
-            )}
-            <SidebarFooter>
-              <button type="button" className="demo-home__sidebar-footer-btn">
-                <Settings size={18} strokeWidth={1.5} />
-                <span>Settings</span>
+                <Grid3X3 size={18} strokeWidth={1.5} />
+                <span>More Components</span>
                 <ChevronRight
                   size={16}
                   strokeWidth={1.5}
@@ -497,6 +470,19 @@ export function DemoLayout() {
           <Outlet />
         </AppBody>
       </AppLayout>
+      <Modal open={componentsModal} onOpenChange={setComponentsModal}>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Component playground</ModalTitle>
+          </ModalHeader>
+          <ModalBody>
+            <DateRangeSelector
+              onChange={(range) => console.log(range)}
+              placeholder={{ start: "Start date", end: "End date" }}
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </SidebarProvider>
   );
 }

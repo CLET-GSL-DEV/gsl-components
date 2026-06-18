@@ -1,0 +1,95 @@
+export const meta = {
+  title: "DateRangeSelector",
+  description: "Date range picker with two inputs, shared calendar popover, range highlighting, and controlled/uncontrolled value.",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { DateRangeSelectorPreview } from "../previews/code/DateRangeSelectorPreview";
+import dateRangeSource from "../previews/examples/date-range-selector.example.tsx?raw";
+
+# DateRangeSelector
+
+Date range picker with two inputs (From / To), a shared calendar popover, range highlighting, and month navigation. Supports controlled and uncontrolled value.
+
+## Example
+
+<ExampleTabs title="Date range" preview={<DateRangeSelectorPreview />} code={dateRangeSource} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `DateRangeValue` | — | Controlled range (`{ start, end }`) |
+| `defaultValue` | `DateRangeValue` | — | Default range (uncontrolled) |
+| `onChange` | `(range: DateRangeValue) => void` | — | Change handler |
+| `placeholder` | `{ start?: string; end?: string }` | — | Placeholder text per field |
+| `invalid` | `boolean` | `false` | Show error border styling |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `min` | `Date` | — | Minimum selectable date |
+| `max` | `Date` | — | Maximum selectable date |
+| `classNames` | `DateRangeSelectorClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+## Usage with react-hook-form
+
+```tsx
+import { useForm } from "react-hook-form";
+import { Form, FormField, Field, FieldControl, FieldLabel, FieldError, DateRangeSelector } from "@rfdtech/components";
+import type { DateRangeValue } from "@rfdtech/components";
+
+function FilterForm() {
+  const form = useForm<{ dateRange: DateRangeValue }>({
+    defaultValues: { dateRange: { start: null, end: null } },
+  });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((d) => console.log(d.dateRange))}>
+        <FormField
+          control={form.control}
+          name="dateRange"
+          render={({ field, fieldState }) => (
+            <Field invalid={!!fieldState.error}>
+              <FieldLabel>Date range</FieldLabel>
+              <FieldControl>
+                <DateRangeSelector value={field.value} onChange={field.onChange} />
+              </FieldControl>
+              <FieldError>{fieldState.error?.message}</FieldError>
+            </Field>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+## Types
+
+### `DateRangeValue`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `start` | `Date \| null` | Start date |
+| `end` | `Date \| null` | End date |
+
+### `DateRangeSelectorProps`
+
+See the props table above.
+
+### `DateRangeSelectorClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Root element (`.gsl-date-range-selector`) |
+| `field` | Per-field wrapper (`.gsl-date-range-selector__field`) |
+| `fieldLabel` | Field label (`.gsl-date-range-selector__field-label`) |
+| `trigger` | Date trigger button (`.gsl-date-selector__trigger`) |
+| `calendar` | Calendar panel (`.gsl-date-selector__calendar`) |
+
+## Notes
+
+- Click either "From" or "To" trigger to open the shared calendar. Selecting a start date then auto-switches to selecting the end date.
+- If the end date is before the start date, the range auto-swaps.
+- Days between start and end are highlighted with a subtle background.
+- Uses the same calendar design as `DateSelector`.

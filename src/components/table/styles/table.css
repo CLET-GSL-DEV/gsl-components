@@ -27,7 +27,7 @@
   padding: 8px 16px;
   height: stretch;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   background: var(--gsl-bg);
   min-width: 320px;
   transition: border-color 150ms ease;
@@ -94,7 +94,7 @@
   height: 34px;
   padding: 0 12px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   background: var(--gsl-bg);
   color: var(--gsl-text-secondary);
   font-family: var(--gsl-font);
@@ -145,7 +145,7 @@
   min-width: 240px;
   padding: 16px;
   background: var(--gsl-bg);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 }
 [data-gsl-theme="dark"] .gsl-table__filter-content {
@@ -173,7 +173,7 @@
   height: 32px;
   padding: 0 14px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius);
+  border-radius: var(--gsl-rounded-base);
   font-family: var(--gsl-font);
   font-size: 13px;
   cursor: pointer;
@@ -220,6 +220,12 @@
 
 /* Header cells get surface background */
 .gsl-table__content th,
+.gsl-table__content thead td,
+.gsl-table__content td {
+  padding: 0 16px;
+}
+
+.gsl-table__content th,
 .gsl-table__content thead td {
   background: var(--gsl-surface-subtle);
   font-size: 12px;
@@ -227,7 +233,6 @@
   color: var(--gsl-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 0 16px;
   height: 40px;
   text-align: left;
   white-space: nowrap;
@@ -300,8 +305,10 @@
 /* ── Pagination ── */
 
 .gsl-table__pagination {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   width: 100%;
 }
 
@@ -323,11 +330,34 @@
 }
 
 .gsl-table__page-results {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 13px;
   color: var(--gsl-text-muted);
   white-space: nowrap;
-  margin-left: auto;
-  flex: 1;
+}
+
+.gsl-table__page-size {
+  font-size: 13px;
+}
+
+/* ── Selection checkbox cell ── */
+
+.gsl-table__checkbox-cell {
+  width: 40px;
+  min-width: 40px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.gsl-table__checkbox-cell input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--gsl-primary);
 }
 
 /* ── Skeleton loading ── */
@@ -347,6 +377,13 @@
 .gsl-table__skeleton--td {
   height: 14px;
   width: 75%;
+}
+
+.gsl-table__skeleton--cb {
+  height: 16px;
+  width: 16px;
+  border-radius: 3px;
+  margin: 0 auto;
 }
 
 @keyframes gsl-table-skeleton-pulse {

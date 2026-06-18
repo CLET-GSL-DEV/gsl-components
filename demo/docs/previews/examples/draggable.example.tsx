@@ -9,7 +9,7 @@ export function DraggableHandleExample() {
         maxWidth: 360,
         height: 240,
         border: "1px dashed var(--gsl-border)",
-        borderRadius: "var(--gsl-radius)",
+        borderRadius: "var(--gsl-rounded-base)",
         background: "var(--gsl-surface-subtle)",
         overflow: "hidden",
       }}
@@ -22,7 +22,7 @@ export function DraggableHandleExample() {
             gap: 8,
             padding: 12,
             border: "1px solid var(--gsl-border)",
-            borderRadius: "var(--gsl-radius)",
+            borderRadius: "var(--gsl-rounded-base)",
             background: "var(--gsl-bg)",
             boxShadow: "0 1px 2px color-mix(in srgb, var(--gsl-text) 8%, transparent)",
             maxWidth: 220,

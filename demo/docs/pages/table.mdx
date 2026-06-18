@@ -10,12 +10,12 @@ import tableSource from "../previews/examples/table.example.tsx?raw";
 
 # Table
 
-Compound table component with built-in URL-driven search, pagination, filters, column sorting, and loading skeletons. All state lives in the URL — components read and write search params internally. Pass `paramPrefix` to `<Table>` to namespace state for multiple tables on one page.
+Compound table component with built-in URL-driven search, pagination, filters, column sorting, selection, and loading skeletons. All state lives in the URL — components read and write search params internally. Pass `paramPrefix` to `<Table>` to namespace state for multiple tables on one page.
 
 ## Example
 
 <ExampleTabs
-  title="Basic table"
+  title="Basic table with selection"
   preview={<TablePreview />}
   code={tableSource}
 />
@@ -49,7 +49,7 @@ Root wrapper. Accepts a `paramPrefix` that is provided via Context to all childr
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `paramPrefix` | `string` | — | URL key namespace shared by all child components |
+| `paramPrefix` | `string` | — | **Required.** URL key namespace shared by all child components |
 | `classNames` | `TableClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root div |
 
@@ -82,7 +82,7 @@ Filter fields must have a `name` attribute, e.g. `<select name="status">`. The n
 
 ## `<TableContent>`
 
-Renders a `<table>` with columns, data, optional sort, and loading skeletons.
+Renders a `<table>` with columns, data, optional sort, row selection, and loading skeletons.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -91,7 +91,35 @@ Renders a `<table>` with columns, data, optional sort, and loading skeletons.
 | `rowKey` | `(row: T) => string \| number` | — | Unique key extractor for each row |
 | `loading` | `boolean` | `false` | Show skeleton rows instead of data |
 | `loadingRows` | `number` | `5` | Number of skeleton rows to display |
+| `selectable` | `boolean` | `false` | Show a checkbox selection column with select-all in the header |
+| `selectedIds` | `Set<string \| number>` | — | Set of selected row keys. Pass with `onSelectionChange` when `selectable` is true |
+| `onSelectionChange` | `(selectedIds: Set<string \| number>) => void` | — | Called with a new `Set` on any selection toggle |
 | `className` | `string` | — | Merged onto the wrapper div |
+
+When `selectable` is true, a checkbox column is prepended to the table. The header checkbox toggles all visible rows (shows indeterminate state when partially selected). Individual row checkboxes toggle that row by its `rowKey` value. Selection is fully controlled: provide `selectedIds` and `onSelectionChange` to manage state externally. Sample usage:
+
+```tsx
+const [selected, setSelected] = useState<Set<string | number>>(new Set());
+
+<Table paramPrefix="users">
+  <TableHeader>
+    <TableSearch />
+    {selected.size > 0 && (
+      <Button variant="outline" onClick={handleBulkDelete}>
+        Delete {selected.size}
+      </Button>
+    )}
+  </TableHeader>
+  <TableContent
+    selectable
+    selectedIds={selected}
+    onSelectionChange={setSelected}
+    columns={columns}
+    data={users}
+    rowKey={(u) => u.id}
+  />
+</Table>
+```
 
 ### `TableColumn<T>`
 
@@ -110,12 +138,12 @@ Renders a `<table>` with columns, data, optional sort, and loading skeletons.
 
 ## `<TablePagination>`
 
-Renders page number buttons, Previous / Next, and a page-size selector. Reads `page` and `pageSize` from the URL; writes changes back. Uses a sliding window with ellipsis when total pages exceed `visiblePages`.
+Renders "Showing X-Y of Z" with a page-size dropdown on the left, and page number buttons with Previous/Next on the right. Reads `page` and `pageSize` from the URL; writes changes back. Uses a sliding window with ellipsis when total pages exceed `visiblePages`.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `totalPages` | `number` | — | Total number of pages |
-| `totalItems` | `number` | — | Total item count (shown as "Showing 1–10 of N") |
+| `totalItems` | `number` | — | Total item count (shown as "Showing X–Y of N") |
 | `pageSizeOptions` | `number[]` | `[10,20,50,100]` | Options in the page-size dropdown |
 | `visiblePages` | `number` | `10` | Max page number buttons before ellipsis |
 | `className` | `string` | — | Merged onto the root div |
@@ -131,7 +159,7 @@ Layout wrapper for the header bar. Typically contains `<TableSearch>` and `<Tabl
 
 ## `<TableFooter>`
 
-Layout wrapper for the footer bar. Typically contains `<TablePagination>`.
+Layout wrapper for the footer bar with `border-top`. Typically contains `<TablePagination>`.
 
 | Prop | Type | Description |
 |------|------|-------------|
@@ -162,6 +190,26 @@ const { page, pageSize, search, filters, pageSizeOptions } = useTableState({
 **Returns:** `{ page, pageSize, pageSizeOptions, setPage, setPageSize, search, setSearch, filters, setFilters, setFilter, sort, setSort, resetAll }`
 
 Filters are stored as `Record<string, string>`. Values from URL are always strings — coerce in your filtering logic as needed. Use `filters.status ?? ""` to provide a default.
+
+## `useTableFilter`
+
+Standalone hook for URL-driven filter state without search, pagination, or sort.
+
+```tsx
+import { useTableFilter } from "@rfdtech/components";
+
+const { filters, setFilter, setFilters, resetFilters } = useTableFilter({
+  defaults: { role: "admin" },
+  paramPrefix: "members",
+});
+```
+
+| Option | Type | Default |
+|--------|------|---------|
+| `defaults` | `Record<string, string>` | — | Default filter values |
+| `paramPrefix` | `string` | — | URL key namespace |
+
+**Returns:** `{ filters, setFilter, setFilters, resetFilters }`
 
 ## `useTablePagination`
 
@@ -195,6 +243,7 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 | `header` | Header bar (`.gsl-table__header-bar`) |
 | `content` | Content wrapper (`.gsl-table__content`) |
 | `footer` | Footer bar (`.gsl-table__footer`) |
+| `selectionCell` | Selection checkbox cells (`.gsl-table__checkbox-cell`) |
 
 ### `PaginationControlsProps`
 
@@ -206,13 +255,7 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 
 | Token | Effect |
 |-------|--------|
-| `--gsl-surface-subtle` | Header row background |
-| `--gsl-bg` | Search, filter trigger, pagination button background (secondary variant) |
-| `--gsl-hover` | Skeleton pulse fill, button hover backgrounds |
-| `--gsl-primary` | Active page number border, focus ring |
-| `--gsl-border` | All borders (rows, inputs, buttons) |
-| `--gsl-radius` | All border radii |
-| `--gsl-z-popover` | Filter popover z-index |
+| `--gsl-rounded-base` | All border radii |
 
 ## Notes
 
@@ -221,4 +264,7 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 - Sort is client-side only (`localeCompare`). No server integration.
 - Loading skeletons use a pulse animation; reduced-motion users get a static version.
 - Without a `paramPrefix`, keys are plain (`page`, `search`, `f_status`). With one, they are namespaced (`members.page`, `members.search`, `members.f_status`).
+- `paramPrefix` is required on `<Table>` — every table must have a unique namespace to avoid URL collisions.
 - The filter form captures all elements with a `name` attribute via `FormData`. For custom inputs (date pickers, multi-selects), ensure they set a `name` and participate in `FormData`.
+- Selection is page-local: "select all" only selects rows on the current page. Selected state is fully controlled via `selectedIds` / `onSelectionChange`.
+- The select-all checkbox shows an indeterminate dash when some (but not all) rows on the page are selected. Clicking it selects all visible rows; clicking again deselects them.

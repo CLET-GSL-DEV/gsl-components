@@ -12,7 +12,6 @@ export const docNavSections: DocNavSection[] = [
   {
     title: "Guide",
     items: [
-      { slug: "changelog", title: "Changelog" },
       { slug: "getting-started", title: "Getting started" },
       { slug: "hooks", title: "Hooks" },
       { slug: "theme", title: "Theme" },
@@ -28,10 +27,12 @@ export const docNavSections: DocNavSection[] = [
       { slug: "breadcrumb", title: "Breadcrumb" },
       { slug: "bulk-import-modal", title: "BulkImportModal" },
       { slug: "button", title: "Button" },
+      { slug: "card", title: "Card" },
       { slug: "checkbox", title: "Checkbox" },
       { slug: "command", title: "Command" },
       { slug: "country-selector", title: "CountrySelector" },
       { slug: "date-selector", title: "DateSelector" },
+      { slug: "date-range-selector", title: "DateRangeSelector" },
       { slug: "dialog", title: "Dialog" },
       { slug: "draggable", title: "Draggable" },
       { slug: "dropdown", title: "Dropdown" },
@@ -45,7 +46,6 @@ export const docNavSections: DocNavSection[] = [
       { slug: "popover", title: "Popover" },
       { slug: "progress-bar", title: "ProgressBar" },
       { slug: "radio-group", title: "RadioGroup" },
-      { slug: "select", title: "Select" },
       { slug: "sheet", title: "Sheet" },
       { slug: "sidebar", title: "Sidebar" },
       { slug: "sortable", title: "Sortable" },

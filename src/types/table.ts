@@ -32,6 +32,7 @@ export interface TableClassNames {
   header?: string;
   content?: string;
   footer?: string;
+  selectionCell?: string;
 }
 
 /* ── Props ── */
@@ -40,7 +41,7 @@ export interface TableProps extends HTMLAttributes<HTMLDivElement> {
   classNames?: TableClassNames;
   className?: string;
   /** URL param namespace shared by all child table components */
-  paramPrefix?: string;
+  paramPrefix: string;
 }
 
 export interface TableHeaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -57,6 +58,12 @@ export interface TableContentProps<T = unknown>
   loading?: boolean;
   /** Number of skeleton rows to show while loading (default 5) */
   loadingRows?: number;
+  /** Show a checkbox selection column (default false) */
+  selectable?: boolean;
+  /** Set of selected row keys. Required with onSelectionChange when selectable. */
+  selectedIds?: Set<string | number>;
+  /** Called when selection changes. Required with selectedIds when selectable. */
+  onSelectionChange?: (selectedIds: Set<string | number>) => void;
 }
 
 export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {

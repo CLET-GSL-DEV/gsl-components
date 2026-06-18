@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `Table` component with debounced search, filter popover, sortable columns, sort arrow indicators, pagination controls, and data-driven content rendering via `TableColumn[]`
+- `Table` component with debounced search, filter popover, sortable columns, sort arrow indicators, pagination controls, row selection with select-all/indeterminate checkbox, and data-driven content rendering via `TableColumn[]`
 - `AppHeader` — compound header with `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderNotifications`, and `AppHeaderProfile` sub-components
 - `AppHeaderSearch` — data-driven search using `Command` primitives; `data` prop (groups of items with `label: ReactNode`), debounced `onSearch` for tanstack query integration, `showEmpty`/`emptyLabel` for no-results state, `children` for custom list content; list rendering memoized on `[data]`
 - `AppHeaderNotifications` — bell trigger → Radix popover with loading skeleton (pulse animation), `loadingLabel` prop for accessible loading state, and consumer-rendered notification items
@@ -22,17 +22,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `OtpInput` — OTP input with configurable length, paste-from-any-slot support, keyboard navigation, `onComplete` callback, and forwardRef for react-hook-form
 - `PhoneNumberInput` — phone input with country code selector (flag + dial code), auto-detection of country from phone number prefix
 - `UploadField` — file upload with drag-and-drop zone, file type icons (PDF/image/video/generic), remove button, `invalid`/`disabled` states
-- `Select` — Radix-based select with `options` array, `SelectClassNames` part-level overrides, `placeholder`, `invalid`/`disabled` states, forwardRef
+- `Dropdown` — gained `invalid` prop and `aria-invalid` support
+- `Card` — surface wrapper with `header` slot, `--gsl-surface-card` background, `--gsl-card-padding` token, and `CardClassNames`
+- `DateRangeSelector` — date range picker with linked From/To inputs, shared calendar, range highlighting, controlled/uncontrolled value
+- `SidebarBrand` — compound sub-component for sidebar brand area, auto-hides on collapse
+- `useTableFilter` hook — URL search-param based filter state with `paramPrefix` support
 - `useTablePagination` hook — URL search-param based pagination (`page`, `pageSize`) with `react-router-dom`
 - `useTableState` hook — URL search-param based table state (search, pagination, sort, filter) with `react-router-dom`
 - `useDebounce` hook for generic debounced values
 - `DocsLayout` component for documentation pages (split from `DemoLayout`)
 - `countries` utility — full country list with name, flag emoji, dial code, ISO code
-- CSS tokens `--gsl-surface-dark`, `--gsl-radius-xl`, `--gsl-radius-2xl`
+- CSS tokens `--gsl-surface-dark`, `--gsl-surface-card`, `--gsl-rounded-base` (replaces `--gsl-radius`), `--gsl-radius-xl`, `--gsl-radius-2xl`
 - `AppHeader` doc page with compound component docs, design token reference, and all sub-components
 - `AppLayout` doc page with layout diagram, auto-positioning docs, and design tokens
-- `MetricCard`, `CountrySelector`, `DateSelector`, `NetworkOperator`, `OtpInput`, `PhoneNumberInput`, `Select`, `UploadField` doc pages with interactive examples and react-hook-form usage sections
-- Tests for `CountrySelector`, `NetworkOperator`, `Select`, `AppHeader` (all sub-components), and `AppLayout` (all layout parts) — all with RHF integration coverage
+- `Card`, `CountrySelector`, `DateSelector`, `DateRangeSelector`, `NetworkOperator`, `OtpInput`, `PhoneNumberInput`, `UploadField` doc pages with interactive examples and react-hook-form usage sections
+- Tests for `CountrySelector`, `NetworkOperator`, `AppHeader` (all sub-components), `AppLayout`, `Card` — all with RHF integration coverage
 
 ### Changed
 
@@ -46,7 +50,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `AppHeaderActionsProps` moved to centralized `src/types/app-header.ts`
 - UploadField disabled drop zone shows `cursor: not-allowed`
 - `AppSidebar` renders as `<aside>` with ref forwarding (was raw Fragment)
-- `CountrySelector`, `NetworkOperator`, `Select`, `AppHeader`, and `AppLayout` now have full test suites with react-hook-form integration coverage
+- `CountrySelector`, `NetworkOperator`, `AppHeader`, and `AppLayout` now have full test suites with react-hook-form integration coverage
+- Table pagination shows "Showing {start} to {select} of {total}" with inline page-size dropdown
+- Table `paramPrefix` now required on `<Table>`
+- CommandGroup loading replaced with 3-row skeleton (was thin loading bar)
+- SidebarContent scrollbar hidden; scroll hint button and gradient overlays internalized to component
+- Sidebar links show `title` tooltip when collapsed
+- `--gsl-radius` token renamed to `--gsl-rounded-base`
+- Design tokens sections on docs pages now only list component-specific tokens
+- Bulk-import template download removed
+- Demo sidebar footer opens Modal with DateRangeSelector playground
+
+### Removed
+
+- `Select` component removed (redundant with `Dropdown`)
 
 
 ## [1.8.0] - 2026-06-15

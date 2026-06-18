@@ -1,11 +1,13 @@
 import type { TableColumn } from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
+import { useState } from "react";
 import {
   Users,
   UserCheck,
   CalendarPlus,
   Activity,
-  Download,
+  Trash2,
+  X,
 } from "lucide-react";
 import {
   Table,
@@ -16,6 +18,8 @@ import {
   TableFooter,
   TablePagination,
   MetricCard,
+  Card,
+  Dropdown,
   Button,
   useTableState,
 } from "@rfdtech/components";
@@ -30,6 +34,9 @@ const columns: TableColumn<GslMember>[] = [
 
 export function DemoPage() {
   const { page, pageSize, pageSizeOptions, search, filters } = useTableState({ defaultPageSize: 10 });
+  const [roleValue, setRoleValue] = useState(filters.role ?? "");
+  const [statusValue, setStatusValue] = useState(filters.status ?? "");
+  const [selected, setSelected] = useState<Set<string | number>>(new Set());
 
   const filtered = gslMembers.filter((m) => {
     const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase());
@@ -49,51 +56,76 @@ export function DemoPage() {
         <MetricCard label="Engagement Rate" value="94.2%" icon={<Activity size={16} strokeWidth={1.5} />} description="Average daily activity" trend="up" trendValue="+1.2%" />
       </div>
 
-      <div className="demo-card">
-        <Table>
+      <Card>
+        <Table paramPrefix="members">
           <TableHeader>
             <TableSearch placeholder="Search members..." />
             <div className="demo-filter-right">
-              <TableFilter>
+              {selected.size > 0 ? (
+                <div className="demo-home__selected-bar">
+                  <span className="demo-home__selected-count">
+                    {selected.size} selected
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelected(new Set())}
+                  >
+                    <X size={14} strokeWidth={1.5} />
+                    Clear
+                  </Button>
+                  <Button variant="primary" size="sm" style={{ gap: 6 }}>
+                    <Trash2 size={14} strokeWidth={1.5} />
+                    Delete
+                  </Button>
+                </div>
+              ) : (
+                <TableFilter>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Status</label>
-                  <select
-                    name="status"
-                    className="demo-home__filter-select"
-                    defaultValue={filters.status ?? ""}
-                  >
-                    <option value="">All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="pending">Pending</option>
-                  </select>
+                  <input type="hidden" name="status" value={statusValue} />
+                  <Dropdown
+                    value={statusValue}
+                    onValueChange={(v) => setStatusValue(v ?? "")}
+                    options={[
+                      { value: "active", label: "Active" },
+                      { value: "inactive", label: "Inactive" },
+                      { value: "pending", label: "Pending" },
+                    ]}
+                    placeholder="All statuses"
+                  />
                 </div>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Role</label>
-                  <select
-                    name="role"
-                    className="demo-home__filter-select"
-                    defaultValue={filters.role ?? ""}
-                  >
-                    <option value="">All</option>
-                    <option value="admin">Admin</option>
-                    <option value="editor">Editor</option>
-                    <option value="viewer">Viewer</option>
-                  </select>
+                  <input type="hidden" name="role" value={roleValue} />
+                  <Dropdown
+                    value={roleValue}
+                    onValueChange={(v) => setRoleValue(v ?? "")}
+                    options={[
+                      { value: "admin", label: "Admin" },
+                      { value: "editor", label: "Editor" },
+                      { value: "viewer", label: "Viewer" },
+                    ]}
+                    placeholder="All roles"
+                  />
                 </div>
               </TableFilter>
-              <Button>
-                <Download size={14} strokeWidth={1.5} />
-                Download CSV
-              </Button>
+              )}
             </div>
           </TableHeader>
-          <TableContent columns={columns} data={paged} rowKey={(m: GslMember) => m.id} />
+          <TableContent
+            selectable
+            selectedIds={selected}
+            onSelectionChange={setSelected}
+            columns={columns}
+            data={paged}
+            rowKey={(m: GslMember) => m.id}
+          />
           <TableFooter>
             <TablePagination totalPages={totalPages} totalItems={filtered.length} pageSizeOptions={pageSizeOptions} />
           </TableFooter>
         </Table>
-      </div>
+      </Card>
     </>
   );
 }

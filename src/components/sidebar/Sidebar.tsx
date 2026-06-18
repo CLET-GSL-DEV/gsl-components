@@ -5,12 +5,16 @@ import {
   forwardRef,
   isValidElement,
   useContext,
+  useEffect,
+  useRef,
+  useState,
   type ReactElement,
   type ReactNode,
 } from "react";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen, ChevronDown } from "lucide-react";
 import type {
   SidebarBadgeProps,
+  SidebarBrandProps,
   SidebarCollapseProps,
   SidebarContentProps,
   SidebarFooterProps,
@@ -169,14 +173,71 @@ export const SidebarHeader = forwardRef<HTMLDivElement, SidebarHeaderProps>(
   },
 );
 
-export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
-  function SidebarContent({ classNames, className, children }, ref) {
+export const SidebarBrand = forwardRef<HTMLDivElement, SidebarBrandProps>(
+  function SidebarBrand({ classNames, className, children }, ref) {
     return (
       <div
         ref={ref}
-        className={cn("gsl-sidebar__content", classNames?.content, className)}
+        className={cn("gsl-sidebar__header-brand", classNames?.root, className)}
       >
         {children}
+      </div>
+    );
+  },
+);
+
+export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
+  function SidebarContent({ classNames, className, children }, ref) {
+    const internalRef = useRef<HTMLDivElement>(null);
+    const [scrolledDown, setScrolledDown] = useState(false);
+    const [showScrollHint, setShowScrollHint] = useState(false);
+
+    useEffect(() => {
+      const el = internalRef.current;
+      if (!el) return;
+      const check = () => {
+        const hasOverflow = el.scrollHeight > el.clientHeight + 2;
+        const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
+        setShowScrollHint(hasOverflow && !atBottom);
+        setScrolledDown(el.scrollTop > 60);
+      };
+      check();
+      el.addEventListener("scroll", check, { passive: true });
+      return () => el.removeEventListener("scroll", check);
+    }, []);
+
+    const handleScrollHint = () => {
+      internalRef.current?.scrollBy({ top: 200, behavior: "smooth" });
+    };
+
+    // Merge forwarded ref with internal ref
+    const setRefs = (node: HTMLDivElement | null) => {
+      (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    };
+
+    return (
+      <div
+        ref={setRefs}
+        className={cn(
+          "gsl-sidebar__content",
+          scrolledDown && "gsl-sidebar__content--scrolled",
+          classNames?.content,
+          className,
+        )}
+      >
+        {children}
+        {showScrollHint && (
+          <button
+            type="button"
+            className="gsl-sidebar__scroll-hint"
+            onClick={handleScrollHint}
+            aria-label="Scroll for more"
+          >
+            <ChevronDown size={16} strokeWidth={2} aria-hidden />
+          </button>
+        )}
       </div>
     );
   },
