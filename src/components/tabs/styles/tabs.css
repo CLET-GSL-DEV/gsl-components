@@ -40,7 +40,7 @@
 .gsl-tabs__trigger {
   padding: 8px 14px;
   border: 1px solid transparent;
-  border-radius: var(--gsl-rounded-base) var(--gsl-rounded-base) 0 0;
+  border-radius: var(--gsl-radius-base) var(--gsl-radius-base) 0 0;
   background: transparent;
   color: var(--gsl-text-secondary);
   font-family: var(--gsl-font);
@@ -117,7 +117,7 @@
 
 .gsl-tabs[data-orientation="vertical"] .gsl-tabs__trigger {
   width: 100%;
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   margin-bottom: 0;
   text-align: left;
 }

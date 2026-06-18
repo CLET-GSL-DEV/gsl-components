@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useTableState, Button } from "@rfdtech/components";
+import { useTableState } from "@rfdtech/components";
 import type { TableColumn } from "@rfdtech/components";
 import {
   Table,
   TableHeader,
   TableSearch,
   TableContent,
+  TableBulkActions,
   TableFooter,
   TablePagination,
 } from "@rfdtech/components";
@@ -75,7 +76,7 @@ export function TableExample() {
   const [users, setUsers] = useState(initialUsers);
   const [selected, setSelected] = useState<Set<string | number>>(new Set());
 
-  const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
+  const { page, pageSize, pageSizeOptions, search } = useTableState({
     defaultPageSize: 5,
   });
 
@@ -87,8 +88,8 @@ export function TableExample() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
-  const handleDelete = () => {
-    setUsers((prev) => prev.filter((u) => !selected.has(u.id)));
+  const handleDelete = (ids: Set<string | number>) => {
+    setUsers((prev) => prev.filter((u) => !ids.has(u.id)));
     setSelected(new Set());
   };
 
@@ -96,17 +97,6 @@ export function TableExample() {
     <Table paramPrefix="users">
       <TableHeader>
         <TableSearch placeholder="Search users..." />
-        {selected.size > 0 && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleDelete}
-            style={{ gap: 6 }}
-          >
-            <Trash2 size={14} strokeWidth={1.5} />
-            Delete {selected.size}
-          </Button>
-        )}
       </TableHeader>
       <TableContent
         selectable
@@ -115,6 +105,19 @@ export function TableExample() {
         columns={columns}
         data={paged}
         rowKey={(u) => u.id}
+      />
+      <TableBulkActions
+        selectedIds={selected}
+        onClear={() => setSelected(new Set())}
+        actions={[
+          {
+            id: "delete",
+            label: "Delete",
+            icon: <Trash2 size={14} strokeWidth={1.5} />,
+            onClick: handleDelete,
+            destructive: true,
+          },
+        ]}
       />
       <TableFooter>
         <TablePagination

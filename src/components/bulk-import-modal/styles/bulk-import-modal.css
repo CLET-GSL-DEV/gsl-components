@@ -6,7 +6,7 @@
   --gsl-bulk-import-error-bg: var(--gsl-error-bg);
   --gsl-bulk-import-gutter: 24px;
   --gsl-shadow: var(--gsl-shadow-lg);
-  --gsl-rounded-base: 12px;
+  --gsl-radius-base: 12px;
 
   position: fixed;
   z-index: var(--gsl-z-modal);
@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   background: var(--gsl-bg);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   box-shadow: var(--gsl-shadow);
   overflow: hidden;
 }
@@ -631,7 +631,7 @@
   min-height: 220px;
   padding: 32px;
   border: 2px dashed var(--gsl-bulk-import-primary);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-surface-subtle);
 }
 
@@ -671,7 +671,7 @@
 .gsl-bulk-import__table-wrap {
   overflow: auto;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
 }
 
 .gsl-bulk-import__table-wrap--header tbody tr {
@@ -708,6 +708,15 @@
   width: 16px;
   height: 16px;
   accent-color: var(--gsl-bulk-import-primary);
+}
+
+.gsl-bulk-import__checkbox--indeterminate .gsl-checkbox__control {
+  background-color: var(--gsl-bulk-import-primary);
+  border-color: var(--gsl-bulk-import-primary);
+}
+
+.gsl-bulk-import__checkbox--indeterminate .gsl-checkbox__icon {
+  opacity: 0;
 }
 
 .gsl-bulk-import__radio {

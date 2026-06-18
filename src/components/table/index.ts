@@ -1,6 +1,7 @@
 export { Table, TableContent, TableFooter } from "./Table";
 export { TableHeader, TableSearch, TableFilter } from "./TableHeader";
 export { TablePagination } from "./TablePagination";
+export { TableBulkActions } from "./TableBulkActions";
 export type {
   TableClassNames,
   TableColumn,
@@ -11,4 +12,7 @@ export type {
   TableProps,
   TableSearchProps,
   PaginationControlsProps,
+  TableBulkAction,
+  TableBulkActionsClassNames,
+  TableBulkActionsProps,
 } from "../../types/table";

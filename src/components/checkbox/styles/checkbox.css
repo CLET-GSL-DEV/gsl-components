@@ -24,7 +24,7 @@
   height: 20px;
   margin-top: 1px;
   border: 1px solid var(--gsl-border);
-  border-radius: calc(var(--gsl-rounded-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base) - 2px);
   background: var(--gsl-bg);
   cursor: inherit;
   transition:

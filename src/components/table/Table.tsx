@@ -1,9 +1,7 @@
 import {
   forwardRef,
   useCallback,
-  useRef,
   useState,
-  useEffect,
   type ReactNode,
   type CSSProperties,
   type Ref,
@@ -14,6 +12,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
+import { Checkbox } from "../checkbox/Checkbox";
 import type { TableColumn } from "../../types/table";
 import type {
   TableProps,
@@ -108,7 +107,6 @@ function TableContentRender<T>(
   const hasData = columns.length > 0 && data.length > 0;
 
   // Selection state
-  const selectAllRef = useRef<HTMLInputElement>(null);
   const allSelected =
     selectable && data.length > 0
       ? data.every((row) => selectedIds?.has(rowKey!(row)))
@@ -117,23 +115,21 @@ function TableContentRender<T>(
     selectable && data.length > 0
       ? data.some((row) => selectedIds?.has(rowKey!(row)))
       : false;
+  const indeterminate = someSelected && !allSelected;
 
-  useEffect(() => {
-    if (selectAllRef.current) {
-      selectAllRef.current.indeterminate = someSelected && !allSelected;
-    }
-  }, [someSelected, allSelected]);
-
-  const handleSelectAll = useCallback(() => {
-    if (!onSelectionChange || !data.length) return;
-    const next = new Set(selectedIds ?? []);
-    if (allSelected) {
-      data.forEach((row) => next.delete(rowKey!(row)));
-    } else {
-      data.forEach((row) => next.add(rowKey!(row)));
-    }
-    onSelectionChange(next);
-  }, [allSelected, selectedIds, onSelectionChange, data, rowKey]);
+  const handleSelectAll = useCallback(
+    (checked: boolean) => {
+      if (!onSelectionChange || !data.length) return;
+      const next = new Set(selectedIds ?? []);
+      if (checked) {
+        data.forEach((row) => next.add(rowKey!(row)));
+      } else {
+        data.forEach((row) => next.delete(rowKey!(row)));
+      }
+      onSelectionChange(next);
+    },
+    [selectedIds, onSelectionChange, data, rowKey],
+  );
 
   const handleToggleRow = useCallback(
     (key: string | number) => {
@@ -163,7 +159,7 @@ function TableContentRender<T>(
   });
 
   return (
-    <div ref={ref} className={cn("gsl-table__content", className)} {...rest}>
+    <div ref={ref} className={cn("gsl-table__content", selectable && selectedIds && selectedIds.size > 0 && "gsl-table__content--has-selected", className)} {...rest}>
       {loading ? (
         <table>
           <thead>
@@ -217,13 +213,17 @@ function TableContentRender<T>(
             <tr>
               {selectable && (
                 <th className="gsl-table__checkbox-cell">
-                  <input
-                    ref={selectAllRef}
-                    type="checkbox"
-                    checked={allSelected}
-                    onChange={handleSelectAll}
-                    aria-label="Select all rows"
-                  />
+                  <span
+                    className={cn(
+                      indeterminate && "gsl-table__checkbox--indeterminate",
+                    )}
+                  >
+                    <Checkbox
+                      checked={allSelected}
+                      onCheckedChange={handleSelectAll}
+                      aria-label="Select all rows"
+                    />
+                  </span>
                 </th>
               )}
               {columns.map((col) => {
@@ -282,11 +282,10 @@ function TableContentRender<T>(
                   <tr key={key}>
                     {selectable && (
                       <td className="gsl-table__checkbox-cell">
-                        <input
-                          type="checkbox"
+                        <Checkbox
                           checked={selectedIds?.has(key) ?? false}
-                          onChange={() => handleToggleRow(key)}
-                          aria-label={`Select row`}
+                          onCheckedChange={() => handleToggleRow(key)}
+                          aria-label="Select row"
                         />
                       </td>
                     )}

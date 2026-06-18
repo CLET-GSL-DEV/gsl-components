@@ -1,7 +1,11 @@
-import { ThemeProvider, useTheme } from "@rfdtech/components";
+import { Dropdown, ThemeProvider, useTheme } from "@rfdtech/components";
 import type { GslTheme } from "@rfdtech/components";
 
-const themes: GslTheme[] = ["light", "dark", "system"];
+const themeOptions = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "system", label: "System" },
+];
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -9,18 +13,12 @@ export function ThemeToggle() {
   return (
     <label className="demo-theme-toggle">
       <span className="demo-theme-toggle__label">Theme</span>
-      <select
-        className="demo-theme-toggle__select"
-        value={theme}
-        onChange={(event) => setTheme(event.target.value as GslTheme)}
+      <Dropdown
         aria-label="Color theme"
-      >
-        {themes.map((option) => (
-          <option key={option} value={option}>
-            {option.charAt(0).toUpperCase() + option.slice(1)}
-          </option>
-        ))}
-      </select>
+        value={theme}
+        onValueChange={(value) => setTheme((value ?? "system") as GslTheme)}
+        options={themeOptions}
+      />
     </label>
   );
 }

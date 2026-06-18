@@ -471,7 +471,7 @@ export function DemoLayout() {
         </AppBody>
       </AppLayout>
       <Modal open={componentsModal} onOpenChange={setComponentsModal}>
-        <ModalContent>
+        <ModalContent showCloseButton>
           <ModalHeader>
             <ModalTitle>Component playground</ModalTitle>
           </ModalHeader>

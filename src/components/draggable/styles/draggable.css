@@ -22,7 +22,7 @@
   min-height: 40px;
   padding: 8px;
   border: 0;
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: transparent;
   color: var(--gsl-text-muted);
   cursor: grab;

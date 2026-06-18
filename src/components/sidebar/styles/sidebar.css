@@ -44,7 +44,7 @@
   height: 32px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--gsl-rounded-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base) - 2px);
   background: transparent;
   color: var(--gsl-text-secondary);
   cursor: pointer;
@@ -116,7 +116,7 @@
 }
 
 .gsl-sidebar__scroll-hint {
-  position: absolute;
+  position: sticky;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -254,7 +254,7 @@
   margin-bottom: 16px;
   padding: 8px 14px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: var(--gsl-font);

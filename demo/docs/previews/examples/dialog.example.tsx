@@ -49,7 +49,7 @@ export function DialogExample() {
                     height: 40,
                     padding: "0 12px",
                     border: "1px solid var(--gsl-border)",
-                    borderRadius: "var(--gsl-rounded-base)",
+                    borderRadius: "var(--gsl-radius-base)",
                     background: "var(--gsl-bg)",
                     color: "var(--gsl-text)",
                   }}
@@ -64,7 +64,7 @@ export function DialogExample() {
                     height: 40,
                     padding: "0 12px",
                     border: "1px solid var(--gsl-border)",
-                    borderRadius: "var(--gsl-rounded-base)",
+                    borderRadius: "var(--gsl-radius-base)",
                     background: "var(--gsl-bg)",
                     color: "var(--gsl-text)",
                   }}

@@ -25,6 +25,41 @@ export interface TableSortState {
   direction: SortDirection;
 }
 
+/* ── Bulk Actions ── */
+
+export interface TableBulkAction {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  onClick: (selectedIds: Set<string | number>) => void;
+  destructive?: boolean;
+}
+
+export interface TableBulkActionsClassNames {
+  root?: string;
+  count?: string;
+}
+
+export interface TableBulkActionsProps {
+  /** Currently selected row keys */
+  selectedIds: Set<string | number>;
+  /** Override the displayed count (defaults to selectedIds.size) */
+  selectedCount?: number;
+  /** Callback to clear all selections */
+  onClear?: () => void;
+  /** Predefined actions rendered as inline buttons */
+  actions?: TableBulkAction[];
+  /**
+   * Render prop for custom action content.
+   * Receives selectedIds so consumers never need to manage selection state directly.
+   */
+  renderActions?: (params: {
+    selectedIds: Set<string | number>;
+  }) => ReactNode;
+  classNames?: TableBulkActionsClassNames;
+  className?: string;
+}
+
 /* ── ClassNames ── */
 
 export interface TableClassNames {

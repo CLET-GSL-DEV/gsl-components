@@ -1030,7 +1030,7 @@ Exports: `Sortable`, `SortableList`, `SortableItem`, `SortableHandle`, `reorderI
 
 ## Table
 
-Compound table with URL-driven search, pagination, filter, sort, row selection, and loading skeletons. See the [Table](/docs/table) docs page for props and exported types.
+Compound table with URL-driven search, pagination, filter, sort, row selection, bulk actions, and loading skeletons. See the [Table](/docs/table) docs page for props and exported types.
 
 ```tsx
 import { useState } from "react";
@@ -1039,6 +1039,7 @@ import {
   TableHeader,
   TableSearch,
   TableContent,
+  TableBulkActions,
   TableFooter,
   TablePagination,
 } from "@rfdtech/components";
@@ -1060,13 +1061,19 @@ const [selected, setSelected] = useState<Set<string | number>>(new Set());
     data={users}
     rowKey={(u) => u.id}
   />
+  <TableBulkActions
+    selectedIds={selected}
+    actions={[
+      { id: "delete", label: "Delete", icon: <Trash2 size={14} />, onClick: (ids) => handleDelete(ids), destructive: true },
+    ]}
+  />
   <TableFooter>
     <TablePagination totalPages={5} totalItems={50} />
   </TableFooter>
 </Table>
 ```
 
-Props: `paramPrefix`, `classNames`, `className`. Exports: `Table`, `TableHeader`, `TableSearch`, `TableFilter`, `TableContent`, `TableFooter`, `TablePagination`. Types: `TableProps`, `TableHeaderProps`, `TableContentProps`, `TableFooterProps`, `TableSearchProps`, `TableFilterProps`, `TableClassNames`, `PaginationControlsProps`, `TableColumn`.
+Props: `paramPrefix`, `classNames`, `className`. Exports: `Table`, `TableHeader`, `TableSearch`, `TableFilter`, `TableContent`, `TableBulkActions`, `TableFooter`, `TablePagination`. Types: `TableProps`, `TableHeaderProps`, `TableContentProps`, `TableFooterProps`, `TableSearchProps`, `TableFilterProps`, `TableBulkActionsProps`, `TableBulkAction`, `TableBulkActionsClassNames`, `TableClassNames`, `PaginationControlsProps`, `TableColumn`.
 
 
 ## Tabs

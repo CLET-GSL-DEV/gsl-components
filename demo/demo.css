@@ -116,7 +116,7 @@ body {
   height: 32px;
   padding: 0 8px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: inherit;
@@ -146,7 +146,7 @@ body {
 .demo-button {
   padding: 10px 18px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-primary);
   color: var(--gsl-on-primary);
   font-size: 14px;
@@ -246,7 +246,7 @@ body {
 .demo-docs__nav-link {
   display: block;
   padding: 6px 8px;
-  border-radius: calc(var(--gsl-rounded-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base) - 2px);
   color: var(--gsl-text);
   text-decoration: none;
   font-size: 14px;
@@ -392,7 +392,7 @@ body {
   padding: 8px 12px;
   border: 1px solid var(--gsl-border);
   border-bottom: none;
-  border-radius: var(--gsl-rounded-base) var(--gsl-rounded-base) 0 0;
+  border-radius: var(--gsl-radius-base) var(--gsl-radius-base) 0 0;
   background: var(--gsl-bg);
 }
 
@@ -421,7 +421,7 @@ body {
 .demo-docs__copy-button {
   padding: 4px 10px;
   border: 1px solid var(--gsl-border);
-  border-radius: calc(var(--gsl-rounded-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base) - 2px);
   background: var(--gsl-bg);
   color: var(--gsl-text-secondary);
   font-size: 12px;
@@ -439,7 +439,7 @@ body {
   margin: 0;
   overflow: hidden;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
 }
 
 .demo-docs__content
@@ -457,7 +457,7 @@ body {
 
 .demo-docs__code-block .demo-docs__code-figure {
   border-top: none;
-  border-radius: 0 0 var(--gsl-rounded-base) var(--gsl-rounded-base);
+  border-radius: 0 0 var(--gsl-radius-base) var(--gsl-radius-base);
 }
 
 .demo-docs__code {
@@ -510,7 +510,7 @@ body {
 .demo-docs__table-wrap {
   overflow-x: auto;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
 }
 
 .demo-docs__table {
@@ -588,7 +588,7 @@ body {
 .demo-docs__example-tabs {
   margin: 0;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   overflow: visible;
 }
@@ -622,7 +622,7 @@ body {
   padding: 8px 14px;
   border: 1px solid transparent;
   border-bottom: none;
-  border-radius: var(--gsl-rounded-base) var(--gsl-rounded-base) 0 0;
+  border-radius: var(--gsl-radius-base) var(--gsl-radius-base) 0 0;
   background: transparent;
   color: var(--gsl-text-secondary);
   font-size: 13px;

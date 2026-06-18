@@ -28,7 +28,7 @@
   height: 40px;
   padding: 0 12px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: inherit;
@@ -66,7 +66,7 @@
   min-width: 260px;
   max-height: 320px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-md);
   display: flex;
@@ -84,7 +84,7 @@
   height: 36px;
   padding: 0 10px;
   border: 1px solid var(--gsl-border);
-  border-radius: calc(var(--gsl-rounded-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base) - 2px);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: inherit;

@@ -23,7 +23,7 @@ export function SortableExample() {
         maxWidth: 360,
         padding: 12,
         border: "1px dashed var(--gsl-border)",
-        borderRadius: "var(--gsl-rounded-base)",
+        borderRadius: "var(--gsl-radius-base)",
         background: "var(--gsl-surface-subtle)",
       }}
     >

@@ -173,7 +173,9 @@ chore: update CHANGELOG for version 1.8.0; document changes including new Form a
 
 ## Git rules
 
+- **NEVER PUSH TO MAIN. EVER. OR ELSE.**
 - **Never push to GitHub unless explicitly asked.** Stage and commit locally, but wait for confirmation before pushing.
+- When pushing is explicitly requested, push to a feature branch or the current working branch — never main.
 
 ## Useful patterns
 

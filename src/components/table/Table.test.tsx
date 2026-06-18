@@ -336,9 +336,9 @@ describe("Table", () => {
       </Table>,
     );
 
-    const selectAll = screen.getByLabelText("Select all rows") as HTMLInputElement;
-    expect(selectAll.indeterminate).toBe(true);
-    expect(selectAll.checked).toBe(false);
+    const selectAll = screen.getByLabelText("Select all rows");
+    expect(selectAll).toHaveAttribute("aria-checked", "false");
+    expect(document.querySelector(".gsl-table__checkbox--indeterminate")).toBeInTheDocument();
   });
 
   it("select-all is unchecked when nothing selected", () => {
@@ -356,9 +356,8 @@ describe("Table", () => {
       </Table>,
     );
 
-    const selectAll = screen.getByLabelText("Select all rows") as HTMLInputElement;
-    expect(selectAll.indeterminate).toBe(false);
-    expect(selectAll.checked).toBe(false);
+    const selectAll = screen.getByLabelText("Select all rows");
+    expect(selectAll).toHaveAttribute("aria-checked", "false");
   });
 
   it("select-all is checked when all rows selected", () => {
@@ -376,9 +375,8 @@ describe("Table", () => {
       </Table>,
     );
 
-    const selectAll = screen.getByLabelText("Select all rows") as HTMLInputElement;
-    expect(selectAll.indeterminate).toBe(false);
-    expect(selectAll.checked).toBe(true);
+    const selectAll = screen.getByLabelText("Select all rows");
+    expect(selectAll).toHaveAttribute("aria-checked", "true");
   });
 
   it("works with numeric row keys", async () => {

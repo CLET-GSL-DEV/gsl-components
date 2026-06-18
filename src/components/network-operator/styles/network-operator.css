@@ -24,7 +24,7 @@
   height: 40px;
   padding: 0 12px 0 8px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-family: inherit;
@@ -60,7 +60,7 @@
   width: 280px;
   padding: 4px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-md);
   display: flex;
@@ -74,7 +74,7 @@
   gap: 10px;
   padding: 8px 10px;
   border: none;
-  border-radius: calc(var(--gsl-rounded-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base) - 2px);
   background: transparent;
   color: var(--gsl-text);
   font-family: inherit;

@@ -99,7 +99,7 @@
   min-height: 40px;
   padding: 0 12px;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-rounded-base);
+  border-radius: var(--gsl-radius-base);
 }
 
 .gsl-command--dialog .gsl-command__input-wrapper {
@@ -256,7 +256,7 @@
   gap: 8px;
   min-height: 40px;
   padding: 8px 10px;
-  border-radius: calc(var(--gsl-rounded-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base) - 2px);
   font-size: 14px;
   line-height: 1.4;
   color: var(--gsl-text);

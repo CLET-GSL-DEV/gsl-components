@@ -196,6 +196,28 @@ createSearchParamAdapter({
 
 ---
 
+## `useDebounce`
+
+Debounces a value by a given delay in milliseconds. Returns the latest value after the delay has elapsed without further changes.
+
+```tsx
+import { useDebounce } from "@rfdtech/components";
+
+const [search, setSearch] = useState("");
+const debouncedSearch = useDebounce(search, 300);
+
+// Use debouncedSearch for API calls, filter the table, etc.
+```
+
+| Argument | Type | Description |
+|----------|------|-------------|
+| `value` | `T` | The value to debounce |
+| `delay` | `number` | Delay in milliseconds before the value updates |
+
+**Returns:** the debounced value of type `T`.
+
+---
+
 ## `useTableState`
 
 Reads all table state (page, pageSize, search, filters, sort) from URL search params. Use to derive filtered and paged data.

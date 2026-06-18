@@ -12,7 +12,7 @@
   --gsl-font:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, sans-serif;
-  --gsl-rounded-base: 8px;
+  --gsl-radius-base: 8px;
   --gsl-radius-xl: 16px;
   --gsl-radius-2xl: 24px;
   --gsl-shadow-sm:
@@ -26,5 +26,6 @@
   --gsl-z-alert: 1200;
   --gsl-z-alert-content: 1201;
   --gsl-z-dropdown: 1300;
+  --gsl-z-datepicker: 1400;
   --gsl-surface-card: var(--gsl-bg);
 }

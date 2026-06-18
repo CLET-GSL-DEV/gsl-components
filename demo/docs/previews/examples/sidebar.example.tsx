@@ -158,7 +158,7 @@ export function SidebarExample() {
             minWidth: 0,
             padding: 16,
             border: "1px solid var(--gsl-border)",
-            borderRadius: "var(--gsl-rounded-base)",
+            borderRadius: "var(--gsl-radius-base)",
             background: "var(--gsl-bg)",
           }}
         >
