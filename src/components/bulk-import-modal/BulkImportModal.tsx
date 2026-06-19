@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import * as Dialog from "@radix-ui/react-dialog";
+import { Button } from "../button/Button";
 import type { BulkImportModalProps } from "../../types/bulk-import-modal";
 import { useBulkImportFlow } from "./hooks/useBulkImportFlow";
 import { getMappedFieldKeys, buildAllSourceColumns } from "./utils/mapRowsToRecords";
@@ -349,21 +350,14 @@ export function BulkImportModal({
             </AlertDialog.Description>
             <div className="gsl-bulk-import__exit-confirm-actions">
               <AlertDialog.Cancel asChild>
-                <button
-                  type="button"
-                  className="gsl-bulk-import__button gsl-bulk-import__button--ghost"
-                >
+                <Button variant="ghost">
                   Cancel
-                </button>
+                </Button>
               </AlertDialog.Cancel>
               <AlertDialog.Action asChild>
-                <button
-                  type="button"
-                  className="gsl-bulk-import__button gsl-bulk-import__button--primary"
-                  onClick={confirmExit}
-                >
+                <Button variant="primary" onClick={confirmExit}>
                   Exit flow
-                </button>
+                </Button>
               </AlertDialog.Action>
             </div>
           </AlertDialog.Content>
