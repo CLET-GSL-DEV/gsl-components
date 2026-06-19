@@ -17,7 +17,7 @@
   line-height: 1.35;
   text-align: center;
   white-space: normal;
-  box-shadow: var(--gsl-shadow-sm);
+  filter: drop-shadow(0 1px 2px rgb(60 64 67 / 30%)) drop-shadow(0 2px 6px rgb(60 64 67 / 15%));
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
