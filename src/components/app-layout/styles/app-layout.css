@@ -35,8 +35,7 @@
   flex: 1;
 
   border-radius: var(--gsl-panel-radius);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
   scrollbar-width: none;
 }
 

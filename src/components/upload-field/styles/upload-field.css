@@ -69,6 +69,7 @@
   color: var(--gsl-text-secondary);
   flex-shrink: 0;
 }
+
 .gsl-upload-field--has-files .gsl-upload-field__icon {
   background: var(--gsl-page-bg);
   box-shadow: var(--gsl-shadow-md);

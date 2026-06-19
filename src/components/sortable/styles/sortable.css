@@ -17,8 +17,7 @@
 }
 
 .gsl-sortable__list--horizontal {
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
 }
 
 .gsl-sortable__item {

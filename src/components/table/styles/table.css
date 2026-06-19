@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 0px;
+  padding: 12px 0;
   margin-bottom: calc(var(--gsl-app-layout-body-gap) / 2);
 }
 
@@ -147,11 +147,11 @@
   padding: 16px;
   background: var(--gsl-bg);
   border-radius: var(--gsl-radius-base);
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 10px rgb(0 0 0 / 10%);
 }
 [data-gsl-theme="dark"] .gsl-table__filter-content {
   border: 1px solid var(--gsl-border);
-  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 20px rgb(0 0 0 / 60%);
 }
 
 .gsl-table__filter-fields {
@@ -276,7 +276,7 @@
 
 /* Only border-bottom between rows */
 .gsl-table__content tr:nth-child(even):not(:first-child) {
-  background: rgba(255, 255, 255, 0.01);
+  background: rgb(255 255 255 / 1%);
 }
 .gsl-table__content thead tr {
   border-bottom: 1px solid var(--gsl-border);
@@ -363,7 +363,7 @@
   min-width: 40px;
   text-align: center;
   align-items: center;
-  justify-content: center;table cssgsl-table__content
+  justify-content: center;
 }
 
 .gsl-table__checkbox--indeterminate .gsl-checkbox__control {
@@ -423,7 +423,6 @@
 }
 
 .gsl-table__bulk-actions-clear {
-  align-items: center;
   justify-content: center;
   height: 24px;
   border: none;
@@ -432,8 +431,7 @@
   color: var(--gsl-text);
   background: transparent;
   cursor: pointer;
-  transition: color 100ms ease, background-color 100ms ease;
-  hover: gsl-table__bulk-actions-clear:hover;
+
 display: flex;
 	align-items: center;
 	gap: 4px;

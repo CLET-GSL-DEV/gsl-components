@@ -14,11 +14,11 @@
   --gsl-primary: #ef4444;
   --gsl-primary-light: #3f1515;
   --gsl-focus: var(--gsl-primary);
-  --gsl-on-primary: #ffffff;
+  --gsl-on-primary: #fff;
   --gsl-error: #f87171;
   --gsl-error-text: #fca5a5;
   --gsl-error-bg: #3f1515;
   --gsl-success: #4ade80;
   --gsl-warning: #facc15;
-  --gsl-overlay: rgba(0, 0, 0, 0.6);
+  --gsl-overlay: rgb(0 0 0 / 60%);
 }
