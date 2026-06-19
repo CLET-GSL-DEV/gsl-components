@@ -354,6 +354,7 @@
     background: var(--gsl-panel-bg, var(--gsl-surface-subtle));
     transition:
       width 200ms ease,
+      max-width 200ms ease,
       padding 200ms ease;
   }
 }

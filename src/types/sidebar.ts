@@ -157,6 +157,8 @@ export interface SidebarLinkProps
   active?: boolean;
   asChild?: boolean;
   icon?: ReactNode;
+  /** If provided, renders as a react-router `<Link>` with this path */
+  to?: string;
   classNames?: SidebarLinkClassNames;
   className?: string;
   children: ReactNode;

@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No changes yet.
 
+## [1.16.1] - 2026-06-19
+
+### Added
+
+- SidebarLink `to` prop: renders as react-router `<Link>` for client-side navigation
+
+### Fixed
+
+- **Peer dependency externalization** — `react-router-dom` and `lucide-react` were bundled inside the library, causing `useLocation()` crash when consuming app ran its own `BrowserRouter`. Both are now externalized from the build and declared as peer dependencies, so the library and app share a single copy from the consumer's node_modules.
+- Tooltip arrow borders now face the correct direction per placement (top, bottom, left, right)
+
+### Changed
+
+- Moved `lucide-react` from `dependencies` to `peerDependencies` (consumer likely has it installed)
+
 ## [1.16.0] - 2026-06-19
 
 ### Added

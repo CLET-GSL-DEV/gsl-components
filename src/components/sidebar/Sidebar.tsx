@@ -11,6 +11,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
+import { Link } from "react-router-dom";
 import { PanelLeftClose, PanelLeftOpen, ChevronDown } from "lucide-react";
 import { Tooltip } from "../tooltip/Tooltip";
 import type {
@@ -360,12 +361,13 @@ function extractLabelText(node: ReactNode): string {
   return "";
 }
 
-export const SidebarLink = forwardRef<HTMLButtonElement, SidebarLinkProps>(
+export const SidebarLink = forwardRef<HTMLButtonElement | HTMLAnchorElement, SidebarLinkProps>(
   function SidebarLink(
     {
       active = false,
       asChild = false,
       icon,
+      to,
       classNames,
       className,
       children,
@@ -406,23 +408,41 @@ export const SidebarLink = forwardRef<HTMLButtonElement, SidebarLinkProps>(
     const labelItems = childItems.filter((child) => child !== badgeElement);
     const tooltipText = extractLabelText(labelItems).trim();
 
-    const linkElement = (
+    const linkContent = (
+      <>
+        {icon ? <span className="gsl-sidebar__link-icon">{icon}</span> : null}
+        <span className="gsl-sidebar__link-label">{labelItems}</span>
+        {badgeElement}
+      </>
+    );
+
+    const inner = to ? (
+      <Link
+        to={to}
+        className={linkClassName}
+        {...(props as Record<string, unknown>)}
+      >
+        {linkContent}
+      </Link>
+    ) : (
+      <button
+        ref={ref as React.Ref<HTMLButtonElement>}
+        type="button"
+        role="link"
+        className={linkClassName}
+        {...props}
+      >
+        {linkContent}
+      </button>
+    );
+
+    const wrappedInner = (
       <SidebarLinkContext.Provider value={true}>
-        <button
-          ref={ref}
-          type="button"
-          role="link"
-          className={linkClassName}
-          {...props}
-        >
-          {icon ? <span className="gsl-sidebar__link-icon">{icon}</span> : null}
-          <span className="gsl-sidebar__link-label">{labelItems}</span>
-          {badgeElement}
-        </button>
+        {inner}
       </SidebarLinkContext.Provider>
     );
 
-    const linkWrapper = <span className="gsl-sidebar__link-wrapper">{linkElement}</span>;
+    const linkWrapper = <span className="gsl-sidebar__link-wrapper">{wrappedInner}</span>;
 
     if (collapsed && tooltipText) {
       return (
