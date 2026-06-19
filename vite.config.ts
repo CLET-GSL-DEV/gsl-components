@@ -22,6 +22,8 @@ export default defineConfig({
         id.startsWith("@radix-ui/") ||
         id === "react-router-dom" ||
         id.startsWith("react-router-dom/") ||
+        id === "react-router" ||
+        id.startsWith("react-router/") ||
         id === "lucide-react" ||
         id.startsWith("lucide-react/"),
       output: {
