@@ -65,6 +65,7 @@
     opacity: 1;
     transform: translateY(0);
   }
+
   to {
     opacity: 0;
     transform: translateY(-4px);
@@ -104,7 +105,7 @@
   position: relative;
 }
 
-.gsl-app-switcher__item:hover:not(:disabled):not(.gsl-app-switcher__item--disabled) {
+.gsl-app-switcher__item:hover:not(:disabled, .gsl-app-switcher__item--disabled) {
   background-color: var(--gsl-hover);
 }
 
@@ -195,7 +196,7 @@
   font-size: 12px;
   line-height: 1.3;
   text-align: center;
-  word-break: break-word;
+  overflow-wrap: anywhere;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;

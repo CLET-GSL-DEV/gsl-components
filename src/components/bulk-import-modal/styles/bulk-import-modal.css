@@ -1061,10 +1061,7 @@
 .gsl-bulk-import__exit-confirm {
   position: fixed;
   z-index: var(--gsl-z-alert-content);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   width: calc(100% - 48px);
   max-width: 480px;
   height: fit-content;
@@ -1185,7 +1182,7 @@
   border: 0;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .gsl-bulk-import {
     --gsl-bulk-import-gutter: 16px;
   }

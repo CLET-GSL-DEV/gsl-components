@@ -1,6 +1,14 @@
 import { Command as CommandPrimitive } from "cmdk";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Search } from "lucide-react";
-import { forwardRef, useCallback, useMemo, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type {
   CommandDialogProps,
   CommandEmptyProps,
@@ -18,6 +26,10 @@ import {
   CommandDialogProvider,
   useCommandDialog,
 } from "./CommandDialogContext";
+import {
+  CommandPopoverProvider,
+  useCommandPopover,
+} from "./CommandPopoverContext";
 import { useCommandShortcut } from "./hooks/useCommandShortcut";
 import { formatCommandShortcutLabels } from "./hooks/parseCommandShortcut";
 import "./styles/command.css";
@@ -53,14 +65,32 @@ function resolveInputShortcut(
 
 export const Command = forwardRef<HTMLDivElement, CommandProps>(
   function Command({ classNames, className, children, ...props }, ref) {
+    const [open, setOpen] = useState(false);
+    const inputWrapperRef = useRef<HTMLDivElement | null>(null);
+    const blurTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+    const cancelPendingClose = useCallback(() => {
+      clearTimeout(blurTimeoutRef.current);
+    }, []);
+
+    useEffect(() => {
+      return () => clearTimeout(blurTimeoutRef.current);
+    }, []);
+
     return (
-      <CommandPrimitive
-        ref={ref}
-        className={cn("gsl-command", classNames?.root, className)}
-        {...props}
-      >
-        {children}
-      </CommandPrimitive>
+      <PopoverPrimitive.Root open={open} onOpenChange={setOpen} modal={false}>
+        <CommandPopoverProvider
+          value={{ isInline: true, open, setOpen, inputWrapperRef, blurTimeoutRef, cancelPendingClose }}
+        >
+          <CommandPrimitive
+            ref={ref}
+            className={cn("gsl-command", classNames?.root, className)}
+            {...props}
+          >
+            {children}
+          </CommandPrimitive>
+        </CommandPopoverProvider>
+      </PopoverPrimitive.Root>
     );
   },
 );
@@ -152,6 +182,7 @@ export const CommandDialog = forwardRef<HTMLDivElement, CommandDialogProps>(
 
 export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
   function CommandInput({ classNames, className, shortcut, ...props }, ref) {
+    const popover = useCommandPopover();
     const dialogContext = useCommandDialog();
     const resolvedShortcut = resolveInputShortcut(
       shortcut,
@@ -163,8 +194,23 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
       [resolvedShortcut],
     );
 
-    return (
-      <div className={cn("gsl-command__input-wrapper", classNames?.wrapper)}>
+    const handleFocus = useCallback(() => {
+      if (popover?.isInline) {
+        popover.cancelPendingClose();
+        popover.setOpen(true);
+      }
+    }, [popover]);
+
+    const handleBlur = useCallback(() => {
+      if (popover?.isInline && popover.blurTimeoutRef) {
+        popover.blurTimeoutRef.current = setTimeout(() => {
+          popover.setOpen(false);
+        }, 150);
+      }
+    }, [popover]);
+
+    const input = (
+      <>
         <Search
           className="gsl-command__input-icon"
           aria-hidden="true"
@@ -188,6 +234,32 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
             ))}
           </kbd>
         ) : null}
+      </>
+    );
+
+    if (popover?.isInline) {
+      return (
+        <PopoverPrimitive.Anchor asChild>
+          <div
+            ref={popover.inputWrapperRef}
+            className={cn(
+              "gsl-command__input-wrapper",
+              classNames?.wrapper,
+            )}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+          >
+            {input}
+          </div>
+        </PopoverPrimitive.Anchor>
+      );
+    }
+
+    return (
+      <div
+        className={cn("gsl-command__input-wrapper", classNames?.wrapper)}
+      >
+        {input}
       </div>
     );
   },
@@ -195,6 +267,39 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
 
 export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
   function CommandList({ classNames, className, children, ...props }, ref) {
+    const popover = useCommandPopover();
+
+    if (popover?.isInline) {
+      return (
+        <PopoverPrimitive.Portal forceMount>
+          <PopoverPrimitive.Content
+            className="gsl-command__popover"
+            sideOffset={4}
+            align="start"
+            forceMount
+            data-testid="command-popover"
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            onPointerDown={() => popover.cancelPendingClose()}
+            onPointerDownOutside={() => {
+              popover.setOpen(false);
+            }}
+          >
+            <CommandPrimitive.List
+              ref={ref}
+              className={cn(
+                "gsl-command__list",
+                classNames?.list,
+                className,
+              )}
+              {...props}
+            >
+              {children}
+            </CommandPrimitive.List>
+          </PopoverPrimitive.Content>
+        </PopoverPrimitive.Portal>
+      );
+    }
+
     return (
       <CommandPrimitive.List
         ref={ref}

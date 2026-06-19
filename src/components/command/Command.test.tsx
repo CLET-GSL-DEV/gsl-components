@@ -43,25 +43,31 @@ function renderInlineCommand({
 }
 
 describe("Command", () => {
-  it("renders input wrapper, icon, and items", () => {
+  it("renders input wrapper, icon, and items", async () => {
+    const user = userEvent.setup();
     renderInlineCommand();
 
     expect(screen.getByRole("combobox")).toBeInTheDocument();
     expect(document.querySelector(".gsl-command__input-wrapper")).toBeInTheDocument();
     expect(document.querySelector(".gsl-command__input-icon")).toBeInTheDocument();
+
+    // Focus to open the popover so items are mounted
+    await user.click(screen.getByRole("combobox"));
     expect(screen.getByText("Email")).toBeInTheDocument();
     expect(screen.getByText("Full name")).toBeInTheDocument();
   });
 
-  it("renders inline list as a floating popover", () => {
+  it("renders inline list as a floating popover", async () => {
+    const user = userEvent.setup();
     renderInlineCommand();
 
-    const list = document.querySelector(
-      ".gsl-command:not(.gsl-command--dialog) .gsl-command__list",
-    );
+    // Focus to open the popover
+    await user.click(screen.getByRole("combobox"));
 
+    const popover = document.querySelector(".gsl-command__popover");
+    expect(popover).toBeInTheDocument();
+    const list = popover?.querySelector(".gsl-command__list");
     expect(list).toBeInTheDocument();
-    expect(list).toHaveStyle({ position: "absolute" });
   });
 
   it("filters items when typing in the input", async () => {
@@ -81,6 +87,8 @@ describe("Command", () => {
 
     renderInlineCommand({ onSelectEmail });
 
+    // Focus the input to open the popover
+    await user.click(screen.getByRole("combobox"));
     await user.click(screen.getByText("Email"));
 
     expect(onSelectEmail).toHaveBeenCalledWith("email");
@@ -105,7 +113,7 @@ describe("Command", () => {
       "custom-wrapper",
     );
     expect(screen.getByRole("combobox")).toHaveClass("custom-input");
-    expect(screen.getByText("One")).toHaveClass("custom-item");
+    expect(screen.getByText("One", { hidden: true } as any)).toHaveClass("custom-item");
   });
 
   it("shows input shortcut badge when CommandDialog shortcut is set", () => {
@@ -164,7 +172,7 @@ describe("Command", () => {
     expect(document.querySelector(".gsl-command__group-loading")).toBeInTheDocument();
     expect(document.querySelector(".gsl-command__skeleton-line")).toBeInTheDocument();
     expect(screen.queryByText("Email")).not.toBeInTheDocument();
-    expect(screen.getByRole("status", { name: "Loading fields" })).toBeInTheDocument();
+    expect(document.querySelector('[role="status"][aria-label="Loading fields"]')).toBeInTheDocument();
   });
 
   it("renders group children when not loading", () => {
@@ -179,7 +187,7 @@ describe("Command", () => {
     );
 
     expect(document.querySelector(".gsl-command__group-loading")).not.toBeInTheDocument();
-    expect(screen.getByText("Email")).toBeInTheDocument();
+    expect(screen.getByText("Email", { hidden: true } as any)).toBeInTheDocument();
   });
 
   it("shows group loading inside CommandDialog", () => {
@@ -239,7 +247,7 @@ describe("Command", () => {
       </Command>,
     );
 
-    const shortcut = screen.getByText("⌘").closest("kbd");
+    const shortcut = (screen.getByText as any)("⌘", { hidden: true }).closest("kbd");
     expect(shortcut).toHaveClass("gsl-command__shortcut");
   });
 

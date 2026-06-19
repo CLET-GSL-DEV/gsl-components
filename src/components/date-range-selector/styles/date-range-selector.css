@@ -208,7 +208,7 @@
   transition: background-color 100ms ease;
 }
 
-.gsl-date-selector__calendar-day:hover:not(:disabled):not(.gsl-date-selector__calendar-day--selected) {
+.gsl-date-selector__calendar-day:hover:not(:disabled, .gsl-date-selector__calendar-day--selected) {
   background: var(--gsl-hover);
 }
 
@@ -287,7 +287,7 @@
 
 /* ── Responsive ── */
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .gsl-date-selector__calendar {
     min-width: 280px;
     padding: 16px;

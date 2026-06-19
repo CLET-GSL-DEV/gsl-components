@@ -82,9 +82,7 @@
   font-weight: 400;
   cursor: pointer;
   text-align: left;
-  transition:
-    background-color 120ms ease;
-    background-color 120ms ease;
+  transition: background-color 120ms ease;
 }
 
 .gsl-network-operator__option:hover {

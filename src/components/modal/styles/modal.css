@@ -154,7 +154,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .gsl-modal {
     --gsl-modal-gutter: 16px;
   }

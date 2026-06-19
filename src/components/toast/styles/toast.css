@@ -128,7 +128,7 @@
   border-color: transparent !important;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .gsl-toast__viewport {
     --offset-right: 16px;
     --offset-left: 16px;

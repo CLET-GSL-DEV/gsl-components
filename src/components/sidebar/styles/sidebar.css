@@ -343,7 +343,7 @@
   padding-inline: 10px;
 }
 
-@media (min-width: 769px) {
+@media (width >= 769px) {
   .gsl-sidebar:not(.gsl-sidebar--mobile) {
     position: sticky;
     top: 24px;
@@ -357,7 +357,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .gsl-sidebar:not(.gsl-sidebar--mobile) {
     position: fixed;
     top: 0;

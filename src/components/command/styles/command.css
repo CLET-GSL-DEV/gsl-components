@@ -10,12 +10,11 @@
 
 .gsl-command:not(.gsl-command--dialog) {
   position: relative;
-  z-index: 0;
   gap: 0;
 }
 
 .gsl-command:not(.gsl-command--dialog):focus-within {
-  z-index: var(--gsl-z-select);
+  /* Popover handles z-index and positioning */
 }
 
 .gsl-command--dialog {
@@ -199,24 +198,30 @@
   display: inline;
 }
 
+.gsl-command__popover {
+  z-index: var(--gsl-z-select);
+  min-width: var(--radix-popover-trigger-width);
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius-xl);
+  box-shadow: var(--gsl-shadow-lg);
+  background: var(--gsl-bg);
+  overflow: hidden;
+}
+
+.gsl-command__popover[data-state="closed"] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .gsl-command__list {
   max-height: min(320px, 50dvh);
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden auto;
   padding: 6px;
   background: var(--gsl-bg);
 }
 
 .gsl-command:not(.gsl-command--dialog) .gsl-command__list {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  z-index: var(--gsl-z-select);
   margin: 0;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-xl);
-  box-shadow: var(--gsl-shadow-lg);
 }
 
 .gsl-command--dialog .gsl-command__list {

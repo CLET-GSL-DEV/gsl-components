@@ -6,8 +6,7 @@
 }
 
 .gsl-radio-group[data-orientation="horizontal"] {
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   align-items: center;
 }
 
