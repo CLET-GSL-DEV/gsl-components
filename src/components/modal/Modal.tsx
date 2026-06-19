@@ -1,6 +1,7 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { X } from "lucide-react";
-import { forwardRef } from "react";
+import { forwardRef, useCallback, useRef, useState } from "react";
 import type {
   ModalBodyProps,
   ModalContentProps,
@@ -11,6 +12,7 @@ import type {
   ModalTitleProps,
 } from "../../types/modal";
 import { cn } from "../../utils/cn";
+import { Button } from "../button/Button";
 import "./styles/modal.css";
 
 export const Modal = DialogPrimitive.Root;
@@ -37,27 +39,113 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
       classNames,
       children,
       showCloseButton = false,
+      size = "lg",
+      preventClose = false,
+      preventCloseTitle = "Discard changes?",
+      preventCloseDescription = "You have unsaved changes. Are you sure you want to close?",
       ...props
     },
     ref,
   ) {
+    const [showConfirm, setShowConfirm] = useState(false);
+    const hiddenCloseRef = useRef<HTMLButtonElement>(null);
+
+    const requestClose = useCallback(() => {
+      setShowConfirm(true);
+    }, []);
+
+    const handleInteractOutside = useCallback(
+      (event: Event) => {
+        if (preventClose) {
+          event.preventDefault();
+          requestClose();
+        }
+      },
+      [preventClose, requestClose],
+    );
+
+    const handleEscapeKeyDown = useCallback(
+      (event: KeyboardEvent) => {
+        if (preventClose) {
+          event.preventDefault();
+          requestClose();
+        }
+      },
+      [preventClose, requestClose],
+    );
+
     return (
-      <DialogPrimitive.Content
-        ref={ref}
-        className={cn("gsl-modal", classNames?.content, className)}
-        {...props}
-      >
-        {children}
-        {showCloseButton ? (
+      <>
+        <DialogPrimitive.Content
+          ref={ref}
+          className={cn(
+            "gsl-modal",
+            `gsl-modal--${size}`,
+            classNames?.content,
+            className,
+          )}
+          onInteractOutside={preventClose ? handleInteractOutside : undefined}
+          onEscapeKeyDown={preventClose ? handleEscapeKeyDown : undefined}
+          {...props}
+        >
+          {children}
+          {showCloseButton ? (
+            preventClose ? (
+              <button
+                type="button"
+                className={cn("gsl-modal__close", classNames?.close)}
+                aria-label="Close modal"
+                onClick={requestClose}
+              >
+                <X size={16} strokeWidth={2} aria-hidden />
+              </button>
+            ) : (
+              <DialogPrimitive.Close
+                type="button"
+                className={cn("gsl-modal__close", classNames?.close)}
+                aria-label="Close modal"
+              >
+                <X size={16} strokeWidth={2} aria-hidden />
+              </DialogPrimitive.Close>
+            )
+          ) : null}
           <DialogPrimitive.Close
-            type="button"
-            className={cn("gsl-modal__close", classNames?.close)}
-            aria-label="Close modal"
-          >
-            <X size={16} strokeWidth={2} aria-hidden />
-          </DialogPrimitive.Close>
-        ) : null}
-      </DialogPrimitive.Content>
+            ref={hiddenCloseRef}
+            style={{ display: "none" }}
+            aria-hidden
+          />
+        </DialogPrimitive.Content>
+
+        <AlertDialog.Root open={showConfirm} onOpenChange={setShowConfirm}>
+          <AlertDialog.Portal>
+            <AlertDialog.Overlay className="gsl-modal__confirm-overlay" />
+            <AlertDialog.Content className="gsl-modal__confirm">
+              <AlertDialog.Title className="gsl-modal__confirm-title">
+                {preventCloseTitle}
+              </AlertDialog.Title>
+              <AlertDialog.Description className="gsl-modal__confirm-description">
+                {preventCloseDescription}
+              </AlertDialog.Description>
+              <div className="gsl-modal__confirm-actions">
+                <AlertDialog.Cancel asChild>
+                  <Button variant="outline">Cancel</Button>
+                </AlertDialog.Cancel>
+                <AlertDialog.Action asChild>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setShowConfirm(false);
+                      hiddenCloseRef.current?.click();
+                    }}
+                  >
+                    Discard
+                  </Button>
+                </AlertDialog.Action>
+              </div>
+            </AlertDialog.Content>
+          </AlertDialog.Portal>
+        </AlertDialog.Root>
+      </>
     );
   },
 );
