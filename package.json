@@ -1,6 +1,6 @@
 {
   "name": "@rfdtech/components",
-  "version": "1.15.1",
+  "version": "1.15.2",
   "description": "Shared React component library for Ghana School of Law (GSL) projects",
   "type": "module",
   "main": "./dist/index.cjs",

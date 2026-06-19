@@ -7,11 +7,25 @@ export function ThemeProvider({
   theme: controlledTheme,
   defaultTheme = "system",
   onThemeChange,
+  storageKey,
   className,
   style,
   children,
 }: ThemeProviderProps) {
-  const [uncontrolledTheme, setUncontrolledTheme] = useState<GslTheme>(defaultTheme);
+  const resolvedDefault = useMemo(() => {
+    if (!storageKey) return defaultTheme;
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored === "light" || stored === "dark" || stored === "system") {
+        return stored;
+      }
+    } catch {
+      // localStorage unavailable
+    }
+    return defaultTheme;
+  }, [storageKey, defaultTheme]);
+
+  const [uncontrolledTheme, setUncontrolledTheme] = useState<GslTheme>(resolvedDefault);
   const isControlled = controlledTheme !== undefined;
   const theme = isControlled ? controlledTheme : uncontrolledTheme;
   const [systemTheme, setSystemTheme] = useState(getSystemTheme);
@@ -55,9 +69,14 @@ export function ThemeProvider({
       }
 
       setUncontrolledTheme(nextTheme);
+      try {
+        if (storageKey) localStorage.setItem(storageKey, nextTheme);
+      } catch {
+        // localStorage unavailable
+      }
       onThemeChange?.(nextTheme);
     },
-    [isControlled, onThemeChange],
+    [isControlled, onThemeChange, storageKey],
   );
 
   const contextValue = useMemo(
