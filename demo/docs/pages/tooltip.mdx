@@ -1,0 +1,52 @@
+export const meta = {
+  title: "Tooltip",
+  description: "Hover label for icon-only controls and truncated content",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { TooltipPreview } from "../previews/code/TooltipPreview";
+import tooltipSource from "../previews/examples/tooltip.example.tsx?raw";
+
+# Tooltip
+
+A pure-CSS hover tooltip with directional arrow. Position it above, below, left, or right of the trigger element. Used internally by `SidebarLink` on the collapsed icon rail.
+
+## Example
+
+<ExampleTabs
+  title="Side positioning"
+  preview={<TooltipPreview />}
+  code={tooltipSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `content` | `ReactNode` | — | Tooltip content (text or elements) |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | Preferred placement relative to the trigger |
+| `classNames` | `TooltipClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root wrapper |
+| `children` | `ReactNode` | — | The element that triggers the tooltip on hover |
+
+## Types
+
+### `TooltipProps`
+
+Props for `Tooltip`.
+
+### `TooltipClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Wrapper `<div>` (`.gsl-tooltip`) |
+| `content` | Tooltip bubble `<span>` (`.gsl-tooltip__content`) |
+
+## Notes
+
+- The tooltip is always in the DOM but hidden with `opacity: 0` and `visibility: hidden`; it reveals on `:hover` of the wrapper.
+- The arrow is rendered via a `::after` pseudo-element on the content bubble.
+- Tooltip content is not interactive (`pointer-events: none`), so it does not interfere with clicks on the trigger.
+- Respects `prefers-reduced-motion: reduce` by disabling the opacity/visibility transition.
+- `--gsl-z-tooltip` controls the z-index (falls back to `--gsl-z-popover`).
+- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
