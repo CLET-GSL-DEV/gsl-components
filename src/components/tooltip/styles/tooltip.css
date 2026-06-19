@@ -1,0 +1,65 @@
+.gsl-tooltip {
+  display: inline-flex;
+}
+
+.gsl-tooltip__content {
+  position: fixed;
+  z-index: var(--gsl-z-tooltip, var(--gsl-z-popover));
+  width: max-content;
+  max-width: min(240px, 90vw);
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--gsl-text);
+  color: var(--gsl-on-primary);
+  font-family: var(--gsl-font);
+  font-size: 11px;
+  line-height: 1.35;
+  text-align: center;
+  white-space: normal;
+  box-shadow: var(--gsl-shadow-sm);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 120ms ease,
+    visibility 120ms ease;
+}
+
+.gsl-tooltip__content--open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.gsl-tooltip__arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--gsl-text);
+  transform: rotate(45deg);
+}
+
+.gsl-tooltip__content--top .gsl-tooltip__arrow {
+  bottom: -4px;
+  left: calc(50% - 4px);
+}
+
+.gsl-tooltip__content--bottom .gsl-tooltip__arrow {
+  top: -4px;
+  left: calc(50% - 4px);
+}
+
+.gsl-tooltip__content--left .gsl-tooltip__arrow {
+  right: -4px;
+  top: calc(50% - 4px);
+}
+
+.gsl-tooltip__content--right .gsl-tooltip__arrow {
+  left: -4px;
+  top: calc(50% - 4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-tooltip__content {
+    transition: none;
+  }
+}
