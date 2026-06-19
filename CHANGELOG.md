@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.2] - 2026-06-19
+
+### Added
+
+- ThemeProvider `storageKey` prop: persists theme to localStorage across sessions
+
+## [1.15.1] - 2026-06-19
+
+### Changed
+
+- Command: inline list now renders via Radix Popover portal, escaping all parent stacking contexts; z-index and positioning handled by Popover instead of absolute CSS
+
+### Fixed
+
+- Malformed CSS in table checkbox-cell and network-operator rules causing PostCSS "Unknown word" errors in consuming projects
+
+### Added
+
+- stylelint with `lint:css` / `lint:css:fix` scripts; wired into `prepublishOnly` to catch CSS syntax errors before publish
+
 ## [1.14.0] - 2026-06-18
 
 ### Changed

@@ -8,6 +8,8 @@ export interface ThemeProviderProps {
   theme?: GslTheme;
   defaultTheme?: GslTheme;
   onThemeChange?: (theme: GslTheme) => void;
+  /** localStorage key for persisting theme across sessions. Omit for no persistence. */
+  storageKey?: string;
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
