@@ -7,7 +7,7 @@ import "./demo.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="system">
+    <ThemeProvider defaultTheme="system" storageKey="gsl-theme">
       <BrowserRouter>
         <App />
       </BrowserRouter>

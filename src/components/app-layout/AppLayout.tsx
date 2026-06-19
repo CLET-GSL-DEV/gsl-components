@@ -1,8 +1,8 @@
 import {
   Children,
-  cloneElement,
   isValidElement,
   forwardRef,
+  type ReactElement,
   type ReactNode,
 } from "react";
 import { cn } from "../../utils/cn";
@@ -15,28 +15,59 @@ export interface AppLayoutProps {
 
 export const AppLayout = forwardRef<HTMLDivElement, AppLayoutProps>(
   function AppLayout({ children, className }, ref) {
-    let header: ReactNode = null;
-    let sidebar: ReactNode = null;
-    let body: ReactNode = null;
+    let headerEl: ReactElement | null = null;
+    let sidebarEl: ReactElement | null = null;
+    let breadcrumbEl: ReactElement | null = null;
+    let bodyEl: ReactElement | null = null;
 
     Children.forEach(children, (child) => {
       if (!isValidElement(child)) return;
       const id = (child.type as any)?.componentId;
       if (id === "AppHeader") {
-        header = child;
+        headerEl = child;
       } else if (id === "AppSidebar") {
-        sidebar = child;
+        sidebarEl = child;
+      } else if (id === "AppBreadcrumb") {
+        breadcrumbEl = child;
       } else if (id === "AppBody") {
-        body = child;
+        bodyEl = child;
       }
     });
 
+    const extractProps = (el: ReactElement | null) => {
+      if (!el) return { className: undefined, children: null, rest: {} };
+      const { className: childClassName, children: childChildren, ...rest } = el.props as Record<string, unknown>;
+      return { className: childClassName as string | undefined, children: childChildren as ReactNode, rest };
+    };
+
+    const header = extractProps(headerEl);
+    const breadcrumb = extractProps(breadcrumbEl);
+    const sidebar = extractProps(sidebarEl);
+    const body = extractProps(bodyEl);
+
     return (
       <div ref={ref} className={cn("gsl-app-layout", className)}>
-        {sidebar && <div className="gsl-app-layout__sidebar">{sidebar}</div>}
+        {sidebarEl && (
+          <div className={cn("gsl-app-layout__sidebar", sidebar.className)} {...sidebar.rest}>
+            {sidebar.children}
+          </div>
+        )}
         <div className="gsl-app-layout__body">
-          {header && <div className="gsl-app-layout__header">{header}</div>}
-          {body && <div className="gsl-app-layout__content">{body}</div>}
+          {headerEl && (
+            <div className={cn("gsl-app-layout__header", header.className)} {...header.rest}>
+              {header.children}
+            </div>
+          )}
+          {breadcrumbEl && breadcrumb.children != null && breadcrumb.children !== false && (
+            <div className={cn("gsl-app-layout__breadcrumb", breadcrumb.className)} {...breadcrumb.rest}>
+              {breadcrumb.children}
+            </div>
+          )}
+          {bodyEl && (
+            <div className={cn("gsl-app-layout__content", body.className)} {...body.rest}>
+              {body.children}
+            </div>
+          )}
         </div>
       </div>
     );

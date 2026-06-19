@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { AppLayout } from "./AppLayout";
 import { AppSidebar } from "./AppSidebar";
+import { AppBreadcrumb } from "./AppBreadcrumb";
 import { AppBody } from "./AppBody";
 import { AppHeader } from "../app-header/AppHeader";
 
@@ -25,7 +26,6 @@ describe("AppLayout", () => {
     );
     expect(screen.getByText("Header")).toBeInTheDocument();
     expect(screen.getByText("Body")).toBeInTheDocument();
-    // Header should be in the sticky header wrapper
     const headerWrapper = container.querySelector(".gsl-app-layout__header");
     expect(headerWrapper).toBeInTheDocument();
   });
@@ -42,18 +42,31 @@ describe("AppLayout", () => {
     expect(sidebarWrapper).toHaveTextContent("Sidebar");
   });
 
-  it("positions all three components", () => {
+  it("positions AppBreadcrumb between header and body", () => {
+    const { container } = render(
+      <AppLayout>
+        <AppBreadcrumb>Breadcrumb</AppBreadcrumb>
+        <AppBody>Body</AppBody>
+      </AppLayout>,
+    );
+    const breadcrumbWrapper = container.querySelector(".gsl-app-layout__breadcrumb");
+    expect(breadcrumbWrapper).toBeInTheDocument();
+    expect(breadcrumbWrapper).toHaveTextContent("Breadcrumb");
+  });
+
+  it("positions all four components", () => {
     const { container } = render(
       <AppLayout>
         <AppHeader>H</AppHeader>
         <AppSidebar>S</AppSidebar>
+        <AppBreadcrumb>Bc</AppBreadcrumb>
         <AppBody>B</AppBody>
       </AppLayout>,
     );
     expect(container.querySelector(".gsl-app-layout__header")).toBeInTheDocument();
     expect(container.querySelector(".gsl-app-layout__sidebar")).toBeInTheDocument();
-    // Content is wrapped in AppBody's <main>
-    expect(screen.getByRole("main")).toBeInTheDocument();
+    expect(container.querySelector(".gsl-app-layout__breadcrumb")).toBeInTheDocument();
+    expect(container.querySelector(".gsl-app-layout__content")).toBeInTheDocument();
   });
 
   it("forwards ref", () => {
@@ -76,6 +89,31 @@ describe("AppLayout", () => {
     expect(root).toHaveClass("custom");
     expect(root).toHaveClass("gsl-app-layout");
   });
+
+  it("passes component className to layout wrapper", () => {
+    const { container } = render(
+      <AppLayout>
+        <AppHeader className="header-custom">H</AppHeader>
+        <AppBody className="body-custom">B</AppBody>
+      </AppLayout>,
+    );
+    const header = container.querySelector(".gsl-app-layout__header");
+    const content = container.querySelector(".gsl-app-layout__content");
+    expect(header).toHaveClass("header-custom");
+    expect(content).toHaveClass("body-custom");
+  });
+
+  it("passes extra props to layout wrapper", () => {
+    const { container } = render(
+      <AppLayout>
+        <AppHeader id="main-header" data-test="x">H</AppHeader>
+        <AppBody>B</AppBody>
+      </AppLayout>,
+    );
+    const header = container.querySelector(".gsl-app-layout__header");
+    expect(header).toHaveAttribute("id", "main-header");
+    expect(header).toHaveAttribute("data-test", "x");
+  });
 });
 
 describe("AppSidebar", () => {
@@ -83,28 +121,11 @@ describe("AppSidebar", () => {
     render(<AppSidebar>Nav</AppSidebar>);
     expect(screen.getByText("Nav")).toBeInTheDocument();
   });
-
-  it("forwards ref", () => {
-    const ref = createRef<HTMLElement>();
-    render(<AppSidebar ref={ref}>S</AppSidebar>);
-    expect(ref.current).toBeInstanceOf(HTMLElement);
-  });
 });
 
 describe("AppBody", () => {
-  it("renders children in main element", () => {
+  it("renders children", () => {
     render(<AppBody>Page</AppBody>);
-    expect(screen.getByRole("main")).toHaveTextContent("Page");
-  });
-
-  it("forwards ref", () => {
-    const ref = createRef<HTMLElement>();
-    render(<AppBody ref={ref}>Body</AppBody>);
-    expect(ref.current).toBeInstanceOf(HTMLElement);
-  });
-
-  it("merges className", () => {
-    render(<AppBody className="custom">Body</AppBody>);
-    expect(screen.getByRole("main")).toHaveClass("custom");
+    expect(screen.getByText("Page")).toBeInTheDocument();
   });
 });

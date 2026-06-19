@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background: var(--gsl-page-bg);
+}
+
 :root,
 .gsl-theme {
   -webkit-font-smoothing: antialiased;
@@ -20,6 +24,7 @@
     0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
   --gsl-shadow-md: 0 10px 24px rgb(60 64 67 / 12%);
   --gsl-shadow-lg: 0 20px 40px rgb(60 64 67 / 18%);
+  --gsl-z-header: 10;
   --gsl-z-popover: 1000;
   --gsl-z-overlay: 1100;
   --gsl-z-modal: 1101;

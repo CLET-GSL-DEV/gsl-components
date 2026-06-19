@@ -9,8 +9,9 @@
   max-width: min(240px, 90vw);
   padding: 6px 10px;
   border-radius: 6px;
-  background: var(--gsl-text);
-  color: var(--gsl-on-primary);
+  background: var(--gsl-bg);
+  color: var(--gsl-text);
+  border: 1px solid var(--gsl-border);
   font-family: var(--gsl-font);
   font-size: 11px;
   line-height: 1.35;
@@ -34,7 +35,9 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  background: var(--gsl-text);
+  background: var(--gsl-bg);
+  border-right: 1px solid var(--gsl-border);
+  border-bottom: 1px solid var(--gsl-border);
   transform: rotate(45deg);
 }
 

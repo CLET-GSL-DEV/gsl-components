@@ -90,6 +90,7 @@ export const TablePagination = forwardRef<
     totalPages,
     totalItems,
     pageSizeOptions = [10, 20, 50, 100],
+    defaultPageSize,
     visiblePages = 10,
     className,
   },
@@ -102,7 +103,7 @@ export const TablePagination = forwardRef<
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = readInt(searchParams, pageKey, 1);
-  const pageSize = readInt(searchParams, sizeKey, 10);
+  const pageSize = readInt(searchParams, sizeKey, defaultPageSize ?? pageSizeOptions[0]);
 
   const setPage = useCallback(
     (p: number) => {
