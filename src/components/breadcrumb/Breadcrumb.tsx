@@ -3,6 +3,7 @@ import {
   cloneElement,
   forwardRef,
   isValidElement,
+  type MouseEvent,
   type ReactElement,
 } from "react";
 import type {
@@ -76,6 +77,7 @@ export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>
       classNames,
       className,
       children,
+      onClick,
       ...props
     },
     ref,
@@ -87,16 +89,28 @@ export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>
     );
 
     if (asChild && isValidElement(children)) {
-      const child = children as ReactElement<{ className?: string }>;
+      const child = children as ReactElement<{ className?: string; onClick?: (e: MouseEvent) => void }>;
 
       return cloneElement(child, {
         ...props,
+        onClick: (e: MouseEvent) => {
+          e.preventDefault();
+          (onClick as any)?.(e);
+        },
         className: cn(linkClassName, child.props.className),
       });
     }
 
     return (
-      <a ref={ref} className={linkClassName} {...props}>
+      <a
+        ref={ref}
+        className={linkClassName}
+        onClick={(e) => {
+          e.preventDefault();
+          onClick?.(e);
+        }}
+        {...props}
+      >
         {children}
       </a>
     );
