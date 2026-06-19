@@ -19,7 +19,7 @@
   border: 1px solid var(--gsl-border);
   border-radius: var(--gsl-radius-xl);
   background: var(--gsl-bg);
-  box-shadow: var(--gsl-shadow-sm);
+  box-shadow: var(--gsl-shadow-md);
   font-family: var(--gsl-font);
   color: var(--gsl-text);
   transform: translate(-50%, -50%);
