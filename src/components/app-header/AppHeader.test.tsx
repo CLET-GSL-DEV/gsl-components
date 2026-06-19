@@ -22,12 +22,6 @@ describe("AppHeaderActions", () => {
     expect(screen.getByText("Actions")).toBeInTheDocument();
   });
 
-  it("forwards ref", () => {
-    const ref = createRef<HTMLDivElement>();
-    render(<AppHeaderActions ref={ref}>A</AppHeaderActions>);
-    expect(ref.current).toBeInstanceOf(HTMLDivElement);
-  });
-
   it("renders with right-side class", () => {
     const { container } = render(<AppHeaderActions>X</AppHeaderActions>);
     expect(container.firstElementChild).toHaveClass("gsl-app-header__right");

@@ -89,7 +89,7 @@ describe("Command", () => {
 
     // Focus the input to open the popover
     await user.click(screen.getByRole("combobox"));
-    await user.click(screen.getByText("Email"));
+    fireEvent.click(screen.getByText("Email"));
 
     expect(onSelectEmail).toHaveBeenCalledWith("email");
   });

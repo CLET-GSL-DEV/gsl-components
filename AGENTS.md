@@ -155,6 +155,37 @@ Alphabetical by `##` section title. One-liner + code block + `Props: ... Exporte
 - Test file: `src/components/{name}/{Name}.test.tsx`
 - Cover: forwardRef, invalid styling, disabled, key interactions (typing, paste, keyboard nav, onChange)
 
+## Before PR checklist
+
+Before creating a pull request, run the full validation pipeline to catch issues early:
+
+```
+npm run lint:css && npm run lint && npm run typecheck && npm run test && npm run build
+```
+
+(Or the equivalent `bun run` commands.) This mirrors `prepublishOnly` and ensures nothing slips through.
+
+## Externalized dependencies
+
+Some deps are **externalized** (not bundled into `dist/`) and declared as **peer dependencies** so the library and consuming app share a single copy:
+
+| Dep | Why externalized |
+|---|---|
+| `react`, `react-dom` | Core React must be shared |
+| `react-hook-form`, `zod`, `@hookform/resolvers` | Shared form context |
+| `@radix-ui/*` | Shared UI primitives with context |
+| `react-router-dom` | Router context — **critical**. Bundled copy causes "`useLocation()` may be used only in the context of a `<Router>`" crash |
+| `lucide-react` | Icon context + bundle dedup. Consumer likely has it already |
+
+To verify a dep is not bundled after a build:
+```
+# Check dist doesn't contain react-router-dom code
+grep -c "useSearchParams\|RouterProvider" dist/index.js
+# Should output 0 if properly externalized
+```
+
+This is NOT testable within the library's own test suite — the dual-context crash only manifests when the library is installed as a separate package in a consuming app. The grep check above is the closest we can get to an automated verification.
+
 ## Git rules
 
 - **NEVER PUSH TO MAIN. EVER. OR ELSE.**
