@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Tooltip component with top/right/bottom/left positioning, arrow indicator, and pure-CSS hover reveal
+- SidebarLink tooltip on collapsed rail: shows label text on hover via Tooltip
+- Modal size variants (`sm`, `md`, `lg`, `xl`) with independently customizable `--gsl-modal-max-width-*` tokens
+- Modal `preventClose` prop: intercepts X, overlay click, and Escape; shows confirmation dialog via AlertDialog
+- Modal centered layout with popover-style border and shadow
+
 ## [1.15.2] - 2026-06-19
 
 ### Added
