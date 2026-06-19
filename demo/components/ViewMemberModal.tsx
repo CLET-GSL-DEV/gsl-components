@@ -8,18 +8,10 @@ import {
   ModalClose,
   Button,
   Badge,
+  Avatar,
 } from "@rfdtech/components";
 import { Mail, Calendar, Shield, Hash, Clock } from "lucide-react";
 import type { DemoMember } from "../data/demoMembers";
-
-function nameToColor(name: string): string {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const h = Math.abs(hash) % 360;
-  return `hsl(${h}, 45%, 88%)`;
-}
 
 interface ViewMemberModalProps {
   member: DemoMember | null;
@@ -52,23 +44,7 @@ export function ViewMemberModal({ member, open, onOpenChange }: ViewMemberModalP
       <ModalContent showCloseButton>
         <ModalHeader>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: "50%",
-                background: nameToColor(member.name),
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 18,
-                fontWeight: 700,
-                color: "var(--gsl-text-secondary)",
-                border: "1px solid var(--gsl-border)",
-              }}
-            >
-              {member.initials}
-            </div>
+            <Avatar name={member.name} size="lg" />
             <div>
               <ModalTitle>{member.name}</ModalTitle>
               <div style={{ fontSize: 13, color: "var(--gsl-text-muted)", marginTop: 2 }}>

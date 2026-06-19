@@ -1,6 +1,6 @@
 export const meta = {
   title: "Modal",
-  description: "Full-page overlay",
+  description: "Centered overlay with size variants",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -9,7 +9,7 @@ import modalSource from "../previews/examples/modal.example.tsx?raw";
 
 # Modal
 
-Compound modal primitives for near full-viewport overlays with header, scrollable body, and footer regions. Built on Radix Dialog with a shell layout similar to `BulkImportModal`, but generic and composable.
+Compound modal primitives for centered overlays with header, scrollable body, and footer regions. Built on Radix Dialog. Comes in four sizes with independently customizable max-width tokens.
 
 Use **Modal** for large workflows or review panels. Use [**Dialog**](/docs/dialog) for smaller centered modals.
 
@@ -22,6 +22,40 @@ Use **Modal** for large workflows or review panels. Use [**Dialog**](/docs/dialo
 />
 
 Click **Review changes** to open the modal with `?modal=review-changes`. Close the modal or use the browser back button to clear the params.
+
+## Sizes
+
+| Size | Token | Max width |
+|------|-------|-----------|
+| `sm` | `--gsl-modal-max-width-sm` | 400px |
+| `md` | `--gsl-modal-max-width-md` | 512px |
+| `lg` (default) | `--gsl-modal-max-width-lg` | 640px |
+| `xl` | `--gsl-modal-max-width-xl` | 800px |
+| `2xl` | `--gsl-modal-max-width-2xl` | 1024px |
+
+Override any size token to customize without touching the CSS classes:
+
+```css
+:root {
+  --gsl-modal-max-width-lg: 720px;
+}
+```
+
+## Prevent close
+
+Pass `preventClose` to intercept the X button, overlay click, and Escape key. Instead of closing immediately, a confirmation dialog appears asking the user to confirm. Useful when the modal contains unsaved changes.
+
+Customize the confirm dialog text with `preventCloseTitle` and `preventCloseDescription`.
+
+```tsx
+<ModalContent
+  showCloseButton
+  size="xl"
+  preventClose={form.formState.isDirty}
+  preventCloseTitle="Discard changes?"
+  preventCloseDescription="You have unsaved changes. Are you sure you want to close?"
+>
+```
 
 ## URL state
 
@@ -61,11 +95,15 @@ Also accepts remaining Radix `Dialog.Overlay` props.
 
 ### `ModalContent`
 
-Near full-viewport modal shell with optional close control.
+Centered modal shell with size variants, optional close control, and close-prevention.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `showCloseButton` | `boolean` | `false` | Shows a top-right close control with an accessible label |
+| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | `"lg"` | Controls max-width via the corresponding `--gsl-modal-max-width-*` token |
+| `preventClose` | `boolean` | `false` | When true, intercepts close attempts and shows a confirmation dialog |
+| `preventCloseTitle` | `string` | `"Discard changes?"` | Title for the close-confirmation dialog |
+| `preventCloseDescription` | `string` | `"You have unsaved changes..."` | Description for the close-confirmation dialog |
 | `classNames` | `ModalContentClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the shell element |
 
@@ -124,6 +162,10 @@ Bottom action bar. Defaults to end-aligned flex layout for buttons.
 
 ## Types
 
+### `ModalSize`
+
+`"sm" | "md" | "lg" | "xl" | "2xl"`
+
 ### `ModalOverlayProps` / `ModalContentProps` / `ModalHeaderProps`
 
 Extend the corresponding element or Radix props with optional `classNames`.
@@ -166,10 +208,14 @@ Extend native `div` / `footer` attributes with optional `classNames`.
 
 ## Notes
 
-- Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
-- The shell uses a compulsory gutter on all sides (`24px` desktop, `16px` at `max-width: 768px`) so the panel never touches the viewport edge.
+- The modal is centered in the viewport with `top: 50%; left: 50%; transform: translate(-50%, -50%)`.
+- Border and shadow match the popover style (`1px solid var(--gsl-border)`, `var(--gsl-shadow-sm)`, `var(--gsl-radius-xl)`).
+- Default size is `lg` (640px). Override per-size max-widths via `--gsl-modal-max-width-{size}` tokens.
+- On mobile (≤768px) the modal fills the viewport without gutters or border-radius.
 - `ModalBody` scrolls internally when content exceeds the available height.
 - The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
+- `preventClose` shows an internal AlertDialog confirmation before closing.
+- Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
 - Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
 - Base `gsl-modal*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 - **URL-driven open state** is the recommended pattern: use `useModalSearchParam` with `open`, `onOpenChange`, and `openWith` (see [URL state](#url-state) above).

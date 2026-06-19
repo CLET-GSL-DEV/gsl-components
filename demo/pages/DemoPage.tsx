@@ -22,13 +22,31 @@ import {
   Card,
   Dropdown,
   useTableState,
+  Badge,
 } from "@rfdtech/components";
+
+function statusVariant(status: string) {
+  switch (status) {
+    case "Active":
+      return "success" as const;
+    case "Pending":
+      return "warning" as const;
+    case "Inactive":
+      return "outline" as const;
+    case "Suspended":
+      return "warning" as const;
+    case "Terminated":
+      return "error" as const;
+    default:
+      return "default" as const;
+  }
+}
 
 const columns: TableColumn<GslMember>[] = [
   { id: "name", header: "Name", accessorKey: "name", sortable: true, cell: ({ value }) => <span className="demo-home__cell-name">{String(value)}</span> },
   { id: "email", header: "Email", accessorKey: "email", sortable: true },
   { id: "role", header: "Role", accessorKey: "role", sortable: true },
-  { id: "status", header: "Status", accessorKey: "status", sortable: true, cell: ({ value }) => <span className={`demo-home__status demo-home__status--${String(value).toLowerCase()}`}>{String(value)}</span> },
+  { id: "status", header: "Status", accessorKey: "status", sortable: true, cell: ({ value }) => <Badge variant={statusVariant(String(value))}>{String(value)}</Badge> },
   { id: "joined", header: "Joined", accessorKey: "joined", sortable: true, cell: ({ value }) => <span className="demo-home__cell-date">{String(value)}</span> },
 ];
 

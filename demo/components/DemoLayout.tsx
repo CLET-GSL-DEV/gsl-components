@@ -2,10 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@rfdtech/components";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@rfdtech/components";
 import { demoApps } from "demo/data/demoApps";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
 import { buildPageItems, buildMemberItems } from "demo/data/demoSearch";
+import { packageVersion } from "demo/docs/site-meta";
 
 import {
   LayoutDashboard,
@@ -31,7 +33,6 @@ import {
   CreditCard,
   Archive,
   MessageSquare,
-  Check,
 } from "lucide-react";
 import {
   Sidebar,
@@ -55,6 +56,7 @@ import {
   AppLayout,
   AppSidebar,
   AppBody,
+  AppBreadcrumb,
   SidebarProvider,
   DateRangeSelector,
   Modal,
@@ -62,6 +64,22 @@ import {
   ModalHeader,
   ModalTitle,
   ModalBody,
+  Badge,
+  Button,
+  Input,
+  Checkbox,
+  ProgressBar,
+  Tooltip,
+  Avatar,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  RadioGroup,
+  Radio,
+  OtpInput,
+  Card,
+  MetricCard,
+  DateSelector,
 } from "@rfdtech/components";
 
 export function DemoLayout() {
@@ -125,14 +143,12 @@ export function DemoLayout() {
           label: "Dashboard",
           href: "/",
           icon: LayoutDashboard,
-          badge: "check",
         },
         {
           id: "members",
           label: "Members",
           href: "/members",
           icon: Users,
-          badge: "check",
         },
         {
           id: "docs",
@@ -146,14 +162,12 @@ export function DemoLayout() {
           label: "Candidates",
           href: "#",
           icon: GraduationCap,
-          badge: "142",
         },
         {
           id: "institutions",
           label: "Institutions",
           href: "#",
           icon: Building2,
-          badge: "12",
         },
       ],
     },
@@ -165,21 +179,18 @@ export function DemoLayout() {
           label: "Item Bank",
           href: "#",
           icon: BookOpen,
-          badge: "843",
         },
         {
           id: "moderation",
           label: "Moderation",
           href: "#",
           icon: Shield,
-          badge: "4",
         },
         {
           id: "results",
           label: "Results",
           href: "#",
           icon: FileText,
-          badge: "New",
         },
         {
           id: "certificates",
@@ -200,7 +211,6 @@ export function DemoLayout() {
           label: "Billing",
           href: "#",
           icon: CreditCard,
-          badge: "Beta",
         },
         { id: "archives", label: "Archives", href: "#", icon: Archive },
       ],
@@ -214,7 +224,6 @@ export function DemoLayout() {
           label: "Reports",
           href: "#",
           icon: FileText,
-          badge: "3",
         },
         { id: "alerts", label: "Alerts", href: "#", icon: Bell, badge: "8" },
         {
@@ -222,7 +231,6 @@ export function DemoLayout() {
           label: "Messages",
           href: "#",
           icon: MessageSquare,
-          badge: "5",
         },
       ],
     },
@@ -243,7 +251,6 @@ export function DemoLayout() {
           label: "Regions",
           href: "#",
           icon: Globe,
-          badge: "Soon",
         },
       ],
     },
@@ -409,6 +416,7 @@ export function DemoLayout() {
                   className="demo-home__sidebar-logo"
                 />
                 <span className="demo-home__sidebar-title">GSL</span>
+                <span className="demo-home__sidebar-version">v{packageVersion}</span>
               </SidebarBrand>
               <SidebarTrigger>Menu</SidebarTrigger>
               <SidebarCollapse />
@@ -427,20 +435,13 @@ export function DemoLayout() {
                           key={link.id}
                           active={isCurrent}
                           icon={<Icon size={18} strokeWidth={1.5} />}
-                          href={link.href}
-                          onClick={(e) => {
-                            if (link.href === "#") e.preventDefault();
+                          onClick={() => {
+                            if (link.href !== "#") navigate(link.href);
                           }}
                         >
                           {link.label}
                           {link.badge && (
-                            <SidebarBadge>
-                              {link.badge === "check" ? (
-                                <Check size={12} strokeWidth={2.5} />
-                              ) : (
-                                link.badge
-                              )}
-                            </SidebarBadge>
+                            <SidebarBadge>{link.badge}</SidebarBadge>
                           )}
                         </SidebarLink>
                       );
@@ -466,19 +467,212 @@ export function DemoLayout() {
             </SidebarFooter>
           </Sidebar>
         </AppSidebar>
+        <AppBreadcrumb>
+          {location.pathname !== "/" && (
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink onClick={() => navigate("/")}>Home</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>
+                    {location.pathname === "/members" ? "Members" : location.pathname.startsWith("/docs") ? "Documentation" : "Page"}
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          )}
+        </AppBreadcrumb>
         <AppBody>
           <Outlet />
         </AppBody>
       </AppLayout>
       <Modal open={componentsModal} onOpenChange={setComponentsModal}>
-        <ModalContent showCloseButton>
+        <ModalContent showCloseButton size="2xl">
           <ModalHeader>
-            <ModalTitle>Component playground</ModalTitle>
+            <ModalTitle>Components</ModalTitle>
           </ModalHeader>
           <ModalBody>
-            <DateRangeSelector
-              onChange={(range) => console.log(range)}
-            />
+            <div className="demo-components-grid">
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/badge"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Badge variant="success">Active</Badge>
+                </span>
+                <span className="demo-components-grid__name">Badge</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/button"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Button variant="primary" size="sm">Button</Button>
+                </span>
+                <span className="demo-components-grid__name">Button</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/input"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Input placeholder="Type here..." style={{ width: "100%" }} />
+                </span>
+                <span className="demo-components-grid__name">Input</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/checkbox"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Checkbox />
+                </span>
+                <span className="demo-components-grid__name">Checkbox</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/textarea"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Input placeholder="Textarea..." style={{ width: "100%" }} />
+                </span>
+                <span className="demo-components-grid__name">Textarea</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/otp-input"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <OtpInput length={3} />
+                </span>
+                <span className="demo-components-grid__name">OtpInput</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/progress-bar"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <ProgressBar value={60} />
+                </span>
+                <span className="demo-components-grid__name">ProgressBar</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/tooltip"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Tooltip content="Hello">
+                    <Button variant="secondary" size="sm">Hover</Button>
+                  </Tooltip>
+                </span>
+                <span className="demo-components-grid__name">Tooltip</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/avatar"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Avatar name="Jane Doe" size="md" />
+                </span>
+                <span className="demo-components-grid__name">Avatar</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/tabs"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Tabs defaultValue="a">
+                    <TabsList>
+                      <TabsTrigger value="a">Tab A</TabsTrigger>
+                      <TabsTrigger value="b">Tab B</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </span>
+                <span className="demo-components-grid__name">Tabs</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/radio-group"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <RadioGroup defaultValue="a">
+                    <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13 }}>
+                      <Radio value="a" /> Option
+                    </label>
+                  </RadioGroup>
+                </span>
+                <span className="demo-components-grid__name">RadioGroup</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/breadcrumb"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Breadcrumb>
+                    <BreadcrumbList>
+                      <BreadcrumbItem><BreadcrumbLink>Home</BreadcrumbLink></BreadcrumbItem>
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem><BreadcrumbPage>Page</BreadcrumbPage></BreadcrumbItem>
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </span>
+                <span className="demo-components-grid__name">Breadcrumb</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/card"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Card style={{ padding: 10, fontSize: 12 }}>Card content</Card>
+                </span>
+                <span className="demo-components-grid__name">Card</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/metric-card"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <MetricCard label="Users" value={42} />
+                </span>
+                <span className="demo-components-grid__name">MetricCard</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/date-selector"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <DateSelector />
+                </span>
+                <span className="demo-components-grid__name">DateSelector</span>
+              </button>
+              <button
+                type="button"
+                className="demo-components-grid__card"
+                onClick={() => { setComponentsModal(false); navigate("/docs/upload-field"); }}
+              >
+                <span className="demo-components-grid__preview">
+                  <Input placeholder="Upload..." disabled style={{ width: "100%" }} />
+                </span>
+                <span className="demo-components-grid__name">UploadField</span>
+              </button>
+            </div>
           </ModalBody>
         </ModalContent>
       </Modal>

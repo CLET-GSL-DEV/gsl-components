@@ -216,8 +216,8 @@
   padding: 2px 8px;
   overflow: hidden;
   border-radius: 999px;
-  background: var(--gsl-hover);
-  color: var(--gsl-text-secondary);
+  background: var(--gsl-sidebar-badge-bg, var(--gsl-primary));
+  color: var(--gsl-sidebar-badge-color, var(--gsl-on-primary));
   font-size: 11px;
   font-weight: 600;
   line-height: 1.4;
@@ -226,7 +226,8 @@
 }
 
 .gsl-sidebar__link--active .gsl-sidebar__link-badge {
-  color: var(--gsl-text);
+  --gsl-sidebar-badge-bg: var(--gsl-hover);
+  --gsl-sidebar-badge-color: var(--gsl-text-secondary);
 }
 
 .gsl-sidebar__link:hover {

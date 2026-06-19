@@ -1,9 +1,9 @@
+import { useState } from "react";
 import {
   Button,
   Modal,
   ModalBody,
   ModalContent,
-  ModalDescription,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
@@ -17,32 +17,36 @@ const reviewItems = [
   "Publish Q2 enrollment announcement",
   "Archive outdated policy PDFs",
   "Notify department heads by email",
-  "Schedule social posts for Monday",
-  "Review accessibility checklist",
-  "Confirm footer contact details",
-  "Export analytics snapshot",
 ];
 
 export function ModalExample() {
   const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
+  const [dirty, setDirty] = useState(false);
 
   return (
-    <>
-      <Button variant="secondary" onClick={() => openWith()}>
+    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+      <Button variant="secondary" onClick={() => { setDirty(false); openWith(); }}>
         Review changes
+      </Button>
+      <Button variant="secondary" onClick={() => { setDirty(true); openWith(); }}>
+        With preventClose
       </Button>
       <Modal open={open} onOpenChange={onOpenChange}>
         <ModalPortal>
           <ModalOverlay />
-          <ModalContent showCloseButton>
+          <ModalContent
+            showCloseButton
+            size="lg"
+            preventClose={dirty}
+          >
             <ModalHeader>
               <ModalTitle>Review changes</ModalTitle>
-              <ModalDescription>
-                Confirm the items below before publishing to the public site.
-                URL state: <code>?modal=review-changes</code>.
-              </ModalDescription>
             </ModalHeader>
             <ModalBody>
+              <p style={{ margin: "0 0 12px", fontSize: 14, color: "var(--gsl-text-secondary)" }}>
+                Confirm the items below before publishing.
+                {dirty && " Close prevention is active — try clicking the X or overlay."}
+              </p>
               <ul
                 style={{
                   margin: 0,
@@ -67,6 +71,6 @@ export function ModalExample() {
           </ModalContent>
         </ModalPortal>
       </Modal>
-    </>
+    </div>
   );
 }

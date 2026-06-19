@@ -58,12 +58,12 @@ function renderSidebar({
             <SidebarGroup>
               <SidebarGroupLabel>General</SidebarGroupLabel>
               <SidebarItem>
-                <SidebarLink href="/dashboard" active>
+                <SidebarLink active>
                   Dashboard
                 </SidebarLink>
               </SidebarItem>
               <SidebarItem>
-                <SidebarLink href="/settings">Settings</SidebarLink>
+                <SidebarLink>Settings</SidebarLink>
               </SidebarItem>
             </SidebarGroup>
           </SidebarNav>
@@ -140,7 +140,7 @@ describe("Sidebar", () => {
                   General
                 </SidebarGroupLabel>
                 <SidebarItem classNames={{ item: "custom-item" }}>
-                  <SidebarLink classNames={{ link: "custom-link" }} href="/home">
+                  <SidebarLink classNames={{ link: "custom-link" }}>
                     Home
                   </SidebarLink>
                 </SidebarItem>
@@ -169,8 +169,8 @@ describe("Sidebar", () => {
           <SidebarContent>
             <SidebarNav aria-label="Main">
               <SidebarItem>
-                <SidebarLink asChild active href="/reports">
-                  <a href="/reports" className="child-link">
+                <SidebarLink asChild active>
+                  <a className="child-link">
                     Reports
                   </a>
                 </SidebarLink>
@@ -196,7 +196,7 @@ describe("Sidebar", () => {
           <SidebarContent>
             <SidebarNav aria-label="Main">
               <SidebarItem>
-                <SidebarLink href="/users" icon={<span data-testid="users-icon" />}>
+                <SidebarLink icon={<span data-testid="users-icon" />}>
                   Users
                 </SidebarLink>
               </SidebarItem>
@@ -263,7 +263,7 @@ describe("Sidebar", () => {
           <SidebarContent>
             <SidebarNav aria-label="Main">
               <SidebarItem>
-                <SidebarLink href="/notifications">
+                <SidebarLink>
                   Notifications
                   <SidebarBadge>New</SidebarBadge>
                 </SidebarLink>
@@ -290,7 +290,7 @@ describe("Sidebar", () => {
           <SidebarContent>
             <SidebarNav aria-label="Main">
               <SidebarItem>
-                <SidebarLink href="/audit-logs">
+                <SidebarLink>
                   Audit Logs
                   <SidebarBadge>12</SidebarBadge>
                 </SidebarLink>
@@ -313,7 +313,7 @@ describe("Sidebar", () => {
           <SidebarContent>
             <SidebarNav aria-label="Main">
               <SidebarItem>
-                <SidebarLink href="/items">
+                <SidebarLink>
                   Items
                   <SidebarBadge classNames={{ badge: "custom-badge" }}>
                     3
@@ -333,5 +333,124 @@ describe("Sidebar", () => {
     expect(() => render(<SidebarBadge>New</SidebarBadge>)).toThrow(
       "SidebarBadge must be used within a SidebarLink.",
     );
+  });
+
+  it("shows tooltip on SidebarLink when sidebar is collapsed", () => {
+    mockMatchMedia(false);
+
+    render(
+      <SidebarProvider defaultCollapsed>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarItem>
+                <SidebarLink icon={<span data-testid="dash-icon" />}>
+                  Dashboard
+                </SidebarLink>
+              </SidebarItem>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const tooltip = document.querySelector('[role="tooltip"]');
+    expect(tooltip).toBeInTheDocument();
+    expect(tooltip).toHaveTextContent("Dashboard");
+  });
+
+  it("does not show tooltip on SidebarLink when sidebar is expanded", () => {
+    mockMatchMedia(false);
+
+    render(
+      <SidebarProvider defaultCollapsed={false}>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarItem>
+                <SidebarLink icon={<span data-testid="dash-icon" />}>
+                  Dashboard
+                </SidebarLink>
+              </SidebarItem>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    expect(
+      document.querySelector('[role="tooltip"]'),
+    ).not.toBeInTheDocument();
+  });
+
+  it("extracts label text from nested children for tooltip", () => {
+    mockMatchMedia(false);
+
+    render(
+      <SidebarProvider defaultCollapsed>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarItem>
+                <SidebarLink icon={<span data-testid="bell-icon" />}>
+                  Notification <strong>Templates</strong>
+                </SidebarLink>
+              </SidebarItem>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const tooltip = document.querySelector('[role="tooltip"]');
+    expect(tooltip).toHaveTextContent("Notification Templates");
+  });
+
+  it("wraps asChild link in tooltip when collapsed", () => {
+    mockMatchMedia(false);
+
+    render(
+      <SidebarProvider defaultCollapsed>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarItem>
+                <SidebarLink asChild>
+                  <a>Reports</a>
+                </SidebarLink>
+              </SidebarItem>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const tooltip = document.querySelector('[role="tooltip"]');
+    expect(tooltip).toBeInTheDocument();
+    expect(tooltip).toHaveTextContent("Reports");
+  });
+
+  it("does not render tooltip when link has no label text", () => {
+    mockMatchMedia(false);
+
+    render(
+      <SidebarProvider defaultCollapsed>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarItem>
+                <SidebarLink icon={<span data-testid="icon-only" />}>
+                  <SidebarBadge>1</SidebarBadge>
+                </SidebarLink>
+              </SidebarItem>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    expect(
+      document.querySelector('[role="tooltip"]'),
+    ).not.toBeInTheDocument();
   });
 });

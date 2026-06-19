@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes yet.
+
+## [1.16.0] - 2026-06-19
+
+### Added
+
+- Tooltip component with top/right/bottom/left positioning, arrow indicator, and pure-CSS hover reveal
+- SidebarLink tooltip on collapsed rail: shows label text on hover via Tooltip
+- Modal size variants (`sm`, `md`, `lg`, `xl`, `2xl`) with independently customizable `--gsl-modal-max-width-*` tokens
+- Modal `preventClose` prop: intercepts X, overlay click, and Escape; shows confirmation dialog via AlertDialog
+- Modal centered layout with popover-style border and shadow
+- AppBreadcrumb slot for breadcrumbs in AppLayout
+- Avatar component with initials/name display and configurable size
+- SidebarBadge now uses primary color tokens with overridable CSS variables
+
+### Changed
+
+- BreadcrumbLink: calls preventDefault on click for SPA safety, preserves consumer onClick
+- BulkImportModal exit confirm: uses Button component instead of raw elements (fixes Cancel dismissal)
+- Modal, Popover, App-switcher, Command dialog, Dropdown: unified border-radius to `--gsl-radius-xl` and box-shadow to `--gsl-shadow-md`
+- AppLayout: passes className and extra props through to all layout wrappers
+- AppHeader: simplified to passthrough container
+- AppSidebar/AppBody: simplified to passthrough, layout classes moved to AppLayout wrappers
+- Theme: adds --gsl-z-header token and body background
+
+### Fixed
+
+- Command inline popover: removed Portal wrapper so popover renders in-flow; adds pointer-events: none when closed to prevent blocking clicks
+
 ## [1.15.2] - 2026-06-19
 
 ### Added

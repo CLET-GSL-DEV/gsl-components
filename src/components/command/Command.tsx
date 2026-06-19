@@ -271,8 +271,7 @@ export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
 
     if (popover?.isInline) {
       return (
-        <PopoverPrimitive.Portal forceMount>
-          <PopoverPrimitive.Content
+        <PopoverPrimitive.Content
             className="gsl-command__popover"
             sideOffset={4}
             align="start"
@@ -296,7 +295,6 @@ export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
               {children}
             </CommandPrimitive.List>
           </PopoverPrimitive.Content>
-        </PopoverPrimitive.Portal>
       );
     }
 

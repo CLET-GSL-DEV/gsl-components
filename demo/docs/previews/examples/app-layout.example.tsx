@@ -6,7 +6,14 @@ import {
   AppHeaderSearch,
   AppHeaderProfile,
   AppSidebar,
+  AppBreadcrumb,
   AppBody,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
   Sidebar,
   SidebarContent,
   SidebarNav,
@@ -109,6 +116,19 @@ export function AppLayoutExample() {
             </SidebarContent>
           </Sidebar>
         </AppSidebar>
+        <AppBreadcrumb>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink>Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Dashboard</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </AppBreadcrumb>
         <AppBody>
           <div
             style={{
