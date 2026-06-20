@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { MetricCard } from "./MetricCard";
 
 describe("MetricCard", () => {
@@ -94,5 +94,78 @@ describe("MetricCard", () => {
       "aria-invalid",
       "true",
     );
+  });
+});
+
+describe("MetricCard animation", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  function mockRafComplete() {
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      now += 2000; // jump past the 1500ms default duration
+      cb(now);
+      return now;
+    });
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(vi.fn());
+  }
+
+  it("renders initial value when animate is false", () => {
+    render(<MetricCard label="Revenue" value="$128.4k" />);
+    expect(screen.getByText("$128.4k")).toBeInTheDocument();
+  });
+
+  it("counts up to a numeric value when animate is true", () => {
+    mockRafComplete();
+    render(<MetricCard label="Users" value={2847} animate />);
+    expect(screen.getByText("2847")).toBeInTheDocument();
+  });
+
+  it("counts up preserving prefix and suffix", () => {
+    mockRafComplete();
+    render(<MetricCard label="Revenue" value="$128.4k" animate />);
+    expect(screen.getByText("$128.4k")).toBeInTheDocument();
+  });
+
+  it("counts up restoring locale comma formatting", () => {
+    mockRafComplete();
+    render(<MetricCard label="Students" value="2,451" animate />);
+    expect(screen.getByText("2,451")).toBeInTheDocument();
+  });
+
+  it("renders plain value when animate is true but value is not parseable", () => {
+    mockRafComplete();
+    render(<MetricCard label="Status" value="N/A" animate />);
+    expect(screen.getByText("N/A")).toBeInTheDocument();
+  });
+
+  it("renders description alongside animated value", () => {
+    mockRafComplete();
+    render(
+      <MetricCard
+        label="Sales"
+        value="$500"
+        animate
+        description="vs last month"
+      />,
+    );
+    expect(screen.getByText("$500")).toBeInTheDocument();
+    expect(screen.getByText("vs last month")).toBeInTheDocument();
+  });
+
+  it("applies classNames.value to the animated display", () => {
+    mockRafComplete();
+    render(
+      <MetricCard
+        label="Test"
+        value="100"
+        animate
+        classNames={{ value: "animated-value" }}
+      />,
+    );
+    expect(screen.getByText("100")).toHaveClass("animated-value");
   });
 });

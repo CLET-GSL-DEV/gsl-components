@@ -24,6 +24,10 @@ export interface MetricCardProps extends HTMLAttributes<HTMLDivElement> {
   trend?: MetricTrend;
   /** Formatted trend text (e.g. "+12.5%") */
   trendValue?: string;
+  /** Enable count-up animation from 0 to the target value on mount and value change */
+  animate?: boolean;
+  /** Duration of the count-up animation in ms (default: 1500) */
+  animationDuration?: number;
   classNames?: MetricCardClassNames;
   className?: string;
 }
