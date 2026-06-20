@@ -47,12 +47,12 @@ export function autoMatchSourceColumns(
         return false;
       }
 
-      const normalizedFieldLabel = field.label.trim().toLowerCase();
-      const normalizedKey = field.key.trim().toLowerCase();
-      return (
-        normalizedLabel === normalizedFieldLabel ||
-        normalizedLabel === normalizedKey
-      );
+      const candidates = [
+        field.label.trim().toLowerCase(),
+        field.key.trim().toLowerCase(),
+        ...(field.matchKeys ?? []).map((k) => k.trim().toLowerCase()),
+      ];
+      return candidates.includes(normalizedLabel);
     });
 
     if (match) {

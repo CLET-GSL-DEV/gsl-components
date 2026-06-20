@@ -26,8 +26,7 @@ describe("AppLayout", () => {
     );
     expect(screen.getByText("Header")).toBeInTheDocument();
     expect(screen.getByText("Body")).toBeInTheDocument();
-    const headerWrapper = container.querySelector(".gsl-app-layout__header");
-    expect(headerWrapper).toBeInTheDocument();
+    expect(container.querySelector(".gsl-app-header")).toBeInTheDocument();
   });
 
   it("positions AppSidebar in sidebar area", () => {
@@ -63,7 +62,7 @@ describe("AppLayout", () => {
         <AppBody>B</AppBody>
       </AppLayout>,
     );
-    expect(container.querySelector(".gsl-app-layout__header")).toBeInTheDocument();
+    expect(container.querySelector(".gsl-app-header")).toBeInTheDocument();
     expect(container.querySelector(".gsl-app-layout__sidebar")).toBeInTheDocument();
     expect(container.querySelector(".gsl-app-layout__breadcrumb")).toBeInTheDocument();
     expect(container.querySelector(".gsl-app-layout__content")).toBeInTheDocument();
@@ -97,7 +96,7 @@ describe("AppLayout", () => {
         <AppBody className="body-custom">B</AppBody>
       </AppLayout>,
     );
-    const header = container.querySelector(".gsl-app-layout__header");
+    const header = container.querySelector(".gsl-app-header");
     const content = container.querySelector(".gsl-app-layout__content");
     expect(header).toHaveClass("header-custom");
     expect(content).toHaveClass("body-custom");
@@ -110,7 +109,7 @@ describe("AppLayout", () => {
         <AppBody>B</AppBody>
       </AppLayout>,
     );
-    const header = container.querySelector(".gsl-app-layout__header");
+    const header = container.querySelector(".gsl-app-header");
     expect(header).toHaveAttribute("id", "main-header");
     expect(header).toHaveAttribute("data-test", "x");
   });

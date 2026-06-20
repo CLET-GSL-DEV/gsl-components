@@ -517,3 +517,10 @@
     transition: none;
   }
 }
+
+/* ── Virtualization ── */
+
+.gsl-table__viewport {
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+}

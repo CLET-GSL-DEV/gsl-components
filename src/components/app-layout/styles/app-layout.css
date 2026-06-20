@@ -1,5 +1,6 @@
 .gsl-app-layout {
-  --gsl-app-layout-body-gap: 1rem;
+  --gsl-app-layout-gap: 1rem;
+  --gsl-app-layout-body-gap: var(--gsl-app-layout-gap, 1rem);
   --gsl-panel-bg: var(--gsl-surface-subtle);
   --gsl-panel-radius: var(--gsl-radius-2xl);
 
@@ -7,10 +8,8 @@
 
   display: flex;
   flex-direction: row;
-  gap: var(--gsl-app-layout-gap, 1rem);
   background: var(--gsl-page-bg);
   font-family: var(--gsl-font);
-  padding: var(--gsl-app-layout-gap, 1rem);
   height: 100vh;
   overflow: hidden;
 }
@@ -28,23 +27,8 @@
   flex: 1;
 }
 
-.gsl-app-layout__header {
-  --gsl-header-py: var(--gsl-app-layout-body-gap, 1rem);
-  --gsl-header-px: var(--gsl-app-layout-body-gap, 1rem);
-
-  position: sticky;
-  top: 0;
-  z-index: var(--gsl-z-header);
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: var(--gsl-header-py) var(--gsl-header-px);
-  border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
-  background: var(--gsl-panel-bg, var(--gsl-surface-subtle));
-  font-family: var(--gsl-font);
-}
-
 .gsl-app-layout__body {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--gsl-app-layout-body-gap);
@@ -53,6 +37,36 @@
   border-radius: var(--gsl-panel-radius);
   overflow: hidden auto;
   scrollbar-width: none;
+
+  padding: var(--gsl-app-layout-gap, 1rem);
+  --gsl-scroll-fade: 1;
+  --gsl-scroll-fade-height: calc(var(--gsl-app-layout-body-gap) * 3);
+  --gsl-scroll-fade-width: 100%;
+}
+
+.gsl-app-layout__body::before,
+.gsl-app-layout__body::after {
+  content: "";
+  position: fixed;
+  display: block;
+  height: var(--gsl-scroll-fade-height);
+  width: var(--gsl-scroll-fade-width);
+  pointer-events: none;
+  z-index: 1;
+  flex-shrink: 0;
+  left: 0;
+  right: 0;
+  opacity: calc(var(--gsl-scroll-fade) * 1);
+}
+
+.gsl-app-layout__body::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--gsl-page-bg), transparent);
+}
+
+.gsl-app-layout__body::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--gsl-page-bg), transparent);
 }
 
 .gsl-app-layout__body::-webkit-scrollbar {
@@ -61,6 +75,13 @@
 
 .gsl-app-layout__sidebar {
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
   width: max-content;
   height: 100%;
+
+  padding: var(--gsl-app-layout-gap, 1rem);
+  padding-right: 0;
 }
+
+

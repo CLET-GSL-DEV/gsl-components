@@ -216,6 +216,54 @@
   background: var(--gsl-error);
 }
 
+/* ── Error card ── */
+
+.gsl-upload-field__error-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+  text-align: center;
+}
+
+.gsl-upload-field__error-icon {
+  color: var(--gsl-error);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gsl-upload-field__error-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gsl-text);
+}
+
+.gsl-upload-field__error-text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gsl-text-secondary);
+  max-width: 320px;
+}
+
+.gsl-upload-field__error-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.gsl-upload-field__action--ghost {
+  background: transparent;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-upload-field__action--ghost:hover:not(:disabled) {
+  background: var(--gsl-hover);
+  opacity: 1;
+}
+
 /* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -223,7 +271,8 @@
     transition: none;
   }
 
-  .gsl-upload-field__action {
+  .gsl-upload-field__action,
+  .gsl-upload-field__action--ghost {
     transition: none;
   }
 }

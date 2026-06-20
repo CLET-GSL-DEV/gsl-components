@@ -40,6 +40,8 @@ function formatSize(bytes: number) {
 function acceptToLabel(accept?: string): string {
   if (!accept) return "any files";
   const normalized = accept.toLowerCase();
+  if (normalized.includes(".csv") && normalized.includes(".xls")) return "Spreadsheet files";
+  if (normalized.includes(".xls")) return "Excel files";
   if (normalized.includes(".csv")) return "CSV files";
   if (normalized.includes(".pdf")) return "PDF files";
   if (normalized.includes(".json")) return "JSON files";
@@ -81,6 +83,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
   ) {
     const [internalValue, setInternalValue] = useState<File | File[] | null>(null);
     const [dragOver, setDragOver] = useState(false);
+    const [fileError, setFileError] = useState<{ name: string; message: string } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const value = controlledValue !== undefined ? controlledValue : internalValue;
@@ -101,7 +104,15 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           if (maxSize && f.size > maxSize) return false;
           return true;
         });
-        if (filtered.length === 0) return;
+        if (filtered.length === 0) {
+          const rejected = Array.from(files)[0];
+          setFileError({
+            name: rejected.name,
+            message: `File exceeds maximum size of ${maxSizeLabel(maxSize!)}`,
+          });
+          return;
+        }
+        setFileError(null);
         if (multiple) {
           setValue(filtered);
         } else {
@@ -139,17 +150,26 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       [disabled, handleFiles],
     );
 
-    const handleRemove = useCallback(
-      (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setValue(null);
-      },
-      [setValue],
-    );
-
     const handleClick = useCallback(() => {
       if (!disabled) inputRef.current?.click();
     }, [disabled]);
+
+    const handleRetry = useCallback(
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setFileError(null);
+        if (!disabled) inputRef.current?.click();
+      },
+      [disabled],
+    );
+
+    const handleDismissError = useCallback(
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setFileError(null);
+      },
+      [],
+    );
 
     const invalidBool = ariaInvalid !== undefined ? !!ariaInvalid : invalid;
     const hasFiles = value ? (Array.isArray(value) ? value.length > 0 : true) : false;
@@ -199,20 +219,56 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           className="gsl-upload-field__input"
         />
 
-        <div
-          className={cn(
-            "gsl-upload-field__icon",
-            classNames?.icon,
-          )}
-        >
-          <CloudUpload size={20} strokeWidth={1.75} aria-hidden />
-        </div>
-        <p className={cn("gsl-upload-field__title", classNames?.title)}>
-          Click to upload or drag and drop
-        </p>
-        <p className={cn("gsl-upload-field__subtitle", classNames?.subtitle)}>
-          {subtitle}
-        </p>
+        {fileError ? (
+          <div className="gsl-upload-field__error-card">
+            <div className="gsl-upload-field__error-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </div>
+            <p className="gsl-upload-field__error-title">
+              Upload failed
+            </p>
+            <p className="gsl-upload-field__error-text">
+              {fileError.message}
+            </p>
+            <div className="gsl-upload-field__error-actions">
+              <button
+                type="button"
+                className="gsl-upload-field__action"
+                onClick={handleRetry}
+              >
+                Try again
+              </button>
+              <button
+                type="button"
+                className="gsl-upload-field__action gsl-upload-field__action--ghost"
+                onClick={handleDismissError}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div
+              className={cn(
+                "gsl-upload-field__icon",
+                classNames?.icon,
+              )}
+            >
+              <CloudUpload size={20} strokeWidth={1.75} aria-hidden />
+            </div>
+            <p className={cn("gsl-upload-field__title", classNames?.title)}>
+              Click to upload or drag and drop
+            </p>
+            <p className={cn("gsl-upload-field__subtitle", classNames?.subtitle)}>
+              {subtitle}
+            </p>
+          </>
+        )}
 
         {hasFiles && (
           <div className={cn("gsl-upload-field__files", classNames?.files)}>
@@ -236,7 +292,10 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
                   <button
                     type="button"
                     className={cn("gsl-upload-field__file-card-remove", classNames?.removeButton)}
-                    onClick={handleRemove}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setValue(null);
+                    }}
                     aria-label="Remove file"
                   >
                     <Trash2 size={16} strokeWidth={1.75} aria-hidden />
@@ -247,14 +306,17 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           </div>
         )}
 
-        {!multiple && (
+        {!multiple && !fileError && (
           <button
             type="button"
             className={cn(
               "gsl-upload-field__action",
               classNames?.actionButton,
             )}
-            onClick={handleClick}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClick();
+            }}
             disabled={disabled}
           >
             {hasFiles ? "Replace file" : "Upload file"}

@@ -25,6 +25,8 @@ export interface BulkImportField {
   description?: string;
   example?: string;
   trim?: boolean;
+  /** Alternate strings for optimistic column matching (case-insensitive) */
+  matchKeys?: string[];
   validate?: (value: string) => string | null;
 }
 

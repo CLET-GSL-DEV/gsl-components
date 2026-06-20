@@ -53,11 +53,7 @@ export const AppLayout = forwardRef<HTMLDivElement, AppLayoutProps>(
           </div>
         )}
         <div className="gsl-app-layout__body">
-          {headerEl && (
-            <div className={cn("gsl-app-layout__header", header.className)} {...header.rest}>
-              {header.children}
-            </div>
-          )}
+          {headerEl}
           {breadcrumbEl && breadcrumb.children != null && breadcrumb.children !== false && (
             <div className={cn("gsl-app-layout__breadcrumb", breadcrumb.className)} {...breadcrumb.rest}>
               {breadcrumb.children}

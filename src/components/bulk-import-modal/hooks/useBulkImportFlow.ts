@@ -91,11 +91,12 @@ export function useBulkImportFlow(
     );
   }, [parsed, headerRowIndex, sourceColumnMapping, excludedColumns]);
 
+  const shouldValidate = step === 4;
   const rowsForValidation = step === 4 ? editableRows : mappedRows;
 
   const validationIssues = useMemo(
-    () => validateMappedRows(rowsForValidation, fields),
-    [rowsForValidation, fields],
+    () => (shouldValidate ? validateMappedRows(rowsForValidation, fields) : []),
+    [shouldValidate, rowsForValidation, fields],
   );
 
   const { errors: validationErrors, warnings: validationWarnings } = useMemo(
@@ -252,9 +253,14 @@ export function useBulkImportFlow(
   const goNext = useCallback(() => {
     setStep((current) => {
       if (current === 2 && headerRowIndex !== null && parsed) {
-        const columns = buildAllSourceColumns(parsed.rows, headerRowIndex);
-        setSourceColumnMapping(autoMatchSourceColumns(fields, columns));
-        setExcludedColumns([]);
+        const hasMapping = Object.values(sourceColumnMapping).some(
+          (v) => v !== null,
+        );
+        if (!hasMapping) {
+          const columns = buildAllSourceColumns(parsed.rows, headerRowIndex);
+          setSourceColumnMapping(autoMatchSourceColumns(fields, columns));
+          setExcludedColumns([]);
+        }
       }
 
       if (current === 3 && headerRowIndex !== null && parsed) {
@@ -297,39 +303,76 @@ export function useBulkImportFlow(
     };
   }, [activeRows, activeErrors, activeWarnings]);
 
-  return {
-    step,
-    parsed,
-    parseError,
-    headerRowIndex,
-    sourceColumnMapping,
-    excludedColumns,
-    sourceColumns: activeSourceColumns,
-    mappedRows,
-    editableRows,
-    validationErrors,
-    validationWarnings,
-    selectedRowIds,
-    showOnlyErrors,
-    discardedRows,
-    canGoNext,
-    canImport,
-    isParsing,
-    setHeaderRowIndex,
-    setSourceColumnMapping,
-    updateSourceMapping,
-    toggleExcludedColumn,
-    setSelectedRowIds,
-    toggleRowSelection,
-    setVisibleRowsSelection,
-    setShowOnlyErrors,
-    discardSelectedRows,
-    updateRowValue,
-    handleFile,
-    goNext,
-    goBack,
-    goToStep,
-    reset,
-    buildResult,
-  };
+  return useMemo(
+    () => ({
+      step,
+      parsed,
+      parseError,
+      headerRowIndex,
+      sourceColumnMapping,
+      excludedColumns,
+      sourceColumns: activeSourceColumns,
+      mappedRows,
+      editableRows,
+      validationErrors,
+      validationWarnings,
+      selectedRowIds,
+      showOnlyErrors,
+      discardedRows,
+      canGoNext,
+      canImport,
+      isParsing,
+      setHeaderRowIndex,
+      setSourceColumnMapping,
+      updateSourceMapping,
+      toggleExcludedColumn,
+      setSelectedRowIds,
+      toggleRowSelection,
+      setVisibleRowsSelection,
+      setShowOnlyErrors,
+      discardSelectedRows,
+      updateRowValue,
+      handleFile,
+      goNext,
+      goBack,
+      goToStep,
+      reset,
+      buildResult,
+    }),
+    [
+      step,
+      parsed,
+      parseError,
+      headerRowIndex,
+      sourceColumnMapping,
+      excludedColumns,
+      activeSourceColumns,
+      mappedRows,
+      editableRows,
+      validationErrors,
+      validationWarnings,
+      selectedRowIds,
+      showOnlyErrors,
+      discardedRows,
+      canGoNext,
+      canImport,
+      isParsing,
+      setHeaderRowIndex,
+      setSourceColumnMapping,
+      updateSourceMapping,
+      toggleExcludedColumn,
+      setSelectedRowIds,
+      toggleRowSelection,
+      setVisibleRowsSelection,
+      setShowOnlyErrors,
+      discardSelectedRows,
+      updateRowValue,
+      handleFile,
+      goNext,
+      goBack,
+      goToStep,
+      reset,
+      buildResult,
+    ],
+  );
 }

@@ -8,6 +8,8 @@ const fields = [
   { key: "full_name", label: "Full name", required: true },
 ];
 
+const CLOSE_BTN = { name: "Close modal" };
+
 describe("BulkImportModal", () => {
   it("walks through the import flow and completes with mapped rows", async () => {
     const user = userEvent.setup();
@@ -75,7 +77,7 @@ describe("BulkImportModal", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: "Close" }));
+    await user.click(screen.getByRole("button", CLOSE_BTN));
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
@@ -108,7 +110,7 @@ describe("BulkImportModal", () => {
       ).toBeInTheDocument();
     });
 
-    await user.click(screen.getByRole("button", { name: "Close" }));
+    await user.click(screen.getByRole("button", CLOSE_BTN));
 
     expect(screen.getByRole("alertdialog")).toBeInTheDocument();
     expect(
@@ -149,7 +151,7 @@ describe("BulkImportModal", () => {
       ).toBeInTheDocument();
     });
 
-    await user.click(screen.getByRole("button", { name: "Close" }));
+    await user.click(screen.getByRole("button", CLOSE_BTN));
 
     const confirmDialog = screen.getByRole("alertdialog");
     await user.click(
@@ -188,8 +190,8 @@ describe("BulkImportModal", () => {
       ).toBeInTheDocument();
     });
 
-    await user.click(screen.getByRole("button", { name: "Close" }));
-    await user.click(screen.getByRole("button", { name: "Exit flow" }));
+    await user.click(screen.getByRole("button", CLOSE_BTN));
+    await user.click(screen.getByRole("button", { name: "Discard" }));
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });

@@ -1,8 +1,15 @@
-import { Checkbox } from "../../checkbox/Checkbox";
+import { useMemo } from "react";
+import { Table, TableContent } from "../../table/Table";
+import type { TableColumn } from "../../../types/table";
 import type {
   BulkImportField,
   BulkImportValidationError,
 } from "../../../types/bulk-import-modal";
+
+interface ValidateRow {
+  _rowId: number;
+  [fieldKey: string]: string | number;
+}
 
 interface ValidateDataStepProps {
   fields: BulkImportField[];
@@ -21,11 +28,9 @@ interface ValidateDataStepProps {
 
 function buildErrorMap(errors: BulkImportValidationError[]) {
   const map = new Map<string, string>();
-
   for (const issue of errors) {
     map.set(`${issue.row}:${issue.fieldKey}`, issue.message);
   }
-
   return map;
 }
 
@@ -49,19 +54,110 @@ export function ValidateDataStep({
     mappedFieldKeys.includes(field.key),
   );
 
-  const visibleRows = mappedRows
-    .map((row, index) => ({ row, rowId: index + 1 }))
-    .filter(({ rowId }) => !discardedRows.includes(rowId))
-    .filter(({ rowId }) => !showOnlyErrors || rowsWithErrors.has(rowId));
+  const visibleRows = useMemo(
+    () =>
+      mappedRows
+        .map((row, index) => ({ row, rowId: index + 1 }))
+        .filter(({ rowId }) => !discardedRows.includes(rowId))
+        .filter(
+          ({ rowId }) => !showOnlyErrors || rowsWithErrors.has(rowId),
+        ),
+    [mappedRows, discardedRows, showOnlyErrors, rowsWithErrors],
+  );
 
   const visibleRowIds = visibleRows.map(({ rowId }) => rowId);
   const allVisibleSelected =
     visibleRowIds.length > 0 &&
-    visibleRowIds.every((rowId) => selectedRowIds.includes(rowId));
-  const someVisibleSelected = visibleRowIds.some((rowId) =>
-    selectedRowIds.includes(rowId),
+    visibleRowIds.every((rid) => selectedRowIds.includes(rid));
+  const someVisibleSelected = visibleRowIds.some((rid) =>
+    selectedRowIds.includes(rid),
   );
   const indeterminate = someVisibleSelected && !allVisibleSelected;
+
+  const selectedIdsSet = useMemo(
+    () => new Set<string | number>(selectedRowIds),
+    [selectedRowIds],
+  );
+
+  const tableData: ValidateRow[] = useMemo(
+    () =>
+      visibleRows.map(({ row, rowId }) => {
+        const record: ValidateRow = { _rowId: rowId };
+        for (const field of visibleFields) {
+          record[field.key] = row[field.key] ?? "";
+        }
+        return record;
+      }),
+    [visibleRows, visibleFields],
+  );
+
+  const tableColumns: TableColumn<ValidateRow>[] = useMemo(
+    () =>
+      visibleFields.map((field) => ({
+        id: field.key,
+        header: field.label.toUpperCase(),
+        accessorKey: field.key as keyof ValidateRow,
+        cell: ({ row, value }) => {
+          const rowId = row._rowId as number;
+          const errorMessage = errorMap.get(`${rowId}:${field.key}`);
+          return (
+            <div
+              className={
+                errorMessage
+                  ? "gsl-bulk-import__cell gsl-bulk-import__cell--error"
+                  : "gsl-bulk-import__cell"
+              }
+            >
+              <input
+                type="text"
+                className={[
+                  "gsl-bulk-import__cell-input",
+                  errorMessage ? "gsl-bulk-import__cell-input--error" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                value={String(value ?? "")}
+                aria-invalid={errorMessage ? true : undefined}
+                aria-label={`${field.label}, row ${rowId}`}
+                onChange={(event) =>
+                  onUpdateRowValue(rowId, field.key, event.target.value)
+                }
+              />
+              {errorMessage ? (
+                <span
+                  className="gsl-bulk-import__cell-error-tooltip"
+                  role="tooltip"
+                >
+                  {errorMessage}
+                </span>
+              ) : null}
+            </div>
+          );
+        },
+      })),
+    [visibleFields, errorMap, onUpdateRowValue],
+  );
+
+  const handleSelectionChange = (next: Set<string | number>) => {
+    const prev = new Set(selectedRowIds);
+
+    const added = visibleRowIds.filter((id) => next.has(id) && !prev.has(id));
+    const removed = visibleRowIds.filter(
+      (id) => !next.has(id) && prev.has(id),
+    );
+
+    if (added.length === visibleRowIds.length && added.length > 0) {
+      onSetVisibleRowsSelection(visibleRowIds, true);
+      return;
+    }
+    if (removed.length === visibleRowIds.length && removed.length > 0) {
+      onSetVisibleRowsSelection(visibleRowIds, false);
+      return;
+    }
+
+    for (const id of added) onToggleRowSelection(id);
+    for (const id of removed) onToggleRowSelection(id);
+  };
 
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--validate">
@@ -101,111 +197,16 @@ export function ValidateDataStep({
           </p>
         ) : (
           <div className="gsl-bulk-import__table-wrap gsl-bulk-import__table-wrap--validate">
-            <table className="gsl-bulk-import__table gsl-bulk-import__table--validate">
-              <thead>
-                <tr>
-                  <th scope="col" className="gsl-bulk-import__checkbox-cell">
-                    <span
-                      className={
-                        indeterminate
-                          ? "gsl-bulk-import__checkbox--indeterminate"
-                          : undefined
-                      }
-                    >
-                      <Checkbox
-                        checked={allVisibleSelected}
-                        disabled={visibleRowIds.length === 0}
-                        aria-label="Select all rows"
-                        onCheckedChange={(checked) =>
-                          onSetVisibleRowsSelection(visibleRowIds, checked)
-                        }
-                      />
-                    </span>
-                  </th>
-                  {visibleFields.map((field) => (
-                    <th key={field.key} scope="col">
-                      {field.label.toUpperCase()}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {visibleRows.map(({ row, rowId }) => {
-                  const hasRowError = rowsWithErrors.has(rowId);
-                  const isSelected = selectedRowIds.includes(rowId);
-
-                  return (
-                    <tr
-                      key={rowId}
-                      className={
-                        [
-                          hasRowError
-                            ? "gsl-bulk-import__table-row--error"
-                            : "",
-                          isSelected
-                            ? "gsl-bulk-import__table-row--selected"
-                            : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ") || undefined
-                      }
-                    >
-                      <td className="gsl-bulk-import__checkbox-cell">
-                        <Checkbox
-                          checked={selectedRowIds.includes(rowId)}
-                          aria-label={`Select row ${rowId}`}
-                          onCheckedChange={() => onToggleRowSelection(rowId)}
-                        />
-                      </td>
-                      {visibleFields.map((field) => {
-                        const errorMessage = errorMap.get(`${rowId}:${field.key}`);
-                        return (
-                          <td
-                            key={field.key}
-                            className={
-                              errorMessage
-                                ? "gsl-bulk-import__cell--error"
-                                : undefined
-                            }
-                            title={errorMessage ?? undefined}
-                          >
-                            <input
-                              type="text"
-                              className={[
-                                "gsl-bulk-import__cell-input",
-                                errorMessage
-                                  ? "gsl-bulk-import__cell-input--error"
-                                  : "",
-                              ]
-                                .filter(Boolean)
-                                .join(" ")}
-                              value={row[field.key] ?? ""}
-                              aria-invalid={errorMessage ? true : undefined}
-                              aria-label={`${field.label}, row ${rowId}`}
-                              onChange={(event) =>
-                                onUpdateRowValue(
-                                  rowId,
-                                  field.key,
-                                  event.target.value,
-                                )
-                              }
-                            />
-                            {errorMessage ? (
-                              <span
-                                className="gsl-bulk-import__cell-error-tooltip"
-                                role="tooltip"
-                              >
-                                {errorMessage}
-                              </span>
-                            ) : null}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <Table paramPrefix="validate">
+              <TableContent<ValidateRow>
+                columns={tableColumns}
+                data={tableData}
+                rowKey={(row) => row._rowId}
+                selectable
+                selectedIds={selectedIdsSet}
+                onSelectionChange={handleSelectionChange}
+              />
+            </Table>
           </div>
         )}
       </div>

@@ -37,6 +37,18 @@ const defaultProps = {
   onUpdateRowValue: vi.fn(),
 };
 
+/** Find the <tr> containing a given textbox input */
+function findRowForInput(labelRegex: RegExp): HTMLTableRowElement {
+  const input = screen.getByRole("textbox", { name: labelRegex });
+  return input.closest("tr")!;
+}
+
+/** Find the checkbox inside a given table row */
+function findRowCheckbox(row: HTMLTableRowElement): HTMLButtonElement {
+  const cb = row.querySelector('button[role="checkbox"]') as HTMLButtonElement;
+  return cb;
+}
+
 describe("ValidateDataStep", () => {
   it("renders mapped rows and toolbar controls", () => {
     render(<ValidateDataStep {...defaultProps} />);
@@ -102,23 +114,23 @@ describe("ValidateDataStep", () => {
     render(<ValidateDataStep {...defaultProps} />);
 
     const emailInput = screen.getByLabelText("Email, row 2");
-    const errorCell = emailInput.closest("td");
+    const errorCell = emailInput.closest(".gsl-bulk-import__cell--error");
 
     expect(emailInput).toHaveAttribute("aria-invalid", "true");
     expect(emailInput).toHaveClass("gsl-bulk-import__cell-input--error");
-    expect(errorCell).toHaveAttribute("title", "Must be a valid email");
+    expect(errorCell).not.toBeNull();
     expect(
       errorCell?.querySelector(".gsl-bulk-import__cell-error-tooltip"),
     ).toHaveTextContent("Must be a valid email");
   });
 
-  it("applies selected row class when row is in selectedRowIds", () => {
+  it("indicates selected rows via checked checkboxes", () => {
     render(<ValidateDataStep {...defaultProps} selectedRowIds={[2]} />);
 
-    const row2Checkbox = screen.getByRole("checkbox", { name: "Select row 2" });
-    const selectedRow = row2Checkbox.closest("tr");
+    const row = findRowForInput(/Email, row 2/i);
+    const cb = findRowCheckbox(row);
 
-    expect(selectedRow).toHaveClass("gsl-bulk-import__table-row--selected");
+    expect(cb).toHaveAttribute("aria-checked", "true");
   });
 
   it("selects all visible rows from the header checkbox", () => {

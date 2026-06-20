@@ -1,12 +1,14 @@
 import {
   forwardRef,
   useCallback,
+  useRef,
   useState,
   type ReactNode,
   type CSSProperties,
   type Ref,
   type ForwardedRef,
 } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   ArrowUpDownIcon,
   ArrowUp,
@@ -78,6 +80,8 @@ interface TableContentInnerProps<T = unknown> {
   selectable?: boolean;
   selectedIds?: Set<string | number>;
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
+  virtualize?: boolean;
+  virtualRowHeight?: number;
 }
 
 function TableContentRender<T>(
@@ -95,6 +99,8 @@ function TableContentRender<T>(
     selectable = false,
     selectedIds,
     onSelectionChange,
+    virtualize = false,
+    virtualRowHeight = 44,
     ...rest
   } = props;
   const [sort, setSort] = useState<{
@@ -158,6 +164,103 @@ function TableContentRender<T>(
     return sort.direction === "asc" ? cmp : -cmp;
   });
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const virtualizer = useVirtualizer({
+    count: virtualize ? sorted.length : 0,
+    getScrollElement: () => scrollRef.current,
+    estimateSize: () => virtualRowHeight,
+    overscan: 5,
+  });
+  const virtualRows = virtualizer.getVirtualItems();
+
+  function renderRow(row: T) {
+    const key = rowKey!(row);
+    return (
+      <tr key={key}>
+        {selectable && (
+          <td className="gsl-table__checkbox-cell">
+            <Checkbox
+              checked={selectedIds?.has(key) ?? false}
+              onCheckedChange={() => handleToggleRow(key)}
+              aria-label="Select row"
+            />
+          </td>
+        )}
+        {columns.map((col) => {
+          const rawValue = getCellValue(row, col);
+          const cellContent = col.cell
+            ? col.cell({ row, value: rawValue })
+            : rawValue;
+          return (
+            <td key={col.id} style={colStyle(col)}>
+              {cellContent}
+            </td>
+          );
+        })}
+      </tr>
+    );
+  }
+
+  const headerRow = (
+    <tr>
+      {selectable && (
+        <th className="gsl-table__checkbox-cell">
+          <span
+            className={cn(
+              indeterminate && "gsl-table__checkbox--indeterminate",
+            )}
+          >
+            <Checkbox
+              checked={allSelected}
+              onCheckedChange={handleSelectAll}
+              aria-label="Select all rows"
+            />
+          </span>
+        </th>
+      )}
+      {columns.map((col) => {
+        const isSorted = sort?.column === col.id;
+        const dir = isSorted ? sort!.direction : null;
+
+        return (
+          <th
+            key={col.id}
+            style={colStyle(col)}
+            className={cn(
+              col.sortable && "gsl-table__th--sortable",
+              isSorted && "gsl-table__th--sorted",
+            )}
+            onClick={() => {
+              if (!col.sortable) return;
+              const next: SortDirection =
+                isSorted && dir === "asc" ? "desc" : "asc";
+              setSort({ column: col.id, direction: next });
+            }}
+          >
+            <span className="gsl-table__th-label">{col.header}</span>
+            {col.sortable && (
+              <span className="gsl-table__sort-icon">
+                {isSorted ? (
+                  dir === "asc" ? (
+                    <ArrowUp size={14} strokeWidth={2} aria-hidden />
+                  ) : (
+                    <ArrowDown size={14} strokeWidth={2} aria-hidden />
+                  )
+                ) : (
+                  <ArrowUpDownIcon
+                    size={14}
+                    strokeWidth={1.5}
+                    aria-hidden
+                  />
+                )}
+              </span>
+            )}
+          </th>
+        );
+      })}
+    </tr>
+  );
+
   return (
     <div ref={ref} className={cn("gsl-table__content", selectable && selectedIds && selectedIds.size > 0 && "gsl-table__content--has-selected", className)} {...rest}>
       {loading ? (
@@ -208,105 +311,61 @@ function TableContentRender<T>(
           </tbody>
         </table>
       ) : hasData ? (
-        <table>
-          <thead>
-            <tr>
-              {selectable && (
-                <th className="gsl-table__checkbox-cell">
-                  <span
-                    className={cn(
-                      indeterminate && "gsl-table__checkbox--indeterminate",
-                    )}
-                  >
-                    <Checkbox
-                      checked={allSelected}
-                      onCheckedChange={handleSelectAll}
-                      aria-label="Select all rows"
-                    />
-                  </span>
-                </th>
+        virtualize ? (
+          <div
+            ref={scrollRef}
+            className="gsl-table__viewport"
+            style={{ overflow: "auto", flex: 1, minHeight: 0 }}
+          >
+            <table style={{ tableLayout: "fixed", width: "100%", borderCollapse: "collapse" }}>
+              <thead>{headerRow}</thead>
+              <tbody>
+                <tr style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
+                  <td colSpan={colSpan} style={{ padding: 0 }}>
+                    <div style={{ position: "relative", width: "100%" }}>
+                      {virtualRows.map((vRow) => {
+                        const row = sorted[vRow.index];
+                        return (
+                          <div
+                            key={vRow.key}
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              width: "100%",
+                              transform: `translateY(${vRow.start}px)`,
+                            }}
+                          >
+                            <table style={{ tableLayout: "fixed", width: "100%", borderCollapse: "collapse" }}>
+                              <tbody>
+                                {renderRow(row)}
+                              </tbody>
+                            </table>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <table>
+            <thead>{headerRow}</thead>
+            <tbody>
+              {sorted.length === 0 ? (
+                <tr>
+                  <td colSpan={colSpan} className="gsl-table__empty">
+                    No data
+                  </td>
+                </tr>
+              ) : (
+                sorted.map((row) => renderRow(row))
               )}
-              {columns.map((col) => {
-                const isSorted = sort?.column === col.id;
-                const dir = isSorted ? sort!.direction : null;
-
-                return (
-                  <th
-                    key={col.id}
-                    style={colStyle(col)}
-                    className={cn(
-                      col.sortable && "gsl-table__th--sortable",
-                      isSorted && "gsl-table__th--sorted",
-                    )}
-                    onClick={() => {
-                      if (!col.sortable) return;
-                      const next: SortDirection =
-                        isSorted && dir === "asc" ? "desc" : "asc";
-                      setSort({ column: col.id, direction: next });
-                    }}
-                  >
-                    <span className="gsl-table__th-label">{col.header}</span>
-                    {col.sortable && (
-                      <span className="gsl-table__sort-icon">
-                        {isSorted ? (
-                          dir === "asc" ? (
-                            <ArrowUp size={14} strokeWidth={2} aria-hidden />
-                          ) : (
-                            <ArrowDown size={14} strokeWidth={2} aria-hidden />
-                          )
-                        ) : (
-                          <ArrowUpDownIcon
-                            size={14}
-                            strokeWidth={1.5}
-                            aria-hidden
-                          />
-                        )}
-                      </span>
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.length === 0 ? (
-              <tr>
-                <td colSpan={colSpan} className="gsl-table__empty">
-                  No data
-                </td>
-              </tr>
-            ) : (
-              sorted.map((row) => {
-                const key = rowKey!(row);
-                return (
-                  <tr key={key}>
-                    {selectable && (
-                      <td className="gsl-table__checkbox-cell">
-                        <Checkbox
-                          checked={selectedIds?.has(key) ?? false}
-                          onCheckedChange={() => handleToggleRow(key)}
-                          aria-label="Select row"
-                        />
-                      </td>
-                    )}
-                    {columns.map((col) => {
-                      const rawValue = getCellValue(row, col);
-                      const cellContent = col.cell
-                        ? col.cell({ row, value: rawValue })
-                        : rawValue;
-
-                      return (
-                        <td key={col.id} style={colStyle(col)}>
-                          {cellContent}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        )
       ) : (
         children
       )}
