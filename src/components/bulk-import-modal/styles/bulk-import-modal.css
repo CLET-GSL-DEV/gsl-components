@@ -453,6 +453,7 @@
   flex: 1;
   min-height: 0;
   display: flex;
+  position: relative;
   flex-direction: column;
   border: 1px solid var(--gsl-border);
   border-radius: 8px;
@@ -465,7 +466,7 @@
 }
 
 .gsl-bulk-import__match-board > .gsl-bulk-import__match-heading--target {
-  margin-top: 0;
+  margin-top: 16px;
   padding: 20px 16px 0;
   border-top: 1px solid var(--gsl-border);
 }
@@ -483,27 +484,29 @@
 
 .gsl-bulk-import__match-track {
   display: flex;
-  gap: 0;
+  gap: 16px;
+  padding-inline: 16px;
   min-width: max-content;
 }
 
 .gsl-bulk-import__match-track--source {
+	padding-bottom: 16px;
   border-bottom: 1px solid var(--gsl-border);
 }
 
 .gsl-bulk-import__match-column {
   flex-shrink: 0;
   width: 220px;
-  padding: 16px;
-  border-right: 1px solid var(--gsl-border);
 }
 
-.gsl-bulk-import__match-column:last-child {
-  border-right: none;
-}
 
-.gsl-bulk-import__step-title {
+.gsl-bulk-import__step-header {
   margin: 0 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gsl-bulk-import__step-title {
   font-size: 28px;
   font-weight: 700;
   color: var(--gsl-text);
@@ -762,19 +765,30 @@
 .gsl-bulk-import__match-heading {
   margin: 0 0 12px;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--gsl-text);
   flex-shrink: 0;
+  position: sticky;
+  left: 0;
 }
+
+.gsl-bulk-import__source-column {
+	border: 1px solid var(--gsl-border);
+	border-radius: var(--gsl-radius-base);
+	padding: 8px;
+	gap: 8px;
+	display: flex;
+	flex-direction: column;
+}
+
 
 .gsl-bulk-import__source-column-header {
   display: flex;
   align-items: flex-start;
+  padding: 8px;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius-base);
+  background: var(--gsl-surface-subtle);
 }
 
 .gsl-bulk-import__source-column-label {
@@ -815,7 +829,7 @@
   color: var(--gsl-text-muted);
   font-size: 13px;
   line-height: 1.4;
-}
+5
 
 .gsl-bulk-import__target-column-control {
   display: flex;
@@ -862,6 +876,14 @@
 .gsl-bulk-import__target-column-control .gsl-dropdown {
   flex: 1;
   min-width: 0;
+}
+
+.gsl-bulk-import__match-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-bottom: 16px;
 }
 
 .gsl-bulk-import__validate-toolbar {

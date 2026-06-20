@@ -224,6 +224,14 @@ export function useBulkImportFlow(
     [],
   );
 
+  const autoMapColumns = useCallback(() => {
+    if (!parsed || headerRowIndex === null) return;
+
+    const columns = buildAllSourceColumns(parsed.rows, headerRowIndex);
+    setSourceColumnMapping(autoMatchSourceColumns(fields, columns));
+    setExcludedColumns([]);
+  }, [fields, headerRowIndex, parsed]);
+
   const toggleExcludedColumn = useCallback((sourceIndex: number) => {
     setExcludedColumns((current) =>
       current.includes(sourceIndex)
@@ -359,6 +367,7 @@ export function useBulkImportFlow(
       updateRowValue,
       handleFile,
       goNext,
+      autoMapColumns,
       goBack,
       goToStep,
       reset,
@@ -394,6 +403,7 @@ export function useBulkImportFlow(
       updateRowValue,
       handleFile,
       goNext,
+      autoMapColumns,
       goBack,
       goToStep,
       reset,

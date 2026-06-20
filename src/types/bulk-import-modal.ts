@@ -125,6 +125,7 @@ export interface UseBulkImportFlowReturn {
   discardSelectedRows: () => void;
   updateRowValue: (rowId: number, fieldKey: string, value: string) => void;
   handleFile: (file: File) => Promise<void>;
+  autoMapColumns: () => void;
   goNext: () => void;
   goBack: () => void;
   goToStep: (step: BulkImportStep) => void;

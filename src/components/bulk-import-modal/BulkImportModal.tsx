@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Modal,
@@ -106,6 +106,11 @@ export function BulkImportModal({
     onOpenChange(false);
   };
 
+  const preventOverlayClose = useCallback(
+    (event: Event) => event.preventDefault(),
+    [],
+  );
+
   const dialogClass = ["gsl-bulk-import", className].filter(Boolean).join(" ");
 
   return (
@@ -120,6 +125,7 @@ export function BulkImportModal({
           preventCloseTitle="Exit import flow"
           preventCloseDescription="Are you sure? Your current information will not be saved."
           onOpenChange={onOpenChange}
+          onInteractOutside={preventOverlayClose}
           aria-describedby={undefined}
         >
           <ModalTitle className="gsl-bulk-import__header">
@@ -269,6 +275,7 @@ export function BulkImportModal({
                 excludedColumns={flow.excludedColumns}
                 onSourceMappingChange={flow.updateSourceMapping}
                 onToggleExcludedColumn={flow.toggleExcludedColumn}
+                onResetMapping={flow.autoMapColumns}
               />
             )}
 

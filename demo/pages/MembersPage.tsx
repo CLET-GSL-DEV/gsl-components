@@ -56,7 +56,11 @@ export function MembersPage() {
     pageSizeOptions: invPageSizeOptions,
     search: invSearch,
     filters: invFilters,
-  } = useTableState({ defaultPageSize: 5, pageSizeOptions: [5, 10, 20, 50], paramPrefix: "invoices" });
+  } = useTableState({
+    defaultPageSize: 5,
+    pageSizeOptions: [5, 10, 20, 50],
+    paramPrefix: "invoices",
+  });
 
   const [selectedMember, setSelectedMember] = useState<DemoMember | null>(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
@@ -208,7 +212,10 @@ export function MembersPage() {
                       { value: "moderator", label: "Moderator" },
                       { value: "examiner", label: "Examiner" },
                       { value: "candidate", label: "Candidate" },
-                      { value: "system administrator", label: "System Administrator" },
+                      {
+                        value: "system administrator",
+                        label: "System Administrator",
+                      },
                     ]}
                     placeholder="All roles"
                   />
@@ -314,13 +321,20 @@ export function MembersPage() {
         open={bulkImportOpen}
         onOpenChange={setBulkImportOpen}
         title="Import Members"
+        maxFileSizeBytes={1024 * 1024 * 5}
         fields={[
-          { key: "name", label: "Full Name", required: true },
+          {
+            key: "name",
+            label: "Full Name",
+            required: true,
+            matchKeys: ["name", "fullName"],
+          },
           {
             key: "email",
             label: "Email",
             required: true,
             type: "email" as const,
+            matchKeys: ["email", "emailAddress"],
           },
           {
             key: "role",
@@ -335,6 +349,8 @@ export function MembersPage() {
               "Candidate",
               "System Administrator",
             ],
+
+            matchKeys: ["role", "roleName"],
           },
           {
             key: "status",
@@ -346,6 +362,8 @@ export function MembersPage() {
               "Inactive",
               "Pending",
             ],
+
+            matchKeys: ["status"],
           },
           { key: "phone", label: "Phone Number" },
           { key: "isr", label: "ISR Number" },

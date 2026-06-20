@@ -30,6 +30,7 @@ Select-style dropdown for choosing one option from a list. Built on `@radix-ui/r
 | `clearable` | `boolean` | `false` | Adds a menu item that resets to `null` |
 | `disabled` | `boolean` | `false` | Disables the trigger |
 | `aria-label` | `string` | — | Accessible name for the combobox trigger |
+| `formatOption` | `(option: DropdownOption \| null, state: "selected" \| "idle" \| "empty") => ReactNode` | — | Custom renderer for option content. Receives the full option (or `null` when empty) and a state flag: `"selected"` in the trigger, `"idle"` in the menu for unselected options, `"empty"` when no value is set. |
 | `classNames` | `DropdownClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root wrapper |
 
@@ -65,3 +66,36 @@ Part-level class names merged after base `gsl-dropdown*` styles:
 - Use `aria-label` (or an external `<label>` associated with the field) so the combobox has an accessible name.
 - When `clearable` is true, choosing the placeholder item calls `onValueChange(null)`.
 - Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+
+### Custom rendering with `formatOption`
+
+`formatOption` lets you render custom content inside both the trigger and the menu for each option. The function receives the full option object and an `isSelected` flag.
+
+```tsx
+<Dropdown
+  value={value}
+  onValueChange={setValue}
+  options={[
+    { value: "1", label: "Option A" },
+    { value: "2", label: "Option B" },
+  ]}
+  formatOption={(option, state) => {
+    if (state === "empty") return <span>Pick one...</span>;
+    if (state === "selected") {
+      return (
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <Check size={14} />
+          <span>{option!.label}</span>
+        </span>
+      );
+    }
+    return <span>{option!.label}</span>;
+  }}
+/>
+```
+
+- `"selected"` — rendered as the trigger value (currently picked option)
+- `"idle"` — rendered as an unselected menu item
+- `"empty"` — rendered in the trigger when no value is set; `option` is `null`
+
+The BulkImportModal's Match Columns step uses this to show a green checkmark badge next to the selected field mapping.

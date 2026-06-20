@@ -1,8 +1,10 @@
+import { useCallback } from "react";
 import type {
   BulkImportField,
   SourceColumn,
   SourceColumnMapping,
 } from "../../../types/bulk-import-modal";
+import { Button } from "../../button/Button";
 import { FieldMappingSelect } from "../internal/FieldMappingSelect";
 
 interface MatchColumnsStepProps {
@@ -13,6 +15,7 @@ interface MatchColumnsStepProps {
   excludedColumns: number[];
   onSourceMappingChange: (sourceIndex: number, fieldKey: string | null) => void;
   onToggleExcludedColumn: (sourceIndex: number) => void;
+  onResetMapping: () => void;
 }
 
 function MappingStatus({ mapped }: { mapped: boolean }) {
@@ -61,6 +64,7 @@ export function MatchColumnsStep({
   excludedColumns,
   onSourceMappingChange,
   onToggleExcludedColumn,
+  onResetMapping,
 }: MatchColumnsStepProps) {
   const visibleColumns = allSourceColumns.filter(
     (column) => !excludedColumns.includes(column.index),
@@ -71,9 +75,43 @@ export function MatchColumnsStep({
     label: field.label,
   }));
 
+  const formatOption = useCallback(
+    (
+      option: { value: string; label: string } | null,
+      state: "selected" | "idle" | "empty",
+    ) => (
+      <span className="gsl-bulk-import__match-colum-dropdown-label">
+        {state !== "idle" && <MappingStatus mapped={state === "selected"} />}
+        <span>{state === "empty" ? "Select Column" : option?.label}</span>
+      </span>
+    ),
+    [],
+  );
+
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--match">
-      <h3 className="gsl-bulk-import__step-title">Match Columns</h3>
+      <div className="gsl-bulk-import__step-header">
+        <h3 className="gsl-bulk-import__step-title">Match Columns</h3>
+
+        <div className="gsl-bulk-import__match-toolbar">
+          <Button variant="outline" size="sm" onClick={onResetMapping}>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+            </svg>
+            Reset mapping
+          </Button>
+        </div>
+      </div>
 
       <div className="gsl-bulk-import__match-layout">
         <div className="gsl-bulk-import__match-board">
@@ -131,11 +169,11 @@ export function MatchColumnsStep({
                       options={fieldOptions}
                       clearable
                       placeholder="Select column..."
+                      formatOption={formatOption}
                       onChange={(fieldKey) =>
                         onSourceMappingChange(column.index, fieldKey)
                       }
                     />
-                    <MappingStatus mapped={isMapped} />
                   </div>
                 </div>
               );

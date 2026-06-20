@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+import type { DropdownOption } from "../../../types/dropdown";
 import { Dropdown } from "../../dropdown/Dropdown";
 
 export interface FieldMappingSelectOption {
@@ -12,6 +14,7 @@ export interface FieldMappingSelectProps {
   options: FieldMappingSelectOption[];
   placeholder?: string;
   clearable?: boolean;
+  formatOption?: (option: DropdownOption | null, state: "selected" | "idle" | "empty") => ReactNode;
 }
 
 export function FieldMappingSelect({
@@ -21,6 +24,7 @@ export function FieldMappingSelect({
   options,
   placeholder = "Select...",
   clearable = false,
+  formatOption,
 }: FieldMappingSelectProps) {
   return (
     <Dropdown
@@ -30,6 +34,7 @@ export function FieldMappingSelect({
       options={options}
       placeholder={placeholder}
       clearable={clearable}
+      formatOption={formatOption}
     />
   );
 }
