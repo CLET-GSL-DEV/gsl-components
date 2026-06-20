@@ -1,5 +1,16 @@
 import { CloudUpload, X, FileImage, FilePlay, FileText, Trash2 } from "lucide-react";
 import { forwardRef, useCallback, useRef, useState, type ReactNode } from "react";
+import {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "../dialog/Dialog";
+import { Button } from "../button/Button";
 import type { UploadFieldProps } from "../../types/upload-field";
 import { cn } from "../../utils/cn";
 import "./styles/upload-field.css";
@@ -83,7 +94,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
   ) {
     const [internalValue, setInternalValue] = useState<File | File[] | null>(null);
     const [dragOver, setDragOver] = useState(false);
-    const [fileError, setFileError] = useState<{ name: string; message: string } | null>(null);
+    const [fileErrorDialog, setFileErrorDialog] = useState<{ name: string; message: string } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const value = controlledValue !== undefined ? controlledValue : internalValue;
@@ -106,13 +117,12 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
         });
         if (filtered.length === 0) {
           const rejected = Array.from(files)[0];
-          setFileError({
+          setFileErrorDialog({
             name: rejected.name,
             message: `File exceeds maximum size of ${maxSizeLabel(maxSize!)}`,
           });
           return;
         }
-        setFileError(null);
         if (multiple) {
           setValue(filtered);
         } else {
@@ -154,22 +164,10 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       if (!disabled) inputRef.current?.click();
     }, [disabled]);
 
-    const handleRetry = useCallback(
-      (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setFileError(null);
-        if (!disabled) inputRef.current?.click();
-      },
-      [disabled],
-    );
-
-    const handleDismissError = useCallback(
-      (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setFileError(null);
-      },
-      [],
-    );
+    const handleDialogRetry = useCallback(() => {
+      setFileErrorDialog(null);
+      if (!disabled) inputRef.current?.click();
+    }, [disabled]);
 
     const invalidBool = ariaInvalid !== undefined ? !!ariaInvalid : invalid;
     const hasFiles = value ? (Array.isArray(value) ? value.length > 0 : true) : false;
@@ -182,147 +180,139 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       : `Only ${supportedLabel} are supported.`;
 
     return (
-      <div
-        ref={ref}
-        id={id}
-        className={cn(
-          "gsl-upload-field",
-          dragOver && "gsl-upload-field--drag-over",
-          hasFiles && "gsl-upload-field--has-files",
-          invalidBool && "gsl-upload-field--invalid",
-          disabled && "gsl-upload-field--disabled",
-          classNames?.root,
-          className,
-        )}
-        aria-invalid={invalidBool || undefined}
-        aria-describedby={ariaDescribedby}
-        onClick={handleClick}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        role="button"
-        tabIndex={disabled ? -1 : 0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") handleClick();
-        }}
-        aria-label="Drop files here"
-        {...props}
-      >
-        <input
-          ref={inputRef}
-          type="file"
-          accept={accept}
-          multiple={multiple}
-          disabled={disabled}
-          name={name}
-          onChange={handleChange}
-          className="gsl-upload-field__input"
-        />
-
-        {fileError ? (
-          <div className="gsl-upload-field__error-card">
-            <div className="gsl-upload-field__error-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
-              </svg>
-            </div>
-            <p className="gsl-upload-field__error-title">
-              Upload failed
-            </p>
-            <p className="gsl-upload-field__error-text">
-              {fileError.message}
-            </p>
-            <div className="gsl-upload-field__error-actions">
-              <button
-                type="button"
-                className="gsl-upload-field__action"
-                onClick={handleRetry}
-              >
-                Try again
-              </button>
-              <button
-                type="button"
-                className="gsl-upload-field__action gsl-upload-field__action--ghost"
-                onClick={handleDismissError}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div
-              className={cn(
-                "gsl-upload-field__icon",
-                classNames?.icon,
-              )}
-            >
-              <CloudUpload size={20} strokeWidth={1.75} aria-hidden />
-            </div>
-            <p className={cn("gsl-upload-field__title", classNames?.title)}>
-              Click to upload or drag and drop
-            </p>
-            <p className={cn("gsl-upload-field__subtitle", classNames?.subtitle)}>
-              {subtitle}
-            </p>
-          </>
-        )}
-
-        {hasFiles && (
-          <div className={cn("gsl-upload-field__files", classNames?.files)}>
-            {files.map((file, i) => (
-              <div
-                key={i}
-                className={cn("gsl-upload-field__file-card", classNames?.fileCard)}
-              >
-                <span className="gsl-upload-field__file-card-icon">
-                  {getFileTypeIcon(file)}
-                </span>
-                <div className="gsl-upload-field__file-card-info">
-                  <span className={cn("gsl-upload-field__file-card-name", classNames?.fileName)}>
-                    {file.name}
-                  </span>
-                  <span className={cn("gsl-upload-field__file-card-size", classNames?.fileSize)}>
-                    {formatSize(file.size)}
-                  </span>
-                </div>
-                {!disabled && (
-                  <button
-                    type="button"
-                    className={cn("gsl-upload-field__file-card-remove", classNames?.removeButton)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setValue(null);
-                    }}
-                    aria-label="Remove file"
-                  >
-                    <Trash2 size={16} strokeWidth={1.75} aria-hidden />
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {!multiple && !fileError && (
-          <button
-            type="button"
-            className={cn(
-              "gsl-upload-field__action",
-              classNames?.actionButton,
-            )}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClick();
-            }}
+      <>
+        <div
+          ref={ref}
+          id={id}
+          className={cn(
+            "gsl-upload-field",
+            dragOver && "gsl-upload-field--drag-over",
+            hasFiles && "gsl-upload-field--has-files",
+            invalidBool && "gsl-upload-field--invalid",
+            disabled && "gsl-upload-field--disabled",
+            classNames?.root,
+            className,
+          )}
+          aria-invalid={invalidBool || undefined}
+          aria-describedby={ariaDescribedby}
+          onClick={handleClick}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") handleClick();
+          }}
+          aria-label="Drop files here"
+          {...props}
+        >
+          <input
+            ref={inputRef}
+            type="file"
+            accept={accept}
+            multiple={multiple}
             disabled={disabled}
+            name={name}
+            onChange={handleChange}
+            className="gsl-upload-field__input"
+          />
+
+          <div
+            className={cn(
+              "gsl-upload-field__icon",
+              classNames?.icon,
+            )}
           >
-            {hasFiles ? "Replace file" : "Upload file"}
-          </button>
-        )}
-      </div>
+            <CloudUpload size={20} strokeWidth={1.75} aria-hidden />
+          </div>
+          <p className={cn("gsl-upload-field__title", classNames?.title)}>
+            Click to upload or drag and drop
+          </p>
+          <p className={cn("gsl-upload-field__subtitle", classNames?.subtitle)}>
+            {subtitle}
+          </p>
+
+          {hasFiles && (
+            <div className={cn("gsl-upload-field__files", classNames?.files)}>
+              {files.map((file, i) => (
+                <div
+                  key={i}
+                  className={cn("gsl-upload-field__file-card", classNames?.fileCard)}
+                >
+                  <span className="gsl-upload-field__file-card-icon">
+                    {getFileTypeIcon(file)}
+                  </span>
+                  <div className="gsl-upload-field__file-card-info">
+                    <span className={cn("gsl-upload-field__file-card-name", classNames?.fileName)}>
+                      {file.name}
+                    </span>
+                    <span className={cn("gsl-upload-field__file-card-size", classNames?.fileSize)}>
+                      {formatSize(file.size)}
+                    </span>
+                  </div>
+                  {!disabled && (
+                    <button
+                      type="button"
+                      className={cn("gsl-upload-field__file-card-remove", classNames?.removeButton)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setValue(null);
+                      }}
+                      aria-label="Remove file"
+                    >
+                      <Trash2 size={16} strokeWidth={1.75} aria-hidden />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!multiple && (
+            <Button
+              variant="primary"
+              size="md"
+              className={cn(
+                "gsl-upload-field__action",
+                classNames?.actionButton,
+              )}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick();
+              }}
+              disabled={disabled}
+            >
+              {hasFiles ? "Replace file" : "Upload file"}
+            </Button>
+          )}
+        </div>
+
+        <Dialog open={fileErrorDialog !== null} onOpenChange={(open) => { if (!open) setFileErrorDialog(null); }}>
+          <DialogPortal>
+            <DialogOverlay />
+            <DialogContent showCloseButton aria-describedby={undefined}>
+              <DialogHeader>
+                <DialogTitle>Upload failed</DialogTitle>
+              </DialogHeader>
+              <DialogDescription>
+                {fileErrorDialog?.name && (
+                  <span className="gsl-upload-field__dialog-filename">{fileErrorDialog.name}</span>
+                )}
+                {fileErrorDialog?.message}
+              </DialogDescription>
+              <DialogFooter>
+                <Button variant="ghost" onClick={() => setFileErrorDialog(null)}>
+                  Cancel
+                </Button>
+                <Button variant="primary" onClick={handleDialogRetry}>
+                  Try again
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </DialogPortal>
+        </Dialog>
+      </>
     );
   },
 );

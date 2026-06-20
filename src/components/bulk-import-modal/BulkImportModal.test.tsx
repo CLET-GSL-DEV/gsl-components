@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { BulkImportModal } from "./BulkImportModal";
@@ -26,7 +26,7 @@ describe("BulkImportModal", () => {
       />,
     );
 
-    expect(screen.getByRole("dialog", { name: "Import students" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Import steps" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Upload Document" })).toBeInTheDocument();
     expect(screen.getByText("Data that we expect:")).toBeInTheDocument();
 
@@ -80,7 +80,7 @@ describe("BulkImportModal", () => {
     await user.click(screen.getByRole("button", CLOSE_BTN));
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
-    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+    expect(screen.queryByRole("dialog", { name: "Exit import flow" })).not.toBeInTheDocument();
   });
 
   it("shows exit confirmation after a file is uploaded", async () => {
@@ -112,7 +112,6 @@ describe("BulkImportModal", () => {
 
     await user.click(screen.getByRole("button", CLOSE_BTN));
 
-    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "Exit import flow" }),
     ).toBeInTheDocument();
@@ -153,12 +152,11 @@ describe("BulkImportModal", () => {
 
     await user.click(screen.getByRole("button", CLOSE_BTN));
 
-    const confirmDialog = screen.getByRole("alertdialog");
     await user.click(
-      within(confirmDialog).getByRole("button", { name: "Cancel" }),
+      screen.getByRole("button", { name: "Cancel" }),
     );
 
-    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+    expect(screen.queryByText("Exit import flow")).not.toBeInTheDocument();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(onOpenChange).not.toHaveBeenCalled();
   });

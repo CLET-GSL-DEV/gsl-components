@@ -63,7 +63,6 @@
 
 .gsl-button--outline {
   border-color: var(--gsl-primary);
-  background: var(--gsl-bg);
   color: var(--gsl-primary);
 }
 

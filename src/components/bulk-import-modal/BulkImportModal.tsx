@@ -1,14 +1,21 @@
 import { useMemo } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Modal,
   ModalPortal,
   ModalOverlay,
   ModalContent,
   ModalTitle,
+  ModalFooter,
+  ModalBody,
 } from "../modal/Modal";
+import { Button } from "../button/Button";
 import type { BulkImportModalProps } from "../../types/bulk-import-modal";
 import { useBulkImportFlow } from "./hooks/useBulkImportFlow";
-import { getMappedFieldKeys, buildAllSourceColumns } from "./utils/mapRowsToRecords";
+import {
+  getMappedFieldKeys,
+  buildAllSourceColumns,
+} from "./utils/mapRowsToRecords";
 import { MatchColumnsStep } from "./steps/MatchColumnsStep";
 import { SelectHeaderRowStep } from "./steps/SelectHeaderRowStep";
 import { UploadStep } from "./steps/UploadStep";
@@ -54,11 +61,13 @@ export function BulkImportModal({
   maxFileSizeBytes = DEFAULT_MAX_FILE_SIZE,
   allowImportWithWarnings = false,
   className,
+  defaultState,
 }: BulkImportModalProps) {
   const flow = useBulkImportFlow({
     fields,
     maxFileSizeBytes,
     open,
+    defaultState,
   });
 
   const hasUnsavedProgress = flow.parsed !== null;
@@ -80,8 +89,7 @@ export function BulkImportModal({
   }, [flow.parsed, flow.headerRowIndex]);
 
   const mappedFieldKeys = useMemo(
-    () =>
-      getMappedFieldKeys(flow.sourceColumnMapping, flow.excludedColumns),
+    () => getMappedFieldKeys(flow.sourceColumnMapping, flow.excludedColumns),
     [flow.sourceColumnMapping, flow.excludedColumns],
   );
 
@@ -103,7 +111,7 @@ export function BulkImportModal({
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
       <ModalPortal>
-        <ModalOverlay className="gsl-bulk-import__overlay" />
+        <ModalOverlay />
         <ModalContent
           className={dialogClass}
           size="2xl"
@@ -111,13 +119,10 @@ export function BulkImportModal({
           preventClose={hasUnsavedProgress}
           preventCloseTitle="Exit import flow"
           preventCloseDescription="Are you sure? Your current information will not be saved."
+          onOpenChange={onOpenChange}
           aria-describedby={undefined}
         >
-          <ModalTitle className="gsl-bulk-import__dialog-title">
-            {title}
-          </ModalTitle>
-
-          <header className="gsl-bulk-import__header">
+          <ModalTitle className="gsl-bulk-import__header">
             <nav className="gsl-bulk-import__stepper" aria-label="Import steps">
               <ol className="gsl-bulk-import__stepper-list">
                 {STEPS.map((stepItem, index) => {
@@ -131,8 +136,12 @@ export function BulkImportModal({
                       className={[
                         "gsl-bulk-import__stepper-item",
                         isActive ? "gsl-bulk-import__stepper-item--active" : "",
-                        isComplete ? "gsl-bulk-import__stepper-item--complete" : "",
-                        canClick ? "gsl-bulk-import__stepper-item--clickable" : "",
+                        isComplete
+                          ? "gsl-bulk-import__stepper-item--complete"
+                          : "",
+                        canClick
+                          ? "gsl-bulk-import__stepper-item--clickable"
+                          : "",
                       ]
                         .filter(Boolean)
                         .join(" ")}
@@ -149,7 +158,9 @@ export function BulkImportModal({
                             <span
                               className={[
                                 "gsl-bulk-import__stepper-number",
-                                isComplete ? "gsl-bulk-import__stepper-number--hidden" : "",
+                                isComplete
+                                  ? "gsl-bulk-import__stepper-number--hidden"
+                                  : "",
                               ]
                                 .filter(Boolean)
                                 .join(" ")}
@@ -159,7 +170,9 @@ export function BulkImportModal({
                             </span>
                             {isComplete && <CheckmarkIcon />}
                           </span>
-                          <span className="gsl-bulk-import__stepper-label">{stepItem.label}</span>
+                          <span className="gsl-bulk-import__stepper-label">
+                            {stepItem.label}
+                          </span>
                         </button>
                       ) : (
                         <>
@@ -167,7 +180,9 @@ export function BulkImportModal({
                             <span
                               className={[
                                 "gsl-bulk-import__stepper-number",
-                                isComplete ? "gsl-bulk-import__stepper-number--hidden" : "",
+                                isComplete
+                                  ? "gsl-bulk-import__stepper-number--hidden"
+                                  : "",
                               ]
                                 .filter(Boolean)
                                 .join(" ")}
@@ -177,7 +192,9 @@ export function BulkImportModal({
                             </span>
                             {isComplete && <CheckmarkIcon />}
                           </span>
-                          <span className="gsl-bulk-import__stepper-label">{stepItem.label}</span>
+                          <span className="gsl-bulk-import__stepper-label">
+                            {stepItem.label}
+                          </span>
                         </>
                       )}
                       {!isLast && (
@@ -207,9 +224,9 @@ export function BulkImportModal({
                 })}
               </ol>
             </nav>
-          </header>
+          </ModalTitle>
 
-          <div
+          <ModalBody
             className={[
               "gsl-bulk-import__body",
               flow.step === 1
@@ -271,37 +288,41 @@ export function BulkImportModal({
                 onUpdateRowValue={flow.updateRowValue}
               />
             )}
-          </div>
+          </ModalBody>
 
           {flow.step > 1 && (
-            <footer className="gsl-bulk-import__footer">
-              <button
-                type="button"
-                className="gsl-bulk-import__button gsl-bulk-import__button--outline"
+            <ModalFooter className="gsl-bulk-import__footer">
+              <Button
+                variant="outline"
+                size="md"
+                className="gsl-bulk-import__footer-action"
                 onClick={flow.goBack}
               >
+                <ChevronLeft size={16} strokeWidth={2} />
                 Back
-              </button>
+              </Button>
               {flow.step < 4 ? (
-                <button
-                  type="button"
-                  className="gsl-bulk-import__button gsl-bulk-import__button--primary gsl-bulk-import__footer-action"
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="gsl-bulk-import__footer-action"
                   disabled={!flow.canGoNext}
                   onClick={flow.goNext}
                 >
                   Next
-                </button>
+                </Button>
               ) : (
-                <button
-                  type="button"
-                  className="gsl-bulk-import__button gsl-bulk-import__button--primary gsl-bulk-import__footer-action"
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="gsl-bulk-import__footer-action"
                   disabled={!canConfirm}
                   onClick={handleConfirm}
                 >
                   Confirm
-                </button>
+                </Button>
               )}
-            </footer>
+            </ModalFooter>
           )}
         </ModalContent>
       </ModalPortal>

@@ -276,6 +276,7 @@ The first worksheet is used for multi-sheet workbooks. Discarded rows are exclud
 | `title` | `string` | `"Bulk import"` | Modal title |
 | `maxFileSizeBytes` | `number` | `5242880` | Maximum upload size (5 MB) |
 | `allowImportWithWarnings` | `boolean` | `false` | Allow import when only warnings exist |
+| `defaultState` | `BulkImportFlowDefaultState` | — | Seed initial flow state for progress preservation across open/close cycles |
 | `className` | `string` | — | Root CSS class |
 
 ### Field schema
@@ -794,7 +795,7 @@ const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
 </Modal>
 ```
 
-Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `size`, `preventClose`, `preventCloseTitle`, `preventCloseDescription`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalSize`, `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
+Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `size`, `preventClose`, `preventCloseTitle`, `preventCloseDescription`, `onOpenChange`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalSize`, `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
 
 
 ## NetworkOperator

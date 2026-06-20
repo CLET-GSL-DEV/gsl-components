@@ -9,6 +9,7 @@
   --gsl-radius-base: 12px;
 
   position: fixed;
+  transform: none;
   z-index: var(--gsl-z-modal);
   inset: var(--gsl-bulk-import-gutter);
   font-family: var(--gsl-font);
@@ -32,53 +33,6 @@
 
 .gsl-bulk-import[data-state="closed"] {
   animation: gsl-bulk-import-dialog-out 180ms ease forwards;
-}
-
-.gsl-bulk-import__dialog-title {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.gsl-bulk-import__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: var(--gsl-z-overlay);
-  background: var(--gsl-overlay);
-}
-
-.gsl-bulk-import__overlay[data-state="open"] {
-  animation: gsl-bulk-import-overlay-in 200ms ease forwards;
-}
-
-.gsl-bulk-import__overlay[data-state="closed"] {
-  animation: gsl-bulk-import-overlay-out 180ms ease forwards;
-}
-
-@keyframes gsl-bulk-import-overlay-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes gsl-bulk-import-overlay-out {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
 }
 
 @keyframes gsl-bulk-import-dialog-in {
@@ -350,9 +304,6 @@
     stroke-dashoffset: 0;
   }
 
-  .gsl-bulk-import__overlay,
-  .gsl-bulk-import__overlay[data-state="open"],
-  .gsl-bulk-import__overlay[data-state="closed"],
   .gsl-bulk-import,
   .gsl-bulk-import[data-state="open"],
   .gsl-bulk-import[data-state="closed"] {
@@ -363,7 +314,7 @@
 .gsl-bulk-import__body {
   flex: 1;
   min-height: 0;
-  padding: 0 32px 24px;
+  padding: 24px;
   overflow: auto;
 }
 
@@ -761,7 +712,10 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  border-bottom: 1px solid var(--gsl-border);
+}
+
+.gsl-bulk-import__virtual-row:nth-child(even) {
+  background: rgb(0 0 0 / 2.5%);
 }
 
 .gsl-bulk-import__virtual-row:hover {
@@ -771,6 +725,19 @@
 .gsl-bulk-import__virtual-row.gsl-bulk-import__table-row--selected {
   background: var(--gsl-bulk-import-primary-light);
   font-weight: 600;
+
+  text-transform: capitalize !important;
+
+  border-bottom: 1px solid var(--gsl-border);
+  border-top: 1px solid var(--gsl-border);
+}
+.gsl-bulk-import__virtual-row.gsl-bulk-import__table-row--selected:last-child {
+  border-top: 1px solid var(--gsl-border);
+  border-bottom: none;
+}
+.gsl-bulk-import__virtual-row.gsl-bulk-import__table-row--selected:first-child {
+  border-bottom: 1px solid var(--gsl-border);
+  border-top: none;
 }
 
 .gsl-bulk-import__virtual-cell {
@@ -861,7 +828,8 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  animation: gsl-bulk-import-step-badge-in 280ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: gsl-bulk-import-step-badge-in 280ms cubic-bezier(0.4, 0, 0.2, 1)
+    both;
 }
 
 .gsl-bulk-import__mapping-status--complete {
@@ -1123,10 +1091,7 @@
 }
 
 .gsl-bulk-import__footer-action {
-  min-width: 280px;
-  padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 600;
+  min-width: 120px;
 }
 
 .gsl-bulk-import__button {
@@ -1223,4 +1188,9 @@
     width: 100%;
     min-width: 0;
   }
+}
+
+.gsl-bulk-import__footer {
+  border: none;
+  padding-top: 0;
 }
