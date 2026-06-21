@@ -26,7 +26,7 @@ Click **Open bulk import** to launch the multi-step import modal with sample dat
 1. **Upload Document** — preview expected columns, then upload `.xlsx`, `.xls`, or `.csv`
 2. **Select header row** — choose the header row with radio buttons
 3. **Match Columns** — map each uploaded column to a target field
-4. **Validate data** — review rows, discard invalid rows, then **Confirm**
+4. **Validate data** — review editable rows with error checking, discard rows, or reset discarded rows, then **Confirm**
 
 ## Props
 
@@ -44,6 +44,7 @@ Click **Open bulk import** to launch the multi-step import modal with sample dat
 ## Notes
 
 - Also exported: `useBulkImportFlow`, step components, and spreadsheet utilities.
-- Discarded rows are excluded from `onComplete`.
+- Discarded rows are excluded from `onComplete`. Use reset discarded rows button to restore them.
+- The validate data table is virtualized for performance with large spreadsheets.
 - The modal uses `useConfirmBeforeUnload` to warn on page refresh/close when a file has been uploaded but not confirmed.
 - The example uses `useModalSearchParam("bulk-import")` for URL-driven open state (`?modal=bulk-import`). See [Modal URL state](/docs/modal#url-state).

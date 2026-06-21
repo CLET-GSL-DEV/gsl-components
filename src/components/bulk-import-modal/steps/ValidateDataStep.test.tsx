@@ -34,6 +34,7 @@ const defaultProps = {
   onSetVisibleRowsSelection: vi.fn(),
   onShowOnlyErrorsChange: vi.fn(),
   onDiscardSelectedRows: vi.fn(),
+  onResetDiscardedRows: vi.fn(),
   onUpdateRowValue: vi.fn(),
 };
 

@@ -1,3 +1,5 @@
+export { BreadcrumbProvider, useBreadcrumbs, useBreadcrumbContext } from "./breadcrumb-context";
+export type { BreadcrumbEntry } from "./breadcrumb-context";
 export {
   Breadcrumb,
   BreadcrumbEllipsis,

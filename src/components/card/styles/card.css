@@ -8,6 +8,26 @@
   color: var(--gsl-text);
 }
 
+.gsl-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.gsl-card__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gsl-text);
+}
+
+.gsl-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 @media (width <= 768px) {
   .gsl-card {
     --gsl-card-padding: 16px;

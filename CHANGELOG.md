@@ -7,9 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.0] - 2026-06-21
+
+### Breaking
+- **AppLayout**: Now wraps `SidebarProvider` and `BreadcrumbProvider` internally. Consumers no longer need to add these providers. Removed `AppBreadcrumb` slot component. Breadcrumbs are context driven, call `useBreadcrumbs()` from any page to set them.
+- **Card**: Removed `header` prop and `CardClassNames`. Use `CardHeader`, `CardTitle`, and `CardActions` sub-components instead.
+
 ### Added
-- `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation on page refresh/close
-- BulkImportModal: browser confirmation prompt via `useConfirmBeforeUnload` when a file has been uploaded but not confirmed
+- `BreadcrumbProvider`, `useBreadcrumbs`, `useBreadcrumbContext`, `BreadcrumbEntry` exports
+- `CardHeader`, `CardTitle`, `CardActions` sub-components
+- `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation
+- BulkImportModal: browser confirmation prompt when a file has been uploaded but not confirmed
+- BulkImportModal: reset discarded rows button on validate data page
+
+### Changed
+- **ValidateDataStep**: replaced `<Table />` dependency with an internal virtualized table using `@tanstack/react-virtual`. Error counts correctly exclude discarded rows.
+- `CheckboxProps.checked` now accepts `"indeterminate"` for native Radix indeterminate support
 
 ## [1.17.0] - 2026-06-20
 

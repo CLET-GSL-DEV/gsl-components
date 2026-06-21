@@ -9,7 +9,7 @@ import appLayoutSource from "../previews/examples/app-layout.example.tsx?raw";
 
 # AppLayout
 
-Application layout container that auto-positions `AppHeader`, `AppSidebar`, `AppBreadcrumb`, and `AppBody` by component type. Renders a full-viewport flex layout with sidebar on the left, header at the top, breadcrumb below the header, and main content filling the remaining space.
+Application layout container that auto-positions `AppHeader`, `AppSidebar`, and `AppBody` by component type. Wraps `SidebarProvider` and `BreadcrumbProvider` internally. Breadcrumbs render from `useBreadcrumbs()` context, no `AppBreadcrumb` slot needed.
 
 ## Example
 
@@ -23,23 +23,12 @@ Application layout container that auto-positions `AppHeader`, `AppSidebar`, `App
 
 ### `AppLayout`
 
-Root layout container. Scans direct children for `componentId` matching `"AppHeader"`, `"AppSidebar"`, `"AppBreadcrumb"`, or `"AppBody"` and positions them automatically. Unmatched children are ignored.
+Root layout container. Scans direct children for `componentId` matching `"AppHeader"`, `"AppSidebar"`, or `"AppBody"` and positions them automatically. Breadcrumbs are rendered between the header and body when `useBreadcrumbs()` is called from any child. `SidebarProvider` and `BreadcrumbProvider` are wrapped internally, no need to add them manually.
 
 | Prop | Type | Description |
 |------|------|-------------|
-| `children` | `ReactNode` | Direct children — `<AppHeader>`, `<AppSidebar>`, `<AppBreadcrumb>`, `<AppBody>` |
+| `children` | `ReactNode` | Direct children — `<AppHeader>`, `<AppSidebar>`, `<AppBody>` |
 | `className` | `string` | Merged onto the root element |
-
-### `AppBreadcrumb`
-
-Wrapper for breadcrumb content. Must be a direct child of `AppLayout`. Renders between the sticky header and the content body. Scrolls with the page content (not sticky).
-
-| Prop | Type | Description |
-|------|------|-------------|
-| `children` | `ReactNode` | Breadcrumb content — typically `<Breadcrumb>` |
-| `className` | `string` | Merged onto the breadcrumb wrapper |
-
-
 
 ### `AppSidebar`
 
@@ -63,6 +52,24 @@ Wrapper for main page content. Must be a direct child of `AppLayout`. Renders as
 
 > Note: `AppHeader` renders above `AppBody` when both are direct children of `AppLayout`. If `AppHeader` is placed inside `AppBody`, it renders inline within the content area without the sticky header wrapper.
 
+## Breadcrumbs
+
+Breadcrumbs are rendered automatically by `AppLayout` when items are set via `useBreadcrumbs()`. No `<AppBreadcrumb>` wrapper or `<BreadcrumbProvider>` needed.
+
+```tsx
+import { useBreadcrumbs } from "@rfdtech/components";
+
+function Page() {
+  useBreadcrumbs([
+    { label: "Users", href: "/users" },
+    { label: "Current User" },
+  ]);
+  return <div>Page content</div>;
+}
+```
+
+When `items` is empty, the breadcrumb section is hidden entirely.
+
 ## Types
 
 ### `AppLayoutProps`
@@ -77,13 +84,6 @@ Wrapper for main page content. Must be a direct child of `AppLayout`. Renders as
 | Key | Type | Description |
 |-----|------|-------------|
 | `children` | `ReactNode` | Sidebar content |
-| `className` | `string` | CSS class |
-
-### `AppBreadcrumbProps`
-
-| Key | Type | Description |
-|-----|------|-------------|
-| `children` | `ReactNode` | Breadcrumb content |
 | `className` | `string` | CSS class |
 
 ### `AppBodyProps`
@@ -107,7 +107,7 @@ Wrapper for main page content. Must be a direct child of `AppLayout`. Renders as
 - The header is sticky (`position: sticky; top: 0`), so it stays visible when the body scrolls.
 - `AppLayout` sets `height: 100vh; overflow: hidden` on itself and `overflow-y: auto` on the body area — the page scrolls within the body while the sidebar stays fixed.
 - The sidebar has `flex-shrink: 0` with `width: max-content`, so it sizes to its content and won't shrink.
-- All four components are optional — you can use only `AppBody` for a simple content shell, or `AppSidebar` + `AppBody` for a sidebar layout without a header.
+- All three components are optional — you can use only `AppBody` for a simple content shell, or `AppSidebar` + `AppBody` for a sidebar layout without a header.
 - Auto-positioning works by reading `componentId` from the child element's render function — only direct children are scanned.
-- Do NOT wrap children in Fragments, conditionals, or unknown elements — `AppLayout` only auto-positions components with `componentId` matching `"AppHeader"`, `"AppSidebar"`, `"AppBreadcrumb"`, or `"AppBody"`. Anything else is silently ignored and won't render.
-- The breadcrumb wrapper is not sticky — it scrolls with the page content below the header.
+- Do NOT wrap children in Fragments, conditionals, or unknown elements — `AppLayout` only auto-positions components with `componentId` matching `"AppHeader"`, `"AppSidebar"`, or `"AppBody"`. Anything else is silently ignored and won't render.
+- Breadcrumbs are rendered from context. Call `useBreadcrumbs()` from any child, AppLayout handles the rest. When items is empty, breadcrumbs are hidden.

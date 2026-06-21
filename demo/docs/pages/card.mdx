@@ -15,11 +15,35 @@ Surface card wrapper for grouping content. Uses `--gsl-surface-card` for backgro
 
 <ExampleTabs title="Card variants" preview={<CardPreview />} code={cardSource} />
 
-## Props
+## Card
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `children` | `ReactNode` | — | Card content |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
+
+## CardHeader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | — | Header content |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
+
+## CardTitle
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | — | Title text or element |
+
+Also accepts remaining `HTMLAttributes<HTMLHeadingElement>`.
+
+## CardActions
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | — | Action items (buttons, links) |
 
 Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
 

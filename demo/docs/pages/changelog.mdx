@@ -12,17 +12,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.0] - 2026-06-21
+
 ### Breaking
-- **ValidateDataStep**: Replaced `<Table />` with a custom virtualized table built on `@tanstack/react-virtual`. Removed all `<Table />`, `TableBulkActions`, and `TableFooter` usage. Error cells now use background color only (no border). Added `onResetDiscardedRows` prop and a "Reset discarded rows" button in the header. Error counts now correctly exclude discarded rows.
+- **AppLayout**: Now wraps `SidebarProvider` and `BreadcrumbProvider` internally. Consumers no longer need to add these providers. Removed `AppBreadcrumb` slot component. Breadcrumbs are context driven, call `useBreadcrumbs()` from any page to set them.
+- **Card**: Removed `header` prop and `CardClassNames`. Use `CardHeader`, `CardTitle`, and `CardActions` sub-components instead.
 
 ### Added
-- `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation on page refresh/close
-- BulkImportModal: browser confirmation prompt via `useConfirmBeforeUnload` when a file has been uploaded but not confirmed
-- BulkImportModal: `resetDiscardedRows` method on `UseBulkImportFlowReturn`
-- BulkImportModal: "Reset discarded rows" button in ValidateDataStep header
+- `BreadcrumbProvider`, `useBreadcrumbs`, `useBreadcrumbContext`, `BreadcrumbEntry` exports
+- `CardHeader`, `CardTitle`, `CardActions` sub-components
+- `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation
+- BulkImportModal: browser confirmation prompt when a file has been uploaded but not confirmed
+- BulkImportModal: reset discarded rows button on validate data page
 
 ### Changed
-- BulkImportModal: ValidateDataStep now computes `activeErrors` filtered by `discardedRows` for accurate error counts
+- **ValidateDataStep**: replaced `<Table />` dependency with an internal virtualized table using `@tanstack/react-virtual`. Error counts correctly exclude discarded rows.
 - `CheckboxProps.checked` now accepts `"indeterminate"` for native Radix indeterminate support
 
 ## [1.13.2] - 2026-06-18
@@ -103,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `SidebarBrand` sub-component for collapsed-aware brand area
 - `useTablePagination`, `useTableState`, `useTableFilter`, `useDebounce` hooks
 - `DocsLayout` for documentation pages
-- `countries` utility — country list with name, flag emoji, dial code, ISO code
+- `countries` utility: country list with name, flag emoji, dial code, ISO code
 - CSS tokens `--gsl-surface-dark`, `--gsl-surface-card`, `--gsl-rounded-base`
 - Documentation pages for all new components with interactive examples
 
@@ -138,7 +142,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Form docs split into `/docs/form` (Field, Input, Textarea) and `/docs/form-field` (Form, FormField, useFormField, Zod)
 - Dialog, Modal, BulkImportModal, and CommandDialog doc examples and README snippets now use `useDialogSearchParam` / `useModalSearchParam` for URL-driven open state
-- Toast rebuilt on [Sonner](https://sonner.emilkowal.ski/) — `ToastProvider`, `Toaster`, and `useToast()` remain the public API; internal queue and styling now delegate to Sonner with GSL `unstyled` class names
+- Toast rebuilt on [Sonner](https://sonner.emilkowal.ski/); `ToastProvider`, `Toaster`, and `useToast()` remain the public API; internal queue and styling now delegate to Sonner with GSL `unstyled` class names
 - `useToast().toasts` is deprecated and always returns `[]` (Sonner does not expose its queue)
 - Docs code examples use increased spacing between fenced blocks and inside highlighted code panels
 
@@ -184,7 +188,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Command inline results render in a floating popover so the search field height stays fixed
 - Command shortcut badges use a single unified chip (e.g. `⌘` `K`) instead of separate key caps per key
 - Command dialog input shows the keyboard shortcut badge automatically when `shortcut` is set
-- Component authoring rule requires full responsive behavior (320px–desktop, touch targets, reduced motion, docs preview checks)
+- Component authoring rule requires full responsive behavior (320px to desktop, touch targets, reduced motion, docs preview checks)
 
 ## [1.5.0] - 2026-06-15
 

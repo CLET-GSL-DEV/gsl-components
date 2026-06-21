@@ -4,5 +4,3 @@ export { AppSidebar } from "./AppSidebar";
 export type { AppSidebarProps } from "./AppSidebar";
 export { AppBody } from "./AppBody";
 export type { AppBodyProps } from "./AppBody";
-export { AppBreadcrumb } from "./AppBreadcrumb";
-export type { AppBreadcrumbProps } from "./AppBreadcrumb";
