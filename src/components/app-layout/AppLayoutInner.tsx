@@ -7,7 +7,8 @@ import {
 } from "react";
 import { cn } from "../../utils/cn";
 import { useBreadcrumbContext } from "../breadcrumb/breadcrumb-context";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../breadcrumb/Breadcrumb";
+import { Link } from "react-router-dom";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../breadcrumb/Breadcrumb";
 import "./styles/app-layout.css";
 
 export interface AppLayoutInnerProps {
@@ -62,9 +63,9 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
                     i > 0 && <BreadcrumbSeparator key={`sep-${i}`} />,
                     <BreadcrumbItem key={i}>
                       {item.href ? (
-                        <BreadcrumbLink href={item.href}>
+                        <Link to={item.href} className="gsl-breadcrumb__link">
                           {item.label}
-                        </BreadcrumbLink>
+                        </Link>
                       ) : (
                         <BreadcrumbPage>{item.label}</BreadcrumbPage>
                       )}

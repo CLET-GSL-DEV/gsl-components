@@ -1,11 +1,7 @@
 import {
-  Children,
-  isValidElement,
   forwardRef,
-  type ReactElement,
   type ReactNode,
 } from "react";
-import { cn } from "../../utils/cn";
 import { BreadcrumbProvider } from "../breadcrumb/breadcrumb-context";
 import { SidebarProvider } from "../sidebar/SidebarContext";
 import { AppLayoutInner } from "./AppLayoutInner";

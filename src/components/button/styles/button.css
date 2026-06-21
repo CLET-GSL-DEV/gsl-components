@@ -90,6 +90,26 @@
   background: var(--gsl-error-bg);
 }
 
+.gsl-button--primary-destructive {
+  border-color: var(--gsl-error);
+  background: var(--gsl-error);
+  color: var(--gsl-on-primary);
+}
+
+.gsl-button--primary-destructive:hover:not(:disabled) {
+  filter: brightness(0.85);
+}
+
+.gsl-button--success {
+  border-color: var(--gsl-success);
+  background: var(--gsl-success);
+  color: var(--gsl-on-primary);
+}
+
+.gsl-button--success:hover:not(:disabled) {
+  filter: brightness(0.85);
+}
+
 .gsl-button__label {
   display: flex;
   align-items: center;
