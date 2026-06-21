@@ -431,15 +431,6 @@
   overflow: hidden;
 }
 
-.gsl-bulk-import__step--validate
-  .gsl-bulk-import__table-wrap--validate
-  .gsl-table {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
 .gsl-bulk-import__validate-header-title {
   margin: 0;
   font-size: 18px;
@@ -1009,7 +1000,6 @@
 
 .gsl-bulk-import__cell--error {
   background: var(--gsl-bulk-import-error-bg);
-  box-shadow: inset 0 0 0 1px var(--gsl-error);
 }
 
 .gsl-bulk-import__cell-input {
@@ -1041,47 +1031,6 @@
 
 .gsl-bulk-import__cell--error .gsl-bulk-import__cell-input:focus-visible {
   box-shadow: inset 0 0 0 2px var(--gsl-error);
-}
-
-/* ── GSL Table integration within validate step ── */
-
-.gsl-bulk-import__table-wrap--validate .gsl-table__content {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-}
-
-.gsl-bulk-import__table-wrap--validate .gsl-table th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-.gsl-bulk-import__table-wrap--validate .gsl-table td {
-  padding: 0;
-  vertical-align: top;
-  height: 44px;
-}
-
-.gsl-bulk-import__table-wrap--validate .gsl-table__checkbox-cell {
-  vertical-align: middle;
-  padding: 10px 12px;
-  width: 44px;
-}
-
-.gsl-bulk-import__table-wrap--validate .gsl-checkbox__control {
-  border-radius: 4px;
-}
-
-.gsl-bulk-import__table-wrap--validate .gsl-table tbody tr:hover {
-  background: var(--gsl-hover);
-}
-
-.gsl-bulk-import__table-wrap--validate
-  .gsl-table
-  tbody
-  tr[data-selected="true"] {
-  background: var(--gsl-bulk-import-primary-light);
 }
 
 .gsl-bulk-import__validate-actions {

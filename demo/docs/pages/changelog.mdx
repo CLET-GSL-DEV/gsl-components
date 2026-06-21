@@ -12,9 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+- **ValidateDataStep**: Replaced `<Table />` with a custom virtualized table built on `@tanstack/react-virtual`. Removed all `<Table />`, `TableBulkActions`, and `TableFooter` usage. Error cells now use background color only (no border). Added `onResetDiscardedRows` prop and a "Reset discarded rows" button in the header. Error counts now correctly exclude discarded rows.
+
 ### Added
 - `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation on page refresh/close
 - BulkImportModal: browser confirmation prompt via `useConfirmBeforeUnload` when a file has been uploaded but not confirmed
+- BulkImportModal: `resetDiscardedRows` method on `UseBulkImportFlowReturn`
+- BulkImportModal: "Reset discarded rows" button in ValidateDataStep header
+
+### Changed
+- BulkImportModal: ValidateDataStep now computes `activeErrors` filtered by `discardedRows` for accurate error counts
+- `CheckboxProps.checked` now accepts `"indeterminate"` for native Radix indeterminate support
 
 ## [1.13.2] - 2026-06-18
 

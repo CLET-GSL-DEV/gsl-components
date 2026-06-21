@@ -123,6 +123,7 @@ export interface UseBulkImportFlowReturn {
   setVisibleRowsSelection: (rowIds: number[], selected: boolean) => void;
   setShowOnlyErrors: (value: boolean) => void;
   discardSelectedRows: () => void;
+  resetDiscardedRows: () => void;
   updateRowValue: (rowId: number, fieldKey: string, value: string) => void;
   handleFile: (file: File) => Promise<void>;
   autoMapColumns: () => void;

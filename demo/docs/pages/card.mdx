@@ -9,7 +9,7 @@ import cardSource from "../previews/examples/card.example.tsx?raw";
 
 # Card
 
-Surface card wrapper for grouping content with an optional header. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for spacing — both overridable via CSS custom properties or `classNames`.
+Surface card wrapper for grouping content. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for spacing — both overridable via CSS custom properties or `className`.
 
 ## Example
 
@@ -19,40 +19,20 @@ Surface card wrapper for grouping content with an optional header. Uses `--gsl-s
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `header` | `ReactNode` | — | Optional header rendered above the body |
-| `children` | `ReactNode` | — | Card body content |
-| `classNames` | `CardClassNames` | — | Part-level class overrides |
-| `className` | `string` | — | Merged onto the root element |
+| `children` | `ReactNode` | — | Card content |
 
 Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
 
-## Types
-
-### `CardProps`
-
-See the props table above.
-
-### `CardClassNames`
-
-| Key | Applied to |
-|-----|------------|
-| `root` | Root element (`.gsl-card`) |
-| `header` | Header wrapper (`.gsl-card__header`) |
-| `body` | Body wrapper (`.gsl-card__body`) |
-
 ## Design tokens
-
-The following tokens are specific to the Card component:
 
 | Token | Fallback | Used for |
 |-------|----------|----------|
 | `--gsl-surface-card` | `--gsl-bg` | Card background |
 | `--gsl-card-padding` | `20px` | Inner padding (16px on mobile) |
 
-Override padding via `--gsl-card-padding` or pass a class with custom padding through `classNames.root`.
+Override padding via `--gsl-card-padding` or tailwind padding classes through `className`.
 
 ## Notes
 
-- Omitting `header` hides the header divider — the body fills the card edge-to-edge.
 - On mobile (`<= 768px`), padding reduces to 16px via `--gsl-card-padding`.
-- Use `classNames.root` to override background, border-radius, shadow, or any root style.
+- Use `className` to override background, border-radius, shadow, or any root style.

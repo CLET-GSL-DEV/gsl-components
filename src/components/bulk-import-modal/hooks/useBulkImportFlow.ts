@@ -274,6 +274,10 @@ export function useBulkImportFlow(
     setSelectedRowIds([]);
   }, [selectedRowIds]);
 
+  const resetDiscardedRows = useCallback(() => {
+    setDiscardedRows([]);
+  }, []);
+
   const updateRowValue = useCallback(
     (rowId: number, fieldKey: string, value: string) => {
       setEditableRows((current) =>
@@ -366,6 +370,7 @@ export function useBulkImportFlow(
       setVisibleRowsSelection,
       setShowOnlyErrors,
       discardSelectedRows,
+      resetDiscardedRows,
       updateRowValue,
       handleFile,
       goNext,
@@ -402,6 +407,7 @@ export function useBulkImportFlow(
       setVisibleRowsSelection,
       setShowOnlyErrors,
       discardSelectedRows,
+      resetDiscardedRows,
       updateRowValue,
       handleFile,
       goNext,

@@ -4,23 +4,16 @@ import { cn } from "../../utils/cn";
 import "./styles/card.css";
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
-  { className, classNames, header, children, ...props },
+  { className, children, ...props },
   ref,
 ) {
   return (
     <div
       ref={ref}
-      className={cn("gsl-card", classNames?.root, className)}
+      className={cn("gsl-card", className)}
       {...props}
     >
-      {header ? (
-        <div className={cn("gsl-card__header", classNames?.header)}>
-          {header}
-        </div>
-      ) : null}
-      <div className={cn("gsl-card__body", classNames?.body)}>
-        {children}
-      </div>
+      {children}
     </div>
   );
 });

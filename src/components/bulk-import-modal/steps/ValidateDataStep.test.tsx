@@ -53,14 +53,20 @@ describe("ValidateDataStep", () => {
   it("renders mapped rows and toolbar controls", () => {
     render(<ValidateDataStep {...defaultProps} />);
 
-    expect(screen.getByRole("heading", { name: "Validate data" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Discard selected rows" })).toBeDisabled();
     expect(
-      screen.getByRole("switch", { name: "Show only rows with errors" }),
+      screen.getByRole("heading", { name: "Validate data" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Discard selected rows" }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole("switch", { name: "Show only rows with errors (1)" }),
     ).toBeInTheDocument();
     expect(screen.getByDisplayValue("a@example.com")).toBeInTheDocument();
     expect(screen.getByDisplayValue("bad")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-bulk-import__validate-board")).toBeInTheDocument();
+    expect(
+      document.querySelector(".gsl-bulk-import__table-wrap--validate"),
+    ).toBeInTheDocument();
   });
 
   it("filters to rows with errors when showOnlyErrors is enabled", () => {

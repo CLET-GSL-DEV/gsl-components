@@ -9,7 +9,7 @@ export interface CheckboxClassNames {
 }
 
 export interface CheckboxProps {
-  checked?: boolean;
+  checked?: boolean | "indeterminate";
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   label?: ReactNode;

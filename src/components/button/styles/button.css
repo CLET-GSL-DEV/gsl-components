@@ -80,6 +80,16 @@
   background: var(--gsl-hover);
 }
 
+.gsl-button--destructive {
+  border-color: transparent;
+  background: transparent;
+  color: var(--gsl-error-text);
+}
+
+.gsl-button--destructive:hover:not(:disabled) {
+  background: var(--gsl-error-bg);
+}
+
 .gsl-button__label {
   display: flex;
   align-items: center;
