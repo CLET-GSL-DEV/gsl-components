@@ -1,5 +1,5 @@
 export { Table, TableContent, TableFooter } from "./Table";
-export { TableHeader, TableSearch, TableFilter } from "./TableHeader";
+export { TableHeader, TableSearch, TableFilter, TableActions } from "./TableHeader";
 export { TablePagination } from "./TablePagination";
 export { TableBulkActions } from "./TableBulkActions";
 export type {

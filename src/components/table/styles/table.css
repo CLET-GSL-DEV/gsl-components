@@ -17,6 +17,13 @@
   margin-bottom: calc(var(--gsl-app-layout-body-gap) / 2);
 }
 
+.gsl-table__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 /* ── Search ── */
 
 .gsl-table__search {
