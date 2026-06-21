@@ -14,6 +14,7 @@ export interface FieldMappingSelectProps {
   options: FieldMappingSelectOption[];
   placeholder?: string;
   clearable?: boolean;
+  invalid?: boolean;
   formatOption?: (option: DropdownOption | null, state: "selected" | "idle" | "empty") => ReactNode;
 }
 
@@ -24,6 +25,7 @@ export function FieldMappingSelect({
   options,
   placeholder = "Select...",
   clearable = false,
+  invalid = false,
   formatOption,
 }: FieldMappingSelectProps) {
   return (
@@ -34,6 +36,7 @@ export function FieldMappingSelect({
       options={options}
       placeholder={placeholder}
       clearable={clearable}
+      invalid={invalid}
       formatOption={formatOption}
     />
   );

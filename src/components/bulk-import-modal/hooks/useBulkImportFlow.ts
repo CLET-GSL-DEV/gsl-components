@@ -136,10 +136,11 @@ export function useBulkImportFlow(
       case 2:
         return headerRowIndex !== null;
       case 3:
-        return isRequiredMappingComplete(
-          fields,
-          sourceColumnMapping,
-          excludedColumns,
+        return (
+          activeSourceColumns.length > 0 &&
+          activeSourceColumns.every(
+            (col) => sourceColumnMapping[col.index] !== null,
+          )
         );
       default:
         return false;
@@ -150,6 +151,7 @@ export function useBulkImportFlow(
     parseError,
     headerRowIndex,
     fields,
+    activeSourceColumns,
     sourceColumnMapping,
     excludedColumns,
   ]);

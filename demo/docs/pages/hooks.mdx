@@ -195,6 +195,31 @@ createSearchParamAdapter({
 
 ---
 
+## `useConfirmBeforeUnload`
+
+Shows a browser confirmation prompt when the user tries to close, refresh, or navigate away from the page. Useful for modals with unsaved progress — like the `BulkImportModal`.
+
+```tsx
+import { useConfirmBeforeUnload } from "@rfdtech/components";
+
+function MyModal({ hasUnsavedData }) {
+  useConfirmBeforeUnload(hasUnsavedData);
+
+  // ...
+}
+```
+
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `shouldConfirm` | `boolean` | — | When `true`, intercepts `beforeunload` to show the browser prompt |
+| `message` | `string` | `""` | Custom message (most browsers ignore this and show their own) |
+
+**Returns:** `void`
+
+> The `beforeunload` event fires for page refresh, tab close, and external navigation. It does **not** fire for in-app route changes — pair it with React Router's `useBlocker` if needed.
+
+---
+
 ## `useDebounce`
 
 Debounces a value by a given delay in milliseconds. Returns the latest value after the delay has elapsed without further changes.

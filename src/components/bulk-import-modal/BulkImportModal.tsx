@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+import { useConfirmBeforeUnload } from "../../hooks/useConfirmBeforeUnload";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Modal,
@@ -71,6 +72,8 @@ export function BulkImportModal({
   });
 
   const hasUnsavedProgress = flow.parsed !== null;
+
+  useConfirmBeforeUnload(hasUnsavedProgress);
 
   const allSourceColumns = useMemo(() => {
     if (!flow.parsed || flow.headerRowIndex === null) {

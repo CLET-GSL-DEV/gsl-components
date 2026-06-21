@@ -421,7 +421,7 @@
   flex-shrink: 0;
 }
 
-.gsl-bulk-import__validate-board {
+.gsl-bulk-import__step--validate .gsl-bulk-import__table-wrap--validate {
   flex: 1;
   min-height: 0;
   display: flex;
@@ -429,16 +429,28 @@
   border: 1px solid var(--gsl-border);
   border-radius: 8px;
   overflow: hidden;
-  background: var(--gsl-bg);
 }
 
-.gsl-bulk-import__step--validate .gsl-bulk-import__table-wrap--validate {
+.gsl-bulk-import__step--validate
+  .gsl-bulk-import__table-wrap--validate
+  .gsl-table {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   min-height: 0;
-  max-height: none;
-  overflow: auto;
-  border: none;
-  border-radius: 0;
+}
+
+.gsl-bulk-import__validate-header-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gsl-text);
+  white-space: nowrap;
+}
+
+.gsl-bulk-import__validate-footer-text {
+  font-size: 13px;
+  color: var(--gsl-text-muted);
 }
 
 .gsl-bulk-import__match-layout {
@@ -490,7 +502,7 @@
 }
 
 .gsl-bulk-import__match-track--source {
-	padding-bottom: 16px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--gsl-border);
 }
 
@@ -499,17 +511,17 @@
   width: 220px;
 }
 
-
 .gsl-bulk-import__step-header {
-  margin: 0 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 8px;
 }
 .gsl-bulk-import__step-title {
   font-size: 28px;
   font-weight: 700;
   color: var(--gsl-text);
+  margin-block: 16px;
 }
 
 .gsl-bulk-import__expected {
@@ -773,14 +785,14 @@
 }
 
 .gsl-bulk-import__source-column {
-	border: 1px solid var(--gsl-border);
-	border-radius: var(--gsl-radius-base);
-	padding: 8px;
-	gap: 8px;
-	display: flex;
-	flex-direction: column;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius-base);
+  padding: 8px;
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
 }
-
 
 .gsl-bulk-import__source-column-header {
   display: flex;
@@ -829,7 +841,7 @@
   color: var(--gsl-text-muted);
   font-size: 13px;
   line-height: 1.4;
-5
+}
 
 .gsl-bulk-import__target-column-control {
   display: flex;
@@ -886,12 +898,29 @@
   margin-bottom: 16px;
 }
 
+.gsl-bulk-import__match-toolbar-hint {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: var(--gsl-text-secondary);
+  line-height: 1.4;
+}
+
 .gsl-bulk-import__validate-toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-shrink: 0;
-  margin-bottom: 16px;
+}
+
+.gsl-bulk-import__validate-err-count {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--gsl-text-muted);
+}
+
+.gsl-bulk-import__validate-err-count--has-errors {
+  color: var(--gsl-error);
 }
 
 .gsl-bulk-import__validate-empty {
@@ -975,10 +1004,12 @@
   height: 44px;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .gsl-bulk-import__cell--error {
   background: var(--gsl-bulk-import-error-bg);
+  box-shadow: inset 0 0 0 1px var(--gsl-error);
 }
 
 .gsl-bulk-import__cell-input {
@@ -1004,13 +1035,15 @@
   box-shadow: inset 0 0 0 2px var(--gsl-bulk-import-primary);
 }
 
-/* ── GSL Table integration within validate step ── */
-
-.gsl-bulk-import__table-wrap--validate .gsl-table {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+.gsl-bulk-import__cell--error .gsl-bulk-import__cell-input {
+  background: transparent;
 }
+
+.gsl-bulk-import__cell--error .gsl-bulk-import__cell-input:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--gsl-error);
+}
+
+/* ── GSL Table integration within validate step ── */
 
 .gsl-bulk-import__table-wrap--validate .gsl-table__content {
   flex: 1;
@@ -1022,11 +1055,6 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--gsl-text-secondary);
-  background: var(--gsl-surface-subtle);
 }
 
 .gsl-bulk-import__table-wrap--validate .gsl-table td {
@@ -1041,8 +1069,31 @@
   width: 44px;
 }
 
+.gsl-bulk-import__table-wrap--validate .gsl-checkbox__control {
+  border-radius: 4px;
+}
+
 .gsl-bulk-import__table-wrap--validate .gsl-table tbody tr:hover {
   background: var(--gsl-hover);
+}
+
+.gsl-bulk-import__table-wrap--validate
+  .gsl-table
+  tbody
+  tr[data-selected="true"] {
+  background: var(--gsl-bulk-import-primary-light);
+}
+
+.gsl-bulk-import__validate-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.gsl-bulk-import__validate-actions-count {
+  font-size: 13px;
+  color: var(--gsl-text-secondary);
 }
 
 .gsl-bulk-import__cell-error-tooltip {

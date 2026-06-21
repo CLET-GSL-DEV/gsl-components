@@ -45,4 +45,5 @@ Click **Open bulk import** to launch the multi-step import modal with sample dat
 
 - Also exported: `useBulkImportFlow`, step components, and spreadsheet utilities.
 - Discarded rows are excluded from `onComplete`.
+- The modal uses `useConfirmBeforeUnload` to warn on page refresh/close when a file has been uploaded but not confirmed.
 - The example uses `useModalSearchParam("bulk-import")` for URL-driven open state (`?modal=bulk-import`). See [Modal URL state](/docs/modal#url-state).

@@ -1,6 +1,11 @@
 import { useMemo } from "react";
-import { Table, TableContent } from "../../table/Table";
-import type { TableColumn } from "../../../types/table";
+import {
+  Table,
+  TableContent,
+  TableFooter,
+} from "../../table/Table";
+import { TableBulkActions } from "../../table/TableBulkActions";
+import type { TableColumn, TableBulkAction } from "../../../types/table";
 import type {
   BulkImportField,
   BulkImportValidationError,
@@ -54,6 +59,26 @@ export function ValidateDataStep({
     mappedFieldKeys.includes(field.key),
   );
 
+  const handleClearSelection = useMemo(
+    () => () => onSetVisibleRowsSelection([], false),
+    [onSetVisibleRowsSelection],
+  );
+
+  const bulkActions: TableBulkAction[] = useMemo(
+    () => [
+      {
+        id: "discard",
+        label: "Discard",
+        destructive: true,
+        onClick: () => {
+          onDiscardSelectedRows();
+          handleClearSelection();
+        },
+      },
+    ],
+    [onDiscardSelectedRows, handleClearSelection],
+  );
+
   const visibleRows = useMemo(
     () =>
       mappedRows
@@ -66,13 +91,6 @@ export function ValidateDataStep({
   );
 
   const visibleRowIds = visibleRows.map(({ rowId }) => rowId);
-  const allVisibleSelected =
-    visibleRowIds.length > 0 &&
-    visibleRowIds.every((rid) => selectedRowIds.includes(rid));
-  const someVisibleSelected = visibleRowIds.some((rid) =>
-    selectedRowIds.includes(rid),
-  );
-  const indeterminate = someVisibleSelected && !allVisibleSelected;
 
   const selectedIdsSet = useMemo(
     () => new Set<string | number>(selectedRowIds),
@@ -100,22 +118,17 @@ export function ValidateDataStep({
         cell: ({ row, value }) => {
           const rowId = row._rowId as number;
           const errorMessage = errorMap.get(`${rowId}:${field.key}`);
+          const cellClass = errorMessage
+            ? "gsl-bulk-import__cell gsl-bulk-import__cell--error"
+            : "gsl-bulk-import__cell";
+          const inputClass = errorMessage
+            ? "gsl-bulk-import__cell-input gsl-bulk-import__cell-input--error"
+            : "gsl-bulk-import__cell-input";
           return (
-            <div
-              className={
-                errorMessage
-                  ? "gsl-bulk-import__cell gsl-bulk-import__cell--error"
-                  : "gsl-bulk-import__cell"
-              }
-            >
+            <div className={cellClass}>
               <input
                 type="text"
-                className={[
-                  "gsl-bulk-import__cell-input",
-                  errorMessage ? "gsl-bulk-import__cell-input--error" : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
+                className={inputClass}
                 value={String(value ?? "")}
                 aria-invalid={errorMessage ? true : undefined}
                 aria-label={`${field.label}, row ${rowId}`}
@@ -161,55 +174,74 @@ export function ValidateDataStep({
 
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--validate">
-      <h3 className="gsl-bulk-import__step-title">Validate data</h3>
-
-      <div className="gsl-bulk-import__validate-toolbar">
-        <button
-          type="button"
-          className="gsl-bulk-import__button gsl-bulk-import__button--outline"
-          disabled={selectedRowIds.length === 0}
-          onClick={onDiscardSelectedRows}
-        >
-          Discard selected rows
-        </button>
-
-        <label className="gsl-bulk-import__switch">
-          <input
-            type="checkbox"
-            role="switch"
-            className="gsl-bulk-import__switch-input"
-            checked={showOnlyErrors}
-            onChange={(event) => onShowOnlyErrorsChange(event.target.checked)}
-          />
-          <span className="gsl-bulk-import__switch-track" aria-hidden="true">
-            <span className="gsl-bulk-import__switch-thumb" />
+      <div className="gsl-bulk-import__step-header">
+        <h3 className="gsl-bulk-import__step-title">Validate data</h3>
+        <div className="gsl-bulk-import__validate-toolbar">
+          <span className={[
+              "gsl-bulk-import__validate-err-count",
+              errors.length > 0 && "gsl-bulk-import__validate-err-count--has-errors",
+            ]
+              .filter(Boolean)
+              .join(" ")}>
+            {errors.length > 0
+              ? `${errors.length} error row${errors.length !== 1 ? "s" : ""} remaining`
+              : "No errors"}
           </span>
-          <span className="gsl-bulk-import__switch-label">
-            Show only rows with errors
-          </span>
-        </label>
+          <label className="gsl-bulk-import__switch">
+            <input
+              type="checkbox"
+              role="switch"
+              className="gsl-bulk-import__switch-input"
+              checked={showOnlyErrors}
+              onChange={(event) =>
+                onShowOnlyErrorsChange(event.target.checked)
+              }
+            />
+            <span
+              className="gsl-bulk-import__switch-track"
+              aria-hidden="true"
+            >
+              <span className="gsl-bulk-import__switch-thumb" />
+            </span>
+            <span className="gsl-bulk-import__switch-label">
+              Show only rows with errors
+            </span>
+          </label>
+        </div>
       </div>
 
-      <div className="gsl-bulk-import__validate-board">
-        {visibleRows.length === 0 ? (
-          <p className="gsl-bulk-import__validate-empty">
-            {showOnlyErrors ? "No rows with errors." : "No rows to validate."}
-          </p>
-        ) : (
-          <div className="gsl-bulk-import__table-wrap gsl-bulk-import__table-wrap--validate">
-            <Table paramPrefix="validate">
-              <TableContent<ValidateRow>
-                columns={tableColumns}
-                data={tableData}
-                rowKey={(row) => row._rowId}
-                selectable
-                selectedIds={selectedIdsSet}
-                onSelectionChange={handleSelectionChange}
-              />
-            </Table>
-          </div>
-        )}
-      </div>
+      {visibleRows.length === 0 ? (
+        <p className="gsl-bulk-import__validate-empty">
+          {showOnlyErrors ? "No rows with errors." : "No rows to validate."}
+        </p>
+      ) : (
+        <div className="gsl-bulk-import__table-wrap gsl-bulk-import__table-wrap--validate">
+          <Table paramPrefix="validate">
+            <TableContent<ValidateRow>
+              columns={tableColumns}
+              data={tableData}
+              rowKey={(row) => row._rowId}
+              selectable
+              selectedIds={selectedIdsSet}
+              onSelectionChange={handleSelectionChange}
+              virtualize
+              virtualRowHeight={44}
+            />
+            <TableBulkActions
+              selectedIds={selectedIdsSet}
+              selectedCount={selectedRowIds.length}
+              onClear={handleClearSelection}
+              actions={bulkActions}
+            />
+            <TableFooter>
+              <span className="gsl-bulk-import__validate-footer-text">
+                {visibleRows.length} row{visibleRows.length !== 1 ? "s" : ""}
+                {errors.length > 0 && ` — ${errors.length} with errors`}
+              </span>
+            </TableFooter>
+          </Table>
+        </div>
+      )}
     </div>
   );
 }

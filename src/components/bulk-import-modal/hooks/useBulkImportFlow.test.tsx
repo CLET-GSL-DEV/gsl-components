@@ -182,6 +182,51 @@ describe("useBulkImportFlow", () => {
     expect(result.current.editableRows[1]?.email).toBe("grace@example.com");
   });
 
+  it("autoMapsColumns resets all mappings and restores excluded columns", async () => {
+    const { result } = renderHook(() =>
+      useBulkImportFlow({ fields, open: true }),
+    );
+
+    const csv = "Full name,Email,Notes\nAda Lovelace,a@example.com,extra\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+
+    await act(async () => {
+      await result.current.handleFile(file);
+    });
+
+    act(() => {
+      result.current.goNext();
+    });
+
+    expect(result.current.step).toBe(3);
+    expect(result.current.sourceColumnMapping).toEqual({
+      0: "full_name",
+      1: "email",
+      2: null,
+    });
+
+    // exclude Notes column, unmap Email
+    act(() => {
+      result.current.toggleExcludedColumn(2);
+      result.current.updateSourceMapping(1, null);
+    });
+
+    expect(result.current.excludedColumns).toEqual([2]);
+    expect(result.current.sourceColumnMapping[1]).toBeNull();
+
+    // reset mapping
+    act(() => {
+      result.current.autoMapColumns();
+    });
+
+    expect(result.current.sourceColumnMapping).toEqual({
+      0: "full_name",
+      1: "email",
+      2: null,
+    });
+    expect(result.current.excludedColumns).toEqual([]);
+  });
+
   it("resets when the modal closes", async () => {
     const { result, rerender } = renderHook(
       ({ open }) => useBulkImportFlow({ fields, open }),

@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes yet.
+### Added
+- `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation on page refresh/close
+- BulkImportModal: browser confirmation prompt via `useConfirmBeforeUnload` when a file has been uploaded but not confirmed
 
 ## [1.17.0] - 2026-06-20
 
