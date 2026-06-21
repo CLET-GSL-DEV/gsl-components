@@ -22,8 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **ValidateDataStep**: replaced `<Table />` dependency with an internal virtualized table using `@tanstack/react-virtual`. Error counts correctly exclude discarded rows.
-- `CheckboxProps.checked` now accepts `"indeterminate"` for native Radix indeterminate support
-
 ## [1.17.0] - 2026-06-20
 
 ### Added
