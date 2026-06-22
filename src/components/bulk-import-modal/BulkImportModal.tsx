@@ -122,7 +122,6 @@ export function BulkImportModal({
         <ModalOverlay />
         <ModalContent
           className={dialogClass}
-          size="2xl"
           showCloseButton
           preventClose={hasUnsavedProgress}
           preventCloseTitle="Exit import flow"
