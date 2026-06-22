@@ -8,6 +8,9 @@ PLAN.md
 .playwright-mcp/
 llms.txt
 table-demo.png
+*.tgz
+*.tgz.bak
+bun.lock
 AGENTS.md
 git.md
 # bun

@@ -3,9 +3,15 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { AppLayout } from "./AppLayout";
 import { AppSidebar } from "./AppSidebar";
-import { AppBreadcrumb } from "./AppBreadcrumb";
 import { AppBody } from "./AppBody";
 import { AppHeader } from "../app-header/AppHeader";
+import { useBreadcrumbs } from "../breadcrumb/breadcrumb-context";
+
+/** Helper that sets breadcrumbs inside the layout */
+function LayoutWithBreadcrumbs({ items }: { items: { label: string; href?: string }[] }) {
+  useBreadcrumbs(items);
+  return null;
+}
 
 describe("AppLayout", () => {
   it("renders children with auto-positioning", () => {
@@ -26,8 +32,7 @@ describe("AppLayout", () => {
     );
     expect(screen.getByText("Header")).toBeInTheDocument();
     expect(screen.getByText("Body")).toBeInTheDocument();
-    const headerWrapper = container.querySelector(".gsl-app-layout__header");
-    expect(headerWrapper).toBeInTheDocument();
+    expect(container.querySelector(".gsl-app-header")).toBeInTheDocument();
   });
 
   it("positions AppSidebar in sidebar area", () => {
@@ -42,31 +47,29 @@ describe("AppLayout", () => {
     expect(sidebarWrapper).toHaveTextContent("Sidebar");
   });
 
-  it("positions AppBreadcrumb between header and body", () => {
+  it("renders breadcrumbs from context when items exist", () => {
     const { container } = render(
       <AppLayout>
-        <AppBreadcrumb>Breadcrumb</AppBreadcrumb>
-        <AppBody>Body</AppBody>
+        <AppBody>
+          <LayoutWithBreadcrumbs items={[{ label: "Users", href: "/users" }, { label: "John" }]} />
+          Body
+        </AppBody>
       </AppLayout>,
     );
     const breadcrumbWrapper = container.querySelector(".gsl-app-layout__breadcrumb");
     expect(breadcrumbWrapper).toBeInTheDocument();
-    expect(breadcrumbWrapper).toHaveTextContent("Breadcrumb");
+    expect(breadcrumbWrapper).toHaveTextContent("Users");
+    expect(breadcrumbWrapper).toHaveTextContent("John");
+    expect(container.querySelector(".gsl-breadcrumb")).toBeInTheDocument();
   });
 
-  it("positions all four components", () => {
+  it("hides breadcrumbs when context is empty", () => {
     const { container } = render(
       <AppLayout>
-        <AppHeader>H</AppHeader>
-        <AppSidebar>S</AppSidebar>
-        <AppBreadcrumb>Bc</AppBreadcrumb>
-        <AppBody>B</AppBody>
+        <AppBody>Body</AppBody>
       </AppLayout>,
     );
-    expect(container.querySelector(".gsl-app-layout__header")).toBeInTheDocument();
-    expect(container.querySelector(".gsl-app-layout__sidebar")).toBeInTheDocument();
-    expect(container.querySelector(".gsl-app-layout__breadcrumb")).toBeInTheDocument();
-    expect(container.querySelector(".gsl-app-layout__content")).toBeInTheDocument();
+    expect(container.querySelector(".gsl-app-layout__breadcrumb")).not.toBeInTheDocument();
   });
 
   it("forwards ref", () => {
@@ -85,7 +88,7 @@ describe("AppLayout", () => {
         <AppBody>Body</AppBody>
       </AppLayout>,
     );
-    const root = container.firstElementChild!;
+    const root = container.querySelector(".gsl-app-layout")!;
     expect(root).toHaveClass("custom");
     expect(root).toHaveClass("gsl-app-layout");
   });
@@ -97,7 +100,7 @@ describe("AppLayout", () => {
         <AppBody className="body-custom">B</AppBody>
       </AppLayout>,
     );
-    const header = container.querySelector(".gsl-app-layout__header");
+    const header = container.querySelector(".gsl-app-header");
     const content = container.querySelector(".gsl-app-layout__content");
     expect(header).toHaveClass("header-custom");
     expect(content).toHaveClass("body-custom");
@@ -110,7 +113,7 @@ describe("AppLayout", () => {
         <AppBody>B</AppBody>
       </AppLayout>,
     );
-    const header = container.querySelector(".gsl-app-layout__header");
+    const header = container.querySelector(".gsl-app-header");
     expect(header).toHaveAttribute("id", "main-header");
     expect(header).toHaveAttribute("data-test", "x");
   });

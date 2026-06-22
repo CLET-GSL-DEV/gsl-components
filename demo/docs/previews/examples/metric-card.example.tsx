@@ -11,6 +11,7 @@ export function MetricCardExample() {
           description="Total revenue this quarter"
           trend="up"
           trendValue="+12.5%"
+          animate
         />
       </div>
       <div style={{ minWidth: 200, flex: 1 }}>
@@ -20,6 +21,7 @@ export function MetricCardExample() {
           description="Current active users"
           trend="down"
           trendValue="-3.2%"
+          animate
         />
       </div>
       <div style={{ minWidth: 200, flex: 1 }}>
@@ -27,6 +29,7 @@ export function MetricCardExample() {
           label="Avg response"
           value="1.2s"
           description="Average API response time"
+          animate
         />
       </div>
     </div>

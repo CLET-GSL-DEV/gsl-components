@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
+  BulkImportFlowDefaultState,
   BulkImportResult,
   BulkImportStep,
   SourceColumnMapping,
@@ -24,35 +25,59 @@ import {
 
 const DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024;
 
+function getDefaultState(
+  ds?: BulkImportFlowDefaultState,
+): Required<BulkImportFlowDefaultState> {
+  return {
+    step: ds?.step ?? 1,
+    parsed: ds?.parsed ?? null,
+    headerRowIndex: ds?.headerRowIndex ?? null,
+    sourceColumnMapping: ds?.sourceColumnMapping ?? {},
+    excludedColumns: ds?.excludedColumns ?? [],
+    selectedRowIds: ds?.selectedRowIds ?? [],
+    showOnlyErrors: ds?.showOnlyErrors ?? false,
+    discardedRows: ds?.discardedRows ?? [],
+    editableRows: ds?.editableRows ?? [],
+  };
+}
+
 export function useBulkImportFlow(
   options: UseBulkImportFlowOptions,
 ): UseBulkImportFlowReturn {
-  const { fields, maxFileSizeBytes = DEFAULT_MAX_FILE_SIZE, open } = options;
+  const { fields, maxFileSizeBytes = DEFAULT_MAX_FILE_SIZE, open, defaultState } = options;
 
-  const [step, setStep] = useState<BulkImportStep>(1);
-  const [parsed, setParsed] = useState<UseBulkImportFlowReturn["parsed"]>(null);
+  const defaultsRef = useRef(getDefaultState(defaultState));
+
+  // Update defaults when defaultState changes so reset() always uses the latest
+  useEffect(() => {
+    defaultsRef.current = getDefaultState(defaultState);
+  }, [defaultState]);
+
+  const [step, setStep] = useState<BulkImportStep>(defaultsRef.current.step);
+  const [parsed, setParsed] = useState<UseBulkImportFlowReturn["parsed"]>(defaultsRef.current.parsed);
   const [parseError, setParseError] = useState<string | null>(null);
-  const [headerRowIndex, setHeaderRowIndex] = useState<number | null>(null);
+  const [headerRowIndex, setHeaderRowIndex] = useState<number | null>(defaultsRef.current.headerRowIndex);
   const [sourceColumnMapping, setSourceColumnMapping] =
-    useState<SourceColumnMapping>({});
-  const [excludedColumns, setExcludedColumns] = useState<number[]>([]);
-  const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const [showOnlyErrors, setShowOnlyErrors] = useState(false);
-  const [discardedRows, setDiscardedRows] = useState<number[]>([]);
-  const [editableRows, setEditableRows] = useState<Record<string, string>[]>([]);
+    useState<SourceColumnMapping>(defaultsRef.current.sourceColumnMapping);
+  const [excludedColumns, setExcludedColumns] = useState<number[]>(defaultsRef.current.excludedColumns);
+  const [selectedRowIds, setSelectedRowIds] = useState<number[]>(defaultsRef.current.selectedRowIds);
+  const [showOnlyErrors, setShowOnlyErrors] = useState(defaultsRef.current.showOnlyErrors);
+  const [discardedRows, setDiscardedRows] = useState<number[]>(defaultsRef.current.discardedRows);
+  const [editableRows, setEditableRows] = useState<Record<string, string>[]>(defaultsRef.current.editableRows);
   const [isParsing, setIsParsing] = useState(false);
 
   const reset = useCallback(() => {
-    setStep(1);
-    setParsed(null);
+    const d = defaultsRef.current;
+    setStep(d.step);
+    setParsed(d.parsed);
     setParseError(null);
-    setHeaderRowIndex(null);
-    setSourceColumnMapping({});
-    setExcludedColumns([]);
-    setSelectedRowIds([]);
-    setShowOnlyErrors(false);
-    setDiscardedRows([]);
-    setEditableRows([]);
+    setHeaderRowIndex(d.headerRowIndex);
+    setSourceColumnMapping(d.sourceColumnMapping);
+    setExcludedColumns(d.excludedColumns);
+    setSelectedRowIds(d.selectedRowIds);
+    setShowOnlyErrors(d.showOnlyErrors);
+    setDiscardedRows(d.discardedRows);
+    setEditableRows(d.editableRows);
     setIsParsing(false);
   }, []);
 
@@ -91,11 +116,12 @@ export function useBulkImportFlow(
     );
   }, [parsed, headerRowIndex, sourceColumnMapping, excludedColumns]);
 
+  const shouldValidate = step === 4;
   const rowsForValidation = step === 4 ? editableRows : mappedRows;
 
   const validationIssues = useMemo(
-    () => validateMappedRows(rowsForValidation, fields),
-    [rowsForValidation, fields],
+    () => (shouldValidate ? validateMappedRows(rowsForValidation, fields) : []),
+    [shouldValidate, rowsForValidation, fields],
   );
 
   const { errors: validationErrors, warnings: validationWarnings } = useMemo(
@@ -110,10 +136,11 @@ export function useBulkImportFlow(
       case 2:
         return headerRowIndex !== null;
       case 3:
-        return isRequiredMappingComplete(
-          fields,
-          sourceColumnMapping,
-          excludedColumns,
+        return (
+          activeSourceColumns.length > 0 &&
+          activeSourceColumns.every(
+            (col) => sourceColumnMapping[col.index] !== null,
+          )
         );
       default:
         return false;
@@ -124,6 +151,7 @@ export function useBulkImportFlow(
     parseError,
     headerRowIndex,
     fields,
+    activeSourceColumns,
     sourceColumnMapping,
     excludedColumns,
   ]);
@@ -198,6 +226,14 @@ export function useBulkImportFlow(
     [],
   );
 
+  const autoMapColumns = useCallback(() => {
+    if (!parsed || headerRowIndex === null) return;
+
+    const columns = buildAllSourceColumns(parsed.rows, headerRowIndex);
+    setSourceColumnMapping(autoMatchSourceColumns(fields, columns));
+    setExcludedColumns([]);
+  }, [fields, headerRowIndex, parsed]);
+
   const toggleExcludedColumn = useCallback((sourceIndex: number) => {
     setExcludedColumns((current) =>
       current.includes(sourceIndex)
@@ -238,6 +274,10 @@ export function useBulkImportFlow(
     setSelectedRowIds([]);
   }, [selectedRowIds]);
 
+  const resetDiscardedRows = useCallback(() => {
+    setDiscardedRows([]);
+  }, []);
+
   const updateRowValue = useCallback(
     (rowId: number, fieldKey: string, value: string) => {
       setEditableRows((current) =>
@@ -252,9 +292,14 @@ export function useBulkImportFlow(
   const goNext = useCallback(() => {
     setStep((current) => {
       if (current === 2 && headerRowIndex !== null && parsed) {
-        const columns = buildAllSourceColumns(parsed.rows, headerRowIndex);
-        setSourceColumnMapping(autoMatchSourceColumns(fields, columns));
-        setExcludedColumns([]);
+        const hasMapping = Object.values(sourceColumnMapping).some(
+          (v) => v !== null,
+        );
+        if (!hasMapping) {
+          const columns = buildAllSourceColumns(parsed.rows, headerRowIndex);
+          setSourceColumnMapping(autoMatchSourceColumns(fields, columns));
+          setExcludedColumns([]);
+        }
       }
 
       if (current === 3 && headerRowIndex !== null && parsed) {
@@ -297,39 +342,80 @@ export function useBulkImportFlow(
     };
   }, [activeRows, activeErrors, activeWarnings]);
 
-  return {
-    step,
-    parsed,
-    parseError,
-    headerRowIndex,
-    sourceColumnMapping,
-    excludedColumns,
-    sourceColumns: activeSourceColumns,
-    mappedRows,
-    editableRows,
-    validationErrors,
-    validationWarnings,
-    selectedRowIds,
-    showOnlyErrors,
-    discardedRows,
-    canGoNext,
-    canImport,
-    isParsing,
-    setHeaderRowIndex,
-    setSourceColumnMapping,
-    updateSourceMapping,
-    toggleExcludedColumn,
-    setSelectedRowIds,
-    toggleRowSelection,
-    setVisibleRowsSelection,
-    setShowOnlyErrors,
-    discardSelectedRows,
-    updateRowValue,
-    handleFile,
-    goNext,
-    goBack,
-    goToStep,
-    reset,
-    buildResult,
-  };
+  return useMemo(
+    () => ({
+      step,
+      parsed,
+      parseError,
+      headerRowIndex,
+      sourceColumnMapping,
+      excludedColumns,
+      sourceColumns: activeSourceColumns,
+      mappedRows,
+      editableRows,
+      validationErrors,
+      validationWarnings,
+      selectedRowIds,
+      showOnlyErrors,
+      discardedRows,
+      canGoNext,
+      canImport,
+      isParsing,
+      setHeaderRowIndex,
+      setSourceColumnMapping,
+      updateSourceMapping,
+      toggleExcludedColumn,
+      setSelectedRowIds,
+      toggleRowSelection,
+      setVisibleRowsSelection,
+      setShowOnlyErrors,
+      discardSelectedRows,
+      resetDiscardedRows,
+      updateRowValue,
+      handleFile,
+      goNext,
+      autoMapColumns,
+      goBack,
+      goToStep,
+      reset,
+      buildResult,
+    }),
+    [
+      step,
+      parsed,
+      parseError,
+      headerRowIndex,
+      sourceColumnMapping,
+      excludedColumns,
+      activeSourceColumns,
+      mappedRows,
+      editableRows,
+      validationErrors,
+      validationWarnings,
+      selectedRowIds,
+      showOnlyErrors,
+      discardedRows,
+      canGoNext,
+      canImport,
+      isParsing,
+      setHeaderRowIndex,
+      setSourceColumnMapping,
+      updateSourceMapping,
+      toggleExcludedColumn,
+      setSelectedRowIds,
+      toggleRowSelection,
+      setVisibleRowsSelection,
+      setShowOnlyErrors,
+      discardSelectedRows,
+      resetDiscardedRows,
+      updateRowValue,
+      handleFile,
+      goNext,
+      autoMapColumns,
+      goBack,
+      goToStep,
+      reset,
+      buildResult,
+    ],
+  );
 }

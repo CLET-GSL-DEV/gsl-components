@@ -4,7 +4,7 @@
   width: 280px;
   max-width: min(100vw, 280px);
   font-family: var(--gsl-font);
-  color: var(--gsl-text);
+  color: var(--gsl-sidebar-text, var(--gsl-text));
   box-sizing: border-box;
   height: 100%;
 }
@@ -46,7 +46,7 @@
   border: none;
   border-radius: calc(var(--gsl-radius-base) - 2px);
   background: transparent;
-  color: var(--gsl-text-secondary);
+  color: var(--gsl-sidebar-link-text, var(--gsl-text-secondary));
   cursor: pointer;
   transition:
     background-color 150ms ease,
@@ -86,7 +86,7 @@
   flex-shrink: 0;
   background: linear-gradient(
     to bottom,
-    var(--gsl-panel-bg, var(--gsl-surface-subtle)),
+    var(--gsl-sidebar-bg, var(--gsl-panel-bg, var(--gsl-surface-subtle))),
     transparent
   );
   pointer-events: none;
@@ -109,7 +109,7 @@
   flex-shrink: 0;
   background: linear-gradient(
     to top,
-    var(--gsl-panel-bg, var(--gsl-surface-subtle)),
+    var(--gsl-sidebar-bg, var(--gsl-panel-bg, var(--gsl-surface-subtle))),
     transparent
   );
   pointer-events: none;
@@ -160,7 +160,7 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--gsl-text-secondary);
+  color: var(--gsl-sidebar-label-text, var(--gsl-text-secondary));
 }
 
 .gsl-sidebar__item {
@@ -178,7 +178,7 @@
   border: none;
   border-radius: 12px;
   background: transparent;
-  color: var(--gsl-text-secondary);
+  color: var(--gsl-sidebar-link-text, var(--gsl-text-secondary));
   font-family: var(--gsl-font);
   font-size: 14px;
   font-weight: 400;
@@ -231,8 +231,8 @@
 }
 
 .gsl-sidebar__link:hover {
-  background: var(--gsl-surface-dark);
-  color: var(--gsl-text);
+  background: var(--gsl-sidebar-link-hover-bg, var(--gsl-surface-dark));
+  color: var(--gsl-sidebar-link-hover-text, var(--gsl-text));
 }
 
 .gsl-sidebar__link:focus-visible {
@@ -241,8 +241,8 @@
 }
 
 .gsl-sidebar__link--active {
-  background: var(--gsl-surface-dark);
-  color: var(--gsl-text);
+  background: var(--gsl-sidebar-link-active-bg, var(--gsl-surface-dark));
+  color: var(--gsl-sidebar-link-active-text, var(--gsl-text));
   font-weight: 600;
 }
 
@@ -351,7 +351,7 @@
     align-self: start;
     padding: 20px 16px;
     border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
-    background: var(--gsl-panel-bg, var(--gsl-surface-subtle));
+    background: var(--gsl-sidebar-bg, var(--gsl-panel-bg, var(--gsl-surface-subtle)));
     transition:
       width 200ms ease,
       max-width 200ms ease,

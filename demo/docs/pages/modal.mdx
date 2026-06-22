@@ -43,7 +43,7 @@ Override any size token to customize without touching the CSS classes:
 
 ## Prevent close
 
-Pass `preventClose` to intercept the X button, overlay click, and Escape key. Instead of closing immediately, a confirmation dialog appears asking the user to confirm. Useful when the modal contains unsaved changes.
+Pass `preventClose` to intercept the X button, overlay click, and Escape key. A confirmation dialog appears before closing. Useful when the modal contains unsaved changes.
 
 Customize the confirm dialog text with `preventCloseTitle` and `preventCloseDescription`.
 
@@ -102,8 +102,9 @@ Centered modal shell with size variants, optional close control, and close-preve
 | `showCloseButton` | `boolean` | `false` | Shows a top-right close control with an accessible label |
 | `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | `"lg"` | Controls max-width via the corresponding `--gsl-modal-max-width-*` token |
 | `preventClose` | `boolean` | `false` | When true, intercepts close attempts and shows a confirmation dialog |
-| `preventCloseTitle` | `string` | `"Discard changes?"` | Title for the close-confirmation dialog |
-| `preventCloseDescription` | `string` | `"You have unsaved changes..."` | Description for the close-confirmation dialog |
+| `preventCloseTitle` | `string` | `"Discard changes?"` | Title for the close-confirmation overlay |
+| `preventCloseDescription` | `string` | `"You have unsaved changes..."` | Description for the close-confirmation overlay |
+| `onOpenChange` | `(open: boolean) => void` | — | Pass the parent's close handler for direct close-control (required when using `preventClose`) |
 | `classNames` | `ModalContentClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the shell element |
 
@@ -214,7 +215,7 @@ Extend native `div` / `footer` attributes with optional `classNames`.
 - On mobile (≤768px) the modal fills the viewport without gutters or border-radius.
 - `ModalBody` scrolls internally when content exceeds the available height.
 - The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
-- `preventClose` shows an internal AlertDialog confirmation before closing.
+- `preventClose` shows a confirmation dialog before closing. Pass `onOpenChange` to `ModalContent` for close-control.
 - Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
 - Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
 - Base `gsl-modal*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

@@ -27,6 +27,7 @@ export interface ModalContentProps
   preventClose?: boolean;
   preventCloseTitle?: string;
   preventCloseDescription?: string;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export interface ModalHeaderClassNames {

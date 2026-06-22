@@ -216,6 +216,27 @@
   background: var(--gsl-error);
 }
 
+/* ── Error card ── */
+
+.gsl-upload-field__action--ghost {
+  background: transparent;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-upload-field__action--ghost:hover:not(:disabled) {
+  background: var(--gsl-hover);
+  opacity: 1;
+}
+
+/* ── Error dialog ── */
+
+.gsl-upload-field__dialog-filename {
+  display: block;
+  font-weight: 600;
+  color: var(--gsl-text);
+  margin-bottom: 4px;
+}
+
 /* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -223,7 +244,8 @@
     transition: none;
   }
 
-  .gsl-upload-field__action {
+  .gsl-upload-field__action,
+  .gsl-upload-field__action--ghost {
     transition: none;
   }
 }

@@ -7,7 +7,7 @@ export function ThemeProvider({
   theme: controlledTheme,
   defaultTheme = "system",
   onThemeChange,
-  storageKey,
+  storageKey = "gsl-theme",
   className,
   style,
   children,
@@ -25,7 +25,8 @@ export function ThemeProvider({
     return defaultTheme;
   }, [storageKey, defaultTheme]);
 
-  const [uncontrolledTheme, setUncontrolledTheme] = useState<GslTheme>(resolvedDefault);
+  const [uncontrolledTheme, setUncontrolledTheme] =
+    useState<GslTheme>(resolvedDefault);
   const isControlled = controlledTheme !== undefined;
   const theme = isControlled ? controlledTheme : uncontrolledTheme;
   const [systemTheme, setSystemTheme] = useState(getSystemTheme);
@@ -92,11 +93,7 @@ export function ThemeProvider({
 
   return (
     <ThemeContext.Provider value={contextValue}>
-      <div
-        className={rootClass}
-        data-gsl-theme={resolvedTheme}
-        style={style}
-      >
+      <div className={rootClass} data-gsl-theme={resolvedTheme} style={style}>
         {children}
       </div>
     </ThemeContext.Provider>

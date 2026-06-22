@@ -132,7 +132,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
-  padding: 16px 24px;
+  padding: 16px;
   border-top: 1px solid var(--gsl-border);
   background: var(--gsl-bg);
 }
@@ -254,7 +254,7 @@
   }
 
   .gsl-modal__footer {
-    padding: 12px 16px;
+    padding: 12px;
   }
 }
 

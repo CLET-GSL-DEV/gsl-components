@@ -261,9 +261,9 @@ const { open, onOpenChange, openWith } = useModalSearchParam("bulk-import");
 1. **Upload Document** — preview expected columns, then upload `.xlsx`, `.xls`, or `.csv`
 2. **Select header row** — choose the header row with radio buttons
 3. **Match Columns** — map each uploaded column to a target field (`Your table` → `Will become`)
-4. **Validate data** — review rows in a table, discard invalid rows, then **Confirm**
+4. **Validate data** — review editable rows with error checking, discard rows, or reset discarded rows, then **Confirm**
 
-The first worksheet is used for multi-sheet workbooks. Discarded rows are excluded from `onComplete`.
+The first worksheet is used for multi-sheet workbooks. Discarded rows are excluded from `onComplete`. Use reset discarded rows button to restore them. The validate data table is virtualized for performance with large spreadsheets.
 
 ### Props
 
@@ -276,6 +276,7 @@ The first worksheet is used for multi-sheet workbooks. Discarded rows are exclud
 | `title` | `string` | `"Bulk import"` | Modal title |
 | `maxFileSizeBytes` | `number` | `5242880` | Maximum upload size (5 MB) |
 | `allowImportWithWarnings` | `boolean` | `false` | Allow import when only warnings exist |
+| `defaultState` | `BulkImportFlowDefaultState` | — | Seed initial flow state for progress preservation across open/close cycles |
 | `className` | `string` | — | Root CSS class |
 
 ### Field schema
@@ -794,7 +795,7 @@ const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
 </Modal>
 ```
 
-Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `size`, `preventClose`, `preventCloseTitle`, `preventCloseDescription`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalSize`, `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
+Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `size`, `preventClose`, `preventCloseTitle`, `preventCloseDescription`, `onOpenChange`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalSize`, `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
 
 
 ## NetworkOperator

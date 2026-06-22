@@ -2,8 +2,13 @@
   --gsl-header-py: var(--gsl-app-layout-body-gap, 1rem);
   --gsl-header-px: var(--gsl-app-layout-body-gap, 1rem);
 
+  position: sticky;
+  top: 0;
+  z-index: var(--gsl-z-header);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   width: 100%;
   padding: var(--gsl-header-py) var(--gsl-header-px);
   border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
@@ -178,11 +183,8 @@
   border-radius: var(--gsl-radius-xl);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-md);
-  z-index: var(--gsl-z-popover);
-}
-
-*[data-gsl-theme="dark"] .gsl-notif-popover {
   border: 1px solid var(--gsl-border);
+  z-index: var(--gsl-z-popover);
 }
 
 .gsl-notif-popover__header {
@@ -313,14 +315,12 @@
   background: var(--gsl-bg);
   border-radius: var(--gsl-radius-xl);
   box-shadow: var(--gsl-shadow-md);
+  border: 1px solid var(--gsl-border);
   outline: none;
   z-index: var(--gsl-z-popover);
   translate: 0 -48px;
 }
 
-*[data-gsl-theme="dark"] .gsl-profile-popover {
-  border: 1px solid var(--gsl-border);
-}
 
 .gsl-profile-popover__header {
   display: flex;
