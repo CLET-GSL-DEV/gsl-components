@@ -1,4 +1,4 @@
-import { createContext, useMemo, type ReactNode } from "react";
+import { createContext, useMemo } from "react";
 import type { ToastDefaults, ToastProviderProps } from "../../types/toast";
 
 export const ToastDefaultsContext = createContext<ToastDefaults | null>(null);

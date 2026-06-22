@@ -31,7 +31,7 @@ import type {
   SidebarTriggerProps,
 } from "../../types/sidebar";
 import { cn } from "../../utils/cn";
-import { SidebarProvider, useSidebar } from "./SidebarContext";
+import { useSidebar } from "./SidebarContext";
 import "./styles/sidebar.css";
 
 export { SidebarProvider, useSidebar } from "./SidebarContext";
@@ -384,11 +384,11 @@ export const SidebarLink = forwardRef<HTMLButtonElement | HTMLAnchorElement, Sid
     );
 
     if (asChild && isValidElement(children)) {
-      const child = children as ReactElement<{ className?: string; role?: string }>;
+      const child = children as ReactElement<{ className?: string; role?: string; [key: string]: unknown }>;
       const tooltipText = extractLabelText(children).trim();
-      const linkElement = cloneElement(child as ReactElement<any>, {
+      const linkElement = cloneElement(child, {
         ...props,
-        role: (child.props as any).role ?? "link",
+        role: child.props.role ?? "link",
         className: cn(linkClassName, child.props.className),
       });
 

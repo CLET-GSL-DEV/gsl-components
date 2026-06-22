@@ -20,7 +20,7 @@ import {
   Badge,
   Avatar,
 } from "@rfdtech/components";
-import { Edit, Eye, MoreHorizontal, Upload } from "lucide-react";
+import { Edit, Eye, Upload } from "lucide-react";
 
 function statusVariant(status: string) {
   switch (status) {

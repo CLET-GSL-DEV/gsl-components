@@ -1,5 +1,5 @@
-import { forwardRef, type ReactNode } from "react";
-import type { AppHeaderProfileProps, AppUser } from "../../types/app-header";
+import { forwardRef } from "react";
+import type { AppHeaderProfileProps } from "../../types/app-header";
 import * as Popover from "@radix-ui/react-popover";
 import { cn } from "../../utils/cn";
 import { ChevronDown } from "lucide-react";
@@ -71,4 +71,4 @@ export const AppHeaderProfile = forwardRef<
   );
 });
 
-(AppHeaderProfile as any).componentId = "AppHeaderProfile";
+(AppHeaderProfile as unknown as { componentId: string }).componentId = "AppHeaderProfile";

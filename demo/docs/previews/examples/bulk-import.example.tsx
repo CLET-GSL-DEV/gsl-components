@@ -1,4 +1,4 @@
-import type { BulkImportField } from "@rfdtech/components";
+import type { BulkImportField, BulkImportResult } from "@rfdtech/components";
 import { BulkImportModal, useModalSearchParam } from "@rfdtech/components";
 import { useCallback } from "react";
 
@@ -53,7 +53,7 @@ export function BulkImportExample() {
   const { open, onOpenChange, openWith } = useModalSearchParam("bulk-import");
 
   const handleComplete = useCallback(
-    (result: any) => {
+    (result: BulkImportResult) => {
       console.log("Import complete:", result);
       onOpenChange(false);
     },

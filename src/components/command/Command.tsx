@@ -74,7 +74,8 @@ export const Command = forwardRef<HTMLDivElement, CommandProps>(
     }, []);
 
     useEffect(() => {
-      return () => clearTimeout(blurTimeoutRef.current);
+      const timeout = blurTimeoutRef.current;
+      return () => clearTimeout(timeout);
     }, []);
 
     return (

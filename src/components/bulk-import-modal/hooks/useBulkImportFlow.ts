@@ -11,7 +11,6 @@ import {
   autoMatchSourceColumns,
   buildAllSourceColumns,
   buildSourceColumns,
-  isRequiredMappingComplete,
   mapRowsToRecords,
 } from "../utils/mapRowsToRecords";
 import {
@@ -150,10 +149,8 @@ export function useBulkImportFlow(
     parsed,
     parseError,
     headerRowIndex,
-    fields,
     activeSourceColumns,
     sourceColumnMapping,
-    excludedColumns,
   ]);
 
   const resultRows = step === 4 ? editableRows : mappedRows;

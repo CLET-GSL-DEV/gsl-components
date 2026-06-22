@@ -1,11 +1,11 @@
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef } from "react";
 import type { AppHeaderNotificationsProps } from "../../types/app-header";
 import { Bell } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { cn } from "../../utils/cn";
 
 export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNotificationsProps>(
-  function AppHeaderNotifications({ className, children, loading, loadingLabel = "Loading notifications..." }, ref) {
+  function AppHeaderNotifications({ className, children, loading, loadingLabel: _loadingLabel = "Loading notifications..." }, ref) {
     return (
       <Popover.Root>
         <Popover.Trigger asChild>
@@ -52,4 +52,4 @@ export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNot
   },
 );
 
-(AppHeaderNotifications as any).componentId = "AppHeaderNotifications";
+(AppHeaderNotifications as unknown as { componentId: string }).componentId = "AppHeaderNotifications";

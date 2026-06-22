@@ -7,7 +7,7 @@ import {
   type FieldPath,
   type FieldValues,
 } from "react-hook-form";
-import type { FormFieldProps, FormProps, UseFormFieldReturn } from "../../types/form";
+import type { FormFieldProps, UseFormFieldReturn } from "../../types/form";
 import { FormFieldContext, useFormFieldContext } from "./FormFieldContext";
 
 export const Form = FormProvider;

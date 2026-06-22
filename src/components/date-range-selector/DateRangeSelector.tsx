@@ -245,7 +245,10 @@ export const DateRangeSelector = forwardRef<
   const [internalValue, setInternalValue] = useState<DateRangeValue>(
     defaultValue ?? { start: null, end: null },
   );
-  const range = isControlled ? (controlledValue ?? { start: null, end: null }) : internalValue;
+  const range = useMemo(
+    () => isControlled ? (controlledValue ?? { start: null, end: null }) : internalValue,
+    [isControlled, controlledValue, internalValue],
+  );
 
   const [open, setOpen] = useState(false);
   const [pendingRange, setPendingRange] = useState<DateRangeValue>({ start: null, end: null });

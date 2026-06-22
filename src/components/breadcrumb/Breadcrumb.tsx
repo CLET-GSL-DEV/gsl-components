@@ -95,7 +95,7 @@ export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>
         ...props,
         onClick: (e: MouseEvent) => {
           e.preventDefault();
-          (onClick as any)?.(e);
+          (onClick as (e: MouseEvent) => void)?.(e);
         },
         className: cn(linkClassName, child.props.className),
       });

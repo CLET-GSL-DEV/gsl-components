@@ -1,6 +1,7 @@
 import {
   forwardRef,
   useCallback,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -18,7 +19,6 @@ import { Checkbox } from "../checkbox/Checkbox";
 import type { TableColumn } from "../../types/table";
 import type {
   TableProps,
-  TableSortState,
   SortDirection,
 } from "../../types/table";
 import { cn } from "../../utils/cn";
@@ -108,8 +108,8 @@ function TableContentRender<T>(
     direction: SortDirection;
   } | null>(null);
 
-  const columns = rawColumns ?? [];
-  const data = rawData ?? [];
+  const columns = useMemo(() => rawColumns ?? [], [rawColumns]);
+  const data = useMemo(() => rawData ?? [], [rawData]);
   const hasData = columns.length > 0 && data.length > 0;
 
   // Selection state

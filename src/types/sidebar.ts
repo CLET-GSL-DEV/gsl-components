@@ -1,5 +1,4 @@
 import type {
-  AnchorHTMLAttributes,
   ButtonHTMLAttributes,
   HTMLAttributes,
   ReactNode,

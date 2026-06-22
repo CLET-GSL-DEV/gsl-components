@@ -3,7 +3,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 import {
   Command,
@@ -13,11 +12,7 @@ import {
   CommandGroup,
   CommandItem,
 } from "../command/Command";
-import type {
-  AppHeaderSearchProps,
-  AppHeaderSearchItem,
-  AppHeaderSearchDataGroup,
-} from "../../types/app-header";
+import type { AppHeaderSearchProps } from "../../types/app-header";
 import { cn } from "../../utils/cn";
 import { useDebounce } from "../../hooks";
 import "./styles/app-header.css";
@@ -97,4 +92,4 @@ export const AppHeaderSearch = forwardRef<
   );
 });
 
-(AppHeaderSearch as any).componentId = "AppHeaderSearch";
+(AppHeaderSearch as unknown as { componentId: string }).componentId = "AppHeaderSearch";

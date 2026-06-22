@@ -26,7 +26,7 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
 
     Children.forEach(children, (child) => {
       if (!isValidElement(child)) return;
-      const id = (child.type as any)?.componentId;
+      const id = (child.type as { componentId?: string })?.componentId;
       if (id === "AppHeader") {
         headerEl = child;
       } else if (id === "AppSidebar") {
@@ -42,7 +42,6 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
       return { className: childClassName as string | undefined, children: childChildren as ReactNode, rest };
     };
 
-    const header = extractProps(headerEl);
     const sidebar = extractProps(sidebarEl);
     const body = extractProps(bodyEl);
 
