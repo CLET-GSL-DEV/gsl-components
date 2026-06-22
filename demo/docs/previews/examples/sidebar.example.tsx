@@ -27,31 +27,31 @@ import {
 } from "@rfdtech/components";
 
 const mainLinks = [
-  { href: "#dashboard", label: "Dashboard", icon: LayoutGrid, badge: undefined },
-  { href: "#users", label: "Users", icon: Users, badge: undefined },
-  { href: "#roles", label: "Roles & Permissions", icon: Shield, badge: undefined },
+  { id: "dashboard", label: "Dashboard", icon: LayoutGrid, badge: undefined },
+  { id: "users", label: "Users", icon: Users, badge: undefined },
+  { id: "roles", label: "Roles & Permissions", icon: Shield, badge: undefined },
   {
-    href: "#notifications",
+    id: "notifications",
     label: "Notification Templates",
     icon: Bell,
     badge: "New",
   },
-  { href: "#workflow", label: "Workflow Parameters", icon: GitBranch, badge: undefined },
-  { href: "#integrations", label: "Integrations", icon: Plug, badge: undefined },
+  { id: "workflow", label: "Workflow Parameters", icon: GitBranch, badge: undefined },
+  { id: "integrations", label: "Integrations", icon: Plug, badge: undefined },
 ] as const;
 
 const cbtLinks = [
-  { href: "#secure-browser", label: "Secure Browser Policy", icon: ScrollText, badge: undefined },
-  { href: "#exam-monitoring", label: "Exam Monitoring Settings", icon: Monitor, badge: undefined },
+  { id: "secure-browser", label: "Secure Browser Policy", icon: ScrollText, badge: undefined },
+  { id: "exam-monitoring", label: "Exam Monitoring Settings", icon: Monitor, badge: undefined },
 ] as const;
 
 const monitoringLinks = [
-  { href: "#audit-logs", label: "Audit Logs", icon: ScrollText, badge: "12" },
-  { href: "#system-health", label: "System Health", icon: Workflow, badge: undefined },
+  { id: "audit-logs", label: "Audit Logs", icon: ScrollText, badge: "12" },
+  { id: "system-health", label: "System Health", icon: Workflow, badge: undefined },
 ] as const;
 
 export function SidebarExample() {
-  const [activeHref, setActiveHref] = useState<string>("#users");
+  const [active, setActive] = useState<string>("users");
 
   return (
     <SidebarProvider>
@@ -95,16 +95,12 @@ export function SidebarExample() {
             <SidebarContent>
               <SidebarNav aria-label="Main navigation">
                 <SidebarGroup>
-                  {mainLinks.map(({ href, label, icon: Icon, badge }) => (
-                    <SidebarItem key={href}>
+                  {mainLinks.map(({ id, label, icon: Icon, badge }) => (
+                    <SidebarItem key={id}>
                       <SidebarLink
-                        href={href}
                         icon={<Icon size={20} strokeWidth={1.75} />}
-                        active={activeHref === href}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setActiveHref(href);
-                        }}
+                        active={active === id}
+                        onClick={() => setActive(id)}
                       >
                         {label}
                         {badge ? <SidebarBadge>{badge}</SidebarBadge> : null}
@@ -114,16 +110,12 @@ export function SidebarExample() {
                 </SidebarGroup>
                 <SidebarGroup>
                   <SidebarGroupLabel>CBT Engine</SidebarGroupLabel>
-                  {cbtLinks.map(({ href, label, icon: Icon }) => (
-                    <SidebarItem key={href}>
+                  {cbtLinks.map(({ id, label, icon: Icon }) => (
+                    <SidebarItem key={id}>
                       <SidebarLink
-                        href={href}
                         icon={<Icon size={20} strokeWidth={1.75} />}
-                        active={activeHref === href}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setActiveHref(href);
-                        }}
+                        active={active === id}
+                        onClick={() => setActive(id)}
                       >
                         {label}
                       </SidebarLink>
@@ -132,16 +124,12 @@ export function SidebarExample() {
                 </SidebarGroup>
                 <SidebarGroup>
                   <SidebarGroupLabel>Monitoring</SidebarGroupLabel>
-                  {monitoringLinks.map(({ href, label, icon: Icon, badge }) => (
-                    <SidebarItem key={href}>
+                  {monitoringLinks.map(({ id, label, icon: Icon, badge }) => (
+                    <SidebarItem key={id}>
                       <SidebarLink
-                        href={href}
                         icon={<Icon size={20} strokeWidth={1.75} />}
-                        active={activeHref === href}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setActiveHref(href);
-                        }}
+                        active={active === id}
+                        onClick={() => setActive(id)}
                       >
                         {label}
                         {badge ? <SidebarBadge>{badge}</SidebarBadge> : null}

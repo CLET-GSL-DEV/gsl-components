@@ -126,6 +126,7 @@ export interface PaginationControlsProps {
   totalPages: number;
   totalItems?: number;
   pageSizeOptions?: number[];
+  defaultPageSize?: number;
   visiblePages?: number;
   className?: string;
 }

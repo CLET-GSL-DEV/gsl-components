@@ -199,6 +199,10 @@
 }
 
 .gsl-command__popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
   z-index: var(--gsl-z-select);
   min-width: var(--radix-popover-trigger-width);
   border: 1px solid var(--gsl-border);

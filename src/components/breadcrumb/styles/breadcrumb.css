@@ -26,11 +26,12 @@
 .gsl-breadcrumb__link {
   color: var(--gsl-text-secondary);
   text-decoration: none;
+  cursor: pointer;
   transition: color 0.15s ease;
 }
 
 .gsl-breadcrumb__link:hover {
-  color: var(--gsl-text);
+  color: var(--gsl-primary);
 }
 
 .gsl-breadcrumb__link:focus-visible {

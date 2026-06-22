@@ -1,20 +1,12 @@
-import { forwardRef, type ReactNode } from "react";
-import { cn } from "../../utils/cn";
-import "./styles/app-layout.css";
+import type { ReactNode } from "react";
 
 export interface AppSidebarProps {
   children?: ReactNode;
   className?: string;
 }
 
-export const AppSidebar = forwardRef<HTMLElement, AppSidebarProps>(
-  function AppSidebar({ children, className }, ref) {
-    return (
-      <aside ref={ref} className={cn("gsl-app-sidebar", className)}>
-        {children}
-      </aside>
-    );
-  },
-);
+export const AppSidebar = ({ children }: AppSidebarProps) => {
+  return children as ReactNode;
+};
 
 (AppSidebar as any).componentId = "AppSidebar";

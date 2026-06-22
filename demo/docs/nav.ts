@@ -53,6 +53,7 @@ export const docNavSections: DocNavSection[] = [
       { slug: "table", title: "Table" },
       { slug: "tabs", title: "Tabs" },
       { slug: "toast", title: "Toast" },
+      { slug: "tooltip", title: "Tooltip" },
       { slug: "upload-field", title: "UploadField" },
     ],
   },

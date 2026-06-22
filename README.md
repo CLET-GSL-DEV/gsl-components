@@ -755,7 +755,7 @@ Props: `label`, `value`, `icon`, `description`, `trend`, `trendValue`, `variant`
 
 ## Modal
 
-Compound modal primitives for near full-viewport overlays with header, body, and footer slots. See the [Modal](/docs/modal) docs page for props and exported types.
+Centered modal with four size variants (`sm`, `md`, `lg`, `xl`), popover-style border, and optional close-prevention. Size tokens are independently customizable via `--gsl-modal-max-width-*`. See the [Modal](/docs/modal) docs page for props and exported types.
 
 ```tsx
 import {
@@ -763,7 +763,6 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalDescription,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
@@ -781,10 +780,9 @@ const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
 <Modal open={open} onOpenChange={onOpenChange}>
   <ModalPortal>
     <ModalOverlay />
-    <ModalContent showCloseButton>
+    <ModalContent showCloseButton size="lg" preventClose={isDirty}>
       <ModalHeader>
         <ModalTitle>Review changes</ModalTitle>
-        <ModalDescription>Confirm before publishing.</ModalDescription>
       </ModalHeader>
       <ModalBody>{children}</ModalBody>
       <ModalFooter>
@@ -796,7 +794,7 @@ const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
 </Modal>
 ```
 
-Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
+Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `size`, `preventClose`, `preventCloseTitle`, `preventCloseDescription`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalSize`, `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
 
 
 ## NetworkOperator
@@ -1120,6 +1118,23 @@ toast({
 ```
 
 Exports: `ToastProvider`, `Toaster`, `useToast`. Types: `ToastOptions`, `ToastVariant`, `ToastProviderProps`, `ToasterProps`, `UseToastReturn`, `ToastClassNames`, `ToastAction`, `ToastReturn`.
+
+
+## Tooltip
+
+Pure-CSS hover tooltip with directional arrow (top, right, bottom, left). Used internally by SidebarLink on the collapsed icon rail. See the [Tooltip](/docs/tooltip) docs page for props and exported types.
+
+```tsx
+import { Tooltip } from "@rfdtech/components";
+
+<Tooltip content="Save changes" side="right">
+  <button type="button" aria-label="Save">
+    <SaveIcon size={20} />
+  </button>
+</Tooltip>
+```
+
+Props: `content`, `side`, `classNames`, `className`. Exported types: `TooltipProps`, `TooltipClassNames`.
 
 
 ## UploadField

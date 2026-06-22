@@ -75,7 +75,7 @@
   padding: 4px 0;
   list-style: none;
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
+  border-radius: var(--gsl-radius-xl);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-md);
   overflow: hidden;

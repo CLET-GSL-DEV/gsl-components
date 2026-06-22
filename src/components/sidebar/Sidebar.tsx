@@ -11,7 +11,9 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
+import { Link } from "react-router-dom";
 import { PanelLeftClose, PanelLeftOpen, ChevronDown } from "lucide-react";
+import { Tooltip } from "../tooltip/Tooltip";
 import type {
   SidebarBadgeProps,
   SidebarBrandProps,
@@ -349,12 +351,23 @@ function isSidebarBadgeElement(
   return isValidElement(child) && child.type === SidebarBadge;
 }
 
-export const SidebarLink = forwardRef<HTMLAnchorElement, SidebarLinkProps>(
+function extractLabelText(node: ReactNode): string {
+  if (typeof node === "string") return node;
+  if (typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(extractLabelText).join(" ");
+  if (isValidElement(node)) {
+    return extractLabelText((node.props as { children?: ReactNode }).children);
+  }
+  return "";
+}
+
+export const SidebarLink = forwardRef<HTMLButtonElement | HTMLAnchorElement, SidebarLinkProps>(
   function SidebarLink(
     {
       active = false,
       asChild = false,
       icon,
+      to,
       classNames,
       className,
       children,
@@ -362,6 +375,7 @@ export const SidebarLink = forwardRef<HTMLAnchorElement, SidebarLinkProps>(
     },
     ref,
   ) {
+    const { collapsed } = useSidebar();
     const linkClassName = cn(
       "gsl-sidebar__link",
       active && "gsl-sidebar__link--active",
@@ -370,26 +384,74 @@ export const SidebarLink = forwardRef<HTMLAnchorElement, SidebarLinkProps>(
     );
 
     if (asChild && isValidElement(children)) {
-      const child = children as ReactElement<{ className?: string }>;
-
-      return cloneElement(child, {
+      const child = children as ReactElement<{ className?: string; role?: string }>;
+      const tooltipText = extractLabelText(children).trim();
+      const linkElement = cloneElement(child as ReactElement<any>, {
         ...props,
+        role: (child.props as any).role ?? "link",
         className: cn(linkClassName, child.props.className),
       });
+
+      if (collapsed && tooltipText) {
+        return (
+          <Tooltip content={tooltipText} side="right">
+            {linkElement}
+          </Tooltip>
+        );
+      }
+
+      return linkElement;
     }
 
     const childItems = Children.toArray(children);
     const badgeElement = childItems.find(isSidebarBadgeElement);
     const labelItems = childItems.filter((child) => child !== badgeElement);
+    const tooltipText = extractLabelText(labelItems).trim();
 
-    return (
+    const linkContent = (
+      <>
+        {icon ? <span className="gsl-sidebar__link-icon">{icon}</span> : null}
+        <span className="gsl-sidebar__link-label">{labelItems}</span>
+        {badgeElement}
+      </>
+    );
+
+    const inner = to ? (
+      <Link
+        to={to}
+        className={linkClassName}
+        {...(props as Record<string, unknown>)}
+      >
+        {linkContent}
+      </Link>
+    ) : (
+      <button
+        ref={ref as React.Ref<HTMLButtonElement>}
+        type="button"
+        role="link"
+        className={linkClassName}
+        {...props}
+      >
+        {linkContent}
+      </button>
+    );
+
+    const wrappedInner = (
       <SidebarLinkContext.Provider value={true}>
-        <a ref={ref} className={linkClassName} {...props}>
-          {icon ? <span className="gsl-sidebar__link-icon">{icon}</span> : null}
-          <span className="gsl-sidebar__link-label">{labelItems}</span>
-          {badgeElement}
-        </a>
+        {inner}
       </SidebarLinkContext.Provider>
     );
+
+    const linkWrapper = <span className="gsl-sidebar__link-wrapper">{wrappedInner}</span>;
+
+    if (collapsed && tooltipText) {
+      return (
+        <Tooltip content={tooltipText} side="right">
+          {linkWrapper}
+        </Tooltip>
+      );
+    }
+
+    return linkWrapper;
   },
 );

@@ -1,6 +1,9 @@
 import type { ComponentPropsWithoutRef } from "react";
 import type * as DialogPrimitive from "@radix-ui/react-dialog";
 
+// ⬇️ ADDED
+export type ModalSize = "sm" | "md" | "lg" | "xl" | "2xl";
+
 export interface ModalOverlayClassNames {
   overlay?: string;
 }
@@ -19,6 +22,11 @@ export interface ModalContentProps
   extends DialogPrimitive.DialogContentProps {
   classNames?: ModalContentClassNames;
   showCloseButton?: boolean;
+  // ⬇️ ADDED
+  size?: ModalSize;
+  preventClose?: boolean;
+  preventCloseTitle?: string;
+  preventCloseDescription?: string;
 }
 
 export interface ModalHeaderClassNames {

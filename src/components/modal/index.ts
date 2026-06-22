@@ -24,6 +24,7 @@ export type {
   ModalHeaderProps,
   ModalOverlayClassNames,
   ModalOverlayProps,
+  ModalSize,
   ModalTitleClassNames,
   ModalTitleProps,
 } from "../../types/modal";

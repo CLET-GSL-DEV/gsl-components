@@ -1,19 +1,12 @@
-import { forwardRef, type ReactNode } from "react";
-import { cn } from "../../utils/cn";
+import type { ReactNode } from "react";
 
 export interface AppBodyProps {
   children?: ReactNode;
   className?: string;
 }
 
-export const AppBody = forwardRef<HTMLElement, AppBodyProps>(
-  function AppBody({ children, className }, ref) {
-    return (
-      <main ref={ref} className={cn("gsl-app-body", className)}>
-        {children}
-      </main>
-    );
-  },
-);
+export const AppBody = ({ children }: AppBodyProps) => {
+  return children as ReactNode;
+};
 
 (AppBody as any).componentId = "AppBody";

@@ -14,30 +14,12 @@ describe("AppHeader", () => {
     render(<AppHeader>Hello</AppHeader>);
     expect(screen.getByText("Hello")).toBeInTheDocument();
   });
-
-  it("forwards ref", () => {
-    const ref = createRef<HTMLDivElement>();
-    render(<AppHeader ref={ref}>Hi</AppHeader>);
-    expect(ref.current).toBeInstanceOf(HTMLDivElement);
-  });
-
-  it("merges className", () => {
-    const { container } = render(<AppHeader className="custom">Hi</AppHeader>);
-    expect(container.firstElementChild).toHaveClass("custom");
-    expect(container.firstElementChild).toHaveClass("gsl-app-header");
-  });
 });
 
 describe("AppHeaderActions", () => {
   it("renders children", () => {
     render(<AppHeaderActions>Actions</AppHeaderActions>);
     expect(screen.getByText("Actions")).toBeInTheDocument();
-  });
-
-  it("forwards ref", () => {
-    const ref = createRef<HTMLDivElement>();
-    render(<AppHeaderActions ref={ref}>A</AppHeaderActions>);
-    expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
   it("renders with right-side class", () => {

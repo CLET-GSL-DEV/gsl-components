@@ -39,8 +39,8 @@
   padding: 8px 0;
   background: var(--gsl-bg);
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  box-shadow: var(--gsl-shadow);
+  border-radius: var(--gsl-radius-xl);
+  box-shadow: var(--gsl-shadow-md);
   opacity: 0;
   transform: translateY(-4px);
 }

@@ -79,12 +79,15 @@ export function EditMemberModal({
 
   const onSubmit = (data: EditMemberFormValues) => {
     console.log("Saved:", data);
+    form.reset(data);
     onOpenChange(false);
   };
 
+  const isDirty = form.formState.isDirty;
+
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
-      <ModalContent showCloseButton>
+      <ModalContent showCloseButton size="xl" preventClose={isDirty}>
         <ModalHeader>
           <ModalTitle>Edit Member</ModalTitle>
         </ModalHeader>

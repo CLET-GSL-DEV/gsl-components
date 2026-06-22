@@ -153,10 +153,12 @@ export interface SidebarBadgeProps {
 }
 
 export interface SidebarLinkProps
-  extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;
   asChild?: boolean;
   icon?: ReactNode;
+  /** If provided, renders as a react-router `<Link>` with this path */
+  to?: string;
   classNames?: SidebarLinkClassNames;
   className?: string;
   children: ReactNode;

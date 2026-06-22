@@ -17,16 +17,26 @@ import {
   Dropdown,
   BulkImportModal,
   useTableState,
+  Badge,
+  Avatar,
 } from "@rfdtech/components";
 import { Edit, Eye, MoreHorizontal, Upload } from "lucide-react";
 
-function nameToColor(name: string): string {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+function statusVariant(status: string) {
+  switch (status) {
+    case "Active":
+      return "success" as const;
+    case "Pending":
+      return "warning" as const;
+    case "Inactive":
+      return "outline" as const;
+    case "Suspended":
+      return "warning" as const;
+    case "Terminated":
+      return "error" as const;
+    default:
+      return "default" as const;
   }
-  const h = Math.abs(hash) % 360;
-  return `hsl(${h}, 45%, 88%)`;
 }
 
 export function MembersPage() {
@@ -37,14 +47,16 @@ export function MembersPage() {
 
   const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
     defaultPageSize: 10,
+    paramPrefix: "members",
   });
 
   const {
     page: invPage,
     pageSize: invPageSize,
+    pageSizeOptions: invPageSizeOptions,
     search: invSearch,
     filters: invFilters,
-  } = useTableState({ defaultPageSize: 5, paramPrefix: "invoices" });
+  } = useTableState({ defaultPageSize: 5, pageSizeOptions: [5, 10, 20, 50], paramPrefix: "invoices" });
 
   const [selectedMember, setSelectedMember] = useState<DemoMember | null>(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
@@ -73,15 +85,7 @@ export function MembersPage() {
         sortable: true,
         cell: ({ row }) => (
           <div className="demo-member-avatar">
-            <div
-              className="demo-member-avatar__circle"
-              style={{
-                background: nameToColor(row.name),
-                borderColor: nameToColor(row.name),
-              }}
-            >
-              {row.initials}
-            </div>
+            <Avatar name={row.name} size="md" />
             <span>{row.name}</span>
           </div>
         ),
@@ -99,12 +103,7 @@ export function MembersPage() {
         accessorKey: "status",
         sortable: true,
         cell: ({ value }) => (
-          <span
-            className={`demo-member-status demo-member-status--${String(value).toLowerCase()}`}
-          >
-            <span className="demo-member-status__dot" />
-            {String(value)}
-          </span>
+          <Badge variant={statusVariant(String(value))}>{String(value)}</Badge>
         ),
       },
       { id: "phone", header: "Phone", accessorKey: "phone", sortable: true },
@@ -295,6 +294,7 @@ export function MembersPage() {
                     m.email.toLowerCase().includes(invSearch.toLowerCase()),
                 ).length
               }
+              pageSizeOptions={invPageSizeOptions}
             />
           </TableFooter>
         </Table>

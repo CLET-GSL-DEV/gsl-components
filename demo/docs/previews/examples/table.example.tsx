@@ -9,6 +9,7 @@ import {
   TableBulkActions,
   TableFooter,
   TablePagination,
+  Badge,
 } from "@rfdtech/components";
 import { Trash2 } from "lucide-react";
 
@@ -35,6 +36,19 @@ const initialUsers: User[] = [
   { id: 12, name: "Paapa Essiedu", email: "paapa@gsl.edu.gh", role: "Viewer", status: "Inactive" },
 ];
 
+function statusVariant(status: string) {
+  switch (status) {
+    case "Active":
+      return "success" as const;
+    case "Pending":
+      return "warning" as const;
+    case "Inactive":
+      return "outline" as const;
+    default:
+      return "default" as const;
+  }
+}
+
 const columns: TableColumn<User>[] = [
   { id: "name", header: "Name", accessorKey: "name", sortable: true },
   { id: "email", header: "Email", accessorKey: "email", sortable: true },
@@ -45,29 +59,7 @@ const columns: TableColumn<User>[] = [
     accessorKey: "status",
     sortable: true,
     cell: ({ value }) => (
-      <span
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          fontSize: 13,
-        }}
-      >
-        <span
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: "50%",
-            background:
-              String(value) === "Active"
-                ? "var(--gsl-primary)"
-                : String(value) === "Pending"
-                  ? "#f59e0b"
-                  : "var(--gsl-text-muted)",
-          }}
-        />
-        {String(value)}
-      </span>
+      <Badge variant={statusVariant(String(value))}>{String(value)}</Badge>
     ),
   },
 ];
