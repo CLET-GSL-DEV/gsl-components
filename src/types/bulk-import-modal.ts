@@ -25,6 +25,8 @@ export interface BulkImportField {
   description?: string;
   example?: string;
   trim?: boolean;
+  /** Alternate strings for optimistic column matching (case-insensitive) */
+  matchKeys?: string[];
   validate?: (value: string) => string | null;
 }
 
@@ -51,6 +53,8 @@ export interface BulkImportModalProps {
   maxFileSizeBytes?: number;
   allowImportWithWarnings?: boolean;
   className?: string;
+  /** Seed initial flow state for progress preservation across open/close cycles. */
+  defaultState?: BulkImportFlowDefaultState;
 }
 
 export interface SourceColumn {
@@ -71,10 +75,25 @@ export type SourceColumnMapping = Record<number, string | null>;
 /** @deprecated Use SourceColumnMapping — kept for backwards compatibility */
 export type ColumnMapping = Record<string, number | null>;
 
+/** Preservable subset of flow state for seeding initial values. */
+export interface BulkImportFlowDefaultState {
+  step?: BulkImportStep;
+  parsed?: ParsedSpreadsheet | null;
+  headerRowIndex?: number | null;
+  sourceColumnMapping?: SourceColumnMapping;
+  excludedColumns?: number[];
+  selectedRowIds?: number[];
+  showOnlyErrors?: boolean;
+  discardedRows?: number[];
+  editableRows?: Record<string, string>[];
+}
+
 export interface UseBulkImportFlowOptions {
   fields: BulkImportField[];
   maxFileSizeBytes?: number;
   open: boolean;
+  /** Seed initial flow state for progress preservation across open/close cycles. */
+  defaultState?: BulkImportFlowDefaultState;
 }
 
 export interface UseBulkImportFlowReturn {
@@ -104,8 +123,10 @@ export interface UseBulkImportFlowReturn {
   setVisibleRowsSelection: (rowIds: number[], selected: boolean) => void;
   setShowOnlyErrors: (value: boolean) => void;
   discardSelectedRows: () => void;
+  resetDiscardedRows: () => void;
   updateRowValue: (rowId: number, fieldKey: string, value: string) => void;
   handleFile: (file: File) => Promise<void>;
+  autoMapColumns: () => void;
   goNext: () => void;
   goBack: () => void;
   goToStep: (step: BulkImportStep) => void;

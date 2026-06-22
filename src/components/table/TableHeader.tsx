@@ -26,6 +26,23 @@ function paramKey(prefix: string | undefined, key: string): string {
   return prefix ? `${prefix}.${key}` : key;
 }
 
+/* ── Actions ── */
+
+export const TableActions = forwardRef<
+  HTMLDivElement,
+  { className?: string; children?: ReactNode }
+>(function TableActions({ className, children, ...props }, ref) {
+  return (
+    <div
+      ref={ref}
+      className={cn("gsl-table__actions", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+});
+
 /* ── Header ── */
 
 export const TableHeader = forwardRef<

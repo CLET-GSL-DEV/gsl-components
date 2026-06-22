@@ -1,37 +1,22 @@
-import type { ChangeEvent, DragEvent } from "react";
 import type { BulkImportField } from "../../../types/bulk-import-modal";
+import { UploadField } from "../../upload-field/UploadField";
 import { getFieldExampleValue } from "../utils/validateFieldValue";
 
 interface UploadStepProps {
   fields: BulkImportField[];
-  fileName: string | null;
   parseError: string | null;
   isParsing: boolean;
+  maxFileSizeBytes: number;
   onFileSelected: (file: File) => void;
 }
 
 export function UploadStep({
   fields,
-  fileName,
   parseError,
   isParsing,
+  maxFileSizeBytes,
   onFileSelected,
 }: UploadStepProps) {
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      onFileSelected(file);
-    }
-  };
-
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files?.[0];
-    if (file) {
-      onFileSelected(file);
-    }
-  };
-
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--upload">
       <h3 className="gsl-bulk-import__step-title">Upload Document</h3>
@@ -62,33 +47,19 @@ export function UploadStep({
         </div>
       </div>
 
-      <div
-        className="gsl-bulk-import__dropzone"
-        onDragOver={(event) => event.preventDefault()}
-        onDrop={handleDrop}
-      >
-        <input
-          id="gsl-bulk-import-file"
-          type="file"
+      <div className="gsl-bulk-import__upload-area">
+        <UploadField
           accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
-          className="gsl-bulk-import__file-input"
-          onChange={handleInputChange}
+          maxSize={maxFileSizeBytes}
           disabled={isParsing}
+          invalid={!!parseError}
+          onChange={(file) => {
+            if (file && !Array.isArray(file)) {
+              onFileSelected(file);
+            }
+          }}
         />
-        <p className="gsl-bulk-import__dropzone-title">
-          Upload .xlsx, .xls or .csv file
-        </p>
-        <label
-          htmlFor="gsl-bulk-import-file"
-          className="gsl-bulk-import__button gsl-bulk-import__button--primary gsl-bulk-import__select-file"
-        >
-          {isParsing ? "Parsing file..." : "Select file"}
-        </label>
       </div>
-
-      {fileName && !parseError && (
-        <p className="gsl-bulk-import__file-name">Selected: {fileName}</p>
-      )}
 
       {parseError && (
         <p className="gsl-bulk-import__error" role="alert">

@@ -15,6 +15,7 @@ export function Dropdown({
   disabled = false,
   invalid = false,
   "aria-label": ariaLabel,
+  formatOption,
   classNames,
   className,
 }: DropdownProps) {
@@ -41,7 +42,9 @@ export function Dropdown({
           aria-invalid={invalid || undefined}
         >
           <Select.Value placeholder={placeholder}>
-            {selectedOption?.label}
+            {formatOption
+              ? formatOption(selectedOption ?? null, isPlaceholder ? "empty" : "selected")
+              : selectedOption?.label ?? placeholder}
           </Select.Value>
           <Select.Icon
             className={cn("gsl-dropdown__trigger-icon", classNames?.icon)}
@@ -74,7 +77,11 @@ export function Dropdown({
                 disabled={option.disabled}
                 className={cn("gsl-dropdown__option", classNames?.option)}
               >
-                <Select.ItemText>{option.label}</Select.ItemText>
+                <Select.ItemText>
+                  {formatOption
+                    ? formatOption(option, option.value === value ? "selected" : "idle")
+                    : option.label}
+                </Select.ItemText>
               </Select.Item>
             ))}
           </Select.Viewport>

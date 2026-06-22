@@ -7,7 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes yet.
+## [1.18.0] - 2026-06-21
+
+### Breaking
+- **AppLayout**: Now wraps `SidebarProvider` and `BreadcrumbProvider` internally. Consumers no longer need to add these providers. Removed `AppBreadcrumb` slot component. Breadcrumbs are context driven, call `useBreadcrumbs()` from any page to set them.
+- **Card**: Removed `header` prop and `CardClassNames`. Use `CardHeader`, `CardTitle`, and `CardActions` sub-components instead.
+
+### Added
+- `BreadcrumbProvider`, `useBreadcrumbs`, `useBreadcrumbContext`, `BreadcrumbEntry` exports
+- `CardHeader`, `CardTitle`, `CardActions` sub-components
+- `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation
+- BulkImportModal: browser confirmation prompt when a file has been uploaded but not confirmed
+- BulkImportModal: reset discarded rows button on validate data page
+
+### Changed
+- **ValidateDataStep**: replaced `<Table />` dependency with an internal virtualized table using `@tanstack/react-virtual`. Error counts correctly exclude discarded rows.
+- Minor CSS improvements across sidebar, button, modal, field, and table components
+
+## [1.17.0] - 2026-06-20
+
+### Added
+
+- ModalContent `onOpenChange` prop for direct close handler passing
+- BulkImportModal `defaultState` prop (`BulkImportFlowDefaultState`) for flow state preservation across open/close cycles
+- BulkImportModal flow state types exported
+- AppHeader: simplified wrapper with `as` prop for semantic flexibility
+- AppLayout: className and extra props passthrough on layout wrappers
+- SelectHeaderRowStep: responsive single-column header row selection with radio buttons on mobile
+- Table: `TableHeaderCell` with `sortable`, `sortDirection`, `onSort` and sort icon; sticky `TableHeader`
+
+### Changed
+
+- ModalContent: removed nested AlertDialog for close-confirmation (all alert() debug calls cleaned out)
+- UploadField: action button uses `<Button variant="primary">` instead of raw `<button>`
+- BulkImportModal stepper: nav-based step indicator with clickable completed steps; footer/body use ModalFooter/ModalBody
+- UploadField: action button height aligned with Button component sizing (36px → 40px)
+
+### Fixed
+
+- ModalContent: no nested Radix Dialog (caused focus-trap / z-index conflicts)
+- BulkImportModal CSS lint: padding shorthand, rgba → rgb modern notation, ::last-child → :last-child
+- ValidateDataStep memoization
+- Modal test: close-button test updated
 
 ## [1.16.1] - 2026-06-19
 

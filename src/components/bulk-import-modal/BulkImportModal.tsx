@@ -1,10 +1,22 @@
-import { useCallback, useMemo, useState } from "react";
-import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import * as Dialog from "@radix-ui/react-dialog";
+import { useCallback, useMemo } from "react";
+import { useConfirmBeforeUnload } from "../../hooks/useConfirmBeforeUnload";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Modal,
+  ModalPortal,
+  ModalOverlay,
+  ModalContent,
+  ModalTitle,
+  ModalFooter,
+  ModalBody,
+} from "../modal/Modal";
 import { Button } from "../button/Button";
 import type { BulkImportModalProps } from "../../types/bulk-import-modal";
 import { useBulkImportFlow } from "./hooks/useBulkImportFlow";
-import { getMappedFieldKeys, buildAllSourceColumns } from "./utils/mapRowsToRecords";
+import {
+  getMappedFieldKeys,
+  buildAllSourceColumns,
+} from "./utils/mapRowsToRecords";
 import { MatchColumnsStep } from "./steps/MatchColumnsStep";
 import { SelectHeaderRowStep } from "./steps/SelectHeaderRowStep";
 import { UploadStep } from "./steps/UploadStep";
@@ -50,47 +62,18 @@ export function BulkImportModal({
   maxFileSizeBytes = DEFAULT_MAX_FILE_SIZE,
   allowImportWithWarnings = false,
   className,
+  defaultState,
 }: BulkImportModalProps) {
-  const [showExitConfirm, setShowExitConfirm] = useState(false);
-
   const flow = useBulkImportFlow({
     fields,
     maxFileSizeBytes,
     open,
+    defaultState,
   });
 
   const hasUnsavedProgress = flow.parsed !== null;
 
-  const requestClose = useCallback(() => {
-    if (!hasUnsavedProgress) {
-      onOpenChange(false);
-      return;
-    }
-
-    setShowExitConfirm(true);
-  }, [hasUnsavedProgress, onOpenChange]);
-
-  const confirmExit = useCallback(() => {
-    setShowExitConfirm(false);
-    onOpenChange(false);
-  }, [onOpenChange]);
-
-  const handleDialogOpenChange = useCallback(
-    (nextOpen: boolean) => {
-      if (nextOpen) {
-        onOpenChange(true);
-        return;
-      }
-
-      if (!hasUnsavedProgress) {
-        onOpenChange(false);
-        return;
-      }
-
-      setShowExitConfirm(true);
-    },
-    [hasUnsavedProgress, onOpenChange],
-  );
+  useConfirmBeforeUnload(hasUnsavedProgress);
 
   const allSourceColumns = useMemo(() => {
     if (!flow.parsed || flow.headerRowIndex === null) {
@@ -109,8 +92,7 @@ export function BulkImportModal({
   }, [flow.parsed, flow.headerRowIndex]);
 
   const mappedFieldKeys = useMemo(
-    () =>
-      getMappedFieldKeys(flow.sourceColumnMapping, flow.excludedColumns),
+    () => getMappedFieldKeys(flow.sourceColumnMapping, flow.excludedColumns),
     [flow.sourceColumnMapping, flow.excludedColumns],
   );
 
@@ -127,242 +109,233 @@ export function BulkImportModal({
     onOpenChange(false);
   };
 
+  const preventOverlayClose = useCallback(
+    (event: Event) => event.preventDefault(),
+    [],
+  );
+
   const dialogClass = ["gsl-bulk-import", className].filter(Boolean).join(" ");
 
   return (
-    <>
-      <Dialog.Root open={open} onOpenChange={handleDialogOpenChange}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="gsl-bulk-import__overlay" />
-          <Dialog.Content className={dialogClass} aria-describedby={undefined}>
-            <Dialog.Title className="gsl-bulk-import__dialog-title">
-              {title}
-            </Dialog.Title>
-
-            <button
-              type="button"
-              className="gsl-bulk-import__close"
-              aria-label="Close"
-              onClick={requestClose}
-            >
-              ×
-            </button>
-
-            <header className="gsl-bulk-import__header">
-              <nav className="gsl-bulk-import__stepper" aria-label="Import steps">
-                <ol className="gsl-bulk-import__stepper-list">
-                  {STEPS.map((stepItem, index) => {
-                    const isActive = flow.step === stepItem.id;
-                    const isComplete = flow.step > stepItem.id;
-                    const isLast = index === STEPS.length - 1;
-                    const canClick = isComplete;
-                    return (
-                      <li
-                        key={stepItem.id}
-                        className={[
-                          "gsl-bulk-import__stepper-item",
-                          isActive ? "gsl-bulk-import__stepper-item--active" : "",
-                          isComplete ? "gsl-bulk-import__stepper-item--complete" : "",
-                          canClick ? "gsl-bulk-import__stepper-item--clickable" : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ")}
-                        aria-current={isActive ? "step" : undefined}
-                      >
-                        {canClick ? (
-                          <button
-                            type="button"
-                            className="gsl-bulk-import__stepper-button"
-                            onClick={() => flow.goToStep(stepItem.id)}
-                            aria-label={`Go to step ${stepItem.id}: ${stepItem.label}`}
-                          >
-                            <span className="gsl-bulk-import__stepper-marker">
-                              <span
-                                className={[
-                                  "gsl-bulk-import__stepper-number",
-                                  isComplete ? "gsl-bulk-import__stepper-number--hidden" : "",
-                                ]
-                                  .filter(Boolean)
-                                  .join(" ")}
-                                aria-hidden={isComplete}
-                              >
-                                {stepItem.id}
-                              </span>
-                              {isComplete && <CheckmarkIcon />}
-                            </span>
-                            <span className="gsl-bulk-import__stepper-label">{stepItem.label}</span>
-                          </button>
-                        ) : (
-                          <>
-                            <span className="gsl-bulk-import__stepper-marker">
-                              <span
-                                className={[
-                                  "gsl-bulk-import__stepper-number",
-                                  isComplete ? "gsl-bulk-import__stepper-number--hidden" : "",
-                                ]
-                                  .filter(Boolean)
-                                  .join(" ")}
-                                aria-hidden={isComplete}
-                              >
-                                {stepItem.id}
-                              </span>
-                              {isComplete && <CheckmarkIcon />}
-                            </span>
-                            <span className="gsl-bulk-import__stepper-label">{stepItem.label}</span>
-                          </>
-                        )}
-                        {!isLast && (
-                          <span
-                            className="gsl-bulk-import__stepper-connector"
-                            aria-hidden="true"
-                          >
-                            <span
-                              className="gsl-bulk-import__stepper-connector-track"
-                              aria-hidden="true"
-                            />
+    <Modal open={open} onOpenChange={onOpenChange}>
+      <ModalPortal>
+        <ModalOverlay />
+        <ModalContent
+          className={dialogClass}
+          showCloseButton
+          preventClose={hasUnsavedProgress}
+          preventCloseTitle="Exit import flow"
+          preventCloseDescription="Are you sure? Your current information will not be saved."
+          onOpenChange={onOpenChange}
+          onInteractOutside={preventOverlayClose}
+          aria-describedby={undefined}
+        >
+          <ModalTitle className="gsl-bulk-import__header">
+            <nav className="gsl-bulk-import__stepper" aria-label="Import steps">
+              <ol className="gsl-bulk-import__stepper-list">
+                {STEPS.map((stepItem, index) => {
+                  const isActive = flow.step === stepItem.id;
+                  const isComplete = flow.step > stepItem.id;
+                  const isLast = index === STEPS.length - 1;
+                  const canClick = isComplete;
+                  return (
+                    <li
+                      key={stepItem.id}
+                      className={[
+                        "gsl-bulk-import__stepper-item",
+                        isActive ? "gsl-bulk-import__stepper-item--active" : "",
+                        isComplete
+                          ? "gsl-bulk-import__stepper-item--complete"
+                          : "",
+                        canClick
+                          ? "gsl-bulk-import__stepper-item--clickable"
+                          : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      aria-current={isActive ? "step" : undefined}
+                    >
+                      {canClick ? (
+                        <button
+                          type="button"
+                          className="gsl-bulk-import__stepper-button"
+                          onClick={() => flow.goToStep(stepItem.id)}
+                          aria-label={`Go to step ${stepItem.id}: ${stepItem.label}`}
+                        >
+                          <span className="gsl-bulk-import__stepper-marker">
                             <span
                               className={[
-                                "gsl-bulk-import__stepper-connector-fill",
+                                "gsl-bulk-import__stepper-number",
                                 isComplete
-                                  ? "gsl-bulk-import__stepper-connector-fill--visible"
+                                  ? "gsl-bulk-import__stepper-number--hidden"
                                   : "",
                               ]
                                 .filter(Boolean)
                                 .join(" ")}
-                              aria-hidden="true"
-                            />
+                              aria-hidden={isComplete}
+                            >
+                              {stepItem.id}
+                            </span>
+                            {isComplete && <CheckmarkIcon />}
                           </span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ol>
-              </nav>
-            </header>
+                          <span className="gsl-bulk-import__stepper-label">
+                            {stepItem.label}
+                          </span>
+                        </button>
+                      ) : (
+                        <>
+                          <span className="gsl-bulk-import__stepper-marker">
+                            <span
+                              className={[
+                                "gsl-bulk-import__stepper-number",
+                                isComplete
+                                  ? "gsl-bulk-import__stepper-number--hidden"
+                                  : "",
+                              ]
+                                .filter(Boolean)
+                                .join(" ")}
+                              aria-hidden={isComplete}
+                            >
+                              {stepItem.id}
+                            </span>
+                            {isComplete && <CheckmarkIcon />}
+                          </span>
+                          <span className="gsl-bulk-import__stepper-label">
+                            {stepItem.label}
+                          </span>
+                        </>
+                      )}
+                      {!isLast && (
+                        <span
+                          className="gsl-bulk-import__stepper-connector"
+                          aria-hidden="true"
+                        >
+                          <span
+                            className="gsl-bulk-import__stepper-connector-track"
+                            aria-hidden="true"
+                          />
+                          <span
+                            className={[
+                              "gsl-bulk-import__stepper-connector-fill",
+                              isComplete
+                                ? "gsl-bulk-import__stepper-connector-fill--visible"
+                                : "",
+                            ]
+                              .filter(Boolean)
+                              .join(" ")}
+                            aria-hidden="true"
+                          />
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
+            </nav>
+          </ModalTitle>
 
-            <div
-              className={[
-                "gsl-bulk-import__body",
-                flow.step === 1
-                  ? "gsl-bulk-import__body--upload"
-                  : flow.step === 2
-                    ? "gsl-bulk-import__body--header"
-                    : flow.step === 3
-                      ? "gsl-bulk-import__body--match"
-                      : flow.step === 4
-                        ? "gsl-bulk-import__body--validate"
-                        : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-            >
-              {flow.step === 1 && (
-                <UploadStep
-                  fields={fields}
-                  fileName={flow.parsed?.fileName ?? null}
-                  parseError={flow.parseError}
-                  isParsing={flow.isParsing}
-                  onFileSelected={(file) => void flow.handleFile(file)}
-                />
-              )}
-
-              {flow.step === 2 && flow.parsed && (
-                <SelectHeaderRowStep
-                  rows={flow.parsed.rows}
-                  headerRowIndex={flow.headerRowIndex}
-                  onSelectHeaderRow={flow.setHeaderRowIndex}
-                />
-              )}
-
-              {flow.step === 3 && flow.parsed && (
-                <MatchColumnsStep
-                  fields={fields}
-                  allSourceColumns={allSourceColumns}
-                  previewRows={previewRows}
-                  sourceColumnMapping={flow.sourceColumnMapping}
-                  excludedColumns={flow.excludedColumns}
-                  onSourceMappingChange={flow.updateSourceMapping}
-                  onToggleExcludedColumn={flow.toggleExcludedColumn}
-                />
-              )}
-
-              {flow.step === 4 && (
-                <ValidateDataStep
-                  fields={fields}
-                  mappedFieldKeys={mappedFieldKeys}
-                  mappedRows={flow.editableRows}
-                  errors={flow.validationErrors}
-                  selectedRowIds={flow.selectedRowIds}
-                  showOnlyErrors={flow.showOnlyErrors}
-                  discardedRows={flow.discardedRows}
-                  onToggleRowSelection={flow.toggleRowSelection}
-                  onSetVisibleRowsSelection={flow.setVisibleRowsSelection}
-                  onShowOnlyErrorsChange={flow.setShowOnlyErrors}
-                  onDiscardSelectedRows={flow.discardSelectedRows}
-                  onUpdateRowValue={flow.updateRowValue}
-                />
-              )}
-            </div>
-
-            {flow.step > 1 && (
-              <footer className="gsl-bulk-import__footer">
-                <button
-                  type="button"
-                  className="gsl-bulk-import__button gsl-bulk-import__button--outline"
-                  onClick={flow.goBack}
-                >
-                  Back
-                </button>
-                {flow.step < 4 ? (
-                  <button
-                    type="button"
-                    className="gsl-bulk-import__button gsl-bulk-import__button--primary gsl-bulk-import__footer-action"
-                    disabled={!flow.canGoNext}
-                    onClick={flow.goNext}
-                  >
-                    Next
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="gsl-bulk-import__button gsl-bulk-import__button--primary gsl-bulk-import__footer-action"
-                    disabled={!canConfirm}
-                    onClick={handleConfirm}
-                  >
-                    Confirm
-                  </button>
-                )}
-              </footer>
+          <ModalBody
+            className={[
+              "gsl-bulk-import__body",
+              flow.step === 1
+                ? "gsl-bulk-import__body--upload"
+                : flow.step === 2
+                  ? "gsl-bulk-import__body--header"
+                  : flow.step === 3
+                    ? "gsl-bulk-import__body--match"
+                    : flow.step === 4
+                      ? "gsl-bulk-import__body--validate"
+                      : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            {flow.step === 1 && (
+              <UploadStep
+                fields={fields}
+                parseError={flow.parseError}
+                isParsing={flow.isParsing}
+                maxFileSizeBytes={maxFileSizeBytes}
+                onFileSelected={(file) => void flow.handleFile(file)}
+              />
             )}
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
 
-      <AlertDialog.Root open={showExitConfirm} onOpenChange={setShowExitConfirm}>
-        <AlertDialog.Portal>
-          <AlertDialog.Overlay className="gsl-bulk-import__exit-confirm-overlay" />
-          <AlertDialog.Content className="gsl-bulk-import__exit-confirm">
-            <AlertDialog.Title className="gsl-bulk-import__exit-confirm-title">
-              Exit import flow
-            </AlertDialog.Title>
-            <AlertDialog.Description className="gsl-bulk-import__exit-confirm-message">
-              Are you sure? Your current information will not be saved.
-            </AlertDialog.Description>
-            <div className="gsl-bulk-import__exit-confirm-actions">
-              <AlertDialog.Cancel asChild>
-                <Button variant="ghost">
-                  Cancel
+            {flow.step === 2 && flow.parsed && (
+              <SelectHeaderRowStep
+                rows={flow.parsed.rows}
+                headerRowIndex={flow.headerRowIndex}
+                onSelectHeaderRow={flow.setHeaderRowIndex}
+              />
+            )}
+
+            {flow.step === 3 && flow.parsed && (
+              <MatchColumnsStep
+                fields={fields}
+                allSourceColumns={allSourceColumns}
+                previewRows={previewRows}
+                sourceColumnMapping={flow.sourceColumnMapping}
+                excludedColumns={flow.excludedColumns}
+                onSourceMappingChange={flow.updateSourceMapping}
+                onToggleExcludedColumn={flow.toggleExcludedColumn}
+                onResetMapping={flow.autoMapColumns}
+              />
+            )}
+
+            {flow.step === 4 && (
+              <ValidateDataStep
+                fields={fields}
+                mappedFieldKeys={mappedFieldKeys}
+                mappedRows={flow.editableRows}
+                errors={flow.validationErrors}
+                selectedRowIds={flow.selectedRowIds}
+                showOnlyErrors={flow.showOnlyErrors}
+                discardedRows={flow.discardedRows}
+                onToggleRowSelection={flow.toggleRowSelection}
+                onSetVisibleRowsSelection={flow.setVisibleRowsSelection}
+                onShowOnlyErrorsChange={flow.setShowOnlyErrors}
+                onDiscardSelectedRows={flow.discardSelectedRows}
+                onResetDiscardedRows={flow.resetDiscardedRows}
+                onUpdateRowValue={flow.updateRowValue}
+              />
+            )}
+          </ModalBody>
+
+          {flow.step > 1 && (
+            <ModalFooter className="gsl-bulk-import__footer">
+              <Button
+                variant="outline"
+                size="md"
+                className="gsl-bulk-import__footer-action"
+                onClick={flow.goBack}
+              >
+                <ChevronLeft size={16} strokeWidth={2} />
+                Back
+              </Button>
+              {flow.step < 4 ? (
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="gsl-bulk-import__footer-action"
+                  disabled={!flow.canGoNext}
+                  onClick={flow.goNext}
+                >
+                  Next
                 </Button>
-              </AlertDialog.Cancel>
-              <AlertDialog.Action asChild>
-                <Button variant="primary" onClick={confirmExit}>
-                  Exit flow
+              ) : (
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="gsl-bulk-import__footer-action"
+                  disabled={!canConfirm}
+                  onClick={handleConfirm}
+                >
+                  Confirm
                 </Button>
-              </AlertDialog.Action>
-            </div>
-          </AlertDialog.Content>
-        </AlertDialog.Portal>
-      </AlertDialog.Root>
-    </>
+              )}
+            </ModalFooter>
+          )}
+        </ModalContent>
+      </ModalPortal>
+    </Modal>
   );
 }

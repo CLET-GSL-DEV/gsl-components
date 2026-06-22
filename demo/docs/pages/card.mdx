@@ -9,50 +9,54 @@ import cardSource from "../previews/examples/card.example.tsx?raw";
 
 # Card
 
-Surface card wrapper for grouping content with an optional header. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for spacing — both overridable via CSS custom properties or `classNames`.
+Surface card wrapper for grouping content. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for spacing — both overridable via CSS custom properties or `className`.
 
 ## Example
 
 <ExampleTabs title="Card variants" preview={<CardPreview />} code={cardSource} />
 
-## Props
+## Card
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `header` | `ReactNode` | — | Optional header rendered above the body |
-| `children` | `ReactNode` | — | Card body content |
-| `classNames` | `CardClassNames` | — | Part-level class overrides |
-| `className` | `string` | — | Merged onto the root element |
+| `children` | `ReactNode` | — | Card content |
 
 Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
 
-## Types
+## CardHeader
 
-### `CardProps`
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | — | Header content |
 
-See the props table above.
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
 
-### `CardClassNames`
+## CardTitle
 
-| Key | Applied to |
-|-----|------------|
-| `root` | Root element (`.gsl-card`) |
-| `header` | Header wrapper (`.gsl-card__header`) |
-| `body` | Body wrapper (`.gsl-card__body`) |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | — | Title text or element |
+
+Also accepts remaining `HTMLAttributes<HTMLHeadingElement>`.
+
+## CardActions
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | — | Action items (buttons, links) |
+
+Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
 
 ## Design tokens
-
-The following tokens are specific to the Card component:
 
 | Token | Fallback | Used for |
 |-------|----------|----------|
 | `--gsl-surface-card` | `--gsl-bg` | Card background |
 | `--gsl-card-padding` | `20px` | Inner padding (16px on mobile) |
 
-Override padding via `--gsl-card-padding` or pass a class with custom padding through `classNames.root`.
+Override padding via `--gsl-card-padding` or tailwind padding classes through `className`.
 
 ## Notes
 
-- Omitting `header` hides the header divider — the body fills the card edge-to-edge.
 - On mobile (`<= 768px`), padding reduces to 16px via `--gsl-card-padding`.
-- Use `classNames.root` to override background, border-radius, shadow, or any root style.
+- Use `className` to override background, border-radius, shadow, or any root style.

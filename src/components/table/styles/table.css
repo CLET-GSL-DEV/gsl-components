@@ -14,8 +14,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 0;
   margin-bottom: calc(var(--gsl-app-layout-body-gap) / 2);
+}
+
+.gsl-table__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 }
 
 /* ── Search ── */
@@ -288,8 +294,7 @@
 }
 
 .gsl-table__content td {
-  padding: 0 16px;
-  height: 44px;
+  padding: var(--gsl-table-cell-padding-y, 4px) 16px;
   font-size: 14px;
   color: var(--gsl-text);
   white-space: nowrap;
@@ -516,4 +521,33 @@
   .gsl-table__filter-btn {
     transition: none;
   }
+}
+
+/* ── Virtualization ── */
+
+.gsl-table__viewport {
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+}
+
+.gsl-bulk-import__match-colum-dropdown-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gsl-bulk-import__mapping-status {
+  color: var(--gsl-page-bg);
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gsl-bulk-import__mapping-status--complete {
+  background: var(--gsl-success);
+}
+.gsl-bulk-import__mapping-status--pending {
+  border: 1px solid var(--gsl-border);
 }

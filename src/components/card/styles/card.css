@@ -5,17 +5,27 @@
   border-radius: var(--gsl-radius-xl);
   padding: var(--gsl-card-padding);
   font-family: var(--gsl-font);
+  color: var(--gsl-text);
 }
 
 .gsl-card__header {
-  margin-bottom: 16px;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.gsl-card__title {
+  margin: 0;
+  font-size: 20px;
   font-weight: 600;
   color: var(--gsl-text);
 }
 
-.gsl-card__body {
-  color: var(--gsl-text);
+.gsl-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 @media (width <= 768px) {

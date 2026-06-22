@@ -28,6 +28,7 @@ export {
   validateFieldValue,
 } from "./utils/validateFieldValue";
 export type {
+  BulkImportFlowDefaultState,
   BulkImportField,
   BulkImportFieldType,
   BulkImportModalProps,

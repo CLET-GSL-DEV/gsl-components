@@ -32,13 +32,7 @@ export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
 
 export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   function DialogContent(
-    {
-      className,
-      classNames,
-      children,
-      showCloseButton = false,
-      ...props
-    },
+    { className, classNames, children, showCloseButton = false, ...props },
     ref,
   ) {
     return (

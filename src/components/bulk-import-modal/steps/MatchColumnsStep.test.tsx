@@ -31,6 +31,7 @@ describe("MatchColumnsStep", () => {
         excludedColumns={[]}
         onSourceMappingChange={vi.fn()}
         onToggleExcludedColumn={vi.fn()}
+        onResetMapping={vi.fn()}
       />,
     );
 
@@ -64,6 +65,7 @@ describe("MatchColumnsStep", () => {
         excludedColumns={[]}
         onSourceMappingChange={vi.fn()}
         onToggleExcludedColumn={vi.fn()}
+        onResetMapping={vi.fn()}
       />,
     );
 

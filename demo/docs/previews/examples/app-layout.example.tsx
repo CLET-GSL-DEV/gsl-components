@@ -6,21 +6,13 @@ import {
   AppHeaderSearch,
   AppHeaderProfile,
   AppSidebar,
-  AppBreadcrumb,
   AppBody,
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
   Sidebar,
   SidebarContent,
   SidebarNav,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarLink,
-  SidebarProvider,
 } from "@rfdtech/components";
 import { LayoutDashboard, Users, Settings } from "lucide-react";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
@@ -72,7 +64,6 @@ export function AppLayoutExample() {
     : [];
 
   return (
-    <SidebarProvider>
     <div style={{ height: 400, borderRadius: "var(--gsl-radius-2xl)", overflow: "hidden" }}>
       <AppLayout>
         <AppHeader>
@@ -116,19 +107,6 @@ export function AppLayoutExample() {
             </SidebarContent>
           </Sidebar>
         </AppSidebar>
-        <AppBreadcrumb>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Dashboard</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </AppBreadcrumb>
         <AppBody>
           <div
             style={{
@@ -145,6 +123,5 @@ export function AppLayoutExample() {
         </AppBody>
       </AppLayout>
     </div>
-    </SidebarProvider>
   );
 }

@@ -56,8 +56,10 @@ import {
   AppLayout,
   AppSidebar,
   AppBody,
-  AppBreadcrumb,
+
   SidebarProvider,
+  BreadcrumbProvider,
+  useBreadcrumbs,
   DateRangeSelector,
   Modal,
   ModalContent,
@@ -81,6 +83,30 @@ import {
   MetricCard,
   DateSelector,
 } from "@rfdtech/components";
+
+/** Sets breadcrumbs based on current route */
+function BreadcrumbSetter() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useBreadcrumbs(
+    location.pathname !== "/"
+      ? [
+          { label: "Home", href: "/" },
+          {
+            label:
+              location.pathname === "/members"
+                ? "Members"
+                : location.pathname.startsWith("/docs")
+                  ? "Documentation"
+                  : "Page",
+          },
+        ]
+      : [],
+  );
+
+  return null;
+}
 
 export function DemoLayout() {
   const location = useLocation();
@@ -258,6 +284,7 @@ export function DemoLayout() {
 
   return (
     <SidebarProvider>
+      <BreadcrumbProvider>
       <AppLayout>
         <AppHeader>
           <AppHeaderSearch
@@ -467,27 +494,12 @@ export function DemoLayout() {
             </SidebarFooter>
           </Sidebar>
         </AppSidebar>
-        <AppBreadcrumb>
-          {location.pathname !== "/" && (
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink onClick={() => navigate("/")}>Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>
-                    {location.pathname === "/members" ? "Members" : location.pathname.startsWith("/docs") ? "Documentation" : "Page"}
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          )}
-        </AppBreadcrumb>
+        <BreadcrumbSetter />
         <AppBody>
           <Outlet />
         </AppBody>
       </AppLayout>
+      </BreadcrumbProvider>
       <Modal open={componentsModal} onOpenChange={setComponentsModal}>
         <ModalContent showCloseButton size="2xl">
           <ModalHeader>

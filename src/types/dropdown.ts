@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface DropdownOption {
   value: string;
   label: string;
@@ -21,6 +23,7 @@ export interface DropdownProps {
   disabled?: boolean;
   invalid?: boolean;
   "aria-label"?: string;
+  formatOption?: (option: DropdownOption | null, state: "selected" | "idle" | "empty") => ReactNode;
   classNames?: DropdownClassNames;
   className?: string;
 }
