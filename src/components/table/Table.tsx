@@ -208,18 +208,17 @@ function TableContentRender<T>(
   const headerRow = (
     <tr>
       {selectable && (
-        <th className="gsl-table__checkbox-cell">
-          <span
-            className={cn(
-              indeterminate && "gsl-table__checkbox--indeterminate",
-            )}
-          >
-            <Checkbox
-              checked={allSelected}
-              onCheckedChange={handleSelectAll}
-              aria-label="Select all rows"
-            />
-          </span>
+        <th
+          className={cn(
+            "gsl-table__checkbox-cell",
+            indeterminate && "gsl-table__checkbox--indeterminate",
+          )}
+        >
+          <Checkbox
+            checked={allSelected}
+            onCheckedChange={handleSelectAll}
+            aria-label="Select all rows"
+          />
         </th>
       )}
       {columns.map((col) => {

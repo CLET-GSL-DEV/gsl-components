@@ -36,3 +36,5 @@ export type {
   UseSearchParamOverlayOptions,
   UseSearchParamOverlayReturn,
 } from "../types/search-param-overlay";
+
+export { composeRefs, useComposedRefs } from "./useComposedRefs";
