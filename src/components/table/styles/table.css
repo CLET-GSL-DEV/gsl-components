@@ -132,7 +132,6 @@
   display: flex;
   align-items: center;
   font-size: 13px;
-  font-weight: 500;
   justify-content: space-between;
   gap: 8px;
   padding-bottom: 8px;
@@ -295,7 +294,7 @@
 }
 
 .gsl-table__content td {
-  padding: var(--gsl-table-cell-padding-y, 4px) 16px;
+  padding: var(--gsl-table-cell-padding-y, 12px) 16px;
   font-size: 14px;
   color: var(--gsl-text);
   white-space: nowrap;
@@ -368,34 +367,15 @@
 
 /* ── Row states ── */
 
-.gsl-table__row--selected {
-  background: var(--gsl-primary-light) !important;
-}
-
-.gsl-table__row--selected:hover {
-  background: var(--gsl-primary-light) !important;
-}
-
-/* Cursor pointer on rows when row actions / click is active */
-.gsl-table__content--row-actions tbody tr {
+.gsl-table__row--clickable {
   cursor: pointer;
 }
 
-/* Hover state on rows (suppressed when context menu is open) */
-.gsl-table__content:not(.gsl-table__content--context-open) tbody tr:hover {
-  background: var(--gsl-hover) !important;
+.gsl-table__row--clickable:hover {
+  background: var(--gsl-hover);
 }
 
-/* Context-open row keeps its highlight even when context is open */
-.gsl-table__row--context-open {
-  background: var(--gsl-hover) !important;
-}
-
-.gsl-table__row--selected.gsl-table__row--context-open {
-  background: var(--gsl-primary-light) !important;
-}
-
-/* Row height (acts as min-height in table layout) — override via --gsl-table-row-height */
+/* Row height (acts as min-height in table layout) */
 .gsl-table__content tbody tr {
   height: var(--gsl-table-row-height, 44px);
 }

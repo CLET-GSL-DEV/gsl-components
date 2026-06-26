@@ -15,5 +15,4 @@ export type {
   TableBulkAction,
   TableBulkActionsClassNames,
   TableBulkActionsProps,
-  TableRowAction,
 } from "../../types/table";

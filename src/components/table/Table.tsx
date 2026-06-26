@@ -16,11 +16,6 @@ import {
   ArrowDown,
 } from "lucide-react";
 import { Checkbox } from "../checkbox/Checkbox";
-import {
-  Popover,
-  PopoverAnchor,
-  PopoverContent,
-} from "../popover/Popover";
 import type { TableColumn } from "../../types/table";
 import type {
   TableProps,
@@ -85,10 +80,6 @@ interface TableContentInnerProps<T = unknown> {
   selectable?: boolean;
   selectedIds?: Set<string | number>;
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
-  rowActions?: import("../../types/table").TableRowAction[];
-  bulkActions?: import("../../types/table").TableBulkAction[];
-  onRowClick?: (rowKey: string | number) => void;
-  onRowContextMenu?: (rowKey: string | number, event: React.MouseEvent) => void;
   virtualize?: boolean;
   virtualRowHeight?: number;
 }
@@ -108,10 +99,6 @@ function TableContentRender<T>(
     selectable = false,
     selectedIds,
     onSelectionChange,
-    rowActions,
-    bulkActions,
-    onRowClick,
-    onRowContextMenu,
     virtualize = false,
     virtualRowHeight = 44,
     ...rest
@@ -125,16 +112,7 @@ function TableContentRender<T>(
   const data = useMemo(() => rawData ?? [], [rawData]);
   const hasData = columns.length > 0 && data.length > 0;
 
-  const hasSelection = selectedIds !== undefined && selectedIds.size > 0;
-  const showCheckboxColumn = selectable && hasSelection;
-
-  // ── Context menu state ──
-
-  const [contextRowKey, setContextRowKey] = useState<string | number | null>(null);
-  const [contextOpen, setContextOpen] = useState(false);
-
-  // ── Selection ──
-
+  // Selection state
   const allSelected =
     selectable && data.length > 0
       ? data.every((row) => selectedIds?.has(rowKey!(row)))
@@ -173,9 +151,8 @@ function TableContentRender<T>(
     [selectedIds, onSelectionChange],
   );
 
-  const colSpan = columns.length + (showCheckboxColumn ? 1 : 0);
-
-  // ── Sort ──
+  // Extra colSpan when selectable adds a column
+  const colSpan = columns.length + (selectable ? 1 : 0);
 
   const sorted = [...data].sort((a, b) => {
     if (!sort) return 0;
@@ -196,147 +173,41 @@ function TableContentRender<T>(
   });
   const virtualRows = virtualizer.getVirtualItems();
 
-  // ── Row rendering ──
-
   function renderRow(row: T) {
     const key = rowKey!(row);
-    const isSelected = selectedIds?.has(key) ?? false;
-
     return (
-      <Popover
-        open={contextOpen && contextRowKey === key}
-        onOpenChange={(open) => { if (!open) setContextOpen(false); }}
+      <tr
+        key={key}
+        onClick={() => selectable && handleToggleRow(key)}
+        className={cn(selectable && "gsl-table__row--clickable")}
       >
-        <PopoverAnchor asChild>
-          <tr
-            key={key}
-            className={cn(
-              isSelected && "gsl-table__row--selected",
-              contextOpen && contextRowKey === key && "gsl-table__row--context-open",
-            )}
-            onClick={() => {
-              if (selectable) {
-                handleToggleRow(key);
-              } else {
-                onRowClick?.(key);
-              }
-            }}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (onRowContextMenu) {
-                onRowContextMenu(key, e);
-              } else {
-                setContextRowKey(key);
-                setContextOpen(true);
-              }
-            }}
-          >
-            {showCheckboxColumn && (
-              <td className="gsl-table__checkbox-cell">
-                <Checkbox
-                  checked={isSelected}
-                  onCheckedChange={() => handleToggleRow(key)}
-                  aria-label="Select row"
-                />
-              </td>
-            )}
-            {columns.map((col) => {
-              const rawValue = getCellValue(row, col);
-              const cellContent = col.cell
-                ? col.cell({ row, value: rawValue })
-                : rawValue;
-              return (
-                <td key={col.id} style={colStyle(col)}>
-                  {cellContent}
-                </td>
-              );
-            })}
-          </tr>
-        </PopoverAnchor>
-        {showContextMenu() && contextRowKey === key && (
-          <PopoverContent
-            align="end"
-            sideOffset={4}
-            className="gsl-popover--menu w-40"
-            onInteractOutside={() => setContextOpen(false)}
-          >
-            <div className="gsl-popover__menu">
-              {/* Select/Deselect for this row — always first when selectable */}
-              {selectable && (
-                <button
-                  type="button"
-                  className="gsl-popover__menu-item"
-                  onClick={() => {
-                    handleToggleRow(key);
-                    setContextOpen(false);
-                  }}
-                >
-                  {isSelected ? "Deselect" : "Select"}
-                </button>
-              )}
-              {/* Bulk actions when multiple rows selected */}
-              {bulkActions && bulkActions.length > 0 && selectedIds && selectedIds.size > 1 && (
-                <>
-                  <div className="my-1 h-px bg-border" />
-                  {bulkActions.map((action) => (
-                    <button
-                      key={action.id}
-                      type="button"
-                      className={cn(
-                        "gsl-popover__menu-item",
-                        action.destructive && "gsl-popover__menu-item--destructive",
-                      )}
-                      onClick={() => {
-                        action.onClick(selectedIds);
-                        setContextOpen(false);
-                      }}
-                    >
-                      {action.icon && <span className="gsl-popover__menu-icon">{action.icon}</span>}
-                      {action.label}
-                    </button>
-                  ))}
-                </>
-              )}
-              {/* Custom row actions */}
-              {rowActions && rowActions.length > 0 && (
-                <>
-                  {(selectable || (bulkActions && selectedIds && selectedIds.size > 1)) && <div className="my-1 h-px bg-border" />}
-                  {rowActions.map((action) => (
-                    <button
-                      key={action.key}
-                      type="button"
-                      className={cn(
-                        "gsl-popover__menu-item",
-                        action.destructive && "gsl-popover__menu-item--destructive",
-                      )}
-                      onClick={() => {
-                        action.onClick(key);
-                        setContextOpen(false);
-                      }}
-                    >
-                      {action.icon && <span className="gsl-popover__menu-icon">{action.icon}</span>}
-                      {action.label}
-                    </button>
-                  ))}
-                </>
-              )}
-            </div>
-          </PopoverContent>
+        {selectable && (
+          <td className="gsl-table__checkbox-cell">
+            <Checkbox
+              checked={selectedIds?.has(key) ?? false}
+              onCheckedChange={() => handleToggleRow(key)}
+              aria-label="Select row"
+            />
+          </td>
         )}
-      </Popover>
+        {columns.map((col) => {
+          const rawValue = getCellValue(row, col);
+          const cellContent = col.cell
+            ? col.cell({ row, value: rawValue })
+            : rawValue;
+          return (
+            <td key={col.id} style={colStyle(col)}>
+              {cellContent}
+            </td>
+          );
+        })}
+      </tr>
     );
   }
 
-  function showContextMenu(): boolean {
-    return (rowActions && rowActions.length > 0) || (bulkActions && bulkActions.length > 0) || selectable || !!onRowContextMenu;
-  }
-
-  // ── Header row ──
-
   const headerRow = (
     <tr>
-      {showCheckboxColumn && (
+      {selectable && (
         <th className="gsl-table__checkbox-cell">
           <span
             className={cn(
@@ -394,31 +265,13 @@ function TableContentRender<T>(
     </tr>
   );
 
-  // ── Loading skeleton ──
-
-  const loadingCheckboxVisible = selectable; // always show skeleton space when selectable
-
-  // ── Applies className when row actions or right-click features are enabled ──
-
-  const actionable = (rowActions && rowActions.length > 0) || (bulkActions && bulkActions.length > 0) || selectable || !!onRowContextMenu || !!onRowClick;
-
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "gsl-table__content",
-        showCheckboxColumn && "gsl-table__content--has-selected",
-        contextOpen && "gsl-table__content--context-open",
-        actionable && "gsl-table__content--row-actions",
-        className,
-      )}
-      {...rest}
-    >
+    <div ref={ref} className={cn("gsl-table__content", selectable && selectedIds && selectedIds.size > 0 && "gsl-table__content--has-selected", className)} {...rest}>
       {loading ? (
         <table>
           <thead>
             <tr>
-              {loadingCheckboxVisible && (
+              {selectable && (
                 <th className="gsl-table__checkbox-cell">
                   <span className="gsl-table__skeleton gsl-table__skeleton--cb" />
                 </th>
@@ -441,7 +294,7 @@ function TableContentRender<T>(
           <tbody>
             {Array.from({ length: loadingRows }, (_, rowIdx) => (
               <tr key={rowIdx}>
-                {loadingCheckboxVisible && (
+                {selectable && (
                   <td className="gsl-table__checkbox-cell">
                     <span className="gsl-table__skeleton gsl-table__skeleton--cb" />
                   </td>

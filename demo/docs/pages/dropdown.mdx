@@ -9,7 +9,7 @@ import dropdownSource from "../previews/examples/dropdown.example.tsx?raw";
 
 # Dropdown
 
-Select-style dropdown for choosing one option from a list. Built on Radix Popover with GSL styling, optional clearable reset, and part-level `classNames`.
+Select-style dropdown for choosing one option from a list. Built on `@radix-ui/react-select` with GSL styling, optional clearable reset, and part-level `classNames`.
 
 ## Example
 
@@ -57,8 +57,8 @@ Part-level class names merged after base `gsl-dropdown*` styles:
 | `root` | Outer wrapper (`.gsl-dropdown`) |
 | `trigger` | Combobox trigger (`.gsl-dropdown__trigger`) |
 | `icon` | Chevron icon (`.gsl-dropdown__trigger-icon`) |
-| `menu` | Menu panel (`.gsl-popover--menu.gsl-dropdown__menu`) |
-| `option` | Menu items (`.gsl-popover__menu-item`) |
+| `menu` | Menu panel (`.gsl-dropdown__menu`) |
+| `option` | Menu items (`.gsl-dropdown__option`) |
 
 ## Notes
 
@@ -66,7 +66,6 @@ Part-level class names merged after base `gsl-dropdown*` styles:
 - Use `aria-label` (or an external `<label>` associated with the field) so the combobox has an accessible name.
 - When `clearable` is true, choosing the placeholder item calls `onValueChange(null)`.
 - Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
-- Built on Radix Popover instead of Select — fixes the issue where opening a Dropdown inside a Modal and clicking outside the dropdown (but inside the modal) would incorrectly close the Modal.
 
 ### Custom rendering with `formatOption`
 

@@ -15,6 +15,7 @@ import {
   TableSearch,
   TableFilter,
   TableContent,
+  TableBulkActions,
   TableFooter,
   TablePagination,
   MetricCard,
@@ -151,7 +152,6 @@ export function DemoPage() {
             columns={columns}
             data={paged}
             rowKey={(m: GslMember) => m.id}
-            bulkActions={bulkActions}
           />
           <TableFooter>
             <TablePagination totalPages={totalPages} totalItems={filtered.length} pageSizeOptions={pageSizeOptions} />
