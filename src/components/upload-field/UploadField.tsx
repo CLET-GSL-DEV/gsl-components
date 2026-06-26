@@ -1,4 +1,4 @@
-import { CloudUpload, X, FileImage, FilePlay, FileText, Trash2 } from "lucide-react";
+import { CloudUpload, FileImage, FilePlay, FileText, Trash2 } from "lucide-react";
 import { forwardRef, useCallback, useRef, useState, type ReactNode } from "react";
 import {
   Dialog,

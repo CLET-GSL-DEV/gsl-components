@@ -9,4 +9,4 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
   return children as ReactNode;
 };
 
-(AppSidebar as any).componentId = "AppSidebar";
+(AppSidebar as unknown as { componentId: string }).componentId = "AppSidebar";

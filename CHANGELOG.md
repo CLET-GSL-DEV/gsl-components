@@ -24,6 +24,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Dropdown: clicking outside the dropdown popover inside a Modal no longer closes the Modal — switched from Radix Select to Radix Popover
 
+## [1.18.1] - 2026-06-22
+
+### Fixed
+
+- **AppLayout**: tests now wrap renders in `MemoryRouter` to fix `useSearchParams` is not defined error
+- **Command**: test queries use `document.querySelector` with cmdk `data-value` attribute instead of `value` attribute
+- **Lint**: removed unused imports across 15+ files; replaced `as any` casts with proper TypeScript types across all source files
+
+### Changed
+
+- **DateRangeSelector**: wrapped `range` computation in `useMemo` to prevent unstable reference
+- **Table**: wrapped `columns` and `data` in `useMemo` to avoid new‑array‑on‑every‑render
+- **Sortable**: wrapped `style` object in `useMemo`
+- **useTableState**: wrapped `sort` computation in `useMemo`
+- **useBulkImportFlow**: removed unnecessary dependencies from `canGoNext` dependency array
+
 ## [1.18.0] - 2026-06-21
 
 ### Breaking

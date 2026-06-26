@@ -113,7 +113,7 @@ describe("Command", () => {
       "custom-wrapper",
     );
     expect(screen.getByRole("combobox")).toHaveClass("custom-input");
-    expect(screen.getByText("One", { hidden: true } as any)).toHaveClass("custom-item");
+    expect(document.querySelector('[data-value="one"]')).toHaveClass("custom-item");
   });
 
   it("shows input shortcut badge when CommandDialog shortcut is set", () => {
@@ -187,7 +187,7 @@ describe("Command", () => {
     );
 
     expect(document.querySelector(".gsl-command__group-loading")).not.toBeInTheDocument();
-    expect(screen.getByText("Email", { hidden: true } as any)).toBeInTheDocument();
+    expect(document.querySelector('[data-value="email"]')).toBeInTheDocument();
   });
 
   it("shows group loading inside CommandDialog", () => {
@@ -247,8 +247,8 @@ describe("Command", () => {
       </Command>,
     );
 
-    const shortcut = (screen.getByText as any)("⌘", { hidden: true }).closest("kbd");
-    expect(shortcut).toHaveClass("gsl-command__shortcut");
+    const shortcut = document.querySelector(".gsl-command__shortcut");
+    expect(shortcut).toBeInTheDocument();
   });
 
   it("toggles CommandDialog when shortcut is pressed", () => {

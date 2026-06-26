@@ -1,4 +1,4 @@
-import { cloneElement, forwardRef, isValidElement, useCallback, useRef, useState, type ReactElement } from "react";
+import { cloneElement, forwardRef, isValidElement, useCallback, useRef, useState, type ReactElement, type Ref } from "react";
 import { createPortal } from "react-dom";
 import type { TooltipProps } from "../../types/tooltip";
 import { cn } from "../../utils/cn";
@@ -66,32 +66,40 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       requestAnimationFrame(() => requestAnimationFrame(position));
     }, [show, position]);
 
+    interface ChildProps {
+      ref?: Ref<HTMLElement>;
+      onMouseEnter?: (e: React.MouseEvent) => void;
+      onMouseLeave?: (e: React.MouseEvent) => void;
+      onFocus?: (e: React.FocusEvent) => void;
+      onBlur?: (e: React.FocusEvent) => void;
+    }
+
     const child = isValidElement(children)
-      ? (children as ReactElement<any>)
+      ? (children as ReactElement<ChildProps>)
       : null;
 
     const trigger = child
       ? cloneElement(child, {
           ref: (node: HTMLElement | null) => {
             triggerRef.current = node;
-            const childRef = (child as any).ref;
+            const childRef = child.props.ref;
             if (typeof childRef === "function") childRef(node);
-            else if (childRef) (childRef as any).current = node;
+            else if (childRef) (childRef as { current: HTMLElement | null }).current = node;
           },
           onMouseEnter: (e: React.MouseEvent) => {
-            (child.props as any).onMouseEnter?.(e);
+            child.props.onMouseEnter?.(e);
             handleMouseEnter();
           },
           onMouseLeave: (e: React.MouseEvent) => {
-            (child.props as any).onMouseLeave?.(e);
+            child.props.onMouseLeave?.(e);
             hide();
           },
           onFocus: (e: React.FocusEvent) => {
-            (child.props as any).onFocus?.(e);
+            child.props.onFocus?.(e);
             handleMouseEnter();
           },
           onBlur: (e: React.FocusEvent) => {
-            (child.props as any).onBlur?.(e);
+            child.props.onBlur?.(e);
             hide();
           },
         })

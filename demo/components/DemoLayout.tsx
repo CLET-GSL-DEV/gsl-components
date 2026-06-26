@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@rfdtech/components";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
@@ -12,9 +12,7 @@ import { packageVersion } from "demo/docs/site-meta";
 import {
   LayoutDashboard,
   Users,
-  Settings,
   ChevronRight,
-  ChevronDown,
   FileText,
   BarChart3,
   Shield,
@@ -60,7 +58,6 @@ import {
   SidebarProvider,
   BreadcrumbProvider,
   useBreadcrumbs,
-  DateRangeSelector,
   Modal,
   ModalContent,
   ModalHeader,
@@ -91,7 +88,6 @@ import {
 /** Sets breadcrumbs based on current route */
 function BreadcrumbSetter() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   useBreadcrumbs(
     location.pathname !== "/"

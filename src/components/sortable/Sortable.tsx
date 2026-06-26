@@ -162,10 +162,13 @@ export const SortableItem = forwardRef<HTMLDivElement, SortableItemProps>(
 
     const hasHandle = handleCount > 0;
 
-    const style = {
-      transform: CSS.Transform.toString(transform),
-      transition,
-    };
+    const style = useMemo(
+      () => ({
+        transform: CSS.Transform.toString(transform),
+        transition,
+      }),
+      [transform, transition],
+    );
 
     const itemContext = useMemo(
       () => ({

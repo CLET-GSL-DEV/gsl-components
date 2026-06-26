@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useConfirmBeforeUnload } from "../../hooks/useConfirmBeforeUnload";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import {
   Modal,
   ModalPortal,
@@ -58,7 +58,6 @@ export function BulkImportModal({
   onOpenChange,
   fields,
   onComplete,
-  title = "Bulk import",
   maxFileSizeBytes = DEFAULT_MAX_FILE_SIZE,
   allowImportWithWarnings = false,
   className,

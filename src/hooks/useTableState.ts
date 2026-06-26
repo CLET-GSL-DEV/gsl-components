@@ -92,10 +92,13 @@ export function useTableState<TFilters extends TableFilters = TableFilters>(
 
   const sortColumn = searchParams.get(sortKey);
   const sortDir = searchParams.get(dirKey) as "asc" | "desc" | null;
-  const sort: { column: string; direction: "asc" | "desc" } | null =
-    sortColumn && (sortDir === "asc" || sortDir === "desc")
-      ? { column: sortColumn, direction: sortDir }
-      : defaultSort;
+  const sort: { column: string; direction: "asc" | "desc" } | null = useMemo(
+    () =>
+      sortColumn && (sortDir === "asc" || sortDir === "desc")
+        ? { column: sortColumn, direction: sortDir }
+        : defaultSort,
+    [sortColumn, sortDir, defaultSort],
+  );
 
   /* ── Setters ── */
 
@@ -152,8 +155,6 @@ export function useTableState<TFilters extends TableFilters = TableFilters>(
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);
-          // Delegate filter writing to the pattern, then reset page
-          const tempParams = new URLSearchParams();
           // Manually apply filter writes using the same key pattern
           const filterPrefix = paramKey(paramPrefix, "f_");
           for (const key of [...next.keys()]) {

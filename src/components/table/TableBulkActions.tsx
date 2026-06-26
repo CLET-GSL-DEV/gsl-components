@@ -2,7 +2,7 @@ import type { TableBulkActionsProps } from "../../types/table";
 import { Button } from "../button";
 import { cn } from "../../utils/cn";
 
-import { X, XCircle } from "lucide-react";
+import { XCircle } from "lucide-react";
 
 export function TableBulkActions({
   selectedIds,

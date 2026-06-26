@@ -170,7 +170,6 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
       onApply,
       onReset,
       applyLabel = "Apply Filter",
-      resetLabel = "Reset",
       className,
     },
     ref,

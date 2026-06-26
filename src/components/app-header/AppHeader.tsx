@@ -14,5 +14,5 @@ export const AppHeaderActions = ({ className, children, ...props }: AppHeaderAct
   );
 };
 
-(AppHeader as any).componentId = "AppHeader";
-(AppHeaderActions as any).componentId = "AppHeaderActions";
+(AppHeader as unknown as { componentId: string }).componentId = "AppHeader";
+(AppHeaderActions as unknown as { componentId: string }).componentId = "AppHeaderActions";

@@ -6,7 +6,6 @@ import {
   useId,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 import type { SidebarProviderProps } from "../../types/sidebar";
 import { cn } from "../../utils/cn";

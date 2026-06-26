@@ -9,4 +9,4 @@ export const AppBody = ({ children }: AppBodyProps) => {
   return children as ReactNode;
 };
 
-(AppBody as any).componentId = "AppBody";
+(AppBody as unknown as { componentId: string }).componentId = "AppBody";

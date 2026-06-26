@@ -1,5 +1,6 @@
-import { createRef } from "react";
+import { createRef, type ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { AppLayout } from "./AppLayout";
 import { AppSidebar } from "./AppSidebar";
@@ -13,22 +14,30 @@ function LayoutWithBreadcrumbs({ items }: { items: { label: string; href?: strin
   return null;
 }
 
+function RenderInRouter({ children }: { children: ReactNode }) {
+  return <MemoryRouter>{children}</MemoryRouter>;
+}
+
 describe("AppLayout", () => {
   it("renders children with auto-positioning", () => {
     render(
-      <AppLayout>
-        <AppBody>Content</AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout>
+          <AppBody>Content</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     expect(screen.getByText("Content")).toBeInTheDocument();
   });
 
   it("positions AppHeader in header area", () => {
     const { container } = render(
-      <AppLayout>
-        <AppHeader>Header</AppHeader>
-        <AppBody>Body</AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout>
+          <AppHeader>Header</AppHeader>
+          <AppBody>Body</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     expect(screen.getByText("Header")).toBeInTheDocument();
     expect(screen.getByText("Body")).toBeInTheDocument();
@@ -37,10 +46,12 @@ describe("AppLayout", () => {
 
   it("positions AppSidebar in sidebar area", () => {
     const { container } = render(
-      <AppLayout>
-        <AppSidebar>Sidebar</AppSidebar>
-        <AppBody>Body</AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout>
+          <AppSidebar>Sidebar</AppSidebar>
+          <AppBody>Body</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     const sidebarWrapper = container.querySelector(".gsl-app-layout__sidebar");
     expect(sidebarWrapper).toBeInTheDocument();
@@ -49,12 +60,14 @@ describe("AppLayout", () => {
 
   it("renders breadcrumbs from context when items exist", () => {
     const { container } = render(
-      <AppLayout>
-        <AppBody>
-          <LayoutWithBreadcrumbs items={[{ label: "Users", href: "/users" }, { label: "John" }]} />
-          Body
-        </AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout>
+          <AppBody>
+            <LayoutWithBreadcrumbs items={[{ label: "Users", href: "/users" }, { label: "John" }]} />
+            Body
+          </AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     const breadcrumbWrapper = container.querySelector(".gsl-app-layout__breadcrumb");
     expect(breadcrumbWrapper).toBeInTheDocument();
@@ -65,9 +78,11 @@ describe("AppLayout", () => {
 
   it("hides breadcrumbs when context is empty", () => {
     const { container } = render(
-      <AppLayout>
-        <AppBody>Body</AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout>
+          <AppBody>Body</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     expect(container.querySelector(".gsl-app-layout__breadcrumb")).not.toBeInTheDocument();
   });
@@ -75,18 +90,22 @@ describe("AppLayout", () => {
   it("forwards ref", () => {
     const ref = createRef<HTMLDivElement>();
     render(
-      <AppLayout ref={ref}>
-        <AppBody>Body</AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout ref={ref}>
+          <AppBody>Body</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
   it("merges className on root", () => {
     const { container } = render(
-      <AppLayout className="custom">
-        <AppBody>Body</AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout className="custom">
+          <AppBody>Body</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     const root = container.querySelector(".gsl-app-layout")!;
     expect(root).toHaveClass("custom");
@@ -95,10 +114,12 @@ describe("AppLayout", () => {
 
   it("passes component className to layout wrapper", () => {
     const { container } = render(
-      <AppLayout>
-        <AppHeader className="header-custom">H</AppHeader>
-        <AppBody className="body-custom">B</AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout>
+          <AppHeader className="header-custom">H</AppHeader>
+          <AppBody className="body-custom">B</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     const header = container.querySelector(".gsl-app-header");
     const content = container.querySelector(".gsl-app-layout__content");
@@ -108,10 +129,12 @@ describe("AppLayout", () => {
 
   it("passes extra props to layout wrapper", () => {
     const { container } = render(
-      <AppLayout>
-        <AppHeader id="main-header" data-test="x">H</AppHeader>
-        <AppBody>B</AppBody>
-      </AppLayout>,
+      <RenderInRouter>
+        <AppLayout>
+          <AppHeader id="main-header" data-test="x">H</AppHeader>
+          <AppBody>B</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
     );
     const header = container.querySelector(".gsl-app-header");
     expect(header).toHaveAttribute("id", "main-header");
