@@ -14,6 +14,7 @@ const fields: BulkImportField[] = [
     type: "email",
     label: "Organisation Email",
     required: true,
+    unique: true,
     pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     example: "info@gsl.edu.gh",
   },

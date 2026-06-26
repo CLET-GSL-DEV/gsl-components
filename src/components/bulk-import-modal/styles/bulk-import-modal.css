@@ -712,6 +712,26 @@
   font-weight: 600;
 }
 
+/* ── Validate data rows ── */
+
+.gsl-bulk-import__data-row {
+  cursor: pointer;
+  min-height: 40px;
+  transition: background-color 120ms ease;
+}
+
+.gsl-bulk-import__data-row:hover {
+  background: var(--gsl-hover);
+}
+
+.gsl-bulk-import__data-row--selected {
+  background: var(--gsl-bulk-import-primary-light);
+}
+
+.gsl-bulk-import__data-row--selected:hover {
+  background: var(--gsl-bulk-import-primary-light);
+}
+
 /* ── Virtual rows (SelectHeaderRowStep) ── */
 
 .gsl-bulk-import__virtual-row {
@@ -755,6 +775,12 @@
   padding: 10px 12px;
   font-size: 13px;
   color: var(--gsl-text);
+}
+
+.gsl-bulk-import__virtual-scroll {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .gsl-bulk-import__virtual-scroll .gsl-bulk-import__radio-cell {

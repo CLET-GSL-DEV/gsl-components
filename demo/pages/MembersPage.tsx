@@ -334,6 +334,7 @@ export function MembersPage() {
             label: "Email",
             required: true,
             type: "email" as const,
+            unique: true,
             matchKeys: ["email", "emailAddress"],
           },
           {

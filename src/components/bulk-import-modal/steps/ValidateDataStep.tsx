@@ -76,7 +76,7 @@ export function ValidateDataStep({
     [activeErrors],
   );
   const visibleFields = useMemo(
-    () => fields.filter((field) => mappedFieldKeys.includes(field.key)),
+    () => fields.filter((f) => mappedFieldKeys.includes(f.key) || f.required),
     [fields, mappedFieldKeys],
   );
 
@@ -169,6 +169,7 @@ export function ValidateDataStep({
             onClick={onDiscardSelectedRows}
           >
             Discard selected rows
+            {selectedRowIds.length > 0 && ` (${selectedRowIds.length})`}
           </Button>
           <label className="gsl-bulk-import__switch">
             <input
@@ -310,22 +311,16 @@ export function ValidateDataStep({
                             <tbody>
                               <tr
                                 data-selected={isSelected || undefined}
+                                className={[
+                                  "gsl-bulk-import__data-row",
+                                  isSelected
+                                    ? "gsl-bulk-import__data-row--selected"
+                                    : "",
+                                ]
+                                  .filter(Boolean)
+                                  .join(" ")}
                                 style={{
                                   height: ROW_HEIGHT,
-                                  background: isSelected
-                                    ? "var(--gsl-bulk-import-primary-light)"
-                                    : undefined,
-                                }}
-                                onMouseEnter={(e) => {
-                                  if (!isSelected) {
-                                    e.currentTarget.style.background =
-                                      "var(--gsl-hover)";
-                                  }
-                                }}
-                                onMouseLeave={(e) => {
-                                  if (!isSelected) {
-                                    e.currentTarget.style.background = "";
-                                  }
                                 }}
                               >
                                 <td

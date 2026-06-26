@@ -52,7 +52,6 @@ export function SelectHeaderRowStep({
         <div
           ref={scrollRef}
           className="gsl-bulk-import__virtual-scroll"
-          style={{ overflow: "auto", flex: 1, minHeight: 0 }}
         >
           <div
             style={{
