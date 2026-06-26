@@ -3,7 +3,7 @@
   padding: 12px;
   background: var(--gsl-bg);
   border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-xl);
+  border-radius: var(--gsl-radius-base);
   box-shadow: var(--gsl-shadow-md);
   font-family: var(--gsl-font);
   font-size: 14px;

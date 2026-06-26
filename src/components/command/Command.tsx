@@ -1,6 +1,6 @@
 import { Command as CommandPrimitive } from "cmdk";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { Search } from "lucide-react";
+import { Search, XCircle } from "lucide-react";
 import {
   forwardRef,
   useCallback,
@@ -188,6 +188,8 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
       shortcut,
       dialogContext?.inputShortcut,
     );
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const [hasValue, setHasValue] = useState(false);
     const shortcutLabels = useMemo(
       () =>
         resolvedShortcut ? formatCommandShortcutLabels(resolvedShortcut) : [],
@@ -218,11 +220,32 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
           strokeWidth={2}
         />
         <CommandPrimitive.Input
-          ref={ref}
+          ref={(node) => {
+            inputRef.current = node;
+            if (typeof ref === "function") ref(node);
+            else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
+          }}
           className={cn("gsl-command__input", classNames?.input, className)}
+          onInput={(e) => setHasValue((e.target as HTMLInputElement).value.length > 0)}
           {...props}
         />
-        {shortcutLabels.length > 0 ? (
+        {hasValue && (
+          <div
+            className="gsl-command__input-clear"
+            onClick={() => {
+              if (inputRef.current) {
+                inputRef.current.value = "";
+                inputRef.current.dispatchEvent(new Event("input", { bubbles: true }));
+                inputRef.current.focus();
+                setHasValue(false);
+              }
+            }}
+            aria-label="Clear search"
+          >
+            <XCircle size={16} strokeWidth={1.5} aria-hidden />
+          </div>
+        )}
+        {!hasValue && shortcutLabels.length > 0 ? (
           <kbd className="gsl-command__input-shortcut" aria-hidden="true">
             {shortcutLabels.map((label, index) => (
               <span

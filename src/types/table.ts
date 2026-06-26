@@ -27,6 +27,14 @@ export interface TableSortState {
 
 /* ── Bulk Actions ── */
 
+export interface TableRowAction {
+  key: string;
+  label: string;
+  icon?: ReactNode;
+  destructive?: boolean;
+  onClick: (rowKey: string | number) => void;
+}
+
 export interface TableBulkAction {
   id: string;
   label: string;
@@ -99,6 +107,12 @@ export interface TableContentProps<T = unknown>
   selectedIds?: Set<string | number>;
   /** Called when selection changes. Required with selectedIds when selectable. */
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
+  /** Context-menu row actions shown on right-click. "Select" always appears first. */
+  rowActions?: TableRowAction[];
+  /** Fired on left-click of a data row. */
+  onRowClick?: (rowKey: string | number) => void;
+  /** Called when a row is right-clicked, receiving the row key. */
+  onRowContextMenu?: (rowKey: string | number, event: React.MouseEvent) => void;
 }
 
 export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {

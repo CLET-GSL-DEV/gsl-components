@@ -132,6 +132,7 @@
   display: flex;
   align-items: center;
   font-size: 13px;
+  font-weight: 500;
   justify-content: space-between;
   gap: 8px;
   padding-bottom: 8px;
@@ -363,6 +364,40 @@
 
 .gsl-table__page-size {
   font-size: 13px;
+}
+
+/* ── Row states ── */
+
+.gsl-table__row--selected {
+  background: var(--gsl-primary-light) !important;
+}
+
+.gsl-table__row--selected:hover {
+  background: var(--gsl-primary-light) !important;
+}
+
+/* Cursor pointer on rows when row actions / click is active */
+.gsl-table__content--row-actions tbody tr {
+  cursor: pointer;
+}
+
+/* Hover state on rows (suppressed when context menu is open) */
+.gsl-table__content:not(.gsl-table__content--context-open) tbody tr:hover {
+  background: var(--gsl-hover) !important;
+}
+
+/* Context-open row keeps its highlight even when context is open */
+.gsl-table__row--context-open {
+  background: var(--gsl-hover) !important;
+}
+
+.gsl-table__row--selected.gsl-table__row--context-open {
+  background: var(--gsl-primary-light) !important;
+}
+
+/* Row height (acts as min-height in table layout) — override via --gsl-table-row-height */
+.gsl-table__content tbody tr {
+  height: var(--gsl-table-row-height, 44px);
 }
 
 /* ── Selection checkbox cell ── */

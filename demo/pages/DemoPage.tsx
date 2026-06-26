@@ -152,11 +152,7 @@ export function DemoPage() {
             columns={columns}
             data={paged}
             rowKey={(m: GslMember) => m.id}
-          />
-          <TableBulkActions
-            selectedIds={selected}
-            onClear={() => setSelected(new Set())}
-            actions={bulkActions}
+            bulkActions={bulkActions}
           />
           <TableFooter>
             <TablePagination totalPages={totalPages} totalItems={filtered.length} pageSizeOptions={pageSizeOptions} />

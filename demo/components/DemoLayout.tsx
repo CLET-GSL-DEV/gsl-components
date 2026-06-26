@@ -66,6 +66,7 @@ import {
   ModalHeader,
   ModalTitle,
   ModalBody,
+  ModalFooter,
   Badge,
   Button,
   Input,
@@ -82,6 +83,9 @@ import {
   Card,
   MetricCard,
   DateSelector,
+  Dropdown,
+  UploadField,
+  CountrySelector,
 } from "@rfdtech/components";
 
 /** Sets breadcrumbs based on current route */
@@ -121,6 +125,7 @@ export function DemoLayout() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [componentsModal, setComponentsModal] = useState(false);
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const handleSearch = useCallback(
     (value: string) => setSearchQuery(value),
     [],
@@ -509,8 +514,8 @@ export function DemoLayout() {
             <div className="demo-components-grid">
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/badge"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/badge" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/badge")}
               >
                 <span className="demo-components-grid__preview">
                   <Badge variant="success">Active</Badge>
@@ -519,8 +524,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/button"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/button" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/button")}
               >
                 <span className="demo-components-grid__preview">
                   <Button variant="primary" size="sm">Button</Button>
@@ -529,8 +534,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/input"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/input" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/input")}
               >
                 <span className="demo-components-grid__preview">
                   <Input placeholder="Type here..." style={{ width: "100%" }} />
@@ -539,8 +544,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/checkbox"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/checkbox" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/checkbox")}
               >
                 <span className="demo-components-grid__preview">
                   <Checkbox />
@@ -549,8 +554,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/textarea"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/textarea" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/textarea")}
               >
                 <span className="demo-components-grid__preview">
                   <Input placeholder="Textarea..." style={{ width: "100%" }} />
@@ -559,8 +564,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/otp-input"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/otp-input" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/otp-input")}
               >
                 <span className="demo-components-grid__preview">
                   <OtpInput length={3} />
@@ -569,8 +574,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/progress-bar"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/progress-bar" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/progress-bar")}
               >
                 <span className="demo-components-grid__preview">
                   <ProgressBar value={60} />
@@ -579,8 +584,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/tooltip"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/tooltip" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/tooltip")}
               >
                 <span className="demo-components-grid__preview">
                   <Tooltip content="Hello">
@@ -591,8 +596,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/avatar"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/avatar" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/avatar")}
               >
                 <span className="demo-components-grid__preview">
                   <Avatar name="Jane Doe" size="md" />
@@ -601,8 +606,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/tabs"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/tabs" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/tabs")}
               >
                 <span className="demo-components-grid__preview">
                   <Tabs defaultValue="a">
@@ -616,8 +621,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/radio-group"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/radio-group" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/radio-group")}
               >
                 <span className="demo-components-grid__preview">
                   <RadioGroup defaultValue="a">
@@ -630,8 +635,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/breadcrumb"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/breadcrumb" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/breadcrumb")}
               >
                 <span className="demo-components-grid__preview">
                   <Breadcrumb>
@@ -646,8 +651,8 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/card"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/card" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/card")}
               >
                 <span className="demo-components-grid__preview">
                   <Card style={{ padding: 10, fontSize: 12 }}>Card content</Card>
@@ -656,36 +661,54 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/metric-card"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/country-selector" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/country-selector")}
               >
                 <span className="demo-components-grid__preview">
-                  <MetricCard label="Users" value={42} />
+                  <CountrySelector style={{ width: "100%" }} />
                 </span>
-                <span className="demo-components-grid__name">MetricCard</span>
+                <span className="demo-components-grid__name">CountrySelector</span>
               </button>
               <button
                 type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/date-selector"); }}
+                className={["demo-components-grid__card", selectedComponent === "/docs/date-selector" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/date-selector")}
               >
                 <span className="demo-components-grid__preview">
                   <DateSelector />
                 </span>
                 <span className="demo-components-grid__name">DateSelector</span>
               </button>
-              <button
-                type="button"
-                className="demo-components-grid__card"
-                onClick={() => { setComponentsModal(false); navigate("/docs/upload-field"); }}
+              <div
+                className={["demo-components-grid__card", selectedComponent === "/docs/dropdown" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
               >
                 <span className="demo-components-grid__preview">
-                  <Input placeholder="Upload..." disabled style={{ width: "100%" }} />
+                  <Dropdown options={[{ value: "a", label: "Option A" }, { value: "b", label: "Option B" }]} placeholder="Select..." />
+                </span>
+                <span className="demo-components-grid__name" onClick={() => setSelectedComponent("/docs/dropdown")}>
+                  Dropdown
+                </span>
+              </div>
+              <button
+                type="button"
+                className={["demo-components-grid__card", "demo-components-grid__card--full", selectedComponent === "/docs/upload-field" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedComponent("/docs/upload-field")}
+              >
+                <span className="demo-components-grid__preview">
+                  <UploadField multiple accept=".xlsx,.xls,.csv" style={{ width: "100%" }} />
                 </span>
                 <span className="demo-components-grid__name">UploadField</span>
               </button>
             </div>
           </ModalBody>
+          <ModalFooter>
+            <Button variant="outline" size="md" onClick={() => { setComponentsModal(false); setSelectedComponent(null); }}>
+              Cancel
+            </Button>
+            <Button variant="primary" size="md" disabled={!selectedComponent} onClick={() => { setComponentsModal(false); navigate(selectedComponent!); setSelectedComponent(null); }}>
+              Go to Docs
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </SidebarProvider>

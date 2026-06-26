@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Table: right-click context menu on rows with built-in Select action and custom `rowActions` prop
+- Table: bulk action support in right-click popover via `bulkActions` prop (shown when multiple rows selected)
+- Table: hidden select column — checkbox column appears only after first row selection
+- Table: `onRowClick` for left-click, `onRowContextMenu` for custom right-click handling
+- Table: `TableRowAction` type for context menu actions
+- Dropdown: rebuilt on Radix Popover (fixes modal + dropdown interaction bug where clicking outside the dropdown inside a modal closed the modal)
+- Command: clear button (XCircle) in input bar when text is entered, matching TableSearch pattern
+
+### Changed
+- Table: hover/selected row states via CSS classes (`gsl-table__row--selected`, `gsl-table__row--context-open`)
+- Table: row height uses `var(--gsl-table-row-height, 44px)` token
+- Popover: border-radius uses `var(--gsl-radius-base)` instead of `var(--gsl-radius-xl)`
+
+### Fixed
+- Dropdown: clicking outside the dropdown popover inside a Modal no longer closes the Modal — switched from Radix Select to Radix Popover
+
 ## [1.18.0] - 2026-06-21
 
 ### Breaking

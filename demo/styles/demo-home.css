@@ -395,11 +395,26 @@
   background: var(--gsl-hover);
 }
 
+.demo-components-grid__card--selected {
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 2px var(--gsl-primary-light);
+  background: var(--gsl-primary-light);
+}
+
 .demo-components-grid__preview {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 40px;
+}
+
+.demo-components-grid__card--full {
+  grid-column: 1 / -1;
+}
+
+.demo-components-grid__card--full .demo-components-grid__preview {
+  min-height: 100px;
+  width: 100%;
 }
 
 .demo-components-grid__name {
