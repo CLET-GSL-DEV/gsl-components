@@ -131,6 +131,9 @@
 
 .gsl-dialog__header {
   padding-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .gsl-dialog__body {
