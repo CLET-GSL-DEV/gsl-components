@@ -371,8 +371,8 @@
   cursor: pointer;
 }
 
-.gsl-table__row--clickable:hover {
-  background: var(--gsl-hover);
+table tbody tr.gsl-table__row--clickable:hover {
+  background: var(--gsl-hover) !important;
 }
 
 /* Row height (acts as min-height in table layout) */
@@ -382,12 +382,34 @@
 
 /* ── Selection checkbox cell ── */
 
-.gsl-table__checkbox-cell {
+/* Collapsed by default — slides open when rows are selected */
+.gsl-table__content .gsl-table__checkbox-cell {
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
+  transition:
+    max-width 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    padding 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gsl-table__checkbox-cell > * {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.gsl-table__content--has-selected .gsl-table__checkbox-cell {
   width: 40px;
   min-width: 40px;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
+  max-width: 40px;
+  padding: 0 16px;
+}
+
+.gsl-table__content--has-selected .gsl-table__checkbox-cell > * {
+  opacity: 1;
+  transition: opacity 150ms ease 100ms;
 }
 
 .gsl-table__checkbox--indeterminate .gsl-checkbox__control {
@@ -533,7 +555,9 @@
 
   .gsl-table__search,
   .gsl-table__filter-trigger,
-  .gsl-table__filter-btn {
+  .gsl-table__filter-btn,
+  .gsl-table__content .gsl-table__checkbox-cell,
+  .gsl-table__checkbox-cell > * {
     transition: none;
   }
 }

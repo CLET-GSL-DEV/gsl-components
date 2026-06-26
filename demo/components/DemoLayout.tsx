@@ -2,7 +2,14 @@ import { useCallback, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@rfdtech/components";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@rfdtech/components";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+} from "@rfdtech/components";
 import { demoApps } from "demo/data/demoApps";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
@@ -54,7 +61,6 @@ import {
   AppLayout,
   AppSidebar,
   AppBody,
-
   SidebarProvider,
   BreadcrumbProvider,
   useBreadcrumbs,
@@ -120,7 +126,9 @@ export function DemoLayout() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [componentsModal, setComponentsModal] = useState(false);
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(
+    null,
+  );
   const handleSearch = useCallback(
     (value: string) => setSearchQuery(value),
     [],
@@ -128,7 +136,10 @@ export function DemoLayout() {
 
   // ── Segmented search: each group has its own loading state ──
   const pagesQuery = useMemo(() => buildPageItems(searchQuery), [searchQuery]);
-  const membersQuery = useMemo(() => buildMemberItems(searchQuery), [searchQuery]);
+  const membersQuery = useMemo(
+    () => buildMemberItems(searchQuery),
+    [searchQuery],
+  );
 
   const { data: pageResults, loading: pagesLoading } = useMockQuery(
     pagesQuery,
@@ -285,220 +296,227 @@ export function DemoLayout() {
   return (
     <SidebarProvider>
       <BreadcrumbProvider>
-      <AppLayout>
-        <AppHeader>
-          <AppHeaderSearch
-            data={searchGroups}
-            onSearch={handleSearch}
-            showEmpty
-            placeholder="Search pages and members..."
-          />
-          <AppHeaderActions>
-            <button
-              type="button"
-              className="gsl-app-header__notif-btn"
-              aria-label="Documentation"
-              onClick={() => navigate("/docs")}
-            >
-              <BookOpen size={18} strokeWidth={1.5} aria-hidden />
-            </button>
-            <AppSwitcher
-              apps={appsData ?? []}
-              loading={appsLoading}
-              title="System directory"
-              onAppSelect={(app) => console.log("Selected:", app.name)}
+        <AppLayout>
+          <AppHeader>
+            <AppHeaderSearch
+              data={searchGroups}
+              onSearch={handleSearch}
+              showEmpty
+              placeholder="Search pages and members..."
             />
-            <AppHeaderNotifications loading={notifLoading}>
-              {notifData?.map((n: (typeof notifData)[number]) => (
-                <div
-                  key={n.id}
-                  className={`gsl-notif-popover__item${!n.unread ? " gsl-notif-popover__item--read" : ""}`}
-                >
-                  {n.unread && <div className="gsl-notif-popover__dot" />}
-                  <div className="gsl-notif-popover__body">
-                    <div className="gsl-notif-popover__body-text">{n.text}</div>
-                    <div className="gsl-notif-popover__body-time">{n.time}</div>
-                  </div>
-                </div>
-              ))}
-            </AppHeaderNotifications>
-            <AppHeaderProfile
-              variant="basic"
-              user={{
-                name: "Kwame Asante",
-                role: "Admin",
-                initials: "KA",
-                email: "kwame@gsl.edu.gh",
-              }}
-            >
+            <AppHeaderActions>
               <button
                 type="button"
-                className="gsl-profile-popover__action"
+                className="gsl-app-header__notif-btn"
+                aria-label="Documentation"
                 onClick={() => navigate("/docs")}
               >
-                <span className="gsl-profile-popover__action-icon">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                <BookOpen size={18} strokeWidth={1.5} aria-hidden />
+              </button>
+              <AppSwitcher
+                apps={appsData ?? []}
+                loading={appsLoading}
+                title="System directory"
+                onAppSelect={(app) => console.log("Selected:", app.name)}
+              />
+              <AppHeaderNotifications loading={notifLoading}>
+                {notifData?.map((n: (typeof notifData)[number]) => (
+                  <div
+                    key={n.id}
+                    className={`gsl-notif-popover__item${!n.unread ? " gsl-notif-popover__item--read" : ""}`}
                   >
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="16" y1="13" x2="8" y2="13" />
-                    <line x1="16" y1="17" x2="8" y2="17" />
-                    <polyline points="10 9 9 9 8 9" />
-                  </svg>
-                </span>
-                <span className="gsl-profile-popover__action-label">Docs</span>
-              </button>
-              <button
-                type="button"
-                className="gsl-profile-popover__action"
-                onClick={() =>
-                  setTheme(resolvedTheme === "dark" ? "light" : "dark")
-                }
-              >
-                <span className="gsl-profile-popover__action-icon">
-                  {resolvedTheme === "dark" ? (
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="5" />
-                      <line x1="12" y1="1" x2="12" y2="3" />
-                      <line x1="12" y1="21" x2="12" y2="23" />
-                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                      <line x1="1" y1="12" x2="3" y2="12" />
-                      <line x1="21" y1="12" x2="23" y2="12" />
-                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                    </svg>
-                  ) : (
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                    </svg>
-                  )}
-                </span>
-                <span className="gsl-profile-popover__action-label">
-                  {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
-                </span>
-              </button>
-              <button
-                type="button"
-                className="gsl-profile-popover__action gsl-profile-popover__action--danger"
-              >
-                <span className="gsl-profile-popover__action-icon">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" y1="12" x2="9" y2="12" />
-                  </svg>
-                </span>
-                <span className="gsl-profile-popover__action-label">
-                  Sign out
-                </span>
-              </button>
-            </AppHeaderProfile>
-          </AppHeaderActions>
-        </AppHeader>
-        <AppSidebar>
-          <Sidebar>
-            <SidebarHeader>
-              <SidebarBrand>
-                <img
-                  src="/gsl-logo.png"
-                  alt=""
-                  width={28}
-                  height={28}
-                  className="demo-home__sidebar-logo"
-                />
-                <span className="demo-home__sidebar-title">GSL</span>
-                <span className="demo-home__sidebar-version">v{packageVersion}</span>
-              </SidebarBrand>
-              <SidebarTrigger>Menu</SidebarTrigger>
-              <SidebarCollapse />
-            </SidebarHeader>
-            <SidebarContent
-            >
-              <SidebarNav>
-                {navGroups.map((group) => (
-                  <SidebarGroup key={group.label}>
-                    <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-                    {group.links.map((link) => {
-                      const Icon = link.icon;
-                      const isCurrent = location.pathname === link.href;
-                      return (
-                        <SidebarLink
-                          key={link.id}
-                          active={isCurrent}
-                          icon={<Icon size={18} strokeWidth={1.5} />}
-                          onClick={() => {
-                            if (link.href !== "#") navigate(link.href);
-                          }}
-                        >
-                          {link.label}
-                          {link.badge && (
-                            <SidebarBadge>{link.badge}</SidebarBadge>
-                          )}
-                        </SidebarLink>
-                      );
-                    })}
-                  </SidebarGroup>
+                    {n.unread && <div className="gsl-notif-popover__dot" />}
+                    <div className="gsl-notif-popover__body">
+                      <div className="gsl-notif-popover__body-text">
+                        {n.text}
+                      </div>
+                      <div className="gsl-notif-popover__body-time">
+                        {n.time}
+                      </div>
+                    </div>
+                  </div>
                 ))}
-              </SidebarNav>
-            </SidebarContent>
-            <SidebarFooter>
-              <button
-                type="button"
-                className="demo-home__sidebar-footer-btn"
-                onClick={() => setComponentsModal(true)}
+              </AppHeaderNotifications>
+              <AppHeaderProfile
+                variant="basic"
+                user={{
+                  name: "Kwame Asante",
+                  role: "Admin",
+                  initials: "KA",
+                  email: "kwame@gsl.edu.gh",
+                }}
               >
-                <Grid3X3 size={18} strokeWidth={1.5} />
-                <span>More Components</span>
-                <ChevronRight
-                  size={16}
-                  strokeWidth={1.5}
-                  className="demo-home__sidebar-footer-chevron"
-                />
-              </button>
-            </SidebarFooter>
-          </Sidebar>
-        </AppSidebar>
-        <BreadcrumbSetter />
-        <AppBody>
-          <Outlet />
-        </AppBody>
-      </AppLayout>
+                <button
+                  type="button"
+                  className="gsl-profile-popover__action"
+                  onClick={() => navigate("/docs")}
+                >
+                  <span className="gsl-profile-popover__action-icon">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                      <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                  </span>
+                  <span className="gsl-profile-popover__action-label">
+                    Docs
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="gsl-profile-popover__action"
+                  onClick={() =>
+                    setTheme(resolvedTheme === "dark" ? "light" : "dark")
+                  }
+                >
+                  <span className="gsl-profile-popover__action-icon">
+                    {resolvedTheme === "dark" ? (
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                      </svg>
+                    )}
+                  </span>
+                  <span className="gsl-profile-popover__action-label">
+                    {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="gsl-profile-popover__action gsl-profile-popover__action--danger"
+                >
+                  <span className="gsl-profile-popover__action-icon">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                  </span>
+                  <span className="gsl-profile-popover__action-label">
+                    Sign out
+                  </span>
+                </button>
+              </AppHeaderProfile>
+            </AppHeaderActions>
+          </AppHeader>
+          <AppSidebar>
+            <Sidebar>
+              <SidebarHeader>
+                <SidebarBrand>
+                  <img
+                    src="/gsl-logo.png"
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="demo-home__sidebar-logo"
+                  />
+                  <span className="demo-home__sidebar-title">GSL</span>
+                  <span className="demo-home__sidebar-version">
+                    v{packageVersion}
+                  </span>
+                </SidebarBrand>
+                <SidebarTrigger>Menu</SidebarTrigger>
+                <SidebarCollapse />
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarNav>
+                  {navGroups.map((group) => (
+                    <SidebarGroup key={group.label}>
+                      <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                      {group.links.map((link) => {
+                        const Icon = link.icon;
+                        const isCurrent = location.pathname === link.href;
+                        return (
+                          <SidebarLink
+                            key={link.id}
+                            active={isCurrent}
+                            icon={<Icon size={18} strokeWidth={1.5} />}
+                            onClick={() => {
+                              if (link.href !== "#") navigate(link.href);
+                            }}
+                          >
+                            {link.label}
+                            {link.badge && (
+                              <SidebarBadge>{link.badge}</SidebarBadge>
+                            )}
+                          </SidebarLink>
+                        );
+                      })}
+                    </SidebarGroup>
+                  ))}
+                </SidebarNav>
+              </SidebarContent>
+              <SidebarFooter>
+                <button
+                  type="button"
+                  className="demo-home__sidebar-footer-btn"
+                  onClick={() => setComponentsModal(true)}
+                >
+                  <Grid3X3 size={18} strokeWidth={1.5} />
+                  <span>More Components</span>
+                  <ChevronRight
+                    size={16}
+                    strokeWidth={1.5}
+                    className="demo-home__sidebar-footer-chevron"
+                  />
+                </button>
+              </SidebarFooter>
+            </Sidebar>
+          </AppSidebar>
+          <BreadcrumbSetter />
+          <AppBody>
+            <Outlet />
+          </AppBody>
+        </AppLayout>
       </BreadcrumbProvider>
       <Modal open={componentsModal} onOpenChange={setComponentsModal}>
         <ModalContent showCloseButton size="2xl">
@@ -509,7 +527,14 @@ export function DemoLayout() {
             <div className="demo-components-grid">
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/badge" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/badge"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/badge")}
               >
                 <span className="demo-components-grid__preview">
@@ -519,17 +544,33 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/button" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/button"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/button")}
               >
                 <span className="demo-components-grid__preview">
-                  <Button variant="primary" size="sm">Button</Button>
+                  <Button variant="primary" size="sm">
+                    Button
+                  </Button>
                 </span>
                 <span className="demo-components-grid__name">Button</span>
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/input" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/input"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/input")}
               >
                 <span className="demo-components-grid__preview">
@@ -539,7 +580,14 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/checkbox" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/checkbox"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/checkbox")}
               >
                 <span className="demo-components-grid__preview">
@@ -549,7 +597,14 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/textarea" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/textarea"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/textarea")}
               >
                 <span className="demo-components-grid__preview">
@@ -559,7 +614,14 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/otp-input" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/otp-input"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/otp-input")}
               >
                 <span className="demo-components-grid__preview">
@@ -569,7 +631,14 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/progress-bar" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/progress-bar"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/progress-bar")}
               >
                 <span className="demo-components-grid__preview">
@@ -579,19 +648,35 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/tooltip" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/tooltip"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/tooltip")}
               >
                 <span className="demo-components-grid__preview">
                   <Tooltip content="Hello">
-                    <Button variant="secondary" size="sm">Hover</Button>
+                    <Button variant="secondary" size="sm">
+                      Hover
+                    </Button>
                   </Tooltip>
                 </span>
                 <span className="demo-components-grid__name">Tooltip</span>
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/avatar" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/avatar"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/avatar")}
               >
                 <span className="demo-components-grid__preview">
@@ -601,7 +686,14 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/tabs" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/tabs"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/tabs")}
               >
                 <span className="demo-components-grid__preview">
@@ -616,12 +708,26 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/radio-group" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/radio-group"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/radio-group")}
               >
                 <span className="demo-components-grid__preview">
                   <RadioGroup defaultValue="a">
-                    <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13 }}>
+                    <label
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        fontSize: 13,
+                      }}
+                    >
                       <Radio value="a" /> Option
                     </label>
                   </RadioGroup>
@@ -630,15 +736,26 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/breadcrumb" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/breadcrumb"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/breadcrumb")}
               >
                 <span className="demo-components-grid__preview">
                   <Breadcrumb>
                     <BreadcrumbList>
-                      <BreadcrumbItem><BreadcrumbLink>Home</BreadcrumbLink></BreadcrumbItem>
+                      <BreadcrumbItem>
+                        <BreadcrumbLink>Home</BreadcrumbLink>
+                      </BreadcrumbItem>
                       <BreadcrumbSeparator />
-                      <BreadcrumbItem><BreadcrumbPage>Page</BreadcrumbPage></BreadcrumbItem>
+                      <BreadcrumbItem>
+                        <BreadcrumbPage>Page</BreadcrumbPage>
+                      </BreadcrumbItem>
                     </BreadcrumbList>
                   </Breadcrumb>
                 </span>
@@ -646,27 +763,52 @@ export function DemoLayout() {
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/card" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/card"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/card")}
               >
                 <span className="demo-components-grid__preview">
-                  <Card style={{ padding: 10, fontSize: 12 }}>Card content</Card>
+                  <Card style={{ padding: 10, fontSize: 12 }}>
+                    Card content
+                  </Card>
                 </span>
                 <span className="demo-components-grid__name">Card</span>
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/country-selector" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/country-selector"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/country-selector")}
               >
                 <span className="demo-components-grid__preview">
                   <CountrySelector style={{ width: "100%" }} />
                 </span>
-                <span className="demo-components-grid__name">CountrySelector</span>
+                <span className="demo-components-grid__name">
+                  CountrySelector
+                </span>
               </button>
               <button
                 type="button"
-                className={["demo-components-grid__card", selectedComponent === "/docs/date-selector" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/date-selector"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/date-selector")}
               >
                 <span className="demo-components-grid__preview">
@@ -675,32 +817,76 @@ export function DemoLayout() {
                 <span className="demo-components-grid__name">DateSelector</span>
               </button>
               <div
-                className={["demo-components-grid__card", selectedComponent === "/docs/dropdown" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  selectedComponent === "/docs/dropdown"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
               >
                 <span className="demo-components-grid__preview">
-                  <Dropdown options={[{ value: "a", label: "Option A" }, { value: "b", label: "Option B" }]} placeholder="Select..." />
+                  <Dropdown
+                    options={[
+                      { value: "a", label: "Option A" },
+                      { value: "b", label: "Option B" },
+                    ]}
+                    placeholder="Select..."
+                  />
                 </span>
-                <span className="demo-components-grid__name" onClick={() => setSelectedComponent("/docs/dropdown")}>
+                <span
+                  className="demo-components-grid__name"
+                  onClick={() => setSelectedComponent("/docs/dropdown")}
+                >
                   Dropdown
                 </span>
               </div>
               <button
                 type="button"
-                className={["demo-components-grid__card", "demo-components-grid__card--full", selectedComponent === "/docs/upload-field" ? "demo-components-grid__card--selected" : ""].filter(Boolean).join(" ")}
+                className={[
+                  "demo-components-grid__card",
+                  "demo-components-grid__card--full",
+                  selectedComponent === "/docs/upload-field"
+                    ? "demo-components-grid__card--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => setSelectedComponent("/docs/upload-field")}
               >
                 <span className="demo-components-grid__preview">
-                  <UploadField multiple accept=".xlsx,.xls,.csv" style={{ width: "100%" }} />
+                  <UploadField
+                    multiple
+                    accept=".xlsx,.xls,.csv"
+                    style={{ width: "100%" }}
+                  />
                 </span>
                 <span className="demo-components-grid__name">UploadField</span>
               </button>
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" size="md" onClick={() => { setComponentsModal(false); setSelectedComponent(null); }}>
+            <Button
+              variant="outline"
+              size="md"
+              onClick={() => {
+                setComponentsModal(false);
+                setSelectedComponent(null);
+              }}
+            >
               Cancel
             </Button>
-            <Button variant="primary" size="md" disabled={!selectedComponent} onClick={() => { setComponentsModal(false); navigate(selectedComponent!); setSelectedComponent(null); }}>
+            <Button
+              variant="primary"
+              size="md"
+              disabled={!selectedComponent}
+              onClick={() => {
+                setComponentsModal(false);
+                navigate(selectedComponent!);
+                setSelectedComponent(null);
+              }}
+            >
               Go to Docs
             </Button>
           </ModalFooter>

@@ -10,17 +10,10 @@ import {
   type ForwardedRef,
 } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import {
-  ArrowUpDownIcon,
-  ArrowUp,
-  ArrowDown,
-} from "lucide-react";
+import { ArrowUpDownIcon, ArrowUp, ArrowDown } from "lucide-react";
 import { Checkbox } from "../checkbox/Checkbox";
 import type { TableColumn } from "../../types/table";
-import type {
-  TableProps,
-  SortDirection,
-} from "../../types/table";
+import type { TableProps, SortDirection } from "../../types/table";
 import { cn } from "../../utils/cn";
 import "./styles/table.css";
 import { TableContext } from "./TableContext";
@@ -51,14 +44,19 @@ function colStyle(col: {
 /* ── Root ── */
 
 export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
-  { className, classNames, paramPrefix, children, ...props },
+  { className, classNames, paramPrefix, height, children, ...props },
   ref,
 ) {
+  const style =
+    height != null
+      ? { height: typeof height === "number" ? `${height}px` : height }
+      : undefined;
   return (
     <TableContext.Provider value={{ paramPrefix }}>
       <div
         ref={ref}
         className={cn("gsl-table", classNames?.root, className)}
+        style={style}
         {...props}
       >
         {children}
@@ -80,7 +78,6 @@ interface TableContentInnerProps<T = unknown> {
   selectable?: boolean;
   selectedIds?: Set<string | number>;
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
-  virtualize?: boolean;
   virtualRowHeight?: number;
 }
 
@@ -99,8 +96,7 @@ function TableContentRender<T>(
     selectable = false,
     selectedIds,
     onSelectionChange,
-    virtualize = false,
-    virtualRowHeight = 44,
+    virtualRowHeight,
     ...rest
   } = props;
   const [sort, setSort] = useState<{
@@ -164,11 +160,12 @@ function TableContentRender<T>(
     return sort.direction === "asc" ? cmp : -cmp;
   });
 
+  const isVirtual = virtualRowHeight != null;
   const scrollRef = useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({
-    count: virtualize ? sorted.length : 0,
+    count: isVirtual ? sorted.length : 0,
     getScrollElement: () => scrollRef.current,
-    estimateSize: () => virtualRowHeight,
+    estimateSize: () => virtualRowHeight ?? 44,
     overscan: 5,
   });
   const virtualRows = virtualizer.getVirtualItems();
@@ -182,7 +179,10 @@ function TableContentRender<T>(
         className={cn(selectable && "gsl-table__row--clickable")}
       >
         {selectable && (
-          <td className="gsl-table__checkbox-cell">
+          <td
+            className="gsl-table__checkbox-cell"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Checkbox
               checked={selectedIds?.has(key) ?? false}
               onCheckedChange={() => handleToggleRow(key)}
@@ -251,11 +251,7 @@ function TableContentRender<T>(
                     <ArrowDown size={14} strokeWidth={2} aria-hidden />
                   )
                 ) : (
-                  <ArrowUpDownIcon
-                    size={14}
-                    strokeWidth={1.5}
-                    aria-hidden
-                  />
+                  <ArrowUpDownIcon size={14} strokeWidth={1.5} aria-hidden />
                 )}
               </span>
             )}
@@ -266,7 +262,18 @@ function TableContentRender<T>(
   );
 
   return (
-    <div ref={ref} className={cn("gsl-table__content", selectable && selectedIds && selectedIds.size > 0 && "gsl-table__content--has-selected", className)} {...rest}>
+    <div
+      ref={ref}
+      className={cn(
+        "gsl-table__content",
+        selectable &&
+          selectedIds &&
+          selectedIds.size > 0 &&
+          "gsl-table__content--has-selected",
+        className,
+      )}
+      {...rest}
+    >
       {loading ? (
         <table>
           <thead>
@@ -279,9 +286,7 @@ function TableContentRender<T>(
               {columns.length > 0
                 ? columns.map((col) => (
                     <th key={col.id} style={colStyle(col)}>
-                      <span className="gsl-table__th-label">
-                        {col.header}
-                      </span>
+                      <span className="gsl-table__th-label">{col.header}</span>
                     </th>
                   ))
                 : Array.from({ length: loadingRows }, (_, i) => (
@@ -315,16 +320,27 @@ function TableContentRender<T>(
           </tbody>
         </table>
       ) : hasData ? (
-        virtualize ? (
+        isVirtual ? (
           <div
             ref={scrollRef}
             className="gsl-table__viewport"
             style={{ overflow: "auto", flex: 1, minHeight: 0 }}
           >
-            <table style={{ tableLayout: "fixed", width: "100%", borderCollapse: "collapse" }}>
+            <table
+              style={{
+                tableLayout: "fixed",
+                width: "100%",
+                borderCollapse: "collapse",
+              }}
+            >
               <thead>{headerRow}</thead>
               <tbody>
-                <tr style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
+                <tr
+                  style={{
+                    height: virtualizer.getTotalSize(),
+                    position: "relative",
+                  }}
+                >
                   <td colSpan={colSpan} style={{ padding: 0 }}>
                     <div style={{ position: "relative", width: "100%" }}>
                       {virtualRows.map((vRow) => {
@@ -340,10 +356,14 @@ function TableContentRender<T>(
                               transform: `translateY(${vRow.start}px)`,
                             }}
                           >
-                            <table style={{ tableLayout: "fixed", width: "100%", borderCollapse: "collapse" }}>
-                              <tbody>
-                                {renderRow(row)}
-                              </tbody>
+                            <table
+                              style={{
+                                tableLayout: "fixed",
+                                width: "100%",
+                                borderCollapse: "collapse",
+                              }}
+                            >
+                              <tbody>{renderRow(row)}</tbody>
                             </table>
                           </div>
                         );

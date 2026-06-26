@@ -50,6 +50,7 @@ Root wrapper. Accepts a `paramPrefix` that is provided via Context to all childr
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `paramPrefix` | `string` | — | **Required.** URL key namespace shared by all child components |
+| `height` | `number \| string` | — | Constrain the table height. Required when using `virtualRowHeight`. Number = px, string = CSS value. |
 | `classNames` | `TableClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root div |
 
@@ -99,6 +100,7 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `onRowClick` | `(rowKey: string \| number) => void` | — | Fired on left-click of a data row |
 | `onRowContextMenu` | `(rowKey: string \| number, event: React.MouseEvent) => void` | — | Overrides the built-in right-click popover with a custom handler |
 | `className` | `string` | — | Merged onto the wrapper div |
+| `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
 
 When `selectable` is true, a checkbox column appears only after at least one row is selected (via right-click → "Select"). The header checkbox toggles all visible rows (shows indeterminate state when partially selected).
 

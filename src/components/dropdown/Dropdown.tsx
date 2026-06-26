@@ -3,6 +3,7 @@ import { ChevronDown } from "lucide-react";
 import type { DropdownProps } from "../../types/dropdown";
 import { cn } from "../../utils/cn";
 import "./styles/dropdown.css";
+import { useMemo } from "react";
 
 const EMPTY_VALUE = "__gsl_dropdown_none__";
 
@@ -19,9 +20,21 @@ export function Dropdown({
   classNames,
   className,
 }: DropdownProps) {
-  const selectedOption = options.find((option) => option.value === value);
+  const selectedOption = useMemo(
+    () => options.find((option) => option.value === value),
+    [options, value],
+  );
   const isPlaceholder = !selectedOption;
-
+  const valueDisplay = useMemo(
+    () =>
+      formatOption?.(
+        selectedOption ?? null,
+        isPlaceholder ? "empty" : "selected",
+      ) ??
+      selectedOption?.label ??
+      placeholder,
+    [formatOption, selectedOption, placeholder],
+  );
   return (
     <Select.Root
       value={value ?? EMPTY_VALUE}
@@ -41,11 +54,7 @@ export function Dropdown({
           aria-label={ariaLabel}
           aria-invalid={invalid || undefined}
         >
-          <Select.Value placeholder={placeholder}>
-            {formatOption
-              ? formatOption(selectedOption ?? null, isPlaceholder ? "empty" : "selected")
-              : selectedOption?.label ?? placeholder}
-          </Select.Value>
+          <Select.Value placeholder={placeholder}>{valueDisplay}</Select.Value>
           <Select.Icon
             className={cn("gsl-dropdown__trigger-icon", classNames?.icon)}
             aria-hidden="true"
@@ -60,6 +69,7 @@ export function Dropdown({
           className={cn("gsl-dropdown__menu", classNames?.menu)}
           position="popper"
           sideOffset={4}
+          onPointerDownOutside={(e) => e.stopPropagation()}
         >
           <Select.Viewport>
             {clearable ? (
@@ -79,7 +89,10 @@ export function Dropdown({
               >
                 <Select.ItemText>
                   {formatOption
-                    ? formatOption(option, option.value === value ? "selected" : "idle")
+                    ? formatOption(
+                        option,
+                        option.value === value ? "selected" : "idle",
+                      )
                     : option.label}
                 </Select.ItemText>
               </Select.Item>
