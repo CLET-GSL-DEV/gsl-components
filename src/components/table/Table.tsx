@@ -198,8 +198,6 @@ function TableContentRender<T>(
 
   // ── Row rendering ──
 
-  const multiSelected = selectable && selectedIds && selectedIds.size > 1;
-
   function renderRow(row: T) {
     const key = rowKey!(row);
     const isSelected = selectedIds?.has(key) ?? false;

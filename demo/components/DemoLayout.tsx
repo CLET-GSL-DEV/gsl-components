@@ -78,7 +78,6 @@ import {
   Radio,
   OtpInput,
   Card,
-  MetricCard,
   DateSelector,
   Dropdown,
   UploadField,

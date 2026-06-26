@@ -15,7 +15,6 @@ import {
   TableSearch,
   TableFilter,
   TableContent,
-  TableBulkActions,
   TableFooter,
   TablePagination,
   MetricCard,
