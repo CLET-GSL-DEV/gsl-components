@@ -408,20 +408,12 @@ table tbody tr.gsl-table__row--clickable:hover {
   width: 40px;
   min-width: 40px;
   max-width: 40px;
+  text-align: center;
 }
 
 .gsl-table__content--has-selected .gsl-table__checkbox-cell > * {
   opacity: 1;
   transition: opacity 150ms ease 100ms;
-}
-
-.gsl-table__checkbox--indeterminate .gsl-checkbox__control {
-  background-color: var(--gsl-primary);
-  border-color: var(--gsl-primary);
-}
-
-.gsl-table__checkbox--indeterminate .gsl-checkbox__icon {
-  opacity: 0;
 }
 
 /* ── Bulk actions bar ── */

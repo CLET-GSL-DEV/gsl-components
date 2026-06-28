@@ -317,12 +317,16 @@ describe("Table", () => {
     expect(checkboxes.length).toBe(2); // header + 1 row
   });
 
-  it("select-all shows indeterminate when partially selected", () => {
+  it("select-all toggles from partially selected state", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
     render(
       <Table paramPrefix="test">
         <TableContent
           selectable
           defaultSelectedIds={new Set(["Alice"])}
+          onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
           ]}
@@ -333,8 +337,14 @@ describe("Table", () => {
     );
 
     const selectAll = screen.getByLabelText("Select all rows");
-    expect(selectAll).toHaveAttribute("aria-checked", "mixed");
-    expect(document.querySelector(".gsl-table__checkbox--indeterminate")).toBeInTheDocument();
+    expect(selectAll).toHaveAttribute("aria-checked", "false");
+
+    // Click from partial → select all
+    await user.click(selectAll);
+    expect(onChange).toHaveBeenLastCalledWith(expect.any(Set));
+    const newSet: Set<string | number> = onChange.mock.calls[0][0];
+    expect(newSet.has("Alice")).toBe(true);
+    expect(newSet.has("Bob")).toBe(true);
   });
 
   it("select-all is unchecked when nothing selected", () => {

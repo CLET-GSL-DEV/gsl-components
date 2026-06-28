@@ -94,25 +94,13 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `loadingRows` | `number` | `5` | Number of skeleton rows to display |
 | `selectable` | `boolean` | `false` | Show a checkbox selection column with select-all in the header |
 | `onSelectionChange` | `(selectedIds: Set<string \| number>) => void` | — | Called with a new `Set` on any selection toggle |
-| `rowActions` | `TableRowAction[]` | — | Custom actions shown in the right-click popover. "Select" always appears first when `selectable` is true. |
-| `bulkActions` | `TableBulkAction[]` | — | Actions shown in the right-click popover when multiple rows are selected. Each action receives the full `selectedIds` set. |
-| `onRowClick` | `(rowKey: string \| number) => void` | — | Fired on left-click of a data row |
-| `onRowContextMenu` | `(rowKey: string \| number, event: React.MouseEvent) => void` | — | Overrides the built-in right-click popover with a custom handler |
+| `defaultSelectedIds` | `Set<string \| number>` | `new Set()` | Initial set of selected row keys |
 | `className` | `string` | — | Merged onto the wrapper div |
 | `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
 
-When `selectable` is true, a checkbox column appears only after at least one row is selected (via right-click → "Select"). The header checkbox toggles all visible rows (shows indeterminate state when partially selected).
+When `selectable` is true, a checkbox column is always present, collapsed to 0 width when no rows are selected. The header checkbox toggles all visible rows (shows indeterminate state when partially selected).
 
-Rows show hover state and cursor pointer when `selectable`, `onRowClick`, `rowActions`, `bulkActions`, or `onRowContextMenu` is set.
-
-### Right-click context menu
-
-Right-clicking a data row opens a popover with:
-- **Select** / **Deselect** — toggles the clicked row (only when `selectable` is true)
-- **Bulk actions** — from `bulkActions` prop, shown when multiple rows are selected (each action operates on all `selectedIds`)
-- **Row actions** — from `rowActions` prop, operates on the clicked row
-
-Use `onRowContextMenu` to replace the built-in popover with your own handler entirely.
+Rows show hover state and cursor pointer when `selectable` is set.
 
 ### `TableColumn<T>`
 
@@ -172,6 +160,8 @@ const [selected, setSelected] = useState<Set<string | number>>(new Set());
   />
 </Table>
 ```
+
+Pass `defaultSelectedIds` to pre-select rows on first render, then use `onSelectionChange` to track changes for `TableBulkActions`.
 
 ### Custom render
 
@@ -298,16 +288,6 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 | `content` | Content wrapper (`.gsl-table__content`) |
 | `footer` | Footer bar (`.gsl-table__footer`) |
 | `selectionCell` | Selection checkbox cells (`.gsl-table__checkbox-cell`) |
-
-### `TableRowAction`
-
-| Key | Type | Description |
-|-----|------|-------------|
-| `key` | `string` | Unique action identifier |
-| `label` | `string` | Display label in the menu |
-| `icon` | `ReactNode` | Optional leading icon |
-| `destructive` | `boolean` | Renders the action in error color |
-| `onClick` | `(rowKey: string \| number) => void` | Called with the row key of the right-clicked row |
 
 ### `TableBulkAction`
 

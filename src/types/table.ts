@@ -97,6 +97,10 @@ export interface TableContentProps<
   selectable?: boolean;
   /** Called when selection changes with the full set of selected row keys */
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
+  /** Initial set of selected row keys */
+  defaultSelectedIds?: Set<string | number>;
+  /** Row height in px. Set this to enable virtual scrolling. Parent <Table> must have a height set. */
+  virtualRowHeight?: number;
 }
 
 export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {
