@@ -10,23 +10,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.20.0] - 2026-06-28
 
 ### Added
+
 - Table: `rowActions` prop — per-row kebab popover rendered internally by `TableContent`. Actions accept `variant` (`"default"` | `"destructive"`), `condition` filter per row, and `onClick` receives the row object. Popover opens on both kebab click and row right-click.
 - Table: Select/Deselect as first item in the row actions popover when `selectable` is true
 - Table: `TableRowAction<T>` type for row-level popover actions
 
 ### Changed
+
 - Table: selection is now fully controlled via `selectedIds` prop (renamed from `defaultSelectedIds`). Pass alongside `onSelectionChange` — both `TableContent` and `TableBulkActions` read from the same source
 - Table: `rowKey` now optional — falls back to row index when not provided
 - Table: checkbox column always rendered (collapsed to 0 width when empty, slides open on first selection)
 - Table: removed indeterminate visual from select-all checkbox; partial selection shows unchecked, clicking selects all
 
 ### Fixed
+
 - Table: internal selection state never updated — `handleToggleRow`/`handleSelectAll` now properly call `setSelectedIds` via controlled `selectedIds` prop
 - Table: `handleSelectAll` checked type widened to accept Radix `boolean` (removed `"indeterminate"` case)
 - Table: `onClear` on `TableBulkActions` now properly resets internal selection via controlled `selectedIds` sync
 - Table: checkbox column animation — added `min-width` to transition for smooth entry
 
 ### Removed
+
 - Table: `TableContentInnerProps` — merged into public `TableContentProps`
 - Table: internal selection `useState` — now fully controlled via `selectedIds` prop
 - Docs: removed hallucinated `rowActions`, `bulkActions`, `onRowClick`, `onRowContextMenu` props from TableContent
@@ -35,11 +39,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Theme: Tailwind v4 `@theme` token integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
 
 ## [1.19.0] - 2026-06-26
 
 ### Added
+
 - Table: right-click context menu on rows with built-in Select action and custom `rowActions` prop
 - Table: bulk action support in right-click popover via `bulkActions` prop (shown when multiple rows selected)
 - Table: hidden select column — checkbox column appears only after first row selection
@@ -49,11 +55,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Command: clear button (XCircle) in input bar when text is entered, matching TableSearch pattern
 
 ### Changed
+
 - Table: hover/selected row states via CSS classes (`gsl-table__row--selected`, `gsl-table__row--context-open`)
 - Table: row height uses `var(--gsl-table-row-height, 44px)` token
 - Popover: border-radius uses `var(--gsl-radius-base)` instead of `var(--gsl-radius-xl)`
 
 ### Fixed
+
 - Dropdown: clicking outside the dropdown popover inside a Modal no longer closes the Modal — switched from Radix Select to Radix Popover
 
 ## [1.18.1] - 2026-06-22
@@ -75,10 +83,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.18.0] - 2026-06-21
 
 ### Breaking
+
 - **AppLayout**: Now wraps `SidebarProvider` and `BreadcrumbProvider` internally. Consumers no longer need to add these providers. Removed `AppBreadcrumb` slot component. Breadcrumbs are context driven, call `useBreadcrumbs()` from any page to set them.
 - **Card**: Removed `header` prop and `CardClassNames`. Use `CardHeader`, `CardTitle`, and `CardActions` sub-components instead.
 
 ### Added
+
 - `BreadcrumbProvider`, `useBreadcrumbs`, `useBreadcrumbContext`, `BreadcrumbEntry` exports
 - `CardHeader`, `CardTitle`, `CardActions` sub-components
 - `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation
@@ -86,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BulkImportModal: reset discarded rows button on validate data page
 
 ### Changed
+
 - **ValidateDataStep**: replaced `<Table />` dependency with an internal virtualized table using `@tanstack/react-virtual`. Error counts correctly exclude discarded rows.
 - Minor CSS improvements across sidebar, button, modal, field, and table components
 
@@ -274,7 +285,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `invalid` prop and `aria-invalid` to `Dropdown`
 - `DemoLayout` and demo pages refactored for new components
 - `DateRangeSelector` refactored to single-trigger display with two-click range selection; start always kept before end (auto-swap); self-contained CSS; simplified `placeholder` prop from `{ start, end }` object to `string`
-
 
 ## [1.8.0] - 2026-06-15
 

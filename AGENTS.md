@@ -113,6 +113,10 @@ src/types/{name}.ts
 
 ## Documentation
 
+### Changelog sync
+
+After updating the root `CHANGELOG.md`, sync the content into `demo/docs/pages/changelog.mdx`. Both files track the same release history — the MDX renders the docs changelog page, the root MD mirrors it for GitHub. Never update one without the other.
+
 ### Example (single source of truth)
 1. `demo/docs/previews/examples/{name}.example.tsx` — runnable component, exports named function
 2. `demo/docs/previews/code/{Name}Preview.tsx` — imports example, renders it (no extra logic)

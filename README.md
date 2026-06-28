@@ -8,30 +8,84 @@ Requires React 18+ and a bundler that processes CSS (Vite, Webpack, etc.).
 
 See [CHANGELOG.md](./CHANGELOG.md) for release history.
 
-## Styles
+## Getting Started
 
-Component styles load automatically when you import from `@rfdtech/components` (the JS bundle includes `import './index.css'`). For reliable styling in production, add this once in your app entry (`main.tsx` or `App.tsx`):
+### 1. Install
+
+```bash
+npm install @rfdtech/components
+```
+
+Requires React 18+. npm 7+ auto-installs `react` and `react-dom` as peer dependencies. Radix UI and other runtime packages are dependencies of `@rfdtech/components`.
+
+### 2. Import CSS
+
+Add this once to your app entry (`main.tsx` or `App.tsx`):
 
 ```ts
 import "@rfdtech/components/style.css";
 ```
 
-After upgrading the package, clear Vite's dependency cache if styles look stale: `rm -rf node_modules/.vite`.
+Components load CSS automatically from the JS bundle (the JS bundle includes `import './index.css'`), but the explicit import above ensures reliable production styling. After upgrading, clear Vite's dependency cache if styles look stale: `rm -rf node_modules/.vite`.
 
-## Shared theming
-
-Wrap your app in `ThemeProvider` for light, dark, and system themes. Design tokens live in [`src/styles/theme.css`](src/styles/theme.css) and apply to `.gsl-theme`, `document.documentElement`, and all components (including portaled modals and popovers).
+### 3. Wrap with ThemeProvider
 
 ```tsx
 import { ThemeProvider } from "@rfdtech/components";
-import "@rfdtech/components/style.css";
 
 <ThemeProvider defaultTheme="system">
   <App />
 </ThemeProvider>
 ```
 
-Use `useTheme()` to read or change the active theme at runtime. See the [Theme](/docs/theme) docs page for token reference and controlled mode.
+Supports `"light"`, `"dark"`, and `"system"` (follows `prefers-color-scheme`). Use `useTheme()` to read or change the active theme at runtime. Design tokens apply to `.gsl-theme`, `document.documentElement`, and all components (including portaled modals and popovers).
+
+### 4. Tailwind v4 integration
+
+If your project uses Tailwind v4, all `--gsl-*` design tokens are automatically available as utility classes. Import `style.css` after `tailwindcss` in your CSS entry:
+
+```css
+/* app/src/index.css */
+@import "tailwindcss";
+@import "@rfdtech/components/style.css";
+```
+
+The `@theme` block ships inside `style.css`. The consumer's Tailwind build processes it and generates these utility classes:
+
+| Utility | Resolves to |
+|---------|-------------|
+| `bg-primary` / `text-primary` | `var(--gsl-primary)` |
+| `bg-primary-foreground` / `text-primary-foreground` | `var(--gsl-on-primary)` |
+| `bg-background` / `text-foreground` | `var(--gsl-page-bg)` / `var(--gsl-text)` |
+| `bg-secondary` / `text-secondary-foreground` | `var(--gsl-surface-dark)` / `var(--gsl-text-secondary)` |
+| `bg-muted` / `text-muted-foreground` | `var(--gsl-surface-subtle)` / `var(--gsl-text-secondary)` |
+| `bg-accent` / `text-accent-foreground` | `var(--gsl-hover)` / `var(--gsl-text)` |
+| `bg-destructive` / `text-destructive-foreground` | `var(--gsl-error)` / `var(--gsl-error-text)` |
+| `bg-card` / `text-card-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
+| `bg-popover` / `text-popover-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
+| `border` / `input` / `ring` | `var(--gsl-border)` / `var(--gsl-border-strong)` / `var(--gsl-focus)` |
+| `rounded-lg` | `var(--gsl-radius-base)` |
+| `shadow-sm` / `shadow-md` / `shadow-lg` | `var(--gsl-shadow-sm)` / etc. |
+| `font-sans` | `var(--gsl-font)` |
+
+**Dark mode** supports both conventions: `<html class="dark">` (Tailwind default) and `<html data-gsl-theme="dark">`.
+
+**Non-Tailwind consumers** are unaffected. Browsers silently ignore `@theme` as an unknown at-rule. All `--gsl-*` tokens continue to work as CSS custom properties.
+
+### 5. Customize tokens
+
+Override any `--gsl-*` token on any ancestor:
+
+```css
+.my-app {
+  --gsl-primary: #1d4ed8;
+  --gsl-primary-light: #eff6ff;
+}
+```
+
+## Design tokens
+
+Quick reference of commonly used tokens and their light-mode defaults:
 
 | Token | Light default | Use |
 |-------|---------------|-----|
@@ -46,37 +100,9 @@ Use `useTheme()` to read or change the active theme at runtime. See the [Theme](
 | `--gsl-success` | `#16a34a` | Success states |
 | `--gsl-warning` | `#eab308` | Warnings |
 
-You can still override tokens on any ancestor without `ThemeProvider`:
-
-```css
-.my-app {
-  --gsl-primary: #1d4ed8;
-  --gsl-primary-light: #eff6ff;
-}
-```
-
 `BulkImportModal` also accepts legacy aliases (`--gsl-bulk-import-primary`, etc.) that map to the shared tokens.
 
-### Tailwind v4 integration
-
-Consumers using Tailwind v4 get automatic utility class mappings for all design tokens. Import `style.css` after `tailwindcss` in your CSS entry:
-
-```css
-@import "tailwindcss";
-@import "@rfdtech/components/style.css";
-```
-
-The `@theme` block ships inside `style.css` and is processed by the consumer's Tailwind build. Available utilities: `bg-primary`, `text-foreground`, `bg-destructive`, `rounded-lg`, `shadow-md`, `font-sans`, and more. Non-Tailwind consumers are unaffected — browsers silently ignore the `@theme` at-rule.
-
-Dark mode works via `<html class="dark">` (Tailwind convention) or `<html data-gsl-theme="dark">`.
-
-## Install
-
-```bash
-npm install @rfdtech/components
-```
-
-Requires React 18+. npm 7+ auto-installs `react` and `react-dom` as peer dependencies. Radix UI and other runtime packages are included as dependencies of `@rfdtech/components`.
+See the [Theme](/docs/theme) docs page for the full token reference (radius, shadows, z-index, fonts) and controlled mode.
 
 
 ## Hooks
