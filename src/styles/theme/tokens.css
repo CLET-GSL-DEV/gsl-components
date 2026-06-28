@@ -1,0 +1,43 @@
+@theme {
+  --color-background: var(--gsl-page-bg);
+  --color-foreground: var(--gsl-text);
+
+  --color-primary: var(--gsl-primary);
+  --color-primary-foreground: var(--gsl-on-primary);
+
+  --color-secondary: var(--gsl-surface-dark);
+  --color-secondary-foreground: var(--gsl-text-secondary);
+
+  --color-muted: var(--gsl-surface-subtle);
+  --color-muted-foreground: var(--gsl-text-secondary);
+
+  --color-accent: var(--gsl-hover);
+  --color-accent-foreground: var(--gsl-text);
+
+  --color-destructive: var(--gsl-error);
+  --color-destructive-foreground: var(--gsl-error-text);
+
+  --color-success: var(--gsl-success);
+  --color-success-foreground: var(--gsl-on-primary);
+
+  --color-warning: var(--gsl-warning);
+  --color-warning-foreground: var(--gsl-text);
+
+  --color-card: var(--gsl-bg);
+  --color-card-foreground: var(--gsl-text);
+
+  --color-popover: var(--gsl-bg);
+  --color-popover-foreground: var(--gsl-text);
+
+  --color-border: var(--gsl-border);
+  --color-input: var(--gsl-border-strong);
+  --color-ring: var(--gsl-focus);
+
+  --radius: var(--gsl-radius-base);
+
+  --font-family-sans: var(--gsl-font);
+
+  --shadow-sm: var(--gsl-shadow-sm);
+  --shadow-md: var(--gsl-shadow-md);
+  --shadow-lg: var(--gsl-shadow-lg);
+}

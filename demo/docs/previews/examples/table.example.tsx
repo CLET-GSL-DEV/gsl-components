@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTableState } from "@rfdtech/components";
-import type { TableColumn } from "@rfdtech/components";
+import type { TableColumn, TableRowAction } from "@rfdtech/components";
 import {
   Table,
   TableHeader,
@@ -10,11 +10,8 @@ import {
   TableFooter,
   TablePagination,
   Badge,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
 } from "@rfdtech/components";
-import { Trash2, MoreHorizontal, Eye, Edit } from "lucide-react";
+import { Trash2, Eye, Edit } from "lucide-react";
 
 interface User {
   id: number;
@@ -65,33 +62,12 @@ const columns: TableColumn<User>[] = [
       <Badge variant={statusVariant(String(value))}>{String(value)}</Badge>
     ),
   },
-  {
-    id: "actions",
-    header: "",
-    cell: () => (
-      <Popover>
-        <PopoverTrigger asChild>
-          <button type="button" className="demo-home__action-btn" aria-label="Row actions">
-            <MoreHorizontal size={14} strokeWidth={1.5} />
-          </button>
-        </PopoverTrigger>
-        <PopoverContent className="demo-home__action-menu" side="bottom" align="end" sideOffset={4}>
-          <button type="button" className="demo-home__action-menu-item">
-            <Eye size={14} strokeWidth={1.5} />
-            View
-          </button>
-          <button type="button" className="demo-home__action-menu-item">
-            <Edit size={14} strokeWidth={1.5} />
-            Edit
-          </button>
-          <button type="button" className="demo-home__action-menu-item demo-home__action-menu-item--destructive">
-            <Trash2 size={14} strokeWidth={1.5} />
-            Delete
-          </button>
-        </PopoverContent>
-      </Popover>
-    ),
-  },
+];
+
+const rowActions: TableRowAction<User>[] = [
+  { id: "view", label: "View", icon: <Eye size={14} strokeWidth={1.5} />, onClick: () => {} },
+  { id: "edit", label: "Edit", icon: <Edit size={14} strokeWidth={1.5} />, onClick: () => {} },
+  { id: "delete", label: "Delete", icon: <Trash2 size={14} strokeWidth={1.5} />, onClick: () => {}, variant: "destructive" },
 ];
 
 export function TableExample() {
@@ -110,10 +86,10 @@ export function TableExample() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
-  const handleDelete = (ids: Set<string | number>) => {
+  const handleDelete = useCallback((ids: Set<string | number>) => {
     setUsers((prev) => prev.filter((u) => !ids.has(u.id)));
     setSelected(new Set());
-  };
+  }, []);
 
   return (
     <Table paramPrefix="users">
@@ -122,7 +98,9 @@ export function TableExample() {
       </TableHeader>
       <TableContent
         selectable
+        selectedIds={selected}
         onSelectionChange={setSelected}
+        rowActions={rowActions}
         columns={columns}
         data={paged}
         rowKey={(u) => u.id}

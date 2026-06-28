@@ -8,11 +8,16 @@ import {
   type CSSProperties,
   type Ref,
   type ForwardedRef,
-  useEffect,
 } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { ArrowUpDownIcon, ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUpDownIcon, ArrowUp, ArrowDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "../checkbox/Checkbox";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverPortal,
+} from "../popover/Popover";
 import type { TableColumn, TableContentProps } from "../../types/table";
 import type { TableProps, SortDirection } from "../../types/table";
 import { cn } from "../../utils/cn";
@@ -81,10 +86,10 @@ function TableContentRender<T>(
     loading = false,
     loadingRows = 5,
     selectable = false,
-
+    selectedIds = new Set(),
     onSelectionChange,
+    rowActions,
     virtualRowHeight,
-    defaultSelectedIds,
 
     ...rest
   } = props;
@@ -102,15 +107,9 @@ function TableContentRender<T>(
     direction: SortDirection;
   } | null>(null);
 
-  const [selectedIds, setSelectedIds] = useState<Set<string | number>>(
-    defaultSelectedIds ?? new Set(),
+  const [openPopoverKey, setOpenPopoverKey] = useState<string | number | null>(
+    null,
   );
-
-  useEffect(() => {
-    if (defaultSelectedIds) {
-      setSelectedIds(defaultSelectedIds);
-    }
-  }, [defaultSelectedIds]);
 
   const columns = useMemo(() => rawColumns ?? [], [rawColumns]);
   const data = useMemo(() => rawData ?? [], [rawData]);
@@ -122,7 +121,7 @@ function TableContentRender<T>(
 
   const hasData = columns.length > 0 && data.length > 0;
 
-  // Selection state
+  // Selection state (reads from controlled selectedIds prop)
   const allSelected =
     selectable && data.length > 0
       ? dataWithIndex.every(({ row, index }) =>
@@ -143,13 +142,9 @@ function TableContentRender<T>(
       const next = new Set(selectedIds);
       dataWithIndex.forEach(({ row, index }) => {
         const key = resolveKey(row, index);
-        if (checked) {
-          next.add(key);
-        } else {
-          next.delete(key);
-        }
+        if (checked) next.add(key);
+        else next.delete(key);
       });
-      setSelectedIds(next);
       onSelectionChange(next);
     },
     [selectedIds, onSelectionChange, dataWithIndex, resolveKey],
@@ -159,19 +154,18 @@ function TableContentRender<T>(
     (key: string | number) => {
       if (!onSelectionChange) return;
       const next = new Set(selectedIds);
-      if (next.has(key)) {
-        next.delete(key);
-      } else {
-        next.add(key);
-      }
-      setSelectedIds(next);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
       onSelectionChange(next);
     },
     [selectedIds, onSelectionChange],
   );
 
-  // Extra colSpan when selectable adds a column
-  const colSpan = columns.length + (selectable ? 1 : 0);
+  const hasRowActions = rowActions && rowActions.length > 0;
+  const hasActionsColumn = selectable || hasRowActions;
+
+  // Extra colSpan when selectable or actions column adds a column
+  const colSpan = columns.length + (selectable ? 1 : 0) + (hasActionsColumn ? 1 : 0);
 
   const sorted = [...data].sort((a, b) => {
     if (!sort) return 0;
@@ -195,10 +189,31 @@ function TableContentRender<T>(
 
   function renderRow(row: T, rowIndex: number) {
     const key = resolveKey(row, rowIndex);
+    const isSelected = selectable && selectedIds.has(key);
+    const actions = hasRowActions
+      ? rowActions!.filter((a) => !a.condition || a.condition(row))
+      : null;
+    const hasCustomActions = actions && actions.length > 0;
+
+    const handleActionClick = (
+      e: React.MouseEvent<HTMLButtonElement>,
+      cb: () => void,
+    ) => {
+      e.preventDefault();
+      e.stopPropagation();
+      cb();
+      setOpenPopoverKey(null);
+    };
+
     return (
       <tr
         key={key}
         onClick={() => selectable && handleToggleRow(key)}
+        onContextMenu={(e) => {
+          if (!hasActionsColumn) return;
+          e.preventDefault();
+          setOpenPopoverKey(key);
+        }}
         className={cn(selectable && "gsl-table__row--clickable")}
       >
         <td
@@ -206,7 +221,7 @@ function TableContentRender<T>(
           onClick={(e) => e.stopPropagation()}
         >
           <Checkbox
-            checked={selectedIds.has(key)}
+            checked={isSelected}
             onCheckedChange={() => handleToggleRow(key)}
             aria-label="Select row"
           />
@@ -223,6 +238,67 @@ function TableContentRender<T>(
             </td>
           );
         })}
+
+        {hasActionsColumn && (
+          <td
+            className="gsl-table__actions-cell"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Popover
+              open={openPopoverKey === key}
+              onOpenChange={(open) => {
+                setOpenPopoverKey(open ? key : null);
+              }}
+            >
+              <PopoverTrigger
+                className="gsl-table__actions-trigger"
+                aria-label="Row actions"
+              >
+                <MoreHorizontal size={14} strokeWidth={1.5} />
+              </PopoverTrigger>
+              <PopoverPortal>
+                <PopoverContent
+                  className="gsl-table__actions-menu"
+                  side="bottom"
+                  align="end"
+                  sideOffset={4}
+                >
+                  {selectable && (
+                    <button
+                      type="button"
+                      className="gsl-table__actions-item"
+                      onClick={(e) =>
+                        handleActionClick(e, () => handleToggleRow(key))
+                      }
+                    >
+                      {isSelected ? "Deselect" : "Select"}
+                    </button>
+                  )}
+                  {selectable && hasCustomActions && (
+                    <div className="gsl-table__actions-separator" />
+                  )}
+                  {actions?.map((action) => (
+                    <button
+                      key={action.id}
+                      type="button"
+                      className={cn(
+                        "gsl-table__actions-item",
+                        action.variant === "destructive" &&
+                          "gsl-table__actions-item--destructive",
+                      )}
+                      onClick={(e) =>
+                        handleActionClick(e, () => action.onClick(row))
+                      }
+                    >
+                      {action.icon}
+                      {action.label}
+                    </button>
+                  ))}
+                </PopoverContent>
+              </PopoverPortal>
+            </Popover>
+          </td>
+        )}
       </tr>
     );
   }
@@ -272,6 +348,7 @@ function TableContentRender<T>(
           </th>
         );
       })}
+      {hasActionsColumn && <th className="gsl-table__actions-cell" />}
     </tr>
   );
 
@@ -307,6 +384,7 @@ function TableContentRender<T>(
                       <span className="gsl-table__skeleton gsl-table__skeleton--th" />
                     </th>
                   ))}
+              {hasActionsColumn && <th className="gsl-table__actions-cell" />}
             </tr>
           </thead>
           <tbody>
@@ -328,6 +406,7 @@ function TableContentRender<T>(
                         <span className="gsl-table__skeleton gsl-table__skeleton--td" />
                       </td>
                     ))}
+                {hasActionsColumn && <td className="gsl-table__actions-cell" />}
               </tr>
             ))}
           </tbody>

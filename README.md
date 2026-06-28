@@ -57,6 +57,19 @@ You can still override tokens on any ancestor without `ThemeProvider`:
 
 `BulkImportModal` also accepts legacy aliases (`--gsl-bulk-import-primary`, etc.) that map to the shared tokens.
 
+### Tailwind v4 integration
+
+Consumers using Tailwind v4 get automatic utility class mappings for all design tokens. Import `style.css` after `tailwindcss` in your CSS entry:
+
+```css
+@import "tailwindcss";
+@import "@rfdtech/components/style.css";
+```
+
+The `@theme` block ships inside `style.css` and is processed by the consumer's Tailwind build. Available utilities: `bg-primary`, `text-foreground`, `bg-destructive`, `rounded-lg`, `shadow-md`, `font-sans`, and more. Non-Tailwind consumers are unaffected — browsers silently ignore the `@theme` at-rule.
+
+Dark mode works via `<html class="dark">` (Tailwind convention) or `<html data-gsl-theme="dark">`.
+
 ## Install
 
 ```bash

@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.20.0] - 2026-06-28
+
+### Added
+- Table: `rowActions` prop — per-row kebab popover rendered internally by `TableContent`. Actions accept `variant` (`"default"` | `"destructive"`), `condition` filter per row, and `onClick` receives the row object. Popover opens on both kebab click and row right-click.
+- Table: Select/Deselect as first item in the row actions popover when `selectable` is true
+- Table: `TableRowAction<T>` type for row-level popover actions
+
+### Changed
+- Table: selection is now fully controlled via `selectedIds` prop (renamed from `defaultSelectedIds`). Pass alongside `onSelectionChange` — both `TableContent` and `TableBulkActions` read from the same source
+- Table: `rowKey` now optional — falls back to row index when not provided
+- Table: checkbox column always rendered (collapsed to 0 width when empty, slides open on first selection)
+- Table: removed indeterminate visual from select-all checkbox; partial selection shows unchecked, clicking selects all
+
+### Fixed
+- Table: internal selection state never updated — `handleToggleRow`/`handleSelectAll` now properly call `setSelectedIds` via controlled `selectedIds` prop
+- Table: `handleSelectAll` checked type widened to accept Radix `boolean` (removed `"indeterminate"` case)
+- Table: `onClear` on `TableBulkActions` now properly resets internal selection via controlled `selectedIds` sync
+- Table: checkbox column animation — added `min-width` to transition for smooth entry
+
+### Removed
+- Table: `TableContentInnerProps` — merged into public `TableContentProps`
+- Table: internal selection `useState` — now fully controlled via `selectedIds` prop
+- Docs: removed hallucinated `rowActions`, `bulkActions`, `onRowClick`, `onRowContextMenu` props from TableContent
+- Docs: removed hallucinated right-click context menu section and `TableRowAction` type (previously listed but never existed)
+
+## [Unreleased]
+
+### Added
+- Theme: Tailwind v4 `@theme` token integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
+
 ## [1.19.0] - 2026-06-26
 
 ### Added

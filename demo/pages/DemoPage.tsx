@@ -1,6 +1,6 @@
-import type { TableColumn, TableBulkAction } from "@rfdtech/components";
+import type { TableColumn, TableBulkAction, TableRowAction } from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   Users,
   UserCheck,
@@ -8,7 +8,6 @@ import {
   Activity,
   Trash2,
   UserX,
-  MoreHorizontal,
   Eye,
   Edit,
 } from "lucide-react";
@@ -24,9 +23,15 @@ import {
   MetricCard,
   Card,
   Dropdown,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
+  Modal,
+  ModalPortal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalTitle,
+  ModalBody,
+  ModalFooter,
+  Button,
   useTableState,
   Badge,
 } from "@rfdtech/components";
@@ -54,33 +59,6 @@ const columns: TableColumn<GslMember>[] = [
   { id: "role", header: "Role", accessorKey: "role", sortable: true },
   { id: "status", header: "Status", accessorKey: "status", sortable: true, cell: ({ value }) => <Badge variant={statusVariant(String(value))}>{String(value)}</Badge> },
   { id: "joined", header: "Joined", accessorKey: "joined", sortable: true, cell: ({ value }) => <span className="demo-home__cell-date">{String(value)}</span> },
-  {
-    id: "actions",
-    header: "",
-    cell: () => (
-      <Popover>
-        <PopoverTrigger asChild>
-          <button type="button" className="demo-home__action-btn" aria-label="Row actions">
-            <MoreHorizontal size={14} strokeWidth={1.5} />
-          </button>
-        </PopoverTrigger>
-        <PopoverContent className="demo-home__action-menu" side="bottom" align="end" sideOffset={4}>
-          <button type="button" className="demo-home__action-menu-item">
-            <Eye size={14} strokeWidth={1.5} />
-            View
-          </button>
-          <button type="button" className="demo-home__action-menu-item">
-            <Edit size={14} strokeWidth={1.5} />
-            Edit
-          </button>
-          <button type="button" className="demo-home__action-menu-item demo-home__action-menu-item--destructive">
-            <Trash2 size={14} strokeWidth={1.5} />
-            Delete
-          </button>
-        </PopoverContent>
-      </Popover>
-    ),
-  },
 ];
 
 export function DemoPage() {
@@ -89,6 +67,7 @@ export function DemoPage() {
   const [statusValue, setStatusValue] = useState(filters.status ?? "");
   const [members, setMembers] = useState(gslMembers);
   const [selected, setSelected] = useState<Set<string | number>>(new Set());
+  const [viewMember, setViewMember] = useState<GslMember | null>(null);
 
   const filtered = members.filter((m) => {
     const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase());
@@ -133,6 +112,19 @@ export function DemoPage() {
       destructive: true,
     },
   ];
+
+  const handleView = useCallback((member: GslMember) => {
+    setViewMember(member);
+  }, []);
+
+  const rowActions = useMemo<TableRowAction<GslMember>[]>(
+    () => [
+      { id: "view", label: "View", icon: <Eye size={14} strokeWidth={1.5} />, onClick: handleView },
+      { id: "edit", label: "Edit", icon: <Edit size={14} strokeWidth={1.5} />, onClick: handleView },
+      { id: "delete", label: "Delete", icon: <Trash2 size={14} strokeWidth={1.5} />, onClick: handleView, variant: "destructive" },
+    ],
+    [handleView],
+  );
 
   return (
     <>
@@ -180,7 +172,9 @@ export function DemoPage() {
           </TableHeader>
           <TableContent
             selectable
+            selectedIds={selected}
             onSelectionChange={setSelected}
+            rowActions={rowActions}
             columns={columns}
             data={paged}
             rowKey={(m: GslMember) => m.id}
@@ -195,6 +189,42 @@ export function DemoPage() {
           </TableFooter>
         </Table>
       </Card>
+
+      <Modal open={viewMember !== null} onOpenChange={(open) => { if (!open) setViewMember(null); }}>
+        <ModalPortal>
+          <ModalOverlay />
+          <ModalContent showCloseButton>
+            <ModalHeader>
+              <ModalTitle>{viewMember?.name}</ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+              <div className="demo-member-detail">
+                <div className="demo-member-detail__row">
+                  <span className="demo-member-detail__label">Email</span>
+                  <span className="demo-member-detail__value">{viewMember?.email}</span>
+                </div>
+                <div className="demo-member-detail__row">
+                  <span className="demo-member-detail__label">Role</span>
+                  <span className="demo-member-detail__value">{viewMember?.role}</span>
+                </div>
+                <div className="demo-member-detail__row">
+                  <span className="demo-member-detail__label">Status</span>
+                  <span className="demo-member-detail__value">
+                    <Badge variant={statusVariant(viewMember?.status ?? "")}>{viewMember?.status}</Badge>
+                  </span>
+                </div>
+                <div className="demo-member-detail__row">
+                  <span className="demo-member-detail__label">Joined</span>
+                  <span className="demo-member-detail__value">{viewMember?.joined}</span>
+                </div>
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" onClick={() => setViewMember(null)}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </ModalPortal>
+      </Modal>
     </>
   );
 }

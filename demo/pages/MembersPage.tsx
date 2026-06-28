@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { demoMembers, type DemoMember } from "../data/demoMembers";
 import { useMockQuery } from "../hooks/useMockQuery";
 import { ViewMemberModal } from "../components/ViewMemberModal";
 import { EditMemberModal } from "../components/EditMemberModal";
-import type { TableColumn } from "@rfdtech/components";
+import type { TableColumn, TableRowAction } from "@rfdtech/components";
 import {
   Table,
   TableHeader,
@@ -16,14 +16,11 @@ import {
   Card,
   Dropdown,
   BulkImportModal,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
   useTableState,
   Badge,
   Avatar,
 } from "@rfdtech/components";
-import { Edit, Eye, Upload, MoreHorizontal } from "lucide-react";
+import { Edit, Eye, Upload, Trash2 } from "lucide-react";
 
 function statusVariant(status: string) {
   switch (status) {
@@ -178,6 +175,15 @@ export function MembersPage() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
+  const invRowActions = useMemo<TableRowAction<DemoMember>[]>(
+    () => [
+      { id: "view", label: "View", icon: <Eye size={14} strokeWidth={1.5} />, onClick: (row) => handleViewMember(row.id) },
+      { id: "edit", label: "Edit", icon: <Edit size={14} strokeWidth={1.5} />, onClick: (row) => { setEditMember(row); setEditModalOpen(true); } },
+      { id: "delete", label: "Delete", icon: <Trash2 size={14} strokeWidth={1.5} />, onClick: () => {}, variant: "destructive" },
+    ],
+    [],
+  );
+
   return (
     <div className="demo-members-page">
       <Card>
@@ -271,33 +277,11 @@ export function MembersPage() {
             </div>
           </TableHeader>
           <TableContent
+            rowActions={invRowActions}
             columns={[
               { id: "name", header: "Name", accessorKey: "name" },
               { id: "email", header: "Email", accessorKey: "email" },
               { id: "role", header: "Role", accessorKey: "role" },
-              {
-                id: "actions",
-                header: "",
-                cell: () => (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button type="button" className="demo-home__action-btn" aria-label="Row actions">
-                        <MoreHorizontal size={14} strokeWidth={1.5} />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="demo-home__action-menu" side="bottom" align="end" sideOffset={4}>
-                      <button type="button" className="demo-home__action-menu-item">
-                        <Eye size={14} strokeWidth={1.5} />
-                        View
-                      </button>
-                      <button type="button" className="demo-home__action-menu-item">
-                        <Edit size={14} strokeWidth={1.5} />
-                        Edit
-                      </button>
-                    </PopoverContent>
-                  </Popover>
-                ),
-              },
             ]}
             data={demoMembers
               .filter(

@@ -1,6 +1,8 @@
 :root,
 :root[data-gsl-theme="light"],
-.gsl-theme[data-gsl-theme="light"] {
+.gsl-theme[data-gsl-theme="light"],
+.light,
+.gsl-theme.light {
   --gsl-bg: #fff;
   --gsl-text: #3c4043;
   --gsl-text-secondary: #5f6368;

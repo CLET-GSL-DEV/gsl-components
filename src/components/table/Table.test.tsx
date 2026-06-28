@@ -258,7 +258,7 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          defaultSelectedIds={new Set(["Alice", "Bob"])}
+          selectedIds={new Set(["Alice", "Bob"])}
           onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
@@ -325,7 +325,7 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          defaultSelectedIds={new Set(["Alice"])}
+          selectedIds={new Set(["Alice"])}
           onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
@@ -370,7 +370,7 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          defaultSelectedIds={new Set(["Alice", "Bob"])}
+          selectedIds={new Set(["Alice", "Bob"])}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
           ]}
@@ -437,7 +437,7 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          defaultSelectedIds={new Set(["Alice", "Bob"])}
+          selectedIds={new Set(["Alice", "Bob"])}
           onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },

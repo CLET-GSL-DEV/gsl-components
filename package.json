@@ -1,6 +1,6 @@
 {
   "name": "@rfdtech/components",
-  "version": "1.19.0",
+  "version": "1.20.0",
   "description": "Shared React component library for Ghana School of Law (GSL) projects",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -37,8 +37,11 @@
   ],
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
-    "dev": "vite --config vite.demo.config.ts",
-    "demo": "vite --config vite.demo.config.ts",
+    "dev": "node server.js",
+    "demo": "node server.js",
+    "build:demo:client": "vite build --config vite.demo.config.ts --outDir dist/client --ssrManifest",
+    "build:demo:server": "vite build --config vite.demo.config.ts --outDir dist/server --ssr entry-server.tsx",
+    "build:demo": "npm run build:demo:client && npm run build:demo:server",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",

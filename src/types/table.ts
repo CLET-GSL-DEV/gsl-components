@@ -25,6 +25,18 @@ export interface TableSortState {
   direction: SortDirection;
 }
 
+/* ── Row Actions ── */
+
+export interface TableRowAction<T> {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  onClick: (row: T) => void;
+  variant?: "default" | "destructive";
+  /** If provided, must return true for the action to appear for this row */
+  condition?: (row: T) => boolean;
+}
+
 /* ── Bulk Actions ── */
 
 export interface TableBulkAction {
@@ -95,10 +107,12 @@ export interface TableContentProps<
   loadingRows?: number;
   /** Show a checkbox selection column (default false) */
   selectable?: boolean;
+  /** Current set of selected row keys. Pass with onSelectionChange for controlled mode. Required for TableBulkActions sync. */
+  selectedIds?: Set<string | number>;
   /** Called when selection changes with the full set of selected row keys */
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
-  /** Initial set of selected row keys */
-  defaultSelectedIds?: Set<string | number>;
+  /** Row-level actions rendered as a kebab dropdown at the end of each row */
+  rowActions?: TableRowAction<T>[];
   /** Row height in px. Set this to enable virtual scrolling. Parent <Table> must have a height set. */
   virtualRowHeight?: number;
 }

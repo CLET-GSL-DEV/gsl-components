@@ -20,4 +20,14 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ["server.js", "api/*.js"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        process: "readonly",
+        URL: "readonly",
+      },
+    },
+  },
 );

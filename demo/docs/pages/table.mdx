@@ -93,12 +93,13 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `loading` | `boolean` | `false` | Show skeleton rows instead of data |
 | `loadingRows` | `number` | `5` | Number of skeleton rows to display |
 | `selectable` | `boolean` | `false` | Show a checkbox selection column with select-all in the header |
+| `selectedIds` | `Set<string \| number>` | `new Set()` | Controlled set of selected row keys. Pass with `onSelectionChange`. Required for `TableBulkActions` sync. |
 | `onSelectionChange` | `(selectedIds: Set<string \| number>) => void` | — | Called with a new `Set` on any selection toggle |
-| `defaultSelectedIds` | `Set<string \| number>` | `new Set()` | Initial set of selected row keys |
+| `rowActions` | `TableRowAction<T>[]` | — | Row-level actions rendered as a kebab dropdown at the end of each row |
 | `className` | `string` | — | Merged onto the wrapper div |
 | `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
 
-When `selectable` is true, a checkbox column is always present, collapsed to 0 width when no rows are selected. The header checkbox toggles all visible rows (shows indeterminate state when partially selected).
+When `selectable` is true, a checkbox column is always present, collapsed to 0 width when no rows are selected. The header checkbox selects or deselects all visible rows.
 
 Rows show hover state and cursor pointer when `selectable` is set.
 
@@ -141,6 +142,7 @@ const [selected, setSelected] = useState<Set<string | number>>(new Set());
 <Table paramPrefix="users">
   <TableContent
     selectable
+    selectedIds={selected}
     onSelectionChange={setSelected}
     columns={columns}
     data={users}
@@ -161,7 +163,7 @@ const [selected, setSelected] = useState<Set<string | number>>(new Set());
 </Table>
 ```
 
-Pass `defaultSelectedIds` to pre-select rows on first render, then use `onSelectionChange` to track changes for `TableBulkActions`.
+`selectedIds` is controlled — pass it alongside `onSelectionChange` so both `TableContent` and `TableBulkActions` read from the same source. `onClear` on `TableBulkActions` resets the shared state. Add `rowActions` to render a per-row kebab dropdown.
 
 ### Custom render
 
@@ -299,6 +301,17 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 | `onClick` | `(selectedIds: Set<string \| number>) => void` | Called with the current selection |
 | `destructive` | `boolean` | Renders the action in error color |
 
+### `TableRowAction`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `id` | `string` | Unique action identifier |
+| `label` | `string` | Display label in the dropdown |
+| `icon` | `ReactNode` | Optional leading icon |
+| `variant` | `"default" \| "destructive"` | Visual style. `"destructive"` renders in error color. |
+| `onClick` | `(row: T) => void` | Called with the row data when the action is selected |
+| `condition` | `(row: T) => boolean` | If provided, action only appears when this returns `true` for the row |
+
 ### `TableBulkActionsClassNames`
 
 | Key | Applied to |
@@ -327,5 +340,4 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 - Without a `paramPrefix`, keys are plain (`page`, `search`, `f_status`). With one, they are namespaced (`members.page`, `members.search`, `members.f_status`).
 - `paramPrefix` is required on `<Table>` — every table must have a unique namespace to avoid URL collisions.
 - The filter form captures all elements with a `name` attribute via `FormData`. For custom inputs (date pickers, multi-selects), ensure they set a `name` and participate in `FormData`.
-- Selection is page-local: "select all" only selects rows on the current page. Selection is managed internally by `TableContent` — use `onSelectionChange` to track selections for `TableBulkActions`.
-- The select-all checkbox shows an indeterminate dash when some (but not all) rows on the page are selected. Clicking it selects all visible rows; clicking again deselects them.
+- Selection is page-local: "select all" only selects rows on the current page. Selection is fully controlled via `selectedIds` / `onSelectionChange` — pass the same `selectedIds` to `TableBulkActions` for sync.

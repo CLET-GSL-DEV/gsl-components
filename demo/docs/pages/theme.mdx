@@ -131,6 +131,49 @@ Override on any ancestor (including `.gsl-theme`):
 }
 ```
 
+## Tailwind v4 integration
+
+All `--gsl-*` tokens are registered with Tailwind v4's token system via a `@theme` block shipped in `style.css`. No extra configuration needed.
+
+### Consumer setup
+
+```css title="app/src/index.css"
+@import "tailwindcss";
+@import "@rfdtech/components/style.css";
+```
+
+The consumer's Tailwind build processes the `@theme` block and generates utility classes:
+
+| Utility | Resolves to |
+|---------|-------------|
+| `bg-primary` / `text-primary` | `var(--gsl-primary)` |
+| `bg-primary-foreground` / `text-primary-foreground` | `var(--gsl-on-primary)` |
+| `bg-background` / `text-foreground` | `var(--gsl-page-bg)` / `var(--gsl-text)` |
+| `bg-secondary` / `text-secondary-foreground` | `var(--gsl-surface-dark)` / `var(--gsl-text-secondary)` |
+| `bg-muted` / `text-muted-foreground` | `var(--gsl-surface-subtle)` / `var(--gsl-text-secondary)` |
+| `bg-accent` / `text-accent-foreground` | `var(--gsl-hover)` / `var(--gsl-text)` |
+| `bg-destructive` / `text-destructive-foreground` | `var(--gsl-error)` / `var(--gsl-error-text)` |
+| `bg-card` / `text-card-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
+| `bg-popover` / `text-popover-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
+| `border` / `input` / `ring` | `var(--gsl-border)` / `var(--gsl-border-strong)` / `var(--gsl-focus)` |
+| `bg-success` / `bg-warning` | `var(--gsl-success)` / `var(--gsl-warning)` |
+| `rounded-lg` | `var(--gsl-radius-base)` |
+| `shadow-sm` / `shadow-md` / `shadow-lg` | `var(--gsl-shadow-sm)` / etc. |
+| `font-sans` | `var(--gsl-font)` |
+
+### Dark mode
+
+Both conventions are supported:
+
+| Selector | Convention |
+|----------|-----------|
+| `<html class="dark">` | Tailwind v4 default |
+| `<html data-gsl-theme="dark">` | GSL native (`ThemeProvider`) |
+
+### Non-Tailwind consumers
+
+No impact. Browsers silently ignore `@theme` as an unknown at-rule. GSL components continue to reference `--gsl-*` tokens directly.
+
 ## Controlled mode
 
 ```tsx title="App.tsx"

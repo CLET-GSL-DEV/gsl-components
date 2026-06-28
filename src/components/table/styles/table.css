@@ -416,6 +416,76 @@ table tbody tr.gsl-table__row--clickable:hover {
   transition: opacity 150ms ease 100ms;
 }
 
+/* ── Row actions cell ── */
+
+.gsl-table__actions-cell {
+  width: 40px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.gsl-table__actions-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  cursor: pointer;
+  transition: background 100ms ease, color 100ms ease;
+}
+
+.gsl-table__actions-trigger:hover {
+  background: var(--gsl-hover);
+  color: var(--gsl-text);
+}
+
+.gsl-table__actions-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+  padding: 4px;
+}
+
+.gsl-table__actions-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gsl-text);
+  font-family: var(--gsl-font);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 100ms ease;
+}
+
+.gsl-table__actions-item:hover {
+  background: var(--gsl-hover);
+}
+
+.gsl-table__actions-item--destructive {
+  color: var(--gsl-error);
+}
+
+.gsl-table__actions-item--destructive:hover {
+  background: var(--gsl-error-bg);
+}
+
+.gsl-table__actions-separator {
+  height: 1px;
+  margin: 2px 8px;
+  background: var(--gsl-border);
+}
+
 /* ── Bulk actions bar ── */
 
 .gsl-table__bulk-actions-bar-wrapper {
