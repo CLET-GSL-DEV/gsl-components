@@ -116,7 +116,8 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         )}
       >
         {trigger}
-        {createPortal(
+        {!import.meta.env.SSR
+          ? createPortal(
           <span
             ref={contentRef}
             className={cn(
@@ -133,7 +134,8 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             <span className="gsl-tooltip__arrow" />
           </span>,
           document.body,
-        )}
+        )
+          : null}
       </div>
     );
   },

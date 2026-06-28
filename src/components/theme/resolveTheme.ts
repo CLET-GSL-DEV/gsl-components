@@ -1,5 +1,5 @@
 export function getSystemTheme(): "light" | "dark" {
-  if (typeof window === "undefined") {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
     return "light";
   }
 

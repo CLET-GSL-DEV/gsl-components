@@ -1,14 +1,8 @@
 {
-  "buildCommand": "npm run build:demo",
-  "outputDirectory": "demo/dist/client",
+  "buildCommand": "npx vite build --config vite.demo.config.ts",
+  "outputDirectory": "demo/dist",
   "installCommand": "npm install",
-  "functions": {
-    "api/ssr.js": {
-      "includeFiles": "demo/dist/**"
-    }
-  },
   "rewrites": [
-    { "source": "/docs", "destination": "/api/ssr" },
-    { "source": "/docs/(.*)", "destination": "/api/ssr" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

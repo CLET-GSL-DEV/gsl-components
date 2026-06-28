@@ -4,7 +4,7 @@ export function useSidebarMedia(breakpoint: number) {
   const query = `(max-width: ${breakpoint}px)`;
 
   const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return false;
     }
 

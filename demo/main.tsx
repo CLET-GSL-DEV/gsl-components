@@ -1,16 +1,5 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { App } from "./App";
-import { ThemeProvider } from "./components/ThemeToggle";
+import { ViteReactSSG } from "vite-react-ssg";
+import { routes } from "./App";
 import "./demo.css";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ThemeProvider defaultTheme="system" storageKey="gsl-theme">
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
-  </StrictMode>,
-);
+export const createRoot = ViteReactSSG({ routes });
