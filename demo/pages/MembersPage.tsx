@@ -16,11 +16,14 @@ import {
   Card,
   Dropdown,
   BulkImportModal,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
   useTableState,
   Badge,
   Avatar,
 } from "@rfdtech/components";
-import { Edit, Eye, Upload } from "lucide-react";
+import { Edit, Eye, Upload, MoreHorizontal } from "lucide-react";
 
 function statusVariant(status: string) {
   switch (status) {
@@ -272,6 +275,29 @@ export function MembersPage() {
               { id: "name", header: "Name", accessorKey: "name" },
               { id: "email", header: "Email", accessorKey: "email" },
               { id: "role", header: "Role", accessorKey: "role" },
+              {
+                id: "actions",
+                header: "",
+                cell: () => (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button type="button" className="demo-home__action-btn" aria-label="Row actions">
+                        <MoreHorizontal size={14} strokeWidth={1.5} />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="demo-home__action-menu" side="bottom" align="end" sideOffset={4}>
+                      <button type="button" className="demo-home__action-menu-item">
+                        <Eye size={14} strokeWidth={1.5} />
+                        View
+                      </button>
+                      <button type="button" className="demo-home__action-menu-item">
+                        <Edit size={14} strokeWidth={1.5} />
+                        Edit
+                      </button>
+                    </PopoverContent>
+                  </Popover>
+                ),
+              },
             ]}
             data={demoMembers
               .filter(

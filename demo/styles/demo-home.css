@@ -337,6 +337,65 @@
   color: var(--gsl-text);
 }
 
+/* ── Action button (kebab menu trigger) ── */
+
+.demo-home__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  cursor: pointer;
+  transition: background 100ms ease, color 100ms ease;
+}
+
+.demo-home__action-btn:hover {
+  background: var(--gsl-hover);
+  color: var(--gsl-text);
+}
+
+/* ── Action menu (popover content) ── */
+
+.demo-home__action-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+  padding: 4px;
+}
+
+.demo-home__action-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gsl-text);
+  font-family: var(--gsl-font);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 100ms ease;
+}
+
+.demo-home__action-menu-item:hover {
+  background: var(--gsl-hover);
+}
+
+.demo-home__action-menu-item--destructive {
+  color: var(--gsl-error);
+}
+
+.demo-home__action-menu-item--destructive:hover {
+  background: var(--gsl-error-bg);
+}
+
 /* ── Selection bar ── */
 
 .demo-home__selected-bar {

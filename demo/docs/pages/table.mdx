@@ -92,8 +92,7 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `rowKey` | `(row: T) => string \| number` | — | Unique key extractor for each row |
 | `loading` | `boolean` | `false` | Show skeleton rows instead of data |
 | `loadingRows` | `number` | `5` | Number of skeleton rows to display |
-| `selectable` | `boolean` | `false` | Show a checkbox selection column with select-all in the header. Column is hidden until at least one row is selected. |
-| `selectedIds` | `Set<string \| number>` | — | Set of selected row keys. Pass with `onSelectionChange` when `selectable` is true |
+| `selectable` | `boolean` | `false` | Show a checkbox selection column with select-all in the header |
 | `onSelectionChange` | `(selectedIds: Set<string \| number>) => void` | — | Called with a new `Set` on any selection toggle |
 | `rowActions` | `TableRowAction[]` | — | Custom actions shown in the right-click popover. "Select" always appears first when `selectable` is true. |
 | `bulkActions` | `TableBulkAction[]` | — | Actions shown in the right-click popover when multiple rows are selected. Each action receives the full `selectedIds` set. |
@@ -154,7 +153,6 @@ const [selected, setSelected] = useState<Set<string | number>>(new Set());
 <Table paramPrefix="users">
   <TableContent
     selectable
-    selectedIds={selected}
     onSelectionChange={setSelected}
     columns={columns}
     data={users}
@@ -349,5 +347,5 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 - Without a `paramPrefix`, keys are plain (`page`, `search`, `f_status`). With one, they are namespaced (`members.page`, `members.search`, `members.f_status`).
 - `paramPrefix` is required on `<Table>` — every table must have a unique namespace to avoid URL collisions.
 - The filter form captures all elements with a `name` attribute via `FormData`. For custom inputs (date pickers, multi-selects), ensure they set a `name` and participate in `FormData`.
-- Selection is page-local: "select all" only selects rows on the current page. Selected state is fully controlled via `selectedIds` / `onSelectionChange`.
+- Selection is page-local: "select all" only selects rows on the current page. Selection is managed internally by `TableContent` — use `onSelectionChange` to track selections for `TableBulkActions`.
 - The select-all checkbox shows an indeterminate dash when some (but not all) rows on the page are selected. Clicking it selects all visible rows; clicking again deselects them.

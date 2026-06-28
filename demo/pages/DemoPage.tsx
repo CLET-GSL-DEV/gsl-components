@@ -8,6 +8,9 @@ import {
   Activity,
   Trash2,
   UserX,
+  MoreHorizontal,
+  Eye,
+  Edit,
 } from "lucide-react";
 import {
   Table,
@@ -21,6 +24,9 @@ import {
   MetricCard,
   Card,
   Dropdown,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
   useTableState,
   Badge,
 } from "@rfdtech/components";
@@ -48,10 +54,37 @@ const columns: TableColumn<GslMember>[] = [
   { id: "role", header: "Role", accessorKey: "role", sortable: true },
   { id: "status", header: "Status", accessorKey: "status", sortable: true, cell: ({ value }) => <Badge variant={statusVariant(String(value))}>{String(value)}</Badge> },
   { id: "joined", header: "Joined", accessorKey: "joined", sortable: true, cell: ({ value }) => <span className="demo-home__cell-date">{String(value)}</span> },
+  {
+    id: "actions",
+    header: "",
+    cell: () => (
+      <Popover>
+        <PopoverTrigger asChild>
+          <button type="button" className="demo-home__action-btn" aria-label="Row actions">
+            <MoreHorizontal size={14} strokeWidth={1.5} />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="demo-home__action-menu" side="bottom" align="end" sideOffset={4}>
+          <button type="button" className="demo-home__action-menu-item">
+            <Eye size={14} strokeWidth={1.5} />
+            View
+          </button>
+          <button type="button" className="demo-home__action-menu-item">
+            <Edit size={14} strokeWidth={1.5} />
+            Edit
+          </button>
+          <button type="button" className="demo-home__action-menu-item demo-home__action-menu-item--destructive">
+            <Trash2 size={14} strokeWidth={1.5} />
+            Delete
+          </button>
+        </PopoverContent>
+      </Popover>
+    ),
+  },
 ];
 
 export function DemoPage() {
-  const { page, pageSize, pageSizeOptions, search, filters } = useTableState({ defaultPageSize: 10 });
+  const { page, pageSize, pageSizeOptions, search, filters } = useTableState({ defaultPageSize: 10, paramPrefix: "members" });
   const [roleValue, setRoleValue] = useState(filters.role ?? "");
   const [statusValue, setStatusValue] = useState(filters.status ?? "");
   const [members, setMembers] = useState(gslMembers);
@@ -147,11 +180,15 @@ export function DemoPage() {
           </TableHeader>
           <TableContent
             selectable
-            selectedIds={selected}
             onSelectionChange={setSelected}
             columns={columns}
             data={paged}
             rowKey={(m: GslMember) => m.id}
+          />
+          <TableBulkActions
+            selectedIds={selected}
+            onClear={() => setSelected(new Set())}
+            actions={bulkActions}
           />
           <TableFooter>
             <TablePagination totalPages={totalPages} totalItems={filtered.length} pageSizeOptions={pageSizeOptions} />

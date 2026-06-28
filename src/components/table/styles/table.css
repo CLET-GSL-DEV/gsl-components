@@ -395,7 +395,8 @@ table tbody tr.gsl-table__row--clickable:hover {
 
   transition:
     max-width 250ms cubic-bezier(0.4, 0, 0.2, 1),
-    padding 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    width 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .gsl-table__checkbox-cell > * {
@@ -407,7 +408,6 @@ table tbody tr.gsl-table__row--clickable:hover {
   width: 40px;
   min-width: 40px;
   max-width: 40px;
-  padding: 0 16px;
 }
 
 .gsl-table__content--has-selected .gsl-table__checkbox-cell > * {

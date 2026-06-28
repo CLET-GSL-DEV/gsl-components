@@ -189,7 +189,6 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set()}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
           ]}
@@ -211,7 +210,6 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set()}
           onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
@@ -236,7 +234,6 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set()}
           onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
@@ -261,7 +258,7 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set(["Alice", "Bob"])}
+          defaultSelectedIds={new Set(["Alice", "Bob"])}
           onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
@@ -303,7 +300,6 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set()}
           columns={[
             { id: "name", header: "Name" },
             { id: "email", header: "Email" },
@@ -326,7 +322,7 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set(["Alice"])}
+          defaultSelectedIds={new Set(["Alice"])}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
           ]}
@@ -337,7 +333,7 @@ describe("Table", () => {
     );
 
     const selectAll = screen.getByLabelText("Select all rows");
-    expect(selectAll).toHaveAttribute("aria-checked", "false");
+    expect(selectAll).toHaveAttribute("aria-checked", "mixed");
     expect(document.querySelector(".gsl-table__checkbox--indeterminate")).toBeInTheDocument();
   });
 
@@ -346,7 +342,6 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set()}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
           ]}
@@ -365,7 +360,7 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set(["Alice", "Bob"])}
+          defaultSelectedIds={new Set(["Alice", "Bob"])}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
           ]}
@@ -387,7 +382,6 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set()}
           onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
@@ -410,7 +404,6 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set()}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },
           ]}
@@ -434,7 +427,7 @@ describe("Table", () => {
       <Table paramPrefix="test">
         <TableContent
           selectable
-          selectedIds={new Set(["Alice", "Bob"])}
+          defaultSelectedIds={new Set(["Alice", "Bob"])}
           onSelectionChange={onChange}
           columns={[
             { id: "name", header: "Name", accessorKey: "name" },

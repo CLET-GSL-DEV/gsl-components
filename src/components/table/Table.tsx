@@ -8,6 +8,7 @@ import {
   type CSSProperties,
   type Ref,
   type ForwardedRef,
+  useEffect,
 } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { ArrowUpDownIcon, ArrowUp, ArrowDown } from "lucide-react";
@@ -76,9 +77,9 @@ interface TableContentInnerProps<T = unknown> {
   loading?: boolean;
   loadingRows?: number;
   selectable?: boolean;
-  selectedIds?: Set<string | number>;
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
   virtualRowHeight?: number;
+  defaultSelectedIds?: Set<string | number>;
 }
 
 function TableContentRender<T>(
@@ -94,18 +95,32 @@ function TableContentRender<T>(
     loading = false,
     loadingRows = 5,
     selectable = false,
-    selectedIds,
+
     onSelectionChange,
     virtualRowHeight,
+    defaultSelectedIds,
+
     ...rest
   } = props;
+
   const [sort, setSort] = useState<{
     column: string;
     direction: SortDirection;
   } | null>(null);
 
+  const [selectedIds, setSelectedIds] = useState<Set<string | number>>(
+    defaultSelectedIds ?? new Set(),
+  );
+
+  useEffect(() => {
+    if (defaultSelectedIds) {
+      setSelectedIds(defaultSelectedIds);
+    }
+  }, [defaultSelectedIds]);
+
   const columns = useMemo(() => rawColumns ?? [], [rawColumns]);
   const data = useMemo(() => rawData ?? [], [rawData]);
+
   const hasData = columns.length > 0 && data.length > 0;
 
   // Selection state
@@ -113,10 +128,12 @@ function TableContentRender<T>(
     selectable && data.length > 0
       ? data.every((row) => selectedIds?.has(rowKey!(row)))
       : false;
+
   const someSelected =
     selectable && data.length > 0
       ? data.some((row) => selectedIds?.has(rowKey!(row)))
       : false;
+
   const indeterminate = someSelected && !allSelected;
 
   const handleSelectAll = useCallback(
@@ -130,6 +147,7 @@ function TableContentRender<T>(
       }
       onSelectionChange(next);
     },
+
     [selectedIds, onSelectionChange, data, rowKey],
   );
 
@@ -144,6 +162,7 @@ function TableContentRender<T>(
       }
       onSelectionChange(next);
     },
+
     [selectedIds, onSelectionChange],
   );
 
@@ -178,18 +197,17 @@ function TableContentRender<T>(
         onClick={() => selectable && handleToggleRow(key)}
         className={cn(selectable && "gsl-table__row--clickable")}
       >
-        {selectable && (
-          <td
-            className="gsl-table__checkbox-cell"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Checkbox
-              checked={selectedIds?.has(key) ?? false}
-              onCheckedChange={() => handleToggleRow(key)}
-              aria-label="Select row"
-            />
-          </td>
-        )}
+        <td
+          className="gsl-table__checkbox-cell"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Checkbox
+            checked={selectedIds?.has(key) ?? false}
+            onCheckedChange={() => handleToggleRow(key)}
+            aria-label="Select row"
+          />
+        </td>
+
         {columns.map((col) => {
           const rawValue = getCellValue(row, col);
           const cellContent = col.cell
@@ -207,15 +225,13 @@ function TableContentRender<T>(
 
   const headerRow = (
     <tr>
-      {selectable && (
-        <th className={cn("gsl-table__checkbox-cell")}>
-          <Checkbox
-            checked={allSelected}
-            onCheckedChange={handleSelectAll}
-            aria-label="Select all rows"
-          />
-        </th>
-      )}
+      <th className={cn("gsl-table__checkbox-cell", indeterminate && "gsl-table__checkbox--indeterminate")}>
+        <Checkbox
+          checked={indeterminate ? "indeterminate" : allSelected}
+          onCheckedChange={handleSelectAll}
+          aria-label="Select all rows"
+        />
+      </th>
       {columns.map((col) => {
         const isSorted = sort?.column === col.id;
         const dir = isSorted ? sort!.direction : null;

@@ -53,9 +53,7 @@ export interface TableBulkActionsProps {
    * Render prop for custom action content.
    * Receives selectedIds so consumers never need to manage selection state directly.
    */
-  renderActions?: (params: {
-    selectedIds: Set<string | number>;
-  }) => ReactNode;
+  renderActions?: (params: { selectedIds: Set<string | number> }) => ReactNode;
   classNames?: TableBulkActionsClassNames;
   className?: string;
 }
@@ -77,14 +75,16 @@ export interface TableProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   /** URL param namespace shared by all child table components */
   paramPrefix: string;
+  height?: number;
 }
 
 export interface TableHeaderProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-export interface TableContentProps<T = unknown>
-  extends HTMLAttributes<HTMLDivElement> {
+export interface TableContentProps<
+  T = unknown,
+> extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   columns?: TableColumn<T>[];
   data?: T[];
@@ -95,9 +95,7 @@ export interface TableContentProps<T = unknown>
   loadingRows?: number;
   /** Show a checkbox selection column (default false) */
   selectable?: boolean;
-  /** Set of selected row keys. Required with onSelectionChange when selectable. */
-  selectedIds?: Set<string | number>;
-  /** Called when selection changes. Required with selectedIds when selectable. */
+  /** Called when selection changes with the full set of selected row keys */
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
 }
 
@@ -105,8 +103,10 @@ export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-export interface TableSearchProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "children"> {
+export interface TableSearchProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "type" | "children"
+> {
   placeholder?: string;
   debounceMs?: number;
   onSearch?: (value: string) => void;

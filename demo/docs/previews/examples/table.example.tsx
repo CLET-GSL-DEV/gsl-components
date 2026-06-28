@@ -10,8 +10,11 @@ import {
   TableFooter,
   TablePagination,
   Badge,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 } from "@rfdtech/components";
-import { Trash2 } from "lucide-react";
+import { Trash2, MoreHorizontal, Eye, Edit } from "lucide-react";
 
 interface User {
   id: number;
@@ -62,6 +65,33 @@ const columns: TableColumn<User>[] = [
       <Badge variant={statusVariant(String(value))}>{String(value)}</Badge>
     ),
   },
+  {
+    id: "actions",
+    header: "",
+    cell: () => (
+      <Popover>
+        <PopoverTrigger asChild>
+          <button type="button" className="demo-home__action-btn" aria-label="Row actions">
+            <MoreHorizontal size={14} strokeWidth={1.5} />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="demo-home__action-menu" side="bottom" align="end" sideOffset={4}>
+          <button type="button" className="demo-home__action-menu-item">
+            <Eye size={14} strokeWidth={1.5} />
+            View
+          </button>
+          <button type="button" className="demo-home__action-menu-item">
+            <Edit size={14} strokeWidth={1.5} />
+            Edit
+          </button>
+          <button type="button" className="demo-home__action-menu-item demo-home__action-menu-item--destructive">
+            <Trash2 size={14} strokeWidth={1.5} />
+            Delete
+          </button>
+        </PopoverContent>
+      </Popover>
+    ),
+  },
 ];
 
 export function TableExample() {
@@ -92,7 +122,6 @@ export function TableExample() {
       </TableHeader>
       <TableContent
         selectable
-        selectedIds={selected}
         onSelectionChange={setSelected}
         columns={columns}
         data={paged}
