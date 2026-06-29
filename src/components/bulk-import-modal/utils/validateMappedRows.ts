@@ -4,22 +4,27 @@ import type {
 } from "../../../types/bulk-import-modal";
 import { validateFieldValue } from "./validateFieldValue";
 
-/**
- * Validate mapped rows: per-cell checks + column-level duplicate detection.
- *
- * Duplicates are detected per unique field independently. Each unique field
- * maintains a `Map<value, firstRowNumber>` — when the same value appears in
- * a later row, that row gets flagged with "Duplicate {fieldLabel}: {value}".
- * Runs in a single pass — O(rows × fields).
- */
 export function validateMappedRows(
   rows: Record<string, string>[],
   fields: BulkImportField[],
+  changedRowIndex?: number,
 ): BulkImportValidationError[] {
-  const issues: BulkImportValidationError[] = [];
   const uniqueFields = fields.filter((f) => f.unique);
 
-  // One Map per unique field — value → first row number
+  if (changedRowIndex !== undefined && changedRowIndex > 0) {
+    return incrementalValidation(rows, fields, uniqueFields, changedRowIndex);
+  }
+
+  return fullValidation(rows, fields, uniqueFields);
+}
+
+function fullValidation(
+  rows: Record<string, string>[],
+  fields: BulkImportField[],
+  uniqueFields: BulkImportField[],
+): BulkImportValidationError[] {
+  const issues: BulkImportValidationError[] = [];
+
   const seen = new Map<string, Map<string, number>>();
   for (const field of uniqueFields) {
     seen.set(field.key, new Map());
@@ -32,7 +37,6 @@ export function validateMappedRows(
     for (const field of fields) {
       const value = row[field.key] ?? "";
 
-      // 1. Per-cell validation (required, type, length, pattern, etc.)
       const message = validateFieldValue(field, value);
       if (message) {
         issues.push({
@@ -44,11 +48,9 @@ export function validateMappedRows(
         });
       }
 
-      // 2. Column-level uniqueness check
       if (field.unique) {
         const fieldSeen = seen.get(field.key)!;
         if (!value) {
-          // Skip empty values — required check already handles them
           continue;
         }
         if (fieldSeen.has(value)) {
@@ -67,6 +69,62 @@ export function validateMappedRows(
   }
 
   return issues;
+}
+
+function incrementalValidation(
+  rows: Record<string, string>[],
+  fields: BulkImportField[],
+  uniqueFields: BulkImportField[],
+  changedRowIndex: number,
+): BulkImportValidationError[] {
+  const row = rows[changedRowIndex - 1];
+  const issues: BulkImportValidationError[] = [];
+
+  if (!row) return issues;
+
+  for (const field of fields) {
+    const value = row[field.key] ?? "";
+
+    const message = validateFieldValue(field, value);
+    if (message) {
+      issues.push({
+        row: changedRowIndex,
+        fieldKey: field.key,
+        fieldLabel: field.label,
+        message,
+        severity: "error",
+      });
+    }
+  }
+
+  for (const field of uniqueFields) {
+    const value = row[field.key] ?? "";
+    if (!value) continue;
+
+    const duplicateRow = rows.findIndex(
+      (otherRow, i) =>
+        i !== changedRowIndex - 1 && (otherRow[field.key] ?? "") === value,
+    );
+
+    if (duplicateRow >= 0) {
+      issues.push({
+        row: changedRowIndex,
+        fieldKey: field.key,
+        fieldLabel: field.label,
+        message: `Duplicate ${field.label}: ${value}`,
+        severity: "error",
+      });
+    }
+  }
+
+  return issues;
+}
+
+export function validateBatch(
+  rows: Record<string, string>[],
+  fields: BulkImportField[],
+): BulkImportValidationError[] {
+  return validateMappedRows(rows, fields);
 }
 
 export function splitValidationIssues(issues: BulkImportValidationError[]) {

@@ -9,20 +9,22 @@ interface SelectHeaderRowStepProps {
 }
 
 const ROW_HEIGHT = 44;
+const PREVIEW_MAX = 20;
 
 export function SelectHeaderRowStep({
   rows,
   headerRowIndex,
   onSelectHeaderRow,
 }: SelectHeaderRowStepProps) {
-  const columnCount = Math.max(...rows.map((row) => row.length), 1);
+  const previewRows = rows.slice(0, PREVIEW_MAX);
+  const columnCount = Math.max(...previewRows.map((row) => row.length), 1);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const virtualizer = useVirtualizer({
-    count: rows.length,
+    count: previewRows.length,
     getScrollElement: () => scrollRef.current,
     estimateSize: () => ROW_HEIGHT,
-    overscan: 10,
+    overscan: 5,
   });
 
   const virtualRows = virtualizer.getVirtualItems();
@@ -30,7 +32,7 @@ export function SelectHeaderRowStep({
 
   const items = hasVirtualRows
     ? virtualRows
-    : rows.map((_, i) => ({
+    : previewRows.map((_, i) => ({
         key: i,
         index: i,
         start: i * ROW_HEIGHT,
@@ -39,13 +41,13 @@ export function SelectHeaderRowStep({
 
   const totalHeight = hasVirtualRows
     ? virtualizer.getTotalSize()
-    : rows.length * ROW_HEIGHT;
+    : previewRows.length * ROW_HEIGHT;
 
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--header">
       <h3 className="gsl-bulk-import__step-title">Select header row</h3>
       <p className="gsl-bulk-import__step-note">
-        Click the row that contains your column headers.
+        Click the row that contains your column headers. Showing first {PREVIEW_MAX} rows.
       </p>
 
       <div className="gsl-bulk-import__table-wrap gsl-bulk-import__table-wrap--header">
@@ -104,7 +106,7 @@ export function SelectHeaderRowStep({
                     </div>
                     {Array.from({ length: columnCount }).map((_, columnIndex) => (
                       <div key={columnIndex} className="gsl-bulk-import__virtual-cell">
-                        {rows[rowIndex]?.[columnIndex] ?? ""}
+                        {previewRows[rowIndex]?.[columnIndex] ?? ""}
                       </div>
                     ))}
                   </div>

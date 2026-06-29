@@ -123,23 +123,28 @@ export function ValidateDataStep({
     count: visibleRows.length,
     getScrollElement: () => scrollRef.current,
     estimateSize: () => ROW_HEIGHT,
-    overscan: 5,
+    overscan: 25,
   });
   const virtualRows = virtualizer.getVirtualItems();
   const hasVirtualRows = virtualRows.length > 0;
+  const isSmallDataset = visibleRows.length <= 50;
 
   const items = hasVirtualRows
     ? virtualRows
-    : visibleRows.map((_, i) => ({
-        key: i,
-        index: i,
-        start: i * ROW_HEIGHT,
-        size: ROW_HEIGHT,
-      }));
+    : isSmallDataset
+      ? visibleRows.map((_, i) => ({
+          key: i,
+          index: i,
+          start: i * ROW_HEIGHT,
+          size: ROW_HEIGHT,
+        }))
+      : [];
 
   const totalHeight = hasVirtualRows
     ? virtualizer.getTotalSize()
-    : visibleRows.length * ROW_HEIGHT;
+    : isSmallDataset
+      ? visibleRows.length * ROW_HEIGHT
+      : 0;
 
   const colCount = columns.length + 1; // +1 for checkbox column
 
@@ -193,9 +198,20 @@ export function ValidateDataStep({
       </div>
 
       {visibleRows.length === 0 ? (
-        <p className="gsl-bulk-import__validate-empty">
-          {showOnlyErrors ? "No rows with errors." : "No rows to validate."}
-        </p>
+        <div className="gsl-bulk-import__validate-empty-wrap">
+          <p className="gsl-bulk-import__validate-empty">
+            {showOnlyErrors ? "No rows with errors." : "No rows to validate."}
+          </p>
+          {showOnlyErrors && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onShowOnlyErrorsChange(false)}
+            >
+              Show all rows
+            </Button>
+          )}
+        </div>
       ) : (
         <div className="gsl-bulk-import__table-wrap--validate">
           <div

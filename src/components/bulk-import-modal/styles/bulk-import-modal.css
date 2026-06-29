@@ -605,6 +605,44 @@
   display: flex;
 }
 
+.gsl-bulk-import__upload-file {
+  flex: 1;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius);
+  background: var(--gsl-hover);
+  padding: 16px;
+}
+
+.gsl-bulk-import__upload-file-name {
+  font-size: 14px;
+  color: var(--gsl-text);
+  font-family: var(--gsl-font);
+}
+
+.gsl-bulk-import__upload-file-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--gsl-radius);
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.gsl-bulk-import__upload-file-remove:hover {
+  background: var(--gsl-border);
+  color: var(--gsl-text);
+}
+
 .gsl-bulk-import__file-input {
   display: none;
 }
@@ -940,13 +978,18 @@
   color: var(--gsl-error);
 }
 
-.gsl-bulk-import__validate-empty {
+.gsl-bulk-import__validate-empty-wrap {
   display: flex;
   flex: 1;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 12px;
+}
+
+.gsl-bulk-import__validate-empty {
+  display: flex;
   margin: 0;
-  padding: 32px;
   font-size: 14px;
   color: var(--gsl-text-secondary);
   text-align: center;

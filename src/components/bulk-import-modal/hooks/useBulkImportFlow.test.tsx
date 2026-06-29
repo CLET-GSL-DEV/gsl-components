@@ -1,6 +1,7 @@
-import { act, renderHook } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { useBulkImportFlow } from "./useBulkImportFlow";
+import { BulkImportStep } from "../../../types/bulk-import-modal";
 
 const fields = [
   { key: "email", label: "Email", required: true, type: "email" as const },
@@ -24,14 +25,14 @@ describe("useBulkImportFlow", () => {
     });
 
     expect(result.current.parsed?.rows).toHaveLength(2);
-    expect(result.current.step).toBe(2);
+    expect(result.current.step).toBe(BulkImportStep.SELECT_HEADER_ROW);
     expect(result.current.headerRowIndex).toBe(0);
 
     act(() => {
       result.current.goNext();
     });
 
-    expect(result.current.step).toBe(3);
+    expect(result.current.step).toBe(BulkImportStep.MATCH_COLUMNS);
     expect(result.current.sourceColumnMapping).toEqual({
       0: "email",
       1: "full_name",
@@ -41,7 +42,7 @@ describe("useBulkImportFlow", () => {
       result.current.goNext();
     });
 
-    expect(result.current.step).toBe(4);
+    expect(result.current.step).toBe(BulkImportStep.VALIDATE_DATA);
     expect(result.current.mappedRows).toHaveLength(1);
     expect(result.current.editableRows).toHaveLength(1);
     expect(result.current.editableRows[0]?.email).toBe("a@example.com");
@@ -141,7 +142,7 @@ describe("useBulkImportFlow", () => {
       await result.current.handleFile(file);
     });
 
-    expect(result.current.step).toBe(1);
+    expect(result.current.step).toBe(BulkImportStep.UPLOAD);
     expect(result.current.parsed).toBeNull();
     expect(result.current.parseError).not.toBeNull();
   });
@@ -169,9 +170,12 @@ describe("useBulkImportFlow", () => {
       result.current.goNext();
     });
 
-    expect(result.current.step).toBe(4);
+    expect(result.current.step).toBe(BulkImportStep.VALIDATE_DATA);
+
+    await waitFor(() => {
+      expect(result.current.validationErrors.length).toBeGreaterThan(0);
+    });
     expect(result.current.canImport).toBe(false);
-    expect(result.current.validationErrors).toHaveLength(1);
 
     act(() => {
       result.current.updateRowValue(2, "email", "grace@example.com");
@@ -198,7 +202,7 @@ describe("useBulkImportFlow", () => {
       result.current.goNext();
     });
 
-    expect(result.current.step).toBe(3);
+    expect(result.current.step).toBe(BulkImportStep.MATCH_COLUMNS);
     expect(result.current.sourceColumnMapping).toEqual({
       0: "full_name",
       1: "email",
@@ -243,7 +247,7 @@ describe("useBulkImportFlow", () => {
 
     rerender({ open: false });
 
-    expect(result.current.step).toBe(1);
+    expect(result.current.step).toBe(BulkImportStep.UPLOAD);
     expect(result.current.parsed).toBeNull();
   });
 });

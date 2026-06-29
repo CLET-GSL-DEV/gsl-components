@@ -15,6 +15,10 @@ function getExtension(fileName: string) {
   return dotIndex === -1 ? "" : fileName.slice(dotIndex).toLowerCase();
 }
 
+function isCsvFile(fileName: string) {
+  return getExtension(fileName) === ".csv";
+}
+
 function normalizeCellValue(value: unknown): string {
   if (value === null || value === undefined) {
     return "";
@@ -23,14 +27,73 @@ function normalizeCellValue(value: unknown): string {
   return String(value).trim();
 }
 
-function normalizeRows(rows: unknown[][]): string[][] {
+export function normalizeRows(rows: unknown[][]): string[][] {
   return rows.map((row) =>
     row.map((cell) => normalizeCellValue(cell)),
   );
 }
 
+export function filterEmptyRows(rows: string[][]): string[][] {
+  return rows.filter((row) =>
+    row.some((cell) => cell.length > 0),
+  );
+}
+
 export function isAcceptedSpreadsheetFile(fileName: string) {
   return ACCEPTED_EXTENSIONS.includes(getExtension(fileName));
+}
+
+export function isCsv(fileName: string) {
+  return isCsvFile(fileName);
+}
+
+export function parseCsvText(text: string): string[][] {
+  const rows: string[][] = [];
+  let current = "";
+  let inQuotes = false;
+  let row: string[] = [];
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        current += ch;
+      }
+    } else {
+      if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ",") {
+        row.push(current);
+        current = "";
+      } else if (ch === "\n") {
+        row.push(current);
+        current = "";
+        if (row.some((c) => c.length > 0)) {
+          rows.push(row);
+        }
+        row = [];
+      } else if (ch === "\r") {
+        // skip
+      } else {
+        current += ch;
+      }
+    }
+  }
+
+  row.push(current);
+  if (row.some((c) => c.length > 0)) {
+    rows.push(row);
+  }
+
+  return rows;
 }
 
 export async function parseSpreadsheetFile(
@@ -47,6 +110,20 @@ export async function parseSpreadsheetFile(
     throw new BulkImportParseError(
       `File is too large. Maximum size is ${Math.round(maxFileSizeBytes / (1024 * 1024))} MB.`,
     );
+  }
+
+  if (isCsvFile(file.name)) {
+    const text = await file.text();
+    const rows = parseCsvText(text);
+
+    if (rows.length === 0) {
+      throw new BulkImportParseError("The uploaded file is empty.");
+    }
+
+    return {
+      rows,
+      fileName: file.name,
+    };
   }
 
   const buffer = await file.arrayBuffer();

@@ -13,6 +13,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@rfdtech/components": resolve(__dirname, "src/index.ts"),
+      "lottie-react": resolve(__dirname, "src/test/mocks/lottie-react.ts"),
     },
   },
 });

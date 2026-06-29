@@ -69,7 +69,12 @@ export interface ParsedSpreadsheet {
   fileName: string;
 }
 
-export type BulkImportStep = 1 | 2 | 3 | 4;
+export enum BulkImportStep {
+  UPLOAD = 1,
+  SELECT_HEADER_ROW = 2,
+  MATCH_COLUMNS = 3,
+  VALIDATE_DATA = 4,
+}
 
 /** Maps source column index to target field key */
 export type SourceColumnMapping = Record<number, string | null>;
@@ -116,6 +121,9 @@ export interface UseBulkImportFlowReturn {
   canGoNext: boolean;
   canImport: boolean;
   isParsing: boolean;
+  isProcessingLarge: boolean;
+  processingProgress: number;
+  uploadedFile: File | null;
   setHeaderRowIndex: (index: number) => void;
   setSourceColumnMapping: (mapping: SourceColumnMapping) => void;
   updateSourceMapping: (sourceIndex: number, fieldKey: string | null) => void;
@@ -134,4 +142,5 @@ export interface UseBulkImportFlowReturn {
   goToStep: (step: BulkImportStep) => void;
   reset: () => void;
   buildResult: () => BulkImportResult;
+  removeFile: () => void;
 }

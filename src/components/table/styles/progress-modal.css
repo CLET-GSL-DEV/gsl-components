@@ -1,0 +1,18 @@
+.gsl-progress-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 24px 24px;
+}
+
+.gsl-progress-modal__progress {
+  width: 100%;
+}
+
+.gsl-progress-modal__text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--gsl-text-secondary);
+  font-family: var(--gsl-font);
+}

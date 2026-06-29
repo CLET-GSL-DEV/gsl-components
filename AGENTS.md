@@ -46,20 +46,27 @@ Props are **self-contained** — each component defines its own interface. Do NO
 ### Component
 
 ```tsx
-export const Example = forwardRef<HTMLInputElement, ExampleProps>(function Example(
-  { invalid = false, disabled = false, classNames, className, ...props },
-  ref,
-) {
-  return (
-    <div
-      aria-invalid={invalid || undefined}
-      className={cn("gsl-example", invalid && "gsl-example--invalid", classNames?.root, className)}
-      {...props}
-    >
-      ...
-    </div>
-  );
-});
+export const Example = forwardRef<HTMLInputElement, ExampleProps>(
+  function Example(
+    { invalid = false, disabled = false, classNames, className, ...props },
+    ref,
+  ) {
+    return (
+      <div
+        aria-invalid={invalid || undefined}
+        className={cn(
+          "gsl-example",
+          invalid && "gsl-example--invalid",
+          classNames?.root,
+          className,
+        )}
+        {...props}
+      >
+        ...
+      </div>
+    );
+  },
+);
 ```
 
 - `invalid` → error border + `aria-invalid`
@@ -72,7 +79,9 @@ export const Example = forwardRef<HTMLInputElement, ExampleProps>(function Examp
 RHF is **not** baked into any input component. Integration is entirely at the consumer level:
 
 ```tsx
-<FormField name="code" control={form.control}
+<FormField
+  name="code"
+  control={form.control}
   render={({ field, fieldState }) => (
     <Field invalid={!!fieldState.error}>
       <FieldControl>
@@ -118,11 +127,13 @@ src/types/{name}.ts
 After updating the root `CHANGELOG.md`, sync the content into `demo/docs/pages/changelog.mdx`. Both files track the same release history — the MDX renders the docs changelog page, the root MD mirrors it for GitHub. Never update one without the other.
 
 ### Example (single source of truth)
+
 1. `demo/docs/previews/examples/{name}.example.tsx` — runnable component, exports named function
 2. `demo/docs/previews/code/{Name}Preview.tsx` — imports example, renders it (no extra logic)
 3. `.mdx` imports preview + `?raw` source, passes to `<ExampleTabs>`
 
 ### MDX page structure
+
 ```
 export const meta = { title, description }
 
@@ -148,9 +159,11 @@ description
 ```
 
 ### Nav entry
+
 `demo/docs/nav.ts` — alphabetical by `slug` in Components section.
 
 ### README entry
+
 Alphabetical by `##` section title. One-liner + code block + `Props: ... Exported types: ...`
 
 ## Testing
@@ -167,21 +180,20 @@ Before creating a pull request, run the full validation pipeline to catch issues
 npm run lint:css && npm run lint && npm run typecheck && npm run test && npm run build
 ```
 
-(Or the equivalent `bun run` commands.) This mirrors `prepublishOnly` and ensures nothing slips through.
-
 ## Externalized dependencies
 
 Some deps are **externalized** (not bundled into `dist/`) and declared as **peer dependencies** so the library and consuming app share a single copy:
 
-| Dep | Why externalized |
-|---|---|
-| `react`, `react-dom` | Core React must be shared |
-| `react-hook-form`, `zod`, `@hookform/resolvers` | Shared form context |
-| `@radix-ui/*` | Shared UI primitives with context |
-| `react-router-dom` | Router context — **critical**. Bundled copy causes "`useLocation()` may be used only in the context of a `<Router>`" crash |
-| `lucide-react` | Icon context + bundle dedup. Consumer likely has it already |
+| Dep                                             | Why externalized                                                                                                           |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `react`, `react-dom`                            | Core React must be shared                                                                                                  |
+| `react-hook-form`, `zod`, `@hookform/resolvers` | Shared form context                                                                                                        |
+| `@radix-ui/*`                                   | Shared UI primitives with context                                                                                          |
+| `react-router-dom`                              | Router context — **critical**. Bundled copy causes "`useLocation()` may be used only in the context of a `<Router>`" crash |
+| `lucide-react`                                  | Icon context + bundle dedup. Consumer likely has it already                                                                |
 
 To verify a dep is not bundled after a build:
+
 ```
 # Check dist doesn't contain react-router-dom code
 grep -c "useSearchParams\|RouterProvider" dist/index.js
@@ -229,6 +241,7 @@ When drafting a PR, categorize changes under these headings (in this order):
 ```
 
 Rules:
+
 - Don't describe implementation details like "single trigger display" or "via CSS" — describe what the component IS
 - Don't mention test file counts in PRs — tests are part of the component they test
 - Don't mention minor housekeeping like "demo modals now have close buttons"
@@ -237,6 +250,7 @@ Rules:
 
 ## Useful patterns
 
+- **No multi-condition ternaries in JSX**: Compute derived values into memoized variables or plain `const` above the return. Nested ternaries splattered across JSX attributes are unreadable garbage. A `useMemo` with the right deps or a plain variable referencing stable state is always cleaner than chaining `===` conditions inside a `className` array.
 - **OTP paste from any slot**: paste handler takes `(index, event)` and fills `newDigits[index + i]`
 - **onComplete**: fires when `joined.length === length` — useful for auto-submit after full entry
 - **Container blur**: use `containerRef.current?.contains(e.relatedTarget)` to detect if focus left the whole component
@@ -246,4 +260,4 @@ Rules:
 
 ## NO HALLUCINATED PROPS
 
-When documenting components, read the actual type definitions from src/types/*.ts. Never invent or assume props. If a prop exists in docs but not in the type file, remove it. If you can't find the type file, ask.
+When documenting components, read the actual type definitions from src/types/\*.ts. Never invent or assume props. If a prop exists in docs but not in the type file, remove it. If you can't find the type file, ask.

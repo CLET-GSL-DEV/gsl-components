@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- ProgressModal: non-dismissable processing overlay with Lottie animation and determinate progress bar
+- BulkImportModal: chunked processing for datasets over 1000 rows — file parsing, row mapping, and validation run in 1000-row batches with a progress overlay to prevent main-thread freezes
+- BulkImportModal: CSV files stream-parsed in chunks for smooth progress; XLSX files parse in one shot with chunked normalize afterward
+- BulkImportModal: incremental validation — editing a cell in step 4 only re-validates that row instead of the entire dataset
+- New exports: `mapDataRows`, `normalizeRows`, `filterEmptyRows`, `isCsv`, `parseCsvText`, `validateBatch`
+
+### Changed
+
+- BulkImportModal: SelectHeaderRowStep now shows only the first 20 rows for header selection
+- BulkImportModal: ValidateDataStep overscan increased to 10 rows for smoother virtual scrolling
+- Deps: added `lottie-react` for Lottie animation rendering
+
 ## [1.20.0] - 2026-06-28
 
 ### Added

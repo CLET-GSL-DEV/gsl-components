@@ -112,6 +112,33 @@ export function mapRowsToRecords(
     );
 }
 
+export function mapDataRows(
+  dataRows: string[][],
+  sourceColumnMapping: SourceColumnMapping,
+  excludedColumns: number[],
+): Record<string, string>[] {
+  const excluded = new Set(excludedColumns);
+
+  return dataRows
+    .map((row) => {
+      const record: Record<string, string> = {};
+
+      for (const [sourceIndexValue, fieldKey] of Object.entries(sourceColumnMapping)) {
+        const sourceIndex = Number(sourceIndexValue);
+        if (!fieldKey || excluded.has(sourceIndex)) {
+          continue;
+        }
+
+        record[fieldKey] = (row[sourceIndex] ?? "").trim();
+      }
+
+      return record;
+    })
+    .filter((record) =>
+      Object.values(record).some((value) => value.length > 0),
+    );
+}
+
 export function getMappedFieldKeys(
   sourceColumnMapping: SourceColumnMapping,
   excludedColumns: number[],

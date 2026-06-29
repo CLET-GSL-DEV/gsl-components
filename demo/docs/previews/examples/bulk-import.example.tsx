@@ -62,13 +62,25 @@ export function BulkImportExample() {
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 12,
+        alignItems: "flex-start",
+      }}
+    >
       <div style={{ display: "flex", gap: 8 }}>
-        <button type="button" className="demo-button" onClick={() => openWith()}>
+        <button
+          type="button"
+          className="demo-button"
+          onClick={() => openWith()}
+        >
           Open bulk import
         </button>
       </div>
       <BulkImportModal
+        maxFileSizeBytes={48 * 1024 * 1024}
         open={open}
         onOpenChange={onOpenChange}
         title="Import documents"
