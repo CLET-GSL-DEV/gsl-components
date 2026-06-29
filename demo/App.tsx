@@ -1,4 +1,5 @@
 import type { RouteRecord } from "vite-react-ssg";
+import { ClientOnly } from "vite-react-ssg";
 import { Navigate, Outlet } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeToggle";
 import { DemoLayout } from "./components/DemoLayout";
@@ -25,14 +26,14 @@ export const routes: RouteRecord[] = [
       },
       {
         path: "docs",
-        element: <Navigate to="/docs/getting-started" replace />,
+        element: <ClientOnly>{() => <Navigate to="/docs/getting-started" replace />}</ClientOnly>,
       },
       {
         path: "docs/:componentId",
         element: <DocsPage />,
         getStaticPaths: () => getAllDocSlugs().map((slug) => `docs/${slug}`),
       },
-      { path: "*", element: <Navigate to="/" replace /> },
+      { path: "*", element: <ClientOnly>{() => <Navigate to="/" replace />}</ClientOnly> },
     ],
   },
 ];

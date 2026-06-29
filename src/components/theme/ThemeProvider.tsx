@@ -93,7 +93,7 @@ export function ThemeProvider({
 
   return (
     <ThemeContext.Provider value={contextValue}>
-      <div className={rootClass} data-gsl-theme={resolvedTheme} style={style}>
+      <div className={rootClass} data-gsl-theme={resolvedTheme} style={style} suppressHydrationWarning>
         {children}
       </div>
     </ThemeContext.Provider>
