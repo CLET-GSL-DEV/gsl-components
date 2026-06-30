@@ -24,7 +24,7 @@ import {
   parseCsvText,
 } from "../utils/parseSpreadsheetFile";
 import * as XLSX from "xlsx";
-import { validateMappedRows } from "../utils/validateMappedRows";
+import { validateRowsChunked } from "../utils/validateRowsChunked";
 
 const CHUNK_SIZE = 1000;
 const DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -394,30 +394,21 @@ export function useBulkImportFlow(
     const mappingId = JSON.stringify([sourceColumnMapping, excludedColumns]);
     if (syncedMappingRef.current !== mappingId) return;
 
-    const signal = abortRef.current.signal;
-    const uniqueFields = fields.filter((f) => f.unique);
-    const nonUniqueFields = fields.filter((f) => !f.unique);
-
     setIsProcessingLarge(true);
     setProcessingProgress(0);
     setProcessingTotal(editableRows.length);
 
+    const signal = abortRef.current.signal;
     (async () => {
-      const fieldIssues = nonUniqueFields.length > 0
-        ? await processInChunks(
-            editableRows,
-            (batch) => validateMappedRows(batch, nonUniqueFields),
-            (pct) => setProcessingProgress(pct),
-            signal,
-          )
-        : [];
+      const issues = await validateRowsChunked({
+        rows: editableRows,
+        fields,
+        signal,
+        onProgress: setProcessingProgress,
+      });
       if (signal.aborted) return;
 
-      const uniqueIssues = uniqueFields.length > 0
-        ? validateMappedRows(editableRows, uniqueFields)
-        : [];
-
-      setValidationCache([...fieldIssues, ...uniqueIssues]);
+      setValidationCache(issues);
       setIsProcessingLarge(false);
     })();
   }, [step, validationCache.length, editableRows, fields, sourceColumnMapping, excludedColumns]);

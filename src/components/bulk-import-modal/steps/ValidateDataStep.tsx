@@ -14,7 +14,7 @@ import type {
   BulkImportResult,
   BulkImportValidationError,
 } from "../../../types/bulk-import-modal";
-import { validateMappedRows } from "../utils/validateMappedRows";
+import { validateRowsChunked } from "../utils/validateRowsChunked";
 import { validateFieldValue } from "../utils/validateFieldValue";
 import { useDebounce } from "../../../hooks/useDebounce";
 
@@ -148,8 +148,6 @@ function CellInput({
 // ── Constants ──
 
 const ROW_HEIGHT = 44;
-const CHUNK_SIZE = 1000;
-const YIELD = () => new Promise<void>((r) => setTimeout(r, 0));
 
 type SelectionState = "ALL" | Set<number>;
 
@@ -175,6 +173,7 @@ export function ValidateDataStep({
 
   const bgAbortRef = useRef(new AbortController());
   const bgTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const [dirtyCellKeys, setDirtyCellKeys] = useState<Set<string>>(new Set());
 
   const mappedRowsRef = useRef(mappedRows);
   mappedRowsRef.current = mappedRows;
@@ -187,28 +186,25 @@ export function ValidateDataStep({
     const signal = bgAbortRef.current.signal;
     const baseRows = mappedRowsRef.current;
     const dirty = dirtyCellsRef.current;
-    const total = baseRows.length;
 
-    const issues: BulkImportValidationError[] = [];
-    for (let i = 0; i < total; i += CHUNK_SIZE) {
-      if (signal.aborted) return;
-      const batch = baseRows.slice(i, i + CHUNK_SIZE);
-      const patched = batch.map((row, j) => {
-        const globalRowId = i + j + 1;
+    const issues = await validateRowsChunked({
+      rows: baseRows,
+      fields: fieldsRef.current,
+      signal,
+      getRow: (row, rowIndex) => {
+        const rowId = rowIndex + 1;
         let patched = row;
         for (const [cellKey, value] of Object.entries(dirty)) {
           const colonIdx = cellKey.indexOf(":");
           const dRowId = Number(cellKey.slice(0, colonIdx));
-          if (dRowId !== globalRowId) continue;
+          if (dRowId !== rowId) continue;
           const fieldKey = cellKey.slice(colonIdx + 1);
           if (patched === row) patched = { ...row };
           patched[fieldKey] = value;
         }
         return patched;
-      });
-      issues.push(...validateMappedRows(patched, fieldsRef.current));
-      if (i + CHUNK_SIZE < total) await YIELD();
-    }
+      },
+    });
 
     if (!signal.aborted) setLocalValidation(issues);
   }, []);
@@ -236,6 +232,12 @@ export function ValidateDataStep({
         return next;
       });
 
+      setDirtyCellKeys((prev) => {
+        const next = new Set(prev);
+        next.add(cellKey);
+        return next;
+      });
+
       if (bgTimerRef.current) clearTimeout(bgTimerRef.current);
       bgTimerRef.current = setTimeout(startBackgroundValidation, 300);
     },
@@ -250,20 +252,25 @@ export function ValidateDataStep({
   const mergedErrors = useMemo(() => {
     const merged = new Map<string, string>();
     for (const [key, msg] of flowErrorMap) {
-      merged.set(key, msg);
+      if (!dirtyCellKeys.has(key)) {
+        merged.set(key, msg);
+      }
     }
     for (const [key, msg] of localErrorMap) {
       merged.set(key, msg);
     }
     return merged;
-  }, [flowErrorMap, localErrorMap]);
+  }, [flowErrorMap, localErrorMap, dirtyCellKeys]);
 
   const activeErrors = useMemo(
     () => {
-      const all = [...errors, ...localValidation];
+      const cleanFlowErrors = errors.filter(
+        (e) => !dirtyCellKeys.has(`${e.row}:${e.fieldKey}`),
+      );
+      const all = [...cleanFlowErrors, ...localValidation];
       return all.filter((e) => e.severity === "error" && !discardedRows.includes(e.row));
     },
-    [errors, localValidation, discardedRows],
+    [errors, localValidation, discardedRows, dirtyCellKeys],
   );
 
   const rowsWithErrors = useMemo(
@@ -359,10 +366,13 @@ export function ValidateDataStep({
 
   const activeErrorList = useMemo(
     () => {
-      const all = [...errors, ...localValidation];
+      const cleanFlowErrors = errors.filter(
+        (e) => !dirtyCellKeys.has(`${e.row}:${e.fieldKey}`),
+      );
+      const all = [...cleanFlowErrors, ...localValidation];
       return all.filter((e) => !discardedRows.includes(e.row));
     },
-    [errors, localValidation, discardedRows],
+    [errors, localValidation, discardedRows, dirtyCellKeys],
   );
 
   useEffect(() => {
