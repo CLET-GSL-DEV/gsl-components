@@ -91,13 +91,14 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
           const isTargetInside = contentRef.current?.contains(targetElement);
           if (isTargetInside) {
             event.preventDefault();
+          } else {
+            if (preventClose) {
+              event.preventDefault();
+              requestClose();
+            }
           }
         } catch {
           // jsdom doesn't support elementFromPoint
-        }
-        if (preventClose) {
-          event.preventDefault();
-          requestClose();
         }
         (consumerOnInteractOutside as ((e: Event) => void) | undefined)?.(
           event,
@@ -127,7 +128,13 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
           </div>,
           document.body,
         ),
-      [preventCloseDescription, preventCloseTitle, handleCancelConfirm, handleDiscard, showConfirm],
+      [
+        preventCloseDescription,
+        preventCloseTitle,
+        handleCancelConfirm,
+        handleDiscard,
+        showConfirm,
+      ],
     );
 
     return (

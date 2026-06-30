@@ -15,6 +15,8 @@ import type {
   BulkImportValidationError,
 } from "../../../types/bulk-import-modal";
 import { validateMappedRows } from "../utils/validateMappedRows";
+import { validateFieldValue } from "../utils/validateFieldValue";
+import { useDebounce } from "../../../hooks/useDebounce";
 
 // ── Types ──
 
@@ -46,8 +48,9 @@ interface CellInputProps {
   baseValue: string;
   errorMessage: string | undefined;
   ariaLabel: string;
+  field: BulkImportField;
   dirtyCellsRef: MutableRefObject<Record<string, string>>;
-  onDirty: (cellKey: string, value: string) => void;
+  onDirty: (cellKey: string, value: string, field: BulkImportField) => void;
 }
 
 // ── Helpers ──
@@ -58,10 +61,6 @@ function buildErrorMap(errors: BulkImportValidationError[]) {
     map.set(`${issue.row}:${issue.fieldKey}`, issue.message);
   }
   return map;
-}
-
-function isDirtyCell(errorMap: Map<string, string>, rowId: number, fieldKey: string) {
-  return errorMap.has(`${rowId}:${fieldKey}`);
 }
 
 function patchRows(
@@ -92,27 +91,31 @@ function CellInput({
   baseValue,
   errorMessage,
   ariaLabel,
+  field,
   dirtyCellsRef,
   onDirty,
 }: CellInputProps) {
-  const [value, setValue] = useState(baseValue);
   const cellKey = `${rowId}:${fieldKey}`;
+  const [value, setValue] = useState(
+    () => dirtyCellsRef.current[cellKey] ?? baseValue,
+  );
+
+  const debouncedValue = useDebounce(value, 500);
 
   useEffect(() => {
-    return () => {
-      delete dirtyCellsRef.current[cellKey];
-    };
+    const stored = dirtyCellsRef.current[cellKey];
+    if (stored === debouncedValue) return;
+    if (stored === undefined && debouncedValue === baseValue) return;
+    dirtyCellsRef.current[cellKey] = debouncedValue;
+    onDirty(cellKey, debouncedValue, field);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [debouncedValue]);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      const next = e.target.value;
-      setValue(next);
-      dirtyCellsRef.current[cellKey] = next;
-      onDirty(cellKey, next);
+      setValue(e.target.value);
     },
-    [cellKey, dirtyCellsRef, onDirty],
+    [],
   );
 
   return (
@@ -145,6 +148,8 @@ function CellInput({
 // ── Constants ──
 
 const ROW_HEIGHT = 44;
+const CHUNK_SIZE = 1000;
+const YIELD = () => new Promise<void>((r) => setTimeout(r, 0));
 
 type SelectionState = "ALL" | Set<number>;
 
@@ -164,38 +169,83 @@ export function ValidateDataStep({
   const [selection, setSelection] = useState<SelectionState>(new Set());
   const [showOnlyErrors, setShowOnlyErrors] = useState(false);
 
-  // ── Local dirty cell tracking (for re-rendering validation) ──
+  // ── Local validation state (per-cell instant + background full scan) ──
 
-  const [dirtyCells, setDirtyCells] = useState<Record<string, string>>({});
+  const [localValidation, setLocalValidation] = useState<BulkImportValidationError[]>([]);
 
-  const handleDirty = useCallback((cellKey: string, value: string) => {
-    setDirtyCells((prev) => ({ ...prev, [cellKey]: value }));
+  const bgAbortRef = useRef(new AbortController());
+  const bgTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  const mappedRowsRef = useRef(mappedRows);
+  mappedRowsRef.current = mappedRows;
+  const fieldsRef = useRef(fields);
+  fieldsRef.current = fields;
+
+  const startBackgroundValidation = useCallback(async () => {
+    bgAbortRef.current.abort();
+    bgAbortRef.current = new AbortController();
+    const signal = bgAbortRef.current.signal;
+    const baseRows = mappedRowsRef.current;
+    const dirty = dirtyCellsRef.current;
+    const total = baseRows.length;
+
+    const issues: BulkImportValidationError[] = [];
+    for (let i = 0; i < total; i += CHUNK_SIZE) {
+      if (signal.aborted) return;
+      const batch = baseRows.slice(i, i + CHUNK_SIZE);
+      const patched = batch.map((row, j) => {
+        const globalRowId = i + j + 1;
+        let patched = row;
+        for (const [cellKey, value] of Object.entries(dirty)) {
+          const colonIdx = cellKey.indexOf(":");
+          const dRowId = Number(cellKey.slice(0, colonIdx));
+          if (dRowId !== globalRowId) continue;
+          const fieldKey = cellKey.slice(colonIdx + 1);
+          if (patched === row) patched = { ...row };
+          patched[fieldKey] = value;
+        }
+        return patched;
+      });
+      issues.push(...validateMappedRows(patched, fieldsRef.current));
+      if (i + CHUNK_SIZE < total) await YIELD();
+    }
+
+    if (!signal.aborted) setLocalValidation(issues);
   }, []);
 
-  // ── Patched rows for local validation ──
+  const handleDirty = useCallback(
+    (cellKey: string, value: string, field: BulkImportField) => {
+      const colonIdx = cellKey.indexOf(":");
+      const rowId = Number(cellKey.slice(0, colonIdx));
+      const fieldKey = cellKey.slice(colonIdx + 1);
 
-  const patchedRows = useMemo(
-    () => patchRows(mappedRows, dirtyCells),
-    [mappedRows, dirtyCells],
+      const msg = validateFieldValue(field, value);
+      setLocalValidation((prev) => {
+        const next = prev.filter(
+          (e) => !(e.row === rowId && e.fieldKey === fieldKey),
+        );
+        if (msg) {
+          next.push({
+            row: rowId,
+            fieldKey,
+            fieldLabel: field.label,
+            message: msg,
+            severity: "error",
+          });
+        }
+        return next;
+      });
+
+      if (bgTimerRef.current) clearTimeout(bgTimerRef.current);
+      bgTimerRef.current = setTimeout(startBackgroundValidation, 300);
+    },
+    [startBackgroundValidation],
   );
 
-  // ── Local validation on patched rows ──
-
-  const localValidation = useMemo(() => {
-    if (Object.keys(dirtyCells).length === 0) return [];
-    return validateMappedRows(patchedRows, fields);
-  }, [patchedRows, fields, dirtyCells]);
-
-  const localErrorMap = useMemo(() => buildErrorMap(localValidation), [localValidation]);
-
-  const localErrors = useMemo(
-    () => localValidation.filter((e) => e.severity === "error"),
-    [localValidation],
-  );
-
-  // ── Merged errors: flow errors for clean cells, local errors for dirty cells ──
+  // ── Merged errors: flow errors for clean cells, local validation for dirty cells ──
 
   const flowErrorMap = useMemo(() => buildErrorMap(errors), [errors]);
+  const localErrorMap = useMemo(() => buildErrorMap(localValidation), [localValidation]);
 
   const mergedErrors = useMemo(() => {
     const merged = new Map<string, string>();
@@ -246,11 +296,11 @@ export function ValidateDataStep({
 
   const visibleRows: VisibleRow[] = useMemo(
     () =>
-      patchedRows
+      mappedRows
         .map((row, index) => ({ row, rowId: index + 1 }))
         .filter(({ rowId }) => !discardedRows.includes(rowId))
         .filter(({ rowId }) => !showOnlyErrors || rowsWithErrors.has(rowId)),
-    [patchedRows, discardedRows, showOnlyErrors, rowsWithErrors],
+    [mappedRows, discardedRows, showOnlyErrors, rowsWithErrors],
   );
 
   const visibleRowIds = useMemo(
@@ -317,9 +367,8 @@ export function ValidateDataStep({
 
   useEffect(() => {
     stepResultRef.current = () => {
-      const rows = patchedRows.filter(
-        (_, index) => !discardedRows.includes(index + 1),
-      );
+      const rows = patchRows(mappedRows, dirtyCellsRef.current)
+        .filter((_, index) => !discardedRows.includes(index + 1));
       return {
         rows,
         errors: activeErrorList.filter((e) => e.severity === "error"),
@@ -329,7 +378,18 @@ export function ValidateDataStep({
     onCanConfirmChange(
       activeErrorList.filter((e) => e.severity === "error").length === 0,
     );
-  }, [stepResultRef, patchedRows, discardedRows, activeErrorList, onCanConfirmChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepResultRef, mappedRows, discardedRows, activeErrorList, onCanConfirmChange]);
+
+  // ── Cleanup: clear dirty cells on unmount / data change ──
+
+  useEffect(() => {
+    return () => {
+      if (bgTimerRef.current) clearTimeout(bgTimerRef.current);
+      bgAbortRef.current.abort();
+      dirtyCellsRef.current = {};
+    };
+  }, [dirtyCellsRef]);
 
   // ── Virtualizer ──
 
@@ -507,6 +567,7 @@ export function ValidateDataStep({
                                       <CellInput
                                         rowId={rowId}
                                         fieldKey={field.key}
+                                        field={field}
                                         baseValue={String(
                                           row[field.key] ?? "",
                                         )}

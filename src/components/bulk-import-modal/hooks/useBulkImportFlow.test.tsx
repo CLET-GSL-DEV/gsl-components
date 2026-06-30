@@ -43,7 +43,7 @@ describe("useBulkImportFlow", () => {
     });
 
     expect(result.current.step).toBe(BulkImportStep.VALIDATE_DATA);
-    expect(result.current.mappedRows).toHaveLength(1);
+    expect(result.current.mappedRows).toHaveLength(0);
     expect(result.current.editableRows).toHaveLength(1);
     expect(result.current.editableRows[0]?.email).toBe("a@example.com");
   });

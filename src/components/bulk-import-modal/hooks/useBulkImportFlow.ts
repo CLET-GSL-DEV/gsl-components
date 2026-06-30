@@ -131,8 +131,9 @@ export function useBulkImportFlow(
 
   const mappedRows = useMemo(() => {
     if (!parsed || headerRowIndex === null) return [];
+    if (step === BulkImportStep.VALIDATE_DATA) return [];
     return mapRowsToRecords(parsed.rows, headerRowIndex, sourceColumnMapping, excludedColumns);
-  }, [parsed, headerRowIndex, sourceColumnMapping, excludedColumns]);
+  }, [parsed, headerRowIndex, sourceColumnMapping, excludedColumns, step]);
 
   useEffect(() => {
     setValidationCache([]);
@@ -148,22 +149,37 @@ export function useBulkImportFlow(
     const mappingId = JSON.stringify([sourceColumnMapping, excludedColumns]);
     if (syncedMappingRef.current === mappingId) return;
 
-    setIsProcessingLarge(true);
-    setProcessingProgress(0);
+    const timer = setTimeout(async () => {
+      const dataRows = parsed.rows.slice(headerRowIndex + 1);
+      const excluded = new Set(excludedColumns);
+      const remapped: Record<string, string>[] = [];
 
-    const remapped = mapRowsToRecords(
-      parsed.rows,
-      headerRowIndex,
-      sourceColumnMapping,
-      excludedColumns,
-    );
+      for (let i = 0; i < dataRows.length; i += CHUNK_SIZE) {
+        const batch = dataRows.slice(i, i + CHUNK_SIZE);
+        for (const row of batch) {
+          const record: Record<string, string> = {};
+          for (const [sourceIndexValue, fieldKey] of Object.entries(
+            sourceColumnMapping,
+          )) {
+            const sourceIndex = Number(sourceIndexValue);
+            if (!fieldKey || excluded.has(sourceIndex)) continue;
+            record[fieldKey] = (row[sourceIndex] ?? "").trim();
+          }
+          if (Object.values(record).some((v) => v.length > 0)) {
+            remapped.push(record);
+          }
+        }
+        if (i + CHUNK_SIZE < dataRows.length) await YIELD();
+      }
 
-    syncedMappingRef.current = mappingId;
+      syncedMappingRef.current = mappingId;
+      setFlow((prev) => ({
+        ...prev,
+        editableRows: remapped,
+      }));
+    }, 0);
 
-    setFlow((prev) => ({
-      ...prev,
-      editableRows: remapped,
-    }));
+    return () => clearTimeout(timer);
   }, [step, parsed, headerRowIndex, sourceColumnMapping, excludedColumns]);
 
   const validationErrors = useMemo(
@@ -313,6 +329,10 @@ export function useBulkImportFlow(
   }, []);
 
   const goNext = useCallback((draft?: { headerRowIndex?: number | null; sourceColumnMapping?: SourceColumnMapping; excludedColumns?: number[] }) => {
+    if (step === BulkImportStep.MATCH_COLUMNS) {
+      setIsProcessingLarge(true);
+      setProcessingProgress(0);
+    }
     setFlow((prev) => {
       const next = { ...prev, ...draft };
       const targetStep = Math.min(BulkImportStep.VALIDATE_DATA, prev.step + 1) as BulkImportStep;
@@ -320,15 +340,19 @@ export function useBulkImportFlow(
       next.maxStep = Math.max(prev.maxStep, targetStep) as BulkImportStep;
       return next;
     });
-  }, []);
+  }, [step, setIsProcessingLarge, setProcessingProgress]);
 
   const goBack = useCallback(() => {
     setFlow((prev) => ({ ...prev, step: Math.max(BulkImportStep.UPLOAD, prev.step - 1) }));
   }, []);
 
   const goToStep = useCallback((target: BulkImportStep) => {
+    if (target === BulkImportStep.VALIDATE_DATA) {
+      setIsProcessingLarge(true);
+      setProcessingProgress(0);
+    }
     setFlow((prev) => (target <= prev.maxStep ? { ...prev, step: target } : prev));
-  }, []);
+  }, [setIsProcessingLarge, setProcessingProgress]);
 
   const discardSelectedRows = useCallback((ids: number[]) => {
     setFlow((prev) => ({
@@ -367,6 +391,9 @@ export function useBulkImportFlow(
     }
     if (validationCache.length > 0) return;
 
+    const mappingId = JSON.stringify([sourceColumnMapping, excludedColumns]);
+    if (syncedMappingRef.current !== mappingId) return;
+
     const signal = abortRef.current.signal;
     const uniqueFields = fields.filter((f) => f.unique);
     const nonUniqueFields = fields.filter((f) => !f.unique);
@@ -393,7 +420,7 @@ export function useBulkImportFlow(
       setValidationCache([...fieldIssues, ...uniqueIssues]);
       setIsProcessingLarge(false);
     })();
-  }, [step, validationCache.length, editableRows, fields]);
+  }, [step, validationCache.length, editableRows, fields, sourceColumnMapping, excludedColumns]);
 
   const buildResultRef = useRef<UseBulkImportFlowReturn["buildResult"]>(() => ({ rows: [], errors: [], warnings: [] }));
   buildResultRef.current = () => ({ rows: activeRows, errors: activeErrors, warnings: activeWarnings });

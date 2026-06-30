@@ -115,15 +115,21 @@ describe("ValidateDataStep", () => {
     });
   });
 
-  it("writes edited cell value to dirtyCellsRef on keystroke", () => {
+  it("writes edited cell value to dirtyCellsRef after debounce", async () => {
     const ref = makeRef();
     render(<ValidateDataStep dirtyCellsRef={ref} {...defaultProps} />);
 
     const emailInput = screen.getByLabelText("Email, row 2") as HTMLInputElement;
     fireEvent.change(emailInput, { target: { value: "fixed@example.com" } });
 
-    expect(ref.current["2:email"]).toBe("fixed@example.com");
     expect(emailInput.value).toBe("fixed@example.com");
+
+    await waitFor(
+      () => {
+        expect(ref.current["2:email"]).toBe("fixed@example.com");
+      },
+      { timeout: 1500 },
+    );
   });
 
   it("shows aria-invalid and error tooltip on invalid fields", async () => {
