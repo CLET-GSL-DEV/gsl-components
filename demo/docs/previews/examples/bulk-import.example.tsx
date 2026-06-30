@@ -80,7 +80,7 @@ export function BulkImportExample() {
         </button>
       </div>
       <BulkImportModal
-        maxFileSizeBytes={48 * 1024 * 1024}
+        maxFileSizeBytes={200 * 1024 * 1024}
         open={open}
         onOpenChange={onOpenChange}
         title="Import documents"

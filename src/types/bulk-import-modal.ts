@@ -89,8 +89,6 @@ export interface BulkImportFlowDefaultState {
   headerRowIndex?: number | null;
   sourceColumnMapping?: SourceColumnMapping;
   excludedColumns?: number[];
-  selectedRowIds?: number[];
-  showOnlyErrors?: boolean;
   discardedRows?: number[];
   editableRows?: Record<string, string>[];
 }
@@ -105,6 +103,7 @@ export interface UseBulkImportFlowOptions {
 
 export interface UseBulkImportFlowReturn {
   step: BulkImportStep;
+  maxStep: BulkImportStep;
   parsed: ParsedSpreadsheet | null;
   parseError: string | null;
   headerRowIndex: number | null;
@@ -115,29 +114,18 @@ export interface UseBulkImportFlowReturn {
   editableRows: Record<string, string>[];
   validationErrors: BulkImportValidationError[];
   validationWarnings: BulkImportValidationError[];
-  selectedRowIds: number[];
-  showOnlyErrors: boolean;
   discardedRows: number[];
-  canGoNext: boolean;
   canImport: boolean;
   isParsing: boolean;
   isProcessingLarge: boolean;
   processingProgress: number;
+  processingTotal: number;
   uploadedFile: File | null;
-  setHeaderRowIndex: (index: number) => void;
-  setSourceColumnMapping: (mapping: SourceColumnMapping) => void;
-  updateSourceMapping: (sourceIndex: number, fieldKey: string | null) => void;
-  toggleExcludedColumn: (sourceIndex: number) => void;
-  setSelectedRowIds: (rowIds: number[]) => void;
-  toggleRowSelection: (rowId: number) => void;
-  setVisibleRowsSelection: (rowIds: number[], selected: boolean) => void;
-  setShowOnlyErrors: (value: boolean) => void;
-  discardSelectedRows: () => void;
+  discardSelectedRows: (ids: number[]) => void;
   resetDiscardedRows: () => void;
-  updateRowValue: (rowId: number, fieldKey: string, value: string) => void;
+  applyEdits: (dirtyCells: Record<string, string>) => void;
   handleFile: (file: File) => Promise<void>;
-  autoMapColumns: () => void;
-  goNext: () => void;
+  goNext: (draft?: { headerRowIndex?: number | null; sourceColumnMapping?: SourceColumnMapping; excludedColumns?: number[] }) => void;
   goBack: () => void;
   goToStep: (step: BulkImportStep) => void;
   reset: () => void;

@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { useBulkImportFlow } from "./useBulkImportFlow";
 import { BulkImportStep } from "../../../types/bulk-import-modal";
@@ -48,45 +48,112 @@ describe("useBulkImportFlow", () => {
     expect(result.current.editableRows[0]?.email).toBe("a@example.com");
   });
 
-  it("sets visible row selection for select-all behavior", async () => {
+  it("commits a header row draft via goNext", async () => {
     const { result } = renderHook(() =>
-      useBulkImportFlow({
-        fields: [
-          { key: "email", label: "Email", required: true },
-          { key: "full_name", label: "Full name", required: true },
-        ],
-        open: true,
-      }),
+      useBulkImportFlow({ fields, open: true }),
     );
 
-    const csv =
-      "Email,Full name\na@example.com,Ada Lovelace\nbad,Grace Hopper\n";
+    const csv = "Email,Full name\na@example.com,Ada Lovelace\n";
     const file = new File([csv], "students.csv", { type: "text/csv" });
 
     await act(async () => {
       await result.current.handleFile(file);
     });
-    act(() => {
-      result.current.goNext();
-    });
-    act(() => {
-      result.current.goNext();
-    });
-
-    expect(result.current.mappedRows).toHaveLength(2);
 
     act(() => {
-      result.current.setVisibleRowsSelection([1, 2], true);
+      result.current.goNext({ headerRowIndex: 1 });
     });
-    expect(result.current.selectedRowIds).toEqual([1, 2]);
 
-    act(() => {
-      result.current.setVisibleRowsSelection([2], false);
-    });
-    expect(result.current.selectedRowIds).toEqual([1]);
+    expect(result.current.step).toBe(BulkImportStep.MATCH_COLUMNS);
+    expect(result.current.headerRowIndex).toBe(1);
   });
 
-  it("excludes discarded rows from the built result", async () => {
+  it("commits mapping and excluded columns draft via goNext", async () => {
+    const { result } = renderHook(() =>
+      useBulkImportFlow({ fields, open: true }),
+    );
+
+    const csv = "Full name,Email,Notes\nAda Lovelace,a@example.com,extra\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+
+    await act(async () => {
+      await result.current.handleFile(file);
+    });
+
+    act(() => {
+      result.current.goNext({ headerRowIndex: 0 });
+    });
+
+    act(() => {
+      result.current.goNext({
+        sourceColumnMapping: { 0: "full_name", 1: null, 2: null },
+        excludedColumns: [2],
+      });
+    });
+
+    expect(result.current.step).toBe(BulkImportStep.VALIDATE_DATA);
+    expect(result.current.sourceColumnMapping[0]).toBe("full_name");
+    expect(result.current.excludedColumns).toEqual([2]);
+  });
+
+  it("applies dirty cells to editableRows without re-validating", async () => {
+    const { result } = renderHook(() =>
+      useBulkImportFlow({ fields, open: true }),
+    );
+
+    const csv =
+      "Email,Full name\na@example.com,Ada Lovelace\nbad,Grace Hopper\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+
+    await act(async () => {
+      await result.current.handleFile(file);
+    });
+    act(() => {
+      result.current.goNext();
+    });
+    act(() => {
+      result.current.goNext();
+    });
+
+    expect(result.current.step).toBe(BulkImportStep.VALIDATE_DATA);
+
+    act(() => {
+      result.current.applyEdits({ "2:email": "grace@example.com" });
+    });
+
+    expect(result.current.editableRows[1]?.email).toBe("grace@example.com");
+  });
+
+  it("applies multiple dirty cells in a single pass", async () => {
+    const { result } = renderHook(() =>
+      useBulkImportFlow({ fields, open: true }),
+    );
+
+    const csv = "Email,Full name\na@example.com,Ada\n\n";
+    const file = new File([csv], "students.csv", { type: "text/csv" });
+
+    await act(async () => {
+      await result.current.handleFile(file);
+    });
+    act(() => {
+      result.current.goNext();
+    });
+    act(() => {
+      result.current.goNext();
+    });
+
+    act(() => {
+      result.current.applyEdits({
+        "1:email": "fixed@example.com",
+        "1:full_name": "Fixed Name",
+      });
+    });
+
+    expect(result.current.editableRows[0]?.email).toBe("fixed@example.com");
+    expect(result.current.editableRows[0]?.full_name).toBe("Fixed Name");
+  });
+
+  it("discards rows by id and excludes them from the built result", async () => {
     const { result } = renderHook(() =>
       useBulkImportFlow({
         fields: [
@@ -104,7 +171,6 @@ describe("useBulkImportFlow", () => {
     await act(async () => {
       await result.current.handleFile(file);
     });
-    expect(result.current.headerRowIndex).toBe(0);
     act(() => {
       result.current.goNext();
     });
@@ -112,13 +178,10 @@ describe("useBulkImportFlow", () => {
       result.current.goNext();
     });
 
-    expect(result.current.mappedRows).toHaveLength(2);
+    expect(result.current.editableRows).toHaveLength(2);
 
     act(() => {
-      result.current.toggleRowSelection(2);
-    });
-    act(() => {
-      result.current.discardSelectedRows();
+      result.current.discardSelectedRows([2]);
     });
 
     const built = result.current.buildResult();
@@ -145,90 +208,6 @@ describe("useBulkImportFlow", () => {
     expect(result.current.step).toBe(BulkImportStep.UPLOAD);
     expect(result.current.parsed).toBeNull();
     expect(result.current.parseError).not.toBeNull();
-  });
-
-  it("re-validates editable rows when a cell value is fixed on step 4", async () => {
-    const { result } = renderHook(() =>
-      useBulkImportFlow({
-        fields,
-        open: true,
-      }),
-    );
-
-    const csv =
-      "Email,Full name\na@example.com,Ada Lovelace\nbad,Grace Hopper\n";
-    const file = new File([csv], "students.csv", { type: "text/csv" });
-
-    await act(async () => {
-      await result.current.handleFile(file);
-    });
-
-    act(() => {
-      result.current.goNext();
-    });
-    act(() => {
-      result.current.goNext();
-    });
-
-    expect(result.current.step).toBe(BulkImportStep.VALIDATE_DATA);
-
-    await waitFor(() => {
-      expect(result.current.validationErrors.length).toBeGreaterThan(0);
-    });
-    expect(result.current.canImport).toBe(false);
-
-    act(() => {
-      result.current.updateRowValue(2, "email", "grace@example.com");
-    });
-
-    expect(result.current.canImport).toBe(true);
-    expect(result.current.validationErrors).toHaveLength(0);
-    expect(result.current.editableRows[1]?.email).toBe("grace@example.com");
-  });
-
-  it("autoMapsColumns resets all mappings and restores excluded columns", async () => {
-    const { result } = renderHook(() =>
-      useBulkImportFlow({ fields, open: true }),
-    );
-
-    const csv = "Full name,Email,Notes\nAda Lovelace,a@example.com,extra\n";
-    const file = new File([csv], "students.csv", { type: "text/csv" });
-
-    await act(async () => {
-      await result.current.handleFile(file);
-    });
-
-    act(() => {
-      result.current.goNext();
-    });
-
-    expect(result.current.step).toBe(BulkImportStep.MATCH_COLUMNS);
-    expect(result.current.sourceColumnMapping).toEqual({
-      0: "full_name",
-      1: "email",
-      2: null,
-    });
-
-    // exclude Notes column, unmap Email
-    act(() => {
-      result.current.toggleExcludedColumn(2);
-      result.current.updateSourceMapping(1, null);
-    });
-
-    expect(result.current.excludedColumns).toEqual([2]);
-    expect(result.current.sourceColumnMapping[1]).toBeNull();
-
-    // reset mapping
-    act(() => {
-      result.current.autoMapColumns();
-    });
-
-    expect(result.current.sourceColumnMapping).toEqual({
-      0: "full_name",
-      1: "email",
-      2: null,
-    });
-    expect(result.current.excludedColumns).toEqual([]);
   });
 
   it("resets when the modal closes", async () => {

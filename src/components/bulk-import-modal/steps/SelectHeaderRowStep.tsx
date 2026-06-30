@@ -56,11 +56,8 @@ export function SelectHeaderRowStep({
           className="gsl-bulk-import__virtual-scroll"
         >
           <div
-            style={{
-              height: totalHeight,
-              width: "100%",
-              position: "relative",
-            }}
+            className="gsl-bulk-import__validate-spacer-row"
+            style={{ height: totalHeight }}
           >
             <RadioGroup.Root
               value={headerRowIndex !== null ? String(headerRowIndex) : undefined}
@@ -83,10 +80,6 @@ export function SelectHeaderRowStep({
                       .filter(Boolean)
                       .join(" ")}
                     style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
                       transform: `translateY(${item.start}px)`,
                       height: `${item.size}px`,
                     }}

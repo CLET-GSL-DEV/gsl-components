@@ -316,6 +316,7 @@
   min-height: 0;
   padding: 24px;
   overflow: auto;
+  position: relative;
 }
 
 .gsl-bulk-import__body--upload {
@@ -772,7 +773,17 @@
 
 /* ── Virtual rows (SelectHeaderRowStep) ── */
 
+.gsl-bulk-import__header-scroll {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+
 .gsl-bulk-import__virtual-row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -1114,29 +1125,120 @@
   color: var(--gsl-text-secondary);
 }
 
+/* ── Validate data table ── */
+
+.gsl-bulk-import__validate-scroll {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.gsl-bulk-import__validate-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.gsl-bulk-import__validate-th-checkbox {
+  width: 44px;
+  min-width: 44px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--gsl-surface-subtle);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  height: 40px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--gsl-border);
+}
+
+.gsl-bulk-import__validate-th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--gsl-surface-subtle);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gsl-text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  height: 40px;
+  text-align: left;
+  vertical-align: middle;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--gsl-border);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.gsl-bulk-import__validate-td-checkbox {
+  width: 44px;
+  min-width: 44px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gsl-border);
+}
+
+.gsl-bulk-import__validate-td {
+  padding: 0;
+  height: 44px;
+  position: relative;
+  border-bottom: 1px solid var(--gsl-border);
+  overflow: visible;
+}
+
+.gsl-bulk-import__validate-spacer-row {
+  position: relative;
+}
+
+.gsl-bulk-import__validate-spacer-td {
+  padding: 0;
+  position: relative;
+}
+
+.gsl-bulk-import__validate-row-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.gsl-bulk-import__validate-row-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* ── Cell error tooltip ── */
+
+.gsl-bulk-import__cell-inner {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+
 .gsl-bulk-import__cell-error-tooltip {
   position: absolute;
-  z-index: 2;
-  left: 50%;
   bottom: calc(100% + 6px);
+  left: 50%;
   transform: translateX(-50%);
-  width: max-content;
-  max-width: min(240px, 90vw);
-  padding: 6px 10px;
-  border-radius: 6px;
   background: var(--gsl-text);
   color: var(--gsl-on-primary);
+  padding: 6px 10px;
   font-size: 11px;
   line-height: 1.35;
-  text-align: center;
-  white-space: normal;
-  box-shadow: var(--gsl-shadow-sm);
-  opacity: 0;
-  visibility: hidden;
+  border-radius: 6px;
+  white-space: nowrap;
   pointer-events: none;
-  transition:
-    opacity 120ms ease,
-    visibility 120ms ease;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  z-index: 10;
 }
 
 .gsl-bulk-import__cell-error-tooltip::after {
@@ -1149,9 +1251,10 @@
   border-top-color: var(--gsl-text);
 }
 
-.gsl-bulk-import__cell--error:hover .gsl-bulk-import__cell-error-tooltip {
+.gsl-bulk-import__validate-td:hover .gsl-bulk-import__cell-error-tooltip,
+.gsl-bulk-import__validate-td:focus-within
+  .gsl-bulk-import__cell-error-tooltip {
   opacity: 1;
-  visibility: visible;
 }
 
 @media (width <= 768px) {
@@ -1284,4 +1387,51 @@
 .gsl-bulk-import__footer {
   border: none;
   padding-top: 0;
+}
+
+.gsl-bulk-import__loading {
+  position: absolute;
+  inset: 24px;
+  display: flex;
+  flex-direction: column;
+  background: var(--gsl-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 10;
+}
+
+.gsl-bulk-import__loading--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gsl-bulk-import__loading-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 0 32px;
+}
+
+.gsl-bulk-import__lottie {
+  width: 320px;
+  height: 320px;
+}
+
+.gsl-bulk-import__loading-bar {
+  width: 100%;
+  max-width: 320px;
+}
+
+.gsl-bulk-import__loading-counter {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gsl-text-muted);
+}
+
+.gsl-bulk-import__step.gsl-bulk-import__step--upload {
+  height: 100%;
 }

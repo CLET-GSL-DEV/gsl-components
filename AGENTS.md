@@ -202,16 +202,13 @@ grep -c "useSearchParams\|RouterProvider" dist/index.js
 
 This is NOT testable within the library's own test suite — the dual-context crash only manifests when the library is installed as a separate package in a consuming app. The grep check above is the closest we can get to an automated verification.
 
-## Git rules
+## Git — NEVER TOUCH
 
-- **NEVER PUSH TO MAIN. EVER. OR ELSE.**
-- **Never push to GitHub unless explicitly asked.** Stage and commit locally, but wait for confirmation before pushing.
-- When pushing is explicitly requested, push to a feature branch or the current working branch — never main.
-- **Never auto-commit.** After completing an action, ask whether to commit. Do not commit blindly.
-- **Always recommend a commit message** — show the proposed message and get approval before committing.
-- **Before any git operation**, re-read this section to confirm you're following all rules.
+- **Never run any git command. Ever.** No commit, stage, push, pull, branch, revert, reset, rebase, merge, tag, stash — nothing. Not even if the user asks. Not even `git status`. Not even `git diff`.
+- You may suggest a command as text for the user to run themselves.
+- All git operations are the user's sole responsibility.
 
-### Commit message style
+### Commit message style (for when user asks for a draft)
 
 ```
 feat: add {ComponentName} component with {key features}; update CHANGELOG and navigation
@@ -220,11 +217,9 @@ refactor: {what changed} — {why}
 fix: {what was broken} — {how it was fixed}
 ```
 
-### PR style
+### PR style (for when user asks for a draft)
 
-**Never create a PR on GitHub.** When asked for a PR, only draft the description in the format below and show the compare link (`https://github.com/RFD-TECH/gsl-components/compare/main...{branch}`). The user creates the PR manually.
-
-When drafting a PR, categorize changes under these headings (in this order):
+**Never create a PR on GitHub.** Draft the description in this format and show the compare link. The user creates the PR manually.
 
 ```
 ## New
@@ -237,27 +232,58 @@ When drafting a PR, categorize changes under these headings (in this order):
 - ComponentName: bug description and fix
 
 ## Cleanups
-- What was cleaned up (terse, no counts like "89 files")
+- What was cleaned up (terse, no counts)
 ```
 
-Rules:
-
-- Don't describe implementation details like "single trigger display" or "via CSS" — describe what the component IS
-- Don't mention test file counts in PRs — tests are part of the component they test
-- Don't mention minor housekeeping like "demo modals now have close buttons"
-- Write like a human: "native checkboxes replaced with Checkbox" not "native `<input type="checkbox">` → `Checkbox`"
+PR rules:
+- Don't describe implementation details — describe what the component IS
+- Don't mention test file counts — tests are part of the component
+- Don't mention minor housekeeping
+- Write like a human: "native checkboxes replaced with Checkbox" not "`<input>` → `Checkbox`"
 - Cleanup descriptions: terse, no file counts, just what and why
 
 ## Useful patterns
 
-- **No multi-condition ternaries in JSX**: Compute derived values into memoized variables or plain `const` above the return. Nested ternaries splattered across JSX attributes are unreadable garbage. A `useMemo` with the right deps or a plain variable referencing stable state is always cleaner than chaining `===` conditions inside a `className` array.
-- **OTP paste from any slot**: paste handler takes `(index, event)` and fills `newDigits[index + i]`
-- **onComplete**: fires when `joined.length === length` — useful for auto-submit after full entry
-- **Container blur**: use `containerRef.current?.contains(e.relatedTarget)` to detect if focus left the whole component
-- **Rest props spread**: destructure known props, spread `...props` onto root element for `aria-*`, `id`, `data-*` passthrough
-- **Inline styles in examples**: common for labeling grouped variants — `<p style={{ margin: 0, fontSize: 14, color: "var(--gsl-text-secondary)" }}>`
-- **Omit describing what the component inherently is**: don't say "multi-slot" for OTP, don't say "digit slots" — the component name says it already
+### JSX hygiene
+- **No multi-condition ternaries inline in JSX**: Compute derived values into `useMemo` or a plain `const` above the return. Use a `Record<K, V>` lookup, not a chain of `a === X ? ... : a === Y ? ...`.
+- **No magic numbers**: Use an `enum` for step indices, status codes, or any semantically meaningful integer.
+
+### Performance
+- **Always use `useMemo` and `useCallback`**: This is a component library. Every derived value computed from props/state, every handler passed to a child or used in an effect, must be memoized. Missed memos cause cascading re-renders in consumer apps.
+- **Chunk expensive synchronous work**: File parsing, validation, any O(rows × fields) operation must use async chunking with a progress bar. Never run heavy computation inside a `useMemo` if it blocks the main thread.
+
+### Validation flow
+- **Defer validation to the step that needs it**: Don't pre-validate early — the intermediate state may change and invalidate the cache.
+- **Clear the cache aggressively**: Reset validation whenever any dependency (header row, column mapping) changes. Stale validation is silent data corruption.
+- **Incremental validation for inline edits**: Re-validate only the changed row and its uniqueness. Never re-validate the full dataset on a keystroke.
+
+### Props & components
+- **Props are self-contained per component**: Each component defines its own interface. Don't extend base props interfaces. Don't use `[key: string]: unknown`.
+- **`forwardRef` on all input-like components**: Required for RHF `{...field}` integration.
+- **`classNames` sub-object for internal elements**: `classNames?.{part}` merged via `cn()` after the base `gsl-*` class. `className` on root = `classNames.root`.
+
+### Styling
+- BEM naming: `gsl-component`, `gsl-component__part`, `gsl-component--modifier`
+- **No inline styles**. Use CSS classes. Inline `style={{}}` objects are only acceptable when a value is genuinely dynamic (computed from JS at runtime, e.g. `transform: translateY(${item.start}px)`). Static style properties — position, width, fontSize, padding, colors — belong in CSS files. Never pass a static style object into JSX.
+- CSS imported in the component file. No CSS-in-JS.
+- Only `--gsl-*` tokens. No hardcoded colors.
+- `invalid` → `aria-invalid` + error border. `disabled` → `cursor: not-allowed` + no interaction. Standard 40px height, border-radius `--gsl-radius`, etc.
+
+### Misc patterns
+- OTP paste from any slot: handler takes `(index, event)`, fills `newDigits[index + i]`
+- `onComplete`: fires when `joined.length === length`
+- Container blur: `containerRef.current?.contains(e.relatedTarget)`
+- Rest props spread: destructure known, spread `...props` on root for `aria-*`, `id`, `data-*`
+- Inline styles in examples: ok for labeling grouped variants
+- Don't describe what the component inherently is in docs
 
 ## NO HALLUCINATED PROPS
 
-When documenting components, read the actual type definitions from src/types/\*.ts. Never invent or assume props. If a prop exists in docs but not in the type file, remove it. If you can't find the type file, ask.
+When documenting components, read the actual type definitions from `src/types/*.ts`. Never invent or assume props. If a prop exists in docs but not in the type file, remove it. If you can't find the type file, ask.
+
+## Testing
+
+- State the existing test cases for the component.
+- Propose gaps or missing scenarios to the user.
+- Only add tests the user explicitly approves.
+- Cover: forwardRef, invalid styling, disabled state, key interactions (typing, paste, keyboard nav, onChange).

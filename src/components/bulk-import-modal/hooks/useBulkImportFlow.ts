@@ -51,13 +51,12 @@ async function processInChunks<T, R>(
 
 interface FlowState {
   step: BulkImportStep;
+  maxStep: BulkImportStep;
   parsed: UseBulkImportFlowReturn["parsed"];
   parseError: string | null;
   headerRowIndex: number | null;
   sourceColumnMapping: SourceColumnMapping;
   excludedColumns: number[];
-  selectedRowIds: number[];
-  showOnlyErrors: boolean;
   discardedRows: number[];
   editableRows: Record<string, string>[];
   isParsing: boolean;
@@ -66,13 +65,12 @@ interface FlowState {
 
 const SEED: FlowState = {
   step: BulkImportStep.UPLOAD,
+  maxStep: BulkImportStep.UPLOAD,
   parsed: null,
   parseError: null,
   headerRowIndex: null,
   sourceColumnMapping: {},
   excludedColumns: [],
-  selectedRowIds: [],
-  showOnlyErrors: false,
   discardedRows: [],
   editableRows: [],
   isParsing: false,
@@ -93,14 +91,17 @@ export function useBulkImportFlow(
   const [flow, setFlow] = useState<FlowState>(seed);
   const [isProcessingLarge, setIsProcessingLarge] = useState(false);
   const [processingProgress, setProcessingProgress] = useState(0);
+  const [processingTotal, setProcessingTotal] = useState(0);
 
   const abortRef = useRef(new AbortController());
+  const syncedMappingRef = useRef<string | null>(null);
   const [validationCache, setValidationCache] = useState<BulkImportValidationError[]>([]);
 
   const reset = useCallback(() => {
     setFlow(seed);
     setIsProcessingLarge(false);
     setProcessingProgress(0);
+    setProcessingTotal(0);
     setValidationCache([]);
   }, [seed]);
 
@@ -114,7 +115,7 @@ export function useBulkImportFlow(
 
   const {
     step, parsed, parseError, headerRowIndex, sourceColumnMapping,
-    excludedColumns, selectedRowIds, showOnlyErrors, discardedRows, editableRows,
+    excludedColumns, discardedRows, editableRows,
     uploadedFile,
   } = flow;
 
@@ -137,6 +138,34 @@ export function useBulkImportFlow(
     setValidationCache([]);
   }, [headerRowIndex, sourceColumnMapping]);
 
+  useEffect(() => {
+    if (step !== BulkImportStep.VALIDATE_DATA) {
+      syncedMappingRef.current = null;
+      return;
+    }
+    if (!parsed || headerRowIndex === null) return;
+
+    const mappingId = JSON.stringify([sourceColumnMapping, excludedColumns]);
+    if (syncedMappingRef.current === mappingId) return;
+
+    setIsProcessingLarge(true);
+    setProcessingProgress(0);
+
+    const remapped = mapRowsToRecords(
+      parsed.rows,
+      headerRowIndex,
+      sourceColumnMapping,
+      excludedColumns,
+    );
+
+    syncedMappingRef.current = mappingId;
+
+    setFlow((prev) => ({
+      ...prev,
+      editableRows: remapped,
+    }));
+  }, [step, parsed, headerRowIndex, sourceColumnMapping, excludedColumns]);
+
   const validationErrors = useMemo(
     () => validationCache.filter((e) => e.severity === "error"),
     [validationCache],
@@ -145,22 +174,6 @@ export function useBulkImportFlow(
     () => validationCache.filter((e) => e.severity === "warning"),
     [validationCache],
   );
-
-  const canGoNext = useMemo(() => {
-    switch (step) {
-      case BulkImportStep.UPLOAD:
-        return parsed !== null && parseError === null;
-      case BulkImportStep.SELECT_HEADER_ROW:
-        return headerRowIndex !== null;
-      case BulkImportStep.MATCH_COLUMNS:
-        return (
-          activeSourceColumns.length > 0 &&
-          activeSourceColumns.every((col) => sourceColumnMapping[col.index] !== null)
-        );
-      default:
-        return false;
-    }
-  }, [step, parsed, parseError, headerRowIndex, activeSourceColumns, sourceColumnMapping]);
 
   const resultRows = step === BulkImportStep.VALIDATE_DATA ? editableRows : mappedRows;
 
@@ -186,6 +199,7 @@ export function useBulkImportFlow(
       ...SEED,
       uploadedFile: prev.uploadedFile,
       step: BulkImportStep.SELECT_HEADER_ROW,
+      maxStep: BulkImportStep.SELECT_HEADER_ROW,
       parsed: { rows, fileName },
       headerRowIndex: h,
       sourceColumnMapping: mapping,
@@ -218,6 +232,7 @@ export function useBulkImportFlow(
           if (signal.aborted) return;
 
           const lines = text.split("\n");
+          setProcessingTotal(lines.length);
           let rows: string[][];
 
           if (lines.length <= CHUNK_SIZE) {
@@ -297,22 +312,13 @@ export function useBulkImportFlow(
     setValidationCache([]);
   }, []);
 
-  const goNext = useCallback(() => {
+  const goNext = useCallback((draft?: { headerRowIndex?: number | null; sourceColumnMapping?: SourceColumnMapping; excludedColumns?: number[] }) => {
     setFlow((prev) => {
-      if (
-        prev.step === BulkImportStep.MATCH_COLUMNS &&
-        prev.parsed &&
-        prev.headerRowIndex !== null
-      ) {
-        const remapped = mapRowsToRecords(
-          prev.parsed.rows,
-          prev.headerRowIndex,
-          prev.sourceColumnMapping,
-          prev.excludedColumns,
-        );
-        return { ...prev, step: BulkImportStep.VALIDATE_DATA, editableRows: remapped };
-      }
-      return { ...prev, step: Math.min(BulkImportStep.VALIDATE_DATA, prev.step + 1) };
+      const next = { ...prev, ...draft };
+      const targetStep = Math.min(BulkImportStep.VALIDATE_DATA, prev.step + 1) as BulkImportStep;
+      next.step = targetStep;
+      next.maxStep = Math.max(prev.maxStep, targetStep) as BulkImportStep;
+      return next;
     });
   }, []);
 
@@ -321,65 +327,13 @@ export function useBulkImportFlow(
   }, []);
 
   const goToStep = useCallback((target: BulkImportStep) => {
-    setFlow((prev) => (target < prev.step ? { ...prev, step: target } : prev));
+    setFlow((prev) => (target <= prev.maxStep ? { ...prev, step: target } : prev));
   }, []);
 
-  const updateSourceMapping = useCallback(
-    (sourceIndex: number, fieldKey: string | null) => {
-      setFlow((prev) => {
-        const next = { ...prev.sourceColumnMapping };
-        if (fieldKey) {
-          for (const [index, mappedFieldKey] of Object.entries(next)) {
-            if (mappedFieldKey === fieldKey && Number(index) !== sourceIndex) {
-              next[Number(index)] = null;
-            }
-          }
-        }
-        next[sourceIndex] = fieldKey;
-        return { ...prev, sourceColumnMapping: next };
-      });
-    },
-    [],
-  );
-
-  const autoMapColumns = useCallback(() => {
-    if (!parsed || headerRowIndex === null) return;
-    const mapping = autoMatchSourceColumns(fields, buildAllSourceColumns(parsed.rows, headerRowIndex));
-    setFlow((prev) => ({ ...prev, sourceColumnMapping: mapping, excludedColumns: [] }));
-  }, [fields, headerRowIndex, parsed]);
-
-  const toggleExcludedColumn = useCallback((sourceIndex: number) => {
-    setFlow((prev) => {
-      const excluded = prev.excludedColumns.includes(sourceIndex)
-        ? prev.excludedColumns.filter((i) => i !== sourceIndex)
-        : [...prev.excludedColumns, sourceIndex];
-      return { ...prev, excludedColumns: excluded, sourceColumnMapping: { ...prev.sourceColumnMapping, [sourceIndex]: null } };
-    });
-  }, []);
-
-  const toggleRowSelection = useCallback((rowId: number) => {
+  const discardSelectedRows = useCallback((ids: number[]) => {
     setFlow((prev) => ({
       ...prev,
-      selectedRowIds: prev.selectedRowIds.includes(rowId)
-        ? prev.selectedRowIds.filter((id) => id !== rowId)
-        : [...prev.selectedRowIds, rowId],
-    }));
-  }, []);
-
-  const setVisibleRowsSelection = useCallback((rowIds: number[], selected: boolean) => {
-    setFlow((prev) => ({
-      ...prev,
-      selectedRowIds: selected
-        ? [...new Set([...prev.selectedRowIds, ...rowIds])]
-        : prev.selectedRowIds.filter((id) => !rowIds.includes(id)),
-    }));
-  }, []);
-
-  const discardSelectedRows = useCallback(() => {
-    setFlow((prev) => ({
-      ...prev,
-      discardedRows: [...new Set([...prev.discardedRows, ...prev.selectedRowIds])],
-      selectedRowIds: [],
+      discardedRows: [...new Set([...prev.discardedRows, ...ids])],
     }));
   }, []);
 
@@ -387,59 +341,30 @@ export function useBulkImportFlow(
     setFlow((prev) => ({ ...prev, discardedRows: [] }));
   }, []);
 
-  const updateRowValue = useCallback(
-    (rowId: number, fieldKey: string, value: string) => {
-      setFlow((prev) => {
-        const next = prev.editableRows.map((row, i) =>
-          i + 1 === rowId ? { ...row, [fieldKey]: value } : row,
-        );
-        const changedRow = next[rowId - 1];
-        if (!changedRow) return prev;
+  const applyEdits = useCallback((dirtyCells: Record<string, string>) => {
+    const entries = Object.entries(dirtyCells);
+    if (entries.length === 0) return;
 
-        const rowIssues = validateMappedRows(next, fields, rowId);
-        const allIssues = [...rowIssues];
-
-        const editedField = fields.find((f) => f.key === fieldKey);
-        if (editedField?.unique) {
-          const valueMap = new Map<string, number[]>();
-          next.forEach((r, i) => {
-            const v = (r[fieldKey] ?? "").trim();
-            if (!v) return;
-            if (!valueMap.has(v)) valueMap.set(v, []);
-            valueMap.get(v)!.push(i + 1);
-          });
-
-          for (const [, indices] of valueMap) {
-            if (indices.length > 1) {
-              for (const idx of indices) {
-                allIssues.push({
-                  row: idx,
-                  fieldKey,
-                  fieldLabel: editedField.label,
-                  message: `Duplicate ${editedField.label}: ${next[idx - 1][fieldKey] ?? ""}`,
-                  severity: "error" as const,
-                });
-              }
-            }
-          }
-        }
-
-        setValidationCache((prevCache) => [
-          ...prevCache.filter((issue) =>
-            issue.row !== rowId &&
-            !(issue.fieldKey === fieldKey && issue.message.startsWith("Duplicate")),
-          ),
-          ...allIssues,
-        ]);
-
-        return { ...prev, editableRows: next };
-      });
-    },
-    [fields],
-  );
+    setFlow((prev) => {
+      const next = prev.editableRows.map((row) => ({ ...row }));
+      for (const [cellKey, value] of entries) {
+        const colonIdx = cellKey.indexOf(":");
+        const rowId = Number(cellKey.slice(0, colonIdx));
+        const fieldKey = cellKey.slice(colonIdx + 1);
+        const row = next[rowId - 1];
+        if (row) row[fieldKey] = value;
+      }
+      return { ...prev, editableRows: next };
+    });
+  }, []);
 
   useEffect(() => {
-    if (step !== BulkImportStep.VALIDATE_DATA) return;
+    if (step !== BulkImportStep.VALIDATE_DATA) {
+      abortRef.current.abort();
+      abortRef.current = new AbortController();
+      setIsProcessingLarge(false);
+      return;
+    }
     if (validationCache.length > 0) return;
 
     const signal = abortRef.current.signal;
@@ -448,6 +373,7 @@ export function useBulkImportFlow(
 
     setIsProcessingLarge(true);
     setProcessingProgress(0);
+    setProcessingTotal(editableRows.length);
 
     (async () => {
       const fieldIssues = nonUniqueFields.length > 0
@@ -475,6 +401,7 @@ export function useBulkImportFlow(
 
   return {
     step,
+    maxStep: flow.maxStep,
     parsed,
     parseError,
     headerRowIndex,
@@ -485,28 +412,17 @@ export function useBulkImportFlow(
     editableRows,
     validationErrors,
     validationWarnings,
-    selectedRowIds,
-    showOnlyErrors,
     discardedRows,
-    canGoNext,
     canImport,
     isParsing: flow.isParsing,
     isProcessingLarge,
     processingProgress,
+    processingTotal,
     uploadedFile,
-    setHeaderRowIndex: useCallback((v) => setFlow((prev) => ({ ...prev, headerRowIndex: v })), []),
-    setSourceColumnMapping: useCallback((v) => setFlow((prev) => ({ ...prev, sourceColumnMapping: v })), []),
-    updateSourceMapping,
-    toggleExcludedColumn,
-    setSelectedRowIds: useCallback((v) => setFlow((prev) => ({ ...prev, selectedRowIds: v })), []),
-    toggleRowSelection,
-    setVisibleRowsSelection,
-    setShowOnlyErrors: useCallback((v) => setFlow((prev) => ({ ...prev, showOnlyErrors: v })), []),
     discardSelectedRows,
     resetDiscardedRows,
-    updateRowValue,
+    applyEdits,
     handleFile,
-    autoMapColumns,
     goNext,
     goBack,
     goToStep,

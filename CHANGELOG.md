@@ -9,10 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Theme: Tailwind v4 `@theme` token integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
 - ProgressModal: non-dismissable processing overlay with Lottie animation and determinate progress bar
 - BulkImportModal: chunked processing for datasets over 1000 rows — file parsing, row mapping, and validation run in 1000-row batches with a progress overlay to prevent main-thread freezes
 - BulkImportModal: CSV files stream-parsed in chunks for smooth progress; XLSX files parse in one shot with chunked normalize afterward
 - BulkImportModal: incremental validation — editing a cell in step 4 only re-validates that row instead of the entire dataset
+- BulkImportModal: loading state replaces step content during chunked processing — step title, Lottie animation, progress bar, and row counter (e.g. "5,000 / 50,000 rows parsed")
+- BulkImportModal: tested against 1M row CSV files
 - New exports: `mapDataRows`, `normalizeRows`, `filterEmptyRows`, `isCsv`, `parseCsvText`, `validateBatch`
 
 ### Changed
@@ -20,6 +23,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BulkImportModal: SelectHeaderRowStep now shows only the first 20 rows for header selection
 - BulkImportModal: ValidateDataStep overscan increased to 10 rows for smoother virtual scrolling
 - Deps: added `lottie-react` for Lottie animation rendering
+
+### Fixed
+
+- Modal: confirm dialog overlay portaled to document.body — escapes transform containing block, covers full viewport
+- Modal: discard button uses DialogPrimitive.Close — no longer requires consumers to pass onOpenChange to ModalContent
+- Modal: consumer onInteractOutside and onEscapeKeyDown handlers no longer override internal preventClose confirm flow
+- Modal: added pointer-events: auto to confirm elements to prevent Radix body-level pointer-events: none from disabling them
+- Modal: removed stray debugger statement
+- Tooltip: rebuilt on Radix Popover primitive — content renders in portal, escaping overflow:hidden clipping from parent containers; Radix handles collision detection and viewport boundary awareness
+- BulkImportModal: loading state replaces step content inline instead of separate ProgressModal or portaled overlay
+
+### Removed
+
+- Modal: onOpenChange prop removed from ModalContentProps
 
 ## [1.20.0] - 2026-06-28
 
@@ -49,12 +66,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Table: internal selection `useState` — now fully controlled via `selectedIds` prop
 - Docs: removed hallucinated `rowActions`, `bulkActions`, `onRowClick`, `onRowContextMenu` props from TableContent
 - Docs: removed hallucinated right-click context menu section and `TableRowAction` type (previously listed but never existed)
-
-## [Unreleased]
-
-### Added
-
-- Theme: Tailwind v4 `@theme` token integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
 
 ## [1.19.0] - 2026-06-26
 
