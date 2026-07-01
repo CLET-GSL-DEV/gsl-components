@@ -15,7 +15,6 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "paths": {
       "@rfdtech/components": ["./src/index.ts"]
     }
