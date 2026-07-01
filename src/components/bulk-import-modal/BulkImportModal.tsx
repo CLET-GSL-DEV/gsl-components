@@ -1,4 +1,12 @@
-import { useCallback, useMemo } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from "react";
 import { useConfirmBeforeUnload } from "../../hooks/useConfirmBeforeUnload";
 import { ChevronLeft } from "lucide-react";
 import {
@@ -11,10 +19,17 @@ import {
   ModalBody,
 } from "../modal/Modal";
 import { Button } from "../button/Button";
-import type { BulkImportModalProps } from "../../types/bulk-import-modal";
+import { ProgressBar } from "../progress-bar/ProgressBar";
+import animationData from "../table/file_processing.json";
+import type { 
+  BulkImportModalProps,
+  BulkImportResult,
+  SourceColumnMapping,
+} from "../../types/bulk-import-modal";
+import { BulkImportStep } from "../../types/bulk-import-modal";
 import { useBulkImportFlow } from "./hooks/useBulkImportFlow";
 import {
-  getMappedFieldKeys,
+  autoMatchSourceColumns,
   buildAllSourceColumns,
 } from "./utils/mapRowsToRecords";
 import { MatchColumnsStep } from "./steps/MatchColumnsStep";
@@ -24,13 +39,15 @@ import { ValidateDataStep } from "./steps/ValidateDataStep";
 import "./styles/bulk-import-modal.css";
 
 const STEPS = [
-  { id: 1, label: "Upload Document" },
-  { id: 2, label: "Select header row" },
-  { id: 3, label: "Match Columns" },
-  { id: 4, label: "Validate data" },
+  { id: BulkImportStep.UPLOAD, label: "Upload Document" },
+  { id: BulkImportStep.SELECT_HEADER_ROW, label: "Select header row" },
+  { id: BulkImportStep.MATCH_COLUMNS, label: "Match Columns" },
+  { id: BulkImportStep.VALIDATE_DATA, label: "Validate data" },
 ] as const;
 
 const DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+const Lottie = lazy(() => import("lottie-react"));
 
 function CheckmarkIcon() {
   return (
@@ -70,50 +87,182 @@ export function BulkImportModal({
     defaultState,
   });
 
+  const flowRef = useRef(flow);
+  flowRef.current = flow;
+
   const hasUnsavedProgress = flow.parsed !== null;
+
+  const loadingVerb = useMemo(() => {
+    return flow.step === BulkImportStep.VALIDATE_DATA ? "records validated" : "rows parsed";
+  }, [flow.step]);
 
   useConfirmBeforeUnload(hasUnsavedProgress);
 
-  const allSourceColumns = useMemo(() => {
-    if (!flow.parsed || flow.headerRowIndex === null) {
-      return [];
-    }
+  // ── Draft state — local to BulkImportModal, committed to flow on Next ──
 
-    return buildAllSourceColumns(flow.parsed.rows, flow.headerRowIndex);
-  }, [flow.parsed, flow.headerRowIndex]);
+  const dirtyCellsRef = useRef<Record<string, string>>({});
+  const stepResultRef = useRef<() => BulkImportResult>(
+    () => ({ rows: [], errors: [], warnings: [] }),
+  );
+  const [canConfirm, setCanConfirm] = useState(false);
 
-  const previewRows = useMemo(() => {
-    if (!flow.parsed || flow.headerRowIndex === null) {
-      return [];
-    }
-
-    return flow.parsed.rows.slice(flow.headerRowIndex + 1);
-  }, [flow.parsed, flow.headerRowIndex]);
-
-  const mappedFieldKeys = useMemo(
-    () => getMappedFieldKeys(flow.sourceColumnMapping, flow.excludedColumns),
-    [flow.sourceColumnMapping, flow.excludedColumns],
+  const [headerRowDraft, setHeaderRowDraft] = useState<number | null>(
+    flow.headerRowIndex,
   );
 
-  const canConfirm =
-    flow.canImport ||
-    (allowImportWithWarnings && flow.validationWarnings.length > 0);
+  const [matchDraft, setMatchDraft] = useState<{
+    mapping: SourceColumnMapping;
+    excluded: number[];
+  }>({
+    mapping: flow.sourceColumnMapping,
+    excluded: flow.excludedColumns,
+  });
 
-  const handleConfirm = () => {
-    if (!canConfirm && flow.validationErrors.length > 0) {
-      return;
+  // Sync drafts from committed flow state when stepping back
+  useEffect(() => {
+    setHeaderRowDraft(flow.headerRowIndex);
+  }, [flow.headerRowIndex]);
+
+  useEffect(() => {
+    setMatchDraft({
+      mapping: { ...flow.sourceColumnMapping },
+      excluded: [...flow.excludedColumns],
+    });
+  }, [flow.sourceColumnMapping, flow.excludedColumns]);
+
+  // ── Derived data for steps ──
+
+  const allSourceColumns = useMemo(() => {
+    if (!flow.parsed || headerRowDraft === null) return [];
+    return buildAllSourceColumns(flow.parsed.rows, headerRowDraft);
+  }, [flow.parsed, headerRowDraft]);
+
+  const previewRows = useMemo(() => {
+    if (!flow.parsed || headerRowDraft === null) return [];
+    return flow.parsed.rows.slice(headerRowDraft + 1);
+  }, [flow.parsed, headerRowDraft]);
+
+  const activeMatchColumns = useMemo(
+    () => allSourceColumns.filter((col) => !matchDraft.excluded.includes(col.index)),
+    [allSourceColumns, matchDraft.excluded],
+  );
+
+  const canGoNext = useMemo(() => {
+    switch (flow.step) {
+      case BulkImportStep.UPLOAD:
+        return flow.parsed !== null && flow.parseError === null;
+      case BulkImportStep.SELECT_HEADER_ROW:
+        return headerRowDraft !== null;
+      case BulkImportStep.MATCH_COLUMNS:
+        return (
+          activeMatchColumns.length > 0 &&
+          activeMatchColumns.every((col) => matchDraft.mapping[col.index] !== null)
+        );
+      default:
+        return false;
     }
+  }, [flow.step, flow.parsed, flow.parseError, headerRowDraft, activeMatchColumns, matchDraft.mapping]);
 
-    onComplete(flow.buildResult());
+  // ── Handlers ──
+
+  const handleConfirm = useCallback(() => {
+    flowRef.current.applyEdits(dirtyCellsRef.current);
+    onComplete(stepResultRef.current());
     onOpenChange(false);
-  };
+  }, [onComplete, onOpenChange]);
+
+  const handleFileSelected = useCallback(
+    (file: File) => {
+      void flowRef.current.handleFile(file);
+    },
+    [],
+  );
+
+  const handleGoNext = useCallback(() => {
+    if (flowRef.current.step === BulkImportStep.SELECT_HEADER_ROW && headerRowDraft !== null) {
+      flowRef.current.goNext({ headerRowIndex: headerRowDraft });
+    } else if (flowRef.current.step === BulkImportStep.MATCH_COLUMNS) {
+      flowRef.current.goNext({
+        sourceColumnMapping: matchDraft.mapping,
+        excludedColumns: matchDraft.excluded,
+      });
+    } else {
+      flowRef.current.goNext();
+    }
+  }, [headerRowDraft, matchDraft]);
+
+  const handleGoBack = useCallback(() => {
+    flowRef.current.goBack();
+  }, []);
+
+  const handleRemoveFile = useCallback(() => {
+    flowRef.current.removeFile();
+  }, []);
+
+  const handleGoToStep = useCallback((targetStep: number) => {
+    flowRef.current.goToStep(targetStep as 1 | 2 | 3 | 4);
+  }, []);
 
   const preventOverlayClose = useCallback(
     (event: Event) => event.preventDefault(),
     [],
   );
 
-  const dialogClass = ["gsl-bulk-import", className].filter(Boolean).join(" ");
+  // ── MatchColumnsStep local handlers ──
+
+  const handleMappingChange = useCallback(
+    (sourceIndex: number, fieldKey: string | null) => {
+      setMatchDraft((prev) => {
+        const nextMapping = { ...prev.mapping };
+        if (fieldKey) {
+          for (const [idx, mappedKey] of Object.entries(nextMapping)) {
+            if (mappedKey === fieldKey && Number(idx) !== sourceIndex) {
+              nextMapping[Number(idx)] = null;
+            }
+          }
+        }
+        nextMapping[sourceIndex] = fieldKey;
+        return { ...prev, mapping: nextMapping };
+      });
+    },
+    [],
+  );
+
+  const handleToggleExcluded = useCallback((sourceIndex: number) => {
+    setMatchDraft((prev) => {
+      const excluded = prev.excluded.includes(sourceIndex)
+        ? prev.excluded.filter((i) => i !== sourceIndex)
+        : [...prev.excluded, sourceIndex];
+      const mapping = { ...prev.mapping, [sourceIndex]: null };
+      return { mapping, excluded };
+    });
+  }, []);
+
+  const handleAutoMap = useCallback(() => {
+    if (!flow.parsed || headerRowDraft === null) return;
+    const columns = buildAllSourceColumns(flow.parsed.rows, headerRowDraft);
+    const mapping = autoMatchSourceColumns(fields, columns);
+    setMatchDraft({ mapping, excluded: [] });
+  }, [flow.parsed, headerRowDraft, fields]);
+
+  // ── Class names ──
+
+  const dialogClass = useMemo(
+    () => ["gsl-bulk-import", className].filter(Boolean).join(" "),
+    [className],
+  );
+
+  const bodyStepClass = useMemo(() => {
+    const map: Record<number, string> = {
+      [BulkImportStep.UPLOAD]: "gsl-bulk-import__body--upload",
+      [BulkImportStep.SELECT_HEADER_ROW]: "gsl-bulk-import__body--header",
+      [BulkImportStep.MATCH_COLUMNS]: "gsl-bulk-import__body--match",
+      [BulkImportStep.VALIDATE_DATA]: "gsl-bulk-import__body--validate",
+    };
+    return map[flow.step] ?? "";
+  }, [flow.step]);
+
+  // ── Render ──
 
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
@@ -125,7 +274,6 @@ export function BulkImportModal({
           preventClose={hasUnsavedProgress}
           preventCloseTitle="Exit import flow"
           preventCloseDescription="Are you sure? Your current information will not be saved."
-          onOpenChange={onOpenChange}
           onInteractOutside={preventOverlayClose}
           aria-describedby={undefined}
         >
@@ -134,7 +282,7 @@ export function BulkImportModal({
               <ol className="gsl-bulk-import__stepper-list">
                 {STEPS.map((stepItem, index) => {
                   const isActive = flow.step === stepItem.id;
-                  const isComplete = flow.step > stepItem.id;
+                  const isComplete = flow.maxStep > stepItem.id;
                   const isLast = index === STEPS.length - 1;
                   const canClick = isComplete;
                   return (
@@ -158,7 +306,7 @@ export function BulkImportModal({
                         <button
                           type="button"
                           className="gsl-bulk-import__stepper-button"
-                          onClick={() => flow.goToStep(stepItem.id)}
+                          onClick={() => handleGoToStep(stepItem.id)}
                           aria-label={`Go to step ${stepItem.id}: ${stepItem.label}`}
                         >
                           <span className="gsl-bulk-import__stepper-marker">
@@ -234,89 +382,113 @@ export function BulkImportModal({
           </ModalTitle>
 
           <ModalBody
-            className={[
-              "gsl-bulk-import__body",
-              flow.step === 1
-                ? "gsl-bulk-import__body--upload"
-                : flow.step === 2
-                  ? "gsl-bulk-import__body--header"
-                  : flow.step === 3
-                    ? "gsl-bulk-import__body--match"
-                    : flow.step === 4
-                      ? "gsl-bulk-import__body--validate"
-                      : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            className={["gsl-bulk-import__body", bodyStepClass].filter(Boolean).join(" ")}
           >
-            {flow.step === 1 && (
+            {flow.step === BulkImportStep.UPLOAD && (
               <UploadStep
                 fields={fields}
                 parseError={flow.parseError}
                 isParsing={flow.isParsing}
                 maxFileSizeBytes={maxFileSizeBytes}
-                onFileSelected={(file) => void flow.handleFile(file)}
+                onFileSelected={handleFileSelected}
+                uploadedFile={flow.uploadedFile}
+                onRemoveFile={handleRemoveFile}
               />
             )}
 
-            {flow.step === 2 && flow.parsed && (
+            {flow.step === BulkImportStep.SELECT_HEADER_ROW && flow.parsed && (
               <SelectHeaderRowStep
                 rows={flow.parsed.rows}
-                headerRowIndex={flow.headerRowIndex}
-                onSelectHeaderRow={flow.setHeaderRowIndex}
+                headerRowIndex={headerRowDraft}
+                onSelectHeaderRow={setHeaderRowDraft}
               />
             )}
 
-            {flow.step === 3 && flow.parsed && (
+            {flow.step === BulkImportStep.MATCH_COLUMNS && flow.parsed && (
               <MatchColumnsStep
                 fields={fields}
                 allSourceColumns={allSourceColumns}
                 previewRows={previewRows}
-                sourceColumnMapping={flow.sourceColumnMapping}
-                excludedColumns={flow.excludedColumns}
-                onSourceMappingChange={flow.updateSourceMapping}
-                onToggleExcludedColumn={flow.toggleExcludedColumn}
-                onResetMapping={flow.autoMapColumns}
+                sourceColumnMapping={matchDraft.mapping}
+                excludedColumns={matchDraft.excluded}
+                onSourceMappingChange={handleMappingChange}
+                onToggleExcludedColumn={handleToggleExcluded}
+                onResetMapping={handleAutoMap}
               />
             )}
 
-            {flow.step === 4 && (
+            {flow.step === BulkImportStep.VALIDATE_DATA && (
               <ValidateDataStep
                 fields={fields}
-                mappedFieldKeys={mappedFieldKeys}
                 mappedRows={flow.editableRows}
                 errors={flow.validationErrors}
-                selectedRowIds={flow.selectedRowIds}
-                showOnlyErrors={flow.showOnlyErrors}
                 discardedRows={flow.discardedRows}
-                onToggleRowSelection={flow.toggleRowSelection}
-                onSetVisibleRowsSelection={flow.setVisibleRowsSelection}
-                onShowOnlyErrorsChange={flow.setShowOnlyErrors}
+                dirtyCellsRef={dirtyCellsRef}
+                stepResultRef={stepResultRef}
                 onDiscardSelectedRows={flow.discardSelectedRows}
                 onResetDiscardedRows={flow.resetDiscardedRows}
-                onUpdateRowValue={flow.updateRowValue}
+                onCanConfirmChange={setCanConfirm}
               />
             )}
+
+            <div
+              className={[
+                "gsl-bulk-import__loading",
+                flow.isProcessingLarge ? "gsl-bulk-import__loading--visible" : "",
+              ].join(" ")}
+            >
+              <h3 className="gsl-bulk-import__step-title">Processing</h3>
+              <p className="gsl-bulk-import__step-note">
+                {flow.step === BulkImportStep.VALIDATE_DATA
+                  ? "Validating your records..."
+                  : "Parsing your data..."}
+              </p>
+              <div className="gsl-bulk-import__loading-center">
+                <Suspense fallback={null}>
+                  <Lottie
+                    animationData={animationData}
+                    loop
+                    autoplay
+                    className="gsl-bulk-import__lottie"
+                  />
+                </Suspense>
+                <div className="gsl-bulk-import__loading-bar">
+                  <ProgressBar value={flow.processingProgress} size="md" />
+                </div>
+                {flow.processingTotal > 0 && (
+                  <p className="gsl-bulk-import__loading-counter">
+                    {Math.round((flow.processingProgress / 100) * flow.processingTotal).toLocaleString()}
+                    {" / "}
+                    {flow.processingTotal.toLocaleString()}
+                    {" "}
+                    {loadingVerb}
+                  </p>
+                )}
+              </div>
+            </div>
           </ModalBody>
 
-          {flow.step > 1 && (
+          {(flow.step > BulkImportStep.UPLOAD || flow.parsed !== null || flow.uploadedFile !== null) && (
             <ModalFooter className="gsl-bulk-import__footer">
-              <Button
-                variant="outline"
-                size="md"
-                className="gsl-bulk-import__footer-action"
-                onClick={flow.goBack}
-              >
-                <ChevronLeft size={16} strokeWidth={2} />
-                Back
-              </Button>
-              {flow.step < 4 ? (
+              {flow.step > BulkImportStep.UPLOAD && (
+                <Button
+                  variant="outline"
+                  size="md"
+                  className="gsl-bulk-import__footer-action"
+                  disabled={flow.isProcessingLarge}
+                  onClick={handleGoBack}
+                >
+                  <ChevronLeft size={16} strokeWidth={2} />
+                  Back
+                </Button>
+              )}
+              {flow.step < BulkImportStep.VALIDATE_DATA ? (
                 <Button
                   variant="primary"
                   size="md"
                   className="gsl-bulk-import__footer-action"
-                  disabled={!flow.canGoNext}
-                  onClick={flow.goNext}
+                  disabled={flow.isProcessingLarge || !canGoNext}
+                  onClick={handleGoNext}
                 >
                   Next
                 </Button>
@@ -325,7 +497,7 @@ export function BulkImportModal({
                   variant="primary"
                   size="md"
                   className="gsl-bulk-import__footer-action"
-                  disabled={!canConfirm}
+                  disabled={flow.isProcessingLarge || !canConfirm}
                   onClick={handleConfirm}
                 >
                   Confirm

@@ -13,7 +13,7 @@ import {
 import { demoApps } from "demo/data/demoApps";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
-import { buildPageItems, buildMemberItems } from "demo/data/demoSearch";
+import { buildPageItems, buildMemberItems, buildDocItems } from "demo/data/demoSearch";
 import { packageVersion } from "demo/docs/site-meta";
 
 import {
@@ -140,6 +140,7 @@ export function DemoLayout() {
     () => buildMemberItems(searchQuery),
     [searchQuery],
   );
+  const docsQuery = useMemo(() => buildDocItems(searchQuery), [searchQuery]);
 
   const { data: pageResults, loading: pagesLoading } = useMockQuery(
     pagesQuery,
@@ -151,6 +152,12 @@ export function DemoLayout() {
     membersQuery,
     2000,
     `${searchQuery}-members`,
+  );
+
+  const { data: docsResults, loading: docsLoading } = useMockQuery(
+    docsQuery,
+    300,
+    `${searchQuery}-docs`,
   );
 
   const searchGroups: AppHeaderSearchDataGroup[] = useMemo(() => {
@@ -168,8 +175,20 @@ export function DemoLayout() {
         loading: membersLoading,
         loadingLabel: "Searching members...",
       },
+      {
+        heading: "Documentation",
+        items: (docsResults ?? []).map((doc) => ({
+          ...doc,
+          onSelect: () => {
+            navigate(`/docs/${doc.value}`);
+            setSearchQuery("");
+          },
+        })),
+        loading: docsLoading,
+        loadingLabel: "Searching documentation...",
+      },
     ];
-  }, [searchQuery, pageResults, pagesLoading, memberResults, membersLoading]);
+  }, [searchQuery, pageResults, pagesLoading, memberResults, membersLoading, docsResults, docsLoading]);
 
   const navGroups = [
     {

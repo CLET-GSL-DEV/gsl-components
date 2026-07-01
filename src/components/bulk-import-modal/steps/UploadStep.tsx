@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import type { BulkImportField } from "../../../types/bulk-import-modal";
 import { UploadField } from "../../upload-field/UploadField";
 import { getFieldExampleValue } from "../utils/validateFieldValue";
@@ -8,6 +9,8 @@ interface UploadStepProps {
   isParsing: boolean;
   maxFileSizeBytes: number;
   onFileSelected: (file: File) => void;
+  uploadedFile?: File | null;
+  onRemoveFile?: () => void;
 }
 
 export function UploadStep({
@@ -16,6 +19,8 @@ export function UploadStep({
   isParsing,
   maxFileSizeBytes,
   onFileSelected,
+  uploadedFile,
+  onRemoveFile,
 }: UploadStepProps) {
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--upload">
@@ -49,6 +54,7 @@ export function UploadStep({
 
       <div className="gsl-bulk-import__upload-area">
         <UploadField
+          value={uploadedFile ?? undefined}
           accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
           maxSize={maxFileSizeBytes}
           disabled={isParsing}
@@ -56,6 +62,8 @@ export function UploadStep({
           onChange={(file) => {
             if (file && !Array.isArray(file)) {
               onFileSelected(file);
+            } else if (!file) {
+              onRemoveFile?.();
             }
           }}
         />

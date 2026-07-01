@@ -1,9 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Tooltip } from "./Tooltip";
 
 describe("Tooltip", () => {
-  it("renders children and tooltip content", () => {
+  it("renders children and tooltip content", async () => {
     render(
       <Tooltip content="Helper text">
         <button type="button">Hover me</button>
@@ -11,49 +11,61 @@ describe("Tooltip", () => {
     );
 
     expect(screen.getByRole("button", { name: "Hover me" })).toBeInTheDocument();
-    const tooltip = document.querySelector('[role="tooltip"]');
-    expect(tooltip).toHaveTextContent("Helper text");
+
+    fireEvent.mouseEnter(screen.getByRole("button", { name: "Hover me" }));
+    await waitFor(() => {
+      const tooltip = document.querySelector('[role="tooltip"]');
+      expect(tooltip).toHaveTextContent("Helper text");
+    });
   });
 
-  it("shows tooltip on hover", () => {
+  it("shows tooltip on hover", async () => {
     render(
       <Tooltip content="Helper text">
         <button type="button">Hover me</button>
       </Tooltip>,
     );
 
-    const tooltip = document.querySelector('[role="tooltip"]')!;
-    expect(tooltip).not.toHaveClass("gsl-tooltip__content--open");
+    expect(document.querySelector('[role="tooltip"]')).toBeNull();
 
     fireEvent.mouseEnter(screen.getByRole("button", { name: "Hover me" }));
-    expect(tooltip).toHaveClass("gsl-tooltip__content--open");
+    await waitFor(() => {
+      const tooltip = document.querySelector('[role="tooltip"]')!;
+      expect(tooltip).toHaveClass("gsl-tooltip__content--open");
+    });
   });
 
-  it("applies side class on content", () => {
+  it("applies side class on content", async () => {
     render(
       <Tooltip content="Right tooltip" side="right">
         <button type="button">Target</button>
       </Tooltip>,
     );
 
-    expect(
-      document.querySelector('[role="tooltip"]'),
-    ).toHaveClass("gsl-tooltip__content--right");
+    fireEvent.mouseEnter(screen.getByRole("button", { name: "Target" }));
+    await waitFor(() => {
+      expect(
+        document.querySelector('[role="tooltip"]'),
+      ).toHaveClass("gsl-tooltip__content--right");
+    });
   });
 
-  it("defaults to top side", () => {
+  it("defaults to top side", async () => {
     render(
       <Tooltip content="Top tooltip">
         <button type="button">Target</button>
       </Tooltip>,
     );
 
-    expect(
-      document.querySelector('[role="tooltip"]'),
-    ).toHaveClass("gsl-tooltip__content--top");
+    fireEvent.mouseEnter(screen.getByRole("button", { name: "Target" }));
+    await waitFor(() => {
+      expect(
+        document.querySelector('[role="tooltip"]'),
+      ).toHaveClass("gsl-tooltip__content--top");
+    });
   });
 
-  it("merges classNames", () => {
+  it("merges classNames", async () => {
     render(
       <Tooltip
         content="Styled"
@@ -63,8 +75,11 @@ describe("Tooltip", () => {
       </Tooltip>,
     );
 
-    const tooltip = document.querySelector('[role="tooltip"]')!;
-    expect(tooltip).toHaveClass("custom-content");
+    fireEvent.mouseEnter(screen.getByRole("button", { name: "Target" }));
+    await waitFor(() => {
+      const tooltip = document.querySelector('[role="tooltip"]')!;
+      expect(tooltip).toHaveClass("custom-content");
+    });
     expect(document.querySelector(".gsl-tooltip")).toHaveClass("custom-root");
   });
 
@@ -94,14 +109,17 @@ describe("Tooltip", () => {
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
-  it("renders ReactNode content", () => {
+  it("renders ReactNode content", async () => {
     render(
       <Tooltip content={<em data-testid="rich-content">rich content</em>}>
         <button type="button">Target</button>
       </Tooltip>,
     );
 
-    expect(screen.getByTestId("rich-content")).toBeInTheDocument();
-    expect(screen.getByTestId("rich-content")).toHaveTextContent("rich content");
+    fireEvent.mouseEnter(screen.getByRole("button", { name: "Target" }));
+    await waitFor(() => {
+      expect(screen.getByTestId("rich-content")).toBeInTheDocument();
+      expect(screen.getByTestId("rich-content")).toHaveTextContent("rich content");
+    });
   });
 });

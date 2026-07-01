@@ -9,7 +9,7 @@ import bulkImportSource from "../previews/examples/bulk-import.example.tsx?raw";
 
 # BulkImportModal
 
-Four-step modal wizard for importing spreadsheet data (`.xlsx`, `.xls`, `.csv`). Parsing and validation run entirely in the browser.
+Four-step modal wizard for importing spreadsheet data (`.xlsx`, `.xls`, `.csv`). Parsing and validation run in the browser. Datasets over 1000 rows are processed in chunks with a progress overlay to avoid main-thread freezes.
 
 ## Example
 

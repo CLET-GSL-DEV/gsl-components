@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import {
@@ -335,7 +335,7 @@ describe("Sidebar", () => {
     );
   });
 
-  it("shows tooltip on SidebarLink when sidebar is collapsed", () => {
+  it("shows tooltip on SidebarLink when sidebar is collapsed", async () => {
     mockMatchMedia(false);
 
     render(
@@ -354,9 +354,12 @@ describe("Sidebar", () => {
       </SidebarProvider>,
     );
 
-    const tooltip = document.querySelector('[role="tooltip"]');
-    expect(tooltip).toBeInTheDocument();
-    expect(tooltip).toHaveTextContent("Dashboard");
+    fireEvent.mouseEnter(screen.getByTestId("dash-icon"));
+    await waitFor(() => {
+      const tooltip = document.querySelector('[role="tooltip"]');
+      expect(tooltip).toBeInTheDocument();
+      expect(tooltip).toHaveTextContent("Dashboard");
+    });
   });
 
   it("does not show tooltip on SidebarLink when sidebar is expanded", () => {
@@ -383,7 +386,7 @@ describe("Sidebar", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("extracts label text from nested children for tooltip", () => {
+  it("extracts label text from nested children for tooltip", async () => {
     mockMatchMedia(false);
 
     render(
@@ -402,11 +405,14 @@ describe("Sidebar", () => {
       </SidebarProvider>,
     );
 
-    const tooltip = document.querySelector('[role="tooltip"]');
-    expect(tooltip).toHaveTextContent("Notification Templates");
+    fireEvent.mouseEnter(screen.getByTestId("bell-icon"));
+    await waitFor(() => {
+      const tooltip = document.querySelector('[role="tooltip"]');
+      expect(tooltip).toHaveTextContent("Notification Templates");
+    });
   });
 
-  it("wraps asChild link in tooltip when collapsed", () => {
+  it("wraps asChild link in tooltip when collapsed", async () => {
     mockMatchMedia(false);
 
     render(
@@ -425,9 +431,12 @@ describe("Sidebar", () => {
       </SidebarProvider>,
     );
 
-    const tooltip = document.querySelector('[role="tooltip"]');
-    expect(tooltip).toBeInTheDocument();
-    expect(tooltip).toHaveTextContent("Reports");
+    fireEvent.mouseEnter(screen.getByRole("link", { name: "Reports" }));
+    await waitFor(() => {
+      const tooltip = document.querySelector('[role="tooltip"]');
+      expect(tooltip).toBeInTheDocument();
+      expect(tooltip).toHaveTextContent("Reports");
+    });
   });
 
   it("does not render tooltip when link has no label text", () => {

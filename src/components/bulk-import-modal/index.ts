@@ -6,7 +6,11 @@ export { ValidateDataStep } from "./steps/ValidateDataStep";
 export { useBulkImportFlow } from "./hooks/useBulkImportFlow";
 export {
   BulkImportParseError,
+  filterEmptyRows,
   isAcceptedSpreadsheetFile,
+  isCsv,
+  normalizeRows,
+  parseCsvText,
   parseSpreadsheetFile,
 } from "./utils/parseSpreadsheetFile";
 export {
@@ -16,10 +20,12 @@ export {
   createEmptySourceMapping,
   getMappedFieldKeys,
   isRequiredMappingComplete,
+  mapDataRows,
   mapRowsToRecords,
 } from "./utils/mapRowsToRecords";
 export {
   splitValidationIssues,
+  validateBatch,
   validateMappedRows,
 } from "./utils/validateMappedRows";
 export {
@@ -33,7 +39,6 @@ export type {
   BulkImportFieldType,
   BulkImportModalProps,
   BulkImportResult,
-  BulkImportStep,
   BulkImportValidationError,
   ColumnMapping,
   ParsedSpreadsheet,
@@ -42,3 +47,4 @@ export type {
   UseBulkImportFlowOptions,
   UseBulkImportFlowReturn,
 } from "../../types/bulk-import-modal";
+export { BulkImportStep } from "../../types/bulk-import-modal";

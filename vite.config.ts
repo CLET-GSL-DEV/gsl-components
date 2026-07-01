@@ -25,7 +25,11 @@ export default defineConfig({
         id === "react-router" ||
         id.startsWith("react-router/") ||
         id === "lucide-react" ||
-        id.startsWith("lucide-react/"),
+        id.startsWith("lucide-react/") ||
+        id === "lottie-react" ||
+        id.startsWith("lottie-react/") ||
+        id === "lottie-web" ||
+        id.startsWith("lottie-web/"),
       output: {
         globals: {
           react: "React",

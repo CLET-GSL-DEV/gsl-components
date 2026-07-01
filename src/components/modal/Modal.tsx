@@ -1,6 +1,7 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { forwardRef, useCallback, useRef, useState } from "react";
+import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type {
   ModalBodyProps,
   ModalContentProps,
@@ -43,7 +44,8 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
       preventClose = false,
       preventCloseTitle = "Discard changes?",
       preventCloseDescription = "You have unsaved changes. Are you sure you want to close?",
-      onOpenChange,
+      onInteractOutside: consumerOnInteractOutside,
+      onEscapeKeyDown: consumerOnEscapeKeyDown,
       ...props
     },
     ref,
@@ -56,48 +58,83 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
     const requestClose = useCallback(() => {
       if (preventClose) {
         setShowConfirm(true);
-      } else {
-        onOpenChange?.(false);
       }
-    }, [preventClose, onOpenChange]);
+    }, [preventClose]);
 
-    const handleDiscard = () => {
+    const handleDiscard = useCallback(() => {
       setShowConfirm(false);
-      onOpenChange?.(false);
-    };
+    }, []);
+
+    const handleCancelConfirm = useCallback(() => {
+      setShowConfirm(false);
+    }, []);
 
     const handleEscapeKeyDown = useCallback(
       (event: KeyboardEvent) => {
-        if (preventClose) {
-          event.preventDefault();
-          requestClose();
-        }
+        event.preventDefault();
+        requestClose();
+        consumerOnEscapeKeyDown?.(event);
       },
-      [preventClose, requestClose],
+      [requestClose, consumerOnEscapeKeyDown],
     );
 
-    const handleInteractOutside = useCallback(
+    const handleInteractOutsideDefault = useCallback(
       (event: Event) => {
-        if (preventClose) {
-          event.preventDefault();
-          requestClose();
-        } else {
-          const typedEvent = event as CustomEvent<{
-            originalEvent: PointerEvent;
-          }>;
+        const typedEvent = event as CustomEvent<{
+          originalEvent: PointerEvent;
+        }>;
+        try {
           const targetElement = document.elementFromPoint(
             typedEvent.detail.originalEvent.clientX,
             typedEvent.detail.originalEvent.clientY,
           );
-
           const isTargetInside = contentRef.current?.contains(targetElement);
           if (isTargetInside) {
             event.preventDefault();
+          } else {
+            if (preventClose) {
+              event.preventDefault();
+              requestClose();
+            }
           }
-          debugger;
+        } catch {
+          // jsdom doesn't support elementFromPoint
         }
+        (consumerOnInteractOutside as ((e: Event) => void) | undefined)?.(
+          event,
+        );
       },
-      [preventClose, requestClose, handleDiscard, contentRef],
+      [consumerOnInteractOutside, preventClose, requestClose],
+    );
+
+    const confirmNode = useMemo(
+      () =>
+        createPortal(
+          <div className="gsl-modal__confirm-overlay">
+            <div className="gsl-modal__confirm">
+              <h2 className="gsl-modal__confirm-title">{preventCloseTitle}</h2>
+              <p className="gsl-modal__confirm-description">
+                {preventCloseDescription}
+              </p>
+              <div className="gsl-modal__confirm-actions">
+                <Button variant="ghost" onClick={handleCancelConfirm}>
+                  Cancel
+                </Button>
+                <DialogPrimitive.Close asChild onClick={handleDiscard}>
+                  <Button variant="primary">Discard</Button>
+                </DialogPrimitive.Close>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        ),
+      [
+        preventCloseDescription,
+        preventCloseTitle,
+        handleCancelConfirm,
+        handleDiscard,
+        showConfirm,
+      ],
     );
 
     return (
@@ -109,8 +146,10 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
           classNames?.content,
           className,
         )}
-        onInteractOutside={handleInteractOutside}
-        onEscapeKeyDown={preventClose ? handleEscapeKeyDown : undefined}
+        onInteractOutside={handleInteractOutsideDefault}
+        onEscapeKeyDown={
+          preventClose ? handleEscapeKeyDown : consumerOnEscapeKeyDown
+        }
         {...props}
       >
         {children}
@@ -135,24 +174,7 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
             </DialogPrimitive.Close>
           ))}
 
-        {showConfirm && (
-          <div className="gsl-modal__confirm-overlay">
-            <div className="gsl-modal__confirm">
-              <h2 className="gsl-modal__confirm-title">{preventCloseTitle}</h2>
-              <p className="gsl-modal__confirm-description">
-                {preventCloseDescription}
-              </p>
-              <div className="gsl-modal__confirm-actions">
-                <Button variant="ghost" onClick={() => setShowConfirm(false)}>
-                  Cancel
-                </Button>
-                <Button variant="primary" onClick={handleDiscard}>
-                  Discard
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        {showConfirm && confirmNode}
       </DialogPrimitive.Content>
     );
   },

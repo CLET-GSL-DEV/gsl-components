@@ -1,4 +1,5 @@
 import { gslMembers } from "./demoHomeMembers";
+import { getAllDocSlugs, getDocPage } from "../docs/registry";
 
 export interface SearchItem {
   value: string;
@@ -51,4 +52,25 @@ export function buildMemberItems(query: string): SearchItem[] {
       label: `${m.name} — ${m.email}`,
       onSelect: () => console.log(`Selected: ${m.name}`),
     }));
+}
+
+export function buildDocItems(query: string): SearchItem[] {
+  if (!query.trim()) return [];
+  const q = query.toLowerCase();
+  const slugs = getAllDocSlugs();
+  const results: SearchItem[] = [];
+  for (const slug of slugs) {
+    const page = getDocPage(slug);
+    if (!page) continue;
+    const title = page.meta.title ?? "";
+    const description = page.meta.description ?? "";
+    if (title.toLowerCase().includes(q) || description.toLowerCase().includes(q) || slug.toLowerCase().includes(q)) {
+      results.push({
+        value: slug,
+        label: title,
+        onSelect: () => {},
+      });
+    }
+  }
+  return results;
 }
