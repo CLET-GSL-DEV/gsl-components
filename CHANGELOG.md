@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Theme: Tailwind v4 `@theme` token integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
+- Theme: Tailwind v4 `@theme` tokens integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
 - ProgressModal: non-dismissable processing overlay with Lottie animation and determinate progress bar
 - BulkImportModal: chunked processing for datasets over 1000 rows — file parsing, row mapping, and validation run in 1000-row batches with a progress overlay to prevent main-thread freezes
 - BulkImportModal: CSV files stream-parsed in chunks for smooth progress; XLSX files parse in one shot with chunked normalize afterward
