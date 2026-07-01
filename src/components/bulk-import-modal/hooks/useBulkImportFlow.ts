@@ -24,9 +24,13 @@ import {
 } from "../utils/parseSpreadsheetFile";
 import * as XLSX from "xlsx";
 import { validateRowsChunked } from "../utils/validateRowsChunked";
-
-const CHUNK_SIZE = 1000;
-const DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024;
+import {
+  PARSE_CHUNK_SIZE,
+  REMAP_CHUNK_SIZE,
+  INITIAL_VALIDATION_CHUNK_SIZE,
+  DEFAULT_MAX_FILE_SIZE,
+  ACCEPTED_EXTENSIONS,
+} from "../constants";
 
 const YIELD = () => new Promise<void>((r) => setTimeout(r, 0));
 
@@ -38,12 +42,12 @@ async function processInChunks<T, R>(
 ): Promise<R[]> {
   const result: R[] = [];
   const total = items.length;
-  for (let i = 0; i < total; i += CHUNK_SIZE) {
+  for (let i = 0; i < total; i += PARSE_CHUNK_SIZE) {
     if (signal?.aborted) return result;
-    const batch = items.slice(i, i + CHUNK_SIZE);
+    const batch = items.slice(i, i + PARSE_CHUNK_SIZE);
     result.push(...fn(batch));
-    onProgress(Math.round((Math.min(i + CHUNK_SIZE, total) / total) * 100));
-    if (i + CHUNK_SIZE < total) await YIELD();
+    onProgress(Math.round((Math.min(i + PARSE_CHUNK_SIZE, total) / total) * 100));
+    if (i + PARSE_CHUNK_SIZE < total) await YIELD();
   }
   return result;
 }
@@ -153,8 +157,8 @@ export function useBulkImportFlow(
       const excluded = new Set(excludedColumns);
       const remapped: Record<string, string>[] = [];
 
-      for (let i = 0; i < dataRows.length; i += CHUNK_SIZE) {
-        const batch = dataRows.slice(i, i + CHUNK_SIZE);
+      for (let i = 0; i < dataRows.length; i += REMAP_CHUNK_SIZE) {
+        const batch = dataRows.slice(i, i + REMAP_CHUNK_SIZE);
         for (const row of batch) {
           const record: Record<string, string> = {};
           for (const [sourceIndexValue, fieldKey] of Object.entries(
@@ -168,7 +172,7 @@ export function useBulkImportFlow(
             remapped.push(record);
           }
         }
-        if (i + CHUNK_SIZE < dataRows.length) await YIELD();
+        if (i + REMAP_CHUNK_SIZE < dataRows.length) await YIELD();
       }
 
       syncedMappingRef.current = mappingId;
@@ -228,7 +232,7 @@ export function useBulkImportFlow(
       setFlow((prev) => ({ ...prev, uploadedFile: file, parseError: null }));
 
       const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
-      if (![".xlsx", ".xls", ".csv"].includes(ext)) {
+      if (!ACCEPTED_EXTENSIONS.includes(ext as typeof ACCEPTED_EXTENSIONS[number])) {
         setFlow((prev) => ({ ...prev, parseError: "Unsupported file type. Upload a .xlsx, .xls, or .csv file." }));
         return;
       }
@@ -250,7 +254,7 @@ export function useBulkImportFlow(
           setProcessingTotal(lines.length);
           let rows: string[][];
 
-          if (lines.length <= CHUNK_SIZE) {
+          if (lines.length <= PARSE_CHUNK_SIZE) {
             rows = filterEmptyRows(normalizeRows(parseCsvText(text)));
           } else {
             rows = await processInChunks(
@@ -289,7 +293,7 @@ export function useBulkImportFlow(
         });
         if (signal.aborted) return;
 
-        if (rawRows.length > CHUNK_SIZE) {
+        if (rawRows.length > PARSE_CHUNK_SIZE) {
           setIsProcessingLarge(true);
           setProcessingProgress(0);
           await YIELD();
@@ -404,6 +408,7 @@ export function useBulkImportFlow(
         fields,
         signal,
         onProgress: setProcessingProgress,
+        chunk_size: INITIAL_VALIDATION_CHUNK_SIZE,
       });
       if (signal.aborted) return;
 

@@ -1,7 +1,6 @@
 import * as XLSX from "xlsx";
 import type { ParsedSpreadsheet } from "../../../types/bulk-import-modal";
-
-const ACCEPTED_EXTENSIONS = [".xlsx", ".xls", ".csv"];
+import { ACCEPTED_EXTENSIONS } from "../constants";
 
 export class BulkImportParseError extends Error {
   constructor(message: string) {
@@ -40,7 +39,7 @@ export function filterEmptyRows(rows: string[][]): string[][] {
 }
 
 export function isAcceptedSpreadsheetFile(fileName: string) {
-  return ACCEPTED_EXTENSIONS.includes(getExtension(fileName));
+  return ACCEPTED_EXTENSIONS.includes(getExtension(fileName) as typeof ACCEPTED_EXTENSIONS[number]);
 }
 
 export function isCsv(fileName: string) {

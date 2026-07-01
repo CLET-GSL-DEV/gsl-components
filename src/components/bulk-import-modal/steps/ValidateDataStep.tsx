@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, MutableRefObject } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Checkbox } from "../../checkbox/Checkbox";
@@ -17,6 +11,7 @@ import type {
 import { validateRowsChunked } from "../utils/validateRowsChunked";
 import { validateFieldValue } from "../utils/validateFieldValue";
 import { useDebounce } from "../../../hooks/useDebounce";
+import { BACKGROUND_VALIDATION_CHUNK_SIZE } from "../constants";
 
 // ── Types ──
 
@@ -111,12 +106,9 @@ function CellInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue]);
 
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setValue(e.target.value);
-    },
-    [],
-  );
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  }, []);
 
   return (
     <span className="gsl-bulk-import__cell-inner">
@@ -134,10 +126,7 @@ function CellInput({
         onChange={handleChange}
       />
       {errorMessage && (
-        <span
-          className="gsl-bulk-import__cell-error-tooltip"
-          role="tooltip"
-        >
+        <span className="gsl-bulk-import__cell-error-tooltip" role="tooltip">
           {errorMessage}
         </span>
       )}
@@ -169,10 +158,14 @@ export function ValidateDataStep({
 
   // ── Local validation state (per-cell instant + background full scan) ──
 
-  const [localValidation, setLocalValidation] = useState<BulkImportValidationError[]>([]);
+  const [localValidation, setLocalValidation] = useState<
+    BulkImportValidationError[]
+  >([]);
 
   const bgAbortRef = useRef(new AbortController());
-  const bgTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const bgTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
   const [dirtyCellKeys, setDirtyCellKeys] = useState<Set<string>>(new Set());
 
   const mappedRowsRef = useRef(mappedRows);
@@ -204,6 +197,7 @@ export function ValidateDataStep({
         }
         return patched;
       },
+      chunk_size: BACKGROUND_VALIDATION_CHUNK_SIZE,
     });
 
     if (!signal.aborted) setLocalValidation(issues);
@@ -247,7 +241,10 @@ export function ValidateDataStep({
   // ── Merged errors: flow errors for clean cells, local validation for dirty cells ──
 
   const flowErrorMap = useMemo(() => buildErrorMap(errors), [errors]);
-  const localErrorMap = useMemo(() => buildErrorMap(localValidation), [localValidation]);
+  const localErrorMap = useMemo(
+    () => buildErrorMap(localValidation),
+    [localValidation],
+  );
 
   const mergedErrors = useMemo(() => {
     const merged = new Map<string, string>();
@@ -262,16 +259,15 @@ export function ValidateDataStep({
     return merged;
   }, [flowErrorMap, localErrorMap, dirtyCellKeys]);
 
-  const activeErrors = useMemo(
-    () => {
-      const cleanFlowErrors = errors.filter(
-        (e) => !dirtyCellKeys.has(`${e.row}:${e.fieldKey}`),
-      );
-      const all = [...cleanFlowErrors, ...localValidation];
-      return all.filter((e) => e.severity === "error" && !discardedRows.includes(e.row));
-    },
-    [errors, localValidation, discardedRows, dirtyCellKeys],
-  );
+  const activeErrors = useMemo(() => {
+    const cleanFlowErrors = errors.filter(
+      (e) => !dirtyCellKeys.has(`${e.row}:${e.fieldKey}`),
+    );
+    const all = [...cleanFlowErrors, ...localValidation];
+    return all.filter(
+      (e) => e.severity === "error" && !discardedRows.includes(e.row),
+    );
+  }, [errors, localValidation, discardedRows, dirtyCellKeys]);
 
   const rowsWithErrors = useMemo(
     () => new Set(activeErrors.map((issue) => issue.row)),
@@ -329,12 +325,9 @@ export function ValidateDataStep({
   const visibleRowIdsRef = useRef(visibleRowIds);
   visibleRowIdsRef.current = visibleRowIds;
 
-  const handleSelectAll = useCallback(
-    (checked: boolean) => {
-      setSelection(checked ? "ALL" : new Set());
-    },
-    [],
-  );
+  const handleSelectAll = useCallback((checked: boolean) => {
+    setSelection(checked ? "ALL" : new Set());
+  }, []);
 
   const handleToggleRow = useCallback((rowId: number) => {
     setSelection((prev) => {
@@ -354,9 +347,7 @@ export function ValidateDataStep({
 
   const handleDiscard = useCallback(() => {
     const ids =
-      selection === "ALL"
-        ? visibleRowIdsRef.current
-        : Array.from(selection);
+      selection === "ALL" ? visibleRowIdsRef.current : Array.from(selection);
     if (ids.length === 0) return;
     onDiscardSelectedRows(ids);
     setSelection(new Set());
@@ -364,21 +355,19 @@ export function ValidateDataStep({
 
   // ── Step result (used by BulkImportModal on Confirm) ──
 
-  const activeErrorList = useMemo(
-    () => {
-      const cleanFlowErrors = errors.filter(
-        (e) => !dirtyCellKeys.has(`${e.row}:${e.fieldKey}`),
-      );
-      const all = [...cleanFlowErrors, ...localValidation];
-      return all.filter((e) => !discardedRows.includes(e.row));
-    },
-    [errors, localValidation, discardedRows, dirtyCellKeys],
-  );
+  const activeErrorList = useMemo(() => {
+    const cleanFlowErrors = errors.filter(
+      (e) => !dirtyCellKeys.has(`${e.row}:${e.fieldKey}`),
+    );
+    const all = [...cleanFlowErrors, ...localValidation];
+    return all.filter((e) => !discardedRows.includes(e.row));
+  }, [errors, localValidation, discardedRows, dirtyCellKeys]);
 
   useEffect(() => {
     stepResultRef.current = () => {
-      const rows = patchRows(mappedRows, dirtyCellsRef.current)
-        .filter((_, index) => !discardedRows.includes(index + 1));
+      const rows = patchRows(mappedRows, dirtyCellsRef.current).filter(
+        (_, index) => !discardedRows.includes(index + 1),
+      );
       return {
         rows,
         errors: activeErrorList.filter((e) => e.severity === "error"),
@@ -389,7 +378,13 @@ export function ValidateDataStep({
       activeErrorList.filter((e) => e.severity === "error").length === 0,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stepResultRef, mappedRows, discardedRows, activeErrorList, onCanConfirmChange]);
+  }, [
+    stepResultRef,
+    mappedRows,
+    discardedRows,
+    activeErrorList,
+    onCanConfirmChange,
+  ]);
 
   // ── Cleanup: clear dirty cells on unmount / data change ──
 
@@ -518,8 +513,14 @@ export function ValidateDataStep({
                 </tr>
               </thead>
               <tbody>
-                <tr className="gsl-bulk-import__validate-spacer-row" style={{ height: totalHeight }}>
-                  <td colSpan={colCount} className="gsl-bulk-import__validate-spacer-td">
+                <tr
+                  className="gsl-bulk-import__validate-spacer-row"
+                  style={{ height: totalHeight }}
+                >
+                  <td
+                    colSpan={colCount}
+                    className="gsl-bulk-import__validate-spacer-td"
+                  >
                     {items.map((item) => {
                       const { row, rowId } = visibleRows[item.index];
                       const isSelected =
@@ -560,7 +561,8 @@ export function ValidateDataStep({
                                 </td>
                                 {visibleFields.map((field) => {
                                   const cellKey = `${rowId}:${field.key}`;
-                                  const errorMessage = mergedErrors.get(cellKey);
+                                  const errorMessage =
+                                    mergedErrors.get(cellKey);
 
                                   return (
                                     <td
@@ -573,14 +575,12 @@ export function ValidateDataStep({
                                       ]
                                         .filter(Boolean)
                                         .join(" ")}
-                                      >
+                                    >
                                       <CellInput
                                         rowId={rowId}
                                         fieldKey={field.key}
                                         field={field}
-                                        baseValue={String(
-                                          row[field.key] ?? "",
-                                        )}
+                                        baseValue={String(row[field.key] ?? "")}
                                         errorMessage={errorMessage}
                                         ariaLabel={`${field.label}, row ${rowId}`}
                                         dirtyCellsRef={dirtyCellsRef}

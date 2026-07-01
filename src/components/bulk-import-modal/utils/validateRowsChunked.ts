@@ -3,8 +3,8 @@ import type {
   BulkImportValidationError,
 } from "../../../types/bulk-import-modal";
 import { validateFieldValue } from "./validateFieldValue";
+import { DEFAULT_CHUNK_SIZE } from "../constants";
 
-const CHUNK_SIZE = 1000;
 const YIELD = () => new Promise<void>((r) => setTimeout(r, 0));
 
 export interface ValidateRowsChunkedOptions {
@@ -16,6 +16,7 @@ export interface ValidateRowsChunkedOptions {
     row: Record<string, string>,
     rowIndex: number,
   ) => Record<string, string>;
+  chunk_size?: number;
 }
 
 export async function validateRowsChunked(
@@ -24,6 +25,7 @@ export async function validateRowsChunked(
   const { rows, fields, signal, onProgress, getRow } = options;
   const total = rows.length;
   const uniqueFields = fields.filter((f) => f.unique);
+  const chunk_size = options.chunk_size ?? DEFAULT_CHUNK_SIZE;
 
   const seen = new Map<string, Map<string, number>>();
   for (const field of uniqueFields) {
@@ -31,9 +33,9 @@ export async function validateRowsChunked(
   }
 
   const issues: BulkImportValidationError[] = [];
-  for (let i = 0; i < total; i += CHUNK_SIZE) {
+  for (let i = 0; i < total; i += chunk_size) {
     if (signal?.aborted) return issues;
-    const batch = rows.slice(i, i + CHUNK_SIZE);
+    const batch = rows.slice(i, i + chunk_size);
 
     for (let j = 0; j < batch.length; j++) {
       const row = batch[j];
@@ -73,11 +75,9 @@ export async function validateRowsChunked(
     }
 
     if (onProgress) {
-      onProgress(
-        Math.round((Math.min(i + CHUNK_SIZE, total) / total) * 100),
-      );
+      onProgress(Math.round((Math.min(i + chunk_size, total) / total) * 100));
     }
-    if (i + CHUNK_SIZE < total) await YIELD();
+    if (i + chunk_size < total) await YIELD();
   }
 
   return issues;

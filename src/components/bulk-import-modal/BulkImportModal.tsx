@@ -36,6 +36,7 @@ import { MatchColumnsStep } from "./steps/MatchColumnsStep";
 import { SelectHeaderRowStep } from "./steps/SelectHeaderRowStep";
 import { UploadStep } from "./steps/UploadStep";
 import { ValidateDataStep } from "./steps/ValidateDataStep";
+import { DEFAULT_MAX_FILE_SIZE } from "./constants";
 import "./styles/bulk-import-modal.css";
 
 const STEPS = [
@@ -44,8 +45,6 @@ const STEPS = [
   { id: BulkImportStep.MATCH_COLUMNS, label: "Match Columns" },
   { id: BulkImportStep.VALIDATE_DATA, label: "Validate data" },
 ] as const;
-
-const DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const Lottie = lazy(() => import("lottie-react"));
 

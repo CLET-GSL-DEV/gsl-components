@@ -25,12 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- BulkImportModal: chunk sizes, max file size, and accepted extensions consolidated into shared `constants.ts` — all files now import from the single source of truth; each processing phase (parse, remap, initial validation, background validation) uses its own named constant
 - BulkImportModal: SelectHeaderRowStep now shows only the first 20 rows for header selection
 - BulkImportModal: ValidateDataStep overscan increased to 10 rows for smoother virtual scrolling
 - Deps: added `lottie-react` for Lottie animation rendering
 
 ### Fixed
 
+- BulkImportModal: ValidateDataStep now correctly imports `BACKGROUND_VALIDATION_CHUNK_SIZE` — was `undefined` at runtime, silently falling back to `DEFAULT_CHUNK_SIZE`
 - Modal: confirm dialog overlay portaled to document.body — escapes transform containing block, covers full viewport
 - Modal: discard button uses DialogPrimitive.Close — no longer requires consumers to pass onOpenChange to ModalContent
 - Modal: consumer onInteractOutside and onEscapeKeyDown handlers no longer override internal preventClose confirm flow
