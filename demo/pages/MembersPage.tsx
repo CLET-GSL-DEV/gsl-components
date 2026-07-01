@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { demoMembers, type DemoMember } from "../data/demoMembers";
 import { useMockQuery } from "../hooks/useMockQuery";
 import { ViewMemberModal } from "../components/ViewMemberModal";

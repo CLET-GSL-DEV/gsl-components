@@ -207,7 +207,7 @@ export function ValidateDataStep({
     });
 
     if (!signal.aborted) setLocalValidation(issues);
-  }, []);
+  }, [dirtyCellsRef]);
 
   const handleDirty = useCallback(
     (cellKey: string, value: string, field: BulkImportField) => {

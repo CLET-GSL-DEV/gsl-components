@@ -133,7 +133,6 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
         preventCloseTitle,
         handleCancelConfirm,
         handleDiscard,
-        showConfirm,
       ],
     );
 

@@ -76,7 +76,6 @@ export function BulkImportModal({
   fields,
   onComplete,
   maxFileSizeBytes = DEFAULT_MAX_FILE_SIZE,
-  allowImportWithWarnings = false,
   className,
   defaultState,
 }: BulkImportModalProps) {

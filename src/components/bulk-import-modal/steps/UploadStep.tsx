@@ -1,4 +1,3 @@
-import { X } from "lucide-react";
 import type { BulkImportField } from "../../../types/bulk-import-modal";
 import { UploadField } from "../../upload-field/UploadField";
 import { getFieldExampleValue } from "../utils/validateFieldValue";

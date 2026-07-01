@@ -129,16 +129,9 @@ function TableContentRender<T>(
         )
       : false;
 
-  const someSelected =
-    selectable && data.length > 0
-      ? dataWithIndex.some(({ row, index }) =>
-          selectedIds.has(resolveKey(row, index)),
-        )
-      : false;
-
   const handleSelectAll = useCallback(
     (checked: boolean) => {
-      if (!onSelectionChange || !data.length) return;
+      if (!onSelectionChange || !dataWithIndex.length) return;
       const next = new Set(selectedIds);
       dataWithIndex.forEach(({ row, index }) => {
         const key = resolveKey(row, index);

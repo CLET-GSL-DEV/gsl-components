@@ -3,7 +3,6 @@ import {
   BulkImportStep,
 } from "../../../types/bulk-import-modal";
 import type {
-  BulkImportFlowDefaultState,
   BulkImportResult,
   BulkImportValidationError,
   SourceColumnMapping,
@@ -207,7 +206,7 @@ export function useBulkImportFlow(
 
   const canImport = activeErrors.length === 0;
 
-  function finishProcessing(rows: string[][], fileName: string) {
+  const finishProcessing = useCallback((rows: string[][], fileName: string) => {
     const h = 0;
     const mapping = autoMatchSourceColumns(fields, buildAllSourceColumns(rows, h));
     const mapped = mapRowsToRecords(rows, h, mapping, []);
@@ -221,7 +220,7 @@ export function useBulkImportFlow(
       sourceColumnMapping: mapping,
       editableRows: mapped,
     }));
-  }
+  }, [fields]);
 
   const handleFile = useCallback(
     async (file: File) => {
@@ -320,7 +319,7 @@ export function useBulkImportFlow(
         setIsProcessingLarge(false);
       }
     },
-    [maxFileSizeBytes, fields],
+    [maxFileSizeBytes, finishProcessing],
   );
 
   const removeFile = useCallback(() => {

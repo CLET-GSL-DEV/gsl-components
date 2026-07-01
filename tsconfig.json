@@ -16,7 +16,8 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "paths": {
-      "@rfdtech/components": ["./src/index.ts"]
+      "@rfdtech/components": ["./src/index.ts"],
+      "demo/*": ["./demo/*"]
     }
   },
   "include": ["src", "demo"],

@@ -129,6 +129,7 @@ export function DemoLayout() {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null,
   );
+  const [previewDropdownValue, setPreviewDropdownValue] = useState<string | null>(null);
   const handleSearch = useCallback(
     (value: string) => setSearchQuery(value),
     [],
@@ -188,7 +189,7 @@ export function DemoLayout() {
         loadingLabel: "Searching documentation...",
       },
     ];
-  }, [searchQuery, pageResults, pagesLoading, memberResults, membersLoading, docsResults, docsLoading]);
+  }, [searchQuery, pageResults, pagesLoading, memberResults, membersLoading, docsResults, docsLoading, navigate]);
 
   const navGroups = [
     {
@@ -847,6 +848,8 @@ export function DemoLayout() {
               >
                 <span className="demo-components-grid__preview">
                   <Dropdown
+                    value={previewDropdownValue}
+                    onValueChange={setPreviewDropdownValue}
                     options={[
                       { value: "a", label: "Option A" },
                       { value: "b", label: "Option B" },

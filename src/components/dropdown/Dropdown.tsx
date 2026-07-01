@@ -33,7 +33,7 @@ export function Dropdown({
       ) ??
       selectedOption?.label ??
       placeholder,
-    [formatOption, selectedOption, placeholder],
+    [formatOption, selectedOption, placeholder, isPlaceholder],
   );
   return (
     <Select.Root
