@@ -1,6 +1,8 @@
 import * as Popover from "@radix-ui/react-popover";
 import { ChevronDown } from "lucide-react";
 import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
+import { AsYouType, parsePhoneNumber } from "libphonenumber-js";
+import type { CountryCode } from "libphonenumber-js";
 import type { PhoneNumberInputProps } from "../../types/phone-number-input";
 import { cn } from "../../utils/cn";
 import { countries, getFlagEmoji } from "../../utils/countries";
@@ -17,6 +19,30 @@ function matchCountry(fullNumber: string): Country | null {
     if (fullNumber.startsWith(c.dialCode)) return c;
   }
   return null;
+}
+
+function formatLocal(local: string, countryCode: CountryCode): string {
+  if (!local) return "";
+  const f = new AsYouType(countryCode);
+  return f.input(local);
+}
+
+function formatNational(fullNumber: string): string {
+  try {
+    const pn = parsePhoneNumber(fullNumber);
+    if (pn) return pn.formatNational();
+  } catch { /* fall through */ }
+  return "";
+}
+
+function toE164(local: string, countryCode: CountryCode): string {
+  if (!local) return "";
+  const f = new AsYouType(countryCode);
+  f.input(local);
+  const e164 = f.getNumberValue();
+  if (e164) return e164;
+  const country = countries.find((c) => c.code === countryCode);
+  return country ? country.dialCode + local : local;
 }
 
 export const PhoneNumberInput = forwardRef<
@@ -46,24 +72,32 @@ export const PhoneNumberInput = forwardRef<
     [defaultCountry],
   );
 
-  // Internal state for uncontrolled mode
   const [internalCountry, setInternalCountry] =
     useState<Country>(defaultCountryObj);
-  const [internalLocal, setInternalLocal] = useState("");
+  const [internalRaw, setInternalRaw] = useState("");
 
-  // Derive display state
   const country = isControlled
     ? (matchCountry(controlledValue ?? "") ?? defaultCountryObj)
     : internalCountry;
 
-  const localNumber = isControlled
+  const countryCode = country.code as CountryCode;
+
+  const rawLocal = isControlled
     ? (() => {
         if (!controlledValue) return "";
         const matched = matchCountry(controlledValue);
         if (matched) return controlledValue.slice(matched.dialCode.length);
         return controlledValue;
       })()
-    : internalLocal;
+    : internalRaw;
+
+  const displayLocal = useMemo(() => {
+    if (!rawLocal) return "";
+    if (isControlled && controlledValue) {
+      return formatNational(controlledValue) || formatLocal(rawLocal, countryCode);
+    }
+    return formatLocal(rawLocal, countryCode);
+  }, [rawLocal, countryCode, isControlled, controlledValue]);
 
   const filtered = useMemo(() => {
     if (!search) return countries;
@@ -77,12 +111,12 @@ export const PhoneNumberInput = forwardRef<
   }, [search]);
 
   const emit = useCallback(
-    (dialCode: string, local: string) => {
-      const full = dialCode + local;
+    (raw: string, countryCode: CountryCode) => {
       if (!isControlled) {
-        setInternalLocal(local);
+        setInternalRaw(raw);
       }
-      onChange?.(full);
+      const e164 = toE164(raw, countryCode);
+      onChange?.(e164);
     },
     [isControlled, onChange],
   );
@@ -95,21 +129,20 @@ export const PhoneNumberInput = forwardRef<
       if (!isControlled) {
         setInternalCountry(next);
       }
-      // Emit full number with new country code, keeping local number
-      onChange?.(next.dialCode + localNumber);
+      emit(rawLocal, next.code as CountryCode);
       setOpen(false);
       setSearch("");
       inputRef.current?.focus();
     },
-    [isControlled, onChange, localNumber],
+    [isControlled, emit, rawLocal],
   );
 
   const handleNumberChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const raw = e.target.value.replace(/[^\d\s\-()]/g, "");
-      emit(country.dialCode, raw);
+      const raw = e.target.value.replace(/\D/g, "");
+      emit(raw, countryCode);
     },
-    [emit, country.dialCode],
+    [emit, countryCode],
   );
 
   const handleOpenChange = (next: boolean) => {
@@ -216,7 +249,7 @@ export const PhoneNumberInput = forwardRef<
         type="tel"
         name={name}
         disabled={disabled}
-        value={localNumber}
+        value={displayLocal}
         onChange={handleNumberChange}
         placeholder="(555) 000-0000"
         className={cn("gsl-phone-number-input__input", classNames?.input)}

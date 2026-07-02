@@ -87,7 +87,7 @@ describe("PhoneNumberInput", () => {
     ).toHaveClass("custom-input");
   });
 
-  it("emits full international number when typing", async () => {
+  it("emits E.164 and shows formatted display when typing US number", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
 
@@ -98,11 +98,13 @@ describe("PhoneNumberInput", () => {
     const input = screen.getByPlaceholderText("(555) 000-0000");
     await user.type(input, "555");
 
-    // onChange receives dial code + local number
+    // onChange receives E.164
     expect(onChange).toHaveBeenLastCalledWith("+1555");
+    // Input shows formatted display
+    expect(input).toHaveValue("(555)");
   });
 
-  it("strips non-digit chars but keeps dial code prefix", async () => {
+  it("strips non-digit chars and formats", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
 
@@ -114,29 +116,26 @@ describe("PhoneNumberInput", () => {
     await user.type(input, "abc555def");
 
     expect(onChange).toHaveBeenLastCalledWith("+1555");
+    expect(input).toHaveValue("(555)");
   });
 
-  it("shows only local number in input for controlled value", () => {
-    render(<PhoneNumberInput value="+44123456789" onChange={() => {}} />);
+  it("shows formatted local number in input for controlled UK value", () => {
+    render(<PhoneNumberInput value="+447400123456" onChange={() => {}} />);
     const input = screen.getByPlaceholderText("(555) 000-0000");
-    // Input shows local number stripped of the +44 prefix
-    expect(input).toHaveValue("123456789");
+    expect(input).toHaveValue("07400 123456");
   });
 
   it("auto-selects country from controlled value dial code", () => {
     render(<PhoneNumberInput value="+233241234567" onChange={() => {}} />);
-    // Ghana (+233) should be auto-detected
     expect(screen.getByText("+233")).toBeInTheDocument();
     expect(screen.getByText(getFlagEmoji("GH"))).toBeInTheDocument();
   });
 
   it("falls back to default country when value has no matching dial code", () => {
     render(<PhoneNumberInput value="5551234" onChange={() => {}} />);
-    // No "+" prefix matches no country — stays on default US
     expect(screen.getByText("+1")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("(555) 000-0000")).toHaveValue(
-      "5551234",
-    );
+    const input = screen.getByPlaceholderText("(555) 000-0000");
+    expect(input).toHaveValue("(555) 123-4");
   });
 
   it("opens dropdown on prefix click", async () => {
@@ -205,7 +204,6 @@ describe("PhoneNumberInput", () => {
       name: /United Kingdom/,
     });
     await user.click(gbOption);
-    // Prefix updates
     expect(screen.getByText("+44")).toBeInTheDocument();
     expect(screen.getByText(getFlagEmoji("GB"))).toBeInTheDocument();
   });
@@ -221,17 +219,15 @@ describe("PhoneNumberInput", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
-  it("emits full number when changing country with existing local number", async () => {
+  it("emits E.164 when changing country with existing local number", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<PhoneNumberInput onChange={onChange} />);
 
-    // Type a local number first
     const input = screen.getByPlaceholderText("(555) 000-0000");
     await user.type(input, "2025551234");
     expect(onChange).toHaveBeenLastCalledWith("+12025551234");
 
-    // Now switch country
     await user.click(screen.getByText("+1").closest("button")!);
     const gbOption = await screen.findByRole("option", {
       name: /United Kingdom/,
@@ -253,7 +249,6 @@ describe("PhoneNumberInput", () => {
       name: /United Kingdom/,
     });
     await user.click(gbOption);
-    // Reopen
     await user.click(screen.getByText("+44").closest("button")!);
     const reopenedSearch = await screen.findByPlaceholderText(
       "Search country...",
@@ -299,7 +294,6 @@ describe("PhoneNumberInput", () => {
     expect(selectedOption).toHaveAttribute("aria-selected", "true");
   });
 
-  // Uncontrolled mode
   it("manages internal state in uncontrolled mode", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
@@ -316,30 +310,40 @@ describe("PhoneNumberInput", () => {
     expect(screen.getByText("+233")).toBeInTheDocument();
   });
 
-  it("preserves leading zero in local number when dialing with Ghana", async () => {
+  it("formats Ghana number as user types and emits correct E.164", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<PhoneNumberInput defaultCountry="GH" onChange={onChange} />);
 
     const input = screen.getByPlaceholderText("(555) 000-0000");
-    await user.type(input, "02054321022");
+    await user.type(input, "0531234567");
 
-    // Leading 0 is preserved in the local part; dial code is prepended
-    expect(onChange).toHaveBeenLastCalledWith("+23302054321022");
+    // Emits correct E.164 with no extra leading 0
+    expect(onChange).toHaveBeenLastCalledWith("+233531234567");
+    // Input shows properly formatted national number
+    expect(input).toHaveValue("053 123 4567");
   });
 
-  it("displays controlled Ghana number without leading zero", () => {
-    render(<PhoneNumberInput value="+2332054321022" onChange={() => {}} />);
+  it("displays controlled Ghana number with formatting", () => {
+    render(<PhoneNumberInput value="+233241234567" onChange={() => {}} />);
 
-    // Ghana flag and dial code
     expect(screen.getByText("+233")).toBeInTheDocument();
-    // Input shows local number stripped of dial code (no leading 0)
-    expect(screen.getByPlaceholderText("(555) 000-0000")).toHaveValue(
-      "2054321022",
-    );
+    const input = screen.getByPlaceholderText("(555) 000-0000");
+    expect(input).toHaveValue("024 123 4567");
   });
 
-  // RHF integration
+  it("formats France number and emits E.164", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<PhoneNumberInput defaultCountry="FR" onChange={onChange} />);
+
+    const input = screen.getByPlaceholderText("(555) 000-0000");
+    await user.type(input, "0612345678");
+
+    expect(onChange).toHaveBeenLastCalledWith("+33612345678");
+    expect(input).toHaveValue("06 12 34 56 78");
+  });
+
   it("works with react-hook-form controlled", async () => {
     const user = userEvent.setup();
 

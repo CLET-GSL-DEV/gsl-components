@@ -148,7 +148,7 @@
 }
 
 .gsl-phone-number-input__list {
-  overflow-y: auto;
+  overflow-y: scroll;
   flex: 1;
 }
 
