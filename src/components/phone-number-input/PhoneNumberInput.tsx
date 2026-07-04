@@ -8,7 +8,7 @@ import { cn } from "../../utils/cn";
 import { countries, getFlagEmoji } from "../../utils/countries";
 import "./styles/phone-number-input.css";
 
-type Country = (typeof countries)[number];
+type Country = (typeof countries)[number] & { code: CountryCode };
 
 function matchCountry(fullNumber: string): Country | null {
   if (!fullNumber) return null;
@@ -80,7 +80,7 @@ export const PhoneNumberInput = forwardRef<
     ? (matchCountry(controlledValue ?? "") ?? defaultCountryObj)
     : internalCountry;
 
-  const countryCode = country.code as CountryCode;
+  const countryCode = country.code;
 
   const rawLocal = isControlled
     ? (() => {
@@ -129,7 +129,7 @@ export const PhoneNumberInput = forwardRef<
       if (!isControlled) {
         setInternalCountry(next);
       }
-      emit(rawLocal, next.code as CountryCode);
+      emit(rawLocal, next.code);
       setOpen(false);
       setSearch("");
       inputRef.current?.focus();
