@@ -26,7 +26,7 @@ Add this once to your app entry (`main.tsx` or `App.tsx`):
 import "@rfdtech/components/style.css";
 ```
 
-Components load CSS automatically from the JS bundle (the JS bundle includes `import './index.css'`), but the explicit import above ensures reliable production styling. After upgrading, clear Vite's dependency cache if styles look stale: `rm -rf node_modules/.vite`.
+Components load CSS automatically from the JS bundle (the JS bundle includes `import './index.css'`), but the explicit import above ensures reliable production styling. After upgrading, clear Vite's dependency cache if styles look stale: `rm -rf node_modules/.vite`. alright
 
 ### 3. Wrap with ThemeProvider
 
