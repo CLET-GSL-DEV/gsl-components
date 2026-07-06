@@ -53,7 +53,7 @@ If your project uses Tailwind v4, all `--gsl-*` design tokens are automatically 
 The `@theme` block ships inside `style.css`. The consumer's Tailwind build processes it and generates these utility classes:
 
 | Utility | Resolves to |
-|---------|-------------|
+| --------- | ------------- |
 | `bg-primary` / `text-primary` | `var(--gsl-primary)` |
 | `bg-primary-foreground` / `text-primary-foreground` | `var(--gsl-on-primary)` |
 | `bg-background` / `text-foreground` | `var(--gsl-page-bg)` / `var(--gsl-text)` |
@@ -72,7 +72,30 @@ The `@theme` block ships inside `style.css`. The consumer's Tailwind build proce
 
 **Non-Tailwind consumers** are unaffected. Browsers silently ignore `@theme` as an unknown at-rule. All `--gsl-*` tokens continue to work as CSS custom properties.
 
-### 5. Customize tokens
+### 6. Next.js App Router
+
+The library ships a `/next` subpath for Next.js App Router. All components and hooks work with Next.js by wrapping your app in `RouterAdapterProvider`:
+
+```tsx
+// app/providers.tsx
+"use client";
+import { RouterAdapterProvider, useNextRouterAdapter } from "@rfdtech/components/next";
+
+export function Providers({ children }) {
+  const adapter = useNextRouterAdapter();
+  return <RouterAdapterProvider value={adapter}>{children}</RouterAdapterProvider>;
+}
+```
+
+Then use components from `@rfdtech/components/next`:
+
+```tsx
+import { useTableState, SidebarLink } from "@rfdtech/components/next";
+```
+
+See the [RouterAdapter](/docs/router-adapter) docs page for full setup.
+
+### 7. Customize tokens
 
 Override any `--gsl-*` token on any ancestor:
 
@@ -88,7 +111,7 @@ Override any `--gsl-*` token on any ancestor:
 Quick reference of commonly used tokens and their light-mode defaults:
 
 | Token | Light default | Use |
-|-------|---------------|-----|
+| ------- | --------------- | ----- |
 | `--gsl-primary` | `#dc2626` | Buttons, focus rings, accents |
 | `--gsl-primary-light` | `#fef2f2` | Selected rows, hover fills |
 | `--gsl-bg` | `#ffffff` | Surfaces |
@@ -103,7 +126,6 @@ Quick reference of commonly used tokens and their light-mode defaults:
 `BulkImportModal` also accepts legacy aliases (`--gsl-bulk-import-primary`, etc.) that map to the shared tokens.
 
 See the [Theme](/docs/theme) docs page for the full token reference (radius, shadows, z-index, fonts) and controlled mode.
-
 
 ## Hooks
 
@@ -129,7 +151,6 @@ openWith({ userId: "42" });
 ```
 
 Exports: `useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`, `createSearchParamAdapter`, `createBrowserSearchParamAdapter`, `readOverlayData`, `writeOverlayData`, `clearOverlayData`, `getDataPrefix`. Types: `SearchParamOverlayState`, `SearchParamOverlayData`, `SearchParamAdapter`, `UseSearchParamOverlayOptions`, `UseSearchParamOverlayReturn`.
-
 
 ## AppHeader
 
@@ -168,7 +189,6 @@ import {
 
 Props: `AppHeader` — `className`, `children`. `AppHeaderActions` — `className`, `children`. Exported types: `AppHeaderProps`, `AppHeaderActionsProps`, `AppHeaderSearchProps`, `AppHeaderSearchDataGroup`, `AppHeaderSearchItem`, `AppHeaderNotificationsProps`, `AppHeaderProfileProps`, `AppUser`.
 
-
 ## AppLayout
 
 Application layout container that auto-positions `AppHeader`, `AppSidebar`, and `AppBody` by component type. Sidebar on the left, header sticky at the top, main content filling the rest. See the [AppLayout](/docs/app-layout) docs page for props and exported types.
@@ -188,7 +208,6 @@ import { AppLayout, AppSidebar, AppBody } from "@rfdtech/components";
 ```
 
 Props: `AppLayout` — `children`, `className`. `AppSidebar` — `children`, `className`. `AppBody` — `children`, `className`. Exported types: `AppLayoutProps`, `AppSidebarProps`, `AppBodyProps`.
-
 
 ## AppSwitcher
 
@@ -215,7 +234,6 @@ Props: `apps`, `loading`, `loadingLabel`, `columns`, `open`, `onOpenChange`, `on
 
 Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, `useAppSwitcher`.
 
-
 ## Badge
 
 Compact inline label for status, counts, and metadata with semantic color variants. See the [Badge](/docs/badge) docs page for props and exported types.
@@ -232,7 +250,6 @@ import { Badge } from "@rfdtech/components";
 ```
 
 Props: `variant`, `size`, `classNames`, `className`, and standard `span` attributes. Exported types: `BadgeProps`, `BadgeClassNames`, `BadgeVariant`, `BadgeSize`.
-
 
 ## Breadcrumb
 
@@ -262,7 +279,6 @@ import {
 ```
 
 Exported parts: `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis`. Exported types: `BreadcrumbProps`, `BreadcrumbLinkProps`, `BreadcrumbPageProps`, and related `*ClassNames` interfaces.
-
 
 ## BulkImportModal
 
@@ -307,7 +323,7 @@ The first worksheet is used for multi-sheet workbooks. Discarded rows are exclud
 ### Props
 
 | Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| ------ | ------ | --------- | ------------- |
 | `open` | `boolean` | required | Controlled open state |
 | `onOpenChange` | `(open: boolean) => void` | required | Open state callback |
 | `fields` | `BulkImportField[]` | required | Target field schema for column matching |
@@ -418,7 +434,6 @@ To change the gutter size, override `--gsl-bulk-import-gutter` on `.gsl-bulk-imp
 }
 ```
 
-
 ## Button
 
 Shared button with primary, secondary, outline, and ghost variants, plus loading and disabled states. See the [Button](/docs/button) docs page for props and exported types.
@@ -446,7 +461,6 @@ import { Button } from "@rfdtech/components";
 
 Props: `variant`, `size`, `loading`, `loadingLabel`, `classNames`, and standard `button` attributes. Exported types: `ButtonProps`, `ButtonClassNames`, `ButtonVariant`, `ButtonSize`.
 
-
 ## Card
 
 Surface card wrapper with optional header and design tokens for padding and background. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for inner spacing. See the [Card](/docs/card) docs page for props and exported types.
@@ -460,7 +474,6 @@ import { Card } from "@rfdtech/components";
 ```
 
 Props: `header`, `children`, `classNames`, `className`, plus standard `div` attributes. Exported types: `CardProps`, `CardClassNames`.
-
 
 ## Checkbox
 
@@ -484,7 +497,6 @@ import { Checkbox } from "@rfdtech/components";
 
 Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `disabled`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `CheckboxProps`, `CheckboxClassNames`.
 
-
 ## CountrySelector
 
 Country selector dropdown with flag emoji, country name, search filtering, and keyboard navigation. Built on `@radix-ui/react-popover`. See the [CountrySelector](/docs/country-selector) docs page for props and exported types.
@@ -498,7 +510,6 @@ import { CountrySelector } from "@rfdtech/components";
 ```
 
 Props: `value`, `defaultValue`, `onChange`, `placeholder`, `invalid`, `disabled`, `classNames`, `className`. Exported types: `CountrySelectorProps`, `CountrySelectorClassNames`.
-
 
 ## DateRangeSelector
 
@@ -515,7 +526,6 @@ import { DateRangeSelector } from "@rfdtech/components";
 ```
 
 Props: `value`, `defaultValue`, `onChange`, `placeholder`, `formatOptions`, `invalid`, `disabled`, `min`, `max`, `classNames`, `className`. Exported types: `DateRangeSelectorProps`, `DateRangeSelectorClassNames`, `DateRangeValue`.
-
 
 ## DateSelector
 
@@ -534,7 +544,6 @@ import { DateSelector } from "@rfdtech/components";
 ```
 
 Props: `value`, `defaultValue`, `onChange`, `placeholder`, `formatOptions`, `invalid`, `disabled`, `min`, `max`, `classNames`, `className`. Exported types: `DateSelectorProps`, `DateSelectorClassNames`.
-
 
 ## Command
 
@@ -583,7 +592,6 @@ const { open, onOpenChange, openWith } = useDialogSearchParam("command-menu");
 
 Exports: `Command`, `CommandDialog`, `CommandInput`, `CommandList`, `CommandEmpty`, `CommandGroup`, `CommandItem`, `CommandSeparator`, `CommandLoading`, `CommandShortcut`, `useCommandShortcut`. Exported types: `CommandProps`, `CommandDialogProps`, `CommandItemProps`, `CommandShortcutProps`, `UseCommandShortcutOptions`, and related `*ClassNames` types.
 
-
 ## RadioGroup
 
 Single-choice radio group with optional labels and descriptions on each `Radio` item. Use `variant="card"` for bordered choice cards. See the [RadioGroup](/docs/radio-group) docs page for props and exported types.
@@ -607,7 +615,6 @@ import { Radio, RadioGroup } from "@rfdtech/components";
 
 Props: `RadioGroup` — `value`, `defaultValue`, `onValueChange`, `name`, `disabled`, `required`, `orientation`, `variant`, `classNames`, `className`, `children`. `Radio` — `value`, `label`, `description`, `disabled`, `id`, `aria-label`, `classNames`, `className`. Exported types: `RadioGroupProps`, `RadioProps`, `RadioGroupClassNames`, `RadioClassNames`, `RadioGroupVariant`.
 
-
 ## Dropdown
 
 Select-style dropdown for choosing one option from a list. See the [Dropdown](/docs/dropdown) docs page for props and exported types.
@@ -629,7 +636,6 @@ import { Dropdown } from "@rfdtech/components";
 ```
 
 Props: `value`, `onValueChange`, `options`, `placeholder`, `clearable`, `disabled`, `aria-label`, `classNames`, `className`. Exported types: `DropdownProps`, `DropdownOption`, `DropdownClassNames`.
-
 
 ## Form
 
@@ -655,7 +661,6 @@ import {
 ```
 
 Exports: `Field`, `FieldLabel`, `FieldDescription`, `FieldError`, `FieldControl`, `Input`, `Textarea`. Types: `FieldProps`, `FieldClassNames`, `InputProps`, `TextareaProps`.
-
 
 ## FormField
 
@@ -713,7 +718,6 @@ const form = useForm<FormValues>({
 
 Exports: `Form`, `FormField`, `useFormField`. Types: `FormProps`, `FormFieldProps`, `UseFormFieldReturn`.
 
-
 ## Dialog
 
 Compound dialog primitives for modal overlays. See the [Dialog](/docs/dialog) docs page for props and exported types.
@@ -753,7 +757,6 @@ const { open, data, onOpenChange, openWith } = useDialogSearchParam<{
 
 Props: `Dialog` — `open`, `defaultOpen`, `onOpenChange`. `DialogContent` — `showCloseButton`, `classNames`, `className`. Styled parts also support part-level `classNames`. Exported types: `DialogOverlayProps`, `DialogContentProps`, `DialogTitleProps`, `DialogDescriptionProps`, and related `*ClassNames` interfaces.
 
-
 ## Draggable
 
 Repositionable panel primitive with optional handle and bounded pointer dragging. See the [Draggable](/docs/draggable) docs page for props and exported types.
@@ -770,7 +773,6 @@ import { Draggable, DraggableHandle } from "@rfdtech/components";
 ```
 
 Exports: `Draggable`, `DraggableHandle`, `useDraggable`, `clampPosition`. Types: `DraggableProps`, `DraggableHandleProps`, `DraggablePosition`, `DraggableBounds`, `DraggableAxis`, `UseDraggableOptions`, `UseDraggableReturn`.
-
 
 ## MetricCard
 
@@ -791,7 +793,6 @@ import { MetricCard } from "@rfdtech/components";
 ```
 
 Props: `label`, `value`, `icon`, `description`, `trend`, `trendValue`, `variant`, `color`, `classNames`, `className`, plus standard `div` attributes. Exported types: `MetricCardProps`, `MetricCardClassNames`, `MetricCardVariant`, `MetricTrend`.
-
 
 ## Modal
 
@@ -836,7 +837,6 @@ const { open, onOpenChange, openWith } = useModalSearchParam("review-changes");
 
 Props: `Modal` — `open`, `defaultOpen`, `onOpenChange`. `ModalContent` — `showCloseButton`, `size`, `preventClose`, `preventCloseTitle`, `preventCloseDescription`, `onOpenChange`, `classNames`, `className`. Layout parts (`ModalHeader`, `ModalBody`, `ModalFooter`) support part-level `classNames`. Exported types: `ModalSize`, `ModalOverlayProps`, `ModalContentProps`, `ModalHeaderProps`, `ModalTitleProps`, `ModalDescriptionProps`, `ModalBodyProps`, `ModalFooterProps`, and related `*ClassNames` interfaces.
 
-
 ## NetworkOperator
 
 Network operator selector with operator image thumbnails (MTN, Vodafone, AirtelTigo, Glo), search filtering, and keyboard navigation. Built on `@radix-ui/react-popover`. See the [NetworkOperator](/docs/network-operator) docs page for props and exported types.
@@ -850,7 +850,6 @@ import { NetworkOperator } from "@rfdtech/components";
 ```
 
 Props: `value`, `defaultValue`, `onChange`, `options`, `placeholder`, `invalid`, `disabled`, `classNames`, `className`. Exported types: `NetworkOperatorProps`, `NetworkOperatorOption`, `NetworkOperatorClassNames`.
-
 
 ## OtpInput
 
@@ -866,7 +865,6 @@ import { OtpInput } from "@rfdtech/components";
 
 Props: `length`, `value`, `onChange`, `onComplete`, `invalid`, `disabled`, `name`, `classNames`, `className`. Exported types: `OtpInputProps`, `OtpInputClassNames`.
 
-
 ## PhoneNumberInput
 
 Phone number input with a country code selector (flag + dial code prefix) that auto-detects the country from the number prefix as the user types. Built on `@radix-ui/react-popover`. See the [PhoneNumberInput](/docs/phone-number-input) docs page for props and exported types.
@@ -880,7 +878,6 @@ import { PhoneNumberInput } from "@rfdtech/components";
 ```
 
 Props: `value`, `defaultValue`, `onChange`, `invalid`, `disabled`, `classNames`, `className`. Exported types: `PhoneNumberInputProps`, `PhoneNumberInputClassNames`.
-
 
 ## Popover
 
@@ -927,7 +924,6 @@ import {
 
 Exports: `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverPortal`, `PopoverAnchor`, `PopoverClose`. Exported types: `PopoverContentProps`, `PopoverContentClassNames`.
 
-
 ## ProgressBar
 
 Accessible progress indicator for task completion and loading states. See the [ProgressBar](/docs/progress-bar) docs page for props and exported types.
@@ -942,6 +938,18 @@ import { ProgressBar } from "@rfdtech/components";
 
 Props: `value`, `max`, `variant`, `size`, `indeterminate`, `label`, `showValue`, `classNames`, `className`, and standard `div` attributes. Exported types: `ProgressBarProps`, `ProgressBarClassNames`, `ProgressBarVariant`, `ProgressBarSize`.
 
+## RouterAdapter
+
+Framework-agnostic router abstraction for Next.js and react-router compatibility.
+
+Seven files that previously imported `react-router-dom` directly (`useTableFilter`, `useTablePagination`, `useTableState`, `TableSearch`, `TableFilter`, `TablePagination`, `SidebarLink`, `AppLayoutInner`) now consume `RouterAdapter` from context. The library ships two entry points:
+
+- `@rfdtech/components` — default, backward compatible (react-router-dom)
+- `@rfdtech/components/next` — Next.js App Router support via `<RouterAdapterProvider>`
+
+See the [RouterAdapter](/docs/router-adapter) docs page for setup instructions.
+
+Exports: `RouterAdapterProvider`, `setRouterAdapter`, `getRouterAdapter`. Types: `RouterAdapterValue`, `RouterSearchParams`, `RouterLinkComponent`.
 
 ## Sidebar
 
@@ -992,7 +1000,6 @@ import {
 
 Exports: `SidebarProvider`, `useSidebar`, `Sidebar`, `SidebarBadge`, `SidebarCollapse`, `SidebarTrigger`, `SidebarOverlay`, `SidebarHeader`, `SidebarContent`, `SidebarFooter`, `SidebarNav`, `SidebarGroup`, `SidebarGroupLabel`, `SidebarItem`, `SidebarLink`. Exported types: `SidebarProviderProps`, `SidebarProps`, `SidebarLinkProps`, `SidebarBadgeProps`, `SidebarCollapseProps`, and related `*ClassNames` types.
 
-
 ## Sheet
 
 Compound sheet primitives for edge-sliding panels. See the [Sheet](/docs/sheet) docs page for props and exported types.
@@ -1035,7 +1042,6 @@ import {
 
 Props: `Sheet` — `open`, `defaultOpen`, `onOpenChange`. `SheetContent` — `side`, `showCloseButton`, `classNames`, `className`. Layout parts support part-level `classNames`. Exported types: `SheetSide`, `SheetOverlayProps`, `SheetContentProps`, `SheetHeaderProps`, `SheetTitleProps`, `SheetDescriptionProps`, `SheetBodyProps`, `SheetFooterProps`, and related `*ClassNames` interfaces.
 
-
 ## Sortable
 
 Reorderable list primitive with optional drag handles and keyboard support. See the [Sortable](/docs/sortable) docs page for props and exported types.
@@ -1064,7 +1070,6 @@ const [items, setItems] = useState(["alpha", "beta", "gamma"]);
 ```
 
 Exports: `Sortable`, `SortableList`, `SortableItem`, `SortableHandle`, `reorderItems`. Types: `SortableProps`, `SortableListProps`, `SortableItemProps`, `SortableHandleProps`, `SortableId`, `SortableStrategy`, `SortableClassNames`.
-
 
 ## Table
 
@@ -1113,7 +1118,6 @@ const [selected, setSelected] = useState<Set<string | number>>(new Set());
 
 Props: `paramPrefix`, `classNames`, `className`. Exports: `Table`, `TableHeader`, `TableSearch`, `TableFilter`, `TableContent`, `TableBulkActions`, `TableFooter`, `TablePagination`. Types: `TableProps`, `TableHeaderProps`, `TableContentProps`, `TableFooterProps`, `TableSearchProps`, `TableFilterProps`, `TableBulkActionsProps`, `TableBulkAction`, `TableBulkActionsClassNames`, `TableClassNames`, `PaginationControlsProps`, `TableColumn`.
 
-
 ## Tabs
 
 Compound tabs primitives for switching between related panels. See the [Tabs](/docs/tabs) docs page for props and exported types.
@@ -1132,7 +1136,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
 ```
 
 Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Props: `Tabs` — `value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`, `variant`, `classNames`, `className`, `children`. `TabsTrigger` — `value`, `disabled`, `classNames`, `className`. Exported types: `TabsProps`, `TabsListProps`, `TabsTriggerProps`, `TabsContentProps`, `TabsVariant`, `TabsClassNames`, `TabsListClassNames`, `TabsTriggerClassNames`, `TabsContentClassNames`.
-
 
 ## Toast
 
@@ -1159,7 +1162,6 @@ toast({
 
 Exports: `ToastProvider`, `Toaster`, `useToast`. Types: `ToastOptions`, `ToastVariant`, `ToastProviderProps`, `ToasterProps`, `UseToastReturn`, `ToastClassNames`, `ToastAction`, `ToastReturn`.
 
-
 ## Tooltip
 
 Pure-CSS hover tooltip with directional arrow (top, right, bottom, left). Used internally by SidebarLink on the collapsed icon rail. See the [Tooltip](/docs/tooltip) docs page for props and exported types.
@@ -1175,7 +1177,6 @@ import { Tooltip } from "@rfdtech/components";
 ```
 
 Props: `content`, `side`, `classNames`, `className`. Exported types: `TooltipProps`, `TooltipClassNames`.
-
 
 ## UploadField
 
@@ -1196,7 +1197,6 @@ import { UploadField } from "@rfdtech/components";
 Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `name`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
 
 Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `placeholder`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
-
 
 ## Development
 

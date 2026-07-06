@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **RouterAdapter**: framework-agnostic router abstraction that replaces direct `react-router-dom` imports across 7 hooks and components. Library now ships two entry points:
+  - `@rfdtech/components` — default, backward compatible (react-router-dom)
+  - `@rfdtech/components/next` — Next.js App Router support via `<RouterAdapterProvider>`
+- New exports: `RouterAdapterProvider`, `setRouterAdapter`, `getRouterAdapter`, `useNextRouterAdapter`
+- RouterAdapter: SidebarLink, AppLayoutInner, table hooks (useTableFilter, useTablePagination, useTableState), TableSearch, TableFilter, and TablePagination no longer import react-router-dom directly — they consume the adapter from context, making them portable to other routers
+
 - Theme: Tailwind v4 `@theme` token integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
 - ProgressModal: non-dismissable processing overlay with Lottie animation and determinate progress bar
 - BulkImportModal: chunked processing for datasets over 1000 rows — file parsing, row mapping, and validation run in 1000-row batches with a progress overlay to prevent main-thread freezes
@@ -54,18 +60,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Table: `TableRowAction<T>` type for row-level popover actions
 
 ### Changed
+
 - Table: selection is now fully controlled via `selectedIds` prop (renamed from `defaultSelectedIds`). Pass alongside `onSelectionChange` — both `TableContent` and `TableBulkActions` read from the same source
 - Table: `rowKey` now optional — falls back to row index when not provided
 - Table: checkbox column always rendered (collapsed to 0 width when empty, slides open on first selection)
 - Table: removed indeterminate visual from select-all checkbox; partial selection shows unchecked, clicking selects all
 
 ### Fixed
+
 - Table: internal selection state never updated — `handleToggleRow`/`handleSelectAll` now properly call `setSelectedIds` via controlled `selectedIds` prop
 - Table: `handleSelectAll` checked type widened to accept Radix `boolean` (removed `"indeterminate"` case)
 - Table: `onClear` on `TableBulkActions` now properly resets internal selection via controlled `selectedIds` sync
 - Table: checkbox column animation — added `min-width` to transition for smooth entry
 
 ### Removed
+
 - Table: `TableContentInnerProps` — merged into public `TableContentProps`
 - Table: internal selection `useState` — now fully controlled via `selectedIds` prop
 - Docs: removed hallucinated `rowActions`, `bulkActions`, `onRowClick`, `onRowContextMenu` props from TableContent
@@ -74,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.19.0] - 2026-06-26
 
 ### Added
+
 - Table: right-click context menu on rows with built-in Select action and custom `rowActions` prop
 - Table: bulk action support in right-click popover via `bulkActions` prop (shown when multiple rows selected)
 - Table: hidden select column — checkbox column appears only after first row selection
@@ -83,21 +93,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Command: clear button (XCircle) in input bar when text is entered, matching TableSearch pattern
 
 ### Changed
+
 - Table: hover/selected row states via CSS classes (`gsl-table__row--selected`, `gsl-table__row--context-open`)
 - Table: row height uses `var(--gsl-table-row-height, 44px)` token
 - Popover: border-radius uses `var(--gsl-radius-base)` instead of `var(--gsl-radius-xl)`
 
 ### Fixed
+
 - Dropdown: clicking outside the dropdown popover inside a Modal no longer closes the Modal — switched from Radix Select to Radix Popover
 
 ## [1.18.1] - 2026-06-22
 
 ### Fixed
+
 - **AppLayout**: tests now wrap renders in `MemoryRouter` to fix `useSearchParams` is not defined error
 - **Command**: test queries use `document.querySelector` with cmdk `data-value` attribute instead of `value` attribute
 - **Lint**: removed unused imports across 15+ files; replaced `as any` casts with proper TypeScript types across all source files
 
 ### Changed
+
 - **DateRangeSelector**: wrapped `range` computation in `useMemo` to prevent unstable reference
 - **Table**: wrapped `columns` and `data` in `useMemo` to avoid new‑array‑on‑every‑render
 - **Sortable**: wrapped `style` object in `useMemo`
@@ -107,10 +121,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.18.0] - 2026-06-21
 
 ### Breaking
+
 - **AppLayout**: Now wraps `SidebarProvider` and `BreadcrumbProvider` internally. Consumers no longer need to add these providers. Removed `AppBreadcrumb` slot component. Breadcrumbs are context driven, call `useBreadcrumbs()` from any page to set them.
 - **Card**: Removed `header` prop and `CardClassNames`. Use `CardHeader`, `CardTitle`, and `CardActions` sub-components instead.
 
 ### Added
+
 - `BreadcrumbProvider`, `useBreadcrumbs`, `useBreadcrumbContext`, `BreadcrumbEntry` exports
 - `CardHeader`, `CardTitle`, `CardActions` sub-components
 - `useConfirmBeforeUnload` hook for browser `beforeunload` confirmation
@@ -118,12 +134,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BulkImportModal: reset discarded rows button on validate data page
 
 ### Changed
+
 - **ValidateDataStep**: replaced `<Table />` dependency with an internal virtualized table using `@tanstack/react-virtual`. Error counts correctly exclude discarded rows.
 - Minor CSS improvements across sidebar, button, modal, field, and table components
 
 ## [1.17.0] - 2026-06-20
 
 ### Added
+
 - ModalContent `onOpenChange` prop for direct close handler passing
 - BulkImportModal `defaultState` prop (`BulkImportFlowDefaultState`) for flow state preservation across open/close cycles
 - BulkImportModal flow state types exported
@@ -133,12 +151,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Table: `TableHeaderCell` with `sortable`, `sortDirection`, `onSort` and sort icon; sticky `TableHeader`
 
 ### Changed
+
 - ModalContent: removed nested AlertDialog for close-confirmation (all alert() debug calls cleaned out)
 - UploadField: action button uses `<Button variant="primary">` instead of raw `<button>`
 - BulkImportModal stepper: nav-based step indicator with clickable completed steps; footer/body use ModalFooter/ModalBody
 - UploadField: action button height aligned with Button component sizing (36px to 40px)
 
 ### Fixed
+
 - ModalContent: no nested Radix Dialog (caused focus-trap / z-index conflicts)
 - BulkImportModal CSS lint: padding shorthand, rgba to rgb modern notation, ::last-child to :last-child
 - ValidateDataStep memoization
@@ -147,18 +167,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.16.1] - 2026-06-19
 
 ### Added
+
 - SidebarLink `to` prop: renders as react-router `<Link>` for client-side navigation
 
 ### Fixed
+
 - **Peer dependency externalization** — `react-router-dom` and `lucide-react` were bundled inside the library, causing `useLocation()` crash when consuming app ran its own `BrowserRouter`. Both are now externalized from the build and declared as peer dependencies, so the library and app share a single copy from the consumer's node_modules.
 - Tooltip arrow borders now face the correct direction per placement (top, bottom, left, right)
 
 ### Changed
+
 - Moved `lucide-react` from `dependencies` to `peerDependencies` (consumer likely has it installed)
 
 ## [1.16.0] - 2026-06-19
 
 ### Added
+
 - Tooltip component with top/right/bottom/left positioning, arrow indicator, and pure-CSS hover reveal
 - SidebarLink tooltip on collapsed rail: shows label text on hover via Tooltip
 - Modal size variants (`sm`, `md`, `lg`, `xl`, `2xl`) with independently customizable `--gsl-modal-max-width-*` tokens
@@ -169,6 +193,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SidebarBadge now uses primary color tokens with overridable CSS variables
 
 ### Changed
+
 - BreadcrumbLink: calls preventDefault on click for SPA safety, preserves consumer onClick
 - BulkImportModal exit confirm: uses Button component instead of raw elements (fixes Cancel dismissal)
 - Modal, Popover, App-switcher, Command dialog, Dropdown: unified border-radius to `--gsl-radius-xl` and box-shadow to `--gsl-shadow-md`
@@ -178,27 +203,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Theme: adds --gsl-z-header token and body background
 
 ### Fixed
+
 - Command inline popover: removed Portal wrapper so popover renders in-flow; adds pointer-events: none when closed to prevent blocking clicks
 
 ## [1.15.2] - 2026-06-19
 
 ### Added
+
 - ThemeProvider `storageKey` prop: persists theme to localStorage across sessions
 
 ## [1.15.1] - 2026-06-19
 
 ### Changed
+
 - Command: inline list now renders via Radix Popover portal, escaping all parent stacking contexts; z-index and positioning handled by Popover instead of absolute CSS
 
 ### Fixed
+
 - Malformed CSS in table checkbox-cell and network-operator rules causing PostCSS "Unknown word" errors in consuming projects
 
 ### Added
+
 - stylelint with `lint:css` / `lint:css:fix` scripts; wired into `prepublishOnly` to catch CSS syntax errors before publish
 
 ## [1.14.0] - 2026-06-18
 
 ### Changed
+
 - CommandDialog overlay now fades in/out with animation, matching Dialog and Modal component patterns
 
 ## [1.13.2] - 2026-06-18

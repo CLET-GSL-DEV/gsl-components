@@ -1,10 +1,11 @@
 import "./styles/theme.css";
 
 // ── Router adapter ────────────────────────────────────────────────────────
-// Set the default adapter BEFORE any component/hook code runs.
+// The Next.js entry uses the context-only adapter, which requires a
+// `<RouterAdapterProvider>` in the consumer's component tree.
 import { setRouterAdapter } from "./adapters/registry";
-import { useReactRouterAdapter } from "./adapters/react-router-adapter";
-setRouterAdapter(useReactRouterAdapter);
+import { useContextRouterAdapter } from "./adapters/context-adapter";
+setRouterAdapter(useContextRouterAdapter);
 // ────────────────────────────────────────────────────────────────────────────
 
 export * from "./components/theme";
@@ -45,6 +46,11 @@ export * from "./components/textarea";
 export * from "./components/toast";
 export * from "./components/tooltip";
 export * from "./components/upload-field";
-export * from "./contexts/router-adapter-context";
 export * from "./hooks";
 export { stringToHue, gradientFromString } from "./utils/stringToColor";
+
+// Re-export RouterAdapterProvider for Next.js consumers to use
+export { RouterAdapterProvider } from "./contexts/router-adapter-context";
+
+// Re-export the Next.js adapter hook
+export { useNextRouterAdapter } from "./adapters/next-adapter";

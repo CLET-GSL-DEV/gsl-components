@@ -30,13 +30,23 @@
       "import": "./dist/index.css",
       "require": "./dist/index.css",
       "default": "./dist/index.css"
+    },
+    "./next": {
+      "import": {
+        "types": "./dist/next-index.d.ts",
+        "default": "./dist/next.js"
+      },
+      "require": {
+        "types": "./dist/next-index.d.ts",
+        "default": "./dist/next.cjs"
+      }
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "vite build && tsc -p tsconfig.build.json",
+    "build": "BUILD_TARGET=default npx vite build && BUILD_TARGET=next npx vite build && mv dist/next-index.css dist/next.css && node -e \"var fs=require('fs');['dist/next.js','dist/next.cjs'].forEach(f=>fs.writeFileSync(f,fs.readFileSync(f,'utf8').replace('./next-index.css','./next.css')))\" && tsc -p tsconfig.build.json && cp src/next.d.ts dist/next.d.ts",
     "dev": "vite-react-ssg dev -c vite.demo.config.ts",
     "demo": "vite-react-ssg build -c vite.demo.config.ts",
     "test": "vitest run",
@@ -57,6 +67,7 @@
     "@radix-ui/react-select": "^2.3.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "lucide-react": ">=1.0.0",
+    "next": ">=14.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
     "react-hook-form": ">=7.0.0",
@@ -68,6 +79,9 @@
       "optional": true
     },
     "zod": {
+      "optional": true
+    },
+    "next": {
       "optional": true
     },
     "@hookform/resolvers": {
@@ -132,9 +146,12 @@
     "access": "public"
   },
   "dependencies": {
+    "@ast-grep/napi-darwin-arm64": "^0.44.1",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@esbuild/darwin-arm64": "^0.28.1",
+    "@rollup/rollup-darwin-arm64": "^4.62.2",
     "@tanstack/react-virtual": "^3.14.3",
     "cmdk": "^1.1.1",
     "libphonenumber-js": "^1.13.7",

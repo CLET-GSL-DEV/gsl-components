@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **RouterAdapter**: framework-agnostic router abstraction that replaces direct `react-router-dom` imports across 7 hooks and components. Library now ships two entry points:
+  - `@rfdtech/components` — default, backward compatible (react-router-dom)
+  - `@rfdtech/components/next` — Next.js App Router support via `<RouterAdapterProvider>`
+- New exports: `RouterAdapterProvider`, `setRouterAdapter`, `getRouterAdapter`, `useNextRouterAdapter`
+- RouterAdapter: SidebarLink, AppLayoutInner, table hooks (useTableFilter, useTablePagination, useTableState), TableSearch, TableFilter, and TablePagination no longer import react-router-dom directly — they consume the adapter from context, making them portable to other routers
+
 - Theme: Tailwind v4 `@theme` tokens integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
 - ProgressModal: non-dismissable processing overlay with Lottie animation and determinate progress bar
 - BulkImportModal: chunked processing for datasets over 1000 rows — file parsing, row mapping, and validation run in 1000-row batches with a progress overlay to prevent main-thread freezes
