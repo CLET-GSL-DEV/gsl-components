@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { DocsLayout } from "../components/DocsLayout";
 import { DocsSidebar } from "../components/DocsSidebar";
@@ -16,26 +16,26 @@ import {
 import { Search } from "lucide-react";
 import { cn } from "../../src/utils/cn";
 
-const SCROLL_THRESHOLD = 100;
+const SCROLL_THRESHOLD = 10;
 const DocsHeader = ({
   setSearchOpen,
 }: {
   setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [scrolledDown, setscrolledDown] = useState(false);
-  const [prevScrollY, setPrevScrollY] = useState(0);
+  const prevScrollY = useRef(0);
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const diff = currentScrollY - prevScrollY;
+      const diff = currentScrollY - prevScrollY.current;
       if (diff < -SCROLL_THRESHOLD) {
         setscrolledDown(true);
       } else if (diff > SCROLL_THRESHOLD) {
         setscrolledDown(false);
       }
 
-      console.log(prevScrollY, currentScrollY);
-      setPrevScrollY(currentScrollY);
+      console.log(diff);
+      prevScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll);

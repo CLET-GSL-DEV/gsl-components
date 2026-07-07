@@ -112,10 +112,11 @@
     left 150ms ease;
 }
 .gsl-tabs--pill .gsl-tabs__list {
-  gap: 4px;
+  --gsl-tabs-pill-indicator-pading: 6px;
+  gap: var(--gsl-tabs-pill-indicator-pading);
   position: relative;
   background: var(--gsl-surface-subtle);
-  padding: 4px;
+  padding: var(--gsl-tabs-pill-indicator-pading);
   border-radius: 999px;
   width: fit-content;
 }
@@ -125,6 +126,7 @@
   left: var(--gsl-tabs-indicator-offset, 0);
   width: var(--gsl-tabs-indicator-size, 0);
   height: var(--gsl-tabs-indicator-cross-size, 0);
+
   border-radius: 9999px;
 }
 .gsl-tabs__list--line[data-orientation="horizontal"] .gsl-tabs__indicator {
