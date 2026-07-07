@@ -6,8 +6,11 @@ export const meta = {
 import { ExampleTabs } from "../components/ExampleTabs";
 import { TabsPreview } from "../previews/code/TabsPreview";
 import { TabsLinePreview } from "../previews/code/TabsLinePreview";
+import { TabsPillExample } from "../previews/examples/tabs-pill.example";
+
 import tabsSource from "../previews/examples/tabs.example.tsx?raw";
 import tabsLineSource from "../previews/examples/tabs-line.example.tsx?raw";
+import tabsPillSource from "../previews/examples/tabs-pill.example.tsx?raw";
 
 # Tabs
 
@@ -30,6 +33,18 @@ Use `variant="line"` on `Tabs` for an underline indicator instead of the enclose
   preview={<TabsLinePreview />}
   code={tabsLineSource}
 />
+
+
+## Pill variant
+
+Use `variant="pill"` on `Tabs` for a pill-style indicator instead of the enclosed tab bar.
+
+<ExampleTabs
+  title="Pill tabs"
+  preview={<TabsPillExample />}
+  code={tabsPillSource}
+/>
+
 
 ## Components
 

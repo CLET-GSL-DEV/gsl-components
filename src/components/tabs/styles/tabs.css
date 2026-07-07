@@ -37,6 +37,18 @@
   border-right: 1px solid var(--gsl-border);
 }
 
+.gsl-tabs--pill .gsl-tabs__trigger {
+  border-radius: 9999px;
+}
+.gsl-tabs--pill .gsl-tabs__trigger[data-state="active"] {
+  color: var(--gsl-on-primary);
+  z-index: 1;
+}
+
+.gsl-tabs--pill .gsl-tabs__trigger[data-state="active"]:hover {
+  background: transparent;
+  color: var(--gsl-on-primary);
+}
 .gsl-tabs__trigger {
   padding: 8px 14px;
   border: 1px solid transparent;
@@ -58,7 +70,6 @@
   color: var(--gsl-text);
   background: var(--gsl-hover);
 }
-
 .gsl-tabs__trigger:focus-visible {
   outline: 2px solid var(--gsl-focus);
   outline-offset: 2px;
@@ -96,9 +107,26 @@
   transition:
     transform 150ms ease,
     width 150ms ease,
-    height 150ms ease;
+    height 150ms ease,
+    top 150ms ease,
+    left 150ms ease;
 }
-
+.gsl-tabs--pill .gsl-tabs__list {
+  gap: 4px;
+  position: relative;
+  background: var(--gsl-surface-subtle);
+  padding: 4px;
+  border-radius: 999px;
+  width: fit-content;
+}
+.gsl-tabs--pill .gsl-tabs__indicator {
+  background: var(--gsl-primary);
+  top: var(--gsl-tabs-indicator-cross-offset, 0);
+  left: var(--gsl-tabs-indicator-offset, 0);
+  width: var(--gsl-tabs-indicator-size, 0);
+  height: var(--gsl-tabs-indicator-cross-size, 0);
+  border-radius: 9999px;
+}
 .gsl-tabs__list--line[data-orientation="horizontal"] .gsl-tabs__indicator {
   bottom: 0;
   left: 0;

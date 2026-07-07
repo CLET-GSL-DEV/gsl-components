@@ -55,6 +55,16 @@ body {
   padding: 12px 24px;
   background: var(--gsl-bg);
   border-bottom: 1px solid var(--gsl-border);
+  position: sticky;
+  top: 0;
+  z-index: var(--gsl-z-header);
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.6);
+  translate: 0 0;
+  transition: translate 0.2s ease-in-out;
+}
+.demo-header.demo-header-up {
+  translate: 0 -100%;
 }
 
 .demo-logo {
@@ -166,7 +176,7 @@ body {
 
 .demo-docs {
   max-width: 1120px;
-  margin: 32px auto 64px;
+  margin: 0px auto;
   padding: 0 24px;
   text-align: left;
 }
@@ -184,6 +194,7 @@ body {
   max-height: calc(100vh - 48px);
   overflow-y: auto;
   padding-right: 24px;
+  padding-block: 24px;
   border-right: 1px solid var(--gsl-border);
 }
 
@@ -319,6 +330,8 @@ body {
   flex-direction: column;
   gap: var(--docs-space-block);
   min-width: 0;
+
+  padding-block: 24px;
 }
 
 .demo-docs__content
