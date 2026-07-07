@@ -5,7 +5,9 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { TablePreview } from "../previews/code/TablePreview";
+import { TablePreviewEmpty } from "../previews/code/TablePreviewEmpty";
 import tableSource from "../previews/examples/table.example.tsx?raw";
+import tableEmptySource from "../previews/examples/table-empty.example.tsx?raw";
 
 # Table
 
@@ -18,6 +20,16 @@ Compound table component with built-in URL-driven search, pagination, filters, c
   preview={<TablePreview />}
   code={tableSource}
 />
+
+## Example Empty State
+
+<ExampleTabs
+  title="Empty state"
+  preview={<TablePreviewEmpty />}
+  code={tableEmptySource}
+/>
+
+
 
 ## Architecture
 
@@ -64,6 +76,7 @@ Search input with debounce and a clear button. Writes the search term to `?searc
 | `debounceMs` | `number` | `300` | Debounce delay in ms |
 | `onSearch` | `(value: string) => void` | — | Callback that fires on the **debounced** search value (not every keystroke) |
 | `onChange` | `(e: ChangeEvent) => void` | — | Raw input change event (fires on every keystroke) |
+| `classNames` | `TableSearchClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the search wrapper |
 
 ## `<TableFilter>`
@@ -79,6 +92,7 @@ Filter fields must have a `name` attribute, e.g. `<select name="status">`. The n
 | `onReset` | `() => void` | — | Optional callback when Reset is clicked (URL clear happens first) |
 | `applyLabel` | `string` | `"Apply Filter"` | Apply button text |
 | `resetLabel` | `string` | `"Reset"` | Reset button aria-label |
+| `classNames` | `TableFilterClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root div |
 
 ## `<TableContent>`
@@ -98,6 +112,9 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `rowActions` | `TableRowAction<T>[]` | — | Row-level actions rendered as a kebab dropdown at the end of each row |
 | `className` | `string` | — | Merged onto the wrapper div |
 | `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
+| `emptyIcon` | `ReactNode` | Inbox icon | JSX/ReactNode icon shown above the empty text when `data` is empty. Defaults to an Inbox icon from `lucide-react`. |
+| `emptyText` | `string` | `"No results"` | Message shown when `data` is empty |
+| `classNames` | `TableContentClassNames` | — | Part-level class overrides |
 
 When `selectable` is true, a checkbox column is always present, collapsed to 0 width when no rows are selected. The header checkbox selects or deselects all visible rows.
 
@@ -192,6 +209,7 @@ Renders "Showing X-Y of Z" with a page-size dropdown on the left, and page numbe
 | `totalItems` | `number` | — | Total item count (shown as "Showing X–Y of N") |
 | `pageSizeOptions` | `number[]` | `[10,20,50,100]` | Options in the page-size dropdown |
 | `visiblePages` | `number` | `10` | Max page number buttons before ellipsis |
+| `classNames` | `TablePaginationClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root div |
 
 ## `<TableHeader>`
@@ -201,6 +219,7 @@ Layout wrapper for the header bar. Typically contains `<TableSearch>` and `<Tabl
 | Prop | Type | Description |
 |------|------|-------------|
 | `children` | `ReactNode` | Header content |
+| `classNames` | `TableHeaderClassNames` | — | Part-level class overrides |
 | `className` | `string` | Merged onto the header bar |
 
 ## `<TableFooter>`
@@ -210,7 +229,18 @@ Layout wrapper for the footer bar with `border-top`. Typically contains `<TableP
 | Prop | Type | Description |
 |------|------|-------------|
 | `children` | `ReactNode` | Footer content |
+| `classNames` | `TableFooterClassNames` | — | Part-level class overrides |
 | `className` | `string` | Merged onto the footer bar |
+
+## `<TableActions>`
+
+Actions area inside the header bar. Layout wrapper for action buttons.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `children` | `ReactNode` | Action content |
+| `classNames` | `TableActionsClassNames` | Part-level class overrides |
+| `className` | `string` | Merged onto the actions wrapper |
 
 ## `useTableState`
 
@@ -318,6 +348,76 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 |-----|------------|
 | `root` | Bar wrapper (`.gsl-table__bulk-actions-bar`) |
 | `count` | "Selected N" label |
+
+### `TableContentClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Content wrapper (`.gsl-table__content`) |
+| `empty` | Empty state container (`.gsl-table__empty`) |
+| `emptyIcon` | Empty state icon (`.gsl-table__empty-icon`) |
+| `emptyText` | Empty state text (`.gsl-table__empty-text`) |
+| `th` | Column header cells |
+| `thLabel` | Header label text (`.gsl-table__th-label`) |
+| `sortIcon` | Sort indicator (`.gsl-table__sort-icon`) |
+| `checkboxCell` | Selection checkbox cells (`.gsl-table__checkbox-cell`) |
+| `actionsCell` | Actions column cell (`.gsl-table__actions-cell`) |
+| `actionsTrigger` | Kebab trigger button (`.gsl-table__actions-trigger`) |
+| `actionsMenu` | Actions popover content (`.gsl-table__actions-menu`) |
+| `actionsItem` | Individual action item (`.gsl-table__actions-item`) |
+| `skeleton` | Loading skeleton spans (`.gsl-table__skeleton--*`) |
+| `viewport` | Virtual scroll viewport (`.gsl-table__viewport`) |
+
+### `TableSearchClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Search wrapper (`.gsl-table__search`) |
+| `icon` | Search icon (`.gsl-table__search-icon`) |
+| `input` | Search input (`.gsl-table__search-input`) |
+| `clear` | Clear button (`.gsl-table__search-clear`) |
+
+### `TableFilterClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Filter wrapper (`.gsl-table__filter`) |
+| `trigger` | Filter trigger button (`.gsl-table__filter-trigger`) |
+| `badge` | Active filter count badge (`.gsl-table__filter-badge`) |
+| `content` | Popover content (`.gsl-table__filter-content`) |
+| `header` | Popover header bar (`.gsl-table__filter-header`) |
+| `resetButton` | Reset button (`.gsl-table__filter-btn--reset`) |
+| `fields` | Filter form fields container (`.gsl-table__filter-fields`) |
+| `actions` | Filter actions bar (`.gsl-table__filter-actions`) |
+| `applyButton` | Apply button (`.gsl-table__filter-btn--apply`) |
+
+### `TablePaginationClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Pagination wrapper (`.gsl-table__pagination`) |
+| `results` | Results summary (`.gsl-table__page-results`) |
+| `pageSize` | Page size dropdown (`.gsl-table__page-size`) |
+| `pages` | Page number buttons container (`.gsl-table__pagination-pages`) |
+| `ellipsis` | Ellipsis indicator (`.gsl-table__page-ellipsis`) |
+
+### `TableHeaderClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Header bar (`.gsl-table__header-bar`) |
+
+### `TableFooterClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Footer bar (`.gsl-table__footer`) |
+
+### `TableActionsClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Actions wrapper (`.gsl-table__actions`) |
 
 ### `PaginationControlsProps`
 

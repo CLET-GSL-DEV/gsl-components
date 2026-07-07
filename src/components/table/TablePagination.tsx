@@ -92,6 +92,7 @@ export const TablePagination = forwardRef<
 		pageSizeOptions = [10, 20, 50, 100],
 		defaultPageSize,
 		visiblePages = 10,
+		classNames,
 		className,
 	},
 	ref,
@@ -145,12 +146,12 @@ export const TablePagination = forwardRef<
 	const pageNumbers = getPageNumbers(page, totalPages, visiblePages);
 
 	return (
-		<div ref={ref} className={cn("gsl-table__pagination", className)}>
+		<div ref={ref} className={cn("gsl-table__pagination", classNames?.root, className)}>
 			{totalItems != null && (
-				<div className="gsl-table__page-results">
+				<div className={cn("gsl-table__page-results", classNames?.results)}>
 					Showing {start}&ndash;{end} of {totalItems}
 					<Dropdown
-						className="gsl-table__page-size"
+						className={cn("gsl-table__page-size", classNames?.pageSize)}
 						value={String(pageSize)}
 						onValueChange={(v) => v && setPageSize(Number(v))}
 						options={pageSizeOptions.map((s) => ({
@@ -161,7 +162,7 @@ export const TablePagination = forwardRef<
 				</div>
 			)}
 
-			<div className="gsl-table__pagination-pages">
+			<div className={cn("gsl-table__pagination-pages", classNames?.pages)}>
 				<Button
 					variant="ghost"
 					size="sm"
@@ -175,7 +176,7 @@ export const TablePagination = forwardRef<
 
 				{pageNumbers.map((p, i) =>
 					p === "ellipsis" ? (
-						<span key={`ellipsis-${i}`} className="gsl-table__page-ellipsis">
+						<span key={`ellipsis-${i}`} className={cn("gsl-table__page-ellipsis", classNames?.ellipsis)}>
 							&hellip;
 						</span>
 					) : (

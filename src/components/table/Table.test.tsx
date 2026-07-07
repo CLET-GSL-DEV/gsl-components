@@ -171,7 +171,7 @@ describe("Table", () => {
     const skeletons = container.querySelectorAll(".gsl-table__skeleton--td");
     expect(skeletons.length).toBe(6);
     // No empty state text
-    expect(screen.queryByText("No data")).not.toBeInTheDocument();
+    expect(screen.queryByText("No results")).not.toBeInTheDocument();
   });
 
   it("loading takes priority over no data", () => {
@@ -181,7 +181,92 @@ describe("Table", () => {
       </Table>,
     );
 
-    expect(screen.queryByText("No data")).not.toBeInTheDocument();
+    expect(screen.queryByText("No results")).not.toBeInTheDocument();
+  });
+
+  it("renders default empty text when data is empty", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          columns={[{ id: "name", header: "Name" }]}
+          data={[]}
+        />
+      </Table>,
+    );
+
+    expect(screen.getByText("No results")).toBeInTheDocument();
+  });
+
+  it("renders custom emptyText when provided", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          columns={[{ id: "name", header: "Name" }]}
+          data={[]}
+          emptyText="No members found"
+        />
+      </Table>,
+    );
+
+    expect(screen.getByText("No members found")).toBeInTheDocument();
+    expect(screen.queryByText("No results")).not.toBeInTheDocument();
+  });
+
+  it("renders emptyIcon when provided", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          columns={[{ id: "name", header: "Name" }]}
+          data={[]}
+          emptyIcon={<span data-testid="empty-icon" />}
+        />
+      </Table>,
+    );
+
+    expect(screen.getByTestId("empty-icon")).toBeInTheDocument();
+  });
+
+  it("renders default empty text when columns are empty too", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent columns={[]} data={[]} />
+      </Table>,
+    );
+
+    expect(screen.getByText("No results")).toBeInTheDocument();
+  });
+
+  it("renders empty state in virtual path when data is empty", () => {
+    render(
+      <Table paramPrefix="test" height={400}>
+        <TableContent
+          columns={[{ id: "name", header: "Name" }]}
+          data={[]}
+          virtualRowHeight={44}
+          emptyIcon={<span data-testid="virtual-empty-icon" />}
+          emptyText="Virtual empty"
+        />
+      </Table>,
+    );
+
+    expect(screen.getByTestId("virtual-empty-icon")).toBeInTheDocument();
+    expect(screen.getByText("Virtual empty")).toBeInTheDocument();
+  });
+
+  it("renders default empty icon when no emptyIcon is provided", () => {
+    const { container } = render(
+      <Table paramPrefix="test">
+        <TableContent
+          columns={[{ id: "name", header: "Name" }]}
+          data={[]}
+        />
+      </Table>,
+    );
+
+    const iconWrapper = container.querySelector(".gsl-table__empty-icon");
+    expect(iconWrapper).toBeInTheDocument();
+    // An Inbox SVG icon should be rendered inside the wrapper
+    expect(iconWrapper?.querySelector("svg")).toBeInTheDocument();
   });
 
   it("renders selection column when selectable", () => {

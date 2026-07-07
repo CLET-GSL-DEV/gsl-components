@@ -90,17 +90,53 @@ export interface TableProps extends HTMLAttributes<HTMLDivElement> {
   height?: number;
 }
 
+export interface TableHeaderClassNames {
+  root?: string;
+}
+
 export interface TableHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  classNames?: TableHeaderClassNames;
   className?: string;
+}
+
+export interface TableActionsClassNames {
+  root?: string;
+}
+
+export interface TableActionsProps extends HTMLAttributes<HTMLDivElement> {
+  classNames?: TableActionsClassNames;
+  className?: string;
+}
+
+export interface TableContentClassNames {
+  root?: string;
+  empty?: string;
+  emptyIcon?: string;
+  emptyText?: string;
+  th?: string;
+  thLabel?: string;
+  sortIcon?: string;
+  checkboxCell?: string;
+  actionsCell?: string;
+  actionsTrigger?: string;
+  actionsMenu?: string;
+  actionsItem?: string;
+  skeleton?: string;
+  viewport?: string;
 }
 
 export interface TableContentProps<
   T = unknown,
 > extends HTMLAttributes<HTMLDivElement> {
   className?: string;
+  classNames?: TableContentClassNames;
   columns?: TableColumn<T>[];
   data?: T[];
   rowKey?: (row: T) => string | number;
+  /** Icon (JSX/ReactNode) shown above the empty text when data is empty */
+  emptyIcon?: ReactNode;
+  /** Message shown when data is empty (defaults to "No results") */
+  emptyText?: string;
   /** Show skeleton loading rows instead of data (default false) */
   loading?: boolean;
   /** Number of skeleton rows to show while loading (default 5) */
@@ -117,8 +153,20 @@ export interface TableContentProps<
   virtualRowHeight?: number;
 }
 
+export interface TableFooterClassNames {
+  root?: string;
+}
+
 export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {
+  classNames?: TableFooterClassNames;
   className?: string;
+}
+
+export interface TableSearchClassNames {
+  root?: string;
+  icon?: string;
+  input?: string;
+  clear?: string;
 }
 
 export interface TableSearchProps extends Omit<
@@ -128,7 +176,20 @@ export interface TableSearchProps extends Omit<
   placeholder?: string;
   debounceMs?: number;
   onSearch?: (value: string) => void;
+  classNames?: TableSearchClassNames;
   className?: string;
+}
+
+export interface TableFilterClassNames {
+  root?: string;
+  trigger?: string;
+  badge?: string;
+  content?: string;
+  header?: string;
+  resetButton?: string;
+  fields?: string;
+  actions?: string;
+  applyButton?: string;
 }
 
 export interface TableFilterProps {
@@ -137,7 +198,16 @@ export interface TableFilterProps {
   onReset?: () => void;
   applyLabel?: string;
   resetLabel?: string;
+  classNames?: TableFilterClassNames;
   className?: string;
+}
+
+export interface TablePaginationClassNames {
+  root?: string;
+  results?: string;
+  pageSize?: string;
+  pages?: string;
+  ellipsis?: string;
 }
 
 export interface PaginationControlsProps {
@@ -146,5 +216,6 @@ export interface PaginationControlsProps {
   pageSizeOptions?: number[];
   defaultPageSize?: number;
   visiblePages?: number;
+  classNames?: TablePaginationClassNames;
   className?: string;
 }

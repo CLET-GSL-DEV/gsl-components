@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.0] - 2026-07-07
+
 ### Added
 
 - **Timeline**: composable vertical timeline with `Timeline` + `TimelineItem` primitives. Four status variants (`complete`, `current`, `warning`, `error`), optional icon override in the dot, staggered connector draw and dot pop-in animations, and part-level `classNames`. Render any markup as the content column. Connector animations respect `prefers-reduced-motion`.
@@ -20,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `@rfdtech/components/next` — Next.js App Router support via `<RouterAdapterProvider>`
 - New exports: `RouterAdapterProvider`, `setRouterAdapter`, `getRouterAdapter`, `useNextRouterAdapter`
 - RouterAdapter: SidebarLink, AppLayoutInner, table hooks (useTableFilter, useTablePagination, useTableState), TableSearch, TableFilter, and TablePagination no longer import react-router-dom directly — they consume the adapter from context, making them portable to other routers
+- TableContent: `emptyIcon` and `emptyText` props for a customizable empty state when `data` is empty; renders in both regular and virtualized paths
+- TableContent: default empty icon (Inbox) shown when no `emptyIcon` is provided
+- Table: `classNames` API added to TableContent, TableHeader, TableFooter, TableSearch, TableFilter, TableActions, and TablePagination for deep inner styling
+- Tabs: `pill` variant with connected pill-style triggers and underline indicator
 
 - Theme: Tailwind v4 `@theme` token integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
 - ProgressModal: non-dismissable processing overlay with Lottie animation and determinate progress bar

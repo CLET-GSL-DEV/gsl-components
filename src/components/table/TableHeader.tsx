@@ -12,7 +12,12 @@ import * as Popover from "@radix-ui/react-popover";
 import { Search, FilterIcon, XCircle } from "lucide-react";
 import { getRouterAdapter } from "../../hooks/../adapters/registry";
 import { useDebounce } from "../../hooks/useDebounce";
-import type { TableSearchProps, TableFilterProps } from "../../types/table";
+import type {
+	TableSearchProps,
+	TableFilterProps,
+	TableActionsProps,
+	TableHeaderProps,
+} from "../../types/table";
 import { cn } from "../../utils/cn";
 import "./styles/table.css";
 import { useTableContext } from "./TableContext";
@@ -28,27 +33,28 @@ function paramKey(prefix: string | undefined, key: string): string {
 
 /* ── Actions ── */
 
-export const TableActions = forwardRef<
-	HTMLDivElement,
-	{ className?: string; children?: ReactNode }
->(function TableActions({ className, children, ...props }, ref) {
-	return (
-		<div ref={ref} className={cn("gsl-table__actions", className)} {...props}>
-			{children}
-		</div>
-	);
-});
+export const TableActions = forwardRef<HTMLDivElement, TableActionsProps>(
+	function TableActions({ classNames, className, children, ...props }, ref) {
+		return (
+			<div
+				ref={ref}
+				className={cn("gsl-table__actions", classNames?.root, className)}
+				{...props}
+			>
+				{children}
+			</div>
+		);
+	},
+);
 
 /* ── Header ── */
 
-export const TableHeader = forwardRef<
-	HTMLDivElement,
-	{ className?: string; children?: ReactNode }
->(function TableHeader({ className, children, ...props }, ref) {
+export const TableHeader = forwardRef<HTMLDivElement, TableHeaderProps>(
+	function TableHeader({ className, classNames, children, ...props }, ref) {
 	return (
 		<div
 			ref={ref}
-			className={cn("gsl-table__header-bar", className)}
+			className={cn("gsl-table__header-bar", classNames?.root, className)}
 			{...props}
 		>
 			{children}
@@ -61,13 +67,14 @@ export const TableHeader = forwardRef<
 export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
 	function TableSearch(
 		{
-			placeholder = "Search...",
-			debounceMs = 300,
-			onSearch,
-			onChange,
-			className,
-			...props
-		},
+   placeholder = "Search...",
+   debounceMs = 300,
+   onSearch,
+   onChange,
+   className,
+   classNames,
+   ...props
+ },
 		ref,
 	) {
 		const { paramPrefix } = useTableContext();
@@ -127,17 +134,17 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
 		}, [onChange]);
 
 		return (
-			<div className={cn("gsl-table__search", className)}>
+			<div className={cn("gsl-table__search", classNames?.root, className)}>
 				<Search
 					size={16}
 					strokeWidth={1.5}
-					className="gsl-table__search-icon"
+					className={cn("gsl-table__search-icon", classNames?.icon)}
 					aria-hidden
 				/>
 				<input
 					ref={ref}
 					type="text"
-					className="gsl-table__search-input"
+					className={cn("gsl-table__search-input", classNames?.input)}
 					placeholder={placeholder}
 					value={value}
 					onChange={handleChange}
@@ -145,7 +152,7 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
 				/>
 				{value && (
 					<div
-						className="gsl-table__search-clear"
+						className={cn("gsl-table__search-clear", classNames?.clear)}
 						onClick={clear}
 						aria-label="Clear search"
 					>
@@ -161,7 +168,7 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
 
 export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
 	function TableFilter(
-		{ children, onApply, onReset, applyLabel = "Apply Filter", className },
+		{ children, onApply, onReset, applyLabel = "Apply Filter", classNames, className },
 		ref,
 	) {
 		const { paramPrefix } = useTableContext();
@@ -229,30 +236,38 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
 		}, [setSearchParams, filterPrefix, onReset]);
 
 		return (
-			<div ref={ref} className={cn("gsl-table__filter", className)}>
+			<div
+				ref={ref}
+				className={cn("gsl-table__filter", classNames?.root, className)}
+			>
 				<Popover.Root open={open} onOpenChange={setOpen}>
 					<Popover.Trigger asChild>
-						<Button className="gsl-table__filter-trigger" aria-label="Filter">
+						<Button
+							className={cn("gsl-table__filter-trigger", classNames?.trigger)}
+							aria-label="Filter"
+						>
 							<FilterIcon size={14} strokeWidth={1.5} aria-hidden />
 							Filters
 							{activeCount != null && activeCount > 0 && (
-								<span className="gsl-table__filter-badge">{activeCount}</span>
+								<span className={cn("gsl-table__filter-badge", classNames?.badge)}>
+									{activeCount}
+								</span>
 							)}
 						</Button>
 					</Popover.Trigger>
 
 					<Popover.Portal>
 						<Popover.Content
-							className="gsl-table__filter-content"
+							className={cn("gsl-table__filter-content", classNames?.content)}
 							side="bottom"
 							align="end"
 							sideOffset={6}
 						>
-							<div className="gsl-table__filter-header">
+							<div className={cn("gsl-table__filter-header", classNames?.header)}>
 								<div>Filters</div>
 								<button
 									type="button"
-									className="gsl-table__filter-btn--reset"
+									className={cn("gsl-table__filter-btn--reset", classNames?.resetButton)}
 									onClick={handleReset}
 								>
 									clear
@@ -261,15 +276,21 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
 							</div>
 
 							{children && (
-								<form ref={formRef} className="gsl-table__filter-fields">
+								<form
+									ref={formRef}
+									className={cn("gsl-table__filter-fields", classNames?.fields)}
+								>
 									{children}
 								</form>
 							)}
 
-							<div className="gsl-table__filter-actions">
+							<div className={cn("gsl-table__filter-actions", classNames?.actions)}>
 								<button
 									type="button"
-									className="gsl-table__filter-btn gsl-table__filter-btn--apply"
+									className={cn(
+										"gsl-table__filter-btn gsl-table__filter-btn--apply",
+										classNames?.applyButton,
+									)}
 									onClick={handleApply}
 								>
 									{applyLabel}

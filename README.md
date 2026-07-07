@@ -97,14 +97,57 @@ See the [RouterAdapter](/docs/router-adapter) docs page for full setup.
 
 ### 7. Customize tokens
 
-Override any `--gsl-*` token on any ancestor:
+GSL components read `--gsl-*` CSS variables. Override any of them by
+declaring a new value on the same selectors the library uses.
 
-```css
-.my-app {
+**Step 1 — Import the library CSS** so its defaults are loaded:
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+```
+
+**Step 2 — Create a theme override file** and import it AFTER the
+library CSS. CSS source order matters: later rules with the same
+specificity win.
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+import "./styles/theme.css"; // imported after
+```
+
+**Step 3 — Override the tokens.** The library writes its defaults on
+these selectors:
+
+| Selector | When it matches |
+|----------|-----------------|
+| `:root` | No theme attribute is set (no `ThemeProvider` mounted) |
+| `:root[data-gsl-theme="light"]` | Light mode on `<html>` — `ThemeProvider` writes the attribute here |
+| `:root[data-gsl-theme="dark"]` | Dark mode on `<html>` |
+| `.gsl-theme` | A consumer wrapper `<div class="gsl-theme">` |
+| `.gsl-theme[data-gsl-theme="light"]` | Wrapper + light attribute |
+| `.gsl-theme[data-gsl-theme="dark"]` | Wrapper + dark attribute |
+
+A bare `:root { ... }` only matches the first row, so the library's
+default keeps winning on rows 2–6 once `ThemeProvider` mounts. To
+cover all of them, list every selector in one rule and hardcode the
+values (don't chain `var(--something)` — just write the color):
+
+```css title="src/styles/theme.css"
+:root,
+:root[data-gsl-theme="light"],
+.gsl-theme[data-gsl-theme="light"],
+:root[data-gsl-theme="dark"],
+.gsl-theme[data-gsl-theme="dark"] {
   --gsl-primary: #1d4ed8;
   --gsl-primary-light: #eff6ff;
+  --gsl-focus: #1d4ed8;
+  --gsl-on-primary: #ffffff;
 }
 ```
+
+That one block overrides the primary color in light mode, dark mode,
+and the unthemed fallback. The same shape works for any other
+`--gsl-*` token — list every selector, hardcode the value.
 
 ## Design tokens
 
