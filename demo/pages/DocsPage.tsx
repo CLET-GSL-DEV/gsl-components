@@ -17,24 +17,30 @@ import { Search } from "lucide-react";
 import { cn } from "../../src/utils/cn";
 
 const SCROLL_THRESHOLD = 10;
+const MIN_SCROLL_THRESHOLD = 250;
+
 const DocsHeader = ({
   setSearchOpen,
 }: {
   setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [headerVisible, setheaderVisible] = useState(false);
+  const [headerHidden, setheaderHidden] = useState(false);
   const prevScrollY = useRef(0);
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const diff = currentScrollY - prevScrollY.current;
-      if (diff < -SCROLL_THRESHOLD) {
-        setheaderVisible(true);
-      } else if (diff > SCROLL_THRESHOLD) {
-        setheaderVisible(false);
+
+      if (currentScrollY <= MIN_SCROLL_THRESHOLD) {
+        setheaderHidden(false);
+      } else {
+        if (diff < -SCROLL_THRESHOLD) {
+          setheaderHidden(true);
+        } else if (diff > SCROLL_THRESHOLD) {
+          setheaderHidden(false);
+        }
       }
 
-      console.log(diff);
       prevScrollY.current = currentScrollY;
     };
 
@@ -44,9 +50,7 @@ const DocsHeader = ({
     };
   }, []);
   return (
-    <header
-      className={cn("demo-header", headerVisible ? "demo-header-up" : "")}
-    >
+    <header className={cn("demo-header", headerHidden ? "demo-header-up" : "")}>
       <Link to="/" className="demo-logo">
         GSL Components
       </Link>

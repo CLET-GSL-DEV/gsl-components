@@ -7,7 +7,7 @@ export type {
   TimelineFooterProps,
   TimelineItemClassNames,
   TimelineItemProps,
-  TimelineItemStatus,
+  TimelineItemMode,
   TimelineProps,
   TimelineTitleClassNames,
   TimelineTitleProps,

@@ -38,7 +38,7 @@
 }
 
 .gsl-tabs--pill .gsl-tabs__trigger {
-  border-radius: 9999px;
+  border-radius: var(--gsl-tabs-pill-radius, 9999px);
 }
 .gsl-tabs--pill .gsl-tabs__trigger[data-state="active"] {
   color: var(--gsl-on-primary);
@@ -112,12 +112,12 @@
     left 150ms ease;
 }
 .gsl-tabs--pill .gsl-tabs__list {
-  --gsl-tabs-pill-indicator-pading: 6px;
-  gap: var(--gsl-tabs-pill-indicator-pading);
+  --gsl-tabs-pill-gap: 6px;
+  gap: var(--gsl-tabs-pill-gap);
   position: relative;
   background: var(--gsl-surface-subtle);
-  padding: var(--gsl-tabs-pill-indicator-pading);
-  border-radius: 999px;
+  padding: var(--gsl-tabs-pill-gap);
+  border-radius: var(--gsl-tabs-pill-radius, 999px);
   width: fit-content;
 }
 .gsl-tabs--pill .gsl-tabs__indicator {
@@ -127,7 +127,7 @@
   width: var(--gsl-tabs-indicator-size, 0);
   height: var(--gsl-tabs-indicator-cross-size, 0);
 
-  border-radius: 9999px;
+  border-radius: var(--gsl-tabs-pill-radius, 9999px);
 }
 .gsl-tabs__list--line[data-orientation="horizontal"] .gsl-tabs__indicator {
   bottom: 0;

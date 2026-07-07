@@ -59,7 +59,7 @@ Root wrapper. Supports controlled and uncontrolled selection.
 | `onValueChange` | `(value: string) => void` | — | Called when the active tab changes |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
 | `activationMode` | `"automatic" \| "manual"` | `"automatic"` | Whether focus activates a tab |
-| `variant` | `TabsVariant` | `"default"` | Visual style (`default` or `line`) |
+| `variant` | `TabsVariant` | `"default"` | Visual style (`default`, `line`, or `pill`) |
 | `classNames` | `TabsClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root |
 | `children` | `ReactNode` | — | `TabsList` and `TabsContent` items |
@@ -120,7 +120,7 @@ Props for `TabsContent`. Extends Radix content props with `classNames` and `clas
 
 ### `TabsVariant`
 
-`"default" | "line"` — visual style for the tab bar and triggers.
+`"default" | "line" | "pill"` — visual style for the tab bar and triggers.
 
 ### `TabsClassNames`
 
@@ -152,5 +152,15 @@ Props for `TabsContent`. Extends Radix content props with `classNames` and `clas
 - Each `TabsTrigger` `value` must match exactly one `TabsContent` `value`.
 - Radix handles keyboard navigation (arrow keys, Home, End) and ARIA roles (`tablist`, `tab`, `tabpanel`).
 - `variant="line"` uses a sliding indicator that moves between active triggers (bottom underline horizontally, right-edge bar vertically); indicator motion is disabled when `prefers-reduced-motion: reduce` is set.
+- `variant="pill"` uses a pill-style indicator that slides between active triggers with a shared pill-shaped container; indicator motion is disabled when `prefers-reduced-motion: reduce` is set.
 - Active panels fade and slide in briefly when switching tabs; animation is disabled when `prefers-reduced-motion: reduce` is set.
 - Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+
+## CSS Custom Properties
+
+These tokens allow overriding pill visual values at any level (consumer project, page, or inline).
+
+| Token | Default | Description |
+|-------|---------|-------------|
+| `--gsl-tabs-pill-radius` | `9999px` | Border-radius of pill triggers, the active indicator, and the pill list container. Set to a smaller value (e.g. `8px`) for a softer pill. |
+| `--gsl-tabs-pill-gap` | `6px` | Gap and padding between pill items and around the pill list. |

@@ -41,7 +41,7 @@ export const Timeline = forwardRef<HTMLOListElement, TimelineProps>(
 
 export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(
   function TimelineItem(
-    { status, color, icon, classNames, className, children, isLast, ...props },
+    { mode, color, icon, classNames, className, children, isLast, ...props },
     ref,
   ) {
     const dotStyle = color
@@ -66,7 +66,7 @@ export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(
           <div
             className={cn(
               "gsl-timeline__dot",
-              status && `gsl-timeline__dot--${status}`,
+              mode && `gsl-timeline__dot--${mode}`,
               classNames?.dot,
             )}
             style={dotStyle}

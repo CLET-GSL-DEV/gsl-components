@@ -39,8 +39,8 @@ Single event entry. Renders the dot + connector rail on the left and `children` 
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `status` | `"complete" \| "current" \| "warning" \| "error"` | — | Dot color variant; no prop = neutral outlined dot |
-| `color` | `string` | — | Custom CSS color for the dot; overrides the status variant's background and border |
+| `mode` | `"primary" \| "success" \| "warning" \| "error" \| "muted"` | — | Dot color variant from GSL primitives; no prop = neutral outlined dot |
+| `color` | `string` | — | Custom CSS color for the dot; overrides the mode's background and border |
 | `icon` | `ReactNode` | — | Replaces the default dot fill (e.g. `Check` / `AlertTriangle`) |
 | `classNames` | `TimelineItemClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root list item |
@@ -94,7 +94,7 @@ Exported from `@rfdtech/components`:
 - `TimelineTitleProps`, `TimelineTitleClassNames`
 - `TimelineDataProps`, `TimelineDataClassNames`
 - `TimelineFooterProps`, `TimelineFooterClassNames`
-- `TimelineItemStatus`
+- `TimelineItemMode`
 
 ### `TimelineItemClassNames`
 
@@ -108,8 +108,21 @@ Exported from `@rfdtech/components`:
 
 ## Notes
 
-- The `current` status shows a pulsing ring around the dot and is intended for the "active" or "you are here" step.
+- The `primary` mode shows a pulsing ring around the dot and is intended for the "active" or "you are here" step.
 - Connectors animate in from top to bottom with a staggered delay per item. Disabled automatically when `prefers-reduced-motion: reduce` is active.
 - The timeline fits a 320px viewport — the content column wraps naturally, and the rail stays fixed at 20px.
 - Dot icons should be ~10×10px (lucide `size={10}`). Larger icons may overflow the 16px dot.
 - Wrap `Timeline` in your own `<section>` or card for layout and heading.
+
+### Tokens
+
+Dot mode colors use existing GSL tokens. Customize the dot halo via `--gsl-timeline-halo`:
+
+| Token | Default | Used by |
+|-------|---------|---------|
+| `--gsl-primary` | Theme primary | `mode="primary"` |
+| `--gsl-success` | `#16a34a` | `mode="success"` |
+| `--gsl-warning` | `#eab308` | `mode="warning"` |
+| `--gsl-error` | `#dc2626` | `mode="error"` |
+| `--gsl-text-muted` | `#9ca3af` | `mode="muted"` |
+| `--gsl-timeline-halo` | `--gsl-bg` | Ring behind the dot that covers the connector line |

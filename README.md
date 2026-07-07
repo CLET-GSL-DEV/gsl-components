@@ -1135,7 +1135,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
 </Tabs>
 ```
 
-Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Props: `Tabs` — `value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`, `variant`, `classNames`, `className`, `children`. `TabsTrigger` — `value`, `disabled`, `classNames`, `className`. Exported types: `TabsProps`, `TabsListProps`, `TabsTriggerProps`, `TabsContentProps`, `TabsVariant`, `TabsClassNames`, `TabsListClassNames`, `TabsTriggerClassNames`, `TabsContentClassNames`.
+Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Props: `Tabs` — `value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`, `variant` (`"default"`, `"line"`, `"pill"`), `classNames`, `className`, `children`. `TabsTrigger` — `value`, `disabled`, `classNames`, `className`. Exported types: `TabsProps`, `TabsListProps`, `TabsTriggerProps`, `TabsContentProps`, `TabsVariant`, `TabsClassNames`, `TabsListClassNames`, `TabsTriggerClassNames`, `TabsContentClassNames`.
 
 ## Timeline
 
@@ -1164,7 +1164,7 @@ import { Check, AlertTriangle } from "lucide-react";
 </Timeline>
 ```
 
-Exports: `Timeline`, `TimelineItem`, `TimelineTitle`, `TimelineData`, `TimelineFooter`. Exported types: `TimelineProps`, `TimelineItemProps`, `TimelineTitleProps`, `TimelineDataProps`, `TimelineFooterProps`, `TimelineClassNames`, `TimelineItemClassNames`, `TimelineTitleClassNames`, `TimelineDataClassNames`, `TimelineFooterClassNames`, `TimelineItemStatus`.
+Exports: `Timeline`, `TimelineItem`, `TimelineTitle`, `TimelineData`, `TimelineFooter`. Exported types: `TimelineProps`, `TimelineItemProps`, `TimelineTitleProps`, `TimelineDataProps`, `TimelineFooterProps`, `TimelineClassNames`, `TimelineItemClassNames`, `TimelineTitleClassNames`, `TimelineDataClassNames`, `TimelineFooterClassNames`, `TimelineItemMode`.
 
 ## Toast
 

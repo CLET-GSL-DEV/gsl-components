@@ -21,7 +21,7 @@ function renderTimeline({
       <TimelineItem data-testid="item-0">
         <p>First event</p>
       </TimelineItem>
-      <TimelineItem status="current" data-testid="item-1">
+      <TimelineItem mode="primary" data-testid="item-1">
         <p>Second event</p>
       </TimelineItem>
     </Timeline>,
@@ -121,31 +121,32 @@ describe("TimelineItem", () => {
       .getByTestId("item")
       .querySelector(".gsl-timeline__dot");
     expect(dot).toBeInTheDocument();
-    expect(dot).not.toHaveClass("gsl-timeline__dot--complete");
+    expect(dot).not.toHaveClass("gsl-timeline__dot--primary");
   });
 
-  it("renders status variants on the dot", () => {
-    const statuses = [
-      "complete",
-      "current",
+  it("renders mode variants on the dot", () => {
+    const modes = [
+      "primary",
+      "success",
       "warning",
       "error",
+      "muted",
     ] as const;
 
-    for (const status of statuses) {
+    for (const mode of modes) {
       const { unmount } = render(
         <Timeline>
-          <TimelineItem status={status} data-testid={`item-${status}`}>
-            <p>{status}</p>
+          <TimelineItem mode={mode} data-testid={`item-${mode}`}>
+            <p>{mode}</p>
           </TimelineItem>
         </Timeline>,
       );
 
       const dot = screen
-        .getByTestId(`item-${status}`)
+        .getByTestId(`item-${mode}`)
         .querySelector(".gsl-timeline__dot");
 
-      expect(dot).toHaveClass(`gsl-timeline__dot--${status}`);
+      expect(dot).toHaveClass(`gsl-timeline__dot--${mode}`);
       unmount();
     }
   });
@@ -168,10 +169,10 @@ describe("TimelineItem", () => {
     });
   });
 
-  it("color prop does not affect a status class", () => {
+  it("color prop does not affect a mode class", () => {
     render(
       <Timeline>
-        <TimelineItem status="complete" color="#ff6b6b" data-testid="item">
+        <TimelineItem mode="success" color="#ff6b6b" data-testid="item">
           <p>Event</p>
         </TimelineItem>
       </Timeline>,
@@ -180,7 +181,7 @@ describe("TimelineItem", () => {
     const dot = screen
       .getByTestId("item")
       .querySelector(".gsl-timeline__dot");
-    expect(dot).toHaveClass("gsl-timeline__dot--complete");
+    expect(dot).toHaveClass("gsl-timeline__dot--success");
     expect(dot).toHaveStyle({
       backgroundColor: "#ff6b6b",
       borderColor: "#ff6b6b",

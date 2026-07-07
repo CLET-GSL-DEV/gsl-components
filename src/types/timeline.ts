@@ -5,7 +5,7 @@ import type {
   ReactNode,
 } from "react";
 
-export type TimelineItemStatus = "complete" | "current" | "warning" | "error";
+export type TimelineItemMode = "primary" | "success" | "warning" | "error" | "muted";
 
 export interface TimelineClassNames {
   root?: string;
@@ -32,7 +32,7 @@ export interface TimelineItemProps extends Omit<
   LiHTMLAttributes<HTMLLIElement>,
   "className"
 > {
-  status?: TimelineItemStatus;
+  mode?: TimelineItemMode;
   color?: string;
   icon?: ReactNode;
   classNames?: TimelineItemClassNames;

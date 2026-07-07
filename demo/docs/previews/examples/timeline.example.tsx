@@ -12,25 +12,25 @@ const history = [
     title: "Case reported",
     date: "12 Jun 2026",
     description: "HR Officer intake",
-    status: "complete" as const,
+    mode: "success" as const,
   },
   {
     title: "Assigned to HR Manager",
     date: "13 Jun 2026",
     description: "You",
-    status: "complete" as const,
+    mode: "success" as const,
   },
   {
     title: "Initial interview scheduled",
     date: "20 Jun 2026",
     description: "Complainant & respondent",
-    status: "complete" as const,
+    mode: "success" as const,
   },
   {
     title: "Response overdue",
     date: "Since 3 Jul 2026",
     description: "You",
-    status: "warning" as const,
+    mode: "warning" as const,
   },
 ];
 
@@ -52,9 +52,9 @@ export function TimelineExample() {
         {history.map((item) => (
           <TimelineItem
             key={item.title}
-            status={item.status}
+            mode={item.mode}
             icon={
-              item.status === "warning" ? null : (
+              item.mode === "warning" ? null : (
                 <Check size={10} strokeWidth={3} />
               )
             }
