@@ -22,16 +22,16 @@ const DocsHeader = ({
 }: {
   setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [scrolledDown, setscrolledDown] = useState(false);
+  const [headerVisible, setheaderVisible] = useState(false);
   const prevScrollY = useRef(0);
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const diff = currentScrollY - prevScrollY.current;
       if (diff < -SCROLL_THRESHOLD) {
-        setscrolledDown(true);
+        setheaderVisible(true);
       } else if (diff > SCROLL_THRESHOLD) {
-        setscrolledDown(false);
+        setheaderVisible(false);
       }
 
       console.log(diff);
@@ -44,7 +44,9 @@ const DocsHeader = ({
     };
   }, []);
   return (
-    <header className={cn("demo-header", scrolledDown ? "demo-header-up" : "")}>
+    <header
+      className={cn("demo-header", headerVisible ? "demo-header-up" : "")}
+    >
       <Link to="/" className="demo-logo">
         GSL Components
       </Link>

@@ -1,0 +1,115 @@
+export const meta = {
+  title: "Timeline",
+  description: "Vertical timeline for ordered events and history",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { TimelinePreview } from "../previews/code/TimelinePreview";
+import timelineSource from "../previews/examples/timeline.example.tsx?raw";
+
+# Timeline
+
+Composable vertical timeline with `Timeline` and `TimelineItem` primitives. Renders an `<ol>` list with a left rail of dots and connectors, and a right column for custom content. Use `TimelineTitle`, `TimelineData`, and `TimelineFooter` sub-components for styled content slots.
+
+## Example
+
+<ExampleTabs
+  title="Case history"
+  preview={<TimelinePreview />}
+  code={timelineSource}
+/>
+
+## Components
+
+### `Timeline`
+
+Root `<ol>` container. Accepts only `TimelineItem` children — non-items are filtered out. Injects `isLast` and index-based animation delay into each item.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `TimelineClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root |
+| `children` | `ReactNode` | — | Only `TimelineItem` children are rendered |
+
+Also accepts standard native `<ol>` attributes.
+
+### `TimelineItem`
+
+Single event entry. Renders the dot + connector rail on the left and `children` as content on the right.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `status` | `"complete" \| "current" \| "warning" \| "error"` | — | Dot color variant; no prop = neutral outlined dot |
+| `color` | `string` | — | Custom CSS color for the dot; overrides the status variant's background and border |
+| `icon` | `ReactNode` | — | Replaces the default dot fill (e.g. `Check` / `AlertTriangle`) |
+| `classNames` | `TimelineItemClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root list item |
+| `children` | `ReactNode` | — | Right-side content (title, date, description, or any markup) |
+
+Also accepts standard native `<li>` attributes.
+
+### `TimelineTitle`
+
+Styled heading for the item title. Renders as `<h3>` by default.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `as` | `"h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6"` | `"h3"` | Heading level |
+| `classNames` | `TimelineTitleClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the heading |
+| `children` | `ReactNode` | — | Title text |
+
+Also accepts standard native heading attributes.
+
+### `TimelineData`
+
+Styled paragraph for date, description, or any metadata.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `TimelineDataClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the paragraph |
+| `children` | `ReactNode` | — | Data content |
+
+Also accepts standard native `<p>` attributes.
+
+### `TimelineFooter`
+
+Styled wrapper for footer content below the title and data.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `TimelineFooterClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the footer |
+| `children` | `ReactNode` | — | Footer content |
+
+Also accepts standard native `<div>` attributes.
+
+## Types
+
+Exported from `@rfdtech/components`:
+
+- `TimelineProps`, `TimelineClassNames`
+- `TimelineItemProps`, `TimelineItemClassNames`
+- `TimelineTitleProps`, `TimelineTitleClassNames`
+- `TimelineDataProps`, `TimelineDataClassNames`
+- `TimelineFooterProps`, `TimelineFooterClassNames`
+- `TimelineItemStatus`
+
+### `TimelineItemClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | `<li>` element |
+| `rail` | Left column with dot and connector |
+| `dot` | The dot itself |
+| `connector` | Vertical line between dots |
+| `content` | Right column wrapper |
+
+## Notes
+
+- The `current` status shows a pulsing ring around the dot and is intended for the "active" or "you are here" step.
+- Connectors animate in from top to bottom with a staggered delay per item. Disabled automatically when `prefers-reduced-motion: reduce` is active.
+- The timeline fits a 320px viewport — the content column wraps naturally, and the rail stays fixed at 20px.
+- Dot icons should be ~10×10px (lucide `size={10}`). Larger icons may overflow the 16px dot.
+- Wrap `Timeline` in your own `<section>` or card for layout and heading.

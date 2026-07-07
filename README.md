@@ -1137,6 +1137,35 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
 
 Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Props: `Tabs` — `value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`, `variant`, `classNames`, `className`, `children`. `TabsTrigger` — `value`, `disabled`, `classNames`, `className`. Exported types: `TabsProps`, `TabsListProps`, `TabsTriggerProps`, `TabsContentProps`, `TabsVariant`, `TabsClassNames`, `TabsListClassNames`, `TabsTriggerClassNames`, `TabsContentClassNames`.
 
+## Timeline
+
+Composable vertical timeline with `Timeline` and `TimelineItem` primitives. Dot color variants for past, current, warning, and error events with optional `color` override. Sub-components `TimelineTitle`, `TimelineData`, and `TimelineFooter` provide styled content slots. Connector animations with staggered draw-in. See the [Timeline](/docs/timeline) docs page for props and exported types.
+
+```tsx
+import {
+  Timeline,
+  TimelineData,
+  TimelineFooter,
+  TimelineItem,
+  TimelineTitle,
+} from "@rfdtech/components";
+import { Check, AlertTriangle } from "lucide-react";
+
+<Timeline>
+  <TimelineItem status="complete" icon={<Check size={10} strokeWidth={3} />}>
+    <TimelineTitle>Case reported</TimelineTitle>
+    <TimelineData>12 Jun 2026</TimelineData>
+    <TimelineFooter>HR Officer intake</TimelineFooter>
+  </TimelineItem>
+  <TimelineItem status="warning" icon={<AlertTriangle size={10} strokeWidth={3} />}>
+    <TimelineTitle>Response overdue</TimelineTitle>
+    <TimelineData>Since 3 Jul 2026</TimelineData>
+  </TimelineItem>
+</Timeline>
+```
+
+Exports: `Timeline`, `TimelineItem`, `TimelineTitle`, `TimelineData`, `TimelineFooter`. Exported types: `TimelineProps`, `TimelineItemProps`, `TimelineTitleProps`, `TimelineDataProps`, `TimelineFooterProps`, `TimelineClassNames`, `TimelineItemClassNames`, `TimelineTitleClassNames`, `TimelineDataClassNames`, `TimelineFooterClassNames`, `TimelineItemStatus`.
+
 ## Toast
 
 Transient notifications with an imperative `useToast` hook, powered by Sonner. See the [Toast](/docs/toast) docs page for props and exported types.

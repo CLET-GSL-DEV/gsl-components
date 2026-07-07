@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Timeline**: composable vertical timeline with `Timeline` + `TimelineItem` primitives. Four status variants (`complete`, `current`, `warning`, `error`), optional icon override in the dot, staggered connector draw and dot pop-in animations, and part-level `classNames`. Render any markup as the content column. Connector animations respect `prefers-reduced-motion`.
 - **RouterAdapter**: framework-agnostic router abstraction that replaces direct `react-router-dom` imports across 7 hooks and components. Library now ships two entry points:
   - `@rfdtech/components` — default, backward compatible (react-router-dom)
   - `@rfdtech/components/next` — Next.js App Router support via `<RouterAdapterProvider>`
