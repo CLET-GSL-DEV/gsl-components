@@ -27,6 +27,11 @@
   flex: 1;
 }
 
+.gsl-app-layout--stacked .gsl-app-layout__content {
+  background: transparent;
+  padding: var(--gsl-app-layout-gap, 1rem);
+}
+
 .gsl-app-layout__body {
   position: relative;
   display: flex;
@@ -85,4 +90,20 @@
   padding-right: 0;
 }
 
+/* Stacked variant: full-width header on top, sidebar + content side by side below. No extra styling. */
+.gsl-app-layout--stacked {
+  flex-direction: column;
+}
 
+.gsl-app-layout__row {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-height: 0;
+}
+
+.gsl-app-layout__main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+}

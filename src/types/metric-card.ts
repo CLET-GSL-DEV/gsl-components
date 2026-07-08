@@ -2,6 +2,8 @@ import type { HTMLAttributes, ReactNode } from "react";
 
 export type MetricTrend = "up" | "down" | "neutral";
 
+export type MetricCardVariant = "default" | "outline";
+
 export interface MetricCardClassNames {
   root?: string;
   icon?: string;
@@ -20,6 +22,8 @@ export interface MetricCardProps extends HTMLAttributes<HTMLDivElement> {
   icon?: ReactNode;
   /** Subtitle or description below the value */
   description?: string;
+  /** Visual variant. "outline" renders a no-fill, bordered card with chevron trend icons and no +/- prefix */
+  variant?: MetricCardVariant;
   /** Direction of the trend indicator */
   trend?: MetricTrend;
   /** Formatted trend text (e.g. "+12.5%") */

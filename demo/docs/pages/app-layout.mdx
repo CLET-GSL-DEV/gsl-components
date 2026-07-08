@@ -5,7 +5,9 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { AppLayoutPreview } from "../previews/code/AppLayoutPreview";
+import { AppLayoutStackedPreview } from "../previews/code/AppLayoutStackedPreview";
 import appLayoutSource from "../previews/examples/app-layout.example.tsx?raw";
+import appLayoutStackedSource from "../previews/examples/app-layout-stacked.example.tsx?raw";
 
 # AppLayout
 
@@ -19,6 +21,19 @@ Application layout container that auto-positions `AppHeader`, `AppSidebar`, and 
   code={appLayoutSource}
 />
 
+## Variants
+
+`AppLayout` accepts a `variant` prop that controls how the header, sidebar, and body are arranged.
+
+- **`"default"`** (default) — the sidebar spans the full height on the left, and the header sits above the content only.
+- **`"stacked"`** — the header spans the full width on top, with the sidebar and content side by side below it. No extra styling.
+
+<ExampleTabs
+  title='variant="stacked" — full-width header on top, sidebar + content side by side'
+  preview={<AppLayoutStackedPreview />}
+  code={appLayoutStackedSource}
+/>
+
 ## Components
 
 ### `AppLayout`
@@ -29,6 +44,7 @@ Root layout container. Scans direct children for `componentId` matching `"AppHea
 |------|------|-------------|
 | `children` | `ReactNode` | Direct children — `<AppHeader>`, `<AppSidebar>`, `<AppBody>` |
 | `className` | `string` | Merged onto the root element |
+| `variant` | `"default" \| "stacked"` | Layout arrangement. `"default"`: sidebar full-height on the left, header above content only. `"stacked"`: full-width header on top, sidebar + content side by side below. Defaults to `"default"`. |
 
 ### `AppSidebar`
 
@@ -78,6 +94,7 @@ When `items` is empty, the breadcrumb section is hidden entirely.
 |-----|------|-------------|
 | `children` | `ReactNode` | Direct children for auto-positioning |
 | `className` | `string` | Root CSS class |
+| `variant` | `"default" \| "stacked"` | Layout arrangement — `"default"` or `"stacked"` (full-width header on top). Defaults to `"default"`. |
 
 ### `AppSidebarProps`
 

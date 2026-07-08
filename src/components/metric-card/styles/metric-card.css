@@ -2,6 +2,11 @@
   --gsl-default-metric-card-bg: var(--gsl-surface-card);
   --gsl-metric-card-radius: var(--gsl-radius-xl);
   --gsl-metric-card-shadow: none;
+
+  /* Overridable type tokens */
+  --gsl-metric-card-value-size: 28px;
+  --gsl-metric-card-value-color: var(--gsl-text);
+  --gsl-metric-card-description-size: 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -14,6 +19,40 @@
 }
 
 /* ── Variants — only affect trend colors ─────── */
+
+/* ── Outline variant: no fill, bordered, larger value, unified 8px gaps ── */
+
+.gsl-metric-card--outline {
+  --gsl-metric-card-value-size: 32px;
+  gap: 8px;
+  padding: 24px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius-base);
+  background: transparent;
+  padding-bottom: 38px;
+}
+
+.gsl-metric-card--outline .gsl-metric-card__value-row {
+  align-items: center;
+  gap: 12px;
+}
+
+.gsl-metric-card--outline .gsl-metric-card__label {
+  font-size: 10px;
+  color: var(--gsl-metric-card-label-color, var(--gsl-text-secondary));
+}
+
+.gsl-metric-card--outline .gsl-metric-card__header,
+.gsl-metric-card--outline .gsl-metric-card__value-row {
+  margin-bottom: 0;
+}
+
+.gsl-metric-card__trend-glyph {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  line-height: 1;
+}
 
 /* ── Top row: icon + label ──────────────────────────────── */
 
@@ -58,10 +97,10 @@
 }
 
 .gsl-metric-card__value {
-  font-size: 28px;
+  font-size: var(--gsl-metric-card-value-size);
   font-weight: 600;
   line-height: 1.2;
-  color: var(--gsl-text);
+  color: var(--gsl-metric-card-value-color);
   letter-spacing: -0.02em;
 }
 
@@ -73,7 +112,7 @@
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
   white-space: nowrap;
@@ -94,19 +133,16 @@
 /* ── Description ────────────────────────────────────────── */
 
 .gsl-metric-card__description {
-  font-size: 13px;
+  font-size: var(--gsl-metric-card-description-size);
   line-height: 1.4;
-  color: var(--gsl-text-muted);
+  color: var(--gsl-text-secondary);
 }
 
 /* ── Responsive ─────────────────────────────────────────── */
 
 @media (width <= 768px) {
   .gsl-metric-card {
+    --gsl-metric-card-value-size: 24px;
     padding: 16px;
-  }
-
-  .gsl-metric-card__value {
-    font-size: 24px;
   }
 }

@@ -156,10 +156,10 @@
 .gsl-sidebar__group-label,.gsl-sidebar__group-toggle{
   margin: 0;
   padding: 0 12px 4px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: var(--gsl-sidebar-label-text, , var(--gsl-text-forground));
+  color: var(--gsl-sidebar-label-text, , var(--gsl-text));
 }
 
 .gsl-sidebar__group-toggle {

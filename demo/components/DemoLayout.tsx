@@ -245,6 +245,12 @@ export function DemoLayout() {
           icon: LayoutDashboard,
         },
         {
+          id: "dashboard2",
+          label: "Dashboard 2",
+          href: "/dashboard2",
+          icon: LayoutDashboard,
+        },
+        {
           id: "members",
           label: "Members",
           href: "/members",
