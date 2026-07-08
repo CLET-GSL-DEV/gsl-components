@@ -93,21 +93,11 @@
 }
 
 .gsl-stepper__label {
+  margin-top: 8px;
   flex-shrink: 0;
   line-height: 1.3;
   white-space: nowrap;
   font-size: 12px;
-}
-
-.gsl-stepper__button--first .gsl-stepper__label {
-  left: 0;
-  transform: none;
-}
-
-.gsl-stepper__button--last .gsl-stepper__label {
-  left: auto;
-  right: 0;
-  transform: none;
 }
 
 .gsl-stepper__item--active .gsl-stepper__label,
@@ -131,7 +121,6 @@
   color: inherit;
   font: inherit;
   cursor: pointer;
-  width: 100%;
 }
 
 .gsl-stepper__button:hover .gsl-stepper__label {
@@ -167,6 +156,7 @@
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 450ms cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
 }
 
 .gsl-stepper__connector-fill--visible {
