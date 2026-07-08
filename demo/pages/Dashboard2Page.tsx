@@ -5,16 +5,7 @@ import type {
 } from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
 import { useCallback, useMemo, useState } from "react";
-import {
-  Users,
-  UserCheck,
-  CalendarPlus,
-  Activity,
-  Trash2,
-  UserX,
-  Eye,
-  Edit,
-} from "lucide-react";
+import { UserCheck, Trash2, UserX, Eye, Edit } from "lucide-react";
 import {
   Table,
   TableHeader,
@@ -24,8 +15,11 @@ import {
   TableBulkActions,
   TableFooter,
   TablePagination,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
   MetricCard,
-  Card,
   Dropdown,
   Modal,
   ModalPortal,
@@ -89,16 +83,28 @@ const columns: TableColumn<GslMember>[] = [
   },
 ];
 
-export function Dashboard2Page() {
+const TABS: { value: string; label: string; status?: GslMember["status"] }[] = [
+  { value: "all", label: "All members" },
+  { value: "active", label: "Active", status: "Active" },
+  { value: "pending", label: "Pending", status: "Pending" },
+  { value: "inactive", label: "Inactive", status: "Inactive" },
+];
+
+interface MembersTableProps {
+  paramPrefix: string;
+  initialData: GslMember[];
+  onView: (member: GslMember) => void;
+}
+
+function MembersTable({ paramPrefix, initialData, onView }: MembersTableProps) {
   const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
     defaultPageSize: 10,
-    paramPrefix: "members",
+    paramPrefix,
   });
   const [roleValue, setRoleValue] = useState(filters.role ?? "");
   const [statusValue, setStatusValue] = useState(filters.status ?? "");
-  const [members, setMembers] = useState(gslMembers);
+  const [members, setMembers] = useState(initialData);
   const [selected, setSelected] = useState<Set<string | number>>(new Set());
-  const [viewMember, setViewMember] = useState<GslMember | null>(null);
 
   const filtered = members.filter((m) => {
     const matchSearch =
@@ -147,34 +153,99 @@ export function Dashboard2Page() {
     },
   ];
 
-  const handleView = useCallback((member: GslMember) => {
-    setViewMember(member);
-  }, []);
-
   const rowActions = useMemo<TableRowAction<GslMember>[]>(
     () => [
       {
         id: "view",
         label: "View",
         icon: <Eye size={14} strokeWidth={1.5} />,
-        onClick: handleView,
+        onClick: onView,
       },
       {
         id: "edit",
         label: "Edit",
         icon: <Edit size={14} strokeWidth={1.5} />,
-        onClick: handleView,
+        onClick: onView,
       },
       {
         id: "delete",
         label: "Delete",
         icon: <Trash2 size={14} strokeWidth={1.5} />,
-        onClick: handleView,
+        onClick: onView,
         variant: "destructive",
       },
     ],
-    [handleView],
+    [onView],
   );
+
+  return (
+    <Table paramPrefix={paramPrefix}>
+      <TableHeader>
+        <TableSearch placeholder="Search members..." />
+        <TableFilter>
+          <div className="demo-home__filter-field">
+            <label className="demo-home__filter-label">Status</label>
+            <input type="hidden" name="status" value={statusValue} />
+            <Dropdown
+              value={statusValue}
+              onValueChange={(v) => setStatusValue(v ?? "")}
+              options={[
+                { value: "active", label: "Active" },
+                { value: "inactive", label: "Inactive" },
+                { value: "pending", label: "Pending" },
+              ]}
+              placeholder="All statuses"
+            />
+          </div>
+          <div className="demo-home__filter-field">
+            <label className="demo-home__filter-label">Role</label>
+            <input type="hidden" name="role" value={roleValue} />
+            <Dropdown
+              value={roleValue}
+              onValueChange={(v) => setRoleValue(v ?? "")}
+              options={[
+                { value: "admin", label: "Admin" },
+                { value: "editor", label: "Editor" },
+                { value: "viewer", label: "Viewer" },
+              ]}
+              placeholder="All roles"
+            />
+          </div>
+        </TableFilter>
+      </TableHeader>
+      <TableContent
+        variant="panel"
+        selectable
+        selectedIds={selected}
+        onSelectionChange={setSelected}
+        rowActions={rowActions}
+        columns={columns}
+        data={paged}
+        rowKey={(m: GslMember) => m.id}
+      />
+      <TableBulkActions
+        selectedIds={selected}
+        onClear={() => setSelected(new Set())}
+        actions={bulkActions}
+      />
+      <TableFooter>
+        <TablePagination
+          totalPages={totalPages}
+          totalItems={filtered.length}
+          pageSizeOptions={pageSizeOptions}
+        />
+      </TableFooter>
+    </Table>
+  );
+}
+
+export function Dashboard2Page() {
+  const [members] = useState(gslMembers);
+  const [viewMember, setViewMember] = useState<GslMember | null>(null);
+
+  const handleView = useCallback((member: GslMember) => {
+    setViewMember(member);
+  }, []);
 
   return (
     <>
@@ -213,64 +284,28 @@ export function Dashboard2Page() {
         />
       </div>
 
-      <Card>
-        <Table paramPrefix="members">
-          <TableHeader>
-            <TableSearch placeholder="Search members..." />
-            <TableFilter>
-              <div className="demo-home__filter-field">
-                <label className="demo-home__filter-label">Status</label>
-                <input type="hidden" name="status" value={statusValue} />
-                <Dropdown
-                  value={statusValue}
-                  onValueChange={(v) => setStatusValue(v ?? "")}
-                  options={[
-                    { value: "active", label: "Active" },
-                    { value: "inactive", label: "Inactive" },
-                    { value: "pending", label: "Pending" },
-                  ]}
-                  placeholder="All statuses"
-                />
-              </div>
-              <div className="demo-home__filter-field">
-                <label className="demo-home__filter-label">Role</label>
-                <input type="hidden" name="role" value={roleValue} />
-                <Dropdown
-                  value={roleValue}
-                  onValueChange={(v) => setRoleValue(v ?? "")}
-                  options={[
-                    { value: "admin", label: "Admin" },
-                    { value: "editor", label: "Editor" },
-                    { value: "viewer", label: "Viewer" },
-                  ]}
-                  placeholder="All roles"
-                />
-              </div>
-            </TableFilter>
-          </TableHeader>
-          <TableContent
-            selectable
-            selectedIds={selected}
-            onSelectionChange={setSelected}
-            rowActions={rowActions}
-            columns={columns}
-            data={paged}
-            rowKey={(m: GslMember) => m.id}
-          />
-          <TableBulkActions
-            selectedIds={selected}
-            onClear={() => setSelected(new Set())}
-            actions={bulkActions}
-          />
-          <TableFooter>
-            <TablePagination
-              totalPages={totalPages}
-              totalItems={filtered.length}
-              pageSizeOptions={pageSizeOptions}
+      <Tabs variant="pill" defaultValue="all">
+        <TabsList>
+          {TABS.map((tab) => (
+            <TabsTrigger key={tab.value} value={tab.value}>
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {TABS.map((tab) => (
+          <TabsContent key={tab.value} value={tab.value}>
+            <MembersTable
+              paramPrefix={`members-${tab.value}`}
+              initialData={
+                tab.status
+                  ? members.filter((m) => m.status === tab.status)
+                  : members
+              }
+              onView={handleView}
             />
-          </TableFooter>
-        </Table>
-      </Card>
+          </TabsContent>
+        ))}
+      </Tabs>
 
       <Modal
         open={viewMember !== null}

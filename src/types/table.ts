@@ -130,6 +130,12 @@ export interface TableContentProps<
 > extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   classNames?: TableContentClassNames;
+  /**
+   * Visual style of the table content wrapper.
+   * `"panel"` gives a faint recessed surface, subtle row dividers, and a
+   * border all around — suited for embedding inside tabs or cards.
+   */
+  variant?: "default" | "panel";
   columns?: TableColumn<T>[];
   data?: T[];
   rowKey?: (row: T) => string | number;

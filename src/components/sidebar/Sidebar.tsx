@@ -388,7 +388,9 @@ export const SidebarGroup = forwardRef<HTMLDivElement, SidebarGroupProps>(
               data-state={expanded ? "expanded" : "collapsed"}
               inert={!expanded}
             >
-              {contentChildren}
+              <div className="gsl-sidebar__group-content-inner">
+                {contentChildren}
+              </div>
             </div>
           ) : (
             contentChildren

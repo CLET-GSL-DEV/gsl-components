@@ -93,6 +93,7 @@ function TableContentRender<T>(
   const {
     className,
     children,
+    variant = "default",
     columns: rawColumns,
     data: rawData,
     rowKey,
@@ -386,6 +387,7 @@ function TableContentRender<T>(
       ref={ref}
       className={cn(
         "gsl-table__content",
+        variant === "panel" && "gsl-table__content--panel",
         selectable &&
           selectedIds.size > 0 &&
           "gsl-table__content--has-selected",

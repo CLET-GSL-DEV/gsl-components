@@ -41,8 +41,8 @@
   height: var(--gsl-stepper-marker-size);
   border-radius: 50%;
   background: var(--gsl-bg);
-  border: var(--gsl-stepper-marker-border) solid var(--gsl-border);
-  color: var(--gsl-border);
+  border: var(--gsl-stepper-marker-border) solid var(--gsl-border-strong);
+  color: var(--gsl-text-muted);
   font-size: 14px;
   font-weight: 600;
   transition:

@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@rfdtech/components";
-import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
 import { demoApps } from "demo/data/demoApps";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
-import { buildPageItems, buildMemberItems, buildDocItems } from "demo/data/demoSearch";
-import { packageVersion } from "demo/docs/site-meta";
 
 import {
   LayoutDashboard,
@@ -33,19 +30,14 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarCollapse,
   SidebarFooter,
-  SidebarHeader,
   SidebarNav,
-  SidebarTrigger,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarLink,
   SidebarBadge,
-  SidebarBrand,
   AppHeader,
   AppHeaderActions,
-  AppHeaderSearch,
   AppHeaderNotifications,
   AppHeaderProfile,
   AppSwitcher,
@@ -73,63 +65,6 @@ export function DemoLayout2() {
     demoNotifications,
     1500,
   );
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const handleSearch = useCallback((value: string) => setSearchQuery(value), []);
-
-  // ── Segmented search: each group has its own loading state ──
-  const pagesQuery = useMemo(() => buildPageItems(searchQuery), [searchQuery]);
-  const membersQuery = useMemo(
-    () => buildMemberItems(searchQuery),
-    [searchQuery],
-  );
-  const docsQuery = useMemo(() => buildDocItems(searchQuery), [searchQuery]);
-
-  const { data: pageResults, loading: pagesLoading } = useMockQuery(
-    pagesQuery,
-    2000,
-    `${searchQuery}-pages`,
-  );
-  const { data: memberResults, loading: membersLoading } = useMockQuery(
-    membersQuery,
-    2000,
-    `${searchQuery}-members`,
-  );
-  const { data: docsResults, loading: docsLoading } = useMockQuery(
-    docsQuery,
-    300,
-    `${searchQuery}-docs`,
-  );
-
-  const searchGroups: AppHeaderSearchDataGroup[] = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    return [
-      {
-        heading: "Pages",
-        items: pageResults ?? [],
-        loading: pagesLoading,
-        loadingLabel: "Searching pages...",
-      },
-      {
-        heading: "Members",
-        items: memberResults ?? [],
-        loading: membersLoading,
-        loadingLabel: "Searching members...",
-      },
-      {
-        heading: "Documentation",
-        items: (docsResults ?? []).map((doc) => ({
-          ...doc,
-          onSelect: () => {
-            navigate(`/docs/${doc.value}`);
-            setSearchQuery("");
-          },
-        })),
-        loading: docsLoading,
-        loadingLabel: "Searching documentation...",
-      },
-    ];
-  }, [searchQuery, pageResults, pagesLoading, memberResults, membersLoading, docsResults, docsLoading, navigate]);
 
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     () => new Set(["Main"]),
@@ -218,12 +153,6 @@ export function DemoLayout2() {
       <BreadcrumbProvider>
         <AppLayout variant="stacked">
           <AppHeader>
-            <AppHeaderSearch
-              data={searchGroups}
-              onSearch={handleSearch}
-              showEmpty
-              placeholder="Search pages and members..."
-            />
             <AppHeaderActions>
               <button
                 type="button"
@@ -278,23 +207,6 @@ export function DemoLayout2() {
           </AppHeader>
           <AppSidebar>
             <Sidebar>
-              <SidebarHeader>
-                <SidebarBrand>
-                  <img
-                    src="/gsl-logo.png"
-                    alt=""
-                    width={28}
-                    height={28}
-                    className="demo-home__sidebar-logo"
-                  />
-                  <span className="demo-home__sidebar-title">GSL</span>
-                  <span className="demo-home__sidebar-version">
-                    v{packageVersion}
-                  </span>
-                </SidebarBrand>
-                <SidebarTrigger>Menu</SidebarTrigger>
-                <SidebarCollapse />
-              </SidebarHeader>
               <SidebarContent>
                 <SidebarNav>
                   {navGroups.map((group) => (

@@ -175,30 +175,50 @@
   text-transform: inherit;
   cursor: pointer;
 }
-.gsl-sidebar__group-label-icon{   }
+.gsl-sidebar__group-label-icon {
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+/* Chevron switches direction when the group is folded */
+.gsl-sidebar__group-toggle[aria-expanded="false"] .gsl-sidebar__group-label-icon {
+  transform: rotate(-90deg);
+}
+
 .gsl-sidebar__group-toggle:focus-visible {
   outline: 2px solid var(--gsl-focus);
   outline-offset: 2px;
 }
 
+/* Fold animation via grid-template-rows (0fr -> 1fr) so the height
+   transition is smooth. The inner wrapper clips overflow while collapsing. */
 .gsl-sidebar__group-content {
+  display: grid;
+  grid-template-rows: 1fr;
   opacity: 1;
   visibility: visible;
-  height: auto;
   transition:
+    grid-template-rows 220ms ease,
     opacity 200ms ease,
-    visibility 0s linear 0s,
-    height 200ms ease;
+    visibility 0s linear 0s;
+}
+
+.gsl-sidebar__group-content-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .gsl-sidebar__group-content[data-state="collapsed"] {
+  grid-template-rows: 0fr;
   opacity: 0;
   visibility: hidden;
-  height: 0;
   transition:
+    grid-template-rows 220ms ease,
     opacity 200ms ease,
-    visibility 0s linear 200ms;
-    height 200ms ease;
+    visibility 0s linear 220ms;
 }
 
 .gsl-sidebar__item {
