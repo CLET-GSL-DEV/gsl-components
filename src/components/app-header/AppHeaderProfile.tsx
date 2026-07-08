@@ -13,17 +13,29 @@ export const AppHeaderProfile = forwardRef<
   ref,
 ) {
   const isBasic = variant === "basic";
+  const isAvatarOnly = variant === "avatar";
 
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <div ref={ref} className={cn("gsl-app-header__profile", className)}>
+        <div
+          ref={ref}
+          className={cn(
+            "gsl-app-header__profile",
+            isAvatarOnly && "gsl-app-header__profile--avatar",
+            className,
+          )}
+        >
           <Avatar name={user.name} src={user.avatar} size={32} />
-          <div className="gsl-app-header__user-info">
-            <span className="gsl-app-header__user-name">{user.name}</span>
-            <span className="gsl-app-header__user-role">{user.role}</span>
-          </div>
-          <ChevronDown size={16} strokeWidth={1.5} aria-hidden />
+          {!isAvatarOnly && (
+            <>
+              <div className="gsl-app-header__user-info">
+                <span className="gsl-app-header__user-name">{user.name}</span>
+                <span className="gsl-app-header__user-role">{user.role}</span>
+              </div>
+              <ChevronDown size={16} strokeWidth={1.5} aria-hidden />
+            </>
+          )}
         </div>
       </Popover.Trigger>
 

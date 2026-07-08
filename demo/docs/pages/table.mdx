@@ -31,7 +31,20 @@ Compound table component with built-in URL-driven search, pagination, filters, c
   code={tableEmptySource}
 />
 
+## Panel variant
 
+Pass `variant="panel"` to `<TableContent>` for a faint recessed surface with
+subtle row dividers and a border all around. It reads well when the table is
+embedded directly in a page — for example inside pill tabs — without a wrapping
+card. The look is a pure CSS override driven by the
+`--gsl-surface-panel` and `--gsl-border-subtle` tokens (both have light and dark
+values).
+
+<ExampleTabs
+  title="Panel tables in pill tabs"
+  preview={<TablePreviewPanel />}
+  code={tablePanelSource}
+/>
 
 ## Architecture
 
@@ -103,6 +116,7 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `variant` | `"default" \| "panel"` | `"default"` | `"panel"` renders a faint recessed surface with subtle row dividers and a border all around (CSS-only override) |
 | `columns` | `TableColumn<T>[]` | — | Column definitions |
 | `data` | `T[]` | — | Row data |
 | `rowKey` | `(row: T) => string \| number` | — | Unique key extractor for each row |
@@ -432,6 +446,8 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 | Token | Effect |
 |-------|--------|
 | `--gsl-radius-base` | All border radii |
+| `--gsl-surface-panel` | Background of the `panel` variant content surface |
+| `--gsl-border-subtle` | Row dividers and outer border of the `panel` variant |
 
 ## Notes
 

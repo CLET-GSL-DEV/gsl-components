@@ -16,6 +16,107 @@
   font-family: var(--gsl-font);
 }
 
+/* ── Plain variant: square edges, primary background, on-primary text ──
+   Background and foreground are overridable tokens — set --gsl-app-header-bg
+   and --gsl-app-header-color on .gsl-app-header--plain (or an ancestor). */
+
+.gsl-app-header--plain {
+  --gsl-app-header-bg: var(--gsl-primary);
+  --gsl-app-header-color: var(--gsl-on-primary);
+
+  border-radius: 0;
+  background: var(--gsl-app-header-bg);
+  color: var(--gsl-app-header-color);
+}
+
+.gsl-app-header--plain .gsl-app-header__notif-btn {
+  color: var(--gsl-app-header-color);
+}
+
+.gsl-app-header--plain .gsl-app-header__notif-btn:hover {
+  background: rgb(255 255 255 / 15%);
+  color: var(--gsl-app-header-color);
+}
+
+.gsl-app-header--plain .gsl-app-header__profile:hover {
+  background: rgb(255 255 255 / 15%);
+}
+
+/* App switcher trigger inherits the on-primary foreground inside the plain header */
+.gsl-app-header--plain .gsl-app-switcher__trigger {
+  color: var(--gsl-app-header-color);
+}
+
+.gsl-app-header--plain .gsl-app-switcher__trigger:hover {
+  background-color: rgb(255 255 255 / 15%);
+}
+
+/* ── Branding (logo + title/subtitle) ──
+   All values are exposed as overridable custom properties; set them on
+   .gsl-app-header__branding (or an ancestor) to re-theme without extra CSS. */
+
+.gsl-app-header__branding {
+  /* Overridable tokens */
+  --gsl-branding-color: inherit;
+  --gsl-branding-font: var(--gsl-font);
+  --gsl-branding-gap: 10px;
+  --gsl-branding-text-gap: 8px;
+  --gsl-branding-logo-size: 28px;
+  --gsl-branding-title-size: 14px;
+  --gsl-branding-title-weight: 700;
+  --gsl-branding-title-color: var(--gsl-branding-color);
+  --gsl-branding-sep-opacity: 0.55;
+  --gsl-branding-subtitle-size: 16px;
+  --gsl-branding-subtitle-weight: 400;
+  --gsl-branding-subtitle-color: var(--gsl-branding-color);
+
+  display: flex;
+  align-items: center;
+  gap: var(--gsl-branding-gap);
+  min-width: 0;
+  color: var(--gsl-branding-color);
+  font-family: var(--gsl-branding-font);
+}
+
+.gsl-app-header__branding-logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.gsl-app-header__branding-logo img,
+.gsl-app-header__branding-logo svg {
+  display: block;
+  width: var(--gsl-branding-logo-size);
+  height: var(--gsl-branding-logo-size);
+}
+
+.gsl-app-header__branding-text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gsl-branding-text-gap);
+  min-width: 0;
+}
+
+.gsl-app-header__branding-title {
+  font-size: var(--gsl-branding-title-size);
+  font-weight: var(--gsl-branding-title-weight);
+  color: var(--gsl-branding-title-color);
+  white-space: nowrap;
+}
+
+.gsl-app-header__branding-sep {
+  color: inherit;
+  opacity: var(--gsl-branding-sep-opacity);
+}
+
+.gsl-app-header__branding-subtitle {
+  font-size: var(--gsl-branding-subtitle-size);
+  font-weight: var(--gsl-branding-subtitle-weight);
+  color: var(--gsl-branding-subtitle-color);
+  white-space: nowrap;
+}
+
 /* ── Right side group ── */
 
 .gsl-app-header__right {
@@ -131,6 +232,12 @@
 .gsl-app-header__profile:hover {
   background: rgb(0 0 0 / 10%);
   --padding-block: 10px;
+}
+
+/* Avatar-only variant: just the avatar, popover opens on click */
+.gsl-app-header__profile--avatar {
+  gap: 0;
+  padding: 4px;
 }
 
 .gsl-app-header__avatar {

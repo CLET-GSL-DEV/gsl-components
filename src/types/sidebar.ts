@@ -78,6 +78,11 @@ export interface SidebarProviderProps {
 export interface SidebarProps {
   classNames?: SidebarClassNames;
   className?: string;
+  /**
+   * Visual style. "default" keeps the panel surface.
+   * "plain" makes the background transparent and adds a right border.
+   */
+  variant?: "default" | "plain";
   children: ReactNode;
 }
 

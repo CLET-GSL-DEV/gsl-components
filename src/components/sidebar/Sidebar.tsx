@@ -59,7 +59,7 @@ const SidebarGroupContext = createContext<SidebarGroupContextValue | null>(
 );
 
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
-  { classNames, className, children },
+  { classNames, className, variant = "default", children },
   ref,
 ) {
   const { open, collapsed, isMobile, sidebarId } = useSidebar();
@@ -70,6 +70,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
       id={sidebarId}
       className={cn(
         "gsl-sidebar",
+        variant === "plain" && "gsl-sidebar--plain",
         isMobile && "gsl-sidebar--mobile",
         isMobile && open && "gsl-sidebar--mobile-open",
         !isMobile && collapsed && "gsl-sidebar--collapsed",
@@ -243,6 +244,7 @@ export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
         className={cn(
           "gsl-sidebar__content",
           scrolledDown && "gsl-sidebar__content--scrolled",
+          showScrollHint && "gsl-sidebar__content--more-below",
           classNames?.content,
           className,
         )}

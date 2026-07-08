@@ -9,6 +9,13 @@
   height: 100%;
 }
 
+/* ── Plain variant: transparent background, right border, no radius ── */
+.gsl-sidebar.gsl-sidebar--plain {
+  background: transparent;
+  border-right: 1px solid var(--gsl-border);
+  border-radius: 0;
+}
+
 .gsl-sidebar__header {
   display: flex;
   flex-wrap: nowrap;
@@ -63,56 +70,55 @@
   outline-offset: 2px;
 }
 
+/* Registered so the mask edges can transition smoothly. */
+@property --gsl-sidebar-mask-top {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --gsl-sidebar-mask-bottom {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+/* Real scroll mask: a linear-gradient mask fades the content to transparent at
+   the top (once scrolled) and bottom (while more content is below). Being a
+   mask, it is background-independent — works on the solid and plain sidebars. */
 .gsl-sidebar__content {
+  --gsl-sidebar-mask-size: 48px;
+  --gsl-sidebar-mask-top: 0px;
+  --gsl-sidebar-mask-bottom: 0px;
+
   flex: 1;
   min-height: 0;
   position: relative;
   overflow-y: auto;
   scrollbar-width: none;
+
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--gsl-sidebar-mask-top),
+    #000 calc(100% - var(--gsl-sidebar-mask-bottom)),
+    transparent 100%
+  );
+  transition:
+    --gsl-sidebar-mask-top 200ms ease,
+    --gsl-sidebar-mask-bottom 200ms ease;
 }
 
 .gsl-sidebar__content::-webkit-scrollbar {
   display: none;
 }
 
-.gsl-sidebar__content::before {
-  content: "";
-  position: sticky;
-  top: 0;
-  display: block;
-  width: 100%;
-  height: 60px;
-  margin-top: -60px;
-  flex-shrink: 0;
-  background: linear-gradient(
-    to bottom,
-    var(--gsl-sidebar-bg, var(--gsl-panel-bg, var(--gsl-surface-subtle))),
-    transparent
-  );
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 200ms ease;
+.gsl-sidebar__content--scrolled {
+  --gsl-sidebar-mask-top: var(--gsl-sidebar-mask-size);
 }
 
-.gsl-sidebar__content--scrolled::before {
-  opacity: 1;
-}
-
-.gsl-sidebar__content::after {
-  content: "";
-  position: sticky;
-  bottom: 0;
-  display: block;
-  width: 100%;
-  height: 80px;
-  flex-shrink: 0;
-  background: linear-gradient(
-    to top,
-    var(--gsl-sidebar-bg, var(--gsl-panel-bg, var(--gsl-surface-subtle))),
-    transparent
-  );
-  pointer-events: none;
+.gsl-sidebar__content--more-below {
+  --gsl-sidebar-mask-bottom: var(--gsl-sidebar-mask-size);
 }
 
 .gsl-sidebar__scroll-hint {
@@ -153,7 +159,8 @@
   gap: 4px;
 }
 
-.gsl-sidebar__group-label,.gsl-sidebar__group-toggle{
+.gsl-sidebar__group-label,
+.gsl-sidebar__group-toggle {
   margin: 0;
   padding: 0 12px 4px;
   font-size: 12px;
@@ -181,7 +188,8 @@
 }
 
 /* Chevron switches direction when the group is folded */
-.gsl-sidebar__group-toggle[aria-expanded="false"] .gsl-sidebar__group-label-icon {
+.gsl-sidebar__group-toggle[aria-expanded="false"]
+  .gsl-sidebar__group-label-icon {
   transform: rotate(-90deg);
 }
 
@@ -417,6 +425,14 @@
       width 200ms ease,
       max-width 200ms ease,
       padding 200ms ease;
+  }
+
+  /* Plain override must live inside the media query to beat the base
+     desktop background/border-radius above. */
+  .gsl-sidebar.gsl-sidebar--plain:not(.gsl-sidebar--mobile) {
+    background: transparent;
+    border-right: 1px solid var(--gsl-border);
+    border-radius: 0;
   }
 }
 

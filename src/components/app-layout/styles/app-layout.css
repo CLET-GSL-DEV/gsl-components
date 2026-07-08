@@ -79,6 +79,9 @@
   display: none;
 }
 
+.gsl-app-layout--stacked .gsl-app-layout__sidebar {
+  padding: 0;
+}
 .gsl-app-layout__sidebar {
   flex-shrink: 0;
   position: relative;

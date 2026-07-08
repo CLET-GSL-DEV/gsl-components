@@ -38,6 +38,7 @@ import {
   SidebarBadge,
   AppHeader,
   AppHeaderActions,
+  AppHeaderBranding,
   AppHeaderNotifications,
   AppHeaderProfile,
   AppSwitcher,
@@ -151,8 +152,21 @@ export function DemoLayout2() {
   return (
     <SidebarProvider>
       <BreadcrumbProvider>
-        <AppLayout variant="stacked">
-          <AppHeader>
+        <AppLayout variant="stacked" className="dashboard2-theme">
+          <AppHeader variant="plain">
+            <AppHeaderBranding
+              logo={
+                <img
+                  src="/gsl-logo.png"
+                  alt=""
+                  width={28}
+                  height={28}
+                  className="demo-home__sidebar-logo"
+                />
+              }
+              title="GSL PORTAL"
+              subtitle="GSL Component Library"
+            />
             <AppHeaderActions>
               <button
                 type="button"
@@ -183,7 +197,7 @@ export function DemoLayout2() {
                 ))}
               </AppHeaderNotifications>
               <AppHeaderProfile
-                variant="basic"
+                variant="avatar"
                 user={{
                   name: "Kwame Asante",
                   role: "Admin",
@@ -206,7 +220,7 @@ export function DemoLayout2() {
             </AppHeaderActions>
           </AppHeader>
           <AppSidebar>
-            <Sidebar>
+            <Sidebar variant="plain">
               <SidebarContent>
                 <SidebarNav>
                   {navGroups.map((group) => (
