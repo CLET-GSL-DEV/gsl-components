@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import {
   Sidebar,
@@ -16,6 +17,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "./Sidebar";
+
+function renderWithRouter(ui: React.ReactNode) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>);
+}
 
 function mockMatchMedia(isMobile: boolean) {
   Object.defineProperty(window, "matchMedia", {
@@ -40,7 +45,7 @@ function renderSidebar({
   onCollapsedChange?: (collapsed: boolean) => void;
   defaultOpen?: boolean;
 } = {}) {
-  return render(
+  return renderWithRouter(
     <SidebarProvider
       defaultOpen={defaultOpen}
       onOpenChange={onOpenChange}
@@ -127,7 +132,7 @@ describe("Sidebar", () => {
   it("merges classNames onto sidebar parts", () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider classNames={{ root: "custom-provider" }}>
         <Sidebar classNames={{ root: "custom-sidebar" }}>
           <SidebarHeader classNames={{ header: "custom-header" }}>
@@ -163,7 +168,7 @@ describe("Sidebar", () => {
   });
 
   it("merges classes onto child when SidebarLink uses asChild", () => {
-    render(
+    renderWithRouter(
       <SidebarProvider>
         <Sidebar>
           <SidebarContent>
@@ -190,7 +195,7 @@ describe("Sidebar", () => {
   it("renders icon and label wrappers when SidebarLink has icon", () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider>
         <Sidebar>
           <SidebarContent>
@@ -257,7 +262,7 @@ describe("Sidebar", () => {
   it("renders SidebarBadge inside SidebarLink", () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider>
         <Sidebar>
           <SidebarContent>
@@ -284,7 +289,7 @@ describe("Sidebar", () => {
   it("hides SidebarBadge when sidebar is collapsed", () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider defaultCollapsed>
         <Sidebar>
           <SidebarContent>
@@ -307,7 +312,7 @@ describe("Sidebar", () => {
   it("merges classNames onto SidebarBadge", () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider>
         <Sidebar>
           <SidebarContent>
@@ -338,7 +343,7 @@ describe("Sidebar", () => {
   it("shows tooltip on SidebarLink when sidebar is collapsed", async () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider defaultCollapsed>
         <Sidebar>
           <SidebarContent>
@@ -365,7 +370,7 @@ describe("Sidebar", () => {
   it("does not show tooltip on SidebarLink when sidebar is expanded", () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider defaultCollapsed={false}>
         <Sidebar>
           <SidebarContent>
@@ -389,7 +394,7 @@ describe("Sidebar", () => {
   it("extracts label text from nested children for tooltip", async () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider defaultCollapsed>
         <Sidebar>
           <SidebarContent>
@@ -415,7 +420,7 @@ describe("Sidebar", () => {
   it("wraps asChild link in tooltip when collapsed", async () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider defaultCollapsed>
         <Sidebar>
           <SidebarContent>
@@ -442,7 +447,7 @@ describe("Sidebar", () => {
   it("does not render tooltip when link has no label text", () => {
     mockMatchMedia(false);
 
-    render(
+    renderWithRouter(
       <SidebarProvider defaultCollapsed>
         <Sidebar>
           <SidebarContent>
@@ -461,5 +466,349 @@ describe("Sidebar", () => {
     expect(
       document.querySelector('[role="tooltip"]'),
     ).not.toBeInTheDocument();
+  });
+
+  it("renders SidebarGroupLabel as a paragraph when group is not collapsible", () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup>
+                <SidebarGroupLabel>Static</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Home</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const label = screen.getByText("Static");
+    expect(label.tagName).toBe("P");
+    expect(label).toHaveClass("gsl-sidebar__group-label");
+    expect(label).not.toHaveClass("gsl-sidebar__group-toggle");
+  });
+
+  it("renders SidebarGroupLabel as a button with aria-expanded=true when group is collapsible", () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup collapsible>
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Profile</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Settings" });
+    expect(trigger.tagName).toBe("BUTTON");
+    expect(trigger).toHaveClass("gsl-sidebar__group-label");
+    expect(trigger).toHaveClass("gsl-sidebar__group-toggle");
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(trigger).toHaveAttribute("aria-controls");
+  });
+
+  it("wires aria-controls on the trigger to the content wrapper id", () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup collapsible>
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Profile</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Settings" });
+    const controlsId = trigger.getAttribute("aria-controls");
+    const content = document.getElementById(controlsId ?? "");
+
+    expect(content).toBeInTheDocument();
+    expect(content).toHaveClass("gsl-sidebar__group-content");
+    expect(content).toHaveAttribute("data-state", "expanded");
+  });
+
+  it("toggles expanded state when the trigger is clicked", async () => {
+    mockMatchMedia(false);
+    const user = userEvent.setup();
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup collapsible>
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Profile</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Settings" });
+    const content = document.getElementById(
+      trigger.getAttribute("aria-controls") ?? "",
+    );
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(content).toHaveAttribute("data-state", "expanded");
+
+    await user.click(trigger);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(content).toHaveAttribute("data-state", "collapsed");
+
+    await user.click(trigger);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(content).toHaveAttribute("data-state", "expanded");
+  });
+
+  it("starts collapsed when defaultExpanded is false", () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup collapsible defaultExpanded={false}>
+                <SidebarGroupLabel>Advanced</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>API Keys</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Advanced" });
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    const content = document.getElementById(
+      trigger.getAttribute("aria-controls") ?? "",
+    );
+    expect(content).toHaveAttribute("data-state", "collapsed");
+    expect(content).toHaveAttribute("inert");
+  });
+
+  it("calls onExpandedChange when toggled", async () => {
+    mockMatchMedia(false);
+    const user = userEvent.setup();
+    const onExpandedChange = vi.fn();
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup
+                collapsible
+                defaultExpanded={false}
+                onExpandedChange={onExpandedChange}
+              >
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Profile</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Settings" }));
+
+    expect(onExpandedChange).toHaveBeenCalledWith(true);
+  });
+
+  it("respects controlled expanded prop", async () => {
+    mockMatchMedia(false);
+    const user = userEvent.setup();
+    const onExpandedChange = vi.fn();
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup
+                collapsible
+                expanded={false}
+                onExpandedChange={onExpandedChange}
+              >
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Profile</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Settings" });
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    await user.click(trigger);
+
+    expect(onExpandedChange).toHaveBeenCalledWith(true);
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("activates the trigger on Enter and Space", async () => {
+    mockMatchMedia(false);
+    const user = userEvent.setup();
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup collapsible>
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Profile</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Settings" });
+    trigger.focus();
+
+    await user.keyboard("{Enter}");
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard(" ");
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("merges classNames onto the new group parts", () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup
+                collapsible
+                classNames={{
+                  group: "custom-group",
+                  groupToggle: "custom-toggle",
+                  groupContent: "custom-content",
+                }}
+              >
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Profile</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    expect(document.querySelector(".custom-group")).toBeInTheDocument();
+    expect(document.querySelector(".custom-toggle")).toBeInTheDocument();
+    expect(document.querySelector(".custom-content")).toBeInTheDocument();
+  });
+
+  it("does not wrap children in a content div when not collapsible", () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup>
+                <SidebarGroupLabel>Static</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Home</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    expect(
+      document.querySelector(".gsl-sidebar__group-content"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("preserves the group space when folded (content stays in flow, hidden via visibility)", () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarGroup collapsible defaultExpanded>
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarItem>
+                  <SidebarLink>Profile</SidebarLink>
+                </SidebarItem>
+                <SidebarItem>
+                  <SidebarLink>Billing</SidebarLink>
+                </SidebarItem>
+              </SidebarGroup>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Settings" });
+    const content = document.getElementById(
+      trigger.getAttribute("aria-controls") ?? "",
+    );
+    expect(content).not.toBeNull();
+
+    fireEvent.click(trigger);
+
+    const style = window.getComputedStyle(content!);
+    expect(style.display).not.toBe("none");
+    expect(content).toHaveAttribute("data-state", "collapsed");
+    expect(content).toHaveAttribute("inert");
   });
 });

@@ -996,7 +996,7 @@ Exports: `RouterAdapterProvider`, `setRouterAdapter`, `getRouterAdapter`. Types:
 
 ## Sidebar
 
-Compound sidebar primitives for app shells and section navigation. Desktop uses a sticky card-style rail with optional collapse; mobile uses an offcanvas drawer with trigger and overlay. See the [Sidebar](/docs/sidebar) docs page for props and exported types.
+Compound sidebar primitives for app shells and section navigation. Desktop uses a sticky card-style rail with optional collapse; mobile uses an offcanvas drawer with trigger and overlay. `SidebarGroup` supports a `collapsible` flag that turns the group label into a button toggle with an animated open/close for the group's content. See the [Sidebar](/docs/sidebar) docs page for props and exported types.
 
 ```tsx
 import {
@@ -1113,6 +1113,34 @@ const [items, setItems] = useState(["alpha", "beta", "gamma"]);
 ```
 
 Exports: `Sortable`, `SortableList`, `SortableItem`, `SortableHandle`, `reorderItems`. Types: `SortableProps`, `SortableListProps`, `SortableItemProps`, `SortableHandleProps`, `SortableId`, `SortableStrategy`, `SortableClassNames`.
+
+## Stepper
+
+Horizontal step indicator for multi-step flows. `Stepper` holds the active step value and derives each `Step`'s `complete` / `active` / `upcoming` state. Each step renders a numbered circle that flips to a check when done, with a connector line that fills between completed steps. Add a `StepLabel` for the step's text. See the [Stepper](/docs/stepper) docs page for props and exported types.
+
+```tsx
+import { useState } from "react";
+import { Step, StepLabel, Stepper } from "@rfdtech/components";
+
+const [step, setStep] = useState(3);
+
+<Stepper value={step} clickable onValueChange={setStep}>
+  <Step value={1}>
+    <StepLabel>Upload Document</StepLabel>
+  </Step>
+  <Step value={2}>
+    <StepLabel>Select header row</StepLabel>
+  </Step>
+  <Step value={3}>
+    <StepLabel>Match Columns</StepLabel>
+  </Step>
+  <Step value={4}>
+    <StepLabel>Validate data</StepLabel>
+  </Step>
+</Stepper>
+```
+
+Exports: `Stepper`, `Step`, `StepLabel`. Also available as `Stepper.Step`, `Stepper.StepLabel` for compound-style imports. Props: `Stepper` — `value`, `clickable`, `onValueChange`, `classNames`, `className`, `children`. `Step` — `value`, `disabled`, `classNames`, `className`, `children`. `StepLabel` — `classNames`, `className`, `children`. Exported types: `StepperProps`, `StepProps`, `StepLabelProps`, `StepperClassNames`, `StepClassNames`, `StepLabelClassNames`, `StepperContextValue`, `StepState`, `StepInternalProps`. Retheme via `--gsl-stepper-accent` (defaults to `--gsl-primary`) and related `--gsl-stepper-*` custom properties.
 
 ## Table
 

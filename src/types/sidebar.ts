@@ -42,6 +42,8 @@ export interface SidebarNavClassNames {
 
 export interface SidebarGroupClassNames {
   group?: string;
+  groupToggle?: string;
+  groupContent?: string;
 }
 
 export interface SidebarGroupLabelClassNames {
@@ -128,6 +130,10 @@ export interface SidebarNavProps extends HTMLAttributes<HTMLElement> {
 }
 
 export interface SidebarGroupProps {
+  collapsible?: boolean;
+  defaultExpanded?: boolean;
+  expanded?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
   classNames?: SidebarGroupClassNames;
   className?: string;
   children: ReactNode;

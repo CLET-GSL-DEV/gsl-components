@@ -153,14 +153,52 @@
   gap: 4px;
 }
 
-.gsl-sidebar__group-label {
+.gsl-sidebar__group-label,.gsl-sidebar__group-toggle{
   margin: 0;
   padding: 0 12px 4px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gsl-sidebar-label-text, var(--gsl-text-secondary));
+  color: var(--gsl-sidebar-label-text, , var(--gsl-text-forground));
+}
+
+.gsl-sidebar__group-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border: none;
+  background: transparent;
+
+  letter-spacing: inherit;
+  text-align: left;
+  text-transform: inherit;
+  cursor: pointer;
+}
+.gsl-sidebar__group-label-icon{   }
+.gsl-sidebar__group-toggle:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-sidebar__group-content {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+  transition:
+    opacity 200ms ease,
+    visibility 0s linear 0s,
+    height 200ms ease;
+}
+
+.gsl-sidebar__group-content[data-state="collapsed"] {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  transition:
+    opacity 200ms ease,
+    visibility 0s linear 200ms;
+    height 200ms ease;
 }
 
 .gsl-sidebar__item {
@@ -242,7 +280,7 @@
 
 .gsl-sidebar__link--active {
   background: var(--gsl-sidebar-link-active-bg, var(--gsl-surface-dark));
-  color: var(--gsl-sidebar-link-active-text, var(--gsl-text));
+  color: var(--gsl-sidebar-link-active-text, var(--gsl-primary));
   font-weight: 600;
 }
 
@@ -351,7 +389,10 @@
     align-self: start;
     padding: 20px 16px;
     border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
-    background: var(--gsl-sidebar-bg, var(--gsl-panel-bg, var(--gsl-surface-subtle)));
+    background: var(
+      --gsl-sidebar-bg,
+      var(--gsl-panel-bg, var(--gsl-surface-subtle))
+    );
     transition:
       width 200ms ease,
       max-width 200ms ease,
@@ -383,6 +424,10 @@
 @media (prefers-reduced-motion: reduce) {
   .gsl-sidebar,
   .gsl-sidebar__overlay {
+    transition: none;
+  }
+
+  .gsl-sidebar__group-content {
     transition: none;
   }
 }

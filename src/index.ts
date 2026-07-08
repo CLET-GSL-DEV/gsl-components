@@ -40,6 +40,7 @@ export * from "./components/radio-group";
 export * from "./components/sheet";
 export * from "./components/sidebar";
 export * from "./components/sortable";
+export * from "./components/stepper";
 export * from "./components/tabs";
 export * from "./components/timeline";
 export * from "./components/textarea";

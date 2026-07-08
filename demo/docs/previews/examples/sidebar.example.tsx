@@ -122,7 +122,7 @@ export function SidebarExample() {
                     </SidebarItem>
                   ))}
                 </SidebarGroup>
-                <SidebarGroup>
+                <SidebarGroup collapsible defaultExpanded={false}>
                   <SidebarGroupLabel>Monitoring</SidebarGroupLabel>
                   {monitoringLinks.map(({ id, label, icon: Icon, badge }) => (
                     <SidebarItem key={id}>
