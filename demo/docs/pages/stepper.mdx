@@ -1,0 +1,134 @@
+export const meta = {
+  title: "Stepper",
+  description: "Horizontal step indicator for multi-step flows",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { StepperPreview } from "../previews/code/StepperPreview";
+import stepperSource from "../previews/examples/stepper.example.tsx?raw";
+
+# Stepper
+
+A horizontal step indicator for multi-step flows. `Stepper` holds the active step value and derives each `Step`'s `complete` / `active` / `upcoming` state. Each step renders a numbered circle that flips to a check when done, with a connector line that fills between completed steps. Add a `StepLabel` for the step's text.
+
+## Example
+
+Steps are clickable here — click a completed step to jump back, or use Back / Next.
+
+<ExampleTabs
+  title="Import flow"
+  preview={<StepperPreview />}
+  code={stepperSource}
+/>
+
+## Components
+
+### `Stepper`
+
+Root container. Renders an `<ol>` and provides the active `value` to its `Step` children.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | — | The active step's `value` (required, controlled) |
+| `clickable` | `boolean` | `false` | When true, each step renders as a button that calls `onValueChange` |
+| `onValueChange` | `(value: number) => void` | — | Fired with a step's `value` when its button is clicked |
+| `classNames` | `StepperClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root |
+| `children` | `ReactNode` | — | `Step` children; non-`Step` children are filtered out |
+
+Also accepts standard native `<ol>` attributes (e.g. `aria-label`).
+
+### `Step`
+
+A single step. Compares its `value` against `Stepper.value` to derive state, then renders the numbered marker (or a check when complete) and the connector to the next step automatically.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | — | Step identifier, also shown inside the marker (required) |
+| `disabled` | `boolean` | `false` | Dims the step and, when `clickable`, skips the button |
+| `classNames` | `StepClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the item |
+| `children` | `ReactNode` | — | Usually a `StepLabel` |
+
+Also accepts standard native `<li>` attributes.
+
+### `StepLabel`
+
+The step's text label. Renders a `<span>`; color follows the parent step's state automatically.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `StepLabelClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the label |
+| `children` | `ReactNode` | — | Label text |
+
+Also accepts standard native `<span>` attributes.
+
+## Namespace
+
+`Stepper.Step` and `Stepper.StepLabel` are attached as static members for compound-style imports.
+
+```tsx
+import { Stepper } from "@rfdtech/components";
+
+<Stepper value={2}>
+  <Stepper.Step value={1}>
+    <Stepper.StepLabel>Upload Document</Stepper.StepLabel>
+  </Stepper.Step>
+  <Stepper.Step value={2}>
+    <Stepper.StepLabel>Validate data</Stepper.StepLabel>
+  </Stepper.Step>
+</Stepper>
+```
+
+## Types
+
+### `StepperClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | `<ol>` element (`.gsl-stepper`) |
+
+### `StepClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | `<li>` element (`.gsl-stepper__item`) |
+| `button` | Clickable wrapper (`.gsl-stepper__button`) |
+| `marker` | Numbered circle (`.gsl-stepper__marker`) |
+| `number` | Step number (`.gsl-stepper__number`) |
+| `check` | Check icon (`.gsl-stepper__check`) |
+| `connector` | Connector line (`.gsl-stepper__connector`) |
+
+### `StepLabelClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Label span (`.gsl-stepper__label`) |
+
+### `StepState`
+
+`"complete" | "active" | "upcoming"` — the derived state applied as a modifier class on each item.
+
+## Notes
+
+- The marker shows the step's `value` as its number and swaps to an animated check once the step is complete (`value < Stepper.value`).
+- The connector between two steps fills once the earlier step is complete.
+- The active step receives `aria-current="step"`.
+- When `clickable` is true, steps render as `<button>` and fire `onValueChange` with the clicked step's `value`; a `disabled` step is skipped.
+- All colors resolve from existing `--gsl-*` tokens through the overridable internal variables below — no new colors are introduced.
+- Check-draw, marker-pop, and connector-fill animations are disabled under `prefers-reduced-motion: reduce`.
+
+## CSS Custom Properties
+
+Override these at any level to retheme without touching the component.
+
+| Token | Default | Description |
+|-------|---------|-------------|
+| `--gsl-stepper-accent` | `var(--gsl-primary)` | Color of active/complete markers and filled connectors. Set to `var(--gsl-success)` for a green "done" look. |
+| `--gsl-stepper-marker-size` | `28px` | Diameter of the numbered circle |
+| `--gsl-stepper-marker-border` | `2px` | Marker border width |
+| `--gsl-stepper-track` | `var(--gsl-border)` | Unfilled connector color |
+| `--gsl-stepper-transition` | `250ms` | Marker color transition duration |
+| `--gsl-stepper-connector-min` | `24px` | Minimum connector length |
+| `--gsl-stepper-gap` | `10px` | Gap between marker, label, and connector |

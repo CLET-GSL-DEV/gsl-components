@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { DocsLayout } from "../components/DocsLayout";
 import { DocsSidebar } from "../components/DocsSidebar";
@@ -14,6 +14,91 @@ import {
   CommandItem,
 } from "@rfdtech/components";
 import { Search } from "lucide-react";
+import { cn } from "../../src/utils/cn";
+
+const SCROLL_THRESHOLD = 10;
+const MIN_SCROLL_THRESHOLD = 250;
+
+const DocsHeader = ({
+  setSearchOpen,
+}: {
+  setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const [headerHidden, setheaderHidden] = useState(false);
+  const prevScrollY = useRef(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const diff = currentScrollY - prevScrollY.current;
+
+      if (currentScrollY <= MIN_SCROLL_THRESHOLD) {
+        setheaderHidden(false);
+      } else {
+        if (diff < -SCROLL_THRESHOLD) {
+          setheaderHidden(true);
+        } else if (diff > SCROLL_THRESHOLD) {
+          setheaderHidden(false);
+        }
+      }
+
+      prevScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  return (
+    <header className={cn("demo-header", headerHidden ? "demo-header-up" : "")}>
+      <Link to="/" className="demo-logo">
+        GSL Components
+      </Link>
+      <nav className="demo-nav">
+        <button
+          type="button"
+          className="demo-nav-link demo-docs-search-btn"
+          onClick={() => setSearchOpen(true)}
+          aria-label="Search docs"
+        >
+          <Search size={14} strokeWidth={1.5} />
+          <span
+            style={{
+              marginLeft: 6,
+              color: "var(--gsl-text-muted)",
+              fontSize: 12,
+            }}
+          >
+            Search docs...
+          </span>
+          <kbd className="gsl-app-header__search-kbd ml-2">⌘K</kbd>
+        </button>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            ["demo-nav-link", isActive ? "demo-nav-link--active" : ""]
+              .filter(Boolean)
+              .join(" ")
+          }
+        >
+          Demo
+        </NavLink>
+        <NavLink
+          to="/docs"
+          className={({ isActive }) =>
+            ["demo-nav-link", isActive ? "demo-nav-link--active" : ""]
+              .filter(Boolean)
+              .join(" ")
+          }
+        >
+          Docs
+        </NavLink>
+        <ThemeToggle />
+      </nav>
+    </header>
+  );
+};
 
 export function DocsPage() {
   const { componentId = "getting-started" } = useParams<{
@@ -36,11 +121,18 @@ export function DocsPage() {
     });
   }, []);
 
-  const handleOpenChange = useCallback((open: boolean) => setSearchOpen(open), []);
+  const handleOpenChange = useCallback(
+    (open: boolean) => setSearchOpen(open),
+    [],
+  );
 
   return (
     <>
-      <CommandDialog open={searchOpen} onOpenChange={handleOpenChange} shortcut="mod+k">
+      <CommandDialog
+        open={searchOpen}
+        onOpenChange={handleOpenChange}
+        shortcut="mod+k"
+      >
         <CommandInput placeholder="Search documentation..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
@@ -56,7 +148,13 @@ export function DocsPage() {
               >
                 <span style={{ fontWeight: 500 }}>{doc.title}</span>
                 {doc.description && (
-                  <span style={{ color: "var(--gsl-text-muted)", marginLeft: 8, fontSize: 12 }}>
+                  <span
+                    style={{
+                      color: "var(--gsl-text-muted)",
+                      marginLeft: 8,
+                      fontSize: 12,
+                    }}
+                  >
                     {doc.description}
                   </span>
                 )}
@@ -65,49 +163,7 @@ export function DocsPage() {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
-
-      <header className="demo-header">
-        <Link to="/" className="demo-logo">
-          GSL Components
-        </Link>
-        <nav className="demo-nav">
-          <button
-            type="button"
-            className="demo-nav-link demo-docs-search-btn"
-            onClick={() => setSearchOpen(true)}
-            aria-label="Search docs"
-          >
-            <Search size={14} strokeWidth={1.5} />
-            <span style={{ marginLeft: 6, color: "var(--gsl-text-muted)", fontSize: 12 }}>
-              Search docs...
-            </span>
-            <kbd className="gsl-app-header__search-kbd" style={{ marginLeft: 8 }}>⌘K</kbd>
-          </button>
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              ["demo-nav-link", isActive ? "demo-nav-link--active" : ""]
-                .filter(Boolean)
-                .join(" ")
-            }
-          >
-            Demo
-          </NavLink>
-          <NavLink
-            to="/docs"
-            className={({ isActive }) =>
-              ["demo-nav-link", isActive ? "demo-nav-link--active" : ""]
-                .filter(Boolean)
-                .join(" ")
-            }
-          >
-            Docs
-          </NavLink>
-          <ThemeToggle />
-        </nav>
-      </header>
-
+      <DocsHeader setSearchOpen={setSearchOpen} />
       <DocsLayout mainClassName="demo-docs" pageClassName="demo-docs-page">
         <div className="demo-docs__layout">
           <aside className="demo-docs__sidebar">

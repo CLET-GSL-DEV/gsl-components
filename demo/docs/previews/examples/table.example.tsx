@@ -5,6 +5,7 @@ import {
   Table,
   TableHeader,
   TableSearch,
+  TableFilter,
   TableContent,
   TableBulkActions,
   TableFooter,
@@ -74,14 +75,18 @@ export function TableExample() {
   const [users, setUsers] = useState(initialUsers);
   const [selected, setSelected] = useState<Set<string | number>>(new Set());
 
-  const { page, pageSize, pageSizeOptions, search } = useTableState({
+  const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
     defaultPageSize: 5,
   });
 
   const filtered = users.filter(
-    (u) =>
-      u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase()),
+    (u) => {
+      if (filters.role && u.role !== filters.role) return false;
+      return (
+        u.name.toLowerCase().includes(search.toLowerCase()) ||
+        u.email.toLowerCase().includes(search.toLowerCase())
+      );
+    },
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -95,6 +100,14 @@ export function TableExample() {
     <Table paramPrefix="users">
       <TableHeader>
         <TableSearch placeholder="Search users..." />
+        <TableFilter>
+          <select name="role">
+            <option value="">All roles</option>
+            <option value="Admin">Admin</option>
+            <option value="Editor">Editor</option>
+            <option value="Viewer">Viewer</option>
+          </select>
+        </TableFilter>
       </TableHeader>
       <TableContent
         selectable

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@rfdtech/components";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
@@ -191,6 +191,49 @@ export function DemoLayout() {
     ];
   }, [searchQuery, pageResults, pagesLoading, memberResults, membersLoading, docsResults, docsLoading, navigate]);
 
+  const initialExpandedGroup = useMemo(() => {
+    const match = [
+      "Main",
+      "Assessment",
+      "Management",
+      "Analytics",
+      "Developer",
+      "Other",
+    ].find((label) =>
+      (
+        {
+          Main: ["/", "/members", "/docs"],
+        } as Record<string, string[]>
+      )[label]?.some((p) => location.pathname.startsWith(p)),
+    );
+    return match ?? "Main";
+  }, [location.pathname]);
+
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
+    () => new Set([initialExpandedGroup]),
+  );
+
+  useEffect(() => {
+    setExpandedGroups((prev) => {
+      if (prev.has(initialExpandedGroup)) return prev;
+      const next = new Set(prev);
+      next.add(initialExpandedGroup);
+      return next;
+    });
+  }, [initialExpandedGroup]);
+
+  const handleGroupToggle = useCallback((label: string, expanded: boolean) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (expanded) {
+        next.add(label);
+      } else {
+        next.delete(label);
+      }
+      return next;
+    });
+  }, []);
+
   const navGroups = [
     {
       label: "Main",
@@ -199,6 +242,12 @@ export function DemoLayout() {
           id: "dashboard",
           label: "Dashboard",
           href: "/",
+          icon: LayoutDashboard,
+        },
+        {
+          id: "dashboard2",
+          label: "Dashboard 2",
+          href: "/dashboard2",
           icon: LayoutDashboard,
         },
         {
@@ -490,7 +539,14 @@ export function DemoLayout() {
               <SidebarContent>
                 <SidebarNav>
                   {navGroups.map((group) => (
-                    <SidebarGroup key={group.label}>
+                    <SidebarGroup
+                      key={group.label}
+                      collapsible
+                      expanded={expandedGroups.has(group.label)}
+                      onExpandedChange={(expanded) =>
+                        handleGroupToggle(group.label, expanded)
+                      }
+                    >
                       <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
                       {group.links.map((link) => {
                         const Icon = link.icon;

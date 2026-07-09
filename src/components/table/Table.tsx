@@ -10,7 +10,14 @@ import {
   type ForwardedRef,
 } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { ArrowUpDownIcon, ArrowUp, ArrowDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDownIcon,
+  ArrowUp,
+  ArrowDown,
+  MoreHorizontal,
+  Inbox,
+  TableIcon,
+} from "lucide-react";
 import { Checkbox } from "../checkbox/Checkbox";
 import {
   Popover,
@@ -18,11 +25,17 @@ import {
   PopoverContent,
   PopoverPortal,
 } from "../popover/Popover";
-import type { TableColumn, TableContentProps } from "../../types/table";
+import type {
+  TableColumn,
+  TableContentProps,
+  TableFooterProps,
+} from "../../types/table";
 import type { TableProps, SortDirection } from "../../types/table";
 import { cn } from "../../utils/cn";
 import "./styles/table.css";
 import { TableContext } from "./TableContext";
+
+const DEFAULT_TABLE_EMPTY_ICON = <TableIcon size={40} strokeWidth={1} />;
 
 /* ── Helpers ── */
 
@@ -80,6 +93,7 @@ function TableContentRender<T>(
   const {
     className,
     children,
+    variant = "default",
     columns: rawColumns,
     data: rawData,
     rowKey,
@@ -90,6 +104,9 @@ function TableContentRender<T>(
     onSelectionChange,
     rowActions,
     virtualRowHeight,
+    emptyIcon,
+    emptyText,
+    classNames,
 
     ...rest
   } = props;
@@ -158,7 +175,8 @@ function TableContentRender<T>(
   const hasActionsColumn = selectable || hasRowActions;
 
   // Extra colSpan when selectable or actions column adds a column
-  const colSpan = columns.length + (selectable ? 1 : 0) + (hasActionsColumn ? 1 : 0);
+  const colSpan =
+    columns.length + (selectable ? 1 : 0) + (hasActionsColumn ? 1 : 0);
 
   const sorted = [...data].sort((a, b) => {
     if (!sort) return 0;
@@ -210,7 +228,7 @@ function TableContentRender<T>(
         className={cn(selectable && "gsl-table__row--clickable")}
       >
         <td
-          className="gsl-table__checkbox-cell"
+          className={cn("gsl-table__checkbox-cell", classNames?.checkboxCell)}
           onClick={(e) => e.stopPropagation()}
         >
           <Checkbox
@@ -234,7 +252,7 @@ function TableContentRender<T>(
 
         {hasActionsColumn && (
           <td
-            className="gsl-table__actions-cell"
+            className={cn("gsl-table__actions-cell", classNames?.actionsCell)}
             onClick={(e) => e.stopPropagation()}
           >
             <Popover
@@ -244,14 +262,20 @@ function TableContentRender<T>(
               }}
             >
               <PopoverTrigger
-                className="gsl-table__actions-trigger"
+                className={cn(
+                  "gsl-table__actions-trigger",
+                  classNames?.actionsTrigger,
+                )}
                 aria-label="Row actions"
               >
                 <MoreHorizontal size={14} strokeWidth={1.5} />
               </PopoverTrigger>
               <PopoverPortal>
                 <PopoverContent
-                  className="gsl-table__actions-menu"
+                  className={cn(
+                    "gsl-table__actions-menu",
+                    classNames?.actionsMenu,
+                  )}
                   side="bottom"
                   align="end"
                   sideOffset={4}
@@ -259,7 +283,10 @@ function TableContentRender<T>(
                   {selectable && (
                     <button
                       type="button"
-                      className="gsl-table__actions-item"
+                      className={cn(
+                        "gsl-table__actions-item",
+                        classNames?.actionsItem,
+                      )}
                       onClick={(e) =>
                         handleActionClick(e, () => handleToggleRow(key))
                       }
@@ -278,6 +305,7 @@ function TableContentRender<T>(
                         "gsl-table__actions-item",
                         action.variant === "destructive" &&
                           "gsl-table__actions-item--destructive",
+                        classNames?.actionsItem,
                       )}
                       onClick={(e) =>
                         handleActionClick(e, () => action.onClick(row))
@@ -298,7 +326,7 @@ function TableContentRender<T>(
 
   const headerRow = (
     <tr>
-      <th className="gsl-table__checkbox-cell">
+      <th className={cn("gsl-table__checkbox-cell", classNames?.checkboxCell)}>
         <Checkbox
           checked={allSelected}
           onCheckedChange={handleSelectAll}
@@ -316,6 +344,7 @@ function TableContentRender<T>(
             className={cn(
               col.sortable && "gsl-table__th--sortable",
               isSorted && "gsl-table__th--sorted",
+              classNames?.th,
             )}
             onClick={() => {
               if (!col.sortable) return;
@@ -324,9 +353,13 @@ function TableContentRender<T>(
               setSort({ column: col.id, direction: next });
             }}
           >
-            <span className="gsl-table__th-label">{col.header}</span>
+            <span className={cn("gsl-table__th-label", classNames?.thLabel)}>
+              {col.header}
+            </span>
             {col.sortable && (
-              <span className="gsl-table__sort-icon">
+              <span
+                className={cn("gsl-table__sort-icon", classNames?.sortIcon)}
+              >
                 {isSorted ? (
                   dir === "asc" ? (
                     <ArrowUp size={14} strokeWidth={2} aria-hidden />
@@ -341,7 +374,11 @@ function TableContentRender<T>(
           </th>
         );
       })}
-      {hasActionsColumn && <th className="gsl-table__actions-cell" />}
+      {hasActionsColumn && (
+        <th
+          className={cn("gsl-table__actions-cell", classNames?.actionsCell)}
+        />
+      )}
     </tr>
   );
 
@@ -350,9 +387,11 @@ function TableContentRender<T>(
       ref={ref}
       className={cn(
         "gsl-table__content",
+        variant === "panel" && "gsl-table__content--panel",
         selectable &&
           selectedIds.size > 0 &&
           "gsl-table__content--has-selected",
+        classNames?.root,
         className,
       )}
       {...rest}
@@ -362,44 +401,100 @@ function TableContentRender<T>(
           <thead>
             <tr>
               {selectable && (
-                <th className="gsl-table__checkbox-cell">
-                  <span className="gsl-table__skeleton gsl-table__skeleton--cb" />
+                <th
+                  className={cn(
+                    "gsl-table__checkbox-cell",
+                    classNames?.checkboxCell,
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "gsl-table__skeleton gsl-table__skeleton--cb",
+                      classNames?.skeleton,
+                    )}
+                  />
                 </th>
               )}
               {columns.length > 0
                 ? columns.map((col) => (
                     <th key={col.id} style={colStyle(col)}>
-                      <span className="gsl-table__th-label">{col.header}</span>
+                      <span
+                        className={cn(
+                          "gsl-table__th-label",
+                          classNames?.thLabel,
+                        )}
+                      >
+                        {col.header}
+                      </span>
                     </th>
                   ))
                 : Array.from({ length: loadingRows }, (_, i) => (
                     <th key={i}>
-                      <span className="gsl-table__skeleton gsl-table__skeleton--th" />
+                      <span
+                        className={cn(
+                          "gsl-table__skeleton gsl-table__skeleton--th",
+                          classNames?.skeleton,
+                        )}
+                      />
                     </th>
                   ))}
-              {hasActionsColumn && <th className="gsl-table__actions-cell" />}
+              {hasActionsColumn && (
+                <th
+                  className={cn(
+                    "gsl-table__actions-cell",
+                    classNames?.actionsCell,
+                  )}
+                />
+              )}
             </tr>
           </thead>
           <tbody>
             {Array.from({ length: loadingRows }, (_, rowIdx) => (
               <tr key={rowIdx}>
                 {selectable && (
-                  <td className="gsl-table__checkbox-cell">
-                    <span className="gsl-table__skeleton gsl-table__skeleton--cb" />
+                  <td
+                    className={cn(
+                      "gsl-table__checkbox-cell",
+                      classNames?.checkboxCell,
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "gsl-table__skeleton gsl-table__skeleton--cb",
+                        classNames?.skeleton,
+                      )}
+                    />
                   </td>
                 )}
                 {columns.length > 0
                   ? columns.map((col) => (
                       <td key={col.id} style={colStyle(col)}>
-                        <span className="gsl-table__skeleton gsl-table__skeleton--td" />
+                        <span
+                          className={cn(
+                            "gsl-table__skeleton gsl-table__skeleton--td",
+                            classNames?.skeleton,
+                          )}
+                        />
                       </td>
                     ))
                   : Array.from({ length: loadingRows }, (_, cellIdx) => (
                       <td key={cellIdx}>
-                        <span className="gsl-table__skeleton gsl-table__skeleton--td" />
+                        <span
+                          className={cn(
+                            "gsl-table__skeleton gsl-table__skeleton--td",
+                            classNames?.skeleton,
+                          )}
+                        />
                       </td>
                     ))}
-                {hasActionsColumn && <td className="gsl-table__actions-cell" />}
+                {hasActionsColumn && (
+                  <td
+                    className={cn(
+                      "gsl-table__actions-cell",
+                      classNames?.actionsCell,
+                    )}
+                  />
+                )}
               </tr>
             ))}
           </tbody>
@@ -408,7 +503,7 @@ function TableContentRender<T>(
         isVirtual ? (
           <div
             ref={scrollRef}
-            className="gsl-table__viewport"
+            className={cn("gsl-table__viewport", classNames?.viewport)}
             style={{ overflow: "auto", flex: 1, minHeight: 0 }}
           >
             <table
@@ -462,21 +557,20 @@ function TableContentRender<T>(
         ) : (
           <table>
             <thead>{headerRow}</thead>
-            <tbody>
-              {sorted.length === 0 ? (
-                <tr>
-                  <td colSpan={colSpan} className="gsl-table__empty">
-                    No data
-                  </td>
-                </tr>
-              ) : (
-                sorted.map((row, i) => renderRow(row, i))
-              )}
-            </tbody>
+            <tbody>{sorted.map((row, i) => renderRow(row, i))}</tbody>
           </table>
         )
-      ) : (
+      ) : children ? (
         children
+      ) : (
+        <div className={cn("gsl-table__empty", classNames?.empty)}>
+          <div className={cn("gsl-table__empty-icon", classNames?.emptyIcon)}>
+            {emptyIcon ?? DEFAULT_TABLE_EMPTY_ICON}
+          </div>
+          <div className={cn("gsl-table__empty-text", classNames?.emptyText)}>
+            {emptyText ?? "No results"}
+          </div>
+        </div>
       )}
     </div>
   );
@@ -488,13 +582,16 @@ export const TableContent = forwardRef(TableContentRender) as <T>(
 
 /* ── Footer ── */
 
-export const TableFooter = forwardRef<
-  HTMLDivElement,
-  { className?: string; children?: ReactNode }
->(function TableFooter({ className, children, ...props }, ref) {
-  return (
-    <div ref={ref} className={cn("gsl-table__footer", className)} {...props}>
-      {children}
-    </div>
-  );
-});
+export const TableFooter = forwardRef<HTMLDivElement, TableFooterProps>(
+  function TableFooter({ classNames, className, children, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        className={cn("gsl-table__footer", classNames?.root, className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);

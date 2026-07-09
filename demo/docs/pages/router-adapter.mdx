@@ -1,0 +1,145 @@
+export const meta = {
+  title: "RouterAdapter",
+  description: "Framework-agnostic router abstraction for Next.js and react-router compatibility",
+};
+
+# RouterAdapter
+
+The library provides a `RouterAdapter` abstraction that decouples components and hooks from the host app's router. This allows the library to work with **react-router-dom** (default) and **Next.js App Router** (via `@rfdtech/components/next`) without changing consumer code.
+
+## How it works
+
+Seven files previously imported `react-router-dom` directly:
+
+- `useTableFilter`, `useTablePagination`, `useTableState`
+- `TableSearch`, `TableFilter`, `TablePagination`
+- `SidebarLink`, `AppLayoutInner`
+
+These now call `getRouterAdapter()` at the top of their function, which returns search params and a `Link` component from whichever framework is active.
+
+The adapter is injected at **module load time** by the entry point:
+
+| Entry | Adapter | Router |
+|-------|---------|--------|
+| `@rfdtech/components` | react-router-dom | Required |
+| `@rfdtech/components/next` | Context-only | Provider required |
+
+## New exports
+
+| Export | Type | Description |
+|--------|------|-------------|
+| `RouterAdapterProvider` | Component | Wraps the app with a custom adapter value |
+| `useNextRouterAdapter` | Hook | Creates a `RouterAdapterValue` from Next.js hooks |
+
+Types: `RouterAdapterValue`, `RouterSearchParams`, `RouterLinkComponent`.
+
+## react-router (default, zero change)
+
+Existing consumers need **no changes**. The default entry keeps using react-router-dom internally:
+
+```tsx
+import {
+  useTableState,
+  TablePagination,
+  SidebarLink,
+} from "@rfdtech/components";
+
+// Works exactly as before — no new wrappers needed
+```
+
+## Next.js App Router
+
+Import the `/next` subpath and wrap your app with `RouterAdapterProvider`:
+
+```tsx
+// app/providers.tsx
+"use client";
+import {
+  RouterAdapterProvider,
+  useNextRouterAdapter,
+} from "@rfdtech/components/next";
+
+export function Providers({ children }) {
+  const adapter = useNextRouterAdapter();
+  return (
+    <RouterAdapterProvider value={adapter}>
+      {children}
+    </RouterAdapterProvider>
+  );
+}
+```
+
+Wrap your root layout:
+
+```tsx
+// app/layout.tsx
+import "@rfdtech/components/style.css";
+import { Providers } from "./providers";
+import { ThemeProvider } from "@rfdtech/components/next";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <Providers>
+          <ThemeProvider defaultTheme="system">
+            {children}
+          </ThemeProvider>
+        </Providers>
+      </body>
+    </html>
+  );
+}
+```
+
+All components and hooks now use Next.js's `useSearchParams` and `next/link` under the hood:
+
+```tsx
+// app/students/page.tsx
+"use client";
+import { useTableState, Table, TablePagination } from "@rfdtech/components/next";
+
+export default function StudentsPage() {
+  const table = useTableState({ defaultPageSize: 20 });
+  return (
+    <Table>
+      <TablePagination totalPages={10} totalItems={200} />
+    </Table>
+  );
+}
+```
+
+## Installing in Next.js
+
+```bash
+npm install @rfdtech/components next
+```
+
+`next` is an optional peer dependency — it is only needed if you use the `/next` subpath.
+
+## Custom adapters
+
+You can also write a custom adapter for other routers by implementing the `RouterAdapterValue` interface and passing it to `RouterAdapterProvider`:
+
+```tsx
+import {
+  RouterAdapterProvider,
+  type RouterAdapterValue,
+} from "@rfdtech/components";
+
+const myAdapter: RouterAdapterValue = {
+  searchParams: new URLSearchParams(),
+  setSearchParams: (next, options) => {
+    // custom URL update logic
+  },
+  Link: ({ to, className, children }) => (
+    <a href={to} className={className}>
+      {children}
+    </a>
+  ),
+};
+
+<RouterAdapterProvider value={myAdapter}>
+  <App />
+</RouterAdapterProvider>
+```

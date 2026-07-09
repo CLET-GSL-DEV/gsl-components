@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Stepper**: horizontal step indicator for multi-step flows. `Stepper` holds the active step value and derives each `Step`'s `complete` / `active` / `upcoming` state. Each `Step` renders a numbered circle that flips to an animated check when done and a connector line that fills between completed steps; `StepLabel` supplies the step's text. Optional `clickable` mode turns steps into buttons firing `onValueChange`, with per-step `disabled`. All colors resolve from existing `--gsl-*` tokens through overridable internal variables (`--gsl-stepper-accent` defaults to `--gsl-primary`, plus `--gsl-stepper-marker-size`, `--gsl-stepper-track`, etc.), and animations respect `prefers-reduced-motion`. Also available as `Stepper.Step`, `Stepper.StepLabel` for compound-style imports.
+- Sidebar: `SidebarGroup` `collapsible` prop — the first `SidebarGroupLabel` child becomes a button toggle. The label keeps the same visual styling as the static `<p>` (same font, size, color, padding); clicking it fades the content open/closed while reserving the group's space in the layout. Supports uncontrolled (`defaultExpanded`) and controlled (`expanded` + `onExpandedChange`) state. Content has `inert` + `visibility: hidden` when folded, and the transition respects `prefers-reduced-motion`. New `SidebarGroupClassNames` keys: `groupToggle`, `groupContent`.
+
+## [1.22.0] - 2026-07-07
+
+### Added
+
+- **Timeline**: composable vertical timeline with `Timeline` + `TimelineItem` primitives. Four status variants (`complete`, `current`, `warning`, `error`), optional icon override in the dot, staggered connector draw and dot pop-in animations, and part-level `classNames`. Render any markup as the content column. Connector animations respect `prefers-reduced-motion`.
+- **RouterAdapter**: framework-agnostic router abstraction that replaces direct `react-router-dom` imports across 7 hooks and components. Library now ships two entry points:
+  - `@rfdtech/components` — default, backward compatible (react-router-dom)
+  - `@rfdtech/components/next` — Next.js App Router support via `<RouterAdapterProvider>`
+- New exports: `RouterAdapterProvider`, `setRouterAdapter`, `getRouterAdapter`, `useNextRouterAdapter`
+- RouterAdapter: SidebarLink, AppLayoutInner, table hooks (useTableFilter, useTablePagination, useTableState), TableSearch, TableFilter, and TablePagination no longer import react-router-dom directly — they consume the adapter from context, making them portable to other routers
+- TableContent: `emptyIcon` and `emptyText` props for a customizable empty state when `data` is empty; renders in both regular and virtualized paths
+- TableContent: default empty icon (Inbox) shown when no `emptyIcon` is provided
+- Table: `classNames` API added to TableContent, TableHeader, TableFooter, TableSearch, TableFilter, TableActions, and TablePagination for deep inner styling
+- Tabs: `pill` variant with connected pill-style triggers and underline indicator
+
 - Theme: Tailwind v4 `@theme` tokens integration — all `--gsl-*` design tokens are registered as Tailwind utility classes for consumers using Tailwind v4; dark mode selectors now support `.dark` and `.light` class-based toggling alongside `data-gsl-theme`
 - ProgressModal: non-dismissable processing overlay with Lottie animation and determinate progress bar
 - BulkImportModal: chunked processing for datasets over 1000 rows — file parsing, row mapping, and validation run in 1000-row batches with a progress overlay to prevent main-thread freezes

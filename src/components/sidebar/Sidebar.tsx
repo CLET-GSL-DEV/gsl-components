@@ -4,15 +4,18 @@ import {
   createContext,
   forwardRef,
   isValidElement,
+  useCallback,
   useContext,
   useEffect,
+  useId,
+  useMemo,
   useRef,
   useState,
   type ReactElement,
   type ReactNode,
 } from "react";
-import { Link } from "react-router-dom";
 import { PanelLeftClose, PanelLeftOpen, ChevronDown } from "lucide-react";
+import { getRouterAdapter } from "../../adapters/registry";
 import { Tooltip } from "../tooltip/Tooltip";
 import type {
   SidebarBadgeProps,
@@ -42,8 +45,21 @@ function useSidebarLinkContext() {
   return useContext(SidebarLinkContext);
 }
 
+interface SidebarGroupContextValue {
+  collapsible: boolean;
+  expanded: boolean;
+  toggle: () => void;
+  toggleId: string;
+  contentId: string;
+  groupToggleClassName?: string;
+}
+
+const SidebarGroupContext = createContext<SidebarGroupContextValue | null>(
+  null,
+);
+
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
-  { classNames, className, children },
+  { classNames, className, variant = "default", children },
   ref,
 ) {
   const { open, collapsed, isMobile, sidebarId } = useSidebar();
@@ -54,6 +70,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
       id={sidebarId}
       className={cn(
         "gsl-sidebar",
+        variant === "plain" && "gsl-sidebar--plain",
         isMobile && "gsl-sidebar--mobile",
         isMobile && open && "gsl-sidebar--mobile-open",
         !isMobile && collapsed && "gsl-sidebar--collapsed",
@@ -214,9 +231,11 @@ export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
 
     // Merge forwarded ref with internal ref
     const setRefs = (node: HTMLDivElement | null) => {
-      (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      (internalRef as React.MutableRefObject<HTMLDivElement | null>).current =
+        node;
       if (typeof ref === "function") ref(node);
-      else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      else if (ref)
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
     };
 
     return (
@@ -225,6 +244,7 @@ export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
         className={cn(
           "gsl-sidebar__content",
           scrolledDown && "gsl-sidebar__content--scrolled",
+          showScrollHint && "gsl-sidebar__content--more-below",
           classNames?.content,
           className,
         )}
@@ -283,25 +303,143 @@ export const SidebarNav = forwardRef<HTMLElement, SidebarNavProps>(
 );
 
 export const SidebarGroup = forwardRef<HTMLDivElement, SidebarGroupProps>(
-  function SidebarGroup({ classNames, className, children }, ref) {
+  function SidebarGroup(
+    {
+      collapsible = false,
+      defaultExpanded = true,
+      expanded: expandedProp,
+      onExpandedChange,
+      classNames,
+      className,
+      children,
+    },
+    ref,
+  ) {
+    const groupId = useId();
+    const toggleId = `${groupId}-toggle`;
+    const contentId = `${groupId}-content`;
+    const [uncontrolledExpanded, setUncontrolledExpanded] =
+      useState(defaultExpanded);
+    const expanded = expandedProp ?? uncontrolledExpanded;
+
+    const setExpanded = useCallback(
+      (next: boolean) => {
+        if (expandedProp === undefined) {
+          setUncontrolledExpanded(next);
+        }
+
+        onExpandedChange?.(next);
+      },
+      [onExpandedChange, expandedProp],
+    );
+
+    const toggle = useCallback(() => {
+      setExpanded(!expanded);
+    }, [expanded, setExpanded]);
+
+    const ctx = useMemo<SidebarGroupContextValue>(
+      () => ({
+        collapsible,
+        expanded,
+        toggle,
+        toggleId,
+        contentId,
+        groupToggleClassName: classNames?.groupToggle,
+      }),
+      [
+        collapsible,
+        expanded,
+        toggle,
+        toggleId,
+        contentId,
+        classNames?.groupToggle,
+      ],
+    );
+
+    const childArray = Children.toArray(children);
+    let label: ReactNode = null;
+    const contentChildren: ReactNode[] = [];
+    for (const child of childArray) {
+      if (
+        label === null &&
+        isValidElement(child) &&
+        (child as ReactElement).type === SidebarGroupLabel
+      ) {
+        label = child;
+      } else {
+        contentChildren.push(child);
+      }
+    }
+
+    const hasTrigger = collapsible && label !== null;
+
     return (
-      <div
-        ref={ref}
-        className={cn("gsl-sidebar__group", classNames?.group, className)}
-      >
-        {children}
-      </div>
+      <SidebarGroupContext.Provider value={ctx}>
+        <div
+          ref={ref}
+          className={cn("gsl-sidebar__group", classNames?.group, className)}
+        >
+          {label}
+          {hasTrigger ? (
+            <div
+              id={contentId}
+              className={cn(
+                "gsl-sidebar__group-content",
+                classNames?.groupContent,
+              )}
+              data-state={expanded ? "expanded" : "collapsed"}
+              inert={!expanded}
+            >
+              <div className="gsl-sidebar__group-content-inner">
+                {contentChildren}
+              </div>
+            </div>
+          ) : (
+            contentChildren
+          )}
+        </div>
+      </SidebarGroupContext.Provider>
     );
   },
 );
 
 export const SidebarGroupLabel = forwardRef<
-  HTMLParagraphElement,
+  HTMLParagraphElement | HTMLButtonElement,
   SidebarGroupLabelProps
 >(function SidebarGroupLabel({ classNames, className, children }, ref) {
+  const ctx = useContext(SidebarGroupContext);
+
+  if (ctx?.collapsible) {
+    return (
+      <button
+        ref={ref as React.Ref<HTMLButtonElement>}
+        type="button"
+        id={ctx.toggleId}
+        className={cn(
+          "gsl-sidebar__group-label",
+          "gsl-sidebar__group-toggle",
+          classNames?.groupLabel,
+          ctx.groupToggleClassName,
+          className,
+        )}
+        aria-expanded={ctx.expanded}
+        aria-controls={ctx.contentId}
+        onClick={ctx.toggle}
+      >
+        {children}
+        <ChevronDown
+          className="gsl-sidebar__group-label-icon"
+          size={20}
+          strokeWidth={1}
+          aria-hidden
+        />
+      </button>
+    );
+  }
+
   return (
     <p
-      ref={ref}
+      ref={ref as React.Ref<HTMLParagraphElement>}
       className={cn(
         "gsl-sidebar__group-label",
         classNames?.groupLabel,
@@ -361,97 +499,105 @@ function extractLabelText(node: ReactNode): string {
   return "";
 }
 
-export const SidebarLink = forwardRef<HTMLButtonElement | HTMLAnchorElement, SidebarLinkProps>(
-  function SidebarLink(
-    {
-      active = false,
-      asChild = false,
-      icon,
-      to,
-      classNames,
-      className,
-      children,
-      ...props
-    },
-    ref,
-  ) {
-    const { collapsed } = useSidebar();
-    const linkClassName = cn(
-      "gsl-sidebar__link",
-      active && "gsl-sidebar__link--active",
-      classNames?.link,
-      className,
-    );
+export const SidebarLink = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  SidebarLinkProps
+>(function SidebarLink(
+  {
+    active = false,
+    asChild = false,
+    icon,
+    to,
+    classNames,
+    className,
+    children,
+    ...props
+  },
+  ref,
+) {
+  const { collapsed } = useSidebar();
+  const { Link } = getRouterAdapter();
+  const linkClassName = cn(
+    "gsl-sidebar__link",
+    active && "gsl-sidebar__link--active",
+    classNames?.link,
+    className,
+  );
 
-    if (asChild && isValidElement(children)) {
-      const child = children as ReactElement<{ className?: string; role?: string; [key: string]: unknown }>;
-      const tooltipText = extractLabelText(children).trim();
-      const linkElement = cloneElement(child, {
-        ...props,
-        role: child.props.role ?? "link",
-        className: cn(linkClassName, child.props.className),
-      });
-
-      if (collapsed && tooltipText) {
-        return (
-          <Tooltip content={tooltipText} side="right">
-            {linkElement}
-          </Tooltip>
-        );
-      }
-
-      return linkElement;
-    }
-
-    const childItems = Children.toArray(children);
-    const badgeElement = childItems.find(isSidebarBadgeElement);
-    const labelItems = childItems.filter((child) => child !== badgeElement);
-    const tooltipText = extractLabelText(labelItems).trim();
-
-    const linkContent = (
-      <>
-        {icon ? <span className="gsl-sidebar__link-icon">{icon}</span> : null}
-        <span className="gsl-sidebar__link-label">{labelItems}</span>
-        {badgeElement}
-      </>
-    );
-
-    const inner = to ? (
-      <Link
-        to={to}
-        className={linkClassName}
-        {...(props as Record<string, unknown>)}
-      >
-        {linkContent}
-      </Link>
-    ) : (
-      <button
-        ref={ref as React.Ref<HTMLButtonElement>}
-        type="button"
-        role="link"
-        className={linkClassName}
-        {...props}
-      >
-        {linkContent}
-      </button>
-    );
-
-    const wrappedInner = (
-      <SidebarLinkContext.Provider value={true}>
-        {inner}
-      </SidebarLinkContext.Provider>
-    );
-
-    const linkWrapper = <span className="gsl-sidebar__link-wrapper">{wrappedInner}</span>;
+  if (asChild && isValidElement(children)) {
+    const child = children as ReactElement<{
+      className?: string;
+      role?: string;
+      [key: string]: unknown;
+    }>;
+    const tooltipText = extractLabelText(children).trim();
+    const linkElement = cloneElement(child, {
+      ...props,
+      role: child.props.role ?? "link",
+      className: cn(linkClassName, child.props.className),
+    });
 
     if (collapsed && tooltipText) {
       return (
         <Tooltip content={tooltipText} side="right">
-          {linkWrapper}
+          {linkElement}
         </Tooltip>
       );
     }
 
-    return linkWrapper;
-  },
-);
+    return linkElement;
+  }
+
+  const childItems = Children.toArray(children);
+  const badgeElement = childItems.find(isSidebarBadgeElement);
+  const labelItems = childItems.filter((child) => child !== badgeElement);
+  const tooltipText = extractLabelText(labelItems).trim();
+
+  const linkContent = (
+    <>
+      {icon ? <span className="gsl-sidebar__link-icon">{icon}</span> : null}
+      <span className="gsl-sidebar__link-label">{labelItems}</span>
+      {badgeElement}
+    </>
+  );
+
+  const inner = to ? (
+    <Link
+      to={to}
+      className={linkClassName}
+      {...(props as Record<string, unknown>)}
+    >
+      {linkContent}
+    </Link>
+  ) : (
+    <button
+      ref={ref as React.Ref<HTMLButtonElement>}
+      type="button"
+      role="link"
+      className={linkClassName}
+      {...props}
+    >
+      {linkContent}
+    </button>
+  );
+
+  const wrappedInner = (
+    <SidebarLinkContext.Provider value={true}>
+      {inner}
+    </SidebarLinkContext.Provider>
+  );
+
+  const linkWrapper = (
+    <span className="gsl-sidebar__link-wrapper">{wrappedInner}</span>
+  );
+
+  if (collapsed && tooltipText) {
+    return (
+      <Tooltip content={tooltipText} side="right">
+        {linkWrapper}
+      </Tooltip>
+    );
+  }
+
+  return linkWrapper;
+});

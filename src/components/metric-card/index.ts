@@ -3,4 +3,5 @@ export type {
   MetricCardProps,
   MetricCardClassNames,
   MetricTrend,
+  MetricCardVariant,
 } from "../../types/metric-card";

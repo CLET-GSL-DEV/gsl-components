@@ -7,9 +7,11 @@
   --gsl-text-muted: #80868b;
   --gsl-border: #3c4043;
   --gsl-border-strong: #5f6368;
+  --gsl-border-subtle: #2c2d30;
   --gsl-hover: #2d2e31;
   --gsl-surface-subtle: #282828;
   --gsl-surface-dark: #35373a;
+  --gsl-surface-panel: #1b1c1e;
   --gsl-page-bg: #141414;
 
   --gsl-primary: #ef4444;

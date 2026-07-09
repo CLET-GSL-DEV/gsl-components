@@ -9,6 +9,12 @@ import { AppLayoutInner } from "./AppLayoutInner";
 export interface AppLayoutProps {
   children?: ReactNode;
   className?: string;
+  /**
+   * Layout arrangement.
+   * - `"default"`: sidebar spans full height on the left, header sits above the content only.
+   * - `"stacked"`: header spans the full width on top, with sidebar and content side by side below it.
+   */
+  variant?: "default" | "stacked";
 }
 
 /**
@@ -17,11 +23,11 @@ export interface AppLayoutProps {
  * by componentId. Breadcrumbs render automatically from context.
  */
 export const AppLayout = forwardRef<HTMLDivElement, AppLayoutProps>(
-  function AppLayout({ children, className }, ref) {
+  function AppLayout({ children, className, variant = "default" }, ref) {
     return (
       <BreadcrumbProvider>
         <SidebarProvider>
-          <AppLayoutInner className={className} ref={ref}>
+          <AppLayoutInner className={className} variant={variant} ref={ref}>
             {children}
           </AppLayoutInner>
         </SidebarProvider>

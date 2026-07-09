@@ -14,6 +14,8 @@ interface TabsLineIndicatorState {
 const hiddenStyle: CSSProperties = {
   ["--gsl-tabs-indicator-offset" as string]: "0px",
   ["--gsl-tabs-indicator-size" as string]: "0px",
+  ["--gsl-tabs-indicator-cross-offset" as string]: "0px",
+  ["--gsl-tabs-indicator-cross-size" as string]: "0px",
 };
 
 export function useTabsLineIndicator(
@@ -55,6 +57,8 @@ export function useTabsLineIndicator(
         style: {
           ["--gsl-tabs-indicator-offset" as string]: `${triggerRect.top - listRect.top}px`,
           ["--gsl-tabs-indicator-size" as string]: `${triggerRect.height}px`,
+          ["--gsl-tabs-indicator-cross-offset" as string]: `${triggerRect.left - listRect.left}px`,
+          ["--gsl-tabs-indicator-cross-size" as string]: `${triggerRect.width}px`,
         },
       });
       return;
@@ -65,6 +69,8 @@ export function useTabsLineIndicator(
       style: {
         ["--gsl-tabs-indicator-offset" as string]: `${triggerRect.left - listRect.left}px`,
         ["--gsl-tabs-indicator-size" as string]: `${triggerRect.width}px`,
+        ["--gsl-tabs-indicator-cross-offset" as string]: `${triggerRect.top - listRect.top}px`,
+        ["--gsl-tabs-indicator-cross-size" as string]: `${triggerRect.height}px`,
       },
     });
   }, [enabled, listRef]);

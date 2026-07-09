@@ -16,6 +16,7 @@ export {
   SidebarTrigger,
   useSidebar,
 } from "./Sidebar";
+
 export type {
   SidebarBadgeClassNames,
   SidebarBadgeProps,

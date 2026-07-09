@@ -29,7 +29,7 @@ Metric display card for dashboards and overviews. Renders a compact card with a 
 | `description` | `string` | — | Subtitle shown below the value row |
 | `trend` | `"up" \| "down" \| "neutral"` | — | Trend direction; renders an arrow icon |
 | `trendValue` | `string` | — | Formatted trend text (e.g. `"+12.5%"`) |
-| `variant` | `"default" \| "primary" \| "success" \| "warning" \| "error"` | `"default"` | Card variant — influences trend color |
+| `variant` | `"default" \| "outline"` | `"default"` | Card style — `"outline"` is a bordered, no-fill card with chevron trend icons |
 | `color` | `string` | — | Custom CSS color for the trend indicator; overrides variant |
 | `classNames` | `MetricCardClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root element |
@@ -49,6 +49,27 @@ Variants only affect the **trend indicator color**, not the background or text o
 | `"error"` | `--gsl-error` |
 
 Override with the `color` prop (any CSS value) for custom accent colors.
+
+### Outline variant
+
+Set `variant="outline"` for a bordered, no-fill card. It differs structurally from the default:
+
+- **No background** — transparent card with a `1px` border in `--gsl-border`, radius `--gsl-radius-base`.
+- **Chevron trend icons** — `up` renders a chevron up, `down` a chevron down, `neutral` a dash.
+- **No `+`/`-` prefix** — a leading sign is stripped from `trendValue` (pass `"12.5%"`, not `"+12.5%"`).
+- **Larger value** — `32px` font size.
+- **Padding `24px`** with a unified `8px` gap between the label, value, and description.
+
+```tsx
+<MetricCard
+  variant="outline"
+  label="Revenue"
+  value="$128.4k"
+  description="Total revenue this quarter"
+  trend="up"
+  trendValue="12.5%"
+/>
+```
 
 ## Types
 
@@ -71,8 +92,11 @@ Also exported: `MetricCardVariant`, `MetricTrend`.
 
 ## Design tokens
 
-| Token | Fallback | Used for |
-|-------|----------|----------|
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-metric-card-value-size` | `28px` (`32px` outline) | Main value (header) font size |
+| `--gsl-metric-card-value-color` | `--gsl-text` | Main value (header) color |
+| `--gsl-metric-card-description-size` | `13px` | Description font size |
 
 Override card background via `--gsl-default-metric-card-bg`, radius via `--gsl-metric-card-radius`, or shadow via `--gsl-metric-card-shadow`.
 

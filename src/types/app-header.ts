@@ -5,10 +5,29 @@ import type { HTMLAttributes, ReactNode } from "react";
 export interface AppHeaderProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   children?: ReactNode;
+  /**
+   * Visual style. "default" = subtle rounded panel surface.
+   * "plain" = square edges (no border radius), primary background, on-primary text.
+   */
+  variant?: "default" | "plain";
 }
 
 export interface AppHeaderActionsProps {
   className?: string;
+  children?: ReactNode;
+}
+
+// ── AppHeaderBranding ──
+
+export interface AppHeaderBrandingProps {
+  className?: string;
+  /** Inline logo node (e.g. an <img> or icon). */
+  logo?: ReactNode;
+  /** Main title text, rendered bold. */
+  title?: ReactNode;
+  /** Secondary text, rendered larger but not bold. */
+  subtitle?: ReactNode;
+  /** Custom content, overrides title/subtitle rendering. */
   children?: ReactNode;
 }
 
@@ -68,6 +87,11 @@ export interface AppHeaderProfileProps {
   user: AppUser;
   children?: ReactNode;
   className?: string;
-  /** Render variant. "full" shows large avatar + email + carded actions. "basic" shows compact inline avatar + name/role + flat actions. */
-  variant?: "full" | "basic";
+  /**
+   * Render variant.
+   * "full" shows large avatar + email + carded actions.
+   * "basic" shows compact inline avatar + name/role + flat actions.
+   * "avatar" shows only the avatar in the header (no name/role/chevron) and opens the full profile popover on click.
+   */
+  variant?: "full" | "basic" | "avatar";
 }

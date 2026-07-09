@@ -52,7 +52,7 @@ openWith({ userId: "42" });
 ```
 
 | Argument / option | Type | Default | Description |
-|-------------------|------|---------|-------------|
+| ------------------- | ------ | --------- | ------------- |
 | `id` | `string \| { id: string }` | — | Overlay id stored as the param value when open |
 | `param` | `string` | `"dialog"` | Query param key |
 | `dataPrefix` | `string` | `` `${param}.` `` | Prefix for flat data keys (e.g. `dialog.userId`) |
@@ -66,7 +66,7 @@ Returns `{ open, data, setOpen, onOpenChange, openWith }`. `onOpenChange` is Rad
 When open, scalar fields are stored as prefixed query keys:
 
 | URL | Meaning |
-|-----|---------|
+| ----- | --------- |
 | `?dialog=edit-user` | Dialog `edit-user` is open |
 | `?dialog=edit-user&dialog.userId=42` | Same dialog with `userId` context |
 | `?dialog=edit-user&dialog.tab=profile` | Additional scalar field |
@@ -107,7 +107,9 @@ const { open, data, openWith } = useSearchParamOverlay<{ panel: string }>(
 
 ## React Router
 
-Pass an adapter built from `useSearchParams` so the hook stays in sync with React Router:
+Table hooks (`useTableFilter`, `useTablePagination`, `useTableState`) and components (`TableSearch`, `TableFilter`, `TablePagination`, `SidebarLink`, `AppLayoutInner`) now use a `RouterAdapter` abstraction — no manual adapter wiring needed. See the [RouterAdapter](/docs/router-adapter) docs page.
+
+The `SearchParamAdapter` below is a separate pattern for `useSearchParamOverlay`, `useDialogSearchParam`, and `useModalSearchParam`. Pass an adapter built from `useSearchParams` so the hook stays in sync with React Router:
 
 ```tsx
 import { useMemo } from "react";
@@ -163,7 +165,7 @@ createSearchParamAdapter({
 ### `SearchParamAdapter`
 
 | Member | Description |
-|--------|-------------|
+| -------- | ------------- |
 | `getSearchParams` | Returns current `URLSearchParams` |
 | `setSearchParams` | Writes params; optional `{ replace }` |
 | `subscribe` | Optional listener for external param changes |
@@ -179,7 +181,7 @@ createSearchParamAdapter({
 ### `UseSearchParamOverlayReturn<TData>`
 
 | Member | Type | Description |
-|--------|------|-------------|
+| -------- | ------ | ------------- |
 | `open` | `boolean` | Whether this overlay id is active |
 | `data` | `Partial<Record<keyof TData, string>> \| null` | Parsed flat params when open |
 | `setOpen` | `boolean \| SearchParamOverlayState<TData>` | Open, close, or open with state |
@@ -262,7 +264,7 @@ const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 ```
 
 | Option | Type | Default |
-|--------|------|---------|
+| -------- | ------ | --------- |
 | `defaultPage` | `number` | `1` |
 | `defaultPageSize` | `number` | `10` |
 | `pageSizeOptions` | `number[]` | `[10,20,50,100]` |
@@ -286,7 +288,7 @@ const { page, pageSize, setPage, setPageSize, reset } = useTablePagination({
 ```
 
 | Option | Type | Default |
-|--------|------|---------|
+| -------- | ------ | --------- |
 | `defaultPage` | `number` | `1` |
 | `defaultPageSize` | `number` | `10` |
 | `paramPrefix` | `string` | — |

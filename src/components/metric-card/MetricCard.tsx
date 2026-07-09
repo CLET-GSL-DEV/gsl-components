@@ -10,6 +10,13 @@ const trendIcons: Record<MetricTrend, typeof ArrowUp> = {
   neutral: Minus,
 };
 
+// Outline variant uses literal triangle/dash glyphs instead of icon components.
+const outlineTrendGlyphs: Record<MetricTrend, string> = {
+  up: "▲",
+  down: "▼",
+  neutral: "–",
+};
+
 interface ParsedValue {
   num: number;
   prefix: string;
@@ -48,6 +55,7 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
       value,
       icon,
       description,
+      variant = "default",
       trend,
       trendValue,
       animate = false,
@@ -58,7 +66,14 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
     },
     ref,
   ) {
-    const TrendIcon = trend ? trendIcons[trend] : null;
+    const isOutline = variant === "outline";
+    const TrendIcon = trend && !isOutline ? trendIcons[trend] : null;
+    const trendGlyph = trend && isOutline ? outlineTrendGlyphs[trend] : null;
+
+    // Outline variant drops the leading +/- from the trend value.
+
+    const displayTrendValue =
+      isOutline && trendValue ? trendValue.replace(/^[+-]/, "") : trendValue;
 
     const parsed = useMemo(
       () => (animate ? parseValueForAnimation(value) : null),
@@ -113,7 +128,12 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-metric-card", classNames?.root, className)}
+        className={cn(
+          "gsl-metric-card",
+          `gsl-metric-card--${variant}`,
+          classNames?.root,
+          className,
+        )}
         {...props}
       >
         <div className="gsl-metric-card__header">
@@ -143,7 +163,12 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
               {TrendIcon ? (
                 <TrendIcon size={14} strokeWidth={2.5} aria-hidden />
               ) : null}
-              {trendValue}
+              {trendGlyph ? (
+                <span className="gsl-metric-card__trend-glyph" aria-hidden>
+                  {trendGlyph}
+                </span>
+              ) : null}
+              {displayTrendValue}
             </span>
           ) : null}
         </div>

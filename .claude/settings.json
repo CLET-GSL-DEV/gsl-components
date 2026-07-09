@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx vitest *)",
+      "Bash(npx stylelint *)",
+      "Bash(echo \"started, pid $!\")",
+      "Bash(break)"
+    ]
+  }
+}

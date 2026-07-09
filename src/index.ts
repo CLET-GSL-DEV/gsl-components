@@ -1,4 +1,12 @@
 import "./styles/theme.css";
+
+// ── Router adapter ────────────────────────────────────────────────────────
+// Set the default adapter BEFORE any component/hook code runs.
+import { setRouterAdapter } from "./adapters/registry";
+import { useReactRouterAdapter } from "./adapters/react-router-adapter";
+setRouterAdapter(useReactRouterAdapter);
+// ────────────────────────────────────────────────────────────────────────────
+
 export * from "./components/theme";
 export * from "./components/app-switcher";
 export * from "./components/app-header";
@@ -32,10 +40,13 @@ export * from "./components/radio-group";
 export * from "./components/sheet";
 export * from "./components/sidebar";
 export * from "./components/sortable";
+export * from "./components/stepper";
 export * from "./components/tabs";
+export * from "./components/timeline";
 export * from "./components/textarea";
 export * from "./components/toast";
 export * from "./components/tooltip";
 export * from "./components/upload-field";
+export * from "./contexts/router-adapter-context";
 export * from "./hooks";
 export { stringToHue, gradientFromString } from "./utils/stringToColor";

@@ -12,13 +12,7 @@ import { TabsProvider, useTabsContext } from "./TabsContext";
 import "./styles/tabs.css";
 
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  {
-    variant = "default",
-    classNames,
-    className,
-    children,
-    ...props
-  },
+  { variant = "default", classNames, className, children, ...props },
   ref,
 ) {
   return (
@@ -27,7 +21,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
         ref={ref}
         className={cn(
           "gsl-tabs",
-          variant === "line" ? "gsl-tabs--line" : "gsl-tabs--default",
+          `gsl-tabs--${variant}`,
           classNames?.root,
           className,
         )}
@@ -43,7 +37,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
   function TabsList({ classNames, className, children, ...props }, ref) {
     const { variant } = useTabsContext();
     const listRef = useRef<HTMLDivElement | null>(null);
-    const isLineVariant = variant === "line";
+    const isLineVariant = variant === "line" || variant === "pill";
     const { style: indicatorStyle, visible: indicatorVisible } =
       useTabsLineIndicator(listRef, isLineVariant);
 
@@ -63,7 +57,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
         }}
         className={cn(
           "gsl-tabs__list",
-          isLineVariant ? "gsl-tabs__list--line" : "gsl-tabs__list--default",
+          `gsl-tabs__list--${variant}`,
           classNames?.list,
           className,
         )}
