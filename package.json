@@ -146,12 +146,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@ast-grep/napi-darwin-arm64": "^0.44.1",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@esbuild/darwin-arm64": "^0.28.1",
-    "@rollup/rollup-darwin-arm64": "^4.62.2",
     "@tanstack/react-virtual": "^3.14.3",
     "cmdk": "^1.1.1",
     "libphonenumber-js": "^1.13.7",
