@@ -44,7 +44,13 @@ const notifications = [
 
 export function AppHeaderExample() {
   const [search, setSearch] = useState("");
-  const [profileVariant, setProfileVariant] = useState<"full" | "basic">("full");
+  const [profileVariant, setProfileVariant] = useState<
+    "full" | "basic" | "avatar"
+  >("full");
+
+  const nextProfileVariant = (
+    { full: "basic", basic: "avatar", avatar: "full" } as const
+  )[profileVariant];
 
   const searchGroups: AppHeaderSearchDataGroup[] = search
     ? [
@@ -102,9 +108,7 @@ export function AppHeaderExample() {
             <button
               type="button"
               className="gsl-profile-popover__action"
-              onClick={() =>
-                setProfileVariant(profileVariant === "full" ? "basic" : "full")
-              }
+              onClick={() => setProfileVariant(nextProfileVariant)}
             >
               <span className="gsl-profile-popover__action-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -114,7 +118,7 @@ export function AppHeaderExample() {
                 </svg>
               </span>
               <span className="gsl-profile-popover__action-label">
-                {profileVariant === "full" ? "Switch to basic" : "Switch to full"}
+                Switch to {nextProfileVariant}
               </span>
             </button>
             <button

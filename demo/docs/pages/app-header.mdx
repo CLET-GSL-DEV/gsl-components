@@ -5,7 +5,9 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { AppHeaderPreview } from "../previews/code/AppHeaderPreview";
+import { AppHeaderPlainPreview } from "../previews/code/AppHeaderPlainPreview";
 import appHeaderSource from "../previews/examples/app-header.example.tsx?raw";
+import appHeaderPlainSource from "../previews/examples/app-header-plain.example.tsx?raw";
 
 # AppHeader
 
@@ -19,7 +21,20 @@ Header bar with compound sub-components for search, app switching, notifications
   code={appHeaderSource}
 />
 
-Click the profile avatar to open the profile popover with variant toggle. The search input shows groups when you type. Notifications open on the bell click.
+Click the profile avatar to open the profile popover with variant toggle (cycles `full` → `basic` → `avatar`). The search input shows groups when you type. Notifications open on the bell click.
+
+## Variants
+
+`AppHeader` accepts a `variant` prop that controls its surface style.
+
+- **`"default"`** (default) — subtle rounded panel surface, matching the rest of the `AppLayout` content area.
+- **`"plain"`** — square edges (no border radius), `--gsl-primary` background, and `--gsl-on-primary` text. Used for dashboard shells where the header should read as a solid top bar rather than a panel.
+
+<ExampleTabs
+  title='variant="plain" — solid primary-colored header with branding'
+  preview={<AppHeaderPlainPreview />}
+  code={appHeaderPlainSource}
+/>
 
 ## Components
 
@@ -27,10 +42,11 @@ Click the profile avatar to open the profile popover with variant toggle. The se
 
 Root flex container that renders children. `AppHeaderSearch` goes on the left; everything else is typically grouped inside `AppHeaderActions` for the right side.
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `className` | `string` | Merged onto the root element |
-| `children` | `ReactNode` | Header content — search, actions, etc. |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"default" \| "plain"` | `"default"` | Visual style — see [Variants](#variants) |
+| `className` | `string` | — | Merged onto the root element |
+| `children` | `ReactNode` | — | Header content — search, actions, etc. |
 
 ### `AppHeaderActions`
 
@@ -40,6 +56,26 @@ Groups items on the right side of the header with a gap. Typically contains `App
 |------|------|-------------|
 | `className` | `string` | Merged onto the actions wrapper |
 | `children` | `ReactNode` | Right-side items (switcher, notifications, profile) |
+
+### `AppHeaderBranding`
+
+Logo + title/subtitle slot for the left side of the header, typically used in place of `AppHeaderSearch` for dashboard shells (see the `"plain"` variant example above).
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `logo` | `ReactNode` | Inline logo node (e.g. an `<img>` or icon) |
+| `title` | `ReactNode` | Main title text, rendered bold |
+| `subtitle` | `ReactNode` | Secondary text, rendered larger but not bold |
+| `children` | `ReactNode` | Custom content — overrides `title`/`subtitle` rendering |
+| `className` | `string` | Merged onto the root element |
+
+```tsx
+<AppHeaderBranding
+  logo={<img src="/logo.png" alt="" width={28} height={28} />}
+  title="GSL PORTAL"
+  subtitle="GSL Component Library"
+/>
+```
 
 ### `AppHeaderSearch`
 
@@ -102,13 +138,15 @@ User profile trigger that opens a Radix popover with avatar, name, and actions. 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `user` | `AppUser` | — | User object with name, role, initials, optional email/avatar |
-| `variant` | `"full" \| "basic"` | `"full"` | Popover layout variant |
+| `variant` | `"full" \| "basic" \| "avatar"` | `"full"` | Trigger + popover layout variant |
 | `children` | `ReactNode` | — | Action buttons rendered in the popover |
 | `className` | `string` | — | Merged onto the trigger |
 
-**`variant="full"`** — centered layout with 64px avatar, name, email, and action buttons wrapped in a card-surface background.
+**`variant="full"`** — trigger shows avatar, name, role, and a chevron. Popover is a centered layout with 64px avatar, name, email, and action buttons wrapped in a card-surface background.
 
-**`variant="basic"`** — compact inline layout with 32px avatar and name/role in a row, no email, flat action buttons (no card background), `min-width: max-content`. Opens flush with the trigger.
+**`variant="basic"`** — trigger shows avatar, name, role, and a chevron. Popover is a compact inline layout with 32px avatar and name/role in a row, no email, flat action buttons (no card background), `min-width: max-content`. Opens flush with the trigger.
+
+**`variant="avatar"`** — trigger shows only the avatar (no name, role, or chevron) — useful for compact headers like the `AppHeader` `"plain"` variant. Clicking still opens the same popover as `"full"`.
 
 #### `AppUser`
 
@@ -126,6 +164,7 @@ User profile trigger that opens a Radix popover with avatar, name, and actions. 
 
 | Key | Type | Description |
 |-----|------|-------------|
+| `variant` | `"default" \| "plain"` | Visual style — see [Variants](#variants) |
 | `className` | `string` | Merged onto the root element |
 | `children` | `ReactNode` | Header content — typically `AppHeaderSearch` + `AppHeaderActions` |
 
@@ -135,6 +174,16 @@ User profile trigger that opens a Radix popover with avatar, name, and actions. 
 |-----|------|-------------|
 | `className` | `string` | Merged onto the wrapper |
 | `children` | `ReactNode` | Right-side items |
+
+### `AppHeaderBrandingProps`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `logo` | `ReactNode` | Inline logo node |
+| `title` | `ReactNode` | Main title text |
+| `subtitle` | `ReactNode` | Secondary text |
+| `children` | `ReactNode` | Custom content, overrides `title`/`subtitle` |
+| `className` | `string` | Merged onto the root element |
 
 ### `AppHeaderSearchProps`
 
@@ -170,7 +219,7 @@ Search props — see [`AppHeaderSearch`](#appheadersearch) props table.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | `user` | `AppUser` | — | User data |
-| `variant` | `"full" \| "basic"` | `"full"` | Popover layout |
+| `variant` | `"full" \| "basic" \| "avatar"` | `"full"` | Trigger + popover layout |
 | `className` | `string` | — | Class on the trigger element |
 | `children` | `ReactNode` | — | Action buttons |
 
@@ -196,6 +245,7 @@ Search props — see [`AppHeaderSearch`](#appheadersearch) props table.
 - All header components accept `className` and pass it through to their root element for Tailwind/consumer overrides.
 - The header avatar in `"full"` variant uses `--gsl-primary` background with `--gsl-on-primary` text.
 - Profile popover opens at `side="top"` with `sideOffset={0}` — flush against the trigger.
+- `variant="plain"` sets `--gsl-app-header-bg`/`--gsl-app-header-color` on the root — override either on `.gsl-app-header--plain` (or an ancestor) to re-theme without extra CSS. Notification button, profile hover, and `AppSwitcher` trigger all inherit the on-primary foreground automatically.
 
 ## Design tokens
 
@@ -205,8 +255,10 @@ Search props — see [`AppHeaderSearch`](#appheadersearch) props table.
 | Token | Fallback | Used for |
 |-------|----------|----------|
 | `--gsl-app-layout-body-gap` | `1rem` | Header padding (horizontal and vertical) |
-| `--gsl-panel-radius` | `--gsl-radius-2xl` | Header border radius |
-| `--gsl-panel-bg` | `--gsl-surface-subtle` | Header background |
+| `--gsl-panel-radius` | `--gsl-radius-2xl` | Header border radius (`"default"` variant) |
+| `--gsl-panel-bg` | `--gsl-surface-subtle` | Header background (`"default"` variant) |
+| `--gsl-app-header-bg` | `--gsl-primary` | Header background (`"plain"` variant) |
+| `--gsl-app-header-color` | `--gsl-on-primary` | Header text/icon color (`"plain"` variant) |
 
 
 

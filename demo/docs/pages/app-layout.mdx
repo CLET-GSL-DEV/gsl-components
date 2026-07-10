@@ -28,8 +28,10 @@ Application layout container that auto-positions `AppHeader`, `AppSidebar`, and 
 - **`"default"`** (default) — the sidebar spans the full height on the left, and the header sits above the content only.
 - **`"stacked"`** — the header spans the full width on top, with the sidebar and content side by side below it. No extra styling.
 
+The example below is the dashboard shell combination: `variant="stacked"` on `AppLayout` paired with [`AppHeader`'s `"plain"` variant](/docs/app-header#variants) and [`Sidebar`'s `"plain"` variant](/docs/sidebar#variants), plus collapsible nav groups. Use this combo when the header and sidebar should read as one solid dashboard frame rather than floating panels.
+
 <ExampleTabs
-  title='variant="stacked" — full-width header on top, sidebar + content side by side'
+  title='variant="stacked" — full-width plain header on top, plain sidebar + content side by side'
   preview={<AppLayoutStackedPreview />}
   code={appLayoutStackedSource}
 />
