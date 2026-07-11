@@ -1,6 +1,12 @@
 export const meta = {
   title: "DateSelector",
   description: "Calendar date picker",
+  category: "Components",
+  keywords: ["date", "date picker", "calendar", "single date"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["date-range-selector", "dropdown", "form-field"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -93,6 +99,8 @@ See the props table above.
 | Token | Used for |
 |-------|----------|
 | `--gsl-radius-base` | Trigger and calendar border radius |
+| `--gsl-date-selector-font` | Font family for the trigger |
+| `--gsl-date-selector-calendar-font` | Font family for the calendar popover and day cells |
 
 ## Notes
 
@@ -100,3 +108,7 @@ See the props table above.
 - Navigation arrows move by month. Clicking the month/year text resets to today.
 - Days from adjacent months are shown muted and selectable.
 - The popover calendar uses `--gsl-shadow-md` and matches the trigger width.
+
+## Don't
+
+- Override borders with `!border-0`/`!shadow-none` style class overrides — let it keep its default border, like Dropdown.

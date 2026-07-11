@@ -27,10 +27,12 @@ export function AppSwitcher({
   onOpenChange,
   onAppSelect,
   columns = 3,
+  maxItems = 6,
   triggerLabel = "Open app switcher",
   trigger,
   title,
   footer,
+  children,
   className,
   style,
   placement = "bottom-end",
@@ -40,6 +42,8 @@ export function AppSwitcher({
     open: controlledOpen,
     onOpenChange,
   });
+
+  const visibleApps = apps.slice(0, maxItems);
 
   const handleAppSelect = useCallback(
     (app: AppItem) => {
@@ -108,7 +112,7 @@ export function AppSwitcher({
               </div>
             ) : null}
 
-            {!loading && apps.length > 0 ? (
+            {!loading && visibleApps.length > 0 ? (
               <div
                 className="gsl-app-switcher__grid"
                 style={
@@ -117,7 +121,7 @@ export function AppSwitcher({
                   } as React.CSSProperties
                 }
               >
-                {apps.map((app) => (
+                {visibleApps.map((app) => (
                   <AppSwitcherItem
                     key={app.id}
                     app={app}
@@ -126,6 +130,10 @@ export function AppSwitcher({
                 ))}
               </div>
             ) : null}
+
+            {children && (
+              <div className="gsl-app-switcher__extra">{children}</div>
+            )}
 
             {footer && (
               <div className="gsl-app-switcher__footer">{footer}</div>

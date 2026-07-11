@@ -32,6 +32,10 @@ export interface MetricCardProps extends HTMLAttributes<HTMLDivElement> {
   animate?: boolean;
   /** Duration of the count-up animation in ms (default: 1500) */
   animationDuration?: number;
+  /** Show shimmering skeleton placeholders instead of the label/value/description content */
+  loading?: boolean;
+  /** Accessible label announced while loading (default: "Loading metric") */
+  loadingLabel?: string;
   classNames?: MetricCardClassNames;
   className?: string;
 }

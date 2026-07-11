@@ -1,6 +1,12 @@
 export const meta = {
   title: "Badge",
   description: "Status and count label",
+  category: "Components",
+  keywords: ["badge", "status label", "count badge", "pill", "tag"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["metric-card", "sidebar"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -52,6 +58,12 @@ Part-level class names merged after base `gsl-badge*` styles:
 ### `BadgeSize`
 
 `"sm" | "md"`
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-badge-font` | `var(--gsl-font-body)` | Font family for the badge label |
 
 ## Notes
 

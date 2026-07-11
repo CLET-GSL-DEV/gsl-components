@@ -1,6 +1,12 @@
 export const meta = {
   title: "Command",
   description: "Command palette and inline search",
+  category: "Components",
+  keywords: ["command palette", "cmd k", "search menu", "combobox", "quick actions"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["dropdown", "dialog"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -183,6 +189,13 @@ Options for `useCommandShortcut` (`shortcut`, `enabled`).
 | `CommandSeparatorClassNames` | `separator` | Separator |
 | `CommandLoadingClassNames` | `loading` | Loading slot |
 | `CommandShortcutClassNames` | `shortcut` | Shortcut chip |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-command-font` | `var(--gsl-font-body)` | Font family for the command root (inline and dialog wrapper) |
+| `--gsl-command-dialog-font` | `var(--gsl-font-body)` | Font family for the dialog panel content (`.gsl-command-dialog__content`) |
 
 ## Notes
 

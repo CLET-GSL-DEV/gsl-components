@@ -3,13 +3,14 @@
   --gsl-app-layout-body-gap: var(--gsl-app-layout-gap, 1rem);
   --gsl-panel-bg: var(--gsl-surface-subtle);
   --gsl-panel-radius: var(--gsl-radius-2xl);
+  --gsl-app-layout-font: var(--gsl-font-body);
 
   box-sizing: border-box;
 
   display: flex;
   flex-direction: row;
   background: var(--gsl-page-bg);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-app-layout-font);
   height: 100vh;
   overflow: hidden;
 }

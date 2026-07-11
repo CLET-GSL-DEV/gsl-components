@@ -125,6 +125,7 @@ export interface SidebarContentProps {
 export interface SidebarFooterProps {
   classNames?: SidebarFooterClassNames;
   className?: string;
+  /** Typically a `ProfilePopover` with the trigger row and menu content */
   children: ReactNode;
 }
 
@@ -169,6 +170,10 @@ export interface SidebarLinkProps
   icon?: ReactNode;
   /** If provided, renders as a react-router `<Link>` with this path */
   to?: string;
+  /** Render a shimmering skeleton placeholder instead of the icon/label, e.g. while nav items are still loading */
+  loading?: boolean;
+  /** Accessible label announced while loading (default: "Loading") */
+  loadingLabel?: string;
   classNames?: SidebarLinkClassNames;
   className?: string;
   children: ReactNode;

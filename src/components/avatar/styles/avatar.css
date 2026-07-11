@@ -1,11 +1,13 @@
 .gsl-avatar {
+  --gsl-avatar-font: var(--gsl-font-body);
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-avatar-font);
 }
 
 .gsl-avatar__image {

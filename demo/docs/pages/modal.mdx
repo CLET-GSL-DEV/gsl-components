@@ -1,6 +1,12 @@
 export const meta = {
   title: "Modal",
   description: "Centered overlay with size variants",
+  category: "Components",
+  keywords: ["modal", "overlay", "review dialog", "full screen modal", "workflow modal"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["dialog", "sheet"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -207,6 +213,16 @@ Extend native `div` / `footer` attributes with optional `classNames`.
 | `ModalBodyClassNames` | `body` | Body element (`.gsl-modal__body`) |
 | `ModalFooterClassNames` | `footer` | Footer element (`.gsl-modal__footer`) |
 
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-modal-font` | `var(--gsl-font-body)` | Font family override for the modal shell |
+| `--gsl-modal-confirm-font` | `var(--gsl-font-body)` | Font family override for the `preventClose` confirmation dialog |
+| `--gsl-modal-gutter` | `24px` | Viewport gutter reserved around the modal shell when sizing its width/height (set to `0` below 768px, where the modal fills the viewport) |
+
+See [Sizes](#sizes) above for the `--gsl-modal-max-width-*` tokens.
+
 ## Notes
 
 - The modal is centered in the viewport with `top: 50%; left: 50%; transform: translate(-50%, -50%)`.
@@ -220,3 +236,13 @@ Extend native `div` / `footer` attributes with optional `classNames`.
 - Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
 - Base `gsl-modal*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 - **URL-driven open state** is the recommended pattern: use `useModalSearchParam` with `open`, `onOpenChange`, and `openWith` (see [URL state](#url-state) above).
+
+## Do
+
+- Follow the structure `Modal > ModalPortal > ModalOverlay + ModalContent(showCloseButton, size) > ModalHeader(ModalTitle, ModalDescription) > Form > ModalBody > ModalFooter`.
+- Give `Field`/`Textarea` inside `ModalBody` a `className="w-full"` so they fill the width.
+- Use `bg-surface-muted/20` (not plain `bg-surface-muted`) for subtle card backgrounds inside a modal.
+
+## Don't
+
+- Wrap the form contents in a literal `<form>` element; call `form.handleSubmit(onSubmit)` from the submit button's `onClick` instead.

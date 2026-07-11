@@ -1,8 +1,10 @@
 .gsl-radio-group {
+  --gsl-radio-group-font: var(--gsl-font-body);
+
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-radio-group-font);
 }
 
 .gsl-radio-group[data-orientation="horizontal"] {

@@ -1,16 +1,24 @@
 export const meta = {
   title: "Tabs",
   description: "Tabbed panels",
+  category: "Components",
+  keywords: ["tabs", "tabbed panels", "segmented control", "pill tabs", "line tabs"],
+  since: "1.5.0",
+  status: "stable",
+  related: ["table"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { TabsPreview } from "../previews/code/TabsPreview";
 import { TabsLinePreview } from "../previews/code/TabsLinePreview";
 import { TabsPillExample } from "../previews/examples/tabs-pill.example";
+import { TableTabsFilterPreview } from "../previews/code/TableTabsFilterPreview";
 
 import tabsSource from "../previews/examples/tabs.example.tsx?raw";
 import tabsLineSource from "../previews/examples/tabs-line.example.tsx?raw";
 import tabsPillSource from "../previews/examples/tabs-pill.example.tsx?raw";
+import tableTabsFilterSource from "../previews/examples/table-tabs-filter.example.tsx?raw";
 
 # Tabs
 
@@ -45,6 +53,19 @@ Use `variant="pill"` on `Tabs` for a pill-style indicator instead of the enclose
   code={tabsPillSource}
 />
 
+
+## Tabs as a table filter
+
+A common pattern: status tabs ("All" / "Active" / "Pending") act as a segment filter over a
+single shared `Table` — one `TableContent` instance whose `data` is filtered by the active tab,
+not a separate table per tab (see [Table's panel variant](/docs/table) for the separate-table-per-tab
+pattern instead).
+
+<ExampleTabs
+  title="Tabs filtering one shared table"
+  preview={<TableTabsFilterPreview />}
+  code={tableTabsFilterSource}
+/>
 
 ## Components
 
@@ -162,5 +183,6 @@ These tokens allow overriding pill visual values at any level (consumer project,
 
 | Token | Default | Description |
 |-------|---------|-------------|
+| `--gsl-tabs-font` | `var(--gsl-font-body)` | Font family override for the tabs root and triggers |
 | `--gsl-tabs-pill-radius` | `9999px` | Border-radius of pill triggers, the active indicator, and the pill list container. Set to a smaller value (e.g. `8px`) for a softer pill. |
 | `--gsl-tabs-pill-gap` | `6px` | Gap and padding between pill items and around the pill list. |

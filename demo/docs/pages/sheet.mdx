@@ -1,6 +1,12 @@
 export const meta = {
   title: "Sheet",
   description: "Side panel",
+  category: "Components",
+  keywords: ["sheet", "side panel", "drawer", "slide out panel", "filters panel"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["dialog", "modal", "sidebar"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -160,6 +166,12 @@ Extend native `div` / `footer` attributes with optional `classNames`.
 |------|-----|------------|
 | `SheetBodyClassNames` | `body` | Body element (`.gsl-sheet__body`) |
 | `SheetFooterClassNames` | `footer` | Footer element (`.gsl-sheet__footer`) |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-sheet-font` | `var(--gsl-font-body)` | Font family override |
 
 ## Notes
 

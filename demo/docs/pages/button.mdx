@@ -1,6 +1,12 @@
 export const meta = {
   title: "Button",
   description: "Action button with variants",
+  category: "Components",
+  keywords: ["button", "cta", "action button", "submit button", "click", "primary button"],
+  since: "1.4.0",
+  status: "stable",
+  related: ["dialog", "modal"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -58,8 +64,24 @@ Part-level class names merged after base `gsl-button*` styles:
 
 `"sm" | "md" | "lg"`
 
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-button-font` | `var(--gsl-font-body)` | Font family override |
+
 ## Notes
 
 - `loading` sets `disabled`, `aria-busy`, and hides the visible label from screen readers while announcing `loadingLabel`.
 - Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 - Conflicting Tailwind utilities may require [`tailwind-merge`](https://github.com/dcastil/tailwind-merge) in your app if overrides do not win.
+
+## Do
+
+- Use `variant="primary"` for create/assign actions, and `variant="primary-destructive"` for destructive ones.
+- In a footer with multiple actions, order Ghost (Cancel) → Primary (action) → Destructive (rightmost).
+
+## Don't
+
+- Add a leading icon to Dialog/Modal action buttons — those are conventionally iconless even though buttons elsewhere often carry one.
+- Use a `Download` icon on a button that navigates rather than downloads — use `ExternalLink`/`ArrowRight` instead.

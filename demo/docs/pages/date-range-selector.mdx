@@ -1,11 +1,19 @@
 export const meta = {
   title: "DateRangeSelector",
   description: "Date range picker",
+  category: "Components",
+  keywords: ["date range", "date range picker", "calendar range", "start and end date", "date filter"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["date-selector", "table", "form-field"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { DateRangeSelectorPreview } from "../previews/code/DateRangeSelectorPreview";
+import { DateRangeFilterPreview } from "../previews/code/DateRangeFilterPreview";
 import dateRangeSource from "../previews/examples/date-range-selector.example.tsx?raw";
+import dateRangeFilterSource from "../previews/examples/date-range-filter.example.tsx?raw";
 
 # DateRangeSelector
 
@@ -17,6 +25,18 @@ Date range picker for choosing a start and end date from a two-month calendar po
   title="Basic date range"
   preview={<DateRangeSelectorPreview />}
   code={dateRangeSource}
+/>
+
+## Inside a table filter
+
+`DateRangeSelector` used inside `TableFilter` to drive a table query, with an in-place empty
+state and an in-place error state (swap `TableContent` for an inline message on genuine errors —
+don't let it silently render an empty table).
+
+<ExampleTabs
+  title="Date range filter on a table"
+  preview={<DateRangeFilterPreview />}
+  code={dateRangeFilterSource}
 />
 
 ## Props
@@ -106,6 +126,13 @@ Part-level class names merged after base `gsl-date-selector*` styles:
 | `applyButton` | Apply button (`.gsl-date-selector__calendar-btn--apply`) |
 | `cancelButton` | Cancel button (`.gsl-date-selector__calendar-btn--cancel`) |
 
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-date-range-selector-font` | `--gsl-font-body` | Trigger button font family |
+| `--gsl-date-selector-calendar-font` | `--gsl-font-body` | Calendar popover font family (header title, weekday labels, and day cells) |
+
 ## Notes
 
 - Click the trigger to open a two-month calendar popover. Year and month dropdowns at the top allow quick navigation; previous/next arrows shift by one month.
@@ -117,3 +144,7 @@ Part-level class names merged after base `gsl-date-selector*` styles:
 - Days strictly between start and end are highlighted with a subtle background in the calendar.
 - The Apply button is disabled until at least a start date is selected.
 - On mobile (below 768px), the two months stack vertically.
+
+## Don't
+
+- Don't override the trigger's border with class overrides like `classNames={{ trigger: "!border-0 !shadow-none focus:!shadow-none" }}` — let it keep its default border, same as `DateSelector` and `Dropdown`.

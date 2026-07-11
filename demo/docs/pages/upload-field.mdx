@@ -1,6 +1,12 @@
 export const meta = {
   title: "UploadField",
   description: "File upload",
+  category: "Components",
+  keywords: ["upload field", "file upload", "dropzone", "file picker", "drag and drop upload"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["bulk-import-modal", "form-field"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -210,6 +216,12 @@ See the props table above.
 | `fileSize` | File size text (`.gsl-upload-field__file-card-size`) |
 | `removeButton` | Remove (trash) button (`.gsl-upload-field__file-card-remove`) |
 | `actionButton` | Upload/Replace button (`.gsl-upload-field__action`) |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-upload-field-font` | `--gsl-font-body` | Font family for the title, subtitle, file card text, and action button |
 
 ## Notes
 

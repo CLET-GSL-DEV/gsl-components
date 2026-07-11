@@ -7,6 +7,7 @@
   --gsl-stepper-transition: 250ms;
   --gsl-stepper-connector-min: 24px;
   --gsl-stepper-gap: 8px;
+  --gsl-stepper-font: var(--gsl-font-body);
 
   display: flex;
   align-items: flex-start;
@@ -14,7 +15,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-stepper-font);
   color: var(--gsl-text);
 }
 

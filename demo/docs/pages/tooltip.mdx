@@ -1,6 +1,12 @@
 export const meta = {
   title: "Tooltip",
   description: "Hover label for icon-only controls and truncated content",
+  category: "Components",
+  keywords: ["tooltip", "hover label", "hint text", "icon label"],
+  since: "1.16.0",
+  status: "stable",
+  related: ["sidebar", "popover"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -41,6 +47,13 @@ Props for `Tooltip`.
 |-----|------------|
 | `root` | Wrapper `<div>` (`.gsl-tooltip`) |
 | `content` | Tooltip bubble `<span>` (`.gsl-tooltip__content`) |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-tooltip-font` | `var(--gsl-font-body)` | Font family override |
+| `--gsl-z-tooltip` | `var(--gsl-z-popover)` | Stacking order (z-index) of the tooltip bubble |
 
 ## Notes
 

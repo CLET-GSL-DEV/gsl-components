@@ -1,8 +1,10 @@
 .gsl-network-operator {
+  --gsl-network-operator-font: var(--gsl-font-body);
+
   position: relative;
   display: block;
   width: 100%;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-network-operator-font);
   font-size: 14px;
 }
 

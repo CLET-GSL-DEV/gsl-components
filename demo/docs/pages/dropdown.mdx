@@ -1,6 +1,12 @@
 export const meta = {
   title: "Dropdown",
   description: "Select dropdown",
+  category: "Components",
+  keywords: ["dropdown", "select", "combobox", "option picker"],
+  since: "1.4.0",
+  status: "stable",
+  related: ["command", "form-field", "date-selector"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -60,6 +66,12 @@ Part-level class names merged after base `gsl-dropdown*` styles:
 | `menu` | Menu panel (`.gsl-dropdown__menu`) |
 | `option` | Menu items (`.gsl-dropdown__option`) |
 
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-dropdown-font` | `var(--gsl-font-body)` | Font family override |
+
 ## Notes
 
 - The trigger icon is Lucide `ChevronDown` (16px); it rotates when the menu is open.
@@ -99,3 +111,11 @@ Part-level class names merged after base `gsl-dropdown*` styles:
 - `"empty"` — rendered in the trigger when no value is set; `option` is `null`
 
 The BulkImportModal's Match Columns step uses this to show a green checkmark badge next to the selected field mapping.
+
+## Do
+
+- With react-hook-form, wire `value={field.value || null}` and `onValueChange={(v) => field.onChange(v ?? "")}`, passing `options` as `{value, label}[]` (`DropdownOption[]`).
+
+## Don't
+
+- Override borders with `classNames={{trigger: "!border-0 !shadow-none focus:!shadow-none"}}` — let the component keep its default border.

@@ -1,4 +1,6 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { RoleSelect } from "../components/role-select/RoleSelect";
+import type { RoleSelectProps } from "./role-select";
 
 // ── AppHeader ──
 
@@ -85,13 +87,28 @@ export interface AppUser {
 
 export interface AppHeaderProfileProps {
   user: AppUser;
-  children?: ReactNode;
+  /** Extra composable content rendered below "Help & Support" — only a `RoleSelect` element is accepted */
+  children?: ReactElement<RoleSelectProps, typeof RoleSelect>;
   className?: string;
   /**
-   * Render variant.
-   * "full" shows large avatar + email + carded actions.
-   * "basic" shows compact inline avatar + name/role + flat actions.
-   * "avatar" shows only the avatar in the header (no name/role/chevron) and opens the full profile popover on click.
+   * Render variant for the header trigger row.
+   * "full" shows avatar + name/role + chevron.
+   * "avatar" shows only the avatar (no name/role/chevron).
+   * Both open the same `ProfilePopover` menu on click.
    */
-  variant?: "full" | "basic" | "avatar";
+  variant?: "full" | "avatar";
+  /** Rendered at the far right of the popover header row (e.g. a theme toggle icon button) */
+  headerAction?: ReactNode;
+  /** Show shimmering skeleton placeholders instead of the avatar/name/role, in both the trigger and the opened popover */
+  loading?: boolean;
+  /** Accessible label announced while loading (default: "Loading profile") */
+  loadingLabel?: string;
+  /** Called when "My Profile" is clicked */
+  onProfileClick?: () => void;
+  /** Called when "Account Settings" is clicked */
+  onSettingsClick?: () => void;
+  /** Called when "Help & Support" is clicked */
+  onHelpClick?: () => void;
+  /** Called when "Sign Out" is clicked */
+  onSignOut?: () => void;
 }

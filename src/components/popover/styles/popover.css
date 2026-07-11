@@ -1,11 +1,12 @@
 .gsl-popover {
+  --gsl-popover-font: var(--gsl-font-body);
   z-index: var(--gsl-z-popover);
   padding: 12px;
   background: var(--gsl-bg);
   border: 1px solid var(--gsl-border);
   border-radius: var(--gsl-radius-base);
   box-shadow: var(--gsl-shadow-md);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-popover-font);
   font-size: 14px;
   line-height: 1.4;
   color: var(--gsl-text);

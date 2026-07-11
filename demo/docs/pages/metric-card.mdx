@@ -1,11 +1,19 @@
 export const meta = {
   title: "MetricCard",
   description: "Metric display card",
+  category: "Components",
+  keywords: ["metric card", "stat card", "kpi card", "dashboard metric", "trend indicator"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["card", "badge"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { MetricCardPreview } from "../previews/code/MetricCardPreview";
+import { MetricCardLoadingPreview } from "../previews/code/MetricCardLoadingPreview";
 import metricCardSource from "../previews/examples/metric-card.example.tsx?raw";
+import metricCardLoadingSource from "../previews/examples/metric-card-loading.example.tsx?raw";
 
 # MetricCard
 
@@ -17,6 +25,16 @@ Metric display card for dashboards and overviews. Renders a compact card with a 
   title="Metric cards"
   preview={<MetricCardPreview />}
   code={metricCardSource}
+/>
+
+## Loading state
+
+Set `loading` to show shimmering skeleton placeholders instead of the label/value/trend/description content — useful while the metric value is still being fetched. The skeleton shape follows whichever of `icon`, `trend`, and `description` you pass, so the loaded and loading layouts line up.
+
+<ExampleTabs
+  title="Loading state"
+  preview={<MetricCardLoadingPreview />}
+  code={metricCardLoadingSource}
 />
 
 ## Props
@@ -31,6 +49,8 @@ Metric display card for dashboards and overviews. Renders a compact card with a 
 | `trendValue` | `string` | — | Formatted trend text (e.g. `"+12.5%"`) |
 | `variant` | `"default" \| "outline"` | `"default"` | Card style — `"outline"` is a bordered, no-fill card with chevron trend icons |
 | `color` | `string` | — | Custom CSS color for the trend indicator; overrides variant |
+| `loading` | `boolean` | `false` | Show shimmering skeleton placeholders instead of the label/value/trend/description |
+| `loadingLabel` | `string` | `"Loading metric"` | Accessible label announced while loading |
 | `classNames` | `MetricCardClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root element |
 
@@ -94,9 +114,14 @@ Also exported: `MetricCardVariant`, `MetricTrend`.
 
 | Token | Default | Used for |
 |-------|---------|----------|
+| `--gsl-metric-card-font` | `--gsl-font-body` | Card font family |
+| `--gsl-metric-card-value-font` | `--gsl-font-header` | Main value (header) font family — now defaults to the theme's header font token `--gsl-font-header` |
 | `--gsl-metric-card-value-size` | `28px` (`32px` outline) | Main value (header) font size |
 | `--gsl-metric-card-value-color` | `--gsl-text` | Main value (header) color |
 | `--gsl-metric-card-description-size` | `13px` | Description font size |
+| `--gsl-default-metric-card-bg` | `--gsl-surface-card` | Card background |
+| `--gsl-metric-card-radius` | `--gsl-radius-xl` | Card border-radius |
+| `--gsl-metric-card-shadow` | `none` | Card box-shadow |
 
 Override card background via `--gsl-default-metric-card-bg`, radius via `--gsl-metric-card-radius`, or shadow via `--gsl-metric-card-shadow`.
 
@@ -106,3 +131,7 @@ Override card background via `--gsl-default-metric-card-bg`, radius via `--gsl-m
 - The icon always renders in `--gsl-text-muted` regardless of variant.
 - Card width is determined by the parent container. Use a grid or flex wrapper for layout.
 - On mobile (`<= 768px`), padding reduces to 16px and value font size to 24px.
+
+## Do
+
+- Use `classNames={{root: "shadow-primary"}}` for a primary-tinted drop shadow instead of the default `none` shadow.

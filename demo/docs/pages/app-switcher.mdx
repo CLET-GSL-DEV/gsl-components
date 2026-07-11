@@ -1,6 +1,12 @@
 export const meta = {
   title: "AppSwitcher",
   description: "9-dot app launcher",
+  category: "Components",
+  keywords: ["app switcher", "9-dot menu", "app launcher", "product switcher", "grid menu"],
+  since: "0.4.0",
+  status: "stable",
+  related: ["app-header"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -35,13 +41,15 @@ Google Apps–style 9-dot launcher for switching between GSL systems. Drop it in
 | `loading` | `boolean` | `false` | Shows a spinner in the panel instead of the grid |
 | `loadingLabel` | `string` | `"Loading systems..."` | Accessible label while loading |
 | `columns` | `number` | `3` | Grid column count |
+| `maxItems` | `number` | `6` | Maximum number of apps rendered in the grid |
 | `title` | `string` | — | Panel header title |
 | `onAppSelect` | `(app: AppItem) => void` | — | Called when an app is selected |
 | `open` | `boolean` | — | Controlled open state |
 | `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
 | `triggerLabel` | `string` | `"Open app switcher"` | Accessible label for the trigger |
 | `trigger` | `ReactNode` | 9-dot icon | Custom trigger element |
-| `footer` | `ReactNode` | — | Footer content below the grid |
+| `footer` | `ReactNode` | — | Footer content below the grid (and below `children`, if present) |
+| `children` | `ReactElement<RoleSelectProps>` | — | A [`RoleSelect`](/role-select) rendered directly below the grid, with no divider/border — only a `RoleSelect` element is accepted |
 | `placement` | `"bottom-end" \| "bottom-start" \| "bottom"` | `"bottom-end"` | Panel position |
 | `closeOnSelect` | `boolean` | `true` | Close panel after selection |
 | `className` | `string` | — | Root CSS class |
@@ -76,6 +84,15 @@ import { useAppSwitcher } from "@rfdtech/components";
 
 const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
 ```
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-shadow` | `--gsl-shadow-sm` | Shadow theming hook on the root element |
+| `--gsl-item-size` | `80px` | Width and height of each app grid item |
+| `--gsl-icon-size` | `32px` | Width and height of the icon slot inside each item |
+| `--gsl-app-switcher-font` | `--gsl-font-body` | Font family for the root element |
 
 ## Notes
 

@@ -17,6 +17,8 @@ body {
   --gsl-font:
     -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue",
     arial, sans-serif;
+  --gsl-font-header: "Roboto Serif", var(--gsl-font);
+  --gsl-font-body: "Lato", var(--gsl-font);
   --gsl-radius-base: 8px;
   --gsl-radius-xl: 16px;
   --gsl-radius-2xl: 24px;
@@ -33,4 +35,40 @@ body {
   --gsl-z-alert-content: 1201;
   --gsl-z-dropdown: 1300;
   --gsl-surface-card: var(--gsl-bg);
+}
+
+/* ── Shared shimmer loading utility ──
+   Compose `.gsl-skeleton` onto a placeholder block to get a consistent
+   shimmer sweep across components (metric card, profile card/popover,
+   sidebar, etc). Give the block its own width/height/border-radius. */
+.gsl-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--gsl-hover);
+}
+
+.gsl-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gsl-shimmer-highlight),
+    transparent
+  );
+  animation: gsl-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes gsl-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-skeleton::after {
+    animation: none;
+  }
 }

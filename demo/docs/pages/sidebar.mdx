@@ -1,13 +1,21 @@
 export const meta = {
   title: "Sidebar",
   description: "Layout sidebar",
+  category: "Components",
+  keywords: ["sidebar", "nav rail", "navigation sidebar", "app shell nav", "collapsible sidebar"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["app-layout", "app-header"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { SidebarPreview } from "../previews/code/SidebarPreview";
 import { SidebarPlainPreview } from "../previews/code/SidebarPlainPreview";
+import { SidebarLoadingPreview } from "../previews/code/SidebarLoadingPreview";
 import sidebarSource from "../previews/examples/sidebar.example.tsx?raw";
 import sidebarPlainSource from "../previews/examples/sidebar-plain.example.tsx?raw";
+import sidebarLoadingSource from "../previews/examples/sidebar-loading.example.tsx?raw";
 
 # Sidebar
 
@@ -32,6 +40,16 @@ Compound sidebar primitives for app shells and section navigation. Desktop shows
   title='variant="plain" — transparent background with a right border'
   preview={<SidebarPlainPreview />}
   code={sidebarPlainSource}
+/>
+
+## Loading state
+
+Set `loading` on `SidebarLink` to shimmer an icon+label placeholder row instead of the real link — useful while nav items are still being fetched. The placeholder is non-interactive and ignores `icon`/`children`/`to`/`onClick`/`active`.
+
+<ExampleTabs
+  title="Loading state"
+  preview={<SidebarLoadingPreview />}
+  code={sidebarLoadingSource}
 />
 
 ## React Router
@@ -118,7 +136,21 @@ Scrollable middle section for navigation.
 
 ### `SidebarFooter`
 
-Bottom slot separated by a top border.
+Bottom slot separated by a top border. A plain wrapper — typically holds a [`ProfilePopover`](/profile-popover) for the signed-in user's trigger row and menu.
+
+```tsx
+<SidebarFooter>
+  <ProfilePopover
+    fullName="Kwame Asante"
+    email="kwame@gsl.edu.gh"
+    items={[
+      { icon: <User size={20} />, label: "My Profile", onClick: () => navigate("/profile") },
+      { icon: <Settings size={20} />, label: "Account Settings", onClick: () => navigate("/settings") },
+    ]}
+    onSignOut={handleSignOut}
+  />
+</SidebarFooter>
+```
 
 ### `SidebarNav`
 
@@ -193,6 +225,8 @@ Styled navigation link.
 | `active` | `boolean` | `false` | Applies active link styling |
 | `asChild` | `boolean` | `false` | Merge props onto the child element |
 | `icon` | `ReactNode` | — | Optional leading icon; label wraps in `.gsl-sidebar__link-label` for collapse |
+| `loading` | `boolean` | `false` | Render a shimmering skeleton placeholder instead of the icon/label — see [Loading state](#loading-state) |
+| `loadingLabel` | `string` | `"Loading"` | Accessible label announced while loading |
 | `classNames` | `SidebarLinkClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the link |
 | `href` | `string` | — | Link destination |
@@ -267,6 +301,25 @@ Props for `SidebarBadge`.
 | `SidebarItemClassNames` | `item` | Item wrapper |
 | `SidebarBadgeClassNames` | `badge` | Badge pill |
 | `SidebarLinkClassNames` | `link` | Link element |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-sidebar-font` | `var(--gsl-font-body)` | Font family override for the sidebar root, links, and trigger button |
+| `--gsl-sidebar-text` | `var(--gsl-text)` | Base text color for the sidebar root |
+| `--gsl-sidebar-bg` | `var(--gsl-panel-bg, var(--gsl-surface-subtle))` | Desktop card panel background |
+| `--gsl-sidebar-link-text` | `var(--gsl-text-secondary)` | Default (inactive) link and collapse-button icon color |
+| `--gsl-sidebar-link-hover-bg` | `var(--gsl-surface-dark)` | Link background on hover |
+| `--gsl-sidebar-link-hover-text` | `var(--gsl-text)` | Link text color on hover |
+| `--gsl-sidebar-link-active-bg` | `var(--gsl-surface-dark)` | Background of the active link |
+| `--gsl-sidebar-link-active-text` | `var(--gsl-primary)` | Text color of the active link |
+| `--gsl-sidebar-label-text` | `var(--gsl-text)` | Group label / group-toggle text color |
+| `--gsl-sidebar-badge-bg` | `var(--gsl-primary)` | Badge background color (`var(--gsl-hover)` on active links) |
+| `--gsl-sidebar-badge-color` | `var(--gsl-on-primary)` | Badge text color (`var(--gsl-text-secondary)` on active links) |
+| `--gsl-sidebar-mask-size` | `48px` | Height of the top/bottom scroll fade mask on `.gsl-sidebar__content` |
+| `--gsl-sidebar-mask-top` | `0px` | Top fade mask offset; animates to `--gsl-sidebar-mask-size` once scrolled |
+| `--gsl-sidebar-mask-bottom` | `0px` | Bottom fade mask offset; animates to `--gsl-sidebar-mask-size` while more content is below |
 
 ## Notes
 

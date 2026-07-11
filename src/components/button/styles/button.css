@@ -1,4 +1,6 @@
 .gsl-button {
+  --gsl-button-font: var(--gsl-font-body);
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -7,7 +9,7 @@
   border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   color: var(--gsl-text);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-button-font);
   font-size: 14px;
   font-weight: 500;
   line-height: 1.4;

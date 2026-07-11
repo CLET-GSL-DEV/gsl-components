@@ -740,14 +740,3 @@ body {
     border-bottom: 1px solid var(--gsl-border);
   }
 }
-
-/* ── Dashboard 2 scoped theme ──
-   Applied to the top-level AppLayout div of DemoLayout2 so every token
-   cascades to the whole Dashboard 2 layout (header + sidebar) and its page. */
-.dashboard2-theme {
-  --gsl-primary: #051b2c;
-  --gsl-secondary: #c8a24b;
-
-  /* Sidebar accent (active link) uses the gold secondary instead of primary. */
-  --gsl-sidebar-link-active-text: var(--gsl-secondary);
-}

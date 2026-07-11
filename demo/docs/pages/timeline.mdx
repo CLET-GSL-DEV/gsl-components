@@ -1,6 +1,12 @@
 export const meta = {
   title: "Timeline",
   description: "Vertical timeline for ordered events and history",
+  category: "Components",
+  keywords: ["timeline", "vertical timeline", "activity feed", "history log", "event log"],
+  since: "1.22.0",
+  status: "stable",
+  related: ["stepper"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -126,3 +132,8 @@ Dot mode colors use existing GSL tokens. Customize the dot halo via `--gsl-timel
 | `--gsl-error` | `#dc2626` | `mode="error"` |
 | `--gsl-text-muted` | `#9ca3af` | `mode="muted"` |
 | `--gsl-timeline-halo` | `--gsl-bg` | Ring behind the dot that covers the connector line |
+| `--gsl-timeline-font` | `--gsl-font-body` | Font family for the root `<ol>` |
+| `--gsl-timeline-stagger-step` | `60ms` | Per-item animation delay increment (multiplied by item index) |
+| `--gsl-timeline-draw-duration` | `300ms` | Duration of the connector line draw-in animation |
+| `--gsl-timeline-pop-duration` | `200ms` | Duration of the dot pop-in animation |
+| `--gsl-timeline-index` | `0` | Item index used to compute staggered animation delay; set automatically per item |

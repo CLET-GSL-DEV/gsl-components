@@ -6,8 +6,10 @@ import {
   AppHeaderNotifications,
   AppHeaderProfile,
   AppSwitcher,
+  RoleSelect,
 } from "@rfdtech/components";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
+import { Shield, Eye, ScrollText } from "lucide-react";
 
 const user = {
   name: "Kwame Asante",
@@ -15,6 +17,12 @@ const user = {
   initials: "KA",
   email: "kwame@gsl.edu.gh",
 };
+
+const roles = [
+  { id: "admin", name: "Admin", icon: <Shield size={16} strokeWidth={1.5} /> },
+  { id: "reviewer", name: "Reviewer", icon: <Eye size={16} strokeWidth={1.5} /> },
+  { id: "auditor", name: "Auditor", icon: <ScrollText size={16} strokeWidth={1.5} /> },
+];
 
 const apps = [
   {
@@ -44,13 +52,14 @@ const notifications = [
 
 export function AppHeaderExample() {
   const [search, setSearch] = useState("");
-  const [profileVariant, setProfileVariant] = useState<
-    "full" | "basic" | "avatar"
-  >("full");
+  const [profileVariant, setProfileVariant] = useState<"full" | "avatar">(
+    "full",
+  );
+  const [selectedRole, setSelectedRole] = useState("admin");
 
-  const nextProfileVariant = (
-    { full: "basic", basic: "avatar", avatar: "full" } as const
-  )[profileVariant];
+  const nextProfileVariant = ({ full: "avatar", avatar: "full" } as const)[
+    profileVariant
+  ];
 
   const searchGroups: AppHeaderSearchDataGroup[] = search
     ? [
@@ -84,6 +93,14 @@ export function AppHeaderExample() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <button
+        type="button"
+        className="gsl-profile-menu__item"
+        style={{ alignSelf: "flex-start" }}
+        onClick={() => setProfileVariant(nextProfileVariant)}
+      >
+        <span>Switch profile trigger to {nextProfileVariant}</span>
+      </button>
       <AppHeader>
         <AppHeaderSearch
           data={searchGroups}
@@ -104,36 +121,17 @@ export function AppHeaderExample() {
               </div>
             ))}
           </AppHeaderNotifications>
-          <AppHeaderProfile user={user} variant={profileVariant}>
-            <button
-              type="button"
-              className="gsl-profile-popover__action"
-              onClick={() => setProfileVariant(nextProfileVariant)}
-            >
-              <span className="gsl-profile-popover__action-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="12" cy="10" r="3" />
-                  <path d="M17 21v-2a4 4 0 0 0-4-4h-2a4 4 0 0 0-4 4v2" />
-                </svg>
-              </span>
-              <span className="gsl-profile-popover__action-label">
-                Switch to {nextProfileVariant}
-              </span>
-            </button>
-            <button
-              type="button"
-              className="gsl-profile-popover__action gsl-profile-popover__action--danger"
-            >
-              <span className="gsl-profile-popover__action-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" y1="12" x2="9" y2="12" />
-                </svg>
-              </span>
-              <span className="gsl-profile-popover__action-label">Sign out</span>
-            </button>
+          <AppHeaderProfile
+            user={user}
+            variant={profileVariant}
+            onSignOut={() => console.log("Sign out")}
+          >
+            <RoleSelect
+              title="View as"
+              roles={roles}
+              selectedRole={selectedRole}
+              onClickRole={(role) => setSelectedRole(role.id)}
+            />
           </AppHeaderProfile>
         </AppHeaderActions>
       </AppHeader>

@@ -14,8 +14,9 @@
   --gsl-surface-panel: #1b1c1e;
   --gsl-page-bg: #141414;
 
-  --gsl-primary: #ef4444;
-  --gsl-primary-light: #3f1515;
+  --gsl-primary: #4a7fa8;
+  --gsl-primary-light: #16232e;
+  --gsl-secondary: #c8a24b;
   --gsl-focus: var(--gsl-primary);
   --gsl-on-primary: #fff;
   --gsl-error: #f87171;
@@ -24,4 +25,5 @@
   --gsl-success: #4ade80;
   --gsl-warning: #facc15;
   --gsl-overlay: rgb(0 0 0 / 60%);
+  --gsl-shimmer-highlight: rgb(255 255 255 / 8%);
 }

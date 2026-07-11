@@ -1,4 +1,6 @@
 .gsl-phone-number-input {
+  --gsl-phone-number-input-font: var(--gsl-font-body);
+
   display: flex;
   align-items: center;
   position: relative;
@@ -101,7 +103,7 @@
   background: transparent;
   color: var(--gsl-text);
   font-size: 14px;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-phone-number-input-font);
   outline: none;
   min-width: 0;
 }
@@ -111,6 +113,8 @@
 }
 
 .gsl-phone-number-input__dropdown {
+  --gsl-phone-number-input-dropdown-font: var(--gsl-font-body);
+
   z-index: var(--gsl-z-select, 50);
   width: 320px;
   max-height: 300px;
@@ -137,7 +141,7 @@
   background: var(--gsl-bg);
   color: var(--gsl-text);
   font-size: 14px;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-phone-number-input-dropdown-font);
   outline: none;
   box-sizing: border-box;
 }
@@ -162,7 +166,7 @@
   background: transparent;
   color: var(--gsl-text);
   font-size: 14px;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-phone-number-input-dropdown-font);
   cursor: pointer;
   text-align: left;
 }

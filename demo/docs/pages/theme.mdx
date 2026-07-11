@@ -1,6 +1,11 @@
 export const meta = {
   title: "Theme",
   description: "Theme provider",
+  category: "Guide",
+  keywords: ["theme", "dark mode", "light mode", "theme provider", "design tokens", "tailwind", "gsltheme", "runtime theme override", "component tokens", "customize colors"],
+  since: "1.3.0",
+  status: "guide",
+  related: ["getting-started"],
 };
 
 # Theme
@@ -122,7 +127,112 @@ Tokens are defined in `theme.css` and applied on `.gsl-theme` and `document.docu
 |-------|-----|
 | `--gsl-font` | Font family stack |
 
-Override any `--gsl-*` CSS variable by declaring a new value on the
+Override any `--gsl-*` CSS variable with the `gslTheme()` runtime helper, or
+by hand with plain CSS.
+
+### `gslTheme()` (recommended)
+
+Call once at startup, after importing the library CSS. It injects a
+`<style>` tag with the light/dark overrides — no CSS file, no build
+config:
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+import { gslTheme } from "@rfdtech/components";
+
+gslTheme({
+  all: {
+    primary: "#1d4ed8", // used by both modes unless a mode below overrides it
+  },
+  light: {
+    primaryLight: "#eff6ff",
+    focus: "#1d4ed8",
+    onPrimary: "#ffffff",
+  },
+  dark: {
+    primary: "#ef4444", // wins over "all" for dark specifically
+    primaryLight: "#3f1515",
+    focus: "#ef4444",
+    onPrimary: "#ffffff",
+  },
+});
+```
+
+Keys are the **camelCase** form of the `--gsl-*` token names documented
+above (`--gsl-primary` → `primary`, `--gsl-radius-base` → `radiusBase`).
+`all`, `light`, and `dark` are all optional:
+
+- `all` applies to both modes, **per token** — set a token in `all` and
+  it's used everywhere unless that specific mode also sets it.
+- A token set in `light`/`dark` always wins over the same token in `all`.
+- Omit a token everywhere to leave the library's own default untouched.
+
+Calling `gslTheme()` again (e.g. on hot reload) replaces the previous
+overrides rather than stacking a new `<style>` tag.
+
+#### Type safety
+
+`gslTheme()` is fully typed against the library's real token set — both
+the **key** and the **value**:
+
+- Unknown or mistyped keys are a type error (`primry` won't compile, and
+  neither will the raw CSS string `"--gsl-primary"` — keys are camelCase).
+- Each token only accepts values shaped like its CSS group:
+
+| Group | Accepts | Example tokens |
+|-------|---------|-----------------|
+| Color | hex, `rgb()`/`rgba()`, `hsl()`/`hsla()`, `oklch()`, or `var(--x)` | `primary`, `bg`, `focus` |
+| Length | `px`/`rem`/`em`/`%`, `"0"`, or `var(--x)` | `radiusBase`, `gap` |
+| Z-index | `number` | `zModal`, `zPopover` |
+| Opacity | `number` or a `%` string | tokens matching `*opacity*` |
+| Shadow / font / misc | any `string` (shadow and font syntax is too varied to constrain further) | `shadowMd`, `font` |
+
+```ts
+gslTheme({
+  light: {
+    zHeader: 20, // ✅ number
+    // zHeader: "20", ❌ type error — z-index tokens are numbers
+    // primary: "blue", ❌ type error — not a hex/rgb/hsl/oklch/var()
+  },
+});
+```
+
+This catches the most common mistakes — misspelled/wrong-cased token
+names and mismatched value shapes — without trying to fully validate CSS
+grammar (e.g. it won't catch `rgb(999 999 999)`, out-of-range channel
+values).
+
+#### Component-scoped overrides
+
+Some components expose their own local tokens (e.g. `AppHeader`'s
+`--gsl-app-header-bg`, exposed here as `bg`) in addition to the global
+ones above. Target a component by name under `components`; only that
+component's own tokens are valid there, and each also supports
+`all`/`light`/`dark`:
+
+```ts
+gslTheme({
+  components: {
+    AppHeader: {
+      all: { font: "Inter, sans-serif" },
+      light: { bg: "#111827", color: "#ffffff" },
+      dark: { bg: "#000000" },
+    },
+    Card: {
+      light: { padding: "24px" },
+    },
+  },
+});
+```
+
+`components` keys are the exported component names (`AppHeader`,
+`Card`, `MetricCard`, ...). Passing `padding` (Card's token) under
+`AppHeader` is a type error — each component only accepts the tokens it
+actually declares.
+
+### Manual CSS
+
+You can also override tokens by hand by declaring new values on the
 same selectors the library uses.
 
 **Step 1 — Import the library CSS** so its defaults are loaded:

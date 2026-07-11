@@ -1,6 +1,12 @@
 export const meta = {
   title: "BulkImportModal",
   description: "Spreadsheet import wizard",
+  category: "Components",
+  keywords: ["bulk import", "csv upload", "xlsx import", "spreadsheet import", "batch import"],
+  since: "0.4.0",
+  status: "stable",
+  related: ["modal", "upload-field", "dropdown"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -40,6 +46,20 @@ Click **Open bulk import** to launch the multi-step import modal with sample dat
 | `maxFileSizeBytes` | `number` | `5242880` | Maximum upload size (5 MB) |
 | `allowImportWithWarnings` | `boolean` | `false` | Allow import when only warnings exist |
 | `defaultState` | `BulkImportFlowDefaultState` | — | Seed initial flow state for progress preservation across open/close cycles |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-bulk-import-primary` | `--gsl-primary` | Primary accent color (buttons, dropzone border, checkbox/radio accents, switch track, focus outlines) |
+| `--gsl-bulk-import-primary-light` | `--gsl-primary-light` | Selected row background, outline button hover background |
+| `--gsl-bulk-import-success` | `--gsl-success` | Stepper active/complete marker color, connector fill, mapping status "complete" badge |
+| `--gsl-bulk-import-warning` | `--gsl-warning` | Mapping status "pending" badge border |
+| `--gsl-bulk-import-error-bg` | `--gsl-error-bg` | Validate step cell error background |
+| `--gsl-bulk-import-gutter` | `24px` (`16px` on mobile) | Modal inset from the viewport edges |
+| `--gsl-shadow` | `--gsl-shadow-lg` | Modal box-shadow |
+| `--gsl-radius-base` | `12px` | Modal border-radius (component-scoped override of the base radius token) |
+| `--gsl-bulk-import-font` | `--gsl-font-body` | Modal font family (also used for the uploaded file name text) |
 
 ## Notes
 

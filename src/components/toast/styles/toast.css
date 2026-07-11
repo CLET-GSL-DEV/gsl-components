@@ -2,7 +2,8 @@
   --width: min(100vw - 32px, 380px);
   --offset-bottom: 24px;
   --offset-right: 24px;
-  font-family: var(--gsl-font);
+  --gsl-toast-font: var(--gsl-font-body);
+  font-family: var(--gsl-toast-font);
 }
 
 [data-sonner-toaster].gsl-toast__viewport {

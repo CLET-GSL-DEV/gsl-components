@@ -1,6 +1,12 @@
 export const meta = {
   title: "PhoneNumberInput",
   description: "Phone input with country codes",
+  category: "Components",
+  keywords: ["phone number", "phone input", "country code", "dial code", "telephone"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["country-selector", "network-operator", "form-field"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -89,6 +95,8 @@ See the props table above.
 | Token | Used for |
 |-------|----------|
 | `--gsl-radius-base` | Input border radius |
+| `--gsl-phone-number-input-font` | Font family for the phone number input field (defaults to `--gsl-font-body`) |
+| `--gsl-phone-number-input-dropdown-font` | Font family for the country dropdown search input and option list (defaults to `--gsl-font-body`) |
 
 ## Notes
 

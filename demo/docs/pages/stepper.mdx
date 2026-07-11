@@ -1,6 +1,12 @@
 export const meta = {
   title: "Stepper",
   description: "Horizontal step indicator for multi-step flows",
+  category: "Components",
+  keywords: ["stepper", "step indicator", "multi step flow", "wizard steps", "progress steps"],
+  since: "1.23.0",
+  status: "stable",
+  related: ["bulk-import-modal", "progress-bar"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -126,9 +132,11 @@ Override these at any level to retheme without touching the component.
 | Token | Default | Description |
 |-------|---------|-------------|
 | `--gsl-stepper-accent` | `var(--gsl-primary)` | Color of active/complete markers and filled connectors. Set to `var(--gsl-success)` for a green "done" look. |
+| `--gsl-stepper-current` | `var(--gsl-secondary)` | Background color of the active step's marker (falls back to `var(--gsl-warning)` if unset) |
 | `--gsl-stepper-marker-size` | `28px` | Diameter of the numbered circle |
 | `--gsl-stepper-marker-border` | `2px` | Marker border width |
 | `--gsl-stepper-track` | `var(--gsl-border)` | Unfilled connector color |
 | `--gsl-stepper-transition` | `250ms` | Marker color transition duration |
 | `--gsl-stepper-connector-min` | `24px` | Minimum connector length |
 | `--gsl-stepper-gap` | `10px` | Gap between marker, label, and connector |
+| `--gsl-stepper-font` | `var(--gsl-font-body)` | Font family for the stepper list and its steps |

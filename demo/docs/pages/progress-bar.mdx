@@ -1,6 +1,12 @@
 export const meta = {
   title: "ProgressBar",
   description: "Progress indicator",
+  category: "Components",
+  keywords: ["progress bar", "loading indicator", "progress indicator", "determinate progress"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["stepper"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -58,6 +64,12 @@ Part-level class names merged after base `gsl-progress-bar*` styles:
 ### `ProgressBarSize`
 
 `"sm" | "md"`
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-progress-bar-font` | `--gsl-font-body` | Font family for the root element (inherited by the percentage value label) |
 
 ## Notes
 

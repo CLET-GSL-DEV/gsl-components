@@ -1,10 +1,12 @@
 .gsl-card {
   --gsl-card-padding: 20px;
+  --gsl-card-font: var(--gsl-font-body);
+  --gsl-card-title-font: var(--gsl-font-header);
 
   background: var(--gsl-surface-card);
   border-radius: var(--gsl-radius-xl);
   padding: var(--gsl-card-padding);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-card-font);
   color: var(--gsl-text);
 }
 
@@ -17,6 +19,7 @@
 
 .gsl-card__title {
   margin: 0;
+  font-family: var(--gsl-card-title-font);
   font-size: 20px;
   font-weight: 600;
   color: var(--gsl-text);

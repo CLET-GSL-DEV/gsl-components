@@ -7,12 +7,13 @@
   --gsl-bulk-import-gutter: 24px;
   --gsl-shadow: var(--gsl-shadow-lg);
   --gsl-radius-base: 12px;
+  --gsl-bulk-import-font: var(--gsl-font-body);
 
   position: fixed;
   transform: none;
   z-index: var(--gsl-z-modal);
   inset: var(--gsl-bulk-import-gutter);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-bulk-import-font);
   width: auto;
   height: auto;
   max-width: 999999999px;
@@ -622,7 +623,7 @@
 .gsl-bulk-import__upload-file-name {
   font-size: 14px;
   color: var(--gsl-text);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-bulk-import-font);
 }
 
 .gsl-bulk-import__upload-file-remove {

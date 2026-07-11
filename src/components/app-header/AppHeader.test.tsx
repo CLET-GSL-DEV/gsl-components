@@ -1,6 +1,6 @@
 import { createRef } from "react";
 import { useForm } from "react-hook-form";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { AppHeader } from "./AppHeader";
@@ -187,29 +187,62 @@ describe("AppHeaderProfile", () => {
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
-  it("opens full popover with email on click", async () => {
+  it("opens the unified profile popover with role, email, and fixed menu items", async () => {
     const userEvents = userEvent.setup();
     render(<AppHeaderProfile user={user} variant="full" />);
 
     await userEvents.click(screen.getByText("Kwame"));
-    expect(screen.getByText("kwame@example.com")).toBeInTheDocument();
+    const menu = screen.getByRole("menu");
+    expect(within(menu).getByText("kwame@example.com")).toBeInTheDocument();
+    expect(
+      within(menu).getByRole("button", { name: /My Profile/ }),
+    ).toBeInTheDocument();
+    expect(
+      within(menu).getByRole("button", { name: /Sign Out/ }),
+    ).toBeInTheDocument();
   });
 
-  it("renders basic popover without email", async () => {
+  it("opens the same popover for the avatar-only variant", async () => {
     const userEvents = userEvent.setup();
-    render(<AppHeaderProfile user={user} variant="basic" />);
+    const { container } = render(
+      <AppHeaderProfile user={user} variant="avatar" />,
+    );
+
+    const trigger = container.querySelector(".gsl-app-header__profile")!;
+    await userEvents.click(trigger);
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("calls the fixed menu item callbacks", async () => {
+    const userEvents = userEvent.setup();
+    const onProfileClick = vi.fn();
+    const onSignOut = vi.fn();
+    render(
+      <AppHeaderProfile
+        user={user}
+        onProfileClick={onProfileClick}
+        onSignOut={onSignOut}
+      />,
+    );
 
     await userEvents.click(screen.getByText("Kwame"));
-    expect(screen.queryByText("kwame@example.com")).not.toBeInTheDocument();
-    // Admin appears in both trigger and popover — verify at least 2 instances
-    expect(screen.getAllByText("Admin").length).toBeGreaterThanOrEqual(2);
+    const menu = screen.getByRole("menu");
+    await userEvents.click(
+      within(menu).getByRole("button", { name: /My Profile/ }),
+    );
+    await userEvents.click(
+      within(menu).getByRole("button", { name: /Sign Out/ }),
+    );
+
+    expect(onProfileClick).toHaveBeenCalledTimes(1);
+    expect(onSignOut).toHaveBeenCalledTimes(1);
   });
 
-  it("renders action buttons as children", async () => {
+  it("renders extra composable content as children", async () => {
     const userEvents = userEvent.setup();
     render(
-      <AppHeaderProfile user={user} variant="full">
-        <button data-testid="action-btn">Settings</button>
+      <AppHeaderProfile user={user}>
+        <button data-testid="action-btn">Switch role</button>
       </AppHeaderProfile>,
     );
 

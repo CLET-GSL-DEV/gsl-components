@@ -1,7 +1,8 @@
 .gsl-progress-bar {
+  --gsl-progress-bar-font: var(--gsl-font-body);
   width: 100%;
   max-width: 100%;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-progress-bar-font);
 }
 
 .gsl-progress-bar--with-value {

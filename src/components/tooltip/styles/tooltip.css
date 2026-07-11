@@ -5,6 +5,8 @@
 }
 
 .gsl-tooltip__content {
+  --gsl-tooltip-font: var(--gsl-font-body);
+
   z-index: var(--gsl-z-tooltip, var(--gsl-z-popover));
   width: max-content;
   max-width: min(240px, 90vw);
@@ -12,7 +14,7 @@
   border-radius: 6px;
   background: var(--gsl-text);
   color: var(--gsl-bg);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-tooltip-font);
   font-size: 11px;
   line-height: 1.35;
   text-align: center;

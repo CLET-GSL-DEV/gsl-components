@@ -28,7 +28,7 @@ const sizeMap: Record<AvatarSize, number> = {
 };
 
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
-  { name, src, size = "md", className, classNames, ...props },
+  { name, src, size = "md", background, backgroundVar, className, classNames, ...props },
   ref,
 ) {
   const initials = nameToInitials(name);
@@ -39,6 +39,10 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
     typeof document !== "undefined"
       ? document.documentElement.getAttribute("data-gsl-theme") ?? undefined
       : undefined;
+
+  const gradient = gradientFromString(name, resolvedTheme);
+  const resolvedBackground =
+    background ?? (backgroundVar ? `var(${backgroundVar}, ${gradient})` : gradient);
 
   return (
     <div
@@ -66,7 +70,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
         <span
           className={cn("gsl-avatar__initials", classNames?.initials)}
           style={{
-            background: gradientFromString(name, resolvedTheme),
+            background: resolvedBackground,
             fontSize: fontSizeForSize(dimension),
           }}
         >

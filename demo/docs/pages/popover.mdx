@@ -1,6 +1,12 @@
 export const meta = {
   title: "Popover",
   description: "Floating content panel",
+  category: "Components",
+  keywords: ["popover", "floating panel", "menu", "action menu", "tooltip panel"],
+  since: "1.4.0",
+  status: "stable",
+  related: ["dropdown", "tooltip", "dialog"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -62,6 +68,12 @@ Extends Radix `PopoverContentProps` with optional `classNames`.
 | Key | Applied to |
 |-----|------------|
 | `content` | Content element (`.gsl-popover`) |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-popover-font` | `var(--gsl-font-body)` | Font family override |
 
 ## Notes
 

@@ -508,6 +508,8 @@ export const SidebarLink = forwardRef<
     asChild = false,
     icon,
     to,
+    loading = false,
+    loadingLabel = "Loading",
     classNames,
     className,
     children,
@@ -520,9 +522,30 @@ export const SidebarLink = forwardRef<
   const linkClassName = cn(
     "gsl-sidebar__link",
     active && "gsl-sidebar__link--active",
+    loading && "gsl-sidebar__link--loading",
     classNames?.link,
     className,
   );
+
+  if (loading) {
+    return (
+      <span className="gsl-sidebar__link-wrapper">
+        <div className={linkClassName} aria-busy="true">
+          {icon ? (
+            <span
+              className="gsl-skeleton gsl-sidebar__skeleton-icon"
+              aria-hidden
+            />
+          ) : null}
+          <span
+            className="gsl-skeleton gsl-sidebar__skeleton-label"
+            aria-hidden
+          />
+          <span className="gsl-sidebar__sr-only">{loadingLabel}</span>
+        </div>
+      </span>
+    );
+  }
 
   if (asChild && isValidElement(children)) {
     const child = children as ReactElement<{

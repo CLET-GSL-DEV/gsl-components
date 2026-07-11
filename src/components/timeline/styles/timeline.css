@@ -1,10 +1,12 @@
 .gsl-timeline {
+  --gsl-timeline-font: var(--gsl-font-body);
+
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-timeline-font);
   color: var(--gsl-text);
 }
 

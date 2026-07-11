@@ -1,10 +1,12 @@
 .gsl-command {
+  --gsl-command-font: var(--gsl-font-body);
+
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-command-font);
   color: var(--gsl-text);
 }
 
@@ -39,6 +41,8 @@
 }
 
 .gsl-command-dialog__content {
+  --gsl-command-dialog-font: var(--gsl-font-body);
+
   position: fixed;
   top: 50%;
   left: 50%;
@@ -53,7 +57,7 @@
   border-radius: var(--gsl-radius-base);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-lg);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-command-dialog-font);
   color: var(--gsl-text);
   transform: translate(-50%, -50%);
 }

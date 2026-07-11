@@ -1,6 +1,8 @@
 .gsl-breadcrumb {
+  --gsl-breadcrumb-font: var(--gsl-font-body);
+
   max-width: 100%;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-breadcrumb-font);
   font-size: 14px;
   line-height: 1.4;
 }

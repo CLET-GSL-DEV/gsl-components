@@ -1,7 +1,9 @@
 .gsl-country-selector {
+  --gsl-country-selector-font: var(--gsl-font-body);
+
   position: relative;
   display: block;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-country-selector-font);
   font-size: 14px;
   width: 100%;
 }

@@ -7,6 +7,7 @@ import {
   SidebarBadge,
   SidebarCollapse,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
@@ -810,5 +811,37 @@ describe("Sidebar", () => {
     expect(style.display).not.toBe("none");
     expect(content).toHaveAttribute("data-state", "collapsed");
     expect(content).toHaveAttribute("inert");
+  });
+});
+
+describe("SidebarFooter", () => {
+  it("renders its children in a bordered bottom slot", () => {
+    render(
+      <SidebarFooter>
+        <button type="button">Custom footer content</button>
+      </SidebarFooter>,
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Custom footer content" }),
+    ).toBeInTheDocument();
+  });
+
+  it("merges classNames and className onto the wrapper", () => {
+    const { container } = render(
+      <SidebarFooter
+        classNames={{ footer: "footer-class" }}
+        className="extra-class"
+      >
+        content
+      </SidebarFooter>,
+    );
+
+    const footer = container.firstElementChild!;
+    expect(footer).toHaveClass(
+      "gsl-sidebar__footer",
+      "footer-class",
+      "extra-class",
+    );
   });
 });

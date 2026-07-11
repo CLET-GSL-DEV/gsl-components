@@ -1,8 +1,9 @@
 .gsl-checkbox {
+  --gsl-checkbox-font: var(--gsl-font-body);
   display: inline-flex;
   align-items: flex-start;
   gap: 8px;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-checkbox-font);
   font-size: 14px;
   line-height: 1.4;
   color: var(--gsl-text);

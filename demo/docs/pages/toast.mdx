@@ -1,6 +1,12 @@
 export const meta = {
   title: "Toast",
   description: "Notification toasts",
+  category: "Components",
+  keywords: ["toast", "notification", "snackbar", "alert message", "sonner"],
+  since: "1.8.0",
+  status: "stable",
+  related: ["hooks"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -122,6 +128,12 @@ Renders the Sonner viewport with GSL styling.
 | `closeButton` | `.gsl-toast__close` |
 | `default` / `success` / `warning` / `error` | Variant modifiers on `.gsl-toast` |
 
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-toast-font` | `var(--gsl-font-body)` | Font family for the toast viewport and its content |
+
 ## Notes
 
 - Toast notifications are powered by [Sonner](https://sonner.emilkowal.ski/) with GSL styling via `unstyled` class names.
@@ -132,3 +144,9 @@ Renders the Sonner viewport with GSL styling.
 - Respects `prefers-reduced-motion: reduce` (no entry/exit animation).
 - Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes.
 - `swipeDirection` and `label` provider props from the previous Radix implementation are not supported.
+
+## Do
+
+- Set up once at the app root as `<ToastProvider><App/><Toaster/></ToastProvider>`.
+- Size icons at `size={18} strokeWidth={2}` and mark them `aria-hidden`.
+- Always extract `toast(...)` calls into named handler functions rather than calling inline in JSX/render.

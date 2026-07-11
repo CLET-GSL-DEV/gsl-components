@@ -36,6 +36,8 @@
   --radius: var(--gsl-radius-base);
 
   --font-family-sans: var(--gsl-font);
+  --font-family-header: var(--gsl-font-header);
+  --font-family-body: var(--gsl-font-body);
 
   --shadow-sm: var(--gsl-shadow-sm);
   --shadow-md: var(--gsl-shadow-md);

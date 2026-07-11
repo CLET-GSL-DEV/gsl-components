@@ -1,6 +1,12 @@
 export const meta = {
   title: "CountrySelector",
   description: "Country picker with search",
+  category: "Components",
+  keywords: ["country selector", "country picker", "flag dropdown", "iso code select"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["phone-number-input", "network-operator", "dropdown"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -85,6 +91,7 @@ Inherits from `HTMLAttributes<HTMLDivElement>` (omitting `onChange`). See the pr
 | Token | Used for |
 |-------|----------|
 | `--gsl-radius-base` | Trigger border radius |
+| `--gsl-country-selector-font` | Font family for the root element, trigger, search input, and options (defaults to `--gsl-font-body`) |
 
 ## Notes
 

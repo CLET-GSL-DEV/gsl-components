@@ -1,4 +1,6 @@
 .gsl-progress-modal {
+  --gsl-progress-modal-font: var(--gsl-font-body);
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,5 +16,5 @@
   margin: 0;
   font-size: 14px;
   color: var(--gsl-text-secondary);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-progress-modal-font);
 }

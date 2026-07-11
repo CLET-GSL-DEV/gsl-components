@@ -17,6 +17,8 @@ import {
   SidebarGroupLabel,
   SidebarLink,
   SidebarBadge,
+  ProfilePopover,
+  RoleSelect,
 } from "@rfdtech/components";
 import {
   Bell,
@@ -26,6 +28,9 @@ import {
   LayoutDashboard,
   Shield,
   Users,
+  User,
+  Settings,
+  HelpCircle,
 } from "lucide-react";
 
 const user = {
@@ -34,6 +39,12 @@ const user = {
   initials: "KA",
   email: "kwame@gsl.edu.gh",
 };
+
+const roles = [
+  { id: "admin", name: "Admin" },
+  { id: "reviewer", name: "Reviewer" },
+  { id: "auditor", name: "Auditor" },
+];
 
 const apps = [
   {
@@ -74,6 +85,7 @@ const navGroups = [
 
 export function AppLayoutStackedExample() {
   const [active, setActive] = useState("members");
+  const [selectedRole, setSelectedRole] = useState("admin");
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     () => new Set(["Main"]),
   );
@@ -94,7 +106,14 @@ export function AppLayoutStackedExample() {
         <AppHeader variant="plain">
           <AppHeaderBranding title="GSL PORTAL" subtitle="Component Library" />
           <AppHeaderActions>
-            <AppSwitcher apps={apps} title="System directory" />
+            <AppSwitcher apps={apps} title="System directory">
+              <RoleSelect
+                title="View as"
+                roles={roles}
+                selectedRole={selectedRole}
+                onClickRole={(role) => setSelectedRole(role.id)}
+              />
+            </AppSwitcher>
             <AppHeaderNotifications>
               {notifications.map((n) => (
                 <div key={n.id} className="gsl-notif-popover__item">
@@ -106,14 +125,11 @@ export function AppLayoutStackedExample() {
                 </div>
               ))}
             </AppHeaderNotifications>
-            <AppHeaderProfile variant="avatar" user={user}>
-              <button
-                type="button"
-                className="gsl-profile-popover__action gsl-profile-popover__action--danger"
-              >
-                <span className="gsl-profile-popover__action-label">Sign out</span>
-              </button>
-            </AppHeaderProfile>
+            <AppHeaderProfile
+              variant="avatar"
+              user={user}
+              onSignOut={() => console.log("Sign out")}
+            />
           </AppHeaderActions>
         </AppHeader>
         <AppSidebar>
@@ -142,12 +158,31 @@ export function AppLayoutStackedExample() {
                   </SidebarGroup>
                 ))}
               </SidebarNav>
-            </SidebarContent>
-            <SidebarFooter>
               <button type="button" className="gsl-sidebar__link" style={{ width: "100%" }}>
                 <ChevronRight size={16} strokeWidth={1.5} />
                 <span className="gsl-sidebar__link-label">Back to main dashboard</span>
               </button>
+            </SidebarContent>
+            <SidebarFooter>
+              <ProfilePopover
+                fullName={user.name}
+                email={user.email}
+                items={[
+                  {
+                    icon: <User size={20} strokeWidth={1.5} aria-hidden />,
+                    label: "My Profile",
+                  },
+                  {
+                    icon: <Settings size={20} strokeWidth={1.5} aria-hidden />,
+                    label: "Account Settings",
+                  },
+                  {
+                    icon: <HelpCircle size={20} strokeWidth={1.5} aria-hidden />,
+                    label: "Help & Support",
+                  },
+                ]}
+                onSignOut={() => console.log("Sign out")}
+              />
             </SidebarFooter>
           </Sidebar>
         </AppSidebar>

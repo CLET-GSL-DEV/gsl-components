@@ -60,6 +60,8 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
       trendValue,
       animate = false,
       animationDuration = 1500,
+      loading = false,
+      loadingLabel = "Loading metric",
       className,
       classNames,
       ...props
@@ -131,57 +133,91 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
         className={cn(
           "gsl-metric-card",
           `gsl-metric-card--${variant}`,
+          loading && "gsl-metric-card--loading",
           classNames?.root,
           className,
         )}
+        aria-busy={loading || undefined}
         {...props}
       >
-        <div className="gsl-metric-card__header">
-          {icon ? (
-            <span className={cn("gsl-metric-card__icon", classNames?.icon)}>
-              {icon}
-            </span>
-          ) : null}
-          <span className={cn("gsl-metric-card__label", classNames?.label)}>
-            {label}
+        {loading ? (
+          <span className="gsl-metric-card__sr-only" role="status">
+            {loadingLabel}
           </span>
+        ) : null}
+
+        <div className="gsl-metric-card__header" aria-hidden={loading || undefined}>
+          {icon ? (
+            loading ? (
+              <span className="gsl-skeleton gsl-metric-card__skeleton-icon" />
+            ) : (
+              <span className={cn("gsl-metric-card__icon", classNames?.icon)}>
+                {icon}
+              </span>
+            )
+          ) : null}
+          {loading ? (
+            <span className="gsl-skeleton gsl-metric-card__skeleton-label" />
+          ) : (
+            <span className={cn("gsl-metric-card__label", classNames?.label)}>
+              {label}
+            </span>
+          )}
         </div>
 
-        <div className="gsl-metric-card__value-row">
-          <span className={cn("gsl-metric-card__value", classNames?.value)}>
-            {displayValue}
-          </span>
+        <div
+          className="gsl-metric-card__value-row"
+          aria-hidden={loading || undefined}
+        >
+          {loading ? (
+            <span className="gsl-skeleton gsl-metric-card__skeleton-value" />
+          ) : (
+            <span className={cn("gsl-metric-card__value", classNames?.value)}>
+              {displayValue}
+            </span>
+          )}
 
           {trend && trendValue ? (
-            <span
-              className={cn(
-                "gsl-metric-card__trend",
-                `gsl-metric-card__trend--${trend}`,
-                classNames?.trend,
-              )}
-            >
-              {TrendIcon ? (
-                <TrendIcon size={14} strokeWidth={2.5} aria-hidden />
-              ) : null}
-              {trendGlyph ? (
-                <span className="gsl-metric-card__trend-glyph" aria-hidden>
-                  {trendGlyph}
-                </span>
-              ) : null}
-              {displayTrendValue}
-            </span>
+            loading ? (
+              <span className="gsl-skeleton gsl-metric-card__skeleton-trend" />
+            ) : (
+              <span
+                className={cn(
+                  "gsl-metric-card__trend",
+                  `gsl-metric-card__trend--${trend}`,
+                  classNames?.trend,
+                )}
+              >
+                {TrendIcon ? (
+                  <TrendIcon size={14} strokeWidth={2.5} aria-hidden />
+                ) : null}
+                {trendGlyph ? (
+                  <span className="gsl-metric-card__trend-glyph" aria-hidden>
+                    {trendGlyph}
+                  </span>
+                ) : null}
+                {displayTrendValue}
+              </span>
+            )
           ) : null}
         </div>
 
         {description ? (
-          <span
-            className={cn(
-              "gsl-metric-card__description",
-              classNames?.description,
-            )}
-          >
-            {description}
-          </span>
+          loading ? (
+            <span
+              className="gsl-skeleton gsl-metric-card__skeleton-description"
+              aria-hidden
+            />
+          ) : (
+            <span
+              className={cn(
+                "gsl-metric-card__description",
+                classNames?.description,
+              )}
+            >
+              {description}
+            </span>
+          )
         ) : null}
       </div>
     );

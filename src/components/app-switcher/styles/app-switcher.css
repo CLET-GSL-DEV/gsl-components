@@ -2,10 +2,11 @@
   --gsl-shadow: var(--gsl-shadow-sm);
   --gsl-item-size: 80px;
   --gsl-icon-size: 32px;
+  --gsl-app-switcher-font: var(--gsl-font-body);
 
   position: relative;
   display: inline-block;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-app-switcher-font);
 }
 
 .gsl-app-switcher__trigger {
@@ -215,6 +216,10 @@
   color: var(--gsl-on-primary);
   background: var(--gsl-focus);
   border-radius: 4px;
+}
+
+.gsl-app-switcher__extra {
+  padding-top: 4px;
 }
 
 .gsl-app-switcher__footer {

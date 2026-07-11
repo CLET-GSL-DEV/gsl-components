@@ -1,4 +1,6 @@
 .gsl-sheet {
+  --gsl-sheet-font: var(--gsl-font-body);
+
   position: fixed;
   z-index: var(--gsl-z-modal);
   display: flex;
@@ -7,7 +9,7 @@
   border: 1px solid var(--gsl-border);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-lg);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-sheet-font);
   color: var(--gsl-text);
 }
 

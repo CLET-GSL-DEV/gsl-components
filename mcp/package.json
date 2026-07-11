@@ -1,0 +1,21 @@
+{
+  "name": "gsl-components-mcp-dev",
+  "private": true,
+  "description": "Dev workspace for the MCP server + rfdui CLI. Not published on its own — it compiles into the root @rfdtech/components package's dist/mcp/ and ships as part of that one package. See ../mcp/README.md.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "index": "tsx src/indexer.ts",
+    "cli": "tsx src/cli.ts",
+    "build": "tsc -p tsconfig.json && node scripts/prepare-dist.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
+  }
+}

@@ -57,14 +57,11 @@ export function AppHeaderPlainExample() {
               </div>
             ))}
           </AppHeaderNotifications>
-          <AppHeaderProfile variant="avatar" user={user}>
-            <button
-              type="button"
-              className="gsl-profile-popover__action gsl-profile-popover__action--danger"
-            >
-              <span className="gsl-profile-popover__action-label">Sign out</span>
-            </button>
-          </AppHeaderProfile>
+          <AppHeaderProfile
+            variant="avatar"
+            user={user}
+            onSignOut={() => console.log("Sign out")}
+          />
         </AppHeaderActions>
       </AppHeader>
     </div>

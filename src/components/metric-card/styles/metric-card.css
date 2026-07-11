@@ -4,6 +4,8 @@
   --gsl-metric-card-shadow: none;
 
   /* Overridable type tokens */
+  --gsl-metric-card-font: var(--gsl-font-body);
+  --gsl-metric-card-value-font: var(--gsl-font-header);
   --gsl-metric-card-value-size: 28px;
   --gsl-metric-card-value-color: var(--gsl-text);
   --gsl-metric-card-description-size: 12px;
@@ -14,7 +16,7 @@
   border: none;
   border-radius: var(--gsl-metric-card-radius);
   background: var(--gsl-default-metric-card-bg);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-metric-card-font);
   box-shadow: var(--gsl-metric-card-shadow);
 }
 
@@ -97,6 +99,7 @@
 }
 
 .gsl-metric-card__value {
+  font-family: var(--gsl-metric-card-value-font);
   font-size: var(--gsl-metric-card-value-size);
   font-weight: 600;
   line-height: 1.2;
@@ -136,6 +139,54 @@
   font-size: var(--gsl-metric-card-description-size);
   line-height: 1.4;
   color: var(--gsl-text-secondary);
+}
+
+/* ── Loading shimmer ────────────────────────────────────── */
+
+.gsl-metric-card--loading {
+  pointer-events: none;
+}
+
+.gsl-metric-card__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.gsl-metric-card__skeleton-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--gsl-radius-base);
+}
+
+.gsl-metric-card__skeleton-label {
+  width: 96px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.gsl-metric-card__skeleton-value {
+  width: 120px;
+  height: var(--gsl-metric-card-value-size);
+  border-radius: 6px;
+}
+
+.gsl-metric-card__skeleton-trend {
+  width: 48px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.gsl-metric-card__skeleton-description {
+  width: 70%;
+  height: 12px;
+  border-radius: 4px;
 }
 
 /* ── Responsive ─────────────────────────────────────────── */

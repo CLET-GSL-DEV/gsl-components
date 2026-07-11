@@ -5,6 +5,7 @@
   --gsl-modal-max-width-xl: 800px;
   --gsl-modal-max-width-2xl: 1024px;
   --gsl-modal-gutter: 24px;
+  --gsl-modal-font: var(--gsl-font-body);
 
   position: fixed;
   top: 50%;
@@ -20,7 +21,7 @@
   border-radius: var(--gsl-radius-xl);
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-md);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-modal-font);
   color: var(--gsl-text);
   transform: translate(-50%, -50%);
 }
@@ -146,6 +147,8 @@
 }
 
 .gsl-modal__confirm {
+  --gsl-modal-confirm-font: var(--gsl-font-body);
+
   position: fixed;
   top: 50%;
   left: 50%;
@@ -156,7 +159,7 @@
   border-radius: 12px;
   background: var(--gsl-bg);
   box-shadow: var(--gsl-shadow-lg);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-modal-confirm-font);
   color: var(--gsl-text);
   transform: translate(-50%, -50%);
 }

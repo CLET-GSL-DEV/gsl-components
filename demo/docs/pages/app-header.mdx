@@ -1,13 +1,21 @@
 export const meta = {
   title: "AppHeader",
   description: "Top bar with search and profile",
+  category: "Components",
+  keywords: ["app header", "header bar", "top bar", "navbar", "search bar", "profile menu", "notifications"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["app-layout", "app-switcher", "sidebar"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { AppHeaderPreview } from "../previews/code/AppHeaderPreview";
 import { AppHeaderPlainPreview } from "../previews/code/AppHeaderPlainPreview";
+import { AppHeaderProfileLoadingPreview } from "../previews/code/AppHeaderProfileLoadingPreview";
 import appHeaderSource from "../previews/examples/app-header.example.tsx?raw";
 import appHeaderPlainSource from "../previews/examples/app-header-plain.example.tsx?raw";
+import appHeaderProfileLoadingSource from "../previews/examples/app-header-profile-loading.example.tsx?raw";
 
 # AppHeader
 
@@ -21,7 +29,7 @@ Header bar with compound sub-components for search, app switching, notifications
   code={appHeaderSource}
 />
 
-Click the profile avatar to open the profile popover with variant toggle (cycles `full` → `basic` → `avatar`). The search input shows groups when you type. Notifications open on the bell click.
+Click the profile avatar to open the profile popover with variant toggle (cycles `full` → `avatar`). The search input shows groups when you type. Notifications open on the bell click.
 
 ## Variants
 
@@ -133,20 +141,27 @@ Notification items use existing CSS classes for styling:
 
 ### `AppHeaderProfile`
 
-User profile trigger that opens a Radix popover with avatar, name, and actions. Pass action buttons as `children`.
+User profile trigger that renders a [`ProfilePopover`](/profile-popover) — the same unified profile menu used by `SidebarFooter`. Builds the popover's **My Profile** / **Account Settings** / **Help & Support** rows from `onProfileClick`/`onSettingsClick`/`onHelpClick`, and passes `headerAction`/`children`/`onSignOut` straight through.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `user` | `AppUser` | — | User object with name, role, initials, optional email/avatar |
-| `variant` | `"full" \| "basic" \| "avatar"` | `"full"` | Trigger + popover layout variant |
-| `children` | `ReactNode` | — | Action buttons rendered in the popover |
+| `variant` | `"full" \| "avatar"` | `"full"` | Trigger layout — both open the same popover |
+| `headerAction` | `ReactNode` | — | Rendered at the far right of the popover header row (e.g. a theme toggle icon button) |
+| `loading` | `boolean` | `false` | Shimmer the trigger avatar/name/role — forwarded into the opened `ProfilePopover` too |
+| `loadingLabel` | `string` | `"Loading profile"` | Accessible label announced while loading |
+| `onProfileClick` | `() => void` | — | Called when "My Profile" is clicked |
+| `onSettingsClick` | `() => void` | — | Called when "Account Settings" is clicked |
+| `onHelpClick` | `() => void` | — | Called when "Help & Support" is clicked |
+| `onSignOut` | `() => void` | — | Called when "Sign Out" is clicked |
+| `children` | `ReactElement<RoleSelectProps>` | — | Extra composable content — only a [`RoleSelect`](/role-select) element is accepted |
 | `className` | `string` | — | Merged onto the trigger |
 
-**`variant="full"`** — trigger shows avatar, name, role, and a chevron. Popover is a centered layout with 64px avatar, name, email, and action buttons wrapped in a card-surface background.
+**`variant="full"`** — trigger shows avatar, name, role, and a chevron.
 
-**`variant="basic"`** — trigger shows avatar, name, role, and a chevron. Popover is a compact inline layout with 32px avatar and name/role in a row, no email, flat action buttons (no card background), `min-width: max-content`. Opens flush with the trigger.
+**`variant="avatar"`** — trigger shows only the avatar (no name, role, or chevron) — useful for compact headers like the `AppHeader` `"plain"` variant. Clicking opens the same popover as `"full"`.
 
-**`variant="avatar"`** — trigger shows only the avatar (no name, role, or chevron) — useful for compact headers like the `AppHeader` `"plain"` variant. Clicking still opens the same popover as `"full"`.
+The trigger's `role` is only ever shown in the trigger row itself — the popover no longer repeats it, since a `RoleSelect` (passed as `children`) already surfaces the current role.
 
 #### `AppUser`
 
@@ -155,8 +170,18 @@ User profile trigger that opens a Radix popover with avatar, name, and actions. 
 | `name` | `string` | User's full name |
 | `role` | `string` | Role label shown in the trigger and popover |
 | `initials` | `string` | Shown in the avatar circle when no `avatar` image is set |
-| `email` | `string` | Shown in the `"full"` variant popover |
+| `email` | `string` | Shown in the popover header |
 | `avatar` | `string` | Image URL — renders as a round avatar |
+
+#### Loading state
+
+Set `loading` to shimmer the avatar/name/role in the trigger — the same `loading` is forwarded into the opened `ProfilePopover`, so the header, menu rows, and default trigger all shimmer together. "Sign Out" stays interactive since it isn't user-data dependent.
+
+<ExampleTabs
+  title="Loading state"
+  preview={<AppHeaderProfileLoadingPreview />}
+  code={appHeaderProfileLoadingSource}
+/>
 
 ## Types
 
@@ -219,9 +244,13 @@ Search props — see [`AppHeaderSearch`](#appheadersearch) props table.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | `user` | `AppUser` | — | User data |
-| `variant` | `"full" \| "basic" \| "avatar"` | `"full"` | Trigger + popover layout |
+| `variant` | `"full" \| "avatar"` | `"full"` | Trigger layout — both open the same `ProfilePopover` |
+| `headerAction` | `ReactNode` | — | Rendered at the far right of the popover header row |
+| `loading` | `boolean` | `false` | Shimmer the trigger avatar/name/role — forwarded into the opened `ProfilePopover` too |
+| `loadingLabel` | `string` | `"Loading profile"` | Accessible label announced while loading |
+| `onProfileClick` / `onSettingsClick` / `onHelpClick` / `onSignOut` | `() => void` | — | Fixed menu item callbacks |
 | `className` | `string` | — | Class on the trigger element |
-| `children` | `ReactNode` | — | Action buttons |
+| `children` | `ReactElement<RoleSelectProps>` | — | Only a `RoleSelect` element is accepted |
 
 ### `AppUser`
 
@@ -230,7 +259,7 @@ Search props — see [`AppHeaderSearch`](#appheadersearch) props table.
 | `name` | `string` | Full name |
 | `role` | `string` | Role label |
 | `initials` | `string` | Avatar text fallback |
-| `email` | `string` | Email (optional, shown in `"full"` variant) |
+| `email` | `string` | Email (optional, shown in the popover header) |
 | `avatar` | `string` | Image URL (optional, overrides initials) |
 
 ## Notes
@@ -241,24 +270,45 @@ Search props — see [`AppHeaderSearch`](#appheadersearch) props table.
 - `AppHeaderSearch` list only shows when the input has text (`data` is defined) — empty input hides the list entirely.
 - Group items are memoized on `[data]` — list rendering does not re-run on every keystroke, only when fetched data changes.
 - Notification items: use `.gsl-notif-popover__item` with `.gsl-notif-popover__dot` (unread indicator), `.gsl-notif-popover__body-text`, and `.gsl-notif-popover__body-time` for consistent styling.
-- Profile actions use `.gsl-profile-popover__action` with `--danger` modifier for destructive actions. Icon and label slots keep consistent spacing.
+- `children` only accepts a `RoleSelect` element — for any other action button, use `onProfileClick`/`onSettingsClick`/`onHelpClick`, or use `ProfilePopover` directly with a custom `items` array.
+- Use `headerAction` for a single icon-only control (e.g. a theme toggle) — `.gsl-profile-menu__header-action-btn` matches the notification bell's icon-button styling.
 - All header components accept `className` and pass it through to their root element for Tailwind/consumer overrides.
-- The header avatar in `"full"` variant uses `--gsl-primary` background with `--gsl-on-primary` text.
-- Profile popover opens at `side="top"` with `sideOffset={0}` — flush against the trigger.
+- The trigger and popover header avatars default to the normal per-name gradient. Set `--gsl-profile-avatar-bg` (unset by default) on any ancestor to override the background for both — see [`ProfilePopover`](/profile-popover).
+- Profile popover opens at `side="top"`, `align="end"`, `sideOffset={8}` — see [`ProfilePopover`](/profile-popover) for the shared implementation.
 - `variant="plain"` sets `--gsl-app-header-bg`/`--gsl-app-header-color` on the root — override either on `.gsl-app-header--plain` (or an ancestor) to re-theme without extra CSS. Notification button, profile hover, and `AppSwitcher` trigger all inherit the on-primary foreground automatically.
 
 ## Design tokens
-
 
 ### AppHeader
 
 | Token | Fallback | Used for |
 |-------|----------|----------|
 | `--gsl-app-layout-body-gap` | `1rem` | Header padding (horizontal and vertical) |
+| `--gsl-header-py` | `--gsl-app-layout-body-gap` (`1rem`) | Header vertical padding |
+| `--gsl-header-px` | `--gsl-app-layout-body-gap` (`1rem`) | Header horizontal padding |
+| `--gsl-app-header-font` | `--gsl-font-body` | Header font family |
 | `--gsl-panel-radius` | `--gsl-radius-2xl` | Header border radius (`"default"` variant) |
 | `--gsl-panel-bg` | `--gsl-surface-subtle` | Header background (`"default"` variant) |
 | `--gsl-app-header-bg` | `--gsl-primary` | Header background (`"plain"` variant) |
 | `--gsl-app-header-color` | `--gsl-on-primary` | Header text/icon color (`"plain"` variant) |
+| `--gsl-branding-color` | `inherit` | `AppHeaderBranding` text/icon color |
+| `--gsl-branding-font` | `--gsl-font-header` (`--gsl-font-body` in `"plain"`) | `AppHeaderBranding` font family — the header font on the default panel header, the body font on the solid on-primary `"plain"` bar |
+| `--gsl-branding-gap` | `10px` | Gap between logo and text in `AppHeaderBranding` |
+| `--gsl-branding-text-gap` | `8px` | Gap between title and subtitle text |
+| `--gsl-branding-logo-size` | `28px` | Branding logo width/height |
+| `--gsl-branding-title-size` | `14px` | Branding title font size |
+| `--gsl-branding-title-weight` | `700` | Branding title font weight |
+| `--gsl-branding-title-color` | `--gsl-branding-color` | Branding title color |
+| `--gsl-branding-sep-opacity` | `0.55` | Opacity of the separator between title and subtitle |
+| `--gsl-branding-subtitle-size` | `16px` | Branding subtitle font size |
+| `--gsl-branding-subtitle-weight` | `400` | Branding subtitle font weight |
+| `--gsl-branding-subtitle-color` | `--gsl-branding-color` | Branding subtitle color |
 
+### Avatar
 
+Avatar doesn't have its own doc page — it's rendered inside `AppHeaderProfile`.
+
+| Token | Fallback | Used for |
+|-------|----------|----------|
+| `--gsl-avatar-font` | `--gsl-font-body` | Avatar font family |
 

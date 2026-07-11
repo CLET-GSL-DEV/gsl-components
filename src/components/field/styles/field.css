@@ -1,10 +1,11 @@
 .gsl-field {
+  --gsl-field-font: var(--gsl-font-body);
   display: flex;
   flex-direction: column;
   gap: 6px;
   width: 100%;
   min-width: 0;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-field-font);
 }
 
 .gsl-field__label {

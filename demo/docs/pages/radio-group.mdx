@@ -1,13 +1,21 @@
 export const meta = {
   title: "RadioGroup",
   description: "Radio group component",
+  category: "Components",
+  keywords: ["radio group", "radio button", "choice cards", "single select", "option list"],
+  since: "1.5.0",
+  status: "stable",
+  related: ["form-field", "checkbox"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { RadioGroupPreview } from "../previews/code/RadioGroupPreview";
 import { RadioGroupCardPreview } from "../previews/code/RadioGroupCardPreview";
+import { RadioDecisionFormPreview } from "../previews/code/RadioDecisionFormPreview";
 import radioGroupSource from "../previews/examples/radio-group.example.tsx?raw";
 import radioGroupCardSource from "../previews/examples/radio-group-card.example.tsx?raw";
+import radioDecisionFormSource from "../previews/examples/radio-decision-form.example.tsx?raw";
 
 # RadioGroup
 
@@ -29,6 +37,18 @@ Use `variant="card"` on `RadioGroup` to render each option as a bordered card wi
   title="Plan selection"
   preview={<RadioGroupCardPreview />}
   code={radioGroupCardSource}
+/>
+
+## Decision form with a conditional field
+
+`RadioGroup` driving a verdict choice, with a `Textarea` reason field that's only required (via
+zod `superRefine`) when the verdict isn't the "approve" path — shown conditionally via
+`form.watch("verdict")`.
+
+<ExampleTabs
+  title="Verdict form with conditional reason field"
+  preview={<RadioDecisionFormPreview />}
+  code={radioDecisionFormSource}
 />
 
 ## Components
@@ -96,6 +116,12 @@ Props for `Radio`. Requires `value`; supports optional `label`, `description`, a
 | `content` | Label and description stack (`.gsl-radio__content`) |
 | `label` | Visible label text |
 | `description` | Secondary description text |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-radio-group-font` | `var(--gsl-font-body)` | Font family override |
 
 ## Notes
 

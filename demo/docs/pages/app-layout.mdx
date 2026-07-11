@@ -1,6 +1,12 @@
 export const meta = {
   title: "AppLayout",
   description: "Application shell layout",
+  category: "Components",
+  keywords: ["app layout", "application shell", "layout container", "sidebar layout", "page shell"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["app-header", "sidebar", "breadcrumb"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -120,6 +126,10 @@ When `items` is empty, the breadcrumb section is hidden entirely.
 | `--gsl-app-layout-gap` | `1rem` | Outer padding and flex gap |
 | `--gsl-panel-bg` | `--gsl-surface-subtle` | Content area background |
 | `--gsl-panel-radius` | `--gsl-radius-2xl` | Content area and body border radius |
+| `--gsl-app-layout-font` | `--gsl-font-body` | Font family for the root layout element |
+| `--gsl-scroll-fade` | `1` | Opacity multiplier for the top/bottom scroll fade overlays on the body |
+| `--gsl-scroll-fade-height` | `calc(var(--gsl-app-layout-body-gap) * 3)` | Height of the bottom (and, unless overridden, top) scroll fade overlay |
+| `--gsl-scroll-fade-width` | `100%` | Width of the top/bottom scroll fade overlays |
 
 ## Notes
 

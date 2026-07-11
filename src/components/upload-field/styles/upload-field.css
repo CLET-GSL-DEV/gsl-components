@@ -1,6 +1,8 @@
 /* ── Root (dropzone) ── */
 
 .gsl-upload-field {
+  --gsl-upload-field-font: var(--gsl-font-body);
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -79,7 +81,7 @@
 
 .gsl-upload-field__title {
   margin: 0;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-upload-field-font);
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
@@ -91,7 +93,7 @@
 
 .gsl-upload-field__subtitle {
   margin: 0;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-upload-field-font);
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
@@ -138,7 +140,7 @@
 }
 
 .gsl-upload-field__file-card-name {
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-upload-field-font);
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
@@ -149,7 +151,7 @@
 }
 
 .gsl-upload-field__file-card-size {
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-upload-field-font);
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
@@ -190,7 +192,7 @@
   border-radius: var(--gsl-radius-base);
   background: var(--gsl-primary);
   color: var(--gsl-on-primary);
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-upload-field-font);
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;

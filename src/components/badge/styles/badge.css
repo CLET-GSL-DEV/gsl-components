@@ -1,11 +1,13 @@
 .gsl-badge {
+  --gsl-badge-font: var(--gsl-font-body);
+
   display: inline-flex;
   align-items: center;
   max-width: 100%;
   overflow: hidden;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-badge-font);
   font-weight: 600;
   line-height: 1.4;
   text-overflow: ellipsis;

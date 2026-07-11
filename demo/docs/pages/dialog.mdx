@@ -1,6 +1,12 @@
 export const meta = {
   title: "Dialog",
   description: "Modal dialog",
+  category: "Components",
+  keywords: ["dialog", "modal dialog", "popup", "confirm dialog", "overlay"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["modal", "popover"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -134,6 +140,12 @@ Extend Radix title and description props with optional `classNames`.
 |-----|------------|
 | `description` | Description element (`.gsl-dialog__description`) |
 
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-dialog-font` | `var(--gsl-font-body)` | Font family override |
+
 ## Notes
 
 - Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
@@ -142,3 +154,13 @@ Extend Radix title and description props with optional `classNames`.
 - The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
 - Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
 - Base `gsl-dialog*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+
+## Do
+
+- For a custom leading icon next to the title, wrap both in `<div className="flex items-center gap-2">` with the icon at `size-5 shrink-0`.
+
+## Don't
+
+- Override `DialogContent` padding via `classNames={{content: "p-0 overflow-hidden"}}` — it manages its own padding.
+- Wrap Title/Description/actions in extra padded/gapped wrapper divs — they sit directly inside `DialogContent`, causing doubled gaps.
+- Add a separate footer component — the actions row is just `<div className="flex justify-end gap-2">` directly inside `DialogContent`.

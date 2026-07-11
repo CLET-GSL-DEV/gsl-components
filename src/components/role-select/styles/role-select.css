@@ -1,0 +1,152 @@
+.gsl-role-select {
+  --gsl-role-select-font: var(--gsl-font-body);
+
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  font-family: var(--gsl-role-select-font);
+}
+
+/* ── Dropdown-style trigger ── */
+
+.gsl-role-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius-base);
+  background: var(--gsl-surface-subtle, var(--gsl-bg));
+  color: var(--gsl-text);
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.gsl-role-select__trigger:hover {
+  background: var(--gsl-hover);
+}
+
+.gsl-role-select__trigger:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-role-select__trigger[data-state="open"] {
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 1px var(--gsl-primary);
+}
+
+.gsl-role-select__trigger-label {
+  font-weight: 500;
+  color: var(--gsl-text);
+}
+
+.gsl-role-select__trigger-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-role-select__trigger-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--gsl-text-secondary);
+}
+
+/* ── Nested role popover ── */
+
+.gsl-role-select__popover {
+  width: var(--radix-popover-trigger-width, 220px);
+  padding: 4px;
+  background: var(--gsl-bg);
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius-base);
+  box-shadow: var(--gsl-shadow-md);
+  outline: none;
+  z-index: var(--gsl-z-select);
+}
+
+.gsl-role-select__list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gsl-role-select__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--gsl-radius-base);
+  background: transparent;
+  color: var(--gsl-text);
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.gsl-role-select__item:hover:not(:disabled) {
+  background-color: var(--gsl-hover);
+}
+
+.gsl-role-select__item:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: -2px;
+}
+
+.gsl-role-select__item--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.gsl-role-select__item-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.gsl-role-select__item-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-role-select__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gsl-role-select__radio {
+  flex-shrink: 0;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--gsl-border);
+  background: transparent;
+  transition: border-color 0.15s ease;
+}
+
+.gsl-role-select__radio--selected {
+  border-color: var(--gsl-focus);
+  background: var(--gsl-focus);
+  box-shadow: inset 0 0 0 3px var(--gsl-bg);
+}
