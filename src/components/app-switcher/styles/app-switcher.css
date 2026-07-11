@@ -34,10 +34,16 @@
 }
 
 .gsl-app-switcher__panel {
+  --gsl-shadow: var(--gsl-shadow-sm);
+  --gsl-item-size: 80px;
+  --gsl-icon-size: 32px;
+  --gsl-app-switcher-font: var(--gsl-font-body);
+
   z-index: var(--gsl-z-popover);
   min-width: 320px;
   max-width: 360px;
   padding: 8px 0;
+  font-family: var(--gsl-app-switcher-font);
   background: var(--gsl-bg);
   border: 1px solid var(--gsl-border);
   border-radius: var(--gsl-radius-xl);
@@ -132,6 +138,11 @@
   background: var(--gsl-hover);
 }
 
+.gsl-app-switcher__icon--tile {
+  border-radius: 10px;
+  background: transparent;
+}
+
 .gsl-app-switcher__icon-image {
   width: 100%;
   height: 100%;
@@ -144,17 +155,35 @@
   line-height: 1;
 }
 
-.gsl-app-switcher__icon-initials {
-  display: inline-flex;
+.gsl-app-switcher__tile {
+  position: relative;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  background: var(--gsl-hover);
-  color: var(--gsl-focus);
+  overflow: hidden;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.gsl-app-switcher__tile-pattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.gsl-app-switcher__tile-glyph {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 12px;
   font-weight: 600;
+  color: #fff;
   letter-spacing: 0.02em;
 }
 

@@ -168,7 +168,15 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
 
 export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
 	function TableFilter(
-		{ children, onApply, onReset, applyLabel = "Apply Filter", classNames, className },
+		{
+			children,
+			onApply,
+			onReset,
+			applyLabel = "Apply Filter",
+			variant = "popover",
+			classNames,
+			className,
+		},
 		ref,
 	) {
 		const { paramPrefix } = useTableContext();
@@ -234,6 +242,72 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
 			onReset?.();
 			setOpen(false);
 		}, [setSearchParams, filterPrefix, onReset]);
+
+		// Spread variant has no Apply button — auto-apply whenever a field's
+		// value changes. Field changes may come from a Dropdown driving a
+		// hidden input (no native "change" event fires for that), so this
+		// compares a FormData snapshot after every render instead of relying
+		// on DOM change events.
+		const spreadSnapshotRef = useRef<string | null>(null);
+
+		useEffect(() => {
+			if (variant !== "spread") return;
+			const form = formRef.current;
+			if (!form) return;
+			const snapshot = JSON.stringify([...new FormData(form).entries()]);
+			if (spreadSnapshotRef.current === null) {
+				spreadSnapshotRef.current = snapshot;
+				return;
+			}
+			if (snapshot !== spreadSnapshotRef.current) {
+				spreadSnapshotRef.current = snapshot;
+				handleApply();
+			}
+		});
+
+		if (variant === "spread") {
+			return (
+				<div
+					ref={ref}
+					className={cn(
+						"gsl-table__filter",
+						"gsl-table__filter--spread",
+						classNames?.root,
+						className,
+					)}
+				>
+					{children && (
+						<form
+							ref={formRef}
+							className={cn(
+								"gsl-table__filter-fields",
+								"gsl-table__filter-fields--spread",
+								classNames?.fields,
+							)}
+						>
+							{children}
+						</form>
+					)}
+
+					<div
+						className={cn(
+							"gsl-table__filter-actions",
+							"gsl-table__filter-actions--spread",
+							classNames?.actions,
+						)}
+					>
+						<button
+							type="button"
+							className={cn("gsl-table__filter-btn--reset", classNames?.resetButton)}
+							onClick={handleReset}
+						>
+							clear
+							<XCircle size={14} strokeWidth={1.5} />
+						</button>
+					</div>
+				</div>
+			);
+		}
 
 		return (
 			<div

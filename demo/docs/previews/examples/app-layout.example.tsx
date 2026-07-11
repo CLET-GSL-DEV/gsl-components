@@ -13,8 +13,9 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarLink,
+  RoleSelect,
 } from "@rfdtech/components";
-import { LayoutDashboard, Users, Settings } from "lucide-react";
+import { LayoutDashboard, Users, Settings, Shield, Eye, ScrollText } from "lucide-react";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
 
 const user = {
@@ -24,6 +25,12 @@ const user = {
   email: "kwame@gsl.edu.gh",
 };
 
+const roles = [
+  { id: "admin", name: "Admin", icon: <Shield size={16} strokeWidth={1.5} /> },
+  { id: "reviewer", name: "Reviewer", icon: <Eye size={16} strokeWidth={1.5} /> },
+  { id: "auditor", name: "Auditor", icon: <ScrollText size={16} strokeWidth={1.5} /> },
+];
+
 const links = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, active: true },
   { id: "members", label: "Members", icon: Users },
@@ -32,6 +39,7 @@ const links = [
 
 export function AppLayoutExample() {
   const [search, setSearch] = useState("");
+  const [selectedRole, setSelectedRole] = useState("admin");
 
   const searchGroups: AppHeaderSearchDataGroup[] = search
     ? [
@@ -77,7 +85,14 @@ export function AppLayoutExample() {
             <AppHeaderProfile
               user={user}
               onSignOut={() => console.log("Sign out")}
-            />
+            >
+              <RoleSelect
+                title="View as"
+                roles={roles}
+                selectedRole={selectedRole}
+                onClickRole={(role) => setSelectedRole(role.id)}
+              />
+            </AppHeaderProfile>
           </AppHeaderActions>
         </AppHeader>
         <AppSidebar>

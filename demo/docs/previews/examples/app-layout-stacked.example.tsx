@@ -106,14 +106,7 @@ export function AppLayoutStackedExample() {
         <AppHeader variant="plain">
           <AppHeaderBranding title="GSL PORTAL" subtitle="Component Library" />
           <AppHeaderActions>
-            <AppSwitcher apps={apps} title="System directory">
-              <RoleSelect
-                title="View as"
-                roles={roles}
-                selectedRole={selectedRole}
-                onClickRole={(role) => setSelectedRole(role.id)}
-              />
-            </AppSwitcher>
+            <AppSwitcher apps={apps} title="System directory" />
             <AppHeaderNotifications>
               {notifications.map((n) => (
                 <div key={n.id} className="gsl-notif-popover__item">
@@ -129,7 +122,14 @@ export function AppLayoutStackedExample() {
               variant="avatar"
               user={user}
               onSignOut={() => console.log("Sign out")}
-            />
+            >
+              <RoleSelect
+                title="View as"
+                roles={roles}
+                selectedRole={selectedRole}
+                onClickRole={(role) => setSelectedRole(role.id)}
+              />
+            </AppHeaderProfile>
           </AppHeaderActions>
         </AppHeader>
         <AppSidebar>
@@ -182,7 +182,14 @@ export function AppLayoutStackedExample() {
                   },
                 ]}
                 onSignOut={() => console.log("Sign out")}
-              />
+              >
+                <RoleSelect
+                  title="View as"
+                  roles={roles}
+                  selectedRole={selectedRole}
+                  onClickRole={(role) => setSelectedRole(role.id)}
+                />
+              </ProfilePopover>
             </SidebarFooter>
           </Sidebar>
         </AppSidebar>

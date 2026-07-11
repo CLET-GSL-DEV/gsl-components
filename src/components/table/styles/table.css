@@ -218,6 +218,30 @@
   opacity: 0.9;
 }
 
+/* ── Filter — spread variant: no popover, fields laid out as a flex row ── */
+
+.gsl-table__filter--spread {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.gsl-table__filter-fields--spread {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+.gsl-table__filter-actions--spread {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 /* ── Content (table wrapper) ── */
 
 .gsl-table__content {

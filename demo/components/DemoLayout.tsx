@@ -14,7 +14,7 @@ import { demoApps } from "demo/data/demoApps";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
 import { buildPageItems, buildMemberItems, buildDocItems } from "demo/data/demoSearch";
-import { packageVersion } from "demo/docs/site-meta";
+import { VersionSwitcher } from "./VersionSwitcher";
 
 import {
   LayoutDashboard,
@@ -395,6 +395,7 @@ export function DemoLayout() {
               placeholder="Search pages and members..."
             />
             <AppHeaderActions>
+              <VersionSwitcher active="legacy" />
               <button
                 type="button"
                 className="gsl-app-header__notif-btn"
@@ -477,9 +478,6 @@ export function DemoLayout() {
                     className="demo-home__sidebar-logo"
                   />
                   <span className="demo-home__sidebar-title">GSL</span>
-                  <span className="demo-home__sidebar-version">
-                    v{packageVersion}
-                  </span>
                 </SidebarBrand>
                 <SidebarTrigger>Menu</SidebarTrigger>
                 <SidebarCollapse />
@@ -566,7 +564,14 @@ export function DemoLayout() {
                     },
                   ]}
                   onSignOut={() => navigate("/")}
-                />
+                >
+                  <RoleSelect
+                    title="View as"
+                    roles={demoRoles}
+                    selectedRole={selectedRole}
+                    onClickRole={(role) => setSelectedRole(role.id)}
+                  />
+                </ProfilePopover>
               </SidebarFooter>
             </Sidebar>
           </AppSidebar>

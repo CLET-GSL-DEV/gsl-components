@@ -41,6 +41,17 @@ a navigation icon like `ExternalLink` or `ArrowRight`, not `Download`. Reserve `
 buttons that actually trigger a file download.
 
 ===RULE===
+id: components-section-header-actions-primary-icon
+title: SectionActions primary button always carries a leading icon
+severity: do
+components: section-header, button
+
+The primary-variant button inside `SectionActions` — the section header's main, highest-emphasis
+action (e.g. "Add user", "Create project") — must always include a leading icon, e.g.
+`<Plus size={14} strokeWidth={1.5} />`. Other buttons in the same `SectionActions` row (outline,
+ghost, secondary) are icon-optional.
+
+===RULE===
 id: components-dialog-no-padding-override
 title: Never override DialogContent padding
 severity: dont

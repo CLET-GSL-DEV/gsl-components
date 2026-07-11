@@ -98,5 +98,6 @@ const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
 
 - Image URLs on `AppItem.icon` render as round cropped icons inside the grid.
 - Fetch apps in your application and pass `apps` + `loading`; AppSwitcher does not call APIs internally.
-- Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`.
+- Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, `AppIconTile`.
+- For systems without a logo yet, pass `icon={<SystemAppIcon name="System Name" />}` — it renders a rounded-square tile with a deterministic gradient background, a subtle pattern texture, and the system's initials, all derived from `name` via a hash (same name always produces the same tile). Build a custom glyph-on-tile icon the same way with `<AppIconTile name="System Name"><YourIcon /></AppIconTile>`.
 - Override shared tokens on `.gsl-app-switcher` for theming (see [Theme](/docs/theme)).

@@ -10,6 +10,7 @@ import {
   TableBulkActions,
   TableFooter,
   TablePagination,
+  Dropdown,
   Badge,
 } from "@rfdtech/components";
 import { Trash2, Eye, Edit } from "lucide-react";
@@ -78,6 +79,7 @@ export function TableExample() {
   const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
     defaultPageSize: 5,
   });
+  const [roleValue, setRoleValue] = useState(filters.role ?? "");
 
   const filtered = users.filter(
     (u) => {
@@ -101,12 +103,18 @@ export function TableExample() {
       <TableHeader>
         <TableSearch placeholder="Search users..." />
         <TableFilter>
-          <select name="role">
-            <option value="">All roles</option>
-            <option value="Admin">Admin</option>
-            <option value="Editor">Editor</option>
-            <option value="Viewer">Viewer</option>
-          </select>
+          <input type="hidden" name="role" value={roleValue} />
+          <Dropdown
+            value={roleValue || null}
+            onValueChange={(v) => setRoleValue(v ?? "")}
+            options={[
+              { value: "Admin", label: "Admin" },
+              { value: "Editor", label: "Editor" },
+              { value: "Viewer", label: "Viewer" },
+            ]}
+            placeholder="All roles"
+            aria-label="Filter by role"
+          />
         </TableFilter>
       </TableHeader>
       <TableContent

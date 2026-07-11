@@ -1,0 +1,330 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useTheme } from "@rfdtech/components";
+import { demoApps } from "demo/data/demoApps";
+import { demoNotifications } from "demo/data/demoNotifications";
+import { useMockQuery } from "demo/hooks/useMockQuery";
+import { VersionSwitcher } from "./VersionSwitcher";
+
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
+  BarChart3,
+  Shield,
+  Bell,
+  HelpCircle,
+  User,
+  Settings,
+  Sun,
+  Moon,
+  ScrollText,
+  BookOpen,
+  MessageSquare,
+  Eye,
+} from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarNav,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarLink,
+  SidebarBadge,
+  ProfilePopover,
+  RoleSelect,
+  AppHeader,
+  AppHeaderActions,
+  AppHeaderBranding,
+  AppHeaderNotifications,
+  AppHeaderProfile,
+  AppSwitcher,
+  AppLayout,
+  AppSidebar,
+  AppBody,
+  SidebarProvider,
+  BreadcrumbProvider,
+  useBreadcrumbs,
+} from "@rfdtech/components";
+
+/** Sets breadcrumbs for the main (new design system) layout */
+function BreadcrumbSetter() {
+  const location = useLocation();
+
+  useBreadcrumbs(
+    location.pathname !== "/"
+      ? [{ label: "Home", href: "/" }, { label: "Members" }]
+      : [],
+  );
+
+  return null;
+}
+
+const demoRoles = [
+  { id: "admin", name: "Admin", icon: <Shield size={16} strokeWidth={1.5} /> },
+  { id: "reviewer", name: "Reviewer", icon: <Eye size={16} strokeWidth={1.5} /> },
+  { id: "auditor", name: "Auditor", icon: <ScrollText size={16} strokeWidth={1.5} /> },
+];
+
+const demoUser = {
+  name: "Kwame Asante",
+  role: "Admin",
+  initials: "KA",
+  email: "kwame@gsl.edu.gh",
+};
+
+export function DemoLayout2() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const { data: appsData, loading: appsLoading } = useMockQuery(demoApps, 2000);
+  const { data: notifData, loading: notifLoading } = useMockQuery(
+    demoNotifications,
+    1500,
+  );
+  const { data: userData, loading: profileLoading } = useMockQuery(
+    demoUser,
+    1300,
+  );
+  const [selectedRole, setSelectedRole] = useState("admin");
+
+  const navGroups = useMemo(
+    () => [
+      {
+        label: "Main",
+        links: [
+          { id: "dashboard", label: "Dashboard", href: "/", icon: LayoutDashboard },
+          { id: "members", label: "Members", href: "/members", icon: Users },
+          {
+            id: "docs",
+            label: "Documentation",
+            href: "/docs",
+            icon: BookOpen,
+            badge: "New",
+          },
+        ],
+      },
+      {
+        label: "Insights",
+        links: [
+          { id: "overview", label: "Overview", href: "#", icon: BarChart3 },
+          { id: "reports", label: "Reports", href: "#", icon: FileText },
+          { id: "alerts", label: "Alerts", href: "#", icon: Bell, badge: "8" },
+          { id: "messages", label: "Messages", href: "#", icon: MessageSquare },
+        ],
+      },
+    ],
+    [],
+  );
+
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
+    () => new Set(["Main"]),
+  );
+
+  useEffect(() => {
+    setExpandedGroups((prev) => {
+      if (prev.has("Main")) return prev;
+      const next = new Set(prev);
+      next.add("Main");
+      return next;
+    });
+  }, []);
+
+  const handleGroupToggle = useCallback((label: string, expanded: boolean) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (expanded) {
+        next.add(label);
+      } else {
+        next.delete(label);
+      }
+      return next;
+    });
+  }, []);
+
+  const { loading: navLoading } = useMockQuery(navGroups, 900);
+
+  return (
+    <SidebarProvider>
+      <BreadcrumbProvider>
+        <AppLayout variant="stacked">
+          <AppHeader variant="plain">
+            <AppHeaderBranding
+              logo={
+                <img
+                  src="/clet-logo.png"
+                  alt=""
+                  width={28}
+                  height={28}
+                  className="demo-home__sidebar-logo"
+                />
+              }
+              title="GSL PORTAL"
+              subtitle="GSL Component Library"
+            />
+            <AppHeaderActions>
+              <VersionSwitcher active="current" />
+              <button
+                type="button"
+                className="gsl-app-header__notif-btn"
+                aria-label="Documentation"
+                onClick={() => navigate("/docs")}
+              >
+                <BookOpen size={18} strokeWidth={1.5} aria-hidden />
+              </button>
+              <AppSwitcher
+                apps={appsData ?? []}
+                loading={appsLoading}
+                title="System directory"
+                onAppSelect={(app) => console.log("Selected:", app.name)}
+              />
+              <AppHeaderNotifications loading={notifLoading}>
+                {notifData?.map((n: (typeof notifData)[number]) => (
+                  <div
+                    key={n.id}
+                    className={`gsl-notif-popover__item${!n.unread ? " gsl-notif-popover__item--read" : ""}`}
+                  >
+                    {n.unread && <div className="gsl-notif-popover__dot" />}
+                    <div className="gsl-notif-popover__body">
+                      <div className="gsl-notif-popover__body-text">
+                        {n.text}
+                      </div>
+                      <div className="gsl-notif-popover__body-time">
+                        {n.time}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </AppHeaderNotifications>
+              <AppHeaderProfile
+                variant="avatar"
+                user={userData ?? demoUser}
+                loading={profileLoading}
+                loadingLabel="Loading profile..."
+                onProfileClick={() => navigate("/docs")}
+                onSettingsClick={() => navigate("/docs")}
+                onHelpClick={() => navigate("/docs")}
+                onSignOut={() => navigate("/")}
+                headerAction={
+                  <button
+                    type="button"
+                    className="gsl-profile-menu__header-action-btn"
+                    aria-label={
+                      resolvedTheme === "dark"
+                        ? "Switch to light mode"
+                        : "Switch to dark mode"
+                    }
+                    onClick={() =>
+                      setTheme(resolvedTheme === "dark" ? "light" : "dark")
+                    }
+                  >
+                    {resolvedTheme === "dark" ? (
+                      <Sun size={18} strokeWidth={1.5} aria-hidden />
+                    ) : (
+                      <Moon size={18} strokeWidth={1.5} aria-hidden />
+                    )}
+                  </button>
+                }
+              >
+                <RoleSelect
+                  title="View as"
+                  roles={demoRoles}
+                  selectedRole={selectedRole}
+                  onClickRole={(role) => setSelectedRole(role.id)}
+                />
+              </AppHeaderProfile>
+            </AppHeaderActions>
+          </AppHeader>
+          <AppSidebar>
+            <Sidebar variant="plain">
+              <SidebarContent>
+                <SidebarNav>
+                  {navLoading ? (
+                    <SidebarGroup>
+                      {Array.from({ length: 6 }).map((_, i) => (
+                        <SidebarLink key={i} loading icon={<span />}>
+                          Loading
+                        </SidebarLink>
+                      ))}
+                    </SidebarGroup>
+                  ) : (
+                    navGroups.map((group) => (
+                      <SidebarGroup
+                        key={group.label}
+                        collapsible
+                        expanded={expandedGroups.has(group.label)}
+                        onExpandedChange={(expanded) =>
+                          handleGroupToggle(group.label, expanded)
+                        }
+                      >
+                        <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                        {group.links.map((link) => {
+                          const Icon = link.icon;
+                          const isCurrent = location.pathname === link.href;
+                          return (
+                            <SidebarLink
+                              key={link.id}
+                              active={isCurrent}
+                              icon={<Icon size={18} strokeWidth={1.5} />}
+                              onClick={() => {
+                                if (link.href !== "#") navigate(link.href);
+                              }}
+                            >
+                              {link.label}
+                              {link.badge && (
+                                <SidebarBadge>{link.badge}</SidebarBadge>
+                              )}
+                            </SidebarLink>
+                          );
+                        })}
+                      </SidebarGroup>
+                    ))
+                  )}
+                </SidebarNav>
+              </SidebarContent>
+              <SidebarFooter>
+                <ProfilePopover
+                  fullName={(userData ?? demoUser).name}
+                  email={(userData ?? demoUser).email}
+                  loading={profileLoading}
+                  loadingLabel="Loading profile..."
+                  items={[
+                    {
+                      icon: <User size={20} strokeWidth={1.5} aria-hidden />,
+                      label: "My Profile",
+                      onClick: () => navigate("/docs"),
+                    },
+                    {
+                      icon: <Settings size={20} strokeWidth={1.5} aria-hidden />,
+                      label: "Account Settings",
+                      onClick: () => navigate("/docs"),
+                    },
+                    {
+                      icon: <HelpCircle size={20} strokeWidth={1.5} aria-hidden />,
+                      label: "Help & Support",
+                      onClick: () => navigate("/docs"),
+                    },
+                  ]}
+                  onSignOut={() => navigate("/")}
+                >
+                  <RoleSelect
+                    title="View as"
+                    roles={demoRoles}
+                    selectedRole={selectedRole}
+                    onClickRole={(role) => setSelectedRole(role.id)}
+                  />
+                </ProfilePopover>
+              </SidebarFooter>
+            </Sidebar>
+          </AppSidebar>
+          <BreadcrumbSetter />
+          <AppBody>
+            <Outlet />
+          </AppBody>
+        </AppLayout>
+      </BreadcrumbProvider>
+    </SidebarProvider>
+  );
+}

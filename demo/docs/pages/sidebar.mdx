@@ -148,7 +148,13 @@ Bottom slot separated by a top border. A plain wrapper — typically holds a [`P
       { icon: <Settings size={20} />, label: "Account Settings", onClick: () => navigate("/settings") },
     ]}
     onSignOut={handleSignOut}
-  />
+  >
+    <RoleSelect
+      roles={roles}
+      selectedRole={selectedRole}
+      onClickRole={(role) => setSelectedRole(role.id)}
+    />
+  </ProfilePopover>
 </SidebarFooter>
 ```
 

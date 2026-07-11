@@ -15,11 +15,13 @@ import { TablePreviewEmpty } from "../previews/code/TablePreviewEmpty";
 import { TablePreviewPanel } from "../previews/code/TablePreviewPanel";
 import { TableCrudPreview } from "../previews/code/TableCrudPreview";
 import { TableActionsPreview } from "../previews/code/TableActionsPreview";
+import { TableFilterSpreadPreview } from "../previews/code/TableFilterSpreadPreview";
 import tableSource from "../previews/examples/table.example.tsx?raw";
 import tableEmptySource from "../previews/examples/table-empty.example.tsx?raw";
 import tablePanelSource from "../previews/examples/table-panel.example.tsx?raw";
 import tableCrudSource from "../previews/examples/table-crud.example.tsx?raw";
 import tableActionsSource from "../previews/examples/table-actions.example.tsx?raw";
+import tableFilterSpreadSource from "../previews/examples/table-filter-spread.example.tsx?raw";
 
 # Table
 
@@ -80,21 +82,39 @@ action actually runs — nothing is deleted until the user confirms. Each row al
   code={tableActionsSource}
 />
 
+## Spread filter variant
+
+Pass `variant="spread"` to `<TableFilter>` to drop the popover entirely — the
+fields render inline as a flex row (with a consistent gap) directly in the
+toolbar, with just a "clear" action — no Apply button. Fields auto-apply as
+soon as their value changes (no popover to dismiss, so there's nothing an
+explicit Apply click would gate). Same `onApply`/`onReset` and URL behavior
+as the default popover variant otherwise, just no trigger button or panel.
+
+<ExampleTabs
+  title="Spread variant — no popover, fields inline"
+  preview={<TableFilterSpreadPreview />}
+  code={tableFilterSpreadSource}
+/>
+
 ## Architecture
 
 Every child component reads and writes its own URL keys through `useSearchParams`. The root `<Table paramPrefix>` provides a shared namespace via React Context. No prop drilling — pass `totalPages` and `totalItems` to `<TablePagination>`; everything else is fully automatic.
 
 ```
 <Table paramPrefix="members">
-  <TableSearch />          → writes ?members.search=term
-  <TableFilter>            → writes ?members.f_role=admin
-    <select name="role">   → FormData captured on Apply
+  <TableSearch />              → writes ?members.search=term
+  <TableFilter>                → writes ?members.f_role=admin
+    <input type="hidden" name="role" value={roleValue} />
+    <Dropdown value={roleValue} onValueChange={setRoleValue} ... />
   </TableFilter>
-  <TableContent />         → renders data + sort headers
-  <TableBulkActions />     → shows selection bar with inline actions
-  <TablePagination />      → reads/writes ?members.page=1&members.pageSize=10
+  <TableContent />             → renders data + sort headers
+  <TableBulkActions />         → shows selection bar with inline actions
+  <TablePagination />          → reads/writes ?members.page=1&members.pageSize=10
 </Table>
 ```
+
+Filter fields must be *named* form-associated elements for `FormData` to capture them — never a raw `<select>`/native `<button>`/native `<input>` as the visible control. Pair a hidden `<input type="hidden" name="...">` (captured by `FormData`) with a real `Dropdown` (or other library input) for the visible, styled UI.
 
 Multiple tables on one page share the same URL without collision by using different prefixes:
 
@@ -132,7 +152,7 @@ Search input with debounce and a clear button. Writes the search term to `?searc
 
 Popover with filter fields and Apply / Reset buttons. Wraps children in a `<form>` element. On Apply, reads `FormData` from named fields and writes `f_{name}={value}` to the URL. On Reset, clears all `f_*` params.
 
-Filter fields must have a `name` attribute, e.g. `<select name="status">`. The name becomes the URL key.
+Filter fields must be *named* form-associated elements for `FormData` to read them — never a raw `<select>`/native `<button>`/native `<input>` as the visible control. Pair a hidden `<input type="hidden" name="status" value={statusValue} />` (captured by `FormData`) with a `Dropdown` (or other library input) driving that value for the visible, styled UI. The `name` becomes the URL key.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -141,6 +161,7 @@ Filter fields must have a `name` attribute, e.g. `<select name="status">`. The n
 | `onReset` | `() => void` | — | Optional callback when Reset is clicked (URL clear happens first) |
 | `applyLabel` | `string` | `"Apply Filter"` | Apply button text |
 | `resetLabel` | `string` | `"Reset"` | Reset button aria-label |
+| `variant` | `"popover" \| "spread"` | `"popover"` | `"spread"` removes the popover and lays fields out inline as a flex row — see [Spread filter variant](#spread-filter-variant) |
 | `classNames` | `TableFilterClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root div |
 

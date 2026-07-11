@@ -14,6 +14,40 @@ References: [`.cursor/rules/gsl-component-authoring.mdc`](.cursor/rules/gsl-comp
 - **Other deps**: `lucide-react`, `cmdk`, `sonner`, `@dnd-kit/*`
 - **CSS-in-JS**: None. Plain CSS files imported in components via Vite.
 
+## Design system versioning — prefer "new design system"
+
+The library has a current, preferred set of component variants ("new design
+system"), demonstrated live in the demo app at `/dashboard2` (current) vs.
+`/dashboard2/legacy` (a frozen snapshot of the old v1 look, reachable via the
+version dropdown in that sidebar). The old look uses the pre-rebrand red
+color tokens, scoped via the `.legacy-theme` class in `demo/demo.css` — it
+does not affect the library's actual defaults.
+
+**New design system variants** (prefer these by default in new work):
+
+| Component | Prefer | Over |
+|-----------|--------|------|
+| `AppHeader` | `variant="plain"` | `variant="default"` |
+| `MetricCard` | `variant="outline"` | `variant="default"` |
+| `SidebarGroup` | `collapsible` (accordion groups) | flat, non-collapsible groups |
+| `TableContent` | `variant="panel"` | `variant="default"` |
+| `TableFilter` | `variant="spread"` | `variant="popover"` (default) |
+
+Brand tokens: `--gsl-primary` (navy) and `--gsl-secondary` (gold) in
+`src/styles/theme/light.css` / `dark.css` are the current defaults — not
+something to "convert," they already apply everywhere by default.
+
+**If a user asks to "convert this app to use the new design system"**: scan
+the codebase for usages of the components above and swap them to the
+preferred variant. Then **ask** whether to also update colors — don't touch
+the consuming app's existing `--gsl-*` token overrides unprompted. If the
+user says yes, override the consuming app's color token overrides with the
+library's current defaults (the navy/gold values above).
+
+If this file or the MCP docs data (`mcp/generated/*.json`) don't yet reflect
+a "new design system" status for a component/variant you're working with,
+this table is the source of truth until they're updated.
+
 ## No new dependencies
 
 **Do NOT add new npm packages.** The project avoids dependency bloat. Use native APIs, existing Radix primitives, or lucide-react for icons. Date formatting uses `Date.toLocaleDateString()`, calendar grids use native `Date` arithmetic.

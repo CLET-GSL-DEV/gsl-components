@@ -11,6 +11,7 @@ import {
   UserX,
   Eye,
   Edit,
+  UserPlus,
 } from "lucide-react";
 import {
   Table,
@@ -23,6 +24,10 @@ import {
   TablePagination,
   MetricCard,
   Card,
+  SectionActions,
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
   Dropdown,
   Modal,
   ModalPortal,
@@ -130,6 +135,23 @@ export function DemoPage() {
 
   return (
     <>
+      <div id="debug-marker-before">DEBUG_BEFORE</div>
+      <SectionHeader>
+        <SectionTitle>Dashboard</SectionTitle>
+        <SectionDescription>
+          Overview of your organization&apos;s members and activity.
+        </SectionDescription>
+        <SectionActions>
+          <Button variant="outline" size="md">
+            Export
+          </Button>
+          <Button variant="primary" size="md">
+            <UserPlus size={14} strokeWidth={1.5} />
+            Add Member
+          </Button>
+        </SectionActions>
+      </SectionHeader>
+
       <div className="demo-home__metrics">
         <MetricCard loading={metricsLoading} label="Total Members" value={members.length} icon={<Users size={16} strokeWidth={1.5} />} description="Across all departments" trend="up" trendValue="+12%" />
         <MetricCard loading={metricsLoading} label="Active Members" value={members.filter((m) => m.status === "Active").length} icon={<UserCheck size={16} strokeWidth={1.5} />} description="Currently active" trend="up" trendValue="+5%" />

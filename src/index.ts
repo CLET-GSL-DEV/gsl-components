@@ -35,10 +35,12 @@ export * from "./components/metric-card";
 export * from "./components/modal";
 export * from "./components/network-operator";
 export * from "./components/popover";
+export * from "./components/popup";
 export * from "./components/profile-popover";
 export * from "./components/progress-bar";
 export * from "./components/radio-group";
 export * from "./components/role-select";
+export * from "./components/section-header";
 export * from "./components/sheet";
 export * from "./components/sidebar";
 export * from "./components/sortable";
@@ -51,4 +53,9 @@ export * from "./components/tooltip";
 export * from "./components/upload-field";
 export * from "./contexts/router-adapter-context";
 export * from "./hooks";
-export { stringToHue, gradientFromString } from "./utils/stringToColor";
+export {
+  stringToHue,
+  gradientFromString,
+  vividGradientFromString,
+  patternIndexFromString,
+} from "./utils/stringToColor";

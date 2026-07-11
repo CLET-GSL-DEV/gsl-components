@@ -3,7 +3,9 @@ import { ClientOnly } from "vite-react-ssg";
 import { Navigate, Outlet } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeToggle";
 import { DemoLayout } from "./components/DemoLayout";
+import { DemoLayout2 } from "./components/DemoLayout2";
 import { DemoPage } from "./pages/DemoPage";
+import { Dashboard2Page } from "./pages/Dashboard2Page";
 import { MembersPage } from "./pages/MembersPage";
 import { DocsPage } from "./pages/DocsPage";
 import { getAllDocSlugs } from "./docs/registry";
@@ -18,11 +20,17 @@ export const routes: RouteRecord[] = [
     ),
     children: [
       {
-        element: <DemoLayout />,
+        // Current (new design system) — the main dashboard
+        element: <DemoLayout2 />,
         children: [
-          { index: true, element: <DemoPage /> },
+          { index: true, element: <Dashboard2Page /> },
           { path: "members", element: <MembersPage /> },
         ],
+      },
+      {
+        // Previous version, unchanged, reachable via the version switcher
+        element: <DemoLayout />,
+        children: [{ path: "legacy", element: <DemoPage /> }],
       },
       {
         path: "docs",

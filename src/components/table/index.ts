@@ -9,6 +9,7 @@ export type {
   TableContentProps,
   TableFilterClassNames,
   TableFilterProps,
+  TableFilterVariant,
   TableFooterClassNames,
   TableFooterProps,
   TableHeaderClassNames,

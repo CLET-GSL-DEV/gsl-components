@@ -1,5 +1,7 @@
-import type { KeyboardEvent } from "react";
+import { isValidElement, type KeyboardEvent } from "react";
 import type { AppItem } from "../../types/app-switcher";
+import { AppIconTile } from "./AppIconTile";
+import { SystemAppIcon } from "./SystemAppIcon";
 
 interface AppSwitcherItemProps {
   app: AppItem;
@@ -16,6 +18,13 @@ function renderIcon(icon: AppItem["icon"]) {
   return icon;
 }
 
+function isTileIcon(icon: AppItem["icon"]): boolean {
+  return (
+    isValidElement(icon) &&
+    (icon.type === AppIconTile || icon.type === SystemAppIcon)
+  );
+}
+
 export function AppSwitcherItem({ app, onSelect }: AppSwitcherItemProps) {
   const handleClick = () => {
     if (app.disabled) return;
@@ -30,9 +39,16 @@ export function AppSwitcherItem({ app, onSelect }: AppSwitcherItemProps) {
     }
   };
 
+  const iconClassName = [
+    "gsl-app-switcher__icon",
+    isTileIcon(app.icon) ? "gsl-app-switcher__icon--tile" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const content = (
     <>
-      <span className="gsl-app-switcher__icon">{renderIcon(app.icon)}</span>
+      <span className={iconClassName}>{renderIcon(app.icon)}</span>
       <span className="gsl-app-switcher__name">{app.name}</span>
       {app.badge && (
         <span className="gsl-app-switcher__badge">{app.badge}</span>

@@ -1,0 +1,133 @@
+.gsl-popup {
+  --gsl-popup-font: var(--gsl-font-body);
+  position: relative;
+  z-index: var(--gsl-z-popover);
+  display: flex;
+  width: min(350px, calc(100vw - 32px));
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  background: var(--gsl-surface-panel);
+  border: 1.5px solid var(--gsl-border-subtle);
+  border-radius: 12px;
+  box-shadow: var(--gsl-shadow-md);
+  font-family: var(--gsl-popup-font);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--gsl-text);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.gsl-popup[data-state="open"] {
+  animation: gsl-popup-in 0.15s ease forwards;
+}
+
+.gsl-popup[data-state="closed"] {
+  animation: gsl-popup-out 0.1s ease forwards;
+}
+
+@keyframes gsl-popup-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gsl-popup-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-popup[data-state="open"],
+  .gsl-popup[data-state="closed"] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.gsl-popup:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-popup__header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gsl-popup__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--gsl-text);
+}
+
+.gsl-popup__description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4285;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-popup__body {
+  width: 100%;
+}
+
+.gsl-popup__footer {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+
+.gsl-popup__footer--row {
+  flex-direction: row;
+}
+
+.gsl-popup__footer--row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.gsl-popup__footer--stack {
+  flex-direction: column;
+}
+
+.gsl-popup__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: calc(var(--gsl-radius-base) - 4px);
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  cursor: pointer;
+}
+
+.gsl-popup__close:hover {
+  background: var(--gsl-hover);
+  color: var(--gsl-text);
+}
+
+.gsl-popup__close:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}

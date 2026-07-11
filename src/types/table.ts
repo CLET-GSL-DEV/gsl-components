@@ -198,12 +198,16 @@ export interface TableFilterClassNames {
   applyButton?: string;
 }
 
+export type TableFilterVariant = "popover" | "spread";
+
 export interface TableFilterProps {
   children?: ReactNode;
   onApply?: () => void;
   onReset?: () => void;
   applyLabel?: string;
   resetLabel?: string;
+  /** "popover" (default) opens the fields in a popover panel. "spread" removes the popover and lays the fields out inline as a flex row. */
+  variant?: TableFilterVariant;
   classNames?: TableFilterClassNames;
   className?: string;
 }

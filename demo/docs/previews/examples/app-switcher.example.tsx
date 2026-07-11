@@ -1,4 +1,4 @@
-import { AppSwitcher } from "@rfdtech/components";
+import { AppSwitcher, SystemAppIcon } from "@rfdtech/components";
 
 const apps = [
   {
@@ -17,6 +17,21 @@ const apps = [
     id: "hr-suite",
     name: "HR Suite",
     icon: "https://ui-avatars.com/api/?name=HR+Suite&background=7c3aed&color=fff&size=96",
+  },
+  {
+    id: "accreditation",
+    name: "Accreditation",
+    icon: <SystemAppIcon name="Accreditation" />,
+  },
+  {
+    id: "facilities",
+    name: "Facilities",
+    icon: <SystemAppIcon name="Facilities" />,
+  },
+  {
+    id: "fleet-management",
+    name: "Fleet Management",
+    icon: <SystemAppIcon name="Fleet Management" />,
   },
 ];
 

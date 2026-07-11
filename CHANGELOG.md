@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking
 
 - **AppHeaderProfile**: `variant` no longer accepts `"basic"` — only `"full"` and `"avatar"` remain. `children` type narrowed from `ReactNode` to a single `RoleSelect` element, matching `ProfilePopover`'s `children` slot.
+- Default brand tokens changed: `--gsl-primary`/`--gsl-primary-light` moved from red (`#dc2626` / `#ef4444`) to navy (`#051b2c` / `#4a7fa8`), and a new `--gsl-secondary` (gold `#c8a24b`) token was added and is now the default `SidebarLink` active-link color. Apps that don't set their own `--gsl-*` overrides will see the new navy/gold branding instead of the old red.
 
 ### Added
 
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MCP docs server + `rfdui` CLI (`mcp/`) — ships inside `@rfdtech/components`'s `dist/mcp` and exposes `list_components`, `search_components`, `get_component`, `get_component_examples`, `get_component_types`, `get_rules`, `search_rules`, `get_tokens`, and `search_docs` tools generated from the existing MDX docs, `src/types/*.ts`, and new `demo/docs/rules/*.md` design-rule files, so AI coding agents can look up real component usage instead of guessing.
 - MetricCard: `loading` prop — shimmering skeleton placeholders for icon/label/value/trend/description, with `loadingLabel` for the announced status text.
 - SidebarLink: `loading` prop — shimmering skeleton placeholder for icon/label, with `loadingLabel` for the announced status text.
+- TableFilter: `variant="spread"` — removes the popover and lays filter fields out inline as a flex row with a consistent gap, followed by inline apply/reset actions. Same `onApply`/`onReset` and URL behavior as the default `"popover"` variant.
 - AppSwitcher: `maxItems` prop to cap the visible app grid, and a `children` slot rendered below the grid (e.g. a "manage apps" link).
 - Avatar: `background` and `backgroundVar` props to override the initials gradient with a solid color or CSS variable (falls back to the existing gradient).
 
