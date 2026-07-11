@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-07-11
+
+### Breaking
+
+- **AppHeaderProfile**: `variant` no longer accepts `"basic"` — only `"full"` and `"avatar"` remain. `children` type narrowed from `ReactNode` to a single `RoleSelect` element, matching `ProfilePopover`'s `children` slot.
+
 ### Added
 
 - **Stepper**: horizontal step indicator for multi-step flows. `Stepper` holds the active step value and derives each `Step`'s `complete` / `active` / `upcoming` state. Each `Step` renders a numbered circle that flips to an animated check when done and a connector line that fills between completed steps; `StepLabel` supplies the step's text. Optional `clickable` mode turns steps into buttons firing `onValueChange`, with per-step `disabled`. All colors resolve from existing `--gsl-*` tokens through overridable internal variables (`--gsl-stepper-accent` defaults to `--gsl-primary`, plus `--gsl-stepper-marker-size`, `--gsl-stepper-track`, etc.), and animations respect `prefers-reduced-motion`. Also available as `Stepper.Step`, `Stepper.StepLabel` for compound-style imports.
