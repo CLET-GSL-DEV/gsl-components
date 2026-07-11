@@ -172,7 +172,11 @@ function TableContentRender<T>(
   );
 
   const hasRowActions = rowActions && rowActions.length > 0;
-  const hasActionsColumn = selectable || hasRowActions;
+  // The kebab actions column only exists to hold rowActions (plus a
+  // Select/Deselect toggle when selectable). With no rowActions, selection
+  // is already handled by the checkbox column, so there's nothing for it
+  // to show — don't render an empty kebab column in that case.
+  const hasActionsColumn = hasRowActions;
 
   // Extra colSpan when selectable or actions column adds a column
   const colSpan =

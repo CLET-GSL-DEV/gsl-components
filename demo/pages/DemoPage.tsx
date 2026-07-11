@@ -135,7 +135,6 @@ export function DemoPage() {
 
   return (
     <>
-      <div id="debug-marker-before">DEBUG_BEFORE</div>
       <SectionHeader>
         <SectionTitle>Dashboard</SectionTitle>
         <SectionDescription>

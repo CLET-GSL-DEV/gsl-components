@@ -1,8 +1,4 @@
-import type {
-  TableColumn,
-  TableBulkAction,
-  TableRowAction,
-} from "@rfdtech/components";
+import type { TableColumn, TableBulkAction } from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
 import { useMockQuery } from "demo/hooks/useMockQuery";
 import { useCallback, useMemo, useState } from "react";
@@ -47,38 +43,6 @@ function statusVariant(status: string) {
       return "default" as const;
   }
 }
-
-const columns: TableColumn<GslMember>[] = [
-  {
-    id: "name",
-    header: "Name",
-    accessorKey: "name",
-    sortable: true,
-    cell: ({ value }) => (
-      <span className="demo-home__cell-name">{String(value)}</span>
-    ),
-  },
-  { id: "email", header: "Email", accessorKey: "email", sortable: true },
-  { id: "role", header: "Role", accessorKey: "role", sortable: true },
-  {
-    id: "status",
-    header: "Status",
-    accessorKey: "status",
-    sortable: true,
-    cell: ({ value }) => (
-      <Badge variant={statusVariant(String(value))}>{String(value)}</Badge>
-    ),
-  },
-  {
-    id: "joined",
-    header: "Joined",
-    accessorKey: "joined",
-    sortable: true,
-    cell: ({ value }) => (
-      <span className="demo-home__cell-date">{String(value)}</span>
-    ),
-  },
-];
 
 export function Dashboard2Page() {
   const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
@@ -146,13 +110,84 @@ export function Dashboard2Page() {
     setViewMember(member);
   }, []);
 
-  const rowActions = useMemo<TableRowAction<GslMember>[]>(
+  const handleDeleteOne = useCallback((id: GslMember["id"]) => {
+    setMembers((prev) => prev.filter((m) => m.id !== id));
+  }, []);
+
+  const columns = useMemo<TableColumn<GslMember>[]>(
     () => [
-      { id: "view", label: "View", icon: <Eye size={14} strokeWidth={1.5} />, onClick: handleView },
-      { id: "edit", label: "Edit", icon: <Edit size={14} strokeWidth={1.5} />, onClick: handleView },
-      { id: "delete", label: "Delete", icon: <Trash2 size={14} strokeWidth={1.5} />, onClick: handleView, variant: "destructive" },
+      {
+        id: "name",
+        header: "Name",
+        accessorKey: "name",
+        sortable: true,
+        cell: ({ value }) => (
+          <span className="demo-home__cell-name">{String(value)}</span>
+        ),
+      },
+      { id: "email", header: "Email", accessorKey: "email", sortable: true },
+      { id: "role", header: "Role", accessorKey: "role", sortable: true },
+      {
+        id: "status",
+        header: "Status",
+        accessorKey: "status",
+        sortable: true,
+        cell: ({ value }) => (
+          <Badge variant={statusVariant(String(value))}>{String(value)}</Badge>
+        ),
+      },
+      {
+        id: "joined",
+        header: "Joined",
+        accessorKey: "joined",
+        sortable: true,
+        cell: ({ value }) => (
+          <span className="demo-home__cell-date">{String(value)}</span>
+        ),
+      },
+      {
+        id: "actions",
+        header: "",
+        cell: ({ row }) => (
+          <div className="demo-member-actions">
+            <button
+              type="button"
+              className="demo-member-actions__btn"
+              aria-label={`View ${row.name}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleView(row);
+              }}
+            >
+              <Eye size={14} strokeWidth={1.5} />
+            </button>
+            <button
+              type="button"
+              className="demo-member-actions__btn"
+              aria-label={`Edit ${row.name}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleView(row);
+              }}
+            >
+              <Edit size={14} strokeWidth={1.5} />
+            </button>
+            <button
+              type="button"
+              className="demo-member-actions__btn demo-member-actions__btn--destructive"
+              aria-label={`Delete ${row.name}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteOne(row.id);
+              }}
+            >
+              <Trash2 size={14} strokeWidth={1.5} />
+            </button>
+          </div>
+        ),
+      },
     ],
-    [handleView],
+    [handleView, handleDeleteOne],
   );
 
   return (
@@ -233,7 +268,6 @@ export function Dashboard2Page() {
           selectable
           selectedIds={selected}
           onSelectionChange={setSelected}
-          rowActions={rowActions}
           columns={columns}
           data={paged}
           rowKey={(m: GslMember) => m.id}

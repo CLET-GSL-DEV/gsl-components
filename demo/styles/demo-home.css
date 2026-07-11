@@ -337,6 +337,15 @@
   color: var(--gsl-text);
 }
 
+.demo-member-actions__btn--destructive {
+  color: var(--gsl-error);
+}
+
+.demo-member-actions__btn--destructive:hover {
+  background: var(--gsl-error-bg);
+  color: var(--gsl-error);
+}
+
 /* ── Action button (kebab menu trigger) ── */
 
 .demo-home__action-btn {
