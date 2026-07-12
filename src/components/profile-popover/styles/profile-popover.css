@@ -223,7 +223,7 @@
 
 .gsl-profile-menu__divider {
   height: 1px;
-  margin: 16px 0;
+  margin-bottom: 16px;
   background: var(--gsl-border);
 }
 

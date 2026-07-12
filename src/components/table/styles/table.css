@@ -582,6 +582,16 @@ table tbody tr.gsl-table__row--clickable:hover {
   background: var(--gsl-border);
 }
 
+.gsl-table__actions-section-label {
+  padding: 4px 8px 2px;
+  color: var(--gsl-text-muted);
+  font-family: var(--gsl-table-actions-font);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 /* ── Bulk actions bar ── */
 
 .gsl-table__bulk-actions-bar-wrapper {

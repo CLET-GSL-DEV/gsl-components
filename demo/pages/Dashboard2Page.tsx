@@ -13,7 +13,6 @@ import {
   TableSearch,
   TableFilter,
   TableContent,
-  TableBulkActions,
   TableFooter,
   TablePagination,
   MetricCard,
@@ -295,11 +294,8 @@ export function Dashboard2Page() {
           data={paged}
           rowKey={(m: GslMember) => m.id}
           rowActions={rowActions}
-        />
-        <TableBulkActions
-          selectedIds={selected}
-          onClear={() => setSelected(new Set())}
-          actions={bulkActions}
+          bulkActions={bulkActions}
+          bulkActionsFooter
         />
         <TableFooter className="gsl-table__footer--no-border">
           <TablePagination

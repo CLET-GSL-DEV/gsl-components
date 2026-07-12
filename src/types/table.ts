@@ -126,6 +126,7 @@ export interface TableContentClassNames {
   actionsTrigger?: string;
   actionsMenu?: string;
   actionsItem?: string;
+  actionsSectionLabel?: string;
   skeleton?: string;
   viewport?: string;
 }
@@ -160,6 +161,20 @@ export interface TableContentProps<
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
   /** Row-level actions rendered as a kebab dropdown at the end of each row */
   rowActions?: TableRowAction<T>[];
+  /**
+   * Bulk actions surfaced inside the row-actions menu (kebab click or
+   * right-click) as a "Bulk actions" section below the row's own actions —
+   * always includes a "Select all" / "Deselect all" toggle, with the rest of
+   * the list appearing once one or more rows are selected.
+   */
+  bulkActions?: TableBulkAction[];
+  /**
+   * When true, also renders the `TableBulkActions` bar at the bottom of the
+   * table automatically, wired to the same `bulkActions`/`selectedIds` — no
+   * need to place `<TableBulkActions>` yourself as a sibling. When false
+   * (default), `bulkActions` only surface inside the row-actions menu.
+   */
+  bulkActionsFooter?: boolean;
   /** Called when a row is clicked (in addition to selection toggling, when `selectable` is set) */
   onRowClick?: (row: T, event: MouseEvent<HTMLTableRowElement>) => void;
   /** Row height in px. Set this to enable virtual scrolling. Parent <Table> must have a height set. */

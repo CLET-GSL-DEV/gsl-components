@@ -7,7 +7,6 @@ import { VersionSwitcher } from "./VersionSwitcher";
 
 import {
   LayoutDashboard,
-  Users,
   FileText,
   BarChart3,
   Shield,
@@ -43,21 +42,7 @@ import {
   AppBody,
   SidebarProvider,
   BreadcrumbProvider,
-  useBreadcrumbs,
 } from "@rfdtech/components";
-
-/** Sets breadcrumbs for the main (new design system) layout */
-function BreadcrumbSetter() {
-  const location = useLocation();
-
-  useBreadcrumbs(
-    location.pathname !== "/"
-      ? [{ label: "Home", href: "/" }, { label: "Members" }]
-      : [],
-  );
-
-  return null;
-}
 
 const demoRoles = [
   { id: "admin", name: "Admin", icon: <Shield size={16} strokeWidth={1.5} /> },
@@ -106,7 +91,6 @@ export function DemoLayout2() {
             href: "/",
             icon: LayoutDashboard,
           },
-          { id: "members", label: "Members", href: "/members", icon: Users },
           {
             id: "docs",
             label: "Documentation",
@@ -321,7 +305,6 @@ export function DemoLayout2() {
               </SidebarFooter>
             </Sidebar>
           </AppSidebar>
-          <BreadcrumbSetter />
           <AppBody>
             <Outlet />
           </AppBody>

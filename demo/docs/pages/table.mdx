@@ -182,6 +182,8 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `selectedIds` | `Set<string \| number>` | `new Set()` | Controlled set of selected row keys. Pass with `onSelectionChange`. Required for `TableBulkActions` sync. |
 | `onSelectionChange` | `(selectedIds: Set<string \| number>) => void` | — | Called with a new `Set` on any selection toggle |
 | `rowActions` | `TableRowAction<T>[]` | — | Row-level actions rendered as a kebab dropdown at the end of each row. Opens from the kebab button on click, or at the cursor position on right-click anywhere in the row — see [Row actions](#row-actions) below. |
+| `bulkActions` | `TableBulkAction[]` | — | Surfaces bulk actions inside the row-actions menu (kebab click or right-click) as a "Bulk actions" section — always includes a Select all/Deselect all toggle, with the rest of the list appearing once one or more rows are selected. Requires `selectable`. See [Row actions](#row-actions) below. |
+| `bulkActionsFooter` | `boolean` | `false` | Also render the `TableBulkActions` bar at the bottom of the table automatically, wired to the same `bulkActions`/`selectedIds` — skip placing `<TableBulkActions>` yourself as a sibling. When `false`, `bulkActions` only surface inside the row-actions menu. |
 | `onRowClick` | `(row: T, event: MouseEvent<HTMLTableRowElement>) => void` | — | Called when a row is clicked. Fires in addition to selection toggling when `selectable` is set — use it to e.g. open a detail view on row click. |
 | `className` | `string` | — | Merged onto the wrapper div |
 | `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
@@ -198,7 +200,7 @@ Rows show hover state and cursor pointer when `selectable` or `onRowClick` is se
 `rowActions` is the **preferred** way to add a per-row action menu — prefer it over hand-rolling a `Popover` per row (see the CRUD example below, kept only for cases needing fully custom menu content). It renders a single kebab-triggered dropdown that opens two ways:
 
 - **Kebab click** — opens anchored to the kebab button, right-aligned underneath it, same as any dropdown trigger.
-- **Right-click anywhere in the row** — opens at the exact cursor position (`clientX`/`clientY`), not snapped to the kebab column. This lets users right-click near the data they care about instead of hunting for the actions column.
+- **Right-click anywhere in the row** — opens at the exact cursor position (`clientX`/`clientY`), not snapped to the kebab column. This lets users right-click near the data they care about instead of hunting for the actions column. Right-clicking the same row again while its menu is already open closes it, instead of re-opening at the new cursor position.
 
 Both open the same menu and share the same `TableRowAction<T>[]` items — no extra wiring needed.
 
@@ -218,6 +220,25 @@ Both open the same menu and share the same `TableRowAction<T>[]` items — no ex
       onClick: (row) => deleteRow(row.id),
     },
   ]}
+/>
+```
+
+**Bulk actions in the row-actions menu.** Pass `bulkActions` (requires `selectable`) to surface bulk actions inside that same kebab/right-click menu, under a "Bulk actions" section label. A Select all/Deselect all toggle always shows there; the rest of `bulkActions` only appears once one or more rows are selected. Add `bulkActionsFooter` to also render the `TableBulkActions` bar at the bottom automatically — otherwise `bulkActions` only ever surface inside the menu, and you place `<TableBulkActions>` yourself if you want the bottom bar:
+
+```tsx
+<TableContent
+  columns={columns}
+  data={rows}
+  rowKey={(row) => row.id}
+  selectable
+  selectedIds={selected}
+  onSelectionChange={setSelected}
+  rowActions={rowActions}
+  bulkActions={[
+    { id: "export", label: "Export", icon: <Download size={14} />, onClick: (ids) => exportRows(ids) },
+    { id: "delete", label: "Delete", icon: <Trash2 size={14} />, destructive: true, onClick: (ids) => deleteRows(ids) },
+  ]}
+  bulkActionsFooter
 />
 ```
 
@@ -477,6 +498,7 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 | `actionsTrigger` | Kebab trigger button (`.gsl-table__actions-trigger`) |
 | `actionsMenu` | Actions popover content (`.gsl-table__actions-menu`) |
 | `actionsItem` | Individual action item (`.gsl-table__actions-item`) |
+| `actionsSectionLabel` | "Bulk actions" section label inside the row-actions menu, shown when `bulkActions` is set (`.gsl-table__actions-section-label`) |
 | `skeleton` | Loading skeleton spans (`.gsl-table__skeleton--*`) |
 | `viewport` | Virtual scroll viewport (`.gsl-table__viewport`) |
 
@@ -565,6 +587,7 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 
 - Use the `TableActions` slot inside `TableHeader` for toolbar-level filters or actions (e.g. a `Dropdown` filter) that are distinct from per-row `TableRowAction`s and bulk `TableBulkActions`.
 - Prefer `rowActions` over a hand-rolled per-row `Popover` for kebab menus — it gets cursor-anchored right-click for free, alongside the standard kebab-click trigger.
+- Prefer `bulkActions` + `bulkActionsFooter` on `TableContent` over manually pairing it with a standalone `<TableBulkActions>` sibling — one prop pair keeps the row-actions menu's "Bulk actions" section and the bottom bar in sync automatically. Reach for a standalone `<TableBulkActions>` only if you need it placed somewhere `TableContent` can't reach (e.g. outside `<Table>` context) or without the in-menu section.
 
 ## Don't
 
