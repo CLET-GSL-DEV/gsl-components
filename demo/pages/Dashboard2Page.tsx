@@ -1,4 +1,8 @@
-import type { TableColumn, TableBulkAction } from "@rfdtech/components";
+import type {
+  TableColumn,
+  TableBulkAction,
+  TableRowAction,
+} from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
 import { useMockQuery } from "demo/hooks/useMockQuery";
 import { useCallback, useMemo, useState } from "react";
@@ -151,46 +155,30 @@ export function Dashboard2Page() {
           <span className="demo-home__cell-date">{String(value)}</span>
         ),
       },
+    ],
+    [],
+  );
+
+  const rowActions = useMemo<TableRowAction<GslMember>[]>(
+    () => [
       {
-        id: "actions",
-        header: "",
-        cell: ({ row }) => (
-          <div className="demo-member-actions">
-            <button
-              type="button"
-              className="demo-member-actions__btn"
-              aria-label={`View ${row.name}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleView(row);
-              }}
-            >
-              <Eye size={14} strokeWidth={1.5} />
-            </button>
-            <button
-              type="button"
-              className="demo-member-actions__btn"
-              aria-label={`Edit ${row.name}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleView(row);
-              }}
-            >
-              <Edit size={14} strokeWidth={1.5} />
-            </button>
-            <button
-              type="button"
-              className="demo-member-actions__btn demo-member-actions__btn--destructive"
-              aria-label={`Delete ${row.name}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDeleteOne(row.id);
-              }}
-            >
-              <Trash2 size={14} strokeWidth={1.5} />
-            </button>
-          </div>
-        ),
+        id: "view",
+        label: "View",
+        icon: <Eye size={14} strokeWidth={1.5} />,
+        onClick: handleView,
+      },
+      {
+        id: "edit",
+        label: "Edit",
+        icon: <Edit size={14} strokeWidth={1.5} />,
+        onClick: handleView,
+      },
+      {
+        id: "delete",
+        label: "Delete",
+        icon: <Trash2 size={14} strokeWidth={1.5} />,
+        onClick: (row) => handleDeleteOne(row.id),
+        variant: "destructive",
       },
     ],
     [handleView, handleDeleteOne],
@@ -306,6 +294,7 @@ export function Dashboard2Page() {
           columns={columns}
           data={paged}
           rowKey={(m: GslMember) => m.id}
+          rowActions={rowActions}
         />
         <TableBulkActions
           selectedIds={selected}

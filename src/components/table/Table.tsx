@@ -21,6 +21,7 @@ import {
 import { Checkbox } from "../checkbox/Checkbox";
 import {
   Popover,
+  PopoverAnchor,
   PopoverTrigger,
   PopoverContent,
   PopoverPortal,
@@ -103,6 +104,7 @@ function TableContentRender<T>(
     selectedIds = new Set(),
     onSelectionChange,
     rowActions,
+    onRowClick,
     virtualRowHeight,
     emptyIcon,
     emptyText,
@@ -127,6 +129,29 @@ function TableContentRender<T>(
   const [openPopoverKey, setOpenPopoverKey] = useState<string | number | null>(
     null,
   );
+
+  // Shared virtual anchor for the row-actions popover: kebab clicks snap it to
+  // the trigger button's rect, right-clicks snap it to the cursor point, so
+  // the same Popover can be positioned either way without remounting.
+  const anchorRectRef = useRef({ x: 0, y: 0, width: 0, height: 0 });
+  const virtualAnchorRef = useRef({
+    getBoundingClientRect: (): DOMRect => {
+      const { x, y, width, height } = anchorRectRef.current;
+      return {
+        x,
+        y,
+        width,
+        height,
+        top: y,
+        left: x,
+        right: x + width,
+        bottom: y + height,
+        toJSON() {
+          return this;
+        },
+      } as DOMRect;
+    },
+  });
 
   const columns = useMemo(() => rawColumns ?? [], [rawColumns]);
   const data = useMemo(() => rawData ?? [], [rawData]);
@@ -223,13 +248,19 @@ function TableContentRender<T>(
     return (
       <tr
         key={key}
-        onClick={() => selectable && handleToggleRow(key)}
+        onClick={(e) => {
+          if (selectable) handleToggleRow(key);
+          onRowClick?.(row, e);
+        }}
         onContextMenu={(e) => {
           if (!hasActionsColumn) return;
           e.preventDefault();
+          anchorRectRef.current = { x: e.clientX, y: e.clientY, width: 0, height: 0 };
           setOpenPopoverKey(key);
         }}
-        className={cn(selectable && "gsl-table__row--clickable")}
+        className={cn(
+          (selectable || onRowClick) && "gsl-table__row--clickable",
+        )}
       >
         <td
           className={cn("gsl-table__checkbox-cell", classNames?.checkboxCell)}
@@ -265,12 +296,22 @@ function TableContentRender<T>(
                 setOpenPopoverKey(open ? key : null);
               }}
             >
+              <PopoverAnchor virtualRef={virtualAnchorRef} />
               <PopoverTrigger
                 className={cn(
                   "gsl-table__actions-trigger",
                   classNames?.actionsTrigger,
                 )}
                 aria-label="Row actions"
+                onClick={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  anchorRectRef.current = {
+                    x: rect.x,
+                    y: rect.y,
+                    width: rect.width,
+                    height: rect.height,
+                  };
+                }}
               >
                 <MoreHorizontal size={14} strokeWidth={1.5} />
               </PopoverTrigger>

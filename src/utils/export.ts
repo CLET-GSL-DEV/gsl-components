@@ -17,8 +17,10 @@ function pad(value: number): string {
 }
 
 function formatTimestamp(date: Date): string {
-  const datePart = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-  return `${datePart} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  return date.toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
 }
 
 export function formatFilenameTimestamp(date: Date): string {

@@ -62,7 +62,9 @@ values).
 
 Selectable rows drive `TableBulkActions`, which opens a confirm `Dialog` before the destructive
 action actually runs — nothing is deleted until the user confirms. Each row also has its own
-`Popover` action menu, an alternative to `rowActions` for richer per-row content.
+`Popover` action menu, built by hand for richer per-row content — prefer [`rowActions`](#row-actions)
+(kebab click + cursor-anchored right-click, no custom `Popover` wiring) unless you need content
+`rowActions` can't express.
 
 <ExampleTabs
   title="Selectable table with bulk delete and row actions"
@@ -179,7 +181,8 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `selectable` | `boolean` | `false` | Show a checkbox selection column with select-all in the header |
 | `selectedIds` | `Set<string \| number>` | `new Set()` | Controlled set of selected row keys. Pass with `onSelectionChange`. Required for `TableBulkActions` sync. |
 | `onSelectionChange` | `(selectedIds: Set<string \| number>) => void` | — | Called with a new `Set` on any selection toggle |
-| `rowActions` | `TableRowAction<T>[]` | — | Row-level actions rendered as a kebab dropdown at the end of each row |
+| `rowActions` | `TableRowAction<T>[]` | — | Row-level actions rendered as a kebab dropdown at the end of each row. Opens from the kebab button on click, or at the cursor position on right-click anywhere in the row — see [Row actions](#row-actions) below. |
+| `onRowClick` | `(row: T, event: MouseEvent<HTMLTableRowElement>) => void` | — | Called when a row is clicked. Fires in addition to selection toggling when `selectable` is set — use it to e.g. open a detail view on row click. |
 | `className` | `string` | — | Merged onto the wrapper div |
 | `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
 | `emptyIcon` | `ReactNode` | Inbox icon | JSX/ReactNode icon shown above the empty text when `data` is empty. Defaults to an Inbox icon from `lucide-react`. |
@@ -188,7 +191,46 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 
 When `selectable` is true, a checkbox column is always present, collapsed to 0 width when no rows are selected. The header checkbox selects or deselects all visible rows.
 
-Rows show hover state and cursor pointer when `selectable` is set.
+Rows show hover state and cursor pointer when `selectable` or `onRowClick` is set.
+
+### Row actions
+
+`rowActions` is the **preferred** way to add a per-row action menu — prefer it over hand-rolling a `Popover` per row (see the CRUD example below, kept only for cases needing fully custom menu content). It renders a single kebab-triggered dropdown that opens two ways:
+
+- **Kebab click** — opens anchored to the kebab button, right-aligned underneath it, same as any dropdown trigger.
+- **Right-click anywhere in the row** — opens at the exact cursor position (`clientX`/`clientY`), not snapped to the kebab column. This lets users right-click near the data they care about instead of hunting for the actions column.
+
+Both open the same menu and share the same `TableRowAction<T>[]` items — no extra wiring needed.
+
+```tsx
+<TableContent
+  columns={columns}
+  data={rows}
+  rowKey={(row) => row.id}
+  rowActions={[
+    { id: "view", label: "View", icon: <Eye size={14} />, onClick: (row) => openView(row) },
+    { id: "edit", label: "Edit", icon: <Edit size={14} />, onClick: (row) => openEdit(row) },
+    {
+      id: "delete",
+      label: "Delete",
+      icon: <Trash2 size={14} />,
+      variant: "destructive",
+      onClick: (row) => deleteRow(row.id),
+    },
+  ]}
+/>
+```
+
+Need a plain row click instead (e.g. navigating to a detail page)? Use `onRowClick` — it fires independently of `rowActions` and of selection toggling:
+
+```tsx
+<TableContent
+  columns={columns}
+  data={rows}
+  rowKey={(row) => row.id}
+  onRowClick={(row) => navigate(`/members/${row.id}`)}
+/>
+```
 
 ### `TableColumn<T>`
 
@@ -522,8 +564,10 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 ## Do
 
 - Use the `TableActions` slot inside `TableHeader` for toolbar-level filters or actions (e.g. a `Dropdown` filter) that are distinct from per-row `TableRowAction`s and bulk `TableBulkActions`.
+- Prefer `rowActions` over a hand-rolled per-row `Popover` for kebab menus — it gets cursor-anchored right-click for free, alongside the standard kebab-click trigger.
 
 ## Don't
 
 - Don't pull `TableSearch`, `TableFilter`, `TableActions`, or a view-mode toggle out of `<Table>` context into a plain `<div>` — these children require the ancestor `<Table paramPrefix>` to function.
 - When a page has a list/tile view toggle, don't rebuild `TableHeader` per mode — keep it (search, filters, toggle) identical for both, and only swap `TableContent` (list) for a grid (tiles) inside `<Table>`.
+- Don't hand-roll `onContextMenu` + a controlled `Popover` to get a cursor-anchored right-click menu — `rowActions` already does this.

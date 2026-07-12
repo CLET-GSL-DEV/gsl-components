@@ -25,7 +25,7 @@ export const docNavSections: DocNavSection[] = [
 		items: [
 			{ slug: "app-header", title: "AppHeader" },
 			{ slug: "app-layout", title: "AppLayout" },
-			{ slug: "app-switcher", title: "AppSwitcher" },
+			{ slug: "app-switcher", title: "AppSwitcher (Deprecated)" },
 			{ slug: "badge", title: "Badge" },
 			{ slug: "breadcrumb", title: "Breadcrumb" },
 			{ slug: "bulk-import-modal", title: "BulkImportModal" },
@@ -39,6 +39,7 @@ export const docNavSections: DocNavSection[] = [
 			{ slug: "dialog", title: "Dialog" },
 			{ slug: "draggable", title: "Draggable" },
 			{ slug: "dropdown", title: "Dropdown" },
+			{ slug: "export-button", title: "ExportButton" },
 			{ slug: "form", title: "Form" },
 			{ slug: "form-field", title: "FormField" },
 			{ slug: "launchpad", title: "Launchpad" },

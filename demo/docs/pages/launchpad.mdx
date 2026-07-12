@@ -17,9 +17,9 @@ import launchpadLoadingSource from "../previews/examples/launchpad-loading.examp
 
 # Launchpad
 
-A purpose-built "app directory" launcher for switching between GSL systems — a 3×3 grid of up to 9 apps, with a built-in bordered "See all" button and an optional role switcher below the grid. Clicking "See all" opens a scaled-up expanded view of the same tile system — a borderless, `--gsl-radius-2xl` modal with a 5-column grid of every app in `apps` (uncapped). It's a sibling to [`AppSwitcher`](/docs/app-switcher), not a replacement: same underlying popover/grid idea, but with a much smaller, more opinionated API and every icon rendered on a fixed brand tile system with no escape hatch.
+A purpose-built "app directory" launcher for switching between GSL systems — a 3×3 grid of up to 9 apps, with a built-in bordered "See all" button and an optional role switcher below the grid. Clicking "See all" opens a scaled-up expanded view of the same tile system — a borderless, `--gsl-radius-2xl` modal with a 5-column grid of every app in `apps` (uncapped). It grew out of the same underlying popover/grid idea as [`AppSwitcher`](/docs/app-switcher), with a much smaller, more opinionated API and every icon rendered on a fixed brand tile system with no escape hatch.
 
-If you need a flexible column count, a different cap, or a fully custom footer, use `AppSwitcher` instead. Reach for `Launchpad` when you want the constrained, low-config version.
+Prefer `Launchpad` for all new work — `AppSwitcher` is deprecated and no longer maintained. `Launchpad` doesn't (yet) cover every `AppSwitcher` capability (flexible column count, an uncapped or differently-capped grid, a fully custom `footer`); if your case genuinely needs one of those, check with the team before reaching for the deprecated component.
 
 ## Examples
 

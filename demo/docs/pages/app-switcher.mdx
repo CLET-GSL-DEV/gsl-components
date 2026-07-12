@@ -1,10 +1,10 @@
 export const meta = {
   title: "AppSwitcher",
-  description: "9-dot app launcher",
+  description: "Deprecated — use Launchpad instead",
   category: "Components",
-  keywords: ["app switcher", "9-dot menu", "app launcher", "product switcher", "grid menu"],
+  keywords: ["app switcher", "9-dot menu", "app launcher", "product switcher", "grid menu", "deprecated"],
   since: "0.4.0",
-  status: "stable",
+  status: "deprecated",
   related: ["app-header", "launchpad"],
   import: "@rfdtech/components",
 };
@@ -16,6 +16,8 @@ import appSwitcherSource from "../previews/examples/app-switcher.example.tsx?raw
 import appSwitcherLoadingSource from "../previews/examples/app-switcher-loading.example.tsx?raw";
 
 # AppSwitcher
+
+> **Deprecated — no longer maintained.** Use [`Launchpad`](/docs/launchpad) instead. `AppSwitcher` remains exported for existing consumers and won't be removed without a major-version breaking-change entry, but it receives no new features or design updates going forward; `Launchpad` is where new work happens.
 
 Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products. Pass `apps` from your own data layer and use `loading` while data is being fetched.
 

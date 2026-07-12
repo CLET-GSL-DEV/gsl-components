@@ -1,0 +1,134 @@
+export const meta = {
+  title: "ExportButton",
+  description: "Export tabular data to CSV, Excel, or PDF",
+  category: "Components",
+  keywords: ["export", "download", "csv", "excel", "xlsx", "pdf", "print", "report"],
+  since: "2.1.0",
+  status: "stable",
+  related: ["table", "button"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { ExportButtonPreview } from "../previews/code/ExportButtonPreview";
+import { ExportButtonFormatsPreview } from "../previews/code/ExportButtonFormatsPreview";
+import exportButtonSource from "../previews/examples/export-button.example.tsx?raw";
+import exportButtonFormatsSource from "../previews/examples/export-button-formats.example.tsx?raw";
+
+# ExportButton
+
+A button that exports tabular `data` to CSV, Excel (`.xlsx`), or a printable PDF report, via a
+dropdown menu. Renders `<Button>` as its trigger and accepts all `Button` props alongside its own —
+pass `variant`, `size`, `loading`, etc. same as you would to `Button` directly.
+
+## Examples
+
+<ExampleTabs
+  title="With multiple formats and a filters description"
+  preview={<ExportButtonPreview />}
+  code={exportButtonSource}
+/>
+
+<ExampleTabs
+  title="Single format, custom label"
+  preview={<ExportButtonFormatsPreview />}
+  code={exportButtonFormatsSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `data` | `T[]` | — | Rows to export |
+| `columns` | `ExportColumn<T>[]` | — | Column `header` + `accessor` pairs — see [Types](#types) below |
+| `title` | `string` | — | Report title, shown in the PDF header and used to derive the default filename (slugified) when `filename` is omitted |
+| `filename` | `string` | slugified `title` | Base filename, before the timestamp suffix and format extension |
+| `filtersDescription` | `string` | — | Optional description of active filters (e.g. `"Active only"`) — folded into the generated filename and shown in the PDF metadata |
+| `formats` | `ExportFormat[]` | `["csv", "xlsx", "pdf"]` | Which format options appear in the dropdown menu, and in this order |
+| `label` | `ReactNode` | `"Export"` | Trigger button label, next to the download icon |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"` | Menu placement side |
+| `align` | `"start" \| "center" \| "end"` | `"end"` | Menu placement alignment |
+| `sideOffset` | `number` | `4` | Menu offset from the trigger |
+| `classNames` | `ExportButtonClassNames` | — | Part-level class overrides: `trigger`, `menu`, `menuItem` |
+
+Also accepts every `Button` prop except `children` and `classNames` (which `ExportButton` defines
+its own version of) — `variant` (default `"outline"`), `size` (default `"md"`), `loading`,
+`loadingLabel`, `disabled`, and any native `<button>` attribute.
+
+## Types
+
+### `ExportColumn`
+
+| Field | Type | Description |
+|-------|------|--------------|
+| `header` | `string` | Column header text — used as the CSV/Excel header cell and the PDF table header |
+| `accessor` | `(row: T) => string \| number \| null \| undefined` | Derives the cell value for a row. `null`/`undefined` renders as an empty cell (CSV/Excel) or `"—"` (PDF) |
+
+### `ExportFormat`
+
+`"csv" | "xlsx" | "pdf"`
+
+### `ExportMeta`
+
+Only relevant if you call `exportToPdf` directly (see below) — `ExportButton` builds this for you.
+
+| Field | Type | Description |
+|-------|------|--------------|
+| `title` | `string` | Report title, shown in the PDF header |
+| `recordCount` | `number` | Optional — shown as `Records: <n>` in the PDF metadata |
+| `filters` | `string` | Optional — shown as `Filters: "<...>"` in the PDF metadata |
+| `generatedAt` | `string` | Optional — pre-formatted generated-at string. Defaults to `new Date()` formatted with `toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })` (e.g. `"Jul 13, 2026, 2:05 PM"`) when omitted |
+
+## Using the export functions directly
+
+Don't want `ExportButton`'s `Button`-based styling — building your own trigger, a custom menu, or
+firing an export from somewhere that isn't a button at all (a keyboard shortcut, a bulk-action
+bar)? The three format functions and the filename helper it's built on are exported directly, with
+no UI attached:
+
+```ts
+import {
+  exportToCsv,
+  exportToXlsx,
+  exportToPdf,
+  formatFilenameTimestamp,
+} from "@rfdtech/components";
+import type { ExportColumn, ExportMeta } from "@rfdtech/components";
+```
+
+| Function | Signature | Behavior |
+|----------|-----------|----------|
+| `exportToCsv` | `<T>(data: T[], columns: ExportColumn<T>[], filename: string) => void` | Triggers a `.csv` file download |
+| `exportToXlsx` | `<T>(data: T[], columns: ExportColumn<T>[], filename: string) => void` | Triggers a `.xlsx` file download |
+| `exportToPdf` | `<T>(data: T[], columns: ExportColumn<T>[], filename: string, meta: ExportMeta) => void` | Opens a new tab with a print-ready report and calls `window.print()` |
+| `formatFilenameTimestamp` | `(date: Date) => string` | The same `YYYY-MM-DD_HHmm` suffix `ExportButton` appends to every filename — kept filesystem-safe and locale-independent on purpose (unlike the human-facing PDF timestamp above, this one is never meant to be pretty) |
+
+None of the three format functions append the filename suffix or slugify anything for you —
+that's `ExportButton`'s own convenience layer. Calling them directly, you own the full filename:
+
+```tsx
+import { exportToCsv, formatFilenameTimestamp } from "@rfdtech/components";
+import type { ExportColumn } from "@rfdtech/components";
+
+interface Member {
+  name: string;
+  email: string;
+}
+
+const columns: ExportColumn<Member>[] = [
+  { header: "Name", accessor: (row) => row.name },
+  { header: "Email", accessor: (row) => row.email },
+];
+
+function handleExport(members: Member[]) {
+  exportToCsv(members, columns, `members-${formatFilenameTimestamp(new Date())}.csv`);
+}
+```
+
+## Notes
+
+- **CSV**: comma-separated, UTF-8 with a BOM (so Excel opens accented/non-Latin characters correctly), values containing a comma/quote/newline are quoted per the CSV spec.
+- **Excel**: a single-sheet `.xlsx` workbook (via the `xlsx` package) with column widths sized to each header's length (minimum 12 characters).
+- **PDF**: not a real PDF generator — opens a new browser tab with a styled, print-ready HTML report (title, record count, filters, and the data table) and calls `window.print()` on load, closing the tab once the print dialog is dismissed. If the browser blocks the popup, nothing opens — there's no fallback or error surfaced to the caller, so make sure `ExportButton` is triggered from a real user click (it always is, since it's the dropdown menu's own `onClick`).
+- Every format shares the same generated filename: `<filename-or-slugified-title>[-<slugified-filtersDescription>]-<YYYY-MM-DD_HHmm>.<ext>`.
+- `data`/`columns` are read at click time — `ExportButton` doesn't cache or transform them, so exports always reflect whatever `data` the component currently has (e.g. the same filtered/sorted rows the consumer is showing in a `Table`).

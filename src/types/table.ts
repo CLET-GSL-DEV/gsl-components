@@ -1,4 +1,9 @@
-import type { HTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
+import type {
+  HTMLAttributes,
+  InputHTMLAttributes,
+  MouseEvent,
+  ReactNode,
+} from "react";
 
 /* ── Column definition ── */
 
@@ -155,6 +160,8 @@ export interface TableContentProps<
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
   /** Row-level actions rendered as a kebab dropdown at the end of each row */
   rowActions?: TableRowAction<T>[];
+  /** Called when a row is clicked (in addition to selection toggling, when `selectable` is set) */
+  onRowClick?: (row: T, event: MouseEvent<HTMLTableRowElement>) => void;
   /** Row height in px. Set this to enable virtual scrolling. Parent <Table> must have a height set. */
   virtualRowHeight?: number;
 }
