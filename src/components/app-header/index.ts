@@ -1,7 +1,7 @@
 export { AppHeader, AppHeaderActions, AppHeaderBranding } from "./AppHeader";
 export { AppHeaderSearch } from "./AppHeaderSearch";
 export { AppHeaderNotifications } from "./AppHeaderNotifications";
-export { AppHeaderProfile } from "./AppHeaderProfile";
+export { AppHeaderNotificationItem } from "./AppHeaderNotificationItem";
 export type {
   AppHeaderProps,
   AppHeaderActionsProps,
@@ -10,6 +10,6 @@ export type {
   AppHeaderSearchDataGroup,
   AppHeaderSearchItem,
   AppHeaderNotificationsProps,
-  AppHeaderProfileProps,
-  AppUser,
+  AppHeaderNotificationItemProps,
+  AppHeaderNotificationItemClassNames,
 } from "../../types/app-header";

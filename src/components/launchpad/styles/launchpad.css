@@ -1,0 +1,460 @@
+.gsl-launchpad {
+  --gsl-shadow: var(--gsl-shadow-sm);
+  --gsl-item-size: 50px;
+  --gsl-icon-size: 50px;
+  --gsl-launchpad-font: var(--gsl-font-body);
+
+  position: relative;
+  display: inline-block;
+  font-family: var(--gsl-launchpad-font);
+}
+
+.gsl-launchpad__trigger-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.gsl-launchpad__trigger-tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--gsl-z-tooltip, var(--gsl-z-popover));
+  width: max-content;
+  max-width: 200px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--gsl-text);
+  color: var(--gsl-bg);
+  font-family: var(--gsl-launchpad-font);
+  font-size: 11px;
+  line-height: 1.35;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgb(0 0 0 / 25%));
+}
+
+.gsl-launchpad__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--gsl-on-primary);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.gsl-launchpad__trigger:hover {
+  background-color: #ffffff33;
+}
+
+.gsl-launchpad__trigger:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-launchpad__panel {
+  --gsl-shadow: var(--gsl-shadow-sm);
+  --gsl-item-size: 80px;
+  --gsl-icon-size: 50px;
+  --gsl-launchpad-font: var(--gsl-font-body);
+
+  z-index: var(--gsl-z-popover);
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+  padding: 8px 0;
+  font-family: var(--gsl-launchpad-font);
+  background: var(--gsl-bg);
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-radius-xl);
+  box-shadow: var(--gsl-shadow-md);
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.gsl-launchpad__grid-scroll {
+  padding-top: 16px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 9px,
+    black calc(100% - 9px),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 9px,
+    black calc(100% - 9px),
+    transparent
+  );
+  overflow-y: auto;
+  max-height: 340px;
+}
+
+.gsl-launchpad__panel[data-state="open"] {
+  animation: gsl-launchpad-panel-in 0.15s ease forwards;
+}
+
+.gsl-launchpad__panel[data-state="closed"] {
+  animation: gsl-launchpad-panel-out 0.1s ease forwards;
+}
+
+@keyframes gsl-launchpad-panel-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gsl-launchpad-panel-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.gsl-launchpad__title {
+  padding-top: 16px;
+  padding-bottom: 4px;
+  font-family: var(--gsl-font-header);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gsl-text);
+  text-align: center;
+}
+
+.gsl-launchpad__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 4px 16px;
+}
+
+.gsl-launchpad__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  gap: 8px;
+  width: var(--gsl-item-size);
+  min-height: var(--gsl-item-size);
+  border: none;
+  border-radius: var(--gsl-radius-base);
+  background: transparent;
+  color: var(--gsl-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  position: relative;
+  padding: 8px;
+}
+
+.gsl-launchpad__item:hover:not(:disabled, .gsl-launchpad__item--disabled) {
+  background-color: var(--gsl-hover);
+}
+
+.gsl-launchpad__item:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: -2px;
+}
+
+.gsl-launchpad__item--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.gsl-launchpad__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--gsl-icon-size);
+  height: var(--gsl-icon-size);
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--gsl-radius-base);
+  background: transparent;
+}
+
+.gsl-launchpad__tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--gsl-radius-base);
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Fixed brand gradient palette — an app's tile gradient is chosen by a
+   deterministic hash of its name (see gradientIndexFromString), independent
+   of which decorative overlay it lands on. */
+.gsl-launchpad__tile--grad-0 {
+  background: linear-gradient(143.64deg, #051b2c 14.73%, #3e5f8a 82.09%);
+}
+
+.gsl-launchpad__tile--grad-1 {
+  background: linear-gradient(133.62deg, #b8960c 6.41%, #ddb100 93.13%);
+}
+
+.gsl-launchpad__tile--grad-2 {
+  background: linear-gradient(137.16deg, #0369a1 16.78%, #0284c7 88.75%);
+}
+
+.gsl-launchpad__tile--grad-3 {
+  background: linear-gradient(138.68deg, #f59e0b 7.53%, #d97706 88.9%);
+}
+
+.gsl-launchpad__tile--grad-4 {
+  background: linear-gradient(137.16deg, #0ea5e9 16.78%, #0369a1 88.75%);
+}
+
+.gsl-launchpad__tile--grad-5 {
+  background: linear-gradient(138.68deg, #fbbf24 7.53%, #fcd34d 88.9%);
+}
+
+.gsl-launchpad__tile--grad-6 {
+  background: linear-gradient(138.68deg, #38bdf8 7.53%, #0369a1 88.9%);
+}
+
+.gsl-launchpad__tile--grad-7 {
+  background: linear-gradient(143.64deg, #3f3f46 14.73%, #52525b 82.09%);
+}
+
+.gsl-launchpad__tile--grad-8 {
+  background: linear-gradient(143.64deg, #713b0c 14.73%, #431d06 82.09%);
+}
+
+/* Decorative overlays — 9 fixed shapes, each with its own baked-in
+   size/anchor (an overlay's alignment is part of its identity and is never
+   swapped with another's). Chosen by a hash independent of the gradient
+   (see overlayIndexFromString), so every gradient × overlay pairing can
+   occur. */
+.gsl-launchpad__tile-overlay {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.05;
+}
+
+.gsl-launchpad__tile-overlay--0 {
+  width: 46.5%;
+  height: auto;
+  right: 0;
+  bottom: 0;
+}
+
+.gsl-launchpad__tile-overlay--1 {
+  width: 80%;
+  height: auto;
+  top: 0;
+  right: 0;
+}
+
+.gsl-launchpad__tile-overlay--2 {
+  width: auto;
+  height: 95%;
+  top: 0;
+  right: 0;
+}
+
+.gsl-launchpad__tile-overlay--3 {
+  width: 97%;
+  height: auto;
+  top: 0;
+  right: 0;
+}
+
+.gsl-launchpad__tile-overlay--4 {
+  width: 100%;
+  height: auto;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.gsl-launchpad__tile-overlay--5 {
+  width: auto;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+
+.gsl-launchpad__tile-overlay--6 {
+  width: 97%;
+  height: auto;
+  top: 0;
+  right: 0;
+}
+
+.gsl-launchpad__tile-overlay--7 {
+  width: 95%;
+  height: auto;
+  right: 0;
+  bottom: 0;
+}
+
+.gsl-launchpad__tile-overlay--8 {
+  width: calc(101% + 5px);
+  height: auto;
+  top: 10%;
+  left: 0;
+}
+
+.gsl-launchpad__tile-glyph {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.gsl-launchpad__expand-grid .gsl-launchpad__tile-glyph {
+  font-size: 32px;
+}
+.gsl-launchpad__status {
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-launchpad__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px 16px;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-launchpad__spinner {
+  animation: gsl-launchpad-spin 0.8s linear infinite;
+}
+
+@keyframes gsl-launchpad-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.gsl-launchpad__name {
+  height: 32px;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.gsl-launchpad__expand-grid .gsl-launchpad__name {
+  font-size: 20px;
+  font-weight: 500;
+  height: auto;
+}
+
+.gsl-launchpad__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--gsl-on-primary);
+  background: var(--gsl-focus);
+  border-radius: 4px;
+}
+
+.gsl-launchpad__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--gsl-border);
+}
+
+/* "See all" expanded modal — a scaled-up version of the popover: same
+   tile system, bigger grid, no standard Modal header/footer chrome.
+   Compound selectors (.gsl-modal.gsl-launchpad__expand, etc.) so these
+   overrides win regardless of CSS import order relative to modal.css. */
+.gsl-modal.gsl-launchpad__expand {
+  border: none;
+  border-radius: var(--gsl-radius-2xl);
+  padding: 50px;
+}
+
+.gsl-launchpad__expand-base {
+  margin-top: 32px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gsl-modal__title.gsl-launchpad__expand-title {
+  margin: 0 0 50px;
+  font-family: var(--gsl-font-header);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--gsl-text);
+  text-align: center;
+}
+
+.gsl-launchpad__expand-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 9px,
+    black calc(100% - 9px),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 9px,
+    black calc(100% - 9px),
+    transparent
+  );
+  padding-block: 32px;
+}
+
+.gsl-launchpad__grid.gsl-launchpad__expand-grid {
+  --gsl-icon-size: 120px;
+
+  grid-template-columns: repeat(5, 1fr);
+  padding: 4px 8px;
+}
+
+.gsl-launchpad__expand-grid .gsl-launchpad__item {
+  width: 100%;
+}
+.gsl-launchpad__expand-base .gsl-modal__close {
+  border-radius: 999px;
+}

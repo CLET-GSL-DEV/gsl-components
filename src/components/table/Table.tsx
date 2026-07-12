@@ -567,14 +567,27 @@ function TableContentRender<T>(
       ) : children ? (
         children
       ) : (
-        <div className={cn("gsl-table__empty", classNames?.empty)}>
-          <div className={cn("gsl-table__empty-icon", classNames?.emptyIcon)}>
-            {emptyIcon ?? DEFAULT_TABLE_EMPTY_ICON}
-          </div>
-          <div className={cn("gsl-table__empty-text", classNames?.emptyText)}>
-            {emptyText ?? "No results"}
-          </div>
-        </div>
+        <table>
+          <thead>{headerRow}</thead>
+          <tbody>
+            <tr>
+              <td colSpan={colSpan || 1}>
+                <div className={cn("gsl-table__empty", classNames?.empty)}>
+                  <div
+                    className={cn("gsl-table__empty-icon", classNames?.emptyIcon)}
+                  >
+                    {emptyIcon ?? DEFAULT_TABLE_EMPTY_ICON}
+                  </div>
+                  <div
+                    className={cn("gsl-table__empty-text", classNames?.emptyText)}
+                  >
+                    {emptyText ?? "No results"}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       )}
     </div>
   );

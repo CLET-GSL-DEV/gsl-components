@@ -271,3 +271,42 @@ components:
 Before building any UI element from scratch, check whether the library already provides it —
 for example `UploadField`, `Checkbox`, `Dropdown`, or `CommandInput`. Don't hand-roll a
 replacement for functionality the library already ships.
+
+===RULE===
+id: components-app-header-notification-item
+title: Use AppHeaderNotificationItem, never hand-rolled notification divs
+severity: dont
+components: app-header
+
+Render each `AppHeaderNotifications` child as an `AppHeaderNotificationItem` (`text`, `time`,
+`unread`, optional `onClick`) — never hand-write `.gsl-notif-popover__item` /
+`.gsl-notif-popover__dot` / `.gsl-notif-popover__body-text` divs directly. The component also
+makes the row keyboard-focusable (Enter/Space) when `onClick` is passed, which hand-rolled divs
+don't get for free.
+
+===RULE===
+id: components-table-row-actions-inline-preferred
+title: Prefer inline row-action buttons over the built-in kebab menu
+severity: do
+components: table
+
+`TableContent`'s `rowActions` prop always renders a kebab (`...`) popover menu. For the current
+design system, prefer a custom `cell` on an "actions" column rendering plain icon buttons inline
+instead (view/edit/delete side by side) — see `demo/pages/MembersPage.tsx` or
+`demo/pages/Dashboard2Page.tsx` for the pattern. Don't combine both on the same table: passing
+`selectable` with no `rowActions` renders no kebab column at all (selection is already handled by
+the checkbox column), so there's no redundant empty menu next to your inline buttons.
+
+===RULE===
+id: components-new-design-system-variants
+title: Prefer the "new design system" variant on these components
+severity: do
+components: app-header, metric-card, sidebar, table
+
+The current preferred variant set (demonstrated at `/dashboard2` vs. the frozen `/dashboard2/legacy`
+in the demo app): `AppHeader` `variant="plain"` over `"default"`; `MetricCard` `variant="outline"`
+over `"default"`; `SidebarGroup` `collapsible` (accordion groups) over flat non-collapsible groups;
+`TableContent` `variant="panel"` over `"default"`; `TableFilter` `variant="spread"` over the
+default `"popover"`. Default to these in new work. If asked to "convert this app to the new design
+system," scan for usages of the components above and swap them to the preferred variant, then ask
+before overriding any of the consuming app's own `--gsl-*` color token overrides.

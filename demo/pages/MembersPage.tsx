@@ -194,8 +194,8 @@ export function MembersPage() {
               <TableFilter>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Status</label>
-                  <input type="hidden" name="status" value={statusValue} />
                   <Dropdown
+                    name="status"
                     value={statusValue}
                     onValueChange={(v) => setStatusValue(v ?? "")}
                     options={[
@@ -210,8 +210,8 @@ export function MembersPage() {
                 </div>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Role</label>
-                  <input type="hidden" name="role" value={roleValue} />
                   <Dropdown
+                    name="role"
                     value={roleValue}
                     onValueChange={(v) => setRoleValue(v ?? "")}
                     options={[
@@ -261,8 +261,8 @@ export function MembersPage() {
               <TableFilter>
                 <div className="demo-home__filter-field">
                   <label className="demo-home__filter-label">Status</label>
-                  <input type="hidden" name="status" value={invStatusValue} />
                   <Dropdown
+                    name="status"
                     value={invStatusValue}
                     onValueChange={(v) => setInvStatusValue(v ?? "")}
                     options={[

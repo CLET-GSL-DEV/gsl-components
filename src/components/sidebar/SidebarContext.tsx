@@ -119,3 +119,12 @@ export function useSidebar() {
 
   return context;
 }
+
+/**
+ * Like useSidebar, but returns null instead of throwing when there is no
+ * SidebarProvider ancestor. For components (e.g. AppHeader) that adapt their
+ * rendering when a sidebar is present but must also work standalone.
+ */
+export function useSidebarOptional() {
+  return useContext(SidebarContext);
+}

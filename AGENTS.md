@@ -17,11 +17,13 @@ References: [`.cursor/rules/gsl-component-authoring.mdc`](.cursor/rules/gsl-comp
 ## Design system versioning — prefer "new design system"
 
 The library has a current, preferred set of component variants ("new design
-system"), demonstrated live in the demo app at `/dashboard2` (current) vs.
-`/dashboard2/legacy` (a frozen snapshot of the old v1 look, reachable via the
-version dropdown in that sidebar). The old look uses the pre-rebrand red
-color tokens, scoped via the `.legacy-theme` class in `demo/demo.css` — it
-does not affect the library's actual defaults.
+system"), demonstrated live in the demo app at `/` (current — `Dashboard2Page`)
+vs. `/legacy` (a frozen snapshot of the old v1 look — `DemoPage`, reachable
+via the version dropdown in that sidebar). The old look uses the pre-rebrand
+red color tokens, scoped via the `.legacy-theme` class in `demo/demo.css` —
+it does not affect the library's actual defaults. See the
+[v2 migration guide](demo/docs/pages/migration-v2.mdx) for the full breaking
+change list.
 
 **New design system variants** (prefer these by default in new work):
 

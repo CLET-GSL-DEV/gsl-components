@@ -1,0 +1,104 @@
+export const meta = {
+  title: "Launchpad",
+  description: "Constrained 9-app launcher with a built-in See all + role switcher",
+  category: "Components",
+  keywords: ["launchpad", "app switcher", "9-dot menu", "app launcher", "product switcher", "grid menu"],
+  since: "2.1.0",
+  status: "stable",
+  related: ["app-switcher", "app-header", "role-select"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { LaunchpadPreview } from "../previews/code/LaunchpadPreview";
+import { LaunchpadLoadingPreview } from "../previews/code/LaunchpadLoadingPreview";
+import launchpadSource from "../previews/examples/launchpad.example.tsx?raw";
+import launchpadLoadingSource from "../previews/examples/launchpad-loading.example.tsx?raw";
+
+# Launchpad
+
+A purpose-built "app directory" launcher for switching between GSL systems — a 3×3 grid of up to 9 apps, with a built-in bordered "See all" button and an optional role switcher below the grid. Clicking "See all" opens a scaled-up expanded view of the same tile system — a borderless, `--gsl-radius-2xl` modal with a 5-column grid of every app in `apps` (uncapped). It's a sibling to [`AppSwitcher`](/docs/app-switcher), not a replacement: same underlying popover/grid idea, but with a much smaller, more opinionated API and every icon rendered on a fixed brand tile system with no escape hatch.
+
+If you need a flexible column count, a different cap, or a fully custom footer, use `AppSwitcher` instead. Reach for `Launchpad` when you want the constrained, low-config version.
+
+## Examples
+
+<ExampleTabs
+  title="With apps, See all, and a role switcher"
+  preview={<LaunchpadPreview />}
+  code={launchpadSource}
+/>
+
+<ExampleTabs
+  title="Loading state"
+  preview={<LaunchpadLoadingPreview />}
+  code={launchpadLoadingSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `apps` | `LaunchpadApp[]` | — | Apps to show. Popover grid is capped at 9 — not configurable; the built-in "See all" modal shows every app in `apps`, uncapped. |
+| `loading` | `boolean` | `false` | Shows a spinner (only — no text) in the panel instead of the grid |
+| `onAppSelect` | `(app: LaunchpadApp) => void` | — | Called when an app is selected, from either the popover grid or the expanded "See all" modal |
+| `children` | `ReactElement<RoleSelectProps>` | — | A [`RoleSelect`](/docs/role-select) rendered below the grid, below the built-in "See all" button — only a `RoleSelect` element is accepted |
+| `open` | `boolean` | — | Controlled open state (the popover; the "See all" modal manages its own state internally) |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
+| `trigger` | `ReactNode` | round 9-dot icon | Custom trigger element — still wrapped with the "Open Launchpad" tooltip/accessible name |
+| `className` | `string` | — | Root CSS class |
+| `style` | `CSSProperties` | — | Root inline styles |
+
+Fixed, not configurable (no prop, no override): the popover title and the expanded modal's title both always read **"Launchpad"** (both `--gsl-font-header`), the trigger's accessible name / hover tooltip always reads **"Open Launchpad"**, and the "See all" button (always rendered, no prop to hide it) always opens the expanded modal. Dropped relative to `AppSwitcher`: `columns` (fixed at 3, or 5 in the expanded modal), `maxItems` (fixed at 9 for the popover, uncapped in the modal), `placement` (fixed `bottom-end`), `closeOnSelect` (always closes on select), `title`/`triggerLabel`/`loadingLabel`/`onSeeAll`/`seeAllLabel` (fixed copy/behavior, no prop), and the generic `footer` slot (replaced by the built-in "See all" button + `children`).
+
+## Types
+
+### `LaunchpadApp`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `name` | `string` | Display name below the icon |
+| `icon` | `<SystemLaunchpadIcon>` \| `<LaunchpadIconTile>` element | Must be one of these two components — a closed set enforced at the type level, so no raw image URL, emoji, or arbitrary icon can opt an app out of the shared tile design |
+| `href` | `string` | Optional navigation URL |
+| `onClick` | `(app: LaunchpadApp) => void` | Optional click handler |
+| `disabled` | `boolean` | Disables the app cell |
+| `badge` | `string` | Optional badge text |
+
+### `LaunchpadProps`
+
+Props for `Launchpad`. Requires `apps`; supports `loading`, panel/trigger customization, and `children` (`RoleSelect`) below the built-in "See all" button.
+
+Also exported: `UseLaunchpadOptions`, `UseLaunchpadReturn`.
+
+## Hooks
+
+**`useLaunchpad`** — headless open/close state for custom UI:
+
+```tsx title="App.tsx"
+import { useLaunchpad } from "@rfdtech/components";
+
+const { open, toggle, close, triggerRef, panelRef } = useLaunchpad();
+```
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-shadow` | `--gsl-shadow-sm` | Shadow theming hook on the root element |
+| `--gsl-item-size` | `80px` (popover panel; root default is `50px`) | Width (and min-height) of each app grid item |
+| `--gsl-icon-size` | `50px` | Width and height of the icon slot inside each item |
+| `--gsl-launchpad-font` | `--gsl-font-body` | Font family for the root element |
+
+## Notes
+
+- **`icon` is a closed set — every app renders on the shared tile system, no exceptions.** `LaunchpadApp.icon` only type-checks as a `SystemLaunchpadIcon` or `LaunchpadIconTile` element. This is deliberate: GSL is a component library for building a family of systems, and per-app custom icons (logos, image URLs, emoji) would let individual apps opt out of the shared visual language. Pass `icon={<SystemLaunchpadIcon name="System Name" />}` — it renders a rounded-square tile (`--gsl-radius-base`) with the system's initials on top of a fixed brand gradient (one of 9) and a decorative overlay shape (one of 9), each picked by an independent hash of `name` — same name always produces the same tile, and the gradient/overlay combination varies independently (up to 81 distinct looks). Need a custom glyph instead of initials? Use `<LaunchpadIconTile name="System Name"><YourIcon /></LaunchpadIconTile>` — same tile, same gradient/overlay rules, just a different glyph on top.
+- Fetch apps in your application and pass `apps` + `loading`; Launchpad does not call APIs internally.
+- Also exported: `LaunchpadItem`, `LaunchpadGridIcon`, `SystemLaunchpadIcon`, `LaunchpadIconTile`.
+- **"See all" opens a scaled-up modal, not a callback.** There's no `onSeeAll` prop — the button is always rendered and always opens a borderless, `--gsl-radius-2xl`, 50px-padded modal (built on `Modal`/`DialogPrimitive`) showing every app in `apps` in a 5-column, 120px-icon grid, with a top-right close button. It's the same tile system as the popover, just bigger — selecting an app there calls the same `onAppSelect` and closes both the modal and the popover.
+- Both the popover's scrollable panel and the expanded modal's scrollable grid wrapper fade at the top/bottom edge (a `mask-image` gradient) to hint there's more to scroll, instead of a hard clip.
+- Decorative tile overlays render at 5% opacity (`.gsl-launchpad__tile-overlay`).
+- Each app's name label reserves a fixed 2-line height regardless of actual text length, so short and long names don't produce uneven grid row heights — true in both the popover and the expanded modal.
+- The panel scrolls (`max-height` + `overflow-y: auto`) once the grid + footer content grows tall.
+- `Launchpad` is a fully independent component tree from `AppSwitcher` — separate types, CSS classes (`.gsl-launchpad*` vs `.gsl-app-switcher*`), and hook (`useLaunchpad` vs `useAppSwitcher`). Adopting `Launchpad` doesn't affect any existing `AppSwitcher` usage.
+- Override shared tokens on `.gsl-launchpad` for theming (see [Theme](/docs/theme)).

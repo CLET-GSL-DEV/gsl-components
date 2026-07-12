@@ -19,6 +19,9 @@ export function Dropdown({
   formatOption,
   classNames,
   className,
+  name,
+  required,
+  form,
 }: DropdownProps) {
   const selectedOption = useMemo(
     () => options.find((option) => option.value === value),
@@ -35,13 +38,22 @@ export function Dropdown({
       placeholder,
     [formatOption, selectedOption, placeholder, isPlaceholder],
   );
+
   return (
     <Select.Root
-      value={value ?? EMPTY_VALUE}
+      // "" (not the clearable sentinel) so Radix's own hidden bubble
+      // <select> — wired up via name/required/form below — submits an
+      // empty value for FormData when nothing's selected, instead of the
+      // internal EMPTY_VALUE marker. The sentinel is only ever a menu
+      // item's value (Radix disallows "" there), never Root's value.
+      value={value ?? ""}
       onValueChange={(nextValue) =>
         onValueChange(nextValue === EMPTY_VALUE ? null : nextValue)
       }
       disabled={disabled}
+      name={name}
+      required={required}
+      form={form}
     >
       <div className={cn("gsl-dropdown", classNames?.root, className)}>
         <Select.Trigger
@@ -75,6 +87,10 @@ export function Dropdown({
             {clearable ? (
               <Select.Item
                 value={EMPTY_VALUE}
+                // Root's value is "" (not EMPTY_VALUE) when nothing's
+                // selected, so Radix no longer marks this item "checked"
+                // on its own — restore that highlight manually.
+                data-state={isPlaceholder ? "checked" : undefined}
                 className={cn("gsl-dropdown__option", classNames?.option)}
               >
                 <Select.ItemText>{placeholder}</Select.ItemText>

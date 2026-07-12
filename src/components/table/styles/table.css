@@ -154,6 +154,7 @@
 
   z-index: var(--gsl-z-popover);
   min-width: 240px;
+  max-width: calc(100vw - 32px);
   padding: 16px;
   background: var(--gsl-bg);
   border-radius: var(--gsl-radius-base);
@@ -233,6 +234,23 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 0;
+}
+
+/* Fields (e.g. Dropdown) default to width: 100% for stacked/popover layouts,
+   which — as a direct flex-row child — makes each field claim the entire
+   row, forcing every other field to wrap onto its own line. Override so
+   fields size themselves and sit side by side instead. The doubled class
+   raises specificity above single-class rules like `.gsl-dropdown { width:
+   100% }`, so this wins regardless of CSS import order.
+   `:not([aria-hidden="true"])` skips Radix's visually-hidden native
+   `<select>` (rendered when a field uses Dropdown's `name` prop for native
+   form participation) — it has no competing `min-width` of its own, so
+   without this exclusion it would get forced to 160px too. */
+.gsl-table__filter-fields--spread.gsl-table__filter-fields--spread
+  > *:not([aria-hidden="true"]) {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 160px;
 }
 
 .gsl-table__filter-actions--spread {
@@ -393,6 +411,10 @@
 
 .gsl-table:has(.gsl-table__content--has-selected) .gsl-table__footer {
   opacity: 0.5;
+}
+
+.gsl-table__footer--no-border {
+  border-top: none;
 }
 
 /* ── Pagination ── */
@@ -684,6 +706,89 @@ table tbody tr.gsl-table__row--clickable:hover {
   }
   50% {
     opacity: 0.4;
+  }
+}
+
+/* ── Responsive (mobile) ── */
+
+@media (width <= 768px) {
+  /* Header bar: search / filter / actions stack full-width instead of
+     squeezing into one row. */
+  .gsl-table__header-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gsl-table__search {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .gsl-table__actions {
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+
+  .gsl-table__filter-trigger {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Spread filter variant: fields stack full-width instead of a cramped row. */
+  .gsl-table__filter--spread {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gsl-table__filter-fields--spread {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gsl-table__filter-fields--spread.gsl-table__filter-fields--spread
+    > *:not([aria-hidden="true"]) {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .gsl-table__filter-actions--spread {
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+
+  /* Pagination: results text and the page-size Dropdown spread end to end
+     on one row (text left, Dropdown right); prev/next/page-numbers wraps
+     and centers on its own row below, instead of overflowing a single
+     space-between row. */
+  .gsl-table__pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .gsl-table__page-results {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Keep the Dropdown itself compact (sized to content) instead of
+     stretching to fill the now-full-width row — its own `width: 100%`
+     otherwise resolves against this row's definite width. */
+  .gsl-table__page-results .gsl-table__page-size {
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  .gsl-table__pagination-pages {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Bulk actions bar: left (count/clear) and right (actions) groups wrap
+     instead of clipping inside the fixed 80% width. */
+  .gsl-table__bulk-actions-bar {
+    flex-wrap: wrap;
+    width: calc(100% - 24px);
   }
 }
 

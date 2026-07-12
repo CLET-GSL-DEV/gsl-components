@@ -1,6 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
-import type { RoleSelect } from "../components/role-select/RoleSelect";
-import type { RoleSelectProps } from "./role-select";
+import type { HTMLAttributes, ReactNode } from "react";
 
 // ── AppHeader ──
 
@@ -75,40 +73,27 @@ export interface AppHeaderNotificationsProps {
   loadingLabel?: string;
 }
 
-// ── AppHeaderProfile ──
+// ── AppHeaderNotificationItem ──
 
-export interface AppUser {
-  name: string;
-  role: string;
-  email?: string;
-  avatar?: string;
-  initials: string;
+export interface AppHeaderNotificationItemClassNames {
+  root?: string;
+  dot?: string;
+  body?: string;
+  text?: string;
+  time?: string;
 }
 
-export interface AppHeaderProfileProps {
-  user: AppUser;
-  /** Extra composable content rendered below "Help & Support" — only a `RoleSelect` element is accepted */
-  children?: ReactElement<RoleSelectProps, typeof RoleSelect>;
+export interface AppHeaderNotificationItemProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onClick"> {
+  /** Notification message content */
+  text: ReactNode;
+  /** Relative/formatted time string (e.g. "2m ago") */
+  time?: ReactNode;
+  /** Shows a leading unread dot. Read items get a subtle background instead (default false) */
+  unread?: boolean;
+  /** Called when the row is clicked (also fires on Enter/Space when set, since the row becomes keyboard-focusable) */
+  onClick?: () => void;
+  classNames?: AppHeaderNotificationItemClassNames;
   className?: string;
-  /**
-   * Render variant for the header trigger row.
-   * "full" shows avatar + name/role + chevron.
-   * "avatar" shows only the avatar (no name/role/chevron).
-   * Both open the same `ProfilePopover` menu on click.
-   */
-  variant?: "full" | "avatar";
-  /** Rendered at the far right of the popover header row (e.g. a theme toggle icon button) */
-  headerAction?: ReactNode;
-  /** Show shimmering skeleton placeholders instead of the avatar/name/role, in both the trigger and the opened popover */
-  loading?: boolean;
-  /** Accessible label announced while loading (default: "Loading profile") */
-  loadingLabel?: string;
-  /** Called when "My Profile" is clicked */
-  onProfileClick?: () => void;
-  /** Called when "Account Settings" is clicked */
-  onSettingsClick?: () => void;
-  /** Called when "Help & Support" is clicked */
-  onHelpClick?: () => void;
-  /** Called when "Sign Out" is clicked */
-  onSignOut?: () => void;
 }
+

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useTheme } from "@rfdtech/components";
-import { demoApps } from "demo/data/demoApps";
+import { launchpadApps } from "demo/data/launchpadApps";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
 import { VersionSwitcher } from "./VersionSwitcher";
@@ -16,8 +15,6 @@ import {
   HelpCircle,
   User,
   Settings,
-  Sun,
-  Moon,
   ScrollText,
   BookOpen,
   MessageSquare,
@@ -32,14 +29,15 @@ import {
   SidebarGroupLabel,
   SidebarLink,
   SidebarBadge,
+  SidebarOverlay,
   ProfilePopover,
   RoleSelect,
   AppHeader,
   AppHeaderActions,
   AppHeaderBranding,
   AppHeaderNotifications,
-  AppHeaderProfile,
-  AppSwitcher,
+  AppHeaderNotificationItem,
+  Launchpad,
   AppLayout,
   AppSidebar,
   AppBody,
@@ -63,8 +61,16 @@ function BreadcrumbSetter() {
 
 const demoRoles = [
   { id: "admin", name: "Admin", icon: <Shield size={16} strokeWidth={1.5} /> },
-  { id: "reviewer", name: "Reviewer", icon: <Eye size={16} strokeWidth={1.5} /> },
-  { id: "auditor", name: "Auditor", icon: <ScrollText size={16} strokeWidth={1.5} /> },
+  {
+    id: "reviewer",
+    name: "Reviewer",
+    icon: <Eye size={16} strokeWidth={1.5} />,
+  },
+  {
+    id: "auditor",
+    name: "Auditor",
+    icon: <ScrollText size={16} strokeWidth={1.5} />,
+  },
 ];
 
 const demoUser = {
@@ -77,9 +83,8 @@ const demoUser = {
 export function DemoLayout2() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { resolvedTheme, setTheme } = useTheme();
 
-  const { data: appsData, loading: appsLoading } = useMockQuery(demoApps, 2000);
+  const { data: appsData, loading: appsLoading } = useMockQuery(launchpadApps, 2000);
   const { data: notifData, loading: notifLoading } = useMockQuery(
     demoNotifications,
     1500,
@@ -95,7 +100,12 @@ export function DemoLayout2() {
       {
         label: "Main",
         links: [
-          { id: "dashboard", label: "Dashboard", href: "/", icon: LayoutDashboard },
+          {
+            id: "dashboard",
+            label: "Dashboard",
+            href: "/",
+            icon: LayoutDashboard,
+          },
           { id: "members", label: "Members", href: "/members", icon: Users },
           {
             id: "docs",
@@ -174,59 +184,46 @@ export function DemoLayout2() {
               >
                 <BookOpen size={18} strokeWidth={1.5} aria-hidden />
               </button>
-              <AppSwitcher
+              <Launchpad
                 apps={appsData ?? []}
                 loading={appsLoading}
-                title="System directory"
                 onAppSelect={(app) => console.log("Selected:", app.name)}
               />
               <AppHeaderNotifications loading={notifLoading}>
                 {notifData?.map((n: (typeof notifData)[number]) => (
-                  <div
+                  <AppHeaderNotificationItem
                     key={n.id}
-                    className={`gsl-notif-popover__item${!n.unread ? " gsl-notif-popover__item--read" : ""}`}
-                  >
-                    {n.unread && <div className="gsl-notif-popover__dot" />}
-                    <div className="gsl-notif-popover__body">
-                      <div className="gsl-notif-popover__body-text">
-                        {n.text}
-                      </div>
-                      <div className="gsl-notif-popover__body-time">
-                        {n.time}
-                      </div>
-                    </div>
-                  </div>
+                    text={n.text}
+                    time={n.time}
+                    unread={n.unread}
+                  />
                 ))}
               </AppHeaderNotifications>
-              <AppHeaderProfile
+              <ProfilePopover
                 variant="avatar"
                 user={userData ?? demoUser}
                 loading={profileLoading}
                 loadingLabel="Loading profile..."
-                onProfileClick={() => navigate("/docs")}
-                onSettingsClick={() => navigate("/docs")}
-                onHelpClick={() => navigate("/docs")}
+                items={[
+                  {
+                    icon: <User size={20} strokeWidth={1.5} aria-hidden />,
+                    label: "My Profile",
+                    onClick: () => navigate("/docs"),
+                  },
+                  {
+                    icon: <Settings size={20} strokeWidth={1.5} aria-hidden />,
+                    label: "Account Settings",
+                    onClick: () => navigate("/docs"),
+                  },
+                  {
+                    icon: (
+                      <HelpCircle size={20} strokeWidth={1.5} aria-hidden />
+                    ),
+                    label: "Help & Support",
+                    onClick: () => navigate("/docs"),
+                  },
+                ]}
                 onSignOut={() => navigate("/")}
-                headerAction={
-                  <button
-                    type="button"
-                    className="gsl-profile-menu__header-action-btn"
-                    aria-label={
-                      resolvedTheme === "dark"
-                        ? "Switch to light mode"
-                        : "Switch to dark mode"
-                    }
-                    onClick={() =>
-                      setTheme(resolvedTheme === "dark" ? "light" : "dark")
-                    }
-                  >
-                    {resolvedTheme === "dark" ? (
-                      <Sun size={18} strokeWidth={1.5} aria-hidden />
-                    ) : (
-                      <Moon size={18} strokeWidth={1.5} aria-hidden />
-                    )}
-                  </button>
-                }
               >
                 <RoleSelect
                   title="View as"
@@ -234,10 +231,11 @@ export function DemoLayout2() {
                   selectedRole={selectedRole}
                   onClickRole={(role) => setSelectedRole(role.id)}
                 />
-              </AppHeaderProfile>
+              </ProfilePopover>
             </AppHeaderActions>
           </AppHeader>
           <AppSidebar>
+            <SidebarOverlay />
             <Sidebar variant="plain">
               <SidebarContent>
                 <SidebarNav>
@@ -297,12 +295,16 @@ export function DemoLayout2() {
                       onClick: () => navigate("/docs"),
                     },
                     {
-                      icon: <Settings size={20} strokeWidth={1.5} aria-hidden />,
+                      icon: (
+                        <Settings size={20} strokeWidth={1.5} aria-hidden />
+                      ),
                       label: "Account Settings",
                       onClick: () => navigate("/docs"),
                     },
                     {
-                      icon: <HelpCircle size={20} strokeWidth={1.5} aria-hidden />,
+                      icon: (
+                        <HelpCircle size={20} strokeWidth={1.5} aria-hidden />
+                      ),
                       label: "Help & Support",
                       onClick: () => navigate("/docs"),
                     },

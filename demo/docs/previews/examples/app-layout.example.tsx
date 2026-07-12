@@ -4,7 +4,7 @@ import {
   AppHeader,
   AppHeaderActions,
   AppHeaderSearch,
-  AppHeaderProfile,
+  ProfilePopover,
   AppSidebar,
   AppBody,
   Sidebar,
@@ -82,7 +82,7 @@ export function AppLayoutExample() {
             placeholder="Search members, projects…"
           />
           <AppHeaderActions>
-            <AppHeaderProfile
+            <ProfilePopover
               user={user}
               onSignOut={() => console.log("Sign out")}
             >
@@ -92,7 +92,7 @@ export function AppLayoutExample() {
                 selectedRole={selectedRole}
                 onClickRole={(role) => setSelectedRole(role.id)}
               />
-            </AppHeaderProfile>
+            </ProfilePopover>
           </AppHeaderActions>
         </AppHeader>
         <AppSidebar>

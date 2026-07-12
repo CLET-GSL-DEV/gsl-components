@@ -1,0 +1,185 @@
+export const meta = {
+  title: "Migration guide: v1 → v2",
+  description: "Upgrade to v2 and the new design system",
+  category: "Guide",
+  keywords: ["migration", "upgrade", "v2", "breaking changes", "new design system", "AppHeaderProfile", "ProfilePopover", "rebrand"],
+  since: "2.0.0",
+  status: "guide",
+  related: ["changelog", "getting-started", "theme", "app-header", "app-switcher", "table"],
+};
+
+# Migration guide: v1 → v2
+
+This walks through every breaking change between `1.22.0` and the current version, and how to
+adopt the new design system. See the [Changelog](/docs/changelog) for the full, dated list —
+this page groups the same changes by what you need to *do* about them.
+
+## The new design system, live
+
+The demo app's root route (`/`, `Dashboard2Page`) is the reference implementation of the new
+design system — it's what a from-scratch app should look like today. `/legacy` is a frozen
+snapshot of the old v1 look (old red branding, old component variants), kept only so the two can
+be compared side by side via the version dropdown in its sidebar.
+
+If you're deciding whether a screen "looks right" after upgrading, compare it against `/`, not
+against your memory of the old library.
+
+## 1. Replace `AppHeaderProfile` with `ProfilePopover`
+
+`AppHeaderProfile` is removed. It was the same popover menu as `ProfilePopover` with a second
+name and a second prop surface — now there's one component. `ProfilePopover` gained `user` and
+`variant` props that build the exact same compact avatar + name/role + chevron trigger
+`AppHeaderProfile` used to render.
+
+```diff
+-import { AppHeaderProfile } from "@rfdtech/components";
++import { ProfilePopover } from "@rfdtech/components";
+
+-<AppHeaderProfile user={user} variant="avatar">
+-  <RoleSelect roles={roles} selectedRole={role} onClickRole={setRole} />
+-</AppHeaderProfile>
++<ProfilePopover user={user} variant="avatar">
++  <RoleSelect roles={roles} selectedRole={role} onClickRole={setRole} />
++</ProfilePopover>
+```
+
+`items`, `loading`/`loadingLabel`, `onSignOut`, and the `children` slot carry over unchanged.
+
+Two things don't carry over as-is:
+
+- **`onProfileClick`/`onSettingsClick`/`onHelpClick` are gone.** `AppHeaderProfile` used to
+  hardcode a "My Profile" / "Account Settings" / "Help & Support" menu built from those three
+  callbacks. Nothing renders in that section unless you pass `items` — build the same three rows
+  yourself:
+
+  ```tsx
+  <ProfilePopover
+    user={user}
+    variant="avatar"
+    items={[
+      { icon: <User size={20} />, label: "My Profile", onClick: goToProfile },
+      { icon: <Settings size={20} />, label: "Account Settings", onClick: goToSettings },
+      { icon: <HelpCircle size={20} />, label: "Help & Support", onClick: goToHelp },
+    ]}
+    onSignOut={signOut}
+  />
+  ```
+
+- **`headerAction` is gone.** The popover header now always shows a built-in light/dark theme
+  toggle when a `ThemeProvider` is in the tree (and nothing when it isn't) — it's no longer a
+  prop you pass, override, or opt out of. Delete any `headerAction={...}` you were passing.
+
+`variant="basic"` (the compact-inline-avatar-with-flat-actions look) is also gone — only `"full"`
+and `"avatar"` remain.
+
+## 2. `AppItem.icon` is now `SystemAppIcon` or `AppIconTile` only
+
+`AppSwitcher`'s `AppItem.icon` used to accept `ReactNode | string` — a raw image URL, an emoji, or
+any arbitrary node. It's now a closed set: `<SystemAppIcon name="..." />` (auto-generated
+initials tile) or `<AppIconTile name="...">custom glyph</AppIconTile>`. This is intentional —
+every app icon now renders on the shared 9-gradient / 9-overlay tile system, with no per-app
+opt-out.
+
+```diff
+ const apps = [
+-  { id: "analytics", name: "Analytics", icon: "https://cdn.example.com/analytics.png" },
++  { id: "analytics", name: "Analytics", icon: <SystemAppIcon name="Analytics" /> },
+-  { id: "custom", name: "Custom App", icon: <MyCustomLogo /> },
++  { id: "custom", name: "Custom App", icon: <AppIconTile name="Custom App"><MyCustomLogo /></AppIconTile> },
+ ];
+```
+
+## 3. `AppSwitcher` now caps the grid at 6 apps by default
+
+The new `maxItems` prop defaults to `6`. If your app grid previously rendered more than 6 apps,
+it's now silently truncated. Pass `maxItems` explicitly to keep the old behavior:
+
+```diff
+-<AppSwitcher apps={apps} />
++<AppSwitcher apps={apps} maxItems={apps.length} />
+```
+
+## 4. `Table`: selection-only tables lose the kebab actions column
+
+Previously, a `Table` with `selectable` but no `rowActions` still rendered a kebab actions column
+containing just a Select/Deselect toggle. Selection is already handled by the checkbox column, so
+that empty kebab column no longer renders. If you relied on the Select/Deselect entry living in
+the kebab menu, add it as an explicit row action instead:
+
+```diff
+ <TableContent
+   selectable
+   selectedIds={selected}
+   onSelectionChange={setSelected}
++  rowActions={[
++    { id: "select", label: isSelected ? "Deselect" : "Select", onClick: toggleRow },
++  ]}
+   ...
+ />
+```
+
+## 5. Rebrand: new default colors and typography
+
+If your app doesn't set its own `--gsl-*` token overrides, two visual defaults changed:
+
+- **Brand colors**: `--gsl-primary`/`--gsl-primary-light` moved from red (`#dc2626`/`#ef4444`) to
+  navy (`#051b2c`/`#4a7fa8`). A new `--gsl-secondary` (gold, `#c8a24b`) token was added and is now
+  the default `SidebarLink` active-link color.
+- **Typography**: new `--gsl-font-header` (Roboto Serif) and `--gsl-font-body` (Lato) tokens, shipped
+  via two new bundled dependencies (`@fontsource/lato`, `@fontsource/roboto-serif`), now back
+  nearly every component's heading and body text — each component defines its own
+  `--gsl-<component>-font`/`-title-font`/`-value-font` variable defaulting to one of the two.
+  Previously everything inherited the single system-font stack (`--gsl-font`). This also grows
+  your CSS bundle by the bundled font weight files.
+
+**If you want to keep the old red/system-font look**, override the tokens yourself — either in
+plain CSS or via [`gslTheme()`](/docs/theme):
+
+```tsx
+import { gslTheme } from "@rfdtech/components";
+
+gslTheme({
+  all: {
+    primary: "#dc2626",
+    primaryLight: "#fef2f2",
+  },
+});
+```
+
+```css
+:root {
+  --gsl-font-header: var(--gsl-font);
+  --gsl-font-body: var(--gsl-font);
+}
+```
+
+**If you want the new look, you don't need to do anything** — it's already the default. See
+`.legacy-theme` in `demo/demo.css` for exactly which tokens the demo app overrides to reproduce
+the old red look on its `/legacy` route, if you want a reference for a similar toggle.
+
+## Adopting the new design system
+
+Beyond the breaking changes above, several components shipped a new *preferred* variant — the old
+default still works, but the new one is what `/` (the reference implementation) uses:
+
+| Component | Prefer | Over |
+|-----------|--------|------|
+| `AppHeader` | `variant="plain"` | `variant="default"` |
+| `MetricCard` | `variant="outline"` | `variant="default"` |
+| `SidebarGroup` | `collapsible` (accordion groups) | flat, non-collapsible groups |
+| `TableContent` | `variant="panel"` | `variant="default"` |
+| `TableFilter` | `variant="spread"` | `variant="popover"` (default) |
+
+None of these require a code change to keep working — they're additive variants, not replacements
+for the defaults. Adopt them where they fit; there's no deadline to migrate off the old variants.
+
+## Checklist
+
+- [ ] Replace every `AppHeaderProfile` with `ProfilePopover` (§1)
+- [ ] Rebuild any hardcoded "My Profile"/"Account Settings"/"Help & Support" menu via `items`
+- [ ] Delete any `headerAction` prop passed to the old `AppHeaderProfile`
+- [ ] Wrap every `AppSwitcher` app icon in `SystemAppIcon`/`AppIconTile` (§2)
+- [ ] Pass `maxItems={apps.length}` to any `AppSwitcher` that should show more than 6 apps (§3)
+- [ ] Add an explicit `rowActions` Select/Deselect entry to `selectable`-only tables that need it (§4)
+- [ ] Decide whether to keep or override the new brand colors and typography (§5)
+- [ ] Optionally adopt the new preferred variants (`plain`, `outline`, `collapsible`, `panel`, `spread`)

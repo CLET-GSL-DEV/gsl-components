@@ -144,3 +144,5 @@ export function AppSwitcher({
     </Popover.Root>
   );
 }
+
+(AppSwitcher as unknown as { componentId: string }).componentId = "AppSwitcher";

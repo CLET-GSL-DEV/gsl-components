@@ -4,8 +4,8 @@ import {
   AppHeaderActions,
   AppHeaderBranding,
   AppHeaderNotifications,
-  AppHeaderProfile,
   AppSwitcher,
+  ProfilePopover,
   RoleSelect,
 } from "@rfdtech/components";
 import { Shield, Eye, ScrollText } from "lucide-react";
@@ -68,7 +68,7 @@ export function AppHeaderPlainExample() {
               </div>
             ))}
           </AppHeaderNotifications>
-          <AppHeaderProfile
+          <ProfilePopover
             variant="avatar"
             user={user}
             onSignOut={() => console.log("Sign out")}
@@ -79,7 +79,7 @@ export function AppHeaderPlainExample() {
               selectedRole={selectedRole}
               onClickRole={(role) => setSelectedRole(role.id)}
             />
-          </AppHeaderProfile>
+          </ProfilePopover>
         </AppHeaderActions>
       </AppHeader>
     </div>

@@ -5,7 +5,6 @@ import {
   AppHeaderActions,
   AppHeaderBranding,
   AppHeaderNotifications,
-  AppHeaderProfile,
   AppSwitcher,
   AppSidebar,
   AppBody,
@@ -118,7 +117,7 @@ export function AppLayoutStackedExample() {
                 </div>
               ))}
             </AppHeaderNotifications>
-            <AppHeaderProfile
+            <ProfilePopover
               variant="avatar"
               user={user}
               onSignOut={() => console.log("Sign out")}
@@ -129,7 +128,7 @@ export function AppLayoutStackedExample() {
                 selectedRole={selectedRole}
                 onClickRole={(role) => setSelectedRole(role.id)}
               />
-            </AppHeaderProfile>
+            </ProfilePopover>
           </AppHeaderActions>
         </AppHeader>
         <AppSidebar>

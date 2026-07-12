@@ -15,6 +15,7 @@ export {
   SidebarProvider,
   SidebarTrigger,
   useSidebar,
+  useSidebarOptional,
 } from "./Sidebar";
 
 export type {

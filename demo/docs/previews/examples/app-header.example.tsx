@@ -4,9 +4,11 @@ import {
   AppHeaderActions,
   AppHeaderSearch,
   AppHeaderNotifications,
-  AppHeaderProfile,
+  AppHeaderNotificationItem,
   AppSwitcher,
+  ProfilePopover,
   RoleSelect,
+  SystemAppIcon,
 } from "@rfdtech/components";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
 import { Shield, Eye, ScrollText } from "lucide-react";
@@ -28,19 +30,19 @@ const apps = [
   {
     id: "gov-portal",
     name: "Governance Portal",
-    icon: "https://ui-avatars.com/api/?name=Governance+Portal&background=1d4ed8&color=fff&size=96",
+    icon: <SystemAppIcon name="Governance Portal" />,
     href: "https://portal.example.com",
   },
   {
     id: "finance-hub",
     name: "Finance Hub",
-    icon: "https://ui-avatars.com/api/?name=Finance+Hub&background=047857&color=fff&size=96",
+    icon: <SystemAppIcon name="Finance Hub" />,
     href: "https://finance.example.com",
   },
   {
     id: "hr-suite",
     name: "HR Suite",
-    icon: "https://ui-avatars.com/api/?name=HR+Suite&background=7c3aed&color=fff&size=96",
+    icon: <SystemAppIcon name="HR Suite" />,
   },
 ];
 
@@ -112,16 +114,15 @@ export function AppHeaderExample() {
           <AppSwitcher apps={apps} />
           <AppHeaderNotifications>
             {notifications.map((n) => (
-              <div key={n.id} className="gsl-notif-popover__item">
-                {n.unread && <div className="gsl-notif-popover__dot" />}
-                <div className="gsl-notif-popover__body">
-                  <div className="gsl-notif-popover__body-text">{n.text}</div>
-                  <div className="gsl-notif-popover__body-time">{n.time}</div>
-                </div>
-              </div>
+              <AppHeaderNotificationItem
+                key={n.id}
+                text={n.text}
+                time={n.time}
+                unread={n.unread}
+              />
             ))}
           </AppHeaderNotifications>
-          <AppHeaderProfile
+          <ProfilePopover
             user={user}
             variant={profileVariant}
             onSignOut={() => console.log("Sign out")}
@@ -132,7 +133,7 @@ export function AppHeaderExample() {
               selectedRole={selectedRole}
               onClickRole={(role) => setSelectedRole(role.id)}
             />
-          </AppHeaderProfile>
+          </ProfilePopover>
         </AppHeaderActions>
       </AppHeader>
       <div

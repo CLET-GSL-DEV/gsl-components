@@ -50,3 +50,21 @@ export function vividGradientFromString(str: string, theme?: string): string {
   const bottom = `hsl(${(hue + 28) % 360}, ${isDark ? 44 : 58}%, ${isDark ? 32 : 38}%)`;
   return `linear-gradient(135deg, ${top}, ${bottom})`;
 }
+
+/**
+ * Deterministic index into a fixed-size set of `count` gradients, derived
+ * from a string. Same string always produces the same index.
+ */
+export function gradientIndexFromString(str: string, count: number): number {
+  return hashString(str) % count;
+}
+
+/**
+ * Deterministic index into a fixed-size set of `count` decorative overlays,
+ * derived from a string. Hashed separately from `gradientIndexFromString`
+ * (a distinguishing suffix is mixed in) so the overlay choice varies
+ * independently of the gradient choice for the same string.
+ */
+export function overlayIndexFromString(str: string, count: number): number {
+  return hashString(`${str}::overlay`) % count;
+}

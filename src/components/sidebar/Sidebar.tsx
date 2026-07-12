@@ -16,6 +16,7 @@ import {
 } from "react";
 import { PanelLeftClose, PanelLeftOpen, ChevronDown } from "lucide-react";
 import { getRouterAdapter } from "../../adapters/registry";
+import { useHasMounted } from "../../hooks/useHasMounted";
 import { Tooltip } from "../tooltip/Tooltip";
 import type {
   SidebarBadgeProps,
@@ -37,7 +38,7 @@ import { cn } from "../../utils/cn";
 import { useSidebar } from "./SidebarContext";
 import "./styles/sidebar.css";
 
-export { SidebarProvider, useSidebar } from "./SidebarContext";
+export { SidebarProvider, useSidebar, useSidebarOptional } from "./SidebarContext";
 
 const SidebarLinkContext = createContext(false);
 
@@ -89,8 +90,12 @@ export const SidebarOverlay = forwardRef<
   SidebarOverlayProps
 >(function SidebarOverlay({ classNames, className, ...props }, ref) {
   const { open, setOpen, isMobile } = useSidebar();
+  // Null-vs-button is a structural branch, so it must wait a render past
+  // mount to match SSR/static-prerendered (always-desktop) markup — see
+  // useHasMounted.
+  const hasMounted = useHasMounted();
 
-  if (!isMobile) {
+  if (!hasMounted || !isMobile) {
     return null;
   }
 

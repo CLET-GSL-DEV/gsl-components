@@ -197,7 +197,7 @@ Exports: `useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`,
 
 ## AppHeader
 
-Compound header bar with `AppHeader`, `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderNotifications`, and `AppHeaderProfile`. Nest search on the left and group switcher, notifications, and profile inside `AppHeaderActions` on the right.
+Compound header bar with `AppHeader`, `AppHeaderSearch`, `AppHeaderActions`, and `AppHeaderNotifications`. Nest search on the left and group switcher, notifications, and profile inside `AppHeaderActions` on the right. The profile trigger is [`ProfilePopover`](/docs/profile-popover) itself (pass `user`/`variant` for the compact header-style trigger) — there's no separate `AppHeaderProfile` component.
 
 See the [AppHeader](/docs/app-header) docs page for props and exported types.
 
@@ -207,7 +207,8 @@ import {
   AppHeaderActions,
   AppHeaderSearch,
   AppHeaderNotifications,
-  AppHeaderProfile,
+  AppHeaderNotificationItem,
+  ProfilePopover,
   AppSwitcher,
 } from "@rfdtech/components";
 
@@ -217,20 +218,20 @@ import {
     <AppSwitcher apps={apps} />
     <AppHeaderNotifications loading={loading}>
       {notifications.map((n) => (
-        <div key={n.id} className="gsl-notif-popover__item">
-          <div className="gsl-notif-popover__body-text">{n.text}</div>
-          <div className="gsl-notif-popover__body-time">{n.time}</div>
-        </div>
+        <AppHeaderNotificationItem key={n.id} text={n.text} time={n.time} unread={n.unread} />
       ))}
     </AppHeaderNotifications>
-    <AppHeaderProfile user={{ name: "Kwame", role: "Admin", initials: "KA" }} variant="basic">
-      <button className="gsl-profile-popover__action">Settings</button>
-    </AppHeaderProfile>
+    <ProfilePopover
+      user={{ name: "Kwame", role: "Admin", initials: "KA" }}
+      variant="avatar"
+      items={[{ label: "Settings", onClick: () => navigate("/settings") }]}
+      onSignOut={signOut}
+    />
   </AppHeaderActions>
 </AppHeader>
 ```
 
-Props: `AppHeader` — `className`, `children`. `AppHeaderActions` — `className`, `children`. Exported types: `AppHeaderProps`, `AppHeaderActionsProps`, `AppHeaderSearchProps`, `AppHeaderSearchDataGroup`, `AppHeaderSearchItem`, `AppHeaderNotificationsProps`, `AppHeaderProfileProps`, `AppUser`.
+Props: `AppHeader` — `className`, `children`. `AppHeaderActions` — `className`, `children`. Exported types: `AppHeaderProps`, `AppHeaderActionsProps`, `AppHeaderSearchProps`, `AppHeaderSearchDataGroup`, `AppHeaderSearchItem`, `AppHeaderNotificationsProps`, `AppHeaderNotificationItemProps`. See [ProfilePopover](/docs/profile-popover) for `ProfilePopoverProps` and `AppUser`.
 
 ## AppLayout
 

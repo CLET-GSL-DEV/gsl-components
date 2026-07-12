@@ -2,7 +2,7 @@ import type { TableColumn, TableBulkAction } from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
 import { useMockQuery } from "demo/hooks/useMockQuery";
 import { useCallback, useMemo, useState } from "react";
-import { UserCheck, Trash2, UserX, Eye, Edit } from "lucide-react";
+import { UserCheck, Trash2, UserX, Eye, Edit, UserPlus } from "lucide-react";
 import {
   Table,
   TableHeader,
@@ -25,7 +25,13 @@ import {
   Dropdown,
   useTableState,
   Badge,
+  SectionHeader,
+  SectionTitle,
+  SectionDescription,
+  SectionActions,
+  ExportButton,
 } from "@rfdtech/components";
+import type { ExportColumn } from "@rfdtech/components";
 
 function statusVariant(status: string) {
   switch (status) {
@@ -190,8 +196,37 @@ export function Dashboard2Page() {
     [handleView, handleDeleteOne],
   );
 
+  const exportColumns = useMemo<ExportColumn<GslMember>[]>(
+    () => [
+      { header: "Name", accessor: (m) => m.name },
+      { header: "Email", accessor: (m) => m.email },
+      { header: "Role", accessor: (m) => m.role },
+      { header: "Status", accessor: (m) => m.status },
+      { header: "Joined", accessor: (m) => m.joined },
+    ],
+    [],
+  );
+
   return (
     <>
+      <SectionHeader>
+        <SectionTitle>Dashboard</SectionTitle>
+        <SectionDescription>
+          Overview of your organization&apos;s members and activity.
+        </SectionDescription>
+        <SectionActions>
+          <ExportButton
+            data={filtered}
+            columns={exportColumns}
+            title="Dashboard Members"
+          />
+          <Button variant="primary" size="md">
+            <UserPlus size={14} strokeWidth={1.5} />
+            Add Member
+          </Button>
+        </SectionActions>
+      </SectionHeader>
+
       <div className="demo-home__metrics">
         <MetricCard
           variant="outline"
@@ -235,8 +270,8 @@ export function Dashboard2Page() {
         <TableHeader>
           <TableSearch placeholder="Search members..." />
           <TableFilter variant="spread">
-            <input type="hidden" name="role" value={roleValue} />
             <Dropdown
+              name="role"
               value={roleValue || null}
               onValueChange={(v) => setRoleValue(v ?? "")}
               options={[
@@ -247,8 +282,8 @@ export function Dashboard2Page() {
               placeholder="All roles"
               aria-label="Filter by role"
             />
-            <input type="hidden" name="status" value={statusValue} />
             <Dropdown
+              name="status"
               value={statusValue || null}
               onValueChange={(v) => setStatusValue(v ?? "")}
               options={[
@@ -277,7 +312,7 @@ export function Dashboard2Page() {
           onClear={() => setSelected(new Set())}
           actions={bulkActions}
         />
-        <TableFooter>
+        <TableFooter className="gsl-table__footer--no-border">
           <TablePagination
             totalPages={totalPages}
             totalItems={filtered.length}

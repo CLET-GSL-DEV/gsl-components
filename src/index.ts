@@ -9,6 +9,7 @@ setRouterAdapter(useReactRouterAdapter);
 
 export * from "./components/theme";
 export * from "./components/app-switcher";
+export * from "./components/launchpad";
 export * from "./components/app-header";
 export * from "./components/app-layout";
 export * from "./components/avatar";
@@ -31,6 +32,7 @@ export * from "./components/date-range-selector";
 export * from "./components/dialog";
 export * from "./components/draggable";
 export * from "./components/dropdown";
+export * from "./components/export-button";
 export * from "./components/metric-card";
 export * from "./components/modal";
 export * from "./components/network-operator";
@@ -58,4 +60,6 @@ export {
   gradientFromString,
   vividGradientFromString,
   patternIndexFromString,
+  gradientIndexFromString,
+  overlayIndexFromString,
 } from "./utils/stringToColor";

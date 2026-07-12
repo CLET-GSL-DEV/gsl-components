@@ -103,8 +103,8 @@ export function TableExample() {
       <TableHeader>
         <TableSearch placeholder="Search users..." />
         <TableFilter>
-          <input type="hidden" name="role" value={roleValue} />
           <Dropdown
+            name="role"
             value={roleValue || null}
             onValueChange={(v) => setRoleValue(v ?? "")}
             options={[

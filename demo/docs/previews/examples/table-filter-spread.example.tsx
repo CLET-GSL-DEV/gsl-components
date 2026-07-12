@@ -81,8 +81,8 @@ export function TableFilterSpreadExample() {
       <TableHeader>
         <TableSearch placeholder="Search members..." />
         <TableFilter variant="spread">
-          <input type="hidden" name="role" value={roleValue} />
           <Dropdown
+            name="role"
             value={roleValue || null}
             onValueChange={(v) => setRoleValue(v ?? "")}
             options={[
@@ -93,8 +93,8 @@ export function TableFilterSpreadExample() {
             placeholder="All roles"
             aria-label="Filter by role"
           />
-          <input type="hidden" name="status" value={statusValue} />
           <Dropdown
+            name="status"
             value={statusValue || null}
             onValueChange={(v) => setStatusValue(v ?? "")}
             options={[

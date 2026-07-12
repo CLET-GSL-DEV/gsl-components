@@ -1,18 +1,91 @@
 import { createRef } from "react";
 import { useForm } from "react-hook-form";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { AppHeader } from "./AppHeader";
 import { AppHeaderActions } from "./AppHeader";
+import { AppHeaderBranding } from "./AppHeader";
 import { AppHeaderSearch } from "./AppHeaderSearch";
 import { AppHeaderNotifications } from "./AppHeaderNotifications";
-import { AppHeaderProfile } from "./AppHeaderProfile";
+import { AppHeaderNotificationItem } from "./AppHeaderNotificationItem";
+import { AppSwitcher } from "../app-switcher/AppSwitcher";
+import { SystemAppIcon } from "../app-switcher/SystemAppIcon";
+import { ProfilePopover } from "../profile-popover/ProfilePopover";
+import { SidebarProvider } from "../sidebar/SidebarContext";
+
+function mockMatchMedia(isMobile: boolean) {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: vi.fn().mockImplementation((query: string) => ({
+      matches: isMobile,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
+function renderFullHeader() {
+  return render(
+    <SidebarProvider>
+      <AppHeader variant="plain">
+        <AppHeaderBranding title="GSL PORTAL" />
+        <AppHeaderActions>
+          <AppSwitcher apps={[{ id: "a", name: "App A", icon: <SystemAppIcon name="App A" /> }]} />
+          <AppHeaderNotifications />
+          <ProfilePopover
+            user={{ name: "Kwame Asante", role: "Admin", initials: "KA" }}
+            variant="avatar"
+          />
+        </AppHeaderActions>
+      </AppHeader>
+    </SidebarProvider>,
+  );
+}
 
 describe("AppHeader", () => {
   it("renders children", () => {
     render(<AppHeader>Hello</AppHeader>);
     expect(screen.getByText("Hello")).toBeInTheDocument();
+  });
+
+  it("renders standalone without a SidebarProvider", () => {
+    render(<AppHeader>Hello</AppHeader>);
+    expect(screen.getByText("Hello")).toBeInTheDocument();
+  });
+
+  it("renders full children on desktop", () => {
+    mockMatchMedia(false);
+    renderFullHeader();
+
+    expect(screen.getByText("GSL PORTAL")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Notifications" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Open app switcher" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Open menu" })).not.toBeInTheDocument();
+  });
+
+  it("collapses to menu + app switcher + profile on mobile", () => {
+    mockMatchMedia(true);
+    renderFullHeader();
+
+    expect(screen.getByRole("button", { name: "Open menu" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Open app switcher" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("KA")).toBeInTheDocument();
+
+    // Dropped on mobile
+    expect(screen.queryByText("GSL PORTAL")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Notifications" }),
+    ).not.toBeInTheDocument();
   });
 });
 
@@ -167,86 +240,56 @@ describe("AppHeaderNotifications", () => {
   });
 });
 
-describe("AppHeaderProfile", () => {
-  const user = {
-    name: "Kwame",
-    role: "Admin",
-    initials: "KA",
-    email: "kwame@example.com",
-  };
-
-  it("renders user name and role in trigger", () => {
-    render(<AppHeaderProfile user={user} />);
-    expect(screen.getByText("Kwame")).toBeInTheDocument();
-    expect(screen.getByText("Admin")).toBeInTheDocument();
+describe("AppHeaderNotificationItem", () => {
+  it("renders text and time", () => {
+    render(<AppHeaderNotificationItem text="New comment" time="2m ago" />);
+    expect(screen.getByText("New comment")).toBeInTheDocument();
+    expect(screen.getByText("2m ago")).toBeInTheDocument();
   });
 
   it("forwards ref", () => {
     const ref = createRef<HTMLDivElement>();
-    render(<AppHeaderProfile user={user} ref={ref} />);
+    render(<AppHeaderNotificationItem ref={ref} text="Hi" />);
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
-  it("opens the unified profile popover with role, email, and fixed menu items", async () => {
-    const userEvents = userEvent.setup();
-    render(<AppHeaderProfile user={user} variant="full" />);
+  it("shows the unread dot only when unread", () => {
+    const { rerender, container } = render(
+      <AppHeaderNotificationItem text="Hi" unread />,
+    );
+    expect(container.querySelector(".gsl-notif-popover__dot")).toBeInTheDocument();
+    expect(container.firstElementChild).not.toHaveClass(
+      "gsl-notif-popover__item--read",
+    );
 
-    await userEvents.click(screen.getByText("Kwame"));
-    const menu = screen.getByRole("menu");
-    expect(within(menu).getByText("kwame@example.com")).toBeInTheDocument();
-    expect(
-      within(menu).getByRole("button", { name: /My Profile/ }),
-    ).toBeInTheDocument();
-    expect(
-      within(menu).getByRole("button", { name: /Sign Out/ }),
-    ).toBeInTheDocument();
+    rerender(<AppHeaderNotificationItem text="Hi" />);
+    expect(container.querySelector(".gsl-notif-popover__dot")).not.toBeInTheDocument();
+    expect(container.firstElementChild).toHaveClass(
+      "gsl-notif-popover__item--read",
+    );
   });
 
-  it("opens the same popover for the avatar-only variant", async () => {
-    const userEvents = userEvent.setup();
-    const { container } = render(
-      <AppHeaderProfile user={user} variant="avatar" />,
-    );
-
-    const trigger = container.querySelector(".gsl-app-header__profile")!;
-    await userEvents.click(trigger);
-    expect(screen.getByRole("menu")).toBeInTheDocument();
+  it("is not focusable/clickable without onClick", () => {
+    render(<AppHeaderNotificationItem text="Hi" />);
+    const row = screen.getByText("Hi").closest(".gsl-notif-popover__item");
+    expect(row).not.toHaveAttribute("role");
+    expect(row).not.toHaveAttribute("tabindex");
   });
 
-  it("calls the fixed menu item callbacks", async () => {
-    const userEvents = userEvent.setup();
-    const onProfileClick = vi.fn();
-    const onSignOut = vi.fn();
-    render(
-      <AppHeaderProfile
-        user={user}
-        onProfileClick={onProfileClick}
-        onSignOut={onSignOut}
-      />,
-    );
+  it("calls onClick when clicked or activated via keyboard", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    render(<AppHeaderNotificationItem text="Hi" onClick={onClick} />);
 
-    await userEvents.click(screen.getByText("Kwame"));
-    const menu = screen.getByRole("menu");
-    await userEvents.click(
-      within(menu).getByRole("button", { name: /My Profile/ }),
-    );
-    await userEvents.click(
-      within(menu).getByRole("button", { name: /Sign Out/ }),
-    );
+    const row = screen.getByRole("button");
+    await user.click(row);
+    expect(onClick).toHaveBeenCalledTimes(1);
 
-    expect(onProfileClick).toHaveBeenCalledTimes(1);
-    expect(onSignOut).toHaveBeenCalledTimes(1);
-  });
+    row.focus();
+    await user.keyboard("{Enter}");
+    expect(onClick).toHaveBeenCalledTimes(2);
 
-  it("renders extra composable content as children", async () => {
-    const userEvents = userEvent.setup();
-    render(
-      <AppHeaderProfile user={user}>
-        <button data-testid="action-btn">Switch role</button>
-      </AppHeaderProfile>,
-    );
-
-    await userEvents.click(screen.getByText("Kwame"));
-    expect(screen.getByTestId("action-btn")).toBeInTheDocument();
+    await user.keyboard(" ");
+    expect(onClick).toHaveBeenCalledTimes(3);
   });
 });

@@ -1,5 +1,6 @@
 export { useConfirmBeforeUnload } from "./useConfirmBeforeUnload";
 export { useDebounce } from "./useDebounce";
+export { useHasMounted } from "./useHasMounted";
 export { createBrowserSearchParamAdapter } from "./createBrowserSearchParamAdapter";
 export { createSearchParamAdapter } from "./createSearchParamAdapter";
 export type { CreateSearchParamAdapterOptions } from "./createSearchParamAdapter";

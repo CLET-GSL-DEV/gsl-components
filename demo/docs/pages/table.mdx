@@ -105,8 +105,7 @@ Every child component reads and writes its own URL keys through `useSearchParams
 <Table paramPrefix="members">
   <TableSearch />              → writes ?members.search=term
   <TableFilter>                → writes ?members.f_role=admin
-    <input type="hidden" name="role" value={roleValue} />
-    <Dropdown value={roleValue} onValueChange={setRoleValue} ... />
+    <Dropdown name="role" value={roleValue} onValueChange={setRoleValue} ... />
   </TableFilter>
   <TableContent />             → renders data + sort headers
   <TableBulkActions />         → shows selection bar with inline actions
@@ -114,7 +113,7 @@ Every child component reads and writes its own URL keys through `useSearchParams
 </Table>
 ```
 
-Filter fields must be *named* form-associated elements for `FormData` to capture them — never a raw `<select>`/native `<button>`/native `<input>` as the visible control. Pair a hidden `<input type="hidden" name="...">` (captured by `FormData`) with a real `Dropdown` (or other library input) for the visible, styled UI.
+Filter fields must be *named* form-associated elements for `FormData` to capture them — never a raw `<select>`/native `<button>`/native `<input>` as the visible control. `Dropdown` participates in native form submission on its own via its `name` prop (backed by Radix's hidden bubble `<select>`) — no separate hidden input needed. Other custom inputs without built-in form participation still need a hand-paired `<input type="hidden" name="...">`.
 
 Multiple tables on one page share the same URL without collision by using different prefixes:
 
@@ -152,7 +151,7 @@ Search input with debounce and a clear button. Writes the search term to `?searc
 
 Popover with filter fields and Apply / Reset buttons. Wraps children in a `<form>` element. On Apply, reads `FormData` from named fields and writes `f_{name}={value}` to the URL. On Reset, clears all `f_*` params.
 
-Filter fields must be *named* form-associated elements for `FormData` to read them — never a raw `<select>`/native `<button>`/native `<input>` as the visible control. Pair a hidden `<input type="hidden" name="status" value={statusValue} />` (captured by `FormData`) with a `Dropdown` (or other library input) driving that value for the visible, styled UI. The `name` becomes the URL key.
+Filter fields must be *named* form-associated elements for `FormData` to read them — never a raw `<select>`/native `<button>`/native `<input>` as the visible control. Pass `name="status"` straight to `Dropdown` and it participates in native form submission on its own (backed by Radix's hidden bubble `<select>`) — the `name` becomes the URL key. Other custom inputs without built-in form participation still need a hand-paired `<input type="hidden" name="...">` driving the same value.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -518,6 +517,7 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 - `paramPrefix` is required on `<Table>` — every table must have a unique namespace to avoid URL collisions.
 - The filter form captures all elements with a `name` attribute via `FormData`. For custom inputs (date pickers, multi-selects), ensure they set a `name` and participate in `FormData`.
 - Selection is page-local: "select all" only selects rows on the current page. Selection is fully controlled via `selectedIds` / `onSelectionChange` — pass the same `selectedIds` to `TableBulkActions` for sync.
+- At `768px` and below (matching the breakpoint `Sidebar` uses for its mobile drawer), `TableHeader`'s children stack full-width instead of squeezing into one row, both `TableFilter` variants stack their fields, `TablePagination` wraps and centers its two rows (results/page-size, then prev/pages/next), and the bulk-actions bar wraps instead of clipping.
 
 ## Do
 

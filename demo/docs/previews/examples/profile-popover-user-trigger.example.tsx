@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AppHeaderProfile, RoleSelect } from "@rfdtech/components";
-import { Shield, Eye, ScrollText } from "lucide-react";
+import { ProfilePopover, RoleSelect } from "@rfdtech/components";
+import { Shield, Eye, ScrollText, User, Settings, HelpCircle } from "lucide-react";
 
 const user = {
   name: "Kwame Asante",
@@ -15,8 +15,8 @@ const roles = [
   { id: "auditor", name: "Auditor", icon: <ScrollText size={16} strokeWidth={1.5} /> },
 ];
 
-export function AppHeaderProfileLoadingExample() {
-  const [loading, setLoading] = useState(true);
+export function ProfilePopoverUserTriggerExample() {
+  const [variant, setVariant] = useState<"full" | "avatar">("full");
   const [selectedRole, setSelectedRole] = useState("admin");
 
   return (
@@ -25,12 +25,9 @@ export function AppHeaderProfileLoadingExample() {
         type="button"
         className="gsl-profile-menu__item"
         style={{ alignSelf: "flex-start" }}
-        onClick={() => {
-          setLoading(true);
-          setTimeout(() => setLoading(false), 1500);
-        }}
+        onClick={() => setVariant((v) => (v === "full" ? "avatar" : "full"))}
       >
-        <span>Simulate loading</span>
+        <span>Switch trigger to {variant === "full" ? "avatar" : "full"}</span>
       </button>
 
       <div
@@ -41,10 +38,26 @@ export function AppHeaderProfileLoadingExample() {
           background: "var(--gsl-surface-subtle)",
         }}
       >
-        <AppHeaderProfile
+        <ProfilePopover
           user={user}
-          loading={loading}
-          loadingLabel="Loading profile..."
+          variant={variant}
+          items={[
+            {
+              icon: <User size={20} strokeWidth={1.5} aria-hidden />,
+              label: "My Profile",
+              onClick: () => console.log("My Profile"),
+            },
+            {
+              icon: <Settings size={20} strokeWidth={1.5} aria-hidden />,
+              label: "Account Settings",
+              onClick: () => console.log("Account Settings"),
+            },
+            {
+              icon: <HelpCircle size={20} strokeWidth={1.5} aria-hidden />,
+              label: "Help & Support",
+              onClick: () => console.log("Help & Support"),
+            },
+          ]}
           onSignOut={() => console.log("Sign out")}
         >
           <RoleSelect
@@ -53,7 +66,7 @@ export function AppHeaderProfileLoadingExample() {
             selectedRole={selectedRole}
             onClickRole={(role) => setSelectedRole(role.id)}
           />
-        </AppHeaderProfile>
+        </ProfilePopover>
       </div>
     </div>
   );
