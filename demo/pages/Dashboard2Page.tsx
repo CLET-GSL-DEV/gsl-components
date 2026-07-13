@@ -306,7 +306,10 @@ export function Dashboard2Page() {
         </TableFooter>
       </Table>
 
-      <Modal open={!!viewMember} onOpenChange={(open) => !open && setViewMember(null)}>
+      <Modal
+        open={!!viewMember}
+        onOpenChange={(open) => !open && setViewMember(null)}
+      >
         <ModalPortal>
           <ModalOverlay />
           <ModalContent showCloseButton>
@@ -317,26 +320,36 @@ export function Dashboard2Page() {
               <div className="demo-member-detail">
                 <div className="demo-member-detail__row">
                   <span className="demo-member-detail__label">Email</span>
-                  <span className="demo-member-detail__value">{viewMember?.email}</span>
+                  <span className="demo-member-detail__value">
+                    {viewMember?.email}
+                  </span>
                 </div>
                 <div className="demo-member-detail__row">
                   <span className="demo-member-detail__label">Role</span>
-                  <span className="demo-member-detail__value">{viewMember?.role}</span>
+                  <span className="demo-member-detail__value">
+                    {viewMember?.role}
+                  </span>
                 </div>
                 <div className="demo-member-detail__row">
                   <span className="demo-member-detail__label">Status</span>
                   <span className="demo-member-detail__value">
-                    <Badge variant={statusVariant(viewMember?.status ?? "")}>{viewMember?.status}</Badge>
+                    <Badge variant={statusVariant(viewMember?.status ?? "")}>
+                      {viewMember?.status}
+                    </Badge>
                   </span>
                 </div>
                 <div className="demo-member-detail__row">
                   <span className="demo-member-detail__label">Joined</span>
-                  <span className="demo-member-detail__value">{viewMember?.joined}</span>
+                  <span className="demo-member-detail__value">
+                    {viewMember?.joined}
+                  </span>
                 </div>
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button variant="ghost" onClick={() => setViewMember(null)}>Close</Button>
+              <Button variant="ghost" onClick={() => setViewMember(null)}>
+                Close
+              </Button>
             </ModalFooter>
           </ModalContent>
         </ModalPortal>

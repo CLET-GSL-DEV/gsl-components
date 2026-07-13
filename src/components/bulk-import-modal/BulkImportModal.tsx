@@ -21,7 +21,7 @@ import {
 import { Button } from "../button/Button";
 import { ProgressBar } from "../progress-bar/ProgressBar";
 import animationData from "../table/file_processing.json";
-import type { 
+import type {
   BulkImportModalProps,
   BulkImportResult,
   SourceColumnMapping,
@@ -91,17 +91,20 @@ export function BulkImportModal({
   const hasUnsavedProgress = flow.parsed !== null;
 
   const loadingVerb = useMemo(() => {
-    return flow.step === BulkImportStep.VALIDATE_DATA ? "records validated" : "rows parsed";
+    return flow.step === BulkImportStep.VALIDATE_DATA
+      ? "records validated"
+      : "rows parsed";
   }, [flow.step]);
 
   useConfirmBeforeUnload(hasUnsavedProgress);
 
-  // ── Draft state — local to BulkImportModal, committed to flow on Next ──
-
+  // Draft state stays local to BulkImportModal; committed to flow on Next.
   const dirtyCellsRef = useRef<Record<string, string>>({});
-  const stepResultRef = useRef<() => BulkImportResult>(
-    () => ({ rows: [], errors: [], warnings: [] }),
-  );
+  const stepResultRef = useRef<() => BulkImportResult>(() => ({
+    rows: [],
+    errors: [],
+    warnings: [],
+  }));
   const [canConfirm, setCanConfirm] = useState(false);
 
   const [headerRowDraft, setHeaderRowDraft] = useState<number | null>(
@@ -128,8 +131,6 @@ export function BulkImportModal({
     });
   }, [flow.sourceColumnMapping, flow.excludedColumns]);
 
-  // ── Derived data for steps ──
-
   const allSourceColumns = useMemo(() => {
     if (!flow.parsed || headerRowDraft === null) return [];
     return buildAllSourceColumns(flow.parsed.rows, headerRowDraft);
@@ -141,7 +142,10 @@ export function BulkImportModal({
   }, [flow.parsed, headerRowDraft]);
 
   const activeMatchColumns = useMemo(
-    () => allSourceColumns.filter((col) => !matchDraft.excluded.includes(col.index)),
+    () =>
+      allSourceColumns.filter(
+        (col) => !matchDraft.excluded.includes(col.index),
+      ),
     [allSourceColumns, matchDraft.excluded],
   );
 
@@ -154,14 +158,21 @@ export function BulkImportModal({
       case BulkImportStep.MATCH_COLUMNS:
         return (
           activeMatchColumns.length > 0 &&
-          activeMatchColumns.every((col) => matchDraft.mapping[col.index] !== null)
+          activeMatchColumns.every(
+            (col) => matchDraft.mapping[col.index] !== null,
+          )
         );
       default:
         return false;
     }
-  }, [flow.step, flow.parsed, flow.parseError, headerRowDraft, activeMatchColumns, matchDraft.mapping]);
-
-  // ── Handlers ──
+  }, [
+    flow.step,
+    flow.parsed,
+    flow.parseError,
+    headerRowDraft,
+    activeMatchColumns,
+    matchDraft.mapping,
+  ]);
 
   const handleConfirm = useCallback(() => {
     flowRef.current.applyEdits(dirtyCellsRef.current);
@@ -169,15 +180,15 @@ export function BulkImportModal({
     onOpenChange(false);
   }, [onComplete, onOpenChange]);
 
-  const handleFileSelected = useCallback(
-    (file: File) => {
-      void flowRef.current.handleFile(file);
-    },
-    [],
-  );
+  const handleFileSelected = useCallback((file: File) => {
+    void flowRef.current.handleFile(file);
+  }, []);
 
   const handleGoNext = useCallback(() => {
-    if (flowRef.current.step === BulkImportStep.SELECT_HEADER_ROW && headerRowDraft !== null) {
+    if (
+      flowRef.current.step === BulkImportStep.SELECT_HEADER_ROW &&
+      headerRowDraft !== null
+    ) {
       flowRef.current.goNext({ headerRowIndex: headerRowDraft });
     } else if (flowRef.current.step === BulkImportStep.MATCH_COLUMNS) {
       flowRef.current.goNext({
@@ -205,8 +216,6 @@ export function BulkImportModal({
     (event: Event) => event.preventDefault(),
     [],
   );
-
-  // ── MatchColumnsStep local handlers ──
 
   const handleMappingChange = useCallback(
     (sourceIndex: number, fieldKey: string | null) => {
@@ -243,8 +252,6 @@ export function BulkImportModal({
     setMatchDraft({ mapping, excluded: [] });
   }, [flow.parsed, headerRowDraft, fields]);
 
-  // ── Class names ──
-
   const dialogClass = useMemo(
     () => ["gsl-bulk-import", className].filter(Boolean).join(" "),
     [className],
@@ -259,8 +266,6 @@ export function BulkImportModal({
     };
     return map[flow.step] ?? "";
   }, [flow.step]);
-
-  // ── Render ──
 
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
@@ -380,7 +385,9 @@ export function BulkImportModal({
           </ModalTitle>
 
           <ModalBody
-            className={["gsl-bulk-import__body", bodyStepClass].filter(Boolean).join(" ")}
+            className={["gsl-bulk-import__body", bodyStepClass]
+              .filter(Boolean)
+              .join(" ")}
           >
             {flow.step === BulkImportStep.UPLOAD && (
               <UploadStep
@@ -432,7 +439,9 @@ export function BulkImportModal({
             <div
               className={[
                 "gsl-bulk-import__loading",
-                flow.isProcessingLarge ? "gsl-bulk-import__loading--visible" : "",
+                flow.isProcessingLarge
+                  ? "gsl-bulk-import__loading--visible"
+                  : "",
               ].join(" ")}
             >
               <h3 className="gsl-bulk-import__step-title">Processing</h3>
@@ -455,18 +464,20 @@ export function BulkImportModal({
                 </div>
                 {flow.processingTotal > 0 && (
                   <p className="gsl-bulk-import__loading-counter">
-                    {Math.round((flow.processingProgress / 100) * flow.processingTotal).toLocaleString()}
+                    {Math.round(
+                      (flow.processingProgress / 100) * flow.processingTotal,
+                    ).toLocaleString()}
                     {" / "}
-                    {flow.processingTotal.toLocaleString()}
-                    {" "}
-                    {loadingVerb}
+                    {flow.processingTotal.toLocaleString()} {loadingVerb}
                   </p>
                 )}
               </div>
             </div>
           </ModalBody>
 
-          {(flow.step > BulkImportStep.UPLOAD || flow.parsed !== null || flow.uploadedFile !== null) && (
+          {(flow.step > BulkImportStep.UPLOAD ||
+            flow.parsed !== null ||
+            flow.uploadedFile !== null) && (
             <ModalFooter className="gsl-bulk-import__footer">
               {flow.step > BulkImportStep.UPLOAD && (
                 <Button

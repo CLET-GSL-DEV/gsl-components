@@ -1,11 +1,9 @@
 import "./styles/theme.css";
 
-// ── Router adapter ────────────────────────────────────────────────────────
 // Set the default adapter BEFORE any component/hook code runs.
 import { setRouterAdapter } from "./adapters/registry";
 import { useReactRouterAdapter } from "./adapters/react-router-adapter";
 setRouterAdapter(useReactRouterAdapter);
-// ────────────────────────────────────────────────────────────────────────────
 
 export * from "./components/theme";
 export * from "./components/app-switcher";

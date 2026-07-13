@@ -69,7 +69,10 @@ export function DemoLayout2() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { data: appsData, loading: appsLoading } = useMockQuery(launchpadApps, 2000);
+  const { data: appsData, loading: appsLoading } = useMockQuery(
+    launchpadApps,
+    2000,
+  );
   const { data: notifData, loading: notifLoading } = useMockQuery(
     demoNotifications,
     1500,
@@ -269,7 +272,7 @@ export function DemoLayout2() {
               <SidebarFooter>
                 <ProfilePopover
                   fullName={(userData ?? demoUser).name}
-                  email={(userData ?? demoUser).email}
+                  email={(userData ?? demoUser).role}
                   loading={profileLoading}
                   loadingLabel="Loading profile..."
                   items={[

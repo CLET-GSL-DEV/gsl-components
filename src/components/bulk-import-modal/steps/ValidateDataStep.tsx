@@ -13,8 +13,6 @@ import { validateFieldValue } from "../utils/validateFieldValue";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { BACKGROUND_VALIDATION_CHUNK_SIZE } from "../constants";
 
-// ── Types ──
-
 interface ColumnDef {
   key: string;
   label: string;
@@ -48,8 +46,6 @@ interface CellInputProps {
   onDirty: (cellKey: string, value: string, field: BulkImportField) => void;
 }
 
-// ── Helpers ──
-
 function buildErrorMap(errors: BulkImportValidationError[]) {
   const map = new Map<string, string>();
   for (const issue of errors) {
@@ -77,8 +73,6 @@ function patchRows(
     return patched;
   });
 }
-
-// ── CellInput ──
 
 function CellInput({
   rowId,
@@ -134,13 +128,9 @@ function CellInput({
   );
 }
 
-// ── Constants ──
-
 const ROW_HEIGHT = 44;
 
 type SelectionState = "ALL" | Set<number>;
-
-// ── Component ──
 
 export function ValidateDataStep({
   fields,
@@ -156,8 +146,7 @@ export function ValidateDataStep({
   const [selection, setSelection] = useState<SelectionState>(new Set());
   const [showOnlyErrors, setShowOnlyErrors] = useState(false);
 
-  // ── Local validation state (per-cell instant + background full scan) ──
-
+  // Local validation: per-cell instant checks plus a background full scan.
   const [localValidation, setLocalValidation] = useState<
     BulkImportValidationError[]
   >([]);
@@ -238,8 +227,7 @@ export function ValidateDataStep({
     [startBackgroundValidation],
   );
 
-  // ── Merged errors: flow errors for clean cells, local validation for dirty cells ──
-
+  // Merge flow errors (clean cells) with local validation (dirty cells).
   const flowErrorMap = useMemo(() => buildErrorMap(errors), [errors]);
   const localErrorMap = useMemo(
     () => buildErrorMap(localValidation),
@@ -274,8 +262,6 @@ export function ValidateDataStep({
     [activeErrors],
   );
 
-  // ── Visible columns ──
-
   const dataKeys = useMemo(() => {
     if (mappedRows.length === 0) return new Set<string>();
     return new Set(Object.keys(mappedRows[0]));
@@ -295,8 +281,6 @@ export function ValidateDataStep({
     [visibleFields],
   );
 
-  // ── Visible rows ──
-
   const visibleRows: VisibleRow[] = useMemo(
     () =>
       mappedRows
@@ -310,8 +294,6 @@ export function ValidateDataStep({
     () => visibleRows.map(({ rowId }) => rowId),
     [visibleRows],
   );
-
-  // ── Selection ──
 
   const allSelected = useMemo(() => {
     if (selection === "ALL") return visibleRows.length > 0;
@@ -353,8 +335,7 @@ export function ValidateDataStep({
     setSelection(new Set());
   }, [selection, onDiscardSelectedRows]);
 
-  // ── Step result (used by BulkImportModal on Confirm) ──
-
+  // Step result, read by BulkImportModal on Confirm.
   const activeErrorList = useMemo(() => {
     const cleanFlowErrors = errors.filter(
       (e) => !dirtyCellKeys.has(`${e.row}:${e.fieldKey}`),
@@ -386,8 +367,7 @@ export function ValidateDataStep({
     onCanConfirmChange,
   ]);
 
-  // ── Cleanup: clear dirty cells on unmount / data change ──
-
+  // Clear dirty cells on unmount / data change.
   useEffect(() => {
     return () => {
       if (bgTimerRef.current) clearTimeout(bgTimerRef.current);
@@ -395,8 +375,6 @@ export function ValidateDataStep({
       dirtyCellsRef.current = {};
     };
   }, [dirtyCellsRef]);
-
-  // ── Virtualizer ──
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({
@@ -427,8 +405,6 @@ export function ValidateDataStep({
       : 0;
 
   const colCount = columns.length + 1;
-
-  // ── Render ──
 
   return (
     <div className="gsl-bulk-import__step gsl-bulk-import__step--validate">

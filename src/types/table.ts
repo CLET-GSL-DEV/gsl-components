@@ -5,8 +5,6 @@ import type {
   ReactNode,
 } from "react";
 
-/* ── Column definition ── */
-
 export interface TableColumn<T> {
   id: string;
   header: string;
@@ -21,16 +19,12 @@ export interface TableColumn<T> {
   align?: "left" | "center" | "right";
 }
 
-/* ── Sort ── */
-
 export type SortDirection = "asc" | "desc";
 
 export interface TableSortState {
   column: string;
   direction: SortDirection;
 }
-
-/* ── Row Actions ── */
 
 export interface TableRowAction<T> {
   id: string;
@@ -41,8 +35,6 @@ export interface TableRowAction<T> {
   /** If provided, must return true for the action to appear for this row */
   condition?: (row: T) => boolean;
 }
-
-/* ── Bulk Actions ── */
 
 export interface TableBulkAction {
   id: string;
@@ -75,8 +67,6 @@ export interface TableBulkActionsProps {
   className?: string;
 }
 
-/* ── ClassNames ── */
-
 export interface TableClassNames {
   root?: string;
   header?: string;
@@ -84,8 +74,6 @@ export interface TableClassNames {
   footer?: string;
   selectionCell?: string;
 }
-
-/* ── Props ── */
 
 export interface TableProps extends HTMLAttributes<HTMLDivElement> {
   classNames?: TableClassNames;

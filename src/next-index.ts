@@ -1,12 +1,10 @@
 import "./styles/theme.css";
 
-// ── Router adapter ────────────────────────────────────────────────────────
 // The Next.js entry uses the context-only adapter, which requires a
 // `<RouterAdapterProvider>` in the consumer's component tree.
 import { setRouterAdapter } from "./adapters/registry";
 import { useContextRouterAdapter } from "./adapters/context-adapter";
 setRouterAdapter(useContextRouterAdapter);
-// ────────────────────────────────────────────────────────────────────────────
 
 export * from "./components/theme";
 export * from "./components/app-switcher";

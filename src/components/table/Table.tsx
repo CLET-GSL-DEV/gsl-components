@@ -39,8 +39,6 @@ import { TableContext } from "./TableContext";
 
 const DEFAULT_TABLE_EMPTY_ICON = <TableIcon size={40} strokeWidth={1} />;
 
-/* ── Helpers ── */
-
 function getCellValue<T>(row: T, col: TableColumn<T>): ReactNode {
   if (col.accessorFn) return col.accessorFn(row);
   if (col.accessorKey != null) return row[col.accessorKey] as ReactNode;
@@ -61,8 +59,6 @@ function colStyle(col: {
   if (col.maxWidth) style.maxWidth = col.maxWidth;
   return style;
 }
-
-/* ── Root ── */
 
 export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
   { className, classNames, paramPrefix, height, children, ...props },
@@ -85,8 +81,6 @@ export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
     </TableContext.Provider>
   );
 });
-
-/* ── Content ── */
 
 function TableContentRender<T>(
   props: TableContentProps<T>,
@@ -132,6 +126,13 @@ function TableContentRender<T>(
   const [openPopoverKey, setOpenPopoverKey] = useState<string | number | null>(
     null,
   );
+
+  // Right-clicking outside the (portaled) popover content closes it via
+  // Radix's own pointerdown-outside handling — which fires on mousedown,
+  // before our row's onContextMenu even runs. Snapshot which row was open
+  // in the pointerdown capture phase (fires before that) so the contextmenu
+  // handler can still tell "closing an open menu" apart from "opening one".
+  const wasOpenKeyRef = useRef<string | number | null>(null);
 
   // Shared virtual anchor for the row-actions popover: kebab clicks snap it to
   // the trigger button's rect, right-clicks snap it to the cursor point, so
@@ -260,10 +261,13 @@ function TableContentRender<T>(
           if (selectable) handleToggleRow(key);
           onRowClick?.(row, e);
         }}
+        onPointerDownCapture={(e) => {
+          if (e.button === 2) wasOpenKeyRef.current = openPopoverKey;
+        }}
         onContextMenu={(e) => {
           if (!hasActionsColumn) return;
           e.preventDefault();
-          if (openPopoverKey === key) {
+          if (wasOpenKeyRef.current === key) {
             setOpenPopoverKey(null);
             return;
           }
@@ -341,6 +345,11 @@ function TableContentRender<T>(
                   side="bottom"
                   align="end"
                   sideOffset={4}
+                  onContextMenu={(e) => {
+                    // Second right-click often lands on the open menu, not the row.
+                    e.preventDefault();
+                    setOpenPopoverKey(null);
+                  }}
                 >
                   {selectable && (
                     <button
@@ -719,8 +728,6 @@ function TableContentRender<T>(
 export const TableContent = forwardRef(TableContentRender) as <T>(
   props: TableContentProps<T> & { ref?: Ref<HTMLDivElement> },
 ) => React.ReactElement;
-
-/* ── Footer ── */
 
 export const TableFooter = forwardRef<HTMLDivElement, TableFooterProps>(
   function TableFooter({ classNames, className, children, ...props }, ref) {

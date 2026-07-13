@@ -19,7 +19,7 @@ import appHeaderBrandingDeclarativeSource from "../previews/examples/app-header-
 
 # AppHeader
 
-Header bar with compound sub-components for search, app switching, notifications, and user profile. Drop `AppHeader` into your `AppLayout` and nest `AppHeaderSearch`, `AppSwitcher`, and `AppHeaderNotifications` inside `AppHeaderActions` for the right side. The profile trigger is [`ProfilePopover`](/profile-popover) itself — pass it `user`/`variant` for the compact header-style trigger. There's no separate `AppHeaderProfile` component.
+Header bar with compound sub-components for search, app switching, notifications, and user profile. Drop `AppHeader` into your `AppLayout` and nest `AppHeaderSearch`, `AppSwitcher`, and `AppHeaderNotifications` inside `AppHeaderActions` for the right side. The profile trigger is [`ProfilePopover`](/profile-popover) itself — pass it `user`/`variant` for the compact header-style trigger. `AppHeaderProfile` still exists as a deprecated wrapper around the same component (see [Profile trigger](#profile-trigger)), but new code should use `ProfilePopover` directly.
 
 ## Example
 
@@ -174,6 +174,24 @@ Also accepts remaining `HTMLAttributes<HTMLDivElement>` (except `onClick`, which
 
 The profile trigger in the example above is [`ProfilePopover`](/profile-popover) with `user`/`variant` props — see that page for the full prop table (`user`, `variant`, `items`, `loading`/`loadingLabel`, `onSignOut`, `children`), the built-in theme toggle, and the loading state. `AppHeader` doesn't have its own profile component — `ProfilePopover` is the same one `SidebarFooter` uses.
 
+#### `AppHeaderProfile` (deprecated)
+
+> **Deprecated — use [`ProfilePopover`](/profile-popover) directly.** `AppHeaderProfile` is a thin wrapper that builds `ProfilePopover`'s `items` from `onProfileClick`/`onSettingsClick`/`onHelpClick` and forwards `user`/`variant`/`children`/`onSignOut`. It's kept for backward compatibility — existing usages keep working unchanged — but it receives no new features, and `headerAction` no longer does anything (the popover's theme toggle is automatic now, not a prop). See the [migration guide](/docs/migration-v2) for the drop-in replacement.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `user` | `AppUser` | — | User object with name, role, initials, optional email/avatar |
+| `variant` | `"full" \| "avatar"` | `"full"` | Trigger layout — both open the same popover |
+| `headerAction` | `ReactNode` | — | **No longer rendered.** Accepted for backward compatibility only |
+| `loading` | `boolean` | `false` | Shimmer the trigger avatar/name/role — forwarded into the opened `ProfilePopover` too |
+| `loadingLabel` | `string` | `"Loading profile"` | Accessible label announced while loading |
+| `onProfileClick` | `() => void` | — | Called when "My Profile" is clicked |
+| `onSettingsClick` | `() => void` | — | Called when "Account Settings" is clicked |
+| `onHelpClick` | `() => void` | — | Called when "Help & Support" is clicked |
+| `onSignOut` | `() => void` | — | Called when "Sign Out" is clicked |
+| `children` | `ReactElement<RoleSelectProps>` | — | Extra composable content — only a [`RoleSelect`](/role-select) element is accepted |
+| `className` | `string` | — | Merged onto the trigger |
+
 ## Types
 
 ### `AppHeaderProps`
@@ -244,6 +262,19 @@ See the props table above.
 | `text` | Message text (`.gsl-notif-popover__body-text`) |
 | `time` | Time string (`.gsl-notif-popover__body-time`) |
 
+### `AppHeaderProfileProps` (deprecated)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `user` | `AppUser` | — | User data |
+| `variant` | `"full" \| "avatar"` | `"full"` | Trigger layout — both open the same `ProfilePopover` |
+| `headerAction` | `ReactNode` | — | No longer rendered — accepted for backward compatibility only |
+| `loading` | `boolean` | `false` | Shimmer the trigger avatar/name/role — forwarded into the opened `ProfilePopover` too |
+| `loadingLabel` | `string` | `"Loading profile"` | Accessible label announced while loading |
+| `onProfileClick` / `onSettingsClick` / `onHelpClick` / `onSignOut` | `() => void` | — | Fixed menu item callbacks |
+| `className` | `string` | — | Class on the trigger element |
+| `children` | `ReactElement<RoleSelectProps>` | — | Only a `RoleSelect` element is accepted |
+
 ## Notes
 
 - `AppHeader` uses compound children: nest sub-components directly, use `AppHeaderActions` to group right-side items.
@@ -252,7 +283,7 @@ See the props table above.
 - `AppHeaderSearch` list only shows when the input has text (`data` is defined) — empty input hides the list entirely.
 - Group items are memoized on `[data]` — list rendering does not re-run on every keystroke, only when fetched data changes.
 - Notification items: use [`AppHeaderNotificationItem`](#appheadernotificationitem) — don't hand-write `.gsl-notif-popover__*` divs.
-- There's no `AppHeaderProfile` component — the header profile trigger is [`ProfilePopover`](/profile-popover) itself, with `user`/`variant` for the compact avatar + name/role + chevron trigger. See that page for its full prop table, `AppUser`, and the built-in theme toggle.
+- The header profile trigger is [`ProfilePopover`](/profile-popover) itself, with `user`/`variant` for the compact avatar + name/role + chevron trigger. See that page for its full prop table, `AppUser`, and the built-in theme toggle. `AppHeaderProfile` is a deprecated thin wrapper around the same component, kept for backward compatibility — see [Profile trigger](#profile-trigger).
 - All header components accept `className` and pass it through to their root element for Tailwind/consumer overrides.
 - The trigger and popover header avatars default to the normal per-name gradient. Set `--gsl-profile-avatar-bg` (unset by default) on any ancestor to override the background for both — see [`ProfilePopover`](/profile-popover).
 - Profile popover opens at `side="top"`, `align="end"`, `sideOffset={8}` — see [`ProfilePopover`](/profile-popover) for the shared implementation.

@@ -30,14 +30,21 @@ export const routes: RouteRecord[] = [
       },
       {
         path: "docs",
-        element: <ClientOnly>{() => <Navigate to="/docs/getting-started" replace />}</ClientOnly>,
+        element: (
+          <ClientOnly>
+            {() => <Navigate to="/docs/getting-started" replace />}
+          </ClientOnly>
+        ),
       },
       {
         path: "docs/:componentId",
         element: <DocsPage />,
         getStaticPaths: () => getAllDocSlugs().map((slug) => `docs/${slug}`),
       },
-      { path: "*", element: <ClientOnly>{() => <Navigate to="/" replace />}</ClientOnly> },
+      {
+        path: "*",
+        element: <ClientOnly>{() => <Navigate to="/" replace />}</ClientOnly>,
+      },
     ],
   },
 ];

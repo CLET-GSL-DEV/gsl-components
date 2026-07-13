@@ -80,6 +80,7 @@
     "react-dom": ">=18.0.0",
     "react-hook-form": ">=7.0.0",
     "react-router-dom": ">=7.0.0",
+    "xlsx": ">=0.18.5",
     "zod": ">=3.0.0"
   },
   "peerDependenciesMeta": {
@@ -93,6 +94,9 @@
       "optional": true
     },
     "@hookform/resolvers": {
+      "optional": true
+    },
+    "xlsx": {
       "optional": true
     }
   },
@@ -138,6 +142,7 @@
     "vite-plugin-lib-inject-css": "^2.2.2",
     "vite-react-ssg": "^0.9.1-beta.1",
     "vitest": "^4.1.8",
+    "xlsx": "^0.18.5",
     "zod": "^4.4.3"
   },
   "keywords": [
@@ -166,7 +171,6 @@
     "libphonenumber-js": "^1.13.7",
     "lottie-react": "^2.4.1",
     "sonner": "^2.0.7",
-    "xlsx": "^0.18.5",
     "zod": ">=3.0.0"
   }
 }

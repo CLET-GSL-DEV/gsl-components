@@ -12,7 +12,11 @@ import {
 import { demoApps } from "demo/data/demoApps";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
-import { buildPageItems, buildMemberItems, buildDocItems } from "demo/data/demoSearch";
+import {
+  buildPageItems,
+  buildMemberItems,
+  buildDocItems,
+} from "demo/data/demoSearch";
 import { VersionSwitcher } from "./VersionSwitcher";
 
 import {
@@ -119,8 +123,16 @@ function BreadcrumbSetter() {
 
 const demoRoles = [
   { id: "admin", name: "Admin", icon: <Shield size={16} strokeWidth={1.5} /> },
-  { id: "reviewer", name: "Reviewer", icon: <Eye size={16} strokeWidth={1.5} /> },
-  { id: "auditor", name: "Auditor", icon: <ScrollText size={16} strokeWidth={1.5} /> },
+  {
+    id: "reviewer",
+    name: "Reviewer",
+    icon: <Eye size={16} strokeWidth={1.5} />,
+  },
+  {
+    id: "auditor",
+    name: "Auditor",
+    icon: <ScrollText size={16} strokeWidth={1.5} />,
+  },
 ];
 
 const demoUser = {
@@ -149,14 +161,16 @@ export function DemoLayout() {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null,
   );
-  const [previewDropdownValue, setPreviewDropdownValue] = useState<string | null>(null);
+  const [previewDropdownValue, setPreviewDropdownValue] = useState<
+    string | null
+  >(null);
   const [selectedRole, setSelectedRole] = useState("admin");
   const handleSearch = useCallback(
     (value: string) => setSearchQuery(value),
     [],
   );
 
-  // ── Segmented search: each group has its own loading state ──
+  // Segmented search: each group has its own loading state.
   const pagesQuery = useMemo(() => buildPageItems(searchQuery), [searchQuery]);
   const membersQuery = useMemo(
     () => buildMemberItems(searchQuery),
@@ -210,7 +224,16 @@ export function DemoLayout() {
         loadingLabel: "Searching documentation...",
       },
     ];
-  }, [searchQuery, pageResults, pagesLoading, memberResults, membersLoading, docsResults, docsLoading, navigate]);
+  }, [
+    searchQuery,
+    pageResults,
+    pagesLoading,
+    memberResults,
+    membersLoading,
+    docsResults,
+    docsLoading,
+    navigate,
+  ]);
 
   const initialExpandedGroup = useMemo(() => {
     const match = [
@@ -222,9 +245,9 @@ export function DemoLayout() {
       "Other",
     ].find((label) =>
       (
-        {
+        ({
           Main: ["/", "/members", "/docs"],
-        } as Record<string, string[]>
+        }) as Record<string, string[]>
       )[label]?.some((p) => location.pathname.startsWith(p)),
     );
     return match ?? "Main";
@@ -538,12 +561,16 @@ export function DemoLayout() {
                       onClick: () => navigate("/docs"),
                     },
                     {
-                      icon: <Settings size={20} strokeWidth={1.5} aria-hidden />,
+                      icon: (
+                        <Settings size={20} strokeWidth={1.5} aria-hidden />
+                      ),
                       label: "Account Settings",
                       onClick: () => navigate("/docs"),
                     },
                     {
-                      icon: <HelpCircle size={20} strokeWidth={1.5} aria-hidden />,
+                      icon: (
+                        <HelpCircle size={20} strokeWidth={1.5} aria-hidden />
+                      ),
                       label: "Help & Support",
                       onClick: () => navigate("/docs"),
                     },
