@@ -175,7 +175,14 @@ export function DemoLayout2() {
                 apps={appsData ?? []}
                 loading={appsLoading}
                 onAppSelect={(app) => console.log("Selected:", app.name)}
-              />
+              >
+                <RoleSelect
+                  title="View as"
+                  roles={demoRoles}
+                  selectedRole={selectedRole}
+                  onClickRole={(role) => setSelectedRole(role.id)}
+                />
+              </Launchpad>
               <AppHeaderNotifications loading={notifLoading}>
                 {notifData?.map((n: (typeof notifData)[number]) => (
                   <AppHeaderNotificationItem

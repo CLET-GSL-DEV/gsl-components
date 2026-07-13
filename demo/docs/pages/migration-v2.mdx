@@ -2,10 +2,10 @@ export const meta = {
   title: "Migration guide: v1 → v2",
   description: "Upgrade to v2 and the new design system",
   category: "Guide",
-  keywords: ["migration", "upgrade", "v2", "breaking changes", "deprecated", "new design system", "AppHeaderProfile", "ProfilePopover", "Launchpad", "AppSwitcher", "rebrand"],
+  keywords: ["migration", "upgrade", "v2", "breaking changes", "deprecated", "new design system", "AppHeaderProfile", "ProfilePopover", "Launchpad", "AppSwitcher", "rebrand", "AppLayout", "Sidebar", "RoleSelect", "stacked layout"],
   since: "2.0.0",
   status: "guide",
-  related: ["changelog", "getting-started", "theme", "app-header", "app-switcher", "launchpad", "table"],
+  related: ["changelog", "getting-started", "theme", "app-header", "app-switcher", "launchpad", "table", "sidebar", "profile-popover", "role-select", "app-layout", "metric-card", "tabs"],
 };
 
 # Migration guide: v1 → v2
@@ -220,27 +220,150 @@ usage, since that's the main gap keeping `Launchpad` from being a universal repl
 
 ## Adopting the new design system
 
-Beyond the changes above, several components shipped a new *preferred* variant — the old default
-still works, but the new one is what `/` (the reference implementation) uses. **Prefer these for
-all new work**, especially the `Table` family:
+**This section is the real point of "v2."** Everything in §1–§6 above is about not breaking when
+you upgrade the dependency. This section is about actually *looking like* the new design system —
+matching `/` (`Dashboard2Page` + its `DemoLayout2` shell), not just staying green on a version bump.
+None of it is required to keep existing screens compiling and rendering. All of it is what new
+screens, and any screen you're meaningfully touching, should be built with. If a screen still has
+the old bordered-panel-everywhere look after you've "migrated" it, it isn't actually migrated yet —
+compare it against `/` directly, section by section, not from memory.
+
+### Layout shell: `AppLayout variant="stacked"`, `AppHeader variant="plain"`, `Sidebar variant="plain"`
+
+The reference shell (`DemoLayout2`) composes three layout-level variant choices together — they're
+designed to be adopted as a set, not individually:
+
+```diff
+-<AppLayout>
++<AppLayout variant="stacked">
+   <AppHeader variant="plain">
+     ...
+   </AppHeader>
+   <AppSidebar>
+     <SidebarOverlay />
+-    <Sidebar>
++    <Sidebar variant="plain">
+       ...
+     </Sidebar>
+   </AppSidebar>
+   <AppBody>
+     <Outlet />
+   </AppBody>
+ </AppLayout>
+```
+
+- **`AppLayout variant="stacked"`** — header spans the full width across the top; sidebar and
+  content sit side by side below it. The default (`"default"`) instead runs the sidebar full-height
+  down the left with the header only spanning the content column. `/` uses `"stacked"`.
+- **`AppHeader variant="plain"`** — square corners, solid `--gsl-primary` background, on-primary
+  text, reads as one continuous top bar with the branding block. Already covered above, repeated
+  here because it's part of the same shell decision, not standalone.
+- **`Sidebar variant="plain"`** — transparent background plus a right border, instead of the
+  default's own panel surface/background. Paired with the `"plain"` header and `"stacked"` layout,
+  this is what removes the boxed-in, panel-inside-panel look of the old default shell.
+
+**`SidebarGroup collapsible`** (already listed below as a standalone preference) is also part of
+this shell in practice — `/`'s nav groups are all `collapsible` accordion sections, not flat lists.
+
+**`SidebarFooter` should host a `ProfilePopover`** — don't leave the sidebar without a footer, and
+don't hand-roll a footer profile row. `/` renders `SidebarFooter` with `ProfilePopover` in
+`fullName`/`email` mode (not `user`/`variant` — that mode is for the compact header trigger, see
+"One role switcher" below), so the full name, email, and role always have a stable,
+real-estate-rich home even when the header trigger stays down to an icon.
+
+### One role switcher, driven consistently across all three places it can appear
+
+`RoleSelect` can be composed as `children` in exactly three components:
+`ProfilePopover` (header), `ProfilePopover` (sidebar footer), and `Launchpad`. If your app has
+role-switching at all, **wire all three from the same `roles`/`selectedRole`/`onClickRole`
+state** — not just whichever one you happened to add first. A user shouldn't find the role
+switcher in the sidebar footer but not in the header, or in either profile popover but not in
+Launchpad. Each location needs its own `<RoleSelect>` element (the prop only accepts one element
+per slot, so you can't literally share a single node across three places), but all three should
+read from and write to the same state so switching role anywhere is reflected everywhere:
+
+```tsx
+const [selectedRole, setSelectedRole] = useState(roles[0].id);
+const roleSelectProps = { title: "View as", roles, selectedRole, onClickRole: (r) => setSelectedRole(r.id) };
+
+// Header
+<ProfilePopover variant="avatar" user={user} items={items} onSignOut={onSignOut}>
+  <RoleSelect {...roleSelectProps} />
+</ProfilePopover>
+
+// Sidebar footer
+<SidebarFooter>
+  <ProfilePopover fullName={user.name} email={user.email} items={items} onSignOut={onSignOut}>
+    <RoleSelect {...roleSelectProps} />
+  </ProfilePopover>
+</SidebarFooter>
+
+// Launchpad (header)
+<Launchpad apps={apps} onAppSelect={onAppSelect}>
+  <RoleSelect {...roleSelectProps} />
+</Launchpad>
+```
+
+**Header `ProfilePopover` prefers `variant="avatar"`** (icon only, no name/role/chevron) — `/` uses
+this, specifically *because* the full name/role/email are already given a proper home in the
+`SidebarFooter` popover (`fullName`/`email` mode). Don't use `variant="full"` in the header if
+you're also rendering a `SidebarFooter` popover — that duplicates the same name/role text in two
+places on screen at once. Reserve `variant="full"` for headers that have no sidebar footer at all.
+
+### Table family
+
+`TableContent`, `TableFilter`, and `TableFooter` are meant to be adopted together, not
+independently — `/` uses all three of these on every table:
 
 | Component | Prefer | Over |
 |-----------|--------|------|
 | `TableContent` | `variant="panel"` | `variant="default"` |
 | `TableFilter` | `variant="spread"` | `variant="popover"` (default) |
-| `AppHeader` | `variant="plain"` | `variant="default"` |
+| `TableFooter` | `className="gsl-table__footer--no-border"` | no className (default top border) |
+
+```diff
+ <Table paramPrefix="members">
+   <TableHeader>
+     <TableSearch placeholder="Search members..." />
+-    <TableFilter>
++    <TableFilter variant="spread">
+       <Dropdown name="role" ... />
+     </TableFilter>
+   </TableHeader>
+-  <TableContent columns={columns} data={data} rowKey={...} />
++  <TableContent variant="panel" columns={columns} data={data} rowKey={...} />
+-  <TableFooter>
++  <TableFooter className="gsl-table__footer--no-border">
+     <TablePagination ... />
+   </TableFooter>
+ </Table>
+```
+
+`TableFooter`'s `--no-border` class is a real, stable class from the library's own stylesheet
+(`.gsl-table__footer--no-border { border-top: none; }`), not a demo-only hack — it's the finishing
+touch that makes the `"panel"`/`"spread"` pairing read as one continuous surface instead of a
+bordered box with another bordered strip glued to the bottom.
+
+### Other preferred variants
+
+| Component | Prefer | Over |
+|-----------|--------|------|
 | `MetricCard` | `variant="outline"` | `variant="default"` |
 | `Tabs` | `variant="pill"` | `variant="default"` |
-| `SidebarGroup` | `collapsible` (accordion groups) | flat, non-collapsible groups |
 
-None of these require a code change to keep existing tables/headers/cards working — they're
-additive variants, not replacements for the defaults, and there's no deadline to migrate existing
-usages off the old ones. But for any `Table` you're building or touching now, default to
-`variant="panel"` on `TableContent` and `variant="spread"` on `TableFilter` rather than the plain
-defaults — that pairing is what the reference implementation (`/`) uses everywhere, and it's the
-look new `Table` work should match.
+`SectionHeader` (with `SectionTitle`/`SectionDescription`/`SectionActions`) is also worth adopting
+for page headers — it's what `/` uses for its title + description + action-buttons row instead of
+hand-rolled `<div>`s, though it's a new addition rather than a variant of something older, so
+there's no "instead of" to name here.
+
+None of the variants on this page require a code change to keep existing screens working — they're
+additive, not replacements for the defaults, and there's no deadline to migrate existing screens off
+the old ones. But treat this whole section, not just the breaking changes above it, as the actual
+definition of "migrated to v2" for any screen you're building fresh or substantially touching.
 
 ## Checklist
+
+**Compatibility (keeps existing screens compiling/rendering — do these when you touch the file):**
 
 - [ ] Migrate `AppHeaderProfile` to `ProfilePopover` where convenient — not required, no removal
       date (§1)
@@ -252,8 +375,24 @@ look new `Table` work should match.
       switch to `Launchpad` instead (§3, §6)
 - [ ] Add an explicit `rowActions` Select/Deselect entry to `selectable`-only tables that need it (§4)
 - [ ] Decide whether to keep or override the new brand colors and typography (§5)
+
+**Design system adoption (the actual "looks like v2" bar — for new/touched screens):**
+
 - [ ] For new `AppSwitcher`-like work, reach for `Launchpad` first — fall back to `AppSwitcher`
       only for flexible columns, an uncapped/differently-capped grid, or a custom `footer` (§6)
-- [ ] For new/touched `Table`s, default to `TableContent variant="panel"` + `TableFilter
-      variant="spread"` instead of the plain defaults
-- [ ] Optionally adopt the other preferred variants (`plain`, `outline`, `pill`, `collapsible`)
+- [ ] New/rebuilt layout shells use `AppLayout variant="stacked"` + `AppHeader variant="plain"` +
+      `Sidebar variant="plain"` + `collapsible` `SidebarGroup`s together, not piecemeal ("Layout
+      shell")
+- [ ] Every layout has a `SidebarFooter` with a `ProfilePopover` in `fullName`/`email` mode — not a
+      hand-rolled footer, not an omitted footer ("Layout shell")
+- [ ] If role-switching exists at all, the same `RoleSelect` state backs all three possible
+      locations: header `ProfilePopover`, `SidebarFooter` `ProfilePopover`, and `Launchpad` — not
+      just one or two of them ("One role switcher")
+- [ ] Header `ProfilePopover` uses `variant="avatar"` when a `SidebarFooter` popover already shows
+      the full name/role — reserve `variant="full"` for headers with no sidebar footer ("One role
+      switcher")
+- [ ] New/touched `Table`s use all three together: `TableContent variant="panel"`, `TableFilter
+      variant="spread"`, `TableFooter className="gsl-table__footer--no-border"`
+- [ ] `MetricCard variant="outline"`, `Tabs variant="pill"` on any new usage
+- [ ] New page headers use `SectionHeader`/`SectionTitle`/`SectionDescription`/`SectionActions`
+      instead of hand-rolled markup
