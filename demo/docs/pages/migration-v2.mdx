@@ -271,6 +271,64 @@ don't hand-roll a footer profile row. `/` renders `SidebarFooter` with `ProfileP
 "One role switcher" below), so the full name, email, and role always have a stable,
 real-estate-rich home even when the header trigger stays down to an icon.
 
+**Branding lives in the header (`AppHeaderBranding`), not the sidebar.** `/`'s `Sidebar` has no
+`SidebarHeader`/`SidebarBrand` at all — the logo and product name live exclusively in `AppHeader`
+via `AppHeaderBranding` (`logo`/`title`/`subtitle`), positioned first inside the header, before
+`AppHeaderActions`:
+
+```tsx
+<AppHeader variant="plain">
+  <AppHeaderBranding
+    logo={<img src="/logo.png" alt="" width={28} height={28} />}
+    title="YOUR PORTAL"
+    subtitle="Your Product Name"
+  />
+  <AppHeaderActions>...</AppHeaderActions>
+</AppHeader>
+```
+
+`SidebarHeader`/`SidebarBrand` are **not deprecated** — they're still valid, documented components
+for apps that want sidebar-only branding with no `AppHeader` branding slot in use. The point isn't
+that they're wrong, it's that the same logo and product name shouldn't appear twice on screen at
+once. If your layout is adopting `AppHeaderBranding` in the header, remove the sidebar's own
+`SidebarHeader`/`SidebarBrand` block — don't keep both.
+
+### Use built-in `loading` states — don't hand-roll placeholders
+
+Nearly every component in the shell and on `/` itself supports a real `loading` prop that renders a
+proper shimmering skeleton — `/` uses every one of these, driven from real query loading flags
+(`useMockQuery` in the demo; your real data-fetching hook in an app):
+
+| Component | Loading prop(s) | Replaces |
+|-----------|------------------|----------|
+| `Launchpad` / `AppSwitcher` | `loading` | A disabled/empty trigger, or rendering nothing until apps arrive |
+| `AppHeaderNotifications` | `loading` | An empty popover, or a hand-rolled spinner |
+| `ProfilePopover` | `loading` + `loadingLabel` | Rendering `"..."` or nothing for the name/email/avatar |
+| `SidebarLink` | `loading` + `loadingLabel` | Not rendering nav items at all until data resolves, or a generic full-page spinner |
+| `MetricCard` | `loading` + `loadingLabel` | A hand-rolled `"..."` or `"N/A"` string in `value`/`description` |
+| `TableContent` | `loading` + `loadingRows` | An empty table, a spinner overlay, or hiding the table until data arrives |
+
+The `SidebarLink` pattern specifically — render a handful of `loading` links in place of the real
+nav while it's being fetched, not a full-sidebar spinner or an empty sidebar:
+
+```tsx
+{navLoading ? (
+  <SidebarGroup>
+    {Array.from({ length: 6 }).map((_, i) => (
+      <SidebarLink key={i} loading icon={<span />}>Loading</SidebarLink>
+    ))}
+  </SidebarGroup>
+) : (
+  navGroups.map((group) => /* real nav */)
+)}
+```
+
+If you find a component rendering `value={data ?? "..."}`, `description={loading ? "Checking..." :
+...}`, a hand-rolled `<Spinner />`, or simply not rendering until data resolves — and that
+component is in the table above — replace it with the real `loading` prop instead. This is
+independent of the layout-shell and table-variant changes above; audit page-level usages too, not
+just the shell files.
+
 ### One role switcher, driven consistently across all three places it can appear
 
 `RoleSelect` can be composed as `children` in exactly three components:
@@ -385,6 +443,13 @@ definition of "migrated to v2" for any screen you're building fresh or substanti
       shell")
 - [ ] Every layout has a `SidebarFooter` with a `ProfilePopover` in `fullName`/`email` mode — not a
       hand-rolled footer, not an omitted footer ("Layout shell")
+- [ ] Branding (logo + product name) lives in `AppHeader` via `AppHeaderBranding`, not duplicated
+      in a `SidebarHeader`/`SidebarBrand` block — remove the sidebar one if the header has it
+      ("Layout shell")
+- [ ] Every component in the loading-props table (`Launchpad`/`AppSwitcher`, `AppHeaderNotifications`,
+      `ProfilePopover`, `SidebarLink`, `MetricCard`, `TableContent`) uses its real `loading` prop
+      instead of a hand-rolled `"..."` value, spinner, or omitted-until-ready render — audit page
+      files too, not just layout files ("Use built-in loading states")
 - [ ] If role-switching exists at all, the same `RoleSelect` state backs all three possible
       locations: header `ProfilePopover`, `SidebarFooter` `ProfilePopover`, and `Launchpad` — not
       just one or two of them ("One role switcher")
