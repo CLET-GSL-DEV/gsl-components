@@ -52,7 +52,7 @@ const DocsHeader = ({
   return (
     <header className={cn("demo-header", headerHidden ? "demo-header-up" : "")}>
       <Link to="/" className="demo-logo">
-        GSL Components
+        GSL Components (Clet)
       </Link>
       <nav className="demo-nav">
         <button

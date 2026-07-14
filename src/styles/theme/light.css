@@ -31,7 +31,8 @@
   --gsl-primary: var(--clet-primary);
   --clet-primary-light: #e7ebee;
   --gsl-primary-light: var(--clet-primary-light);
-  --gsl-secondary: #c8a24b;
+  --clet-secondary: #c8a24b;
+  --gsl-secondary: var(--clet-secondary);
   --clet-focus: var(--clet-primary);
   --gsl-focus: var(--clet-focus);
   --clet-on-primary: #fff;

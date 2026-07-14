@@ -62,6 +62,8 @@ function ThemeSwitcher() {
 
 Tokens are defined in `theme.css` and applied on `.gsl-theme` and `document.documentElement` (for portaled overlays such as modals and popovers).
 
+Every **color** token below also has a `--clet-*` alias with the identical value (e.g. `--gsl-primary` / `--clet-primary`) — **prefer `--clet-*` in new code**; `--gsl-*` keeps working unchanged (each `--gsl-*` color token is defined as `var(--clet-*)` under the hood, so overriding either name has the same effect). Non-color tokens (radius, shadow, z-index, font) only have a `--gsl-*` name.
+
 ### Colors
 
 | Token | Use |
@@ -85,6 +87,7 @@ Tokens are defined in `theme.css` and applied on `.gsl-theme` and `document.docu
 |-------|-----|
 | `--gsl-primary` | Buttons, focus rings, accents, avatar bg |
 | `--gsl-primary-light` | Focus ring background, selected backgrounds |
+| `--gsl-secondary` | Gold brand accent (e.g. active `SidebarLink`) |
 | `--gsl-on-primary` | Text on primary backgrounds |
 | `--gsl-focus` | Focus ring color (defaults to `--gsl-primary`) |
 | `--gsl-error` | Invalid borders, error text, destructive actions |
@@ -301,16 +304,18 @@ values (don't chain `var(--something)` — just write the color):
 .gsl-theme[data-gsl-theme="light"],
 :root[data-gsl-theme="dark"],
 .gsl-theme[data-gsl-theme="dark"] {
-  --gsl-primary: #1d4ed8;
-  --gsl-primary-light: #eff6ff;
-  --gsl-focus: #1d4ed8;
-  --gsl-on-primary: #ffffff;
+  --clet-primary: #1d4ed8;
+  --clet-primary-light: #eff6ff;
+  --clet-focus: #1d4ed8;
+  --clet-on-primary: #ffffff;
 }
 ```
 
 That one block overrides the primary color in light mode, dark mode,
-and the unthemed fallback. The same shape works for any other
-`--gsl-*` token — list every selector, hardcode the value.
+and the unthemed fallback. The same shape works for any other color
+token — list every selector, hardcode the value, using its `--clet-*`
+name (or the equivalent `--gsl-*` name — both work). Non-color tokens
+only have a `--gsl-*` name.
 
 ## Tailwind v4 integration
 

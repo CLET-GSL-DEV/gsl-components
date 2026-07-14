@@ -46,7 +46,7 @@ function classify(name) {
     return "length";
   if (/(duration|transition|delay|stagger)/.test(local)) return "duration";
   if (
-    /(color|^bg$|-bg$|bg-|background|border|accent|track|success|warning|error|primary|surface|hover|overlay|text|focus|current|highlight|shimmer)/.test(
+    /(color|^bg$|-bg$|bg-|background|border|accent|track|success|warning|error|primary|secondary|surface|hover|overlay|text|focus|current|highlight|shimmer)/.test(
       local,
     )
   )

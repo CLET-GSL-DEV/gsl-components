@@ -1,6 +1,6 @@
-# GSL Components
+# GSL Components (Clet)
 
-Shared React component library for Ghana School of Law (GSL) projects.
+Shared React component library for Ghana School of Law (GSL) projects. Also known as **Clet** — the library/design-system's own brand name, distinct from the "GSL" institutional abbreviation above. `--gsl-*` tokens, `.gsl-*` classes, and the `@rfdtech/components` package name are unchanged; every color token also has an equivalent `--clet-*` alias (see [Customize tokens](#7-customize-tokens)).
 
 Requires React 18+ and a bundler that processes CSS (Vite, Webpack, etc.).
 
@@ -111,7 +111,13 @@ See the [RouterAdapter](/docs/router-adapter) docs page for full setup.
 
 ### 7. Customize tokens
 
-GSL components read `--gsl-*` CSS variables. Override any of them by
+Components read `--gsl-*` CSS variables. Every color token also has a
+`--clet-*` alias with the exact same value — **prefer `--clet-*` in new
+override code**; `--gsl-*` keeps working unchanged for existing overrides
+(each `--gsl-*` color token is now defined as `var(--clet-*)`, so overriding
+either name works — `--clet-*` is just the newer, preferred spelling).
+Non-color tokens (radius, shadow, font, spacing) only have a `--gsl-*` name;
+there is no `--clet-*` equivalent for those. Override any token by
 declaring a new value on the same selectors the library uses.
 
 **Step 1 — Import the library CSS** so its defaults are loaded:
@@ -152,33 +158,38 @@ values (don't chain `var(--something)` — just write the color):
 .gsl-theme[data-gsl-theme="light"],
 :root[data-gsl-theme="dark"],
 .gsl-theme[data-gsl-theme="dark"] {
-  --gsl-primary: #1d4ed8;
-  --gsl-primary-light: #eff6ff;
-  --gsl-focus: #1d4ed8;
-  --gsl-on-primary: #ffffff;
+  --clet-primary: #1d4ed8;
+  --clet-primary-light: #eff6ff;
+  --clet-focus: #1d4ed8;
+  --clet-on-primary: #ffffff;
 }
 ```
 
 That one block overrides the primary color in light mode, dark mode,
-and the unthemed fallback. The same shape works for any other
-`--gsl-*` token — list every selector, hardcode the value.
+and the unthemed fallback. The same shape works for any other color
+token — list every selector, hardcode the value, and use its `--clet-*`
+name (or the equivalent `--gsl-*` name — both work identically).
 
 ## Design tokens
 
-Quick reference of commonly used tokens and their light-mode defaults:
+Quick reference of commonly used color tokens and their light-mode defaults.
+Each has both a `--clet-*` (preferred) and `--gsl-*` (legacy, still works)
+name for the same value:
 
-| Token | Light default | Use |
+| Token (`--clet-*` / `--gsl-*`) | Light default | Use |
 | ------- | --------------- | ----- |
-| `--gsl-primary` | `#dc2626` | Buttons, focus rings, accents |
-| `--gsl-primary-light` | `#fef2f2` | Selected rows, hover fills |
-| `--gsl-bg` | `#ffffff` | Surfaces |
-| `--gsl-text` | `#3c4043` | Body text |
-| `--gsl-text-secondary` | `#5f6368` | Labels, muted UI |
-| `--gsl-border` | `#dadce0` | Borders |
-| `--gsl-hover` | `#f1f3f4` | Row/cell hover |
-| `--gsl-error` / `--gsl-error-bg` | `#dc2626` / `#fef2f2` | Errors |
-| `--gsl-success` | `#16a34a` | Success states |
-| `--gsl-warning` | `#eab308` | Warnings |
+| `primary` | `#083755` | Buttons, focus rings, accents |
+| `primary-light` | `#e7ebee` | Selected rows, hover fills |
+| `secondary` | `#c8a24b` | Gold accent (e.g. active `SidebarLink`) |
+| `bg` | `#ffffff` | Surfaces |
+| `main-bg` | `#fafafa` | Page/app-layout background |
+| `text` | `#3c4043` | Body text |
+| `text-secondary` | `#5f6368` | Labels, muted UI |
+| `border` | `#dadce0` | Borders |
+| `hover` | `#f1f3f4` | Row/cell hover |
+| `error` / `error-bg` | `#dc2626` / `#fef2f2` | Errors |
+| `success` | `#16a34a` | Success states |
+| `warning` | `#eab308` | Warnings |
 
 `BulkImportModal` also accepts legacy aliases (`--gsl-bulk-import-primary`, etc.) that map to the shared tokens.
 

@@ -4,7 +4,7 @@ globs: src/components/**/*,src/types/**/*
 alwaysApply: false
 ---
 
-# GSL component authoring
+# GSL component authoring (Clet)
 
 ## Module layout
 
@@ -23,6 +23,7 @@ src/types/{name}.ts    # props, classNames, unions
 - Prefix classes `gsl-{component}` / `gsl-{component}__part`.
 - Import CSS in the component file.
 - Component-scoped tokens: `--gsl-{component}-{name}`, named so `generate-theme-tokens.mjs`'s `classify()` infers the right type (e.g. include `size`/`radius`/`shadow`/`font`/`color` in the name). See the full token & theme checklist in `AGENTS.md`.
+- Color-classified tokens get a `--clet-{name}` alias too (`--clet-{name}: <value>;` then `--gsl-{name}: var(--clet-{name});`) — `--clet-*` is the preferred name in new docs/examples, `--gsl-*` keeps working. Non-color tokens don't get one.
 
 ## Responsive
 

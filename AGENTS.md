@@ -1,4 +1,4 @@
-# GSL Components — Agent Knowledge
+# GSL Components (Clet) — Agent Knowledge
 
 References: [`.cursor/rules/gsl-component-authoring.mdc`](.cursor/rules/gsl-component-authoring.mdc) — always consult first.
 
@@ -134,7 +134,8 @@ RHF is **not** baked into any input component. Integration is entirely at the co
 ## Styling
 
 - **Tokens**: `--gsl-bg`, `--gsl-text`, `--gsl-text-secondary`, `--gsl-border`, `--gsl-border-strong`, `--gsl-hover`, `--gsl-primary`, `--gsl-primary-light`, `--gsl-error`, `--gsl-radius`, `--gsl-font`, `--gsl-z-popover`, `--gsl-z-select`, `--gsl-shadow-sm/md/lg`, `--gsl-overlay`
-- **No hardcoded colors**. Only `--gsl-*` tokens.
+- **Dual naming for color tokens**: every *color*-classified token (per `classify()`) has both a `--gsl-*` name (legacy, still fully functional) and a `--clet-*` alias with the identical value — `--gsl-<name>` is defined as `var(--clet-<name>)`. **New docs/examples should show `--clet-*`** as the preferred override name; existing `--gsl-*` overrides keep working unchanged. Non-color tokens (radius, shadow, font, spacing, z-index) only have a `--gsl-*` name — do not invent a `--clet-*` alias for those.
+- **No hardcoded colors**. Only `--gsl-*`/`--clet-*` tokens.
 - **BEM naming**: `gsl-component`, `gsl-component__part`, `gsl-component--modifier`
 - **CSS imported in the component file**: `import "./styles/example.css"`
 - **Input standard look**: 40px height, 0 12px padding, `var(--gsl-border)` 1px solid, `var(--gsl-radius)` border-radius, 14px font
@@ -153,6 +154,7 @@ Run through this for **every** new component and every CSS change to an existing
 4. **Global tokens must also get a Tailwind `@theme` mapping.** If the token is a *global* one (defined in `src/styles/theme/{base,light,dark}.css`, not component-scoped), add a corresponding line in the `@theme` block in `src/styles/theme/tokens.css` (e.g. `--color-foo: var(--gsl-foo);` or `--text-foo: var(--gsl-font-size-foo);`) so Tailwind auto-generates the utility class. Component-scoped tokens (`--gsl-<slug>-*`) do NOT get an `@theme` entry — they're consumed directly in that component's CSS and overridden via `gslTheme({ components: { ... } })`. Check the running coverage checklist comment at the bottom of `tokens.css` and update it if you deliberately skip a mapping.
 5. **Verify light + dark values exist** for any new global color token — add both, never just one mode.
 6. **Rebuild/refresh the MCP index** before considering the work done: restart the dev MCP server (it auto-rebuilds `mcp/generated/*.json` from source when stale) or run `npm run build:mcp`, then confirm the component/tokens are visible via `list_components` / `get_component` / `get_tokens`.
+7. **New color tokens also need a `--clet-*` alias.** If the token you're adding classifies as `color`, define it as `--clet-<name>: <value>;` and immediately follow it with `--gsl-<name>: var(--clet-<name>);` (same pattern used throughout `src/styles/theme/{light,dark}.css` and every component's color tokens). `npm run generate:tokens` only scans `--gsl-*` declarations, so this doesn't change how you run it — just how the token's own declaration is written. Non-color tokens (radius/shadow/font/etc.) do NOT get a `--clet-*` alias.
 
 ## Module layout
 
