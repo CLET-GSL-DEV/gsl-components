@@ -1,0 +1,79 @@
+export const meta = {
+  title: "Switch",
+  description: "Binary on/off toggle control",
+  category: "Components",
+  keywords: ["switch", "toggle", "on off", "checkbox alternative"],
+  since: "2.1.0",
+  status: "stable",
+  related: ["checkbox", "radio-group"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { SwitchPreview } from "../previews/code/SwitchPreview";
+import switchVariantsSource from "../previews/examples/switch-variants.example.tsx?raw";
+
+# Switch
+
+Binary on/off toggle built on Radix `Switch`. Use it for settings that take effect immediately, unlike `Checkbox`, which is typically used inside a form that requires an explicit submit.
+
+## Example
+
+<ExampleTabs
+  title="States and label variants"
+  preview={<SwitchPreview />}
+  code={switchVariantsSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `checked` | `boolean` | — | Controlled checked state |
+| `defaultChecked` | `boolean` | — | Uncontrolled initial checked state |
+| `onCheckedChange` | `(checked: boolean) => void` | — | Fires when the switch is toggled |
+| `label` | `ReactNode` | — | Renders a "Switch + Text" variant |
+| `labelPosition` | `"left" \| "right"` | `"right"` | Side the label renders on when `label` is set |
+| `disabled` | `boolean` | `false` | Disables interaction |
+| `invalid` | `boolean` | `false` | Error styling + `aria-invalid` |
+| `required` | `boolean` | — | Marks the field required for form submission |
+| `name` | `string` | — | Form field name |
+| `value` | `string` | — | Form value when checked |
+| `id` | `string` | — | Overrides the auto-generated id |
+| `aria-label` | `string` | — | Accessible name when no visible `label` is set |
+| `classNames` | `SwitchClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root (same as `classNames.root`) |
+
+## Types
+
+### `SwitchProps`
+
+Props for `Switch`. Not `forwardRef` — matches the `Checkbox` convention of a plain function component with an internal Radix `Switch.Root`/`Switch.Thumb` pair.
+
+### `SwitchClassNames`
+
+Part-level class names merged after base `gsl-switch*` styles:
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer wrapper (`<label>` when `label` is set, else `<span>`) |
+| `track` | The Radix `Switch.Root` track button |
+| `thumb` | The Radix `Switch.Thumb` |
+| `label` | The label `<span>` |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-switch-width` | `44px` | Track width |
+| `--gsl-switch-height` | `24px` | Track height |
+| `--gsl-switch-thumb-size` | `20px` | Thumb diameter |
+| `--gsl-switch-padding` | `2px` | Inset between track edge and thumb |
+| `--gsl-switch-font` | `var(--gsl-font-body)` | Font family for the label |
+| `--gsl-switch-label-size` | `var(--gsl-text-size-base)` | Label font size |
+
+## Notes
+
+- Checked track uses `--gsl-primary`; unchecked uses `--gsl-border-strong`. No custom blue accent is used — the design's on-brand navy matches the library's existing primary token.
+- Hover, focus (`--gsl-focus` outline), and disabled (`opacity: 0.6`) states are handled purely in CSS via Radix's `data-state`/`data-disabled` attributes.
+- Clicking the visible `label` toggles the switch, same as `Checkbox`.

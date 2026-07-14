@@ -1,14 +1,29 @@
 import * as Popover from "@radix-ui/react-popover";
+import * as FlagIcons from "country-flag-icons/react/3x2";
 import { ChevronDown } from "lucide-react";
 import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
 import { AsYouType, parsePhoneNumber } from "libphonenumber-js";
 import type { CountryCode } from "libphonenumber-js";
 import type { PhoneNumberInputProps } from "../../types/phone-number-input";
 import { cn } from "../../utils/cn";
-import { countries, getFlagEmoji } from "../../utils/countries";
+import { countries } from "../../utils/countries";
 import "./styles/phone-number-input.css";
 
 type Country = (typeof countries)[number] & { code: CountryCode };
+
+function FlagIcon({
+  code,
+  label,
+  className,
+}: {
+  code: string;
+  label: string;
+  className?: string;
+}) {
+  const Flag = FlagIcons[code as keyof typeof FlagIcons];
+  if (!Flag) return null;
+  return <Flag role="img" aria-label={label} className={className} />;
+}
 
 function matchCountry(fullNumber: string): Country | null {
   if (!fullNumber) return null;
@@ -175,9 +190,11 @@ export const PhoneNumberInput = forwardRef<
             aria-haspopup="listbox"
             aria-expanded={open}
           >
-            <span className="gsl-phone-number-input__flag">
-              {getFlagEmoji(country.code)}
-            </span>
+            <FlagIcon
+              code={country.code}
+              label={`${country.name} flag`}
+              className="gsl-phone-number-input__flag"
+            />
             <span className="gsl-phone-number-input__dial">
               {country.dialCode}
             </span>
@@ -228,9 +245,11 @@ export const PhoneNumberInput = forwardRef<
                   )}
                   onClick={() => handleCountrySelect(c.code)}
                 >
-                  <span className="gsl-phone-number-input__option-flag">
-                    {getFlagEmoji(c.code)}
-                  </span>
+                  <FlagIcon
+                    code={c.code}
+                    label={`${c.name} flag`}
+                    className="gsl-phone-number-input__option-flag"
+                  />
                   <span className="gsl-phone-number-input__option-name">
                     {c.name}
                   </span>

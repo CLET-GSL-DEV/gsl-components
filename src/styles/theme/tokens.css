@@ -1,21 +1,30 @@
 @theme {
-  --color-background: var(--gsl-page-bg);
+  --color-background: var(--gsl-main-bg);
   --color-foreground: var(--gsl-text);
 
   --color-primary: var(--gsl-primary);
   --color-primary-foreground: var(--gsl-on-primary);
+  --color-primary-light: var(--gsl-primary-light);
 
+  /* NOTE: --color-secondary intentionally maps to the neutral surface-dark tone
+     (existing Tailwind convention in this repo), NOT to the gold brand token
+     --gsl-secondary. The gold brand color is exposed separately below as
+     --color-brand-gold so both remain reachable without changing --color-secondary's
+     existing meaning for consumers already using bg-secondary/text-secondary. */
   --color-secondary: var(--gsl-surface-dark);
   --color-secondary-foreground: var(--gsl-text-secondary);
+  --color-brand-gold: var(--gsl-secondary);
 
   --color-muted: var(--gsl-surface-subtle);
   --color-muted-foreground: var(--gsl-text-secondary);
+  --color-text-muted: var(--gsl-text-muted);
 
   --color-accent: var(--gsl-hover);
   --color-accent-foreground: var(--gsl-text);
 
   --color-destructive: var(--gsl-error);
   --color-destructive-foreground: var(--gsl-error-text);
+  --color-destructive-bg: var(--gsl-error-bg);
 
   --color-success: var(--gsl-success);
   --color-success-foreground: var(--gsl-on-primary);
@@ -29,17 +38,50 @@
   --color-popover: var(--gsl-bg);
   --color-popover-foreground: var(--gsl-text);
 
+  --color-panel: var(--gsl-surface-panel);
+
   --color-border: var(--gsl-border);
+  --color-border-strong: var(--gsl-border-strong);
+  --color-border-subtle: var(--gsl-border-subtle);
   --color-input: var(--gsl-border-strong);
   --color-ring: var(--gsl-focus);
 
   --radius: var(--gsl-radius-base);
+  --radius-xl: var(--gsl-radius-xl);
+  --radius-2xl: var(--gsl-radius-2xl);
 
   --font-family-sans: var(--gsl-font);
   --font-family-header: var(--gsl-font-header);
   --font-family-body: var(--gsl-font-body);
 
+  --text-xs: var(--gsl-text-size-xs);
+  --text-sm: var(--gsl-text-size-sm);
+  --text-base: var(--gsl-text-size-base);
+  --text-md: var(--gsl-text-size-md);
+  --text-lg: var(--gsl-text-size-lg);
+  --text-xl: var(--gsl-text-size-xl);
+
   --shadow-sm: var(--gsl-shadow-sm);
   --shadow-md: var(--gsl-shadow-md);
   --shadow-lg: var(--gsl-shadow-lg);
 }
+
+/* ── Global token → Tailwind coverage checklist ──
+   Every --gsl-* global token (src/styles/theme/{base,light,dark}.css) is either
+   mapped above or intentionally skipped here, so `npm run generate:tokens` +
+   this file together give full coverage. Component-scoped tokens
+   (--gsl-<slug>-*) are NOT mapped here by design — see AGENTS.md.
+
+   Intentionally NOT mapped (not a fit for Tailwind's utility surface; consumed
+   directly via var(--gsl-*) in component CSS instead):
+   - --gsl-z-header, --gsl-z-popover, --gsl-z-overlay, --gsl-z-modal,
+     --gsl-z-select, --gsl-z-alert, --gsl-z-alert-content, --gsl-z-dropdown
+     (z-index isn't a themeable Tailwind v4 @theme namespace; each component
+     already reads its z-index token straight from CSS)
+   - --gsl-overlay, --gsl-shimmer-highlight (semi-transparent compositing
+     values used only inline by Modal/skeleton CSS, not general-purpose colors)
+   - --gsl-surface-card (already equal to --gsl-bg / --color-card)
+   No --gsl-success-bg or --gsl-warning-bg tokens exist yet (unlike error, which
+   has -bg/-text companions) — new variants needing a tinted success/warning
+   background should use color-mix(in srgb, var(--gsl-success) N%, transparent)
+   (see Badge/Notice) rather than inventing new global tokens for a single use. */

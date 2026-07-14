@@ -14,6 +14,10 @@ import { UploadFieldPreview } from "../previews/code/UploadFieldPreview";
 import uploadFieldSource from "../previews/examples/upload-field.example.tsx?raw";
 import { UploadFieldFormPreview } from "../previews/code/UploadFieldFormPreview";
 import uploadFieldFormSource from "../previews/examples/upload-field-form.example.tsx?raw";
+import { UploadFieldMultiplePreview } from "../previews/code/UploadFieldMultiplePreview";
+import uploadFieldMultipleSource from "../previews/examples/upload-field-multiple.example.tsx?raw";
+import { UploadFieldStatusCardsPreview } from "../previews/code/UploadFieldStatusCardsPreview";
+import uploadFieldStatusCardsSource from "../previews/examples/upload-field-status-cards.example.tsx?raw";
 
 # UploadField
 
@@ -25,6 +29,26 @@ File upload with a dashed-border dropzone, cloud upload icon, auto-generated sup
   title="Basic upload"
   preview={<UploadFieldPreview />}
   code={uploadFieldSource}
+/>
+
+## Multiple files
+
+Selecting or dropping several files at once with `multiple`.
+
+<ExampleTabs
+  title="Multiple file selection"
+  preview={<UploadFieldMultiplePreview />}
+  code={uploadFieldMultipleSource}
+/>
+
+## Per-file upload status
+
+The optional `fileStatuses` prop overlays an uploading/completed/failed state per file (index-aligned with `value`) — pass `onCancel`/`onRetry` to wire up the cancel and retry actions. Omit `fileStatuses` entirely for the default plain attach/remove look shown above.
+
+<ExampleTabs
+  title="Uploading, completed, and failed cards"
+  preview={<UploadFieldStatusCardsPreview />}
+  code={uploadFieldStatusCardsSource}
 />
 
 ## Form validation
@@ -178,6 +202,9 @@ const uploadSchema = z.object({
 | `invalid` | `boolean` | `false` | Show error border styling |
 | `disabled` | `boolean` | `false` | Disable interaction and dim appearance |
 | `name` | `string` | — | Form field name (for react-hook-form) |
+| `fileStatuses` | `UploadFieldFileStatus[]` | — | Optional per-file status overlay (`uploading`/`completed`/`failed`), index-aligned with `value` |
+| `onCancel` | `(file: File, index: number) => void` | — | Called from the cancel (×) control on an `"uploading"` file |
+| `onRetry` | `(file: File, index: number) => void` | — | Called from "Try Again" on a `"failed"` file |
 | `classNames` | `UploadFieldClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root element |
 
@@ -194,13 +221,23 @@ When files are added, the component detects the file type and shows a matching i
 | PDF | `.pdf` extension | Custom PDF icon |
 | Other | Everything else | `FileText` |
 
-File size is formatted automatically: `B`, `KB`, or `MB`.
+File size is formatted automatically: `B`, `KB`, or `MB`. The same detection logic is available standalone via the exported `FileFormatIcon` component (`<FileFormatIcon file={file} size={20} />`) — useful for rendering a matching icon outside of `UploadField`, e.g. in a custom file list.
 
 ## Types
 
 ### `UploadFieldProps`
 
 See the props table above.
+
+### `UploadFieldFileStatus`
+
+One entry in the `fileStatuses` array:
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `status` | `"uploading" \| "completed" \| "failed"` | Current state of that file |
+| `progress` | `number?` | 0–100, read when `status` is `"uploading"` |
+| `error` | `string?` | Shown when `status` is `"failed"`; defaults to "Failed" |
 
 ### `UploadFieldClassNames`
 
@@ -214,6 +251,11 @@ See the props table above.
 | `fileCard` | Individual file card (`.gsl-upload-field__file-card`) |
 | `fileName` | File name text (`.gsl-upload-field__file-card-name`) |
 | `fileSize` | File size text (`.gsl-upload-field__file-card-size`) |
+| `fileProgress` | Uploading-state progress bar (`.gsl-upload-field__file-card-progress`) |
+| `fileStatusText` | Failed-state status line (`.gsl-upload-field__file-card-status`) |
+| `retryButton` | "Try Again" button (`.gsl-upload-field__file-card-retry`) |
+| `cancelButton` | Cancel (×) button on an uploading file (`.gsl-upload-field__file-card-cancel`) |
+| `completedIcon` | Completed check icon (`.gsl-upload-field__file-card-completed-icon`) |
 | `removeButton` | Remove (trash) button (`.gsl-upload-field__file-card-remove`) |
 | `actionButton` | Upload/Replace button (`.gsl-upload-field__action`) |
 
@@ -221,14 +263,18 @@ See the props table above.
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-upload-field-font` | `--gsl-font-body` | Font family for the title, subtitle, file card text, and action button |
+| `--gsl-upload-field-font` | `var(--gsl-font-body)` | Font family for the title, subtitle, file card text, and action button |
+| `--gsl-text-size-md` | `16px` | Title font size |
+| `--gsl-text-size-base` | `14px` | Subtitle, file name, and action button font size |
+| `--gsl-text-size-xs` | `12px` | File size and failed-status text font size |
 
 ## Notes
 
 - The subtitle is auto-generated from `accept` and `maxSize` props (e.g. "Only CSV files are supported. Maximum filesize 10MB.").
 - The action button changes text: "Upload file" when empty, "Replace file" when a file is selected. Only shown in single-file mode (`multiple={false}`).
 - Drop zone turns `--gsl-primary-light` background when files are selected or during drag-over.
-- When `multiple` is true, selecting or dropping new files **replaces** the current set (no append).
+- When `multiple` is true, selecting or dropping new files **replaces** the current set (no append) — this applies to picking new files via the input/drop zone, not to `fileStatuses`, which stays index-aligned with whatever `value` currently holds.
 - Controlled mode: pass `value` and `onChange`. Uncontrolled mode: let the component manage its own state.
-- Files exceeding `maxSize` are silently filtered out. No error message is shown — handle validation externally via `onChange`.
-- Delete button color uses `--gsl-error` on hover.
+- If **every** newly selected file exceeds `maxSize`, an "Upload failed" dialog appears with a "Try again" action. If only **some** files in a multi-file selection exceed it, those are silently filtered from the accepted set — handle finer-grained per-file validation externally via `fileStatuses`/`onChange` instead.
+- Removing a file via the trash icon removes only that file from the array in multi-file mode — it does not clear the whole selection.
+- The failed-state card gets a `--gsl-error` border and tinted background; no new colors were introduced for any status — uploading uses `ProgressBar`'s default (`--gsl-primary`) variant, completed uses `--gsl-success`, failed uses `--gsl-error`.

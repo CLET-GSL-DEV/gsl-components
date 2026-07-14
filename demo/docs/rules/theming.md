@@ -43,3 +43,25 @@ registry (unknown keys and mismatched value shapes are compile errors), and it i
 tag with no build config or separate CSS file needed. Reach for a hand-written CSS override file
 (documented as a fallback) only when you need conditional/media-query logic `gslTheme()` can't
 express. See `get_component("theme")` for the full API and `get_tokens()` for every valid token name.
+Put the call in a `src/gsl.theme.ts` file, side-effect-imported once in the app entry point (see
+`get_component("theme")` for the recommended-file convention).
+
+===RULE===
+id: theming-migration-ask-about-existing-token-overrides
+title: When migrating, ask the user about each existing `--gsl-*` token override — don't silently keep or drop any
+severity: do
+components: theme
+
+When migrating a project onto the new design system defaults, first find every existing override
+of a **known `--gsl-*` token** — a `gslTheme()` call (in `src/gsl.theme.ts` or elsewhere), or
+hand-written CSS setting a real `--gsl-*` custom property. This does not include custom/arbitrary
+CSS variables or component-local one-off styling that isn't a recognized library token — only
+overrides of tokens the library itself defines (cross-check against `get_tokens()`).
+
+List every overridden token found, then ask the user about each one individually — keep the
+existing override (preserve current branding for that token), or drop it and adopt the new
+approved default. Don't decide this silently and don't batch it into a single yes/no — a token like
+`--gsl-primary` might be an intentional brand choice worth keeping, while another was only ever set
+to match the *old* pre-rebrand defaults and should be dropped now that those defaults themselves
+changed. See the "Rebrand" section of `get_component("migration-v2")` for the specific old→new
+default values that changed.

@@ -1,0 +1,109 @@
+/* ── Root ── */
+
+.gsl-switch {
+  --gsl-switch-width: 44px;
+  --gsl-switch-height: 24px;
+  --gsl-switch-thumb-size: 20px;
+  --gsl-switch-padding: 2px;
+  --gsl-switch-font: var(--gsl-font-body);
+  --gsl-switch-label-size: var(--gsl-text-size-base);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--gsl-switch-font);
+  font-size: var(--gsl-switch-label-size);
+  line-height: 1.4;
+  color: var(--gsl-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.gsl-switch--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ── Track ── */
+
+.gsl-switch__track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--gsl-switch-width);
+  height: var(--gsl-switch-height);
+  padding: 0;
+  border: none;
+  border-radius: calc(var(--gsl-switch-height) / 2);
+  background-color: var(--gsl-border-strong);
+  cursor: inherit;
+  transition: background-color 150ms ease;
+}
+
+.gsl-switch__track[data-state="checked"] {
+  background-color: var(--gsl-primary);
+}
+
+.gsl-switch__track:hover:not([data-disabled]) {
+  background-color: var(--gsl-text-muted);
+}
+
+.gsl-switch__track[data-state="checked"]:hover:not([data-disabled]) {
+  background-color: var(--gsl-primary);
+}
+
+.gsl-switch__track:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-switch__track--invalid {
+  box-shadow: inset 0 0 0 1px var(--gsl-error);
+}
+
+.gsl-switch__track--invalid:focus-visible {
+  outline-color: var(--gsl-error);
+}
+
+.gsl-switch__track:disabled {
+  cursor: not-allowed;
+}
+
+/* ── Thumb ── */
+
+.gsl-switch__thumb {
+  display: block;
+  width: var(--gsl-switch-thumb-size);
+  height: var(--gsl-switch-thumb-size);
+  border-radius: 50%;
+  background-color: var(--gsl-on-primary);
+  box-shadow: var(--gsl-shadow-sm);
+  transform: translateX(var(--gsl-switch-padding));
+  transition: transform 150ms ease;
+  will-change: transform;
+}
+
+.gsl-switch__thumb[data-state="checked"] {
+  transform: translateX(
+    calc(
+      var(--gsl-switch-width) - var(--gsl-switch-thumb-size) -
+        var(--gsl-switch-padding)
+    )
+  );
+}
+
+/* ── Label ── */
+
+.gsl-switch__label {
+  line-height: 1.4;
+}
+
+/* ── Reduced motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-switch__track,
+  .gsl-switch__thumb {
+    transition: none;
+  }
+}

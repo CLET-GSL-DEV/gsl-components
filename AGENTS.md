@@ -10,7 +10,7 @@ References: [`.cursor/rules/gsl-component-authoring.mdc`](.cursor/rules/gsl-comp
 - **Package**: `@rfdtech/components` — shared component library
 - **Entry**: `src/index.ts` — imports `theme.css`, re-exports all components
 - **Demo**: `npm run demo` uses `vite.demo.config.ts`, aliases `@rfdtech/components` → `src/index.ts`
-- **Available Radix deps**: `@radix-ui/react-popover`, `@radix-ui/react-select`, `@radix-ui/react-checkbox`, `@radix-ui/react-dialog`, `@radix-ui/react-tabs`, `@radix-ui/react-radio-group`, `@radix-ui/react-alert-dialog`
+- **Available Radix deps**: `@radix-ui/react-popover`, `@radix-ui/react-select`, `@radix-ui/react-checkbox`, `@radix-ui/react-dialog`, `@radix-ui/react-tabs`, `@radix-ui/react-radio-group`, `@radix-ui/react-alert-dialog`, `@radix-ui/react-switch`
 - **Other deps**: `lucide-react`, `cmdk`, `sonner`, `@dnd-kit/*`
 - **CSS-in-JS**: None. Plain CSS files imported in components via Vite.
 
@@ -142,6 +142,17 @@ RHF is **not** baked into any input component. Integration is entirely at the co
 - **Disabled**: `background-color: var(--gsl-hover); color: var(--gsl-text-muted); cursor: not-allowed`
 - **Invalid**: `border-color: var(--gsl-error)` + same for focus shadow
 - **Reduced motion**: `@media (prefers-reduced-motion: reduce) { transition: none; }`
+
+## Adding or changing a component — token & theme checklist
+
+Run through this for **every** new component and every CSS change to an existing one, before it ships:
+
+1. **No hardcoded values.** Every color, font-size, radius, shadow, and z-index in the component's CSS must be a `var(--gsl-*)` reference — never a literal hex/px/rgb.
+2. **Name component-scoped tokens so `classify()` infers the right type.** Declare them as `--gsl-<slug>-<name>` at the component's root rule in `src/components/<slug>/styles/<slug>.css`. `scripts/generate-theme-tokens.mjs` checks patterns **in order** and stops at the first match: `radius` → length, `shadow` → shadow, `z-`/`z$` → zIndex, `font` → font (typed as a loose string), `opacity` → opacity, then `size`/`gap`/`width`/`height`/`padding`/`margin`/`px`/`py` → length, then `duration`/`transition`/`delay` → duration, then a long color-keyword list (`color`, `bg`, `border`, `text`, `primary`, …) → color, else misc. Order matters: a name containing **both** `font` and `size` (e.g. a hypothetical `--gsl-font-size-*`) is classified as `font`/string, not length, because `font` is checked first — that's why the global text-size scale is named `--gsl-text-size-*`, not `--gsl-font-size-*`. When adding a length-ish token, avoid pairing `font` with a length keyword in the same name; a badly named token gets a looser `GslStringValue` type in `gslTheme()` instead of the stricter `GslLengthValue`.
+3. **Run `npm run generate:tokens`** after adding or renaming any `--gsl-*` token in CSS. This regenerates `src/generated/components.theme.ts` (the typed surface `gslTheme()` type-checks against, and the same registry the MCP's `get_tokens` reads) — never hand-edit that generated file. Skipping this step means the token is real in CSS but invisible to `gslTheme()` and to agents querying the docs MCP.
+4. **Global tokens must also get a Tailwind `@theme` mapping.** If the token is a *global* one (defined in `src/styles/theme/{base,light,dark}.css`, not component-scoped), add a corresponding line in the `@theme` block in `src/styles/theme/tokens.css` (e.g. `--color-foo: var(--gsl-foo);` or `--text-foo: var(--gsl-font-size-foo);`) so Tailwind auto-generates the utility class. Component-scoped tokens (`--gsl-<slug>-*`) do NOT get an `@theme` entry — they're consumed directly in that component's CSS and overridden via `gslTheme({ components: { ... } })`. Check the running coverage checklist comment at the bottom of `tokens.css` and update it if you deliberately skip a mapping.
+5. **Verify light + dark values exist** for any new global color token — add both, never just one mode.
+6. **Rebuild/refresh the MCP index** before considering the work done: restart the dev MCP server (it auto-rebuilds `mcp/generated/*.json` from source when stale) or run `npm run build:mcp`, then confirm the component/tokens are visible via `list_components` / `get_component` / `get_tokens`.
 
 ## Module layout
 
@@ -323,3 +334,6 @@ When documenting components, read the actual type definitions from `src/types/*.
 - Propose gaps or missing scenarios to the user.
 - Only add tests the user explicitly approves.
 - Cover: forwardRef, invalid styling, disabled state, key interactions (typing, paste, keyboard nav, onChange).
+
+<!-- rfdtech-ui -->
+Use the `rfdtech-ui` MCP server (`search_components`, `get_component`, `get_rules`) before building UI with `@rfdtech/components`.

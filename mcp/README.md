@@ -33,6 +33,36 @@ ever serve that generated JSON.
 `search_components`/`search_docs`/`search_rules` are lexical (term overlap), not embeddings — this
 is a local, offline server with no network calls.
 
+## Automatic setup on `npm install`
+
+The root package's `postinstall` script (`scripts/postinstall.mjs`) runs `rfdui setup`
+automatically after `npm install @rfdtech/components` — no manual step required. It:
+
+- Resolves the consumer's actual project root via `INIT_CWD` (not the package's own folder inside
+  `node_modules`), so files land in the right place.
+- No-ops silently if `dist/mcp/cli.js` isn't built yet (e.g. a contributor's `npm install` in this
+  repo before `npm run build`) and never fails the install if setup itself errors.
+- Is skippable with `RFDUI_SKIP_SETUP=1` (or `true`) — e.g. for CI installs that don't want it
+  writing files.
+
+Re-running `npm install`, or `rfdui setup`/`rfdui update` directly, is always safe — every writer
+merges into existing config instead of overwriting it.
+
+### If the install script gets blocked
+
+`npx rfdui setup` always works manually, regardless of package manager or script-blocking config —
+use it any time postinstall didn't run.
+
+- **pnpm** (v8+) ignores build scripts from dependencies by default (`Ignored build scripts:
+  @rfdtech/components` in the install output). Fix: `pnpm approve-builds @rfdtech/components`
+  (or `pnpm approve-builds` for the interactive picker), then `pnpm install` again. That writes
+  `allowBuilds: { "@rfdtech/components": true }` to `pnpm-workspace.yaml` (pnpm 11+ — older pnpm
+  uses `onlyBuiltDependencies` instead).
+- **npm** runs `postinstall` by default, nothing to approve. A silent no-op usually means
+  `ignore-scripts=true` in an `.npmrc` (project/user/global) or `--ignore-scripts` was passed to
+  `npm install` — common in locked-down CI. Drop it for a local install, or just run `npx rfdui
+  setup` manually.
+
 ## CLI (`rfdui`)
 
 ```
@@ -44,7 +74,8 @@ rfdui search <query>   Lexical search from the terminal
 rfdui update           Rebuild the index and re-run setup
 ```
 
-`rfdui setup` detects and configures, idempotently (safe to re-run):
+`rfdui setup` (also invoked automatically by `postinstall`, see above) detects and configures,
+idempotently (safe to re-run):
 
 - **Claude Code** (`.claude/` or `.mcp.json` present) — project `.mcp.json`, `.claude/skills/rfdtech-ui/SKILL.md`, a `CLAUDE.md` pointer
 - **Cursor** (`.cursor/` present) — `.cursor/mcp.json`, `.cursor/rules/rfdtech-ui.mdc`

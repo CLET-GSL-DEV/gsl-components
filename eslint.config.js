@@ -3,7 +3,7 @@ import tseslint from "typescript-eslint";
 import reactHooks from "eslint-plugin-react-hooks";
 
 export default tseslint.config(
-  { ignores: ["dist", "demo/dist", "*.config.*"] },
+  { ignores: ["**/dist/**", "*.config.*"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -21,7 +21,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["server.js", "api/*.js", "scripts/**/*.mjs"],
+    files: ["server.js", "api/*.js", "**/scripts/**/*.mjs"],
     languageOptions: {
       globals: {
         console: "readonly",

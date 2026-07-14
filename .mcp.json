@@ -2,7 +2,23 @@
   "mcpServers": {
     "gsl-components-docs": {
       "command": "mcp/node_modules/.bin/tsx",
-      "args": ["mcp/src/index.ts"]
+      "args": [
+        "mcp/src/index.ts"
+      ]
+    },
+    "rfdtech-ui": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@rfdtech/components-mcp"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
     }
   }
 }

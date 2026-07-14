@@ -1,7 +1,8 @@
 .gsl-app-layout {
   --gsl-app-layout-gap: 1rem;
   --gsl-app-layout-body-gap: var(--gsl-app-layout-gap, 1rem);
-  --gsl-panel-bg: var(--gsl-surface-subtle);
+  --clet-panel-bg: var(--clet-surface-subtle);
+  --gsl-panel-bg: var(--clet-panel-bg);
   --gsl-panel-radius: var(--gsl-radius-2xl);
   --gsl-app-layout-font: var(--gsl-font-body);
 
@@ -9,7 +10,7 @@
 
   display: flex;
   flex-direction: row;
-  background: var(--gsl-page-bg);
+  background: var(--gsl-main-bg);
   font-family: var(--gsl-app-layout-font);
   height: 100vh;
   overflow: hidden;
@@ -32,8 +33,9 @@
 }
 
 .gsl-app-layout--stacked .gsl-app-layout__content {
-  background: transparent;
+  background: var(--gsl-main-bg);
   padding: var(--gsl-app-layout-gap, 1rem);
+  border-radius: 0;
 }
 
 .gsl-app-layout__body {
@@ -70,13 +72,13 @@
 .gsl-app-layout__body::before {
   top: 0;
   height: var(--gsl-scroll-fade-top-height, var(--gsl-scroll-fade-height));
-  background: linear-gradient(to bottom, var(--gsl-page-bg), transparent);
+  background: linear-gradient(to bottom, var(--gsl-main-bg), transparent);
 }
 
 .gsl-app-layout__body::after {
   bottom: 0;
   height: var(--gsl-scroll-fade-height);
-  background: linear-gradient(to top, var(--gsl-page-bg), transparent);
+  background: linear-gradient(to top, var(--gsl-main-bg), transparent);
 }
 
 .gsl-app-layout__body::-webkit-scrollbar {

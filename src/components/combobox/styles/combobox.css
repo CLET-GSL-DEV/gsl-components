@@ -1,0 +1,306 @@
+/* ── Root ── */
+
+.gsl-combobox {
+  --gsl-combobox-trigger-height: 40px;
+  --gsl-combobox-radius: var(--gsl-radius-base);
+  --gsl-combobox-font: var(--gsl-font-body);
+  --gsl-combobox-label-size: var(--gsl-text-size-base);
+  --gsl-combobox-menu-max-height: 320px;
+
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 0;
+  font-family: var(--gsl-combobox-font);
+}
+
+/* ── Trigger ── */
+
+.gsl-combobox__trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  height: var(--gsl-combobox-trigger-height);
+  padding: 0 32px 0 12px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-combobox-radius);
+  background-color: var(--gsl-bg);
+  font-family: inherit;
+  font-size: var(--gsl-combobox-label-size);
+  line-height: 1.4;
+  color: var(--gsl-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.gsl-combobox__trigger:hover:not(:disabled) {
+  border-color: var(--gsl-border-strong);
+  background-color: var(--gsl-hover);
+}
+
+.gsl-combobox__trigger[aria-expanded="true"] {
+  border-color: var(--gsl-primary);
+  box-shadow: 0 0 0 1px var(--gsl-primary);
+}
+
+.gsl-combobox__trigger--invalid {
+  border-color: var(--gsl-error);
+}
+
+.gsl-combobox__trigger--invalid[aria-expanded="true"] {
+  box-shadow: 0 0 0 1px var(--gsl-error);
+}
+
+.gsl-combobox__trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.gsl-combobox__trigger:focus-visible {
+  outline: 2px solid var(--gsl-focus);
+  outline-offset: 2px;
+}
+
+.gsl-combobox__trigger-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gsl-combobox__trigger-text--placeholder {
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-combobox__clear {
+  flex-shrink: 0;
+  color: var(--gsl-text-muted);
+  cursor: pointer;
+}
+
+.gsl-combobox__clear:hover {
+  color: var(--gsl-text);
+}
+
+.gsl-combobox__chevron {
+  position: absolute;
+  right: 12px;
+  flex-shrink: 0;
+  color: var(--gsl-text-secondary);
+  pointer-events: none;
+  transition: transform 150ms ease;
+}
+
+.gsl-combobox__chevron[data-state="open"] {
+  transform: rotate(180deg);
+}
+
+/* ── Content ── */
+
+.gsl-combobox__content {
+  /*
+   * Radix portals this content to document.body, which is a DOM sibling
+   * of .gsl-combobox, not a descendant — so custom properties scoped to
+   * .gsl-combobox (radius/label-size/font/menu-max-height) don't inherit
+   * here. Re-declare them locally so the portaled panel still resolves
+   * to the right defaults (and stays overridable via classNames/CSS).
+   */
+  --gsl-combobox-radius: var(--gsl-radius-base);
+  --gsl-combobox-label-size: var(--gsl-text-size-base);
+  --gsl-combobox-font: var(--gsl-font-body);
+  --gsl-combobox-menu-max-height: 320px;
+
+  z-index: var(--gsl-z-select);
+  width: var(--radix-popover-trigger-width);
+  min-width: 200px;
+  border: 1px solid var(--gsl-border);
+  border-radius: var(--gsl-combobox-radius);
+  background: var(--gsl-bg);
+  box-shadow: var(--gsl-shadow-md);
+  font-family: var(--gsl-combobox-font);
+  overflow: hidden;
+}
+
+.gsl-combobox__content[data-state="open"] {
+  animation: gsl-combobox-content-in 150ms ease forwards;
+}
+
+.gsl-combobox__content[data-state="closed"] {
+  animation: gsl-combobox-content-out 100ms ease forwards;
+}
+
+.gsl-combobox__command {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ── Search input ── */
+
+.gsl-combobox__input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--gsl-border);
+}
+
+.gsl-combobox__input-icon {
+  flex-shrink: 0;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-combobox__input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--gsl-text);
+  font-family: inherit;
+  font-size: var(--gsl-combobox-label-size);
+  line-height: 1.4;
+  outline: none;
+}
+
+.gsl-combobox__input::placeholder {
+  color: var(--gsl-text-muted);
+}
+
+/* ── List ── */
+
+.gsl-combobox__list {
+  max-height: var(--gsl-combobox-menu-max-height);
+  overflow: hidden auto;
+  padding: 6px;
+}
+
+.gsl-combobox__empty {
+  padding: 24px 12px;
+  font-size: var(--gsl-combobox-label-size);
+  line-height: 1.4;
+  text-align: center;
+  color: var(--gsl-text-secondary);
+}
+
+/* ── Item ── */
+
+.gsl-combobox__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 8px;
+  border-radius: calc(var(--gsl-combobox-radius) - 2px);
+  font-size: var(--gsl-combobox-label-size);
+  line-height: 1.4;
+  color: var(--gsl-text);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 120ms ease;
+}
+
+.gsl-combobox__item[data-selected="true"] {
+  background: var(--gsl-hover);
+}
+
+.gsl-combobox__item[data-disabled="true"] {
+  color: var(--gsl-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.gsl-combobox__item-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-combobox__item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Single-select check mark */
+
+.gsl-combobox__item-check-single {
+  flex-shrink: 0;
+  color: var(--gsl-primary);
+}
+
+/* Multi-select checkbox (mirrors Checkbox's visual) */
+
+.gsl-combobox__item-check {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--gsl-border);
+  border-radius: calc(var(--gsl-radius-base) - 4px);
+  background: var(--gsl-bg);
+  color: var(--gsl-on-primary);
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.gsl-combobox__item-check--checked {
+  border-color: var(--gsl-primary);
+  background: var(--gsl-primary);
+}
+
+/* ── Animations ── */
+
+@keyframes gsl-combobox-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gsl-combobox-content-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsl-combobox__trigger,
+  .gsl-combobox__chevron,
+  .gsl-combobox__item,
+  .gsl-combobox__item-check {
+    transition: none;
+  }
+
+  .gsl-combobox__content[data-state="open"],
+  .gsl-combobox__content[data-state="closed"] {
+    animation: none;
+  }
+}

@@ -22,8 +22,10 @@
    and --gsl-app-header-color on .gsl-app-header--plain (or an ancestor). */
 
 .gsl-app-header--plain {
-  --gsl-app-header-bg: var(--gsl-primary);
-  --gsl-app-header-color: var(--gsl-on-primary);
+  --clet-app-header-bg: var(--clet-primary);
+  --gsl-app-header-bg: var(--clet-app-header-bg);
+  --clet-app-header-color: var(--clet-on-primary);
+  --gsl-app-header-color: var(--clet-app-header-color);
 
   border-radius: 0;
   background: var(--gsl-app-header-bg);
@@ -60,7 +62,8 @@
 
 .gsl-app-header__branding {
   /* Overridable tokens */
-  --gsl-branding-color: inherit;
+  --clet-branding-color: inherit;
+  --gsl-branding-color: var(--clet-branding-color);
   --gsl-branding-font: var(--gsl-font-body);
   --gsl-branding-gap: 10px;
   --gsl-branding-text-gap: 8px;
@@ -68,11 +71,13 @@
   --gsl-branding-title-font: var(--gsl-font-header);
   --gsl-branding-title-size: 20px;
   --gsl-branding-title-weight: 700;
-  --gsl-branding-title-color: var(--gsl-branding-color);
+  --clet-branding-title-color: var(--clet-branding-color);
+  --gsl-branding-title-color: var(--clet-branding-title-color);
   --gsl-branding-sep-opacity: 0.55;
   --gsl-branding-subtitle-size: 16px;
   --gsl-branding-subtitle-weight: 400;
-  --gsl-branding-subtitle-color: var(--gsl-branding-color);
+  --clet-branding-subtitle-color: var(--clet-branding-color);
+  --gsl-branding-subtitle-color: var(--clet-branding-subtitle-color);
 
   display: flex;
   align-items: center;

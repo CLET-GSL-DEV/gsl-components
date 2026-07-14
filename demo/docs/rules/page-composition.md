@@ -1,0 +1,151 @@
+# Page composition
+
+===RULE===
+id: page-composition-layout-shell
+title: Adopt AppLayout variant="stacked" + AppHeader variant="plain" + Sidebar variant="plain" together
+severity: do
+components: app-layout, app-header, sidebar
+
+Adopt the new layout shell as a set, not individually: `AppLayout variant="stacked"` (header spans
+full width on top, sidebar + content side by side below), `AppHeader variant="plain"` (square
+corners, `--gsl-primary` background, on-primary text, continuous top bar), and `Sidebar
+variant="plain"` (transparent background + right border instead of a panel surface). All required
+for new/touched screens — none required for existing screens to keep compiling.
+
+===RULE===
+id: page-composition-sidebar-groups-collapsible
+title: Use collapsible SidebarGroups, not flat nav lists
+severity: do
+components: sidebar
+
+All nav groups use `SidebarGroup collapsible` accordion sections, not flat lists. Initialize with
+the `Main` group expanded and the rest collapsed.
+
+===RULE===
+id: page-composition-sidebar-footer-required
+title: Every Sidebar needs a SidebarFooter hosting a ProfilePopover
+severity: do
+components: sidebar, profile-popover
+
+Never omit `SidebarFooter`. It must host a `ProfilePopover` in `fullName`/`email` mode (not
+`user`/`variant`) — full name, email, and role get a stable, real-estate-rich home there. This is
+required on the new layout shell, unlike the old default shell (`DemoLayout`), which never
+required one.
+
+===RULE===
+id: page-composition-no-sidebar-trigger
+title: Don't render SidebarTrigger in new layouts
+severity: dont
+components: sidebar
+
+The old default layout shell renders `<SidebarTrigger>Menu</SidebarTrigger>` to manually toggle
+the sidebar. The new shell drops it entirely — don't render `SidebarTrigger` in new or touched
+layouts. Use `SidebarProvider` with its defaults and no manual collapse control.
+
+===RULE===
+id: page-composition-sidebar-badge-numeric
+title: SidebarBadge shows a real numeric count, not decorative text
+severity: do
+components: sidebar
+
+Compose `SidebarBadge` inside a `SidebarLink`'s children (`{link.badge && <SidebarBadge>{link.badge}</SidebarBadge>}`).
+Reserve it for a live count of actionable items on that nav destination (e.g. `8` unread alerts) —
+the number must reflect real pending/important items, not a static placeholder. The one exception
+is a short text badge like `"New"` for a feature callout (e.g. a newly-added nav link) — don't
+invent other text badges beyond that pattern.
+
+===RULE===
+id: page-composition-branding-in-app-header
+title: Branding lives in AppHeader via AppHeaderBranding, never in the sidebar
+severity: do
+components: app-header, sidebar
+
+Put branding in `AppHeader` via `AppHeaderBranding` (`logo`/`title`/`subtitle`), never in the
+sidebar. `Sidebar` has no `SidebarHeader`/`SidebarBrand` when `AppHeaderBranding` is used — the
+same logo must not appear twice on screen. Use the current brand logo (`clet-logo.png`) for any
+new system — `gsl-logo.png` is the older mark used only by the legacy default layout shell.
+
+===RULE===
+id: page-composition-profile-popover-default-items
+title: Don't rebuild My Profile/Account Settings/Help and Support via items
+severity: dont
+components: profile-popover
+
+`ProfilePopover`'s `items` defaults to "My Profile", "Account Settings", and "Help and Support",
+wired via `onMyProfile`/`onAccountSettings`/`onHelpAndSupport`. Don't hand-build those three rows
+via a passed-in `items` array — only pass `items` when the system genuinely needs rows other than
+the three defaults, since a passed-in array fully replaces them rather than merging.
+
+===RULE===
+id: page-composition-role-select-three-locations
+title: Wire the same RoleSelect state into Launchpad, header ProfilePopover, and sidebar footer ProfilePopover
+severity: do
+components: role-select, launchpad, profile-popover
+
+Whenever a system allows a user to have more than one role — true for most systems — wire the same
+`RoleSelect` state (`roles`/`selectedRole`/`onClickRole`) into all three locations: `Launchpad`,
+the header `ProfilePopover`, and the sidebar footer `ProfilePopover`. Don't add it to only one or
+two of the three. The header `ProfilePopover` uses `variant="avatar"` when a sidebar footer
+popover also exists; reserve `variant="full"` for headers with no sidebar footer.
+
+===RULE===
+id: page-composition-launchpad-required-role-select
+title: Launchpad's children (RoleSelect) is required, not optional
+severity: do
+components: launchpad
+
+`Launchpad`'s `children` prop is required at the type level and only accepts a single `RoleSelect`
+element — omitting it is a type error, not a lint warning. There is no bordered "See all" footer
+button anymore: a small ghost `sm` expand button sits at the top right of the panel next to the
+title, its expand icon always visible, its "See more" text label appearing only once `apps.length`
+exceeds the 9-app cap.
+
+===RULE===
+id: page-composition-launchpad-over-app-switcher
+title: Use Launchpad, not the deprecated AppSwitcher, for new app-switching UI
+severity: dont
+components: app-switcher, launchpad
+
+`AppSwitcher` is deprecated and gets no new features. Use `Launchpad` for all new app-switching
+work. Stay on `AppSwitcher` only if the system genuinely needs flexible column count, an uncapped
+grid without an expand modal, or a fully custom footer slot — and check with the team first.
+
+===RULE===
+id: page-composition-table-family-variants
+title: Adopt TableContent variant="panel" + TableFilter variant="spread" + no-border TableFooter together
+severity: do
+components: table
+
+New or touched `Table`s use all three together: `TableContent variant="panel"` (not `"default"`),
+`TableFilter variant="spread"` (not the default `"popover"`), and `TableFooter
+className="gsl-table__footer--no-border"` (a real library class, not a demo hack).
+
+===RULE===
+id: page-composition-other-preferred-variants
+title: Prefer MetricCard variant="outline" and Tabs variant="pill" on new usage
+severity: do
+components: metric-card, tabs
+
+Use `MetricCard variant="outline"` over `"default"`, and `Tabs variant="pill"` over `"default"`,
+on any new or substantially-touched screen.
+
+===RULE===
+id: page-composition-section-header
+title: Use SectionHeader for page headers, never a hand-rolled div
+severity: do
+components: section-header
+
+Use `SectionHeader` (with `SectionTitle`/`SectionDescription`/`SectionActions`) to compose page
+headers — never a hand-rolled `<div>`.
+
+===RULE===
+id: page-composition-builtin-loading-states
+title: Use each component's real loading prop, never hand-rolled placeholders
+severity: do
+components: launchpad, app-header, profile-popover, sidebar, metric-card, table
+
+Every component that supports a real `loading` prop (with a shimmering skeleton) should use it —
+`Launchpad`, `AppHeaderNotifications`, `ProfilePopover` (`loading`/`loadingLabel`), `SidebarLink`
+(`loading`/`loadingLabel`), `MetricCard` (`loading`/`loadingLabel`), `TableContent`
+(`loading`/`loadingRows`). Never render `"..."` placeholders, a hand-rolled `<Spinner />`, or omit
+content until data is ready.

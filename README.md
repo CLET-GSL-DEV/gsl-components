@@ -56,7 +56,7 @@ The `@theme` block ships inside `style.css`. The consumer's Tailwind build proce
 | --------- | ------------- |
 | `bg-primary` / `text-primary` | `var(--gsl-primary)` |
 | `bg-primary-foreground` / `text-primary-foreground` | `var(--gsl-on-primary)` |
-| `bg-background` / `text-foreground` | `var(--gsl-page-bg)` / `var(--gsl-text)` |
+| `bg-background` / `text-foreground` | `var(--gsl-main-bg)` / `var(--gsl-text)` |
 | `bg-secondary` / `text-secondary-foreground` | `var(--gsl-surface-dark)` / `var(--gsl-text-secondary)` |
 | `bg-muted` / `text-muted-foreground` | `var(--gsl-surface-subtle)` / `var(--gsl-text-secondary)` |
 | `bg-accent` / `text-accent-foreground` | `var(--gsl-hover)` / `var(--gsl-text)` |
@@ -72,7 +72,21 @@ The `@theme` block ships inside `style.css`. The consumer's Tailwind build proce
 
 **Non-Tailwind consumers** are unaffected. Browsers silently ignore `@theme` as an unknown at-rule. All `--gsl-*` tokens continue to work as CSS custom properties.
 
-### 6. Next.js App Router
+### 6. AI-assisted development (automatic)
+
+`npm install` also wires up an MCP server + skill doc for any AI coding tool it detects in your project — **Claude Code**, **Cursor**, **Codex**, and **OpenCode** — so agents search real components, pull authoritative prop types, and follow the library's design rules instead of inventing APIs. This runs via this package's own `postinstall` script (`scripts/postinstall.mjs`) — no separate command, no action needed. It's idempotent and safe to re-run. Set `RFDUI_SKIP_SETUP=1` to opt out (e.g. in CI). See [`mcp/README.md`](./mcp/README.md) for the `rfdui` CLI (`setup`, `doctor`, `search`, `update`) if you want to run it manually or check its status.
+
+**If your package manager blocked the install script**, run setup manually — `npx rfdui setup` always works regardless of package manager or script-blocking config. Otherwise, to let it run automatically on the next install:
+
+- **pnpm** (v8+) blocks lifecycle scripts from dependencies by default and prints `Ignored build scripts: @rfdtech/components` after install. Approve it, then reinstall:
+  ```bash
+  pnpm approve-builds @rfdtech/components   # or: pnpm approve-builds (interactive picker)
+  pnpm install
+  ```
+  This writes `@rfdtech/components: true` under `allowBuilds` in `pnpm-workspace.yaml` (pnpm 11+; older pnpm uses `onlyBuiltDependencies` instead — same idea, different key).
+- **npm** runs `postinstall` by default — nothing to approve. If it didn't run, your project or user `.npmrc` likely sets `ignore-scripts=true` (common in locked-down CI), or you ran `npm install --ignore-scripts`. Either drop that flag/setting for a local install, or just run `npx rfdui setup` manually — that always works even with scripts globally disabled.
+
+### 7. Next.js App Router
 
 The library ships a `/next` subpath for Next.js App Router. All components and hooks work with Next.js by wrapping your app in `RouterAdapterProvider`:
 
@@ -541,9 +555,23 @@ import { Checkbox } from "@rfdtech/components";
 
 Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `disabled`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `CheckboxProps`, `CheckboxClassNames`.
 
-## CountrySelector
+## Combobox
 
-Country selector dropdown with flag emoji, country name, search filtering, and keyboard navigation. Built on `@radix-ui/react-popover`. See the [CountrySelector](/docs/country-selector) docs page for props and exported types.
+Searchable option list built on `cmdk`, opened from a trigger button — supports single selection, multi-selection with checkboxes, and a per-option leading icon. Unlike `Dropdown` (Radix `Select`-based), it has search built in. See the [Combobox](/docs/combobox) docs page for props and exported types.
+
+```tsx
+import { Combobox } from "@rfdtech/components";
+
+<Combobox aria-label="Field" options={options} value={value} onValueChange={setValue} clearable />
+
+<Combobox aria-label="Field" options={options} value={values} onValueChange={setValues} multiple />
+```
+
+Props: `options`, `multiple`, `value`, `onValueChange`, `placeholder`, `searchPlaceholder`, `disabled`, `invalid`, `clearable`, `emptyMessage`, `aria-label`, `classNames`, `className`, `name`. Exported types: `ComboboxProps`, `ComboboxOption`, `ComboboxClassNames`.
+
+## CountrySelector (Deprecated)
+
+**Deprecated** — use [`Combobox`](#combobox) for general country selection, or [`PhoneNumberInput`](#phonenumberinput)'s own built-in country picker for phone numbers. Country selector dropdown with flag emoji, country name, search filtering, and keyboard navigation. Built on `@radix-ui/react-popover`. See the [CountrySelector](/docs/country-selector) docs page for props and exported types.
 
 ```tsx
 import { CountrySelector } from "@rfdtech/components";
@@ -895,6 +923,24 @@ import { NetworkOperator } from "@rfdtech/components";
 
 Props: `value`, `defaultValue`, `onChange`, `options`, `placeholder`, `invalid`, `disabled`, `classNames`, `className`. Exported types: `NetworkOperatorProps`, `NetworkOperatorOption`, `NetworkOperatorClassNames`.
 
+## Notice
+
+Boxed, persistent callout for scoped context, policy explanations, or a standing status message — unlike `Toast`, it renders inline and doesn't auto-dismiss. See the [Notice](/docs/notice) docs page for props and exported types.
+
+```tsx
+import { Notice } from "@rfdtech/components";
+
+<Notice variant="warning" leftBorder dashed title="Your scope for this composer">
+  <ul>
+    <li>Templates: Admissions Directorate only · Audience: 4 pre-approved groups.</li>
+  </ul>
+</Notice>
+
+<Notice variant="success">This will send directly.</Notice>
+```
+
+Props: `variant`, `color`, `title`, `icon`, `leftBorder`, `dashed`, `classNames`, `className`, `children`. Exported types: `NoticeProps`, `NoticeClassNames`, `NoticeVariant`.
+
 ## OtpInput
 
 One-time password input with configurable digit length, paste support, keyboard navigation (arrow keys, backspace), auto-focus advancement, and `onComplete` callback. See the [OtpInput](/docs/otp-input) docs page for props and exported types.
@@ -1143,6 +1189,20 @@ const [step, setStep] = useState(3);
 
 Exports: `Stepper`, `Step`, `StepLabel`. Also available as `Stepper.Step`, `Stepper.StepLabel` for compound-style imports. Props: `Stepper` — `value`, `clickable`, `onValueChange`, `classNames`, `className`, `children`. `Step` — `value`, `disabled`, `classNames`, `className`, `children`. `StepLabel` — `classNames`, `className`, `children`. Exported types: `StepperProps`, `StepProps`, `StepLabelProps`, `StepperClassNames`, `StepClassNames`, `StepLabelClassNames`, `StepperContextValue`, `StepState`, `StepInternalProps`. Retheme via `--gsl-stepper-accent` (defaults to `--gsl-primary`) and related `--gsl-stepper-*` custom properties.
 
+## Switch
+
+Binary on/off toggle built on `@radix-ui/react-switch`, with an optional label ("Switch + Text"). See the [Switch](/docs/switch) docs page for props and exported types.
+
+```tsx
+import { Switch } from "@rfdtech/components";
+
+<Switch aria-label="Notifications" checked={enabled} onCheckedChange={setEnabled} />
+
+<Switch label="Email alerts" checked={enabled} onCheckedChange={setEnabled} />
+```
+
+Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `labelPosition`, `disabled`, `invalid`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `SwitchProps`, `SwitchClassNames`.
+
 ## Table
 
 Compound table with URL-driven search, pagination, filter, sort, row selection, bulk actions, and loading skeletons. See the [Table](/docs/table) docs page for props and exported types.
@@ -1295,9 +1355,7 @@ import { UploadField } from "@rfdtech/components";
 <UploadField accept="image/*" maxSize={5 * 1024 * 1024} />
 ```
 
-Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `name`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
-
-Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `placeholder`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
+Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `name`, `fileStatuses`, `onCancel`, `onRetry`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`, `UploadFieldFileStatus`, `UploadFieldFileStatusKind`. Also exports `FileFormatIcon` for rendering the same file-type icon standalone.
 
 ## Development
 

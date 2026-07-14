@@ -6,7 +6,7 @@
 body {
   margin: 0;
   font-family: var(--gsl-font);
-  background: var(--gsl-page-bg);
+  background: var(--gsl-main-bg);
   color: var(--gsl-text);
 }
 
@@ -18,7 +18,7 @@ body {
 .demo-card {
   padding: 1rem;
   border-radius: var(--gsl-radius-xl);
-  background-color: var(--gsl-page-bg);
+  background-color: var(--gsl-main-bg);
 }
 
 .demo-filter-right {
@@ -541,7 +541,7 @@ body {
 }
 
 .demo-docs__table th {
-  background: var(--gsl-page-bg);
+  background: var(--gsl-main-bg);
   font-weight: 500;
 }
 
@@ -620,7 +620,7 @@ body {
   font-size: 13px;
   font-weight: 500;
   color: var(--gsl-text-secondary);
-  background: var(--gsl-page-bg);
+  background: var(--gsl-main-bg);
 }
 
 .demo-docs__tabs {
@@ -628,7 +628,7 @@ body {
   gap: 4px;
   padding: 8px 12px 0;
   border-bottom: 1px solid var(--gsl-border);
-  background: var(--gsl-page-bg);
+  background: var(--gsl-main-bg);
 }
 
 .demo-docs__tab {
@@ -689,6 +689,11 @@ body {
   padding: 24px;
 }
 
+.demo-docs__preview-canvas--launchpad {
+  background: var(--gsl-surface-subtle);
+  border-radius: var(--gsl-radius-xl);
+}
+
 .demo-docs__preview-canvas kbd {
   display: inline-flex;
   min-width: 20px;
@@ -723,7 +728,7 @@ body {
 .demo-docs__content :not(pre) > code {
   padding: 2px 6px;
   border-radius: 4px;
-  background: var(--gsl-page-bg);
+  background: var(--gsl-main-bg);
   border: 1px solid var(--gsl-border);
 }
 

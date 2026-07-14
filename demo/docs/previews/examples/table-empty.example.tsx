@@ -9,7 +9,6 @@ import {
   TableFooter,
   TablePagination,
 } from "@rfdtech/components";
-import { Inbox } from "lucide-react";
 
 interface User {
   id: number;
@@ -26,7 +25,7 @@ const columns: TableColumn<User>[] = [
 
 export function TableEmptyExample() {
   const [selected, setSelected] = useState<Set<string | number>>(new Set());
-  const { page, pageSize, search } = useTableState({ defaultPageSize: 5 });
+  useTableState({ defaultPageSize: 5 });
 
   const filtered: User[] = [];
   const totalPages = 0;

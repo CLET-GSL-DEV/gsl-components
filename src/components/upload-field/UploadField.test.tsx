@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { UploadField } from "./UploadField";
+import { FileFormatIcon, UploadField } from "./UploadField";
 
 function createFile(name: string, type: string, size = 1024) {
   return new File([new ArrayBuffer(size)], name, { type });
@@ -104,7 +104,7 @@ describe("UploadField", () => {
     render(<UploadField onChange={onChange} />);
     setFileInput([createFile("doc.txt", "text/plain")]);
 
-    const removeButton = screen.getByRole("button", { name: "Remove file" });
+    const removeButton = screen.getByRole("button", { name: /^Remove /i });
     await user.click(removeButton);
 
     expect(onChange).toHaveBeenCalledWith(null);
@@ -114,7 +114,7 @@ describe("UploadField", () => {
   it("does not show remove button when disabled", () => {
     render(<UploadField disabled />);
     setFileInput([createFile("doc.txt", "text/plain")]);
-    expect(screen.queryByRole("button", { name: "Remove file" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Remove /i })).not.toBeInTheDocument();
   });
 
   it("applies drag-over class when dragging over dropzone", () => {
@@ -229,7 +229,7 @@ describe("UploadField", () => {
     setFileInput([createFile("notes.txt", "text/plain")]);
     expect(screen.getByText("notes.txt")).toBeInTheDocument();
 
-    const removeButton = screen.getByRole("button", { name: "Remove file" });
+    const removeButton = screen.getByRole("button", { name: /^Remove /i });
     await user.click(removeButton);
     expect(onChange).toHaveBeenCalledWith(null);
     expect(screen.queryByText("notes.txt")).not.toBeInTheDocument();
@@ -259,5 +259,107 @@ describe("UploadField", () => {
 
     setFileInput([createFile("avatar.jpg", "image/jpeg")]);
     expect(screen.getByTestId("value")).toHaveTextContent("avatar.jpg");
+  });
+});
+
+describe("UploadField file status", () => {
+  it("renders a progress bar and cancel control for an uploading file", async () => {
+    const user = userEvent.setup();
+    const onCancel = vi.fn();
+    const file = createFile("report.pdf", "application/pdf");
+    render(
+      <UploadField
+        multiple
+        value={[file]}
+        fileStatuses={[{ status: "uploading", progress: 40 }]}
+        onCancel={onCancel}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(document.querySelector(".gsl-progress-bar")).toBeInTheDocument();
+    expect(
+      document.querySelector(".gsl-progress-bar__indicator"),
+    ).toHaveStyle({ width: "40%" });
+
+    const cancelButton = screen.getByRole("button", {
+      name: "Cancel upload of report.pdf",
+    });
+    await user.click(cancelButton);
+    expect(onCancel).toHaveBeenCalledWith(file, 0);
+  });
+
+  it("renders a completed check icon and keeps the remove button", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const file = createFile("report.pdf", "application/pdf");
+    render(
+      <UploadField
+        multiple
+        value={[file]}
+        fileStatuses={[{ status: "completed" }]}
+        onChange={onChange}
+      />,
+    );
+
+    expect(
+      document.querySelector(".gsl-upload-field__file-card-completed-icon"),
+    ).toBeInTheDocument();
+
+    const removeButton = screen.getByRole("button", {
+      name: "Remove report.pdf",
+    });
+    await user.click(removeButton);
+    expect(onChange).toHaveBeenCalledWith(null);
+  });
+
+  it("renders a failed card with red border and Try Again", async () => {
+    const user = userEvent.setup();
+    const onRetry = vi.fn();
+    const file = createFile("report.pdf", "application/pdf");
+    render(
+      <UploadField
+        multiple
+        value={[file]}
+        fileStatuses={[{ status: "failed", error: "Network error" }]}
+        onRetry={onRetry}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(
+      document.querySelector(".gsl-upload-field__file-card--failed"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Network error")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Try Again" }));
+    expect(onRetry).toHaveBeenCalledWith(file, 0);
+  });
+
+  it("removes only the targeted file when multiple files are present", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const fileA = createFile("a.txt", "text/plain");
+    const fileB = createFile("b.txt", "text/plain");
+    render(
+      <UploadField multiple value={[fileA, fileB]} onChange={onChange} />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Remove a.txt" }));
+    expect(onChange).toHaveBeenCalledWith([fileB]);
+  });
+});
+
+describe("FileFormatIcon", () => {
+  it("renders a distinct icon per file kind", () => {
+    const { container: pdf } = render(
+      <FileFormatIcon file={createFile("doc.pdf", "application/pdf")} />,
+    );
+    const { container: image } = render(
+      <FileFormatIcon file={createFile("photo.png", "image/png")} />,
+    );
+    expect(pdf.querySelector("svg")).toBeInTheDocument();
+    expect(image.querySelector("svg")).toBeInTheDocument();
+    expect(pdf.innerHTML).not.toBe(image.innerHTML);
   });
 });

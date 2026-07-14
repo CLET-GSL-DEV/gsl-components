@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "rfdtech-ui": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@rfdtech/components-mcp"
+      ]
+    }
+  }
+}

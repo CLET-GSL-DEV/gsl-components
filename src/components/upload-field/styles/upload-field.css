@@ -73,7 +73,7 @@
 }
 
 .gsl-upload-field--has-files .gsl-upload-field__icon {
-  background: var(--gsl-page-bg);
+  background: var(--gsl-main-bg);
   box-shadow: var(--gsl-shadow-md);
 }
 
@@ -83,7 +83,7 @@
   margin: 0;
   font-family: var(--gsl-upload-field-font);
   font-weight: 500;
-  font-size: 16px;
+  font-size: var(--gsl-text-size-md);
   line-height: 24px;
   text-align: center;
   color: var(--gsl-text);
@@ -95,7 +95,7 @@
   margin: 0;
   font-family: var(--gsl-upload-field-font);
   font-weight: 400;
-  font-size: 14px;
+  font-size: var(--gsl-text-size-base);
   line-height: 20px;
   text-align: center;
   color: var(--gsl-text-secondary);
@@ -119,7 +119,13 @@
   padding: 6px 12px;
   gap: 8px;
   background: var(--gsl-bg);
+  border: 1px solid transparent;
   border-radius: var(--gsl-radius-base);
+}
+
+.gsl-upload-field__file-card--failed {
+  border-color: var(--gsl-error);
+  background: color-mix(in srgb, var(--gsl-error) 6%, var(--gsl-bg));
 }
 
 .gsl-upload-field__file-card-icon {
@@ -132,9 +138,8 @@
 
 .gsl-upload-field__file-card-info {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 2px;
   flex: 1;
   min-width: 0;
 }
@@ -142,7 +147,7 @@
 .gsl-upload-field__file-card-name {
   font-family: var(--gsl-upload-field-font);
   font-weight: 400;
-  font-size: 14px;
+  font-size: var(--gsl-text-size-base);
   line-height: 20px;
   color: var(--gsl-primary);
   white-space: nowrap;
@@ -151,12 +156,72 @@
 }
 
 .gsl-upload-field__file-card-size {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-family: var(--gsl-upload-field-font);
   font-weight: 400;
-  font-size: 12px;
+  font-size: var(--gsl-text-size-xs);
   line-height: 16px;
   color: var(--gsl-text-secondary);
+}
+
+.gsl-upload-field__file-card-completed-icon {
+  color: var(--gsl-success);
   flex-shrink: 0;
+}
+
+.gsl-upload-field__file-card-progress {
+  margin-top: 2px;
+}
+
+.gsl-upload-field__file-card-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--gsl-upload-field-font);
+  font-size: var(--gsl-text-size-xs);
+  line-height: 16px;
+  color: var(--gsl-error);
+}
+
+.gsl-upload-field__file-card-status-dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--gsl-error);
+}
+
+.gsl-upload-field__file-card-retry {
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: var(--gsl-error);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.gsl-upload-field__file-card-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--gsl-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.gsl-upload-field__file-card-cancel:hover {
+  background: var(--gsl-hover);
+  color: var(--gsl-text);
 }
 
 .gsl-upload-field__file-card-remove {
@@ -194,7 +259,7 @@
   color: var(--gsl-on-primary);
   font-family: var(--gsl-upload-field-font);
   font-weight: 500;
-  font-size: 14px;
+  font-size: var(--gsl-text-size-base);
   line-height: 20px;
   cursor: pointer;
   transition: background-color 150ms ease;

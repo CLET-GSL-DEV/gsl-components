@@ -21,7 +21,10 @@ import {
   DialogFooter,
 } from "../dialog/Dialog";
 import { Button } from "../button/Button";
-import type { ProfilePopoverItem, ProfilePopoverProps } from "../../types/profile-popover";
+import type {
+  ProfilePopoverItem,
+  ProfilePopoverProps,
+} from "../../types/profile-popover";
 import { cn } from "../../utils/cn";
 import { ThemeContext } from "../theme/ThemeContext";
 import "./styles/profile-popover.css";
@@ -311,7 +314,8 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
                     ))}
                   </div>
                 )}
-                {children}
+
+                <div className="gsl-profile-menu__items">{children}</div>
               </div>
             ) : null}
 

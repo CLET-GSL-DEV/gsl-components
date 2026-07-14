@@ -1,5 +1,6 @@
 .gsl-metric-card {
-  --gsl-default-metric-card-bg: var(--gsl-surface-card);
+  --clet-default-metric-card-bg: var(--clet-surface-card);
+  --gsl-default-metric-card-bg: var(--clet-default-metric-card-bg);
   --gsl-metric-card-radius: var(--gsl-radius-xl);
   --gsl-metric-card-shadow: none;
 
@@ -7,7 +8,8 @@
   --gsl-metric-card-font: var(--gsl-font-body);
   --gsl-metric-card-value-font: var(--gsl-font-header);
   --gsl-metric-card-value-size: 28px;
-  --gsl-metric-card-value-color: var(--gsl-text);
+  --clet-metric-card-value-color: var(--clet-text);
+  --gsl-metric-card-value-color: var(--clet-metric-card-value-color);
   --gsl-metric-card-description-size: 12px;
   display: flex;
   flex-direction: column;
@@ -30,7 +32,7 @@
   padding: 24px;
   border: 1px solid var(--gsl-border);
   border-radius: var(--gsl-radius-base);
-  background: transparent;
+  background: var(--gsl-bg);
   padding-bottom: 38px;
 }
 

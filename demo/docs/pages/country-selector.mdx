@@ -1,11 +1,11 @@
 export const meta = {
   title: "CountrySelector",
-  description: "Country picker with search",
+  description: "Deprecated — use Combobox or PhoneNumberInput's country picker instead",
   category: "Components",
-  keywords: ["country selector", "country picker", "flag dropdown", "iso code select"],
+  keywords: ["country selector", "country picker", "flag dropdown", "iso code select", "deprecated"],
   since: "1.9.0",
-  status: "stable",
-  related: ["phone-number-input", "network-operator", "dropdown"],
+  status: "deprecated",
+  related: ["combobox", "phone-number-input", "network-operator", "dropdown"],
   import: "@rfdtech/components",
 };
 
@@ -14,6 +14,8 @@ import { CountrySelectorPreview } from "../previews/code/CountrySelectorPreview"
 import countrySelectorSource from "../previews/examples/country-selector.example.tsx?raw";
 
 # CountrySelector
+
+> **Deprecated — no longer maintained.** Use [`Combobox`](/docs/combobox) (build a country list with `options`) for general country selection, or [`PhoneNumberInput`](/docs/phone-number-input)'s own built-in country picker for phone-number use cases. `CountrySelector` remains exported for existing consumers and won't be removed without a major-version breaking-change entry, but it receives no new features or design updates going forward. See the [migration guide](/docs/migration-v2).
 
 Country selector dropdown with flag emoji, country name, search filtering, and keyboard navigation. Wraps a Radix popover with a trigger that shows the selected flag and country name.
 

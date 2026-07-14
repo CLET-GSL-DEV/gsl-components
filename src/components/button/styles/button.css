@@ -58,6 +58,10 @@
   filter: brightness(0.95);
 }
 
+.gsl-button--secondary {
+  background: transparent;
+}
+
 .gsl-button--secondary:hover:not(:disabled) {
   background: var(--gsl-hover);
   border-color: var(--gsl-border-strong);
@@ -69,7 +73,7 @@
 }
 
 .gsl-button--outline:hover:not(:disabled) {
-  background: var(--gsl-primary-light);
+  background: transparent;
 }
 
 .gsl-button--ghost {

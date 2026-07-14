@@ -12,8 +12,10 @@ export const meta = {
 import { ExampleTabs } from "../components/ExampleTabs";
 import { DateRangeSelectorPreview } from "../previews/code/DateRangeSelectorPreview";
 import { DateRangeFilterPreview } from "../previews/code/DateRangeFilterPreview";
+import { DateRangePresetsPreview } from "../previews/code/DateRangePresetsPreview";
 import dateRangeSource from "../previews/examples/date-range-selector.example.tsx?raw";
 import dateRangeFilterSource from "../previews/examples/date-range-filter.example.tsx?raw";
+import dateRangePresetsSource from "../previews/examples/date-range-presets.example.tsx?raw";
 
 # DateRangeSelector
 
@@ -25,6 +27,16 @@ Date range picker for choosing a start and end date from a two-month calendar po
   title="Basic date range"
   preview={<DateRangeSelectorPreview />}
   code={dateRangeSource}
+/>
+
+## With quick-select presets
+
+A left rail of quick-select presets (`presets` prop) and a "Range: ..." summary in the footer — both are opt-in and only render when `presets` is passed. Selecting a preset previews it on the calendar; **Apply is still required to commit it**, same as a manual day selection. `getRange` is evaluated lazily on click, so relative presets like "Today" and "Last 7 days" stay accurate.
+
+<ExampleTabs
+  title="Quick-select presets"
+  preview={<DateRangePresetsPreview />}
+  code={dateRangePresetsSource}
 />
 
 ## Inside a table filter
@@ -52,6 +64,7 @@ don't let it silently render an empty table).
 | `disabled` | `boolean` | `false` | Disable interaction |
 | `min` | `Date` | — | Earliest selectable date |
 | `max` | `Date` | — | Latest selectable date |
+| `presets` | `DateRangePreset[]` | — | Left-rail quick-select presets; also enables the "Range: ..." footer summary |
 | `classNames` | `DateRangeSelectorClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root wrapper |
 
@@ -106,6 +119,15 @@ Value shape for `DateRangeSelector`. Holds the selected start and end dates, eac
 
 See the props table above.
 
+### `DateRangePreset`
+
+One entry in the `presets` array:
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `label` | `string` | Rail label, e.g. `"Today"`, `"Last 7 days"`, `"All time"` |
+| `getRange` | `() => DateRangeValue` | Computed on click — evaluated lazily so "Today"-relative presets stay accurate. Returning `{ start: null, end: null }` (e.g. for "All time") clears the range on Apply |
+
 ### `DateRangeSelectorClassNames`
 
 Part-level class names merged after base `gsl-date-selector*` styles:
@@ -116,22 +138,32 @@ Part-level class names merged after base `gsl-date-selector*` styles:
 | `trigger` | Trigger button (`.gsl-date-selector__trigger`) |
 | `calendar` | Calendar panel (`.gsl-date-selector__calendar`) |
 | `calendarHeader` | Month/year navigation row (`.gsl-date-selector__calendar-header`) |
-| `calendarNav` | Previous/next month arrows (`.gsl-date-selector__calendar-nav`) |
+| `calendarNav` | Previous/next month arrows |
 | `calendarTitle` | Month label above each month panel (`.gsl-date-selector__calendar-title`) |
 | `calendarWeekdays` | Weekday labels container (`.gsl-date-selector__calendar-weekdays`) |
 | `calendarWeekday` | Individual weekday label (`.gsl-date-selector__calendar-weekday`) |
 | `calendarGrid` | Calendar day grid (`.gsl-date-selector__calendar-grid`) |
 | `calendarDay` | Individual day button (`.gsl-date-selector__calendar-day`) |
-| `calendarFooter` | Apply/Cancel button row (`.gsl-date-selector__calendar-footer`) |
-| `applyButton` | Apply button (`.gsl-date-selector__calendar-btn--apply`) |
-| `cancelButton` | Cancel button (`.gsl-date-selector__calendar-btn--cancel`) |
+| `calendarFooter` | Footer row (`.gsl-date-selector__calendar-footer`) |
+| `applyButton` | Apply button |
+| `cancelButton` | Cancel button |
+| `presets` | Presets rail (`.gsl-date-range-selector__presets`) |
+| `presetItem` | Individual preset button (`.gsl-date-range-selector__preset-item`) |
+| `rangeSummary` | "Range: ..." footer summary (`.gsl-date-range-selector__summary`) |
 
 ## Design tokens
 
 | Token | Default | Used for |
 |-------|---------|----------|
 | `--gsl-date-range-selector-font` | `--gsl-font-body` | Trigger button font family |
+| `--gsl-date-range-selector-trigger-height` | `40px` | Trigger button height |
+| `--gsl-date-range-selector-calendar-min-width` | `256px` | Calendar popover minimum width (single-month base; the double-month layout scales from this) |
+| `--gsl-date-range-selector-calendar-padding` | `12px` | Calendar popover inner padding |
+| `--gsl-date-range-selector-weekday-height` | `32px` | Weekday label row height |
 | `--gsl-date-selector-calendar-font` | `--gsl-font-body` | Calendar popover font family (header title, weekday labels, and day cells) |
+| `--gsl-text-size-base` | `14px` | Trigger and month-title font size |
+| `--gsl-text-size-xs` | `12px` | Weekday label font size |
+| `--gsl-text-size-sm` | `13px` | Day cell, preset item, and range summary font size |
 
 ## Notes
 
@@ -142,8 +174,9 @@ Part-level class names merged after base `gsl-date-selector*` styles:
 - Selecting the same day for both picks produces a single-day range where `start === end`.
 - Clicking a new date when a range is already set clears the pending range and starts a new selection.
 - Days strictly between start and end are highlighted with a subtle background in the calendar.
-- The Apply button is disabled until at least a start date is selected.
-- On mobile (below 768px), the two months stack vertically.
+- The Apply button is disabled until at least a start date is selected, **or** a preset has been clicked (even a preset like "All time" that resolves to `{ start: null, end: null }`).
+- Clicking a preset previews it on the calendar and marks that preset active; manually clicking a day afterward clears the active-preset highlight.
+- On mobile (below 768px), the two months stack vertically, and the presets rail (when present) moves above the calendar as a horizontal, wrapping row.
 
 ## Don't
 

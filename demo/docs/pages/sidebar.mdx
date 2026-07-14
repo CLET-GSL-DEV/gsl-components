@@ -314,7 +314,7 @@ Props for `SidebarBadge`.
 |-------|---------|----------|
 | `--gsl-sidebar-font` | `var(--gsl-font-body)` | Font family override for the sidebar root, links, and trigger button |
 | `--gsl-sidebar-text` | `var(--gsl-text)` | Base text color for the sidebar root |
-| `--gsl-sidebar-bg` | `var(--gsl-panel-bg, var(--gsl-surface-subtle))` | Desktop card panel background |
+| `--gsl-sidebar-bg` | `var(--gsl-bg)` | Sidebar surface background — the single override point referenced by every background declaration in the sidebar's CSS |
 | `--gsl-sidebar-link-text` | `var(--gsl-text-secondary)` | Default (inactive) link and collapse-button icon color |
 | `--gsl-sidebar-link-hover-bg` | `var(--gsl-surface-dark)` | Link background on hover |
 | `--gsl-sidebar-link-hover-text` | `var(--gsl-text)` | Link text color on hover |
@@ -329,7 +329,7 @@ Props for `SidebarBadge`.
 
 ## Notes
 
-- Desktop renders a **card panel** (`--gsl-surface-subtle` background, 24px radius, icon + label rows) by default. Active links use a neutral gray pill, not primary color.
+- Desktop renders a **card panel** (`--gsl-bg` background, 24px radius, icon + label rows) by default. Active links use a neutral gray pill, not primary color.
 - `variant="plain"` swaps the card panel for a transparent background with a right border (`--gsl-border`) and no radius — use it alongside `AppHeader`'s `"plain"` variant for a flush dashboard shell.
 - Use `SidebarCollapse` in the header to collapse to a **72px icon rail** on desktop; group labels, link labels, badges, and footer content hide automatically.
 - `SidebarGroup` with `collapsible` renders its first `SidebarGroupLabel` as a button and animates the content open/close with an opacity transition. The label looks identical to the static label when not collapsible — same font, size, color, and padding. The content area stays in the layout when folded (items fade to invisible but the space is reserved) so toggling doesn't shift items below it. Set `defaultExpanded` for the initial state or use `expanded` + `onExpandedChange` for controlled state. The animation respects `prefers-reduced-motion`.

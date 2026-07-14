@@ -1,9 +1,13 @@
 .gsl-stepper {
-  --gsl-stepper-accent: var(--gsl-primary);
-  --gsl-stepper-current: var(--gsl-secondary);
+  --clet-stepper-accent: var(--clet-primary);
+  --gsl-stepper-accent: var(--clet-stepper-accent);
+  --clet-stepper-current: var(--gsl-secondary);
+  --gsl-stepper-current: var(--clet-stepper-current);
   --gsl-stepper-marker-size: 32px;
-  --gsl-stepper-marker-border: 2px;
-  --gsl-stepper-track: var(--gsl-border);
+  --clet-stepper-marker-border: 2px;
+  --gsl-stepper-marker-border: var(--clet-stepper-marker-border);
+  --clet-stepper-track: var(--clet-border);
+  --gsl-stepper-track: var(--clet-stepper-track);
   --gsl-stepper-transition: 250ms;
   --gsl-stepper-connector-min: 24px;
   --gsl-stepper-gap: 8px;

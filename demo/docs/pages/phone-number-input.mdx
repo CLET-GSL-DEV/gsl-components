@@ -19,6 +19,8 @@ import phoneNumberInputFormSource from "../previews/examples/phone-number-input-
 
 Phone number input with a country code selector (flag + dial code prefix). Built on `@radix-ui/react-popover` with GSL styling. Auto-detects the country from the number prefix as the user types. Supports controlled and uncontrolled value.
 
+Flags are real SVG icons from [`country-flag-icons`](https://www.npmjs.com/package/country-flag-icons), not emoji — they render consistently across operating systems and browsers (unlike emoji flags, which some platforms render as a two-letter country code instead of a flag).
+
 ## Example
 
 <ExampleTabs title="Variants" preview={<PhoneNumberInputPreview />} code={phoneNumberInputSource} />
@@ -92,15 +94,20 @@ See the props table above.
 
 ## Design tokens
 
-| Token | Used for |
-|-------|----------|
-| `--gsl-radius-base` | Input border radius |
-| `--gsl-phone-number-input-font` | Font family for the phone number input field (defaults to `--gsl-font-body`) |
-| `--gsl-phone-number-input-dropdown-font` | Font family for the country dropdown search input and option list (defaults to `--gsl-font-body`) |
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--gsl-radius-base` | `8px` | Input border radius |
+| `--gsl-phone-number-input-font` | `var(--gsl-font-body)` | Font family for the phone number input field |
+| `--gsl-phone-number-input-dropdown-font` | `var(--gsl-font-body)` | Font family for the country dropdown search input and option list |
+| `--gsl-phone-number-input-height` | `40px` | Root height |
+| `--gsl-phone-number-input-dropdown-width` | `320px` | Country dropdown width |
+| `--gsl-phone-number-input-dropdown-max-height` | `300px` | Country dropdown max height before scrolling |
+| `--gsl-text-size-base` | `14px` | Prefix, input, search input, and option font size |
 
 ## Notes
 
 - Country auto-detection: as the user types, the component matches the prefix against dial codes and updates the selected country. The sorted check uses longest dial code first to avoid partial matches (e.g., `+233` matches Ghana, not `+23`).
-- Countries are from the `countries` utility — same dataset used by `CountrySelector`.
+- Countries are from the `countries` utility — same dataset used by the deprecated `CountrySelector`.
 - The value includes the full number with the dial code prefix (e.g. `+2332054321022`). The `+` prefix is always included.
 - Changing the country dropdown updates the dial code prefix in the input value.
+- Each flag icon renders with `role="img"` and an `aria-label` of `"{country name} flag"` for accessibility.

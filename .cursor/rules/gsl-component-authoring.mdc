@@ -19,9 +19,10 @@ src/types/{name}.ts    # props, classNames, unions
 
 ## Styling
 
-- Use `--gsl-*` tokens from `src/styles/theme/`; no hardcoded theme colors.
+- Use `--gsl-*` tokens from `src/styles/theme/`; no hardcoded theme colors, sizes, or shadows.
 - Prefix classes `gsl-{component}` / `gsl-{component}__part`.
 - Import CSS in the component file.
+- Component-scoped tokens: `--gsl-{component}-{name}`, named so `generate-theme-tokens.mjs`'s `classify()` infers the right type (e.g. include `size`/`radius`/`shadow`/`font`/`color` in the name). See the full token & theme checklist in `AGENTS.md`.
 
 ## Responsive
 
@@ -70,7 +71,7 @@ className={cn("gsl-example", classNames?.root, className)}
 
 ## Required on every public API change
 
-Do not finish component work without all three:
+Do not finish component work without all four:
 
 1. **CHANGELOG.md** — entry under `[Unreleased]` (`Added` / `Changed` / `Fixed`).
 2. **README.md** — usage summary and link to docs page (insert the `##` section in alphabetical order among other components).
@@ -79,6 +80,7 @@ Do not finish component work without all three:
    - **Props** table
    - **Types** section for every exported type/interface/union
    - Nav entry in `demo/docs/nav.ts` (insert in alphabetical order by `slug` in the Components section)
+4. **Tokens & theme** — if any `--gsl-*` token was added or renamed: run `npm run generate:tokens`; if it's a global token (not component-scoped), add a mapping in the `@theme` block at `src/styles/theme/tokens.css`; verify light + dark values exist; refresh the MCP index (`npm run build:mcp`) and confirm via `get_tokens`/`get_component`. Full checklist in `AGENTS.md`.
 
 ### Doc examples (single source)
 

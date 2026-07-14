@@ -6,6 +6,13 @@ import { cn } from "../../utils/cn";
 import { countries, getFlagEmoji } from "../../utils/countries";
 import "./styles/country-selector.css";
 
+/**
+ * @deprecated Standalone country/dial-code picker, superseded by the searchable
+ * `Combobox` (build a country list with `options`) for general country selection,
+ * or `PhoneNumberInput`'s own built-in country picker for phone-number use cases —
+ * see the [migration guide](/docs/migration-v2). Kept exported and fully working;
+ * it receives no further features or design updates.
+ */
 export const CountrySelector = forwardRef<HTMLDivElement, CountrySelectorProps>(
   function CountrySelector(
     {

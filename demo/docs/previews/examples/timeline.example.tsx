@@ -1,4 +1,4 @@
-import { AlertTriangle, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import {
   Timeline,
   TimelineData,

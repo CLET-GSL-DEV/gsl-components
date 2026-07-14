@@ -3,7 +3,6 @@
 
   display: flex;
   flex-direction: column;
-  padding: 0 10px;
   font-family: var(--gsl-role-select-font);
 }
 

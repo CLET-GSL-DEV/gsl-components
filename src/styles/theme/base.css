@@ -7,7 +7,7 @@
 }
 
 body {
-  background: var(--gsl-page-bg);
+  background: var(--gsl-main-bg);
 }
 
 :root,
@@ -19,6 +19,12 @@ body {
     arial, sans-serif;
   --gsl-font-header: "Roboto Serif", var(--gsl-font);
   --gsl-font-body: "Lato", var(--gsl-font);
+  --gsl-text-size-xs: 12px;
+  --gsl-text-size-sm: 13px;
+  --gsl-text-size-base: 14px;
+  --gsl-text-size-md: 16px;
+  --gsl-text-size-lg: 20px;
+  --gsl-text-size-xl: 24px;
   --gsl-radius-base: 8px;
   --gsl-radius-xl: 16px;
   --gsl-radius-2xl: 24px;
@@ -34,7 +40,8 @@ body {
   --gsl-z-alert: 1200;
   --gsl-z-alert-content: 1201;
   --gsl-z-dropdown: 1300;
-  --gsl-surface-card: var(--gsl-bg);
+  --clet-surface-card: var(--clet-bg);
+  --gsl-surface-card: var(--clet-surface-card);
 }
 
 /* ── Shared shimmer loading utility ──

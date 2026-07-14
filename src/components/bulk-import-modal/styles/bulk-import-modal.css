@@ -1,9 +1,14 @@
 .gsl-bulk-import {
-  --gsl-bulk-import-primary: var(--gsl-primary);
-  --gsl-bulk-import-primary-light: var(--gsl-primary-light);
-  --gsl-bulk-import-success: var(--gsl-success);
-  --gsl-bulk-import-warning: var(--gsl-warning);
-  --gsl-bulk-import-error-bg: var(--gsl-error-bg);
+  --clet-bulk-import-primary: var(--clet-primary);
+  --gsl-bulk-import-primary: var(--clet-bulk-import-primary);
+  --clet-bulk-import-primary-light: var(--clet-primary-light);
+  --gsl-bulk-import-primary-light: var(--clet-bulk-import-primary-light);
+  --clet-bulk-import-success: var(--clet-success);
+  --gsl-bulk-import-success: var(--clet-bulk-import-success);
+  --clet-bulk-import-warning: var(--clet-warning);
+  --gsl-bulk-import-warning: var(--clet-bulk-import-warning);
+  --clet-bulk-import-error-bg: var(--clet-error-bg);
+  --gsl-bulk-import-error-bg: var(--clet-bulk-import-error-bg);
   --gsl-bulk-import-gutter: 24px;
   --gsl-shadow: var(--gsl-shadow-lg);
   --gsl-radius-base: 12px;

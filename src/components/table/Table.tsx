@@ -15,7 +15,6 @@ import {
   ArrowUp,
   ArrowDown,
   MoreHorizontal,
-  Inbox,
   TableIcon,
 } from "lucide-react";
 import { Checkbox } from "../checkbox/Checkbox";

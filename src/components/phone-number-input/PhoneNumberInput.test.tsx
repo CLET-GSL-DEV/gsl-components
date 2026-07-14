@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { PhoneNumberInput } from "./PhoneNumberInput";
-import { countries, getFlagEmoji } from "../../utils/countries";
+import { countries } from "../../utils/countries";
 
 describe("PhoneNumberInput", () => {
   it("renders prefix button with default country (US)", () => {
@@ -12,9 +12,9 @@ describe("PhoneNumberInput", () => {
     expect(screen.getByText("+1")).toBeInTheDocument();
   });
 
-  it("renders the US flag emoji by default", () => {
+  it("renders the US flag icon by default", () => {
     render(<PhoneNumberInput />);
-    expect(screen.getByText(getFlagEmoji("US"))).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "United States flag" })).toBeInTheDocument();
   });
 
   it("renders a tel input with placeholder", () => {
@@ -128,7 +128,7 @@ describe("PhoneNumberInput", () => {
   it("auto-selects country from controlled value dial code", () => {
     render(<PhoneNumberInput value="+233241234567" onChange={() => {}} />);
     expect(screen.getByText("+233")).toBeInTheDocument();
-    expect(screen.getByText(getFlagEmoji("GH"))).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Ghana flag" })).toBeInTheDocument();
   });
 
   it("falls back to default country when value has no matching dial code", () => {
@@ -205,7 +205,9 @@ describe("PhoneNumberInput", () => {
     });
     await user.click(gbOption);
     expect(screen.getByText("+44")).toBeInTheDocument();
-    expect(screen.getByText(getFlagEmoji("GB"))).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "United Kingdom flag" }),
+    ).toBeInTheDocument();
   });
 
   it("closes dropdown after selecting a country", async () => {
@@ -280,7 +282,9 @@ describe("PhoneNumberInput", () => {
     await user.click(screen.getByText("+1").closest("button")!);
     const options = await screen.findAllByRole("option");
     expect(options.length).toBe(countries.length);
-    expect(options[0].textContent).toContain(getFlagEmoji("AF"));
+    expect(
+      options[0].querySelector(".gsl-phone-number-input__option-flag"),
+    ).toBeInTheDocument();
     expect(options[0].textContent).toContain("+93");
   });
 

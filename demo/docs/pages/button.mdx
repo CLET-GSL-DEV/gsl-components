@@ -73,6 +73,7 @@ Part-level class names merged after base `gsl-button*` styles:
 ## Notes
 
 - `loading` sets `disabled`, `aria-busy`, and hides the visible label from screen readers while announcing `loadingLabel`.
+- `variant="secondary"` has a transparent background with a `--gsl-border` outline — it fills with `--gsl-hover` on hover, same as `ghost`/`destructive`, but keeps its border where those go borderless.
 - Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 - Conflicting Tailwind utilities may require [`tailwind-merge`](https://github.com/dcastil/tailwind-merge) in your app if overrides do not win.
 

@@ -76,7 +76,7 @@ Tokens are defined in `theme.css` and applied on `.gsl-theme` and `document.docu
 | `--gsl-surface-subtle` | Sidebar, panel backgrounds |
 | `--gsl-surface-dark` | Active sidebar states |
 | `--gsl-surface-card` | Card component background (defaults to `--gsl-bg`) |
-| `--gsl-page-bg` | Page/app layout background |
+| `--gsl-main-bg` | Page/app layout background |
 | `--gsl-overlay` | Modal/dialog backdrops |
 
 ### Semantic
@@ -169,6 +169,34 @@ above (`--gsl-primary` → `primary`, `--gsl-radius-base` → `radiusBase`).
 
 Calling `gslTheme()` again (e.g. on hot reload) replaces the previous
 overrides rather than stacking a new `<style>` tag.
+
+#### Recommended file: `src/gsl.theme.ts`
+
+There's no build-time auto-discovery for a theme file (no Vite plugin scans
+for one, unlike e.g. `tailwind.config.ts`) — `gslTheme()` is a plain runtime
+function, so it has to be explicitly imported once. To keep every consumer's
+override in the same predictable place, put the `gslTheme(...)` call in its
+own file named **`src/gsl.theme.ts`** and import it for its side effect,
+right after the library CSS, in your entry point:
+
+```ts title="src/gsl.theme.ts"
+import { gslTheme } from "@rfdtech/components";
+
+gslTheme({
+  all: { primary: "#1d4ed8" },
+  dark: { primary: "#ef4444", primaryLight: "#3f1515" },
+});
+```
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+import "./gsl.theme"; // side-effect import — runs gslTheme() once at startup
+import { ThemeProvider } from "@rfdtech/components";
+```
+
+One file, one canonical name, imported once — not a hard requirement (any
+file/location works, since it's just a function call), but the convention
+every GSL project should follow so a theme override is always easy to find.
 
 #### Type safety
 
@@ -301,7 +329,7 @@ The consumer's Tailwind build processes the `@theme` block and generates utility
 |---------|-------------|
 | `bg-primary` / `text-primary` | `var(--gsl-primary)` |
 | `bg-primary-foreground` / `text-primary-foreground` | `var(--gsl-on-primary)` |
-| `bg-background` / `text-foreground` | `var(--gsl-page-bg)` / `var(--gsl-text)` |
+| `bg-background` / `text-foreground` | `var(--gsl-main-bg)` / `var(--gsl-text)` |
 | `bg-secondary` / `text-secondary-foreground` | `var(--gsl-surface-dark)` / `var(--gsl-text-secondary)` |
 | `bg-muted` / `text-muted-foreground` | `var(--gsl-surface-subtle)` / `var(--gsl-text-secondary)` |
 | `bg-accent` / `text-accent-foreground` | `var(--gsl-hover)` / `var(--gsl-text)` |

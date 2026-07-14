@@ -10,7 +10,15 @@ import type { DateSelectorProps } from "../../types/date-selector";
 import { cn } from "../../utils/cn";
 import "./styles/date-selector.css";
 
-const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
+const WEEKDAYS = [
+  { short: "M", full: "Monday" },
+  { short: "T", full: "Tuesday" },
+  { short: "W", full: "Wednesday" },
+  { short: "T", full: "Thursday" },
+  { short: "F", full: "Friday" },
+  { short: "S", full: "Saturday" },
+  { short: "S", full: "Sunday" },
+] as const;
 
 const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -274,15 +282,15 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
               >
                 {WEEKDAYS.map((day) => (
                   <div
-                    key={day}
+                    key={day.full}
                     className={cn(
                       "gsl-date-selector__calendar-weekday",
                       classNames?.calendarWeekday,
                     )}
                     role="columnheader"
-                    aria-label={day}
+                    aria-label={day.full}
                   >
-                    {day}
+                    {day.short}
                   </div>
                 ))}
               </div>

@@ -115,8 +115,8 @@ export function DocsPage() {
       const p = getDocPage(slug);
       return {
         slug,
-        title: p?.meta.title ?? slug,
-        description: p?.meta.description ?? "",
+        title: p?.meta?.title ?? slug,
+        description: p?.meta?.description ?? "",
       };
     });
   }, []);

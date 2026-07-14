@@ -1,5 +1,9 @@
+/* --gsl-sidebar-bg is the single override point for every background
+   declaration in this file that paints the sidebar surface itself. */
 .gsl-sidebar {
   --gsl-sidebar-font: var(--gsl-font-body);
+  --clet-sidebar-bg: var(--clet-bg);
+  --gsl-sidebar-bg: var(--clet-sidebar-bg);
 
   display: flex;
   flex-direction: column;
@@ -11,9 +15,12 @@
   height: 100%;
 }
 
-/* ── Plain variant: transparent background, right border, no radius ── */
+/* ── Plain variant: right border, no radius ── */
 .gsl-sidebar.gsl-sidebar--plain {
-  background: transparent;
+  --clet-sidebar-bg: var(--clet-bg);
+  --gsl-sidebar-bg: var(--clet-sidebar-bg);
+
+  background: var(--gsl-sidebar-bg);
   border-right: 1px solid var(--gsl-border);
   border-radius: 0;
 }
@@ -294,8 +301,10 @@
 }
 
 .gsl-sidebar__link--active .gsl-sidebar__link-badge {
-  --gsl-sidebar-badge-bg: var(--gsl-hover);
-  --gsl-sidebar-badge-color: var(--gsl-text-secondary);
+  --clet-sidebar-badge-bg: var(--clet-hover);
+  --gsl-sidebar-badge-bg: var(--clet-sidebar-badge-bg);
+  --clet-sidebar-badge-color: var(--clet-text-secondary);
+  --gsl-sidebar-badge-color: var(--clet-sidebar-badge-color);
 }
 
 .gsl-sidebar__link:hover {
@@ -405,7 +414,7 @@
   height: 100dvh;
   padding: 16px;
   border-right: 1px solid var(--gsl-border);
-  background: var(--gsl-bg);
+  background: var(--gsl-sidebar-bg);
   box-shadow: var(--gsl-shadow-lg);
   transform: translateX(-100%);
   transition: transform 200ms ease;
@@ -453,10 +462,7 @@
     align-self: start;
     padding: 20px 16px;
     border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
-    background: var(
-      --gsl-sidebar-bg,
-      var(--gsl-panel-bg, var(--gsl-surface-subtle))
-    );
+    background: var(--gsl-sidebar-bg);
     transition:
       width 200ms ease,
       max-width 200ms ease,
@@ -482,7 +488,7 @@
     height: 100dvh;
     padding: 16px;
     border-right: 1px solid var(--gsl-border);
-    background: var(--gsl-bg);
+    background: var(--gsl-sidebar-bg);
     box-shadow: var(--gsl-shadow-lg);
     transform: translateX(-100%);
     transition: transform 200ms ease;

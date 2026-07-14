@@ -51,7 +51,7 @@
 }
 
 .gsl-launchpad__trigger:hover {
-  background-color: #ffffff33;
+  background-color: #fff3;
 }
 
 .gsl-launchpad__trigger:focus-visible {
@@ -62,7 +62,7 @@
 .gsl-launchpad__panel {
   --gsl-shadow: var(--gsl-shadow-sm);
   --gsl-item-size: 80px;
-  --gsl-icon-size: 50px;
+  --gsl-icon-size: 60px;
   --gsl-launchpad-font: var(--gsl-font-body);
 
   z-index: var(--gsl-z-popover);
@@ -81,13 +81,6 @@
 .gsl-launchpad__grid-scroll {
   padding-top: 16px;
   mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 9px,
-    black calc(100% - 9px),
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
     to bottom,
     transparent,
     black 9px,
@@ -157,6 +150,7 @@
 .gsl-launchpad__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 12px 0;
   padding: 4px 16px;
 }
 
@@ -174,18 +168,13 @@
   color: var(--gsl-text);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.15s ease;
   position: relative;
-  padding: 8px;
-}
-
-.gsl-launchpad__item:hover:not(:disabled, .gsl-launchpad__item--disabled) {
-  background-color: var(--gsl-hover);
+  padding: 0;
 }
 
 .gsl-launchpad__item:focus-visible {
   outline: 2px solid var(--gsl-focus);
-  outline-offset: -2px;
+  outline-offset: 2px;
 }
 
 .gsl-launchpad__item--disabled {
@@ -200,9 +189,15 @@
   width: var(--gsl-icon-size);
   height: var(--gsl-icon-size);
   flex-shrink: 0;
-  overflow: hidden;
+  overflow: visible;
   border-radius: var(--gsl-radius-base);
   background: transparent;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.gsl-launchpad__item:hover:not(:disabled, .gsl-launchpad__item--disabled) .gsl-launchpad__icon {
+  transform: scale(1.15);
+  box-shadow: var(--gsl-shadow-md);
 }
 
 .gsl-launchpad__tile {
@@ -215,7 +210,6 @@
   overflow: hidden;
   border-radius: var(--gsl-radius-base);
   color: #fff;
-  overflow: hidden;
 }
 
 /* Fixed brand gradient palette — an app's tile gradient is chosen by a
@@ -265,7 +259,7 @@
 .gsl-launchpad__tile-overlay {
   position: absolute;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.1;
 }
 
 .gsl-launchpad__tile-overlay--0 {
@@ -354,27 +348,53 @@
   color: var(--gsl-text-secondary);
 }
 
-.gsl-launchpad__loading {
+.gsl-launchpad__skeleton-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 24px 16px;
-  color: var(--gsl-text-secondary);
+  gap: 8px;
+  width: var(--gsl-item-size);
+  min-height: var(--gsl-item-size);
 }
 
-.gsl-launchpad__spinner {
-  animation: gsl-launchpad-spin 0.8s linear infinite;
+.gsl-launchpad__skeleton-icon {
+  width: var(--gsl-icon-size);
+  height: var(--gsl-icon-size);
+  border-radius: var(--gsl-radius-base);
+  background: var(--gsl-hover);
+  animation: gsl-launchpad-skeleton-pulse 1.1s ease-in-out infinite;
 }
 
-@keyframes gsl-launchpad-spin {
-  to {
-    transform: rotate(360deg);
+.gsl-launchpad__skeleton-name {
+  width: 70%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--gsl-hover);
+  animation: gsl-launchpad-skeleton-pulse 1.1s ease-in-out infinite;
+}
+
+.gsl-launchpad__skeleton-item:nth-child(3n + 2) .gsl-launchpad__skeleton-icon,
+.gsl-launchpad__skeleton-item:nth-child(3n + 2) .gsl-launchpad__skeleton-name {
+  animation-delay: 0.12s;
+}
+
+.gsl-launchpad__skeleton-item:nth-child(3n + 3) .gsl-launchpad__skeleton-icon,
+.gsl-launchpad__skeleton-item:nth-child(3n + 3) .gsl-launchpad__skeleton-name {
+  animation-delay: 0.24s;
+}
+
+@keyframes gsl-launchpad-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.9;
   }
 }
 .gsl-launchpad__name {
-  height: 32px;
+  height: 16px;
   flex-shrink: 0;
   font-size: 10px;
   font-weight: 600;
@@ -385,7 +405,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 
@@ -393,6 +413,7 @@
   font-size: 20px;
   font-weight: 500;
   height: auto;
+  -webkit-line-clamp: 2;
 }
 
 .gsl-launchpad__badge {
@@ -413,6 +434,7 @@
   align-items: stretch;
   gap: 8px;
   padding: 8px 16px;
+  padding-top: 16px;
   border-top: 1px solid var(--gsl-border);
 }
 
@@ -448,13 +470,6 @@
   min-height: 0;
   overflow-y: auto;
   mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 9px,
-    black calc(100% - 9px),
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
     to bottom,
     transparent,
     black 9px,

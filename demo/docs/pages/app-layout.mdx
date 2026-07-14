@@ -140,3 +140,4 @@ When `items` is empty, the breadcrumb section is hidden entirely.
 - Auto-positioning works by reading `componentId` from the child element's render function — only direct children are scanned.
 - Do NOT wrap children in Fragments, conditionals, or unknown elements — `AppLayout` only auto-positions components with `componentId` matching `"AppHeader"`, `"AppSidebar"`, or `"AppBody"`. Anything else is silently ignored and won't render.
 - Breadcrumbs are rendered from context. Call `useBreadcrumbs()` from any child, AppLayout handles the rest. When items is empty, breadcrumbs are hidden.
+- Content area background differs by variant: `"default"` fills the content area with `--gsl-panel-bg` (a distinct panel card); `"stacked"` uses `--gsl-main-bg` directly instead, so it reads flush with the page rather than as a separate panel.

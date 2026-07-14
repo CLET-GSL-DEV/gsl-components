@@ -11,7 +11,9 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { PopupPreview } from "../previews/code/PopupPreview";
+import { PopupVariantsPreview } from "../previews/code/PopupVariantsPreview";
 import popupSource from "../previews/examples/popup.example.tsx?raw";
+import popupVariantsSource from "../previews/examples/popup-variants.example.tsx?raw";
 
 # Popup
 
@@ -20,6 +22,16 @@ Compound popup primitives for small, anchored confirmation cards — a title, de
 ## Example
 
 <ExampleTabs title="Confirmation popup" preview={<PopupPreview />} code={popupSource} />
+
+## Variants
+
+Every slot (`PopupHeader`/`PopupTitle`/`PopupDescription`/`PopupBody`/`PopupFooter`) is independently optional, and `PopupFooter` supports a `"row"` (side-by-side, equal width) or `"stack"` (full width) layout — combine them freely: title + description with row or stack buttons, an optional input body, description-only, or title-only with a single button.
+
+<ExampleTabs
+  title="Title/description/body combinations, row and stack footers"
+  preview={<PopupVariantsPreview />}
+  code={popupVariantsSource}
+/>
 
 ## Components
 
@@ -105,11 +117,17 @@ Extends `HTMLAttributes<HTMLDivElement>` with `layout` and `classNames`.
 | Token | Default | Used for |
 |-------|---------|----------|
 | `--gsl-popup-font` | `var(--gsl-font-body)` | Font family override |
+| `--gsl-popup-radius` | `12px` | Card corner radius |
+| `--gsl-popup-padding` | `24px` | Card inner padding |
+| `--gsl-popup-gap` | `24px` | Gap between header/body/footer |
+| `--gsl-popup-width` | `350px` | Card max width (clamped to `100vw - 32px` on narrow screens) |
+| `--gsl-popup-border-width` | `1.5px` | Card border thickness |
+| `--gsl-popup-footer-gap` | `16px` | Gap between footer action buttons |
 | `--gsl-surface-panel` | theme surface | Card background |
-| `--gsl-border-subtle` | theme border | Card border |
+| `--gsl-border-subtle` | theme border | Card border color |
 | `--gsl-shadow-md` | theme shadow | Card elevation |
-
-Card padding, gap, and radius (24px / 24px / 12px) and footer button gap (16px) are fixed per the Figma spec rather than tokenized.
+| `--gsl-text-size-base` | `14px` | Body/description font size |
+| `--gsl-text-size-md` | `16px` | Title font size |
 
 ## Notes
 

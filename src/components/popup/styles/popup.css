@@ -1,18 +1,25 @@
 .gsl-popup {
   --gsl-popup-font: var(--gsl-font-body);
+  --gsl-popup-radius: 12px;
+  --gsl-popup-padding: 24px;
+  --gsl-popup-gap: 24px;
+  --gsl-popup-width: 350px;
+  --gsl-popup-border-width: 1.5px;
+  --gsl-popup-footer-gap: 16px;
+
   position: relative;
   z-index: var(--gsl-z-popover);
   display: flex;
-  width: min(350px, calc(100vw - 32px));
+  width: min(var(--gsl-popup-width), calc(100vw - 32px));
   flex-direction: column;
-  gap: 24px;
-  padding: 24px;
+  gap: var(--gsl-popup-gap);
+  padding: var(--gsl-popup-padding);
   background: var(--gsl-surface-panel);
-  border: 1.5px solid var(--gsl-border-subtle);
-  border-radius: 12px;
+  border: var(--gsl-popup-border-width) solid var(--gsl-border-subtle);
+  border-radius: var(--gsl-popup-radius);
   box-shadow: var(--gsl-shadow-md);
   font-family: var(--gsl-popup-font);
-  font-size: 14px;
+  font-size: var(--gsl-text-size-base);
   line-height: 1.4;
   color: var(--gsl-text);
   text-align: center;
@@ -69,7 +76,7 @@
 
 .gsl-popup__title {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--gsl-text-size-md);
   font-weight: 600;
   line-height: 1.5;
   color: var(--gsl-text);
@@ -77,7 +84,7 @@
 
 .gsl-popup__description {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--gsl-text-size-base);
   line-height: 1.4285;
   color: var(--gsl-text-secondary);
 }
@@ -89,7 +96,7 @@
 .gsl-popup__footer {
   display: flex;
   width: 100%;
-  gap: 16px;
+  gap: var(--gsl-popup-footer-gap);
 }
 
 .gsl-popup__footer--row {
