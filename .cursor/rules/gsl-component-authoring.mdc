@@ -4,7 +4,7 @@ globs: src/components/**/*,src/types/**/*
 alwaysApply: false
 ---
 
-# GSL component authoring (Clet)
+# Clet component authoring
 
 ## Module layout
 

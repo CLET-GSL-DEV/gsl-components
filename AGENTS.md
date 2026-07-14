@@ -1,4 +1,4 @@
-# GSL Components (Clet) — Agent Knowledge
+# Clet Components — Agent Knowledge
 
 References: [`.cursor/rules/gsl-component-authoring.mdc`](.cursor/rules/gsl-component-authoring.mdc) — always consult first.
 

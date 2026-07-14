@@ -1,6 +1,6 @@
-# GSL Components (Clet)
+# Clet Components
 
-Shared React component library for Ghana School of Law (GSL) projects. Also known as **Clet** — the library/design-system's own brand name, distinct from the "GSL" institutional abbreviation above. `--gsl-*` tokens, `.gsl-*` classes, and the `@rfdtech/components` package name are unchanged; every color token also has an equivalent `--clet-*` alias (see [Customize tokens](#7-customize-tokens)).
+Shared React component library for Clet projects. The `--gsl-*` CSS tokens, `.gsl-*` class names, and the `@rfdtech/components` package name are kept unchanged for backward compatibility; every color token also has an equivalent `--clet-*` alias (see [Customize tokens](#7-customize-tokens)).
 
 Requires React 18+ and a bundler that processes CSS (Vite, Webpack, etc.).
 

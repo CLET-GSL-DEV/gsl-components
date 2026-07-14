@@ -2,7 +2,13 @@
 // Scans src/styles/theme/*.css and each component's styles/*.css for --gsl-*
 // custom property definitions, then emits src/generated/components.theme.ts —
 // the typed surface consumed by gslTheme(). Run via `npm run generate:tokens`.
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -213,6 +219,7 @@ ${componentVarMapEntries}
 };
 `;
 
+mkdirSync(path.dirname(outFile), { recursive: true });
 writeFileSync(outFile, output);
 console.log(
   `generate-theme-tokens: ${globalTokens.length} global tokens, ${componentEntries.length} components (${componentEntries.reduce((n, c) => n + c.tokens.length, 0)} component tokens).`,
