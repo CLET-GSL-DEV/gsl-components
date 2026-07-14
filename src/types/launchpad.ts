@@ -33,8 +33,8 @@ export interface LaunchpadApp {
 export interface LaunchpadProps {
   /**
    * Apps to display. The popover grid is capped at 9 (see design note on
-   * the component); the built-in "See all" button opens an expanded modal
-   * showing every app in `apps`, uncapped.
+   * the component); the built-in expand button opens a modal showing every
+   * app in `apps`, uncapped.
    */
   apps: LaunchpadApp[];
   /** Shows a loading state (spinner only) in the panel instead of the grid */
@@ -46,10 +46,11 @@ export interface LaunchpadProps {
   /** Called when an app is selected (from the grid or the "See all" expanded view) */
   onAppSelect?: (app: LaunchpadApp) => void;
   /**
-   * Role switcher rendered below the grid, below the built-in "See all"
-   * button — only a `RoleSelect` element is accepted.
+   * Role switcher rendered below the grid, outside the scrollable/masked
+   * grid area and separated from it by a divider. Required — only a
+   * `RoleSelect` element is accepted, and passing none is a type error.
    */
-  children?: ReactElement<RoleSelectProps, typeof RoleSelect>;
+  children: ReactElement<RoleSelectProps, typeof RoleSelect>;
   /**
    * Custom trigger element — replaces the default square 9-dot icon.
    * Whatever you pass is still wrapped with the "Open Launchpad" tooltip

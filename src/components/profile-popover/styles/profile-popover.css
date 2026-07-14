@@ -223,7 +223,6 @@
 
 .gsl-profile-menu__divider {
   height: 1px;
-  margin-bottom: 16px;
   background: var(--gsl-border);
 }
 
@@ -234,13 +233,14 @@
 }
 
 .gsl-profile-menu__items--signout {
-  padding-bottom: 8px;
+  padding-block: 8px;
 }
 
 .gsl-profile-menu__content {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding-block: 16px;
 }
 
 .gsl-profile-menu__item {

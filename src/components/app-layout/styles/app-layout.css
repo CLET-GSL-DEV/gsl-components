@@ -20,6 +20,9 @@
   padding: 0 var(--gsl-app-layout-body-gap);
 }
 
+.gsl-app-layout--stacked .gsl-app-layout__breadcrumb {
+  padding-top: var(--gsl-app-layout-body-gap);
+}
 .gsl-app-layout__content {
   background: var(--gsl-panel-bg);
   border-radius: var(--gsl-panel-radius);

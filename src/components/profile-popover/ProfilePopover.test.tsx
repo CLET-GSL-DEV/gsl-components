@@ -54,17 +54,54 @@ describe("ProfilePopover", () => {
     expect(within(menu).getByRole("button", { name: /Sign Out/ })).toBeInTheDocument();
   });
 
-  it("renders no items section when items is omitted", async () => {
+  it("renders default items (My Profile, Account Settings, Help and Support) when items is omitted", async () => {
     const user = userEvent.setup();
-    render(<ProfilePopover fullName="Yaw Boateng" />);
+    const onMyProfile = vi.fn();
+    const onAccountSettings = vi.fn();
+    const onHelpAndSupport = vi.fn();
+    render(
+      <ProfilePopover
+        fullName="Yaw Boateng"
+        onMyProfile={onMyProfile}
+        onAccountSettings={onAccountSettings}
+        onHelpAndSupport={onHelpAndSupport}
+      />,
+    );
 
     await user.click(screen.getByRole("button", { name: /Yaw Boateng/ }));
     const menu = screen.getByRole("menu");
 
+    await user.click(within(menu).getByRole("button", { name: "My Profile" }));
+    await user.click(
+      within(menu).getByRole("button", { name: "Account Settings" }),
+    );
+    await user.click(
+      within(menu).getByRole("button", { name: "Help and Support" }),
+    );
     expect(within(menu).getByRole("button", { name: /Sign Out/ })).toBeInTheDocument();
+
+    expect(onMyProfile).toHaveBeenCalledTimes(1);
+    expect(onAccountSettings).toHaveBeenCalledTimes(1);
+    expect(onHelpAndSupport).toHaveBeenCalledTimes(1);
   });
 
-  it("calls the item and sign out callbacks", async () => {
+  it("replaces the default items entirely when items is passed", async () => {
+    const user = userEvent.setup();
+    render(
+      <ProfilePopover
+        fullName="Yaw Boateng"
+        items={[{ label: "Custom Row" }]}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: /Yaw Boateng/ }));
+    const menu = screen.getByRole("menu");
+
+    expect(within(menu).getByRole("button", { name: "Custom Row" })).toBeInTheDocument();
+    expect(within(menu).queryByRole("button", { name: "My Profile" })).not.toBeInTheDocument();
+  });
+
+  it("calls the item and sign out callbacks (confirming the Sign Out dialog)", async () => {
     const user = userEvent.setup();
     const onProfileClick = vi.fn();
     const onSignOut = vi.fn();
@@ -84,7 +121,52 @@ describe("ProfilePopover", () => {
     await user.click(within(menu).getByRole("button", { name: /Sign Out/ }));
 
     expect(onProfileClick).toHaveBeenCalledTimes(1);
+    expect(onSignOut).not.toHaveBeenCalled();
+
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByText("Confirm Sign Out")).toBeInTheDocument();
+    await user.click(within(dialog).getByRole("button", { name: "Sign Out" }));
+
     expect(onSignOut).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not call onSignOut when the confirm dialog is cancelled", async () => {
+    const user = userEvent.setup();
+    const onSignOut = vi.fn();
+
+    render(<ProfilePopover fullName="Yaw Boateng" onSignOut={onSignOut} />);
+
+    await user.click(screen.getByRole("button", { name: /Yaw Boateng/ }));
+    await user.click(
+      within(screen.getByRole("menu")).getByRole("button", { name: /Sign Out/ }),
+    );
+
+    const dialog = screen.getByRole("dialog");
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+
+    expect(onSignOut).not.toHaveBeenCalled();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("skips the confirm dialog and signs out immediately when noConfirmSignOut is set", async () => {
+    const user = userEvent.setup();
+    const onSignOut = vi.fn();
+
+    render(
+      <ProfilePopover
+        fullName="Yaw Boateng"
+        onSignOut={onSignOut}
+        noConfirmSignOut
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: /Yaw Boateng/ }));
+    await user.click(
+      within(screen.getByRole("menu")).getByRole("button", { name: /Sign Out/ }),
+    );
+
+    expect(onSignOut).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("renders a RoleSelect child between items and Sign Out", async () => {
@@ -193,6 +275,12 @@ describe("ProfilePopover — user/variant header trigger", () => {
     );
 
     expect(onProfileClick).toHaveBeenCalledTimes(1);
+    expect(onSignOut).not.toHaveBeenCalled();
+
+    const dialog = screen.getByRole("dialog");
+    await userEvents.click(
+      within(dialog).getByRole("button", { name: "Sign Out" }),
+    );
     expect(onSignOut).toHaveBeenCalledTimes(1);
   });
 

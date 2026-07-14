@@ -1,8 +1,27 @@
-import { forwardRef, useContext } from "react";
+import { forwardRef, useContext, useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
-import { LogOut, ChevronDown, Sun, Moon } from "lucide-react";
+import {
+  LogOut,
+  ChevronDown,
+  Sun,
+  Moon,
+  User,
+  Settings,
+  HelpCircle,
+} from "lucide-react";
 import { Avatar } from "../avatar/Avatar";
-import type { ProfilePopoverProps } from "../../types/profile-popover";
+import {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "../dialog/Dialog";
+import { Button } from "../button/Button";
+import type { ProfilePopoverItem, ProfilePopoverProps } from "../../types/profile-popover";
 import { cn } from "../../utils/cn";
 import { ThemeContext } from "../theme/ThemeContext";
 import "./styles/profile-popover.css";
@@ -18,7 +37,11 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
       trigger,
       triggerClassName,
       items,
+      onMyProfile,
+      onAccountSettings,
+      onHelpAndSupport,
       onSignOut,
+      noConfirmSignOut = false,
       children,
       side = "top",
       align = "start",
@@ -29,10 +52,47 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
     },
     ref,
   ) {
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const [confirmSignOutOpen, setConfirmSignOutOpen] = useState(false);
+
     const resolvedFullName = fullName ?? user?.name ?? "";
     const resolvedEmail = email ?? user?.email;
     const resolvedPhoto = profilePhoto ?? user?.avatar;
     const isAvatarOnly = variant === "avatar";
+
+    const defaultItems: ProfilePopoverItem[] = [
+      {
+        icon: <User size={20} strokeWidth={1.5} aria-hidden />,
+        label: "My Profile",
+        onClick: onMyProfile,
+      },
+      {
+        icon: <Settings size={20} strokeWidth={1.5} aria-hidden />,
+        label: "Account Settings",
+        onClick: onAccountSettings,
+      },
+      {
+        icon: <HelpCircle size={20} strokeWidth={1.5} aria-hidden />,
+        label: "Help and Support",
+        onClick: onHelpAndSupport,
+      },
+    ];
+    const resolvedItems = items ?? defaultItems;
+
+    const handleSignOutClick = () => {
+      if (noConfirmSignOut) {
+        setPopoverOpen(false);
+        onSignOut?.();
+        return;
+      }
+      setPopoverOpen(false);
+      setConfirmSignOutOpen(true);
+    };
+
+    const handleConfirmSignOut = () => {
+      setConfirmSignOutOpen(false);
+      onSignOut?.();
+    };
 
     const themeContext = useContext(ThemeContext);
     const themeToggle = themeContext ? (
@@ -151,11 +211,11 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
       </button>
     );
 
-    const hasItems = Boolean(items && items.length > 0);
+    const hasItems = resolvedItems.length > 0;
     const hasContent = loading || hasItems || Boolean(children);
 
     return (
-      <Popover.Root>
+      <Popover.Root open={popoverOpen} onOpenChange={setPopoverOpen}>
         <Popover.Trigger asChild>
           {trigger ?? headerStyleTrigger}
         </Popover.Trigger>
@@ -235,7 +295,7 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
               <div className="gsl-profile-menu__content">
                 {hasItems && (
                   <div className="gsl-profile-menu__items">
-                    {items!.map((item, index) => (
+                    {resolvedItems.map((item, index) => (
                       <button
                         key={index}
                         type="button"
@@ -260,7 +320,7 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
               <button
                 type="button"
                 className="gsl-profile-menu__item gsl-profile-menu__item--danger"
-                onClick={onSignOut}
+                onClick={handleSignOutClick}
               >
                 <LogOut size={20} strokeWidth={1.5} aria-hidden />
                 <span>Sign Out</span>
@@ -268,6 +328,36 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
             </div>
           </Popover.Content>
         </Popover.Portal>
+
+        <Dialog
+          open={confirmSignOutOpen}
+          onOpenChange={(open) => {
+            if (!open) setConfirmSignOutOpen(false);
+          }}
+        >
+          <DialogPortal>
+            <DialogOverlay />
+            <DialogContent aria-describedby={undefined}>
+              <DialogHeader>
+                <DialogTitle>Confirm Sign Out</DialogTitle>
+              </DialogHeader>
+              <DialogDescription>
+                Are you sure you want to sign out?
+              </DialogDescription>
+              <DialogFooter>
+                <Button
+                  variant="ghost"
+                  onClick={() => setConfirmSignOutOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="destructive" onClick={handleConfirmSignOut}>
+                  Sign Out
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </DialogPortal>
+        </Dialog>
       </Popover.Root>
     );
   },

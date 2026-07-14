@@ -56,10 +56,23 @@ export interface ProfilePopoverProps {
   trigger?: ReactNode;
   /** Merged onto the built-in trigger element (ignored when `trigger` is passed). */
   triggerClassName?: string;
-  /** Menu rows rendered below the header (e.g. "My Profile", "Account Settings") */
+  /**
+   * Menu rows rendered below the header. Defaults to "My Profile",
+   * "Account Settings", and "Help and Support" (wired to `onMyProfile`,
+   * `onAccountSettings`, `onHelpAndSupport`) — pass `items` to replace them
+   * entirely.
+   */
   items?: ProfilePopoverItem[];
-  /** Called when "Sign Out" is clicked */
+  /** Called when the default "My Profile" row is clicked (ignored when `items` is passed) */
+  onMyProfile?: () => void;
+  /** Called when the default "Account Settings" row is clicked (ignored when `items` is passed) */
+  onAccountSettings?: () => void;
+  /** Called when the default "Help and Support" row is clicked (ignored when `items` is passed) */
+  onHelpAndSupport?: () => void;
+  /** Called when "Sign Out" is confirmed (or clicked immediately, if `noConfirmSignOut` is set) */
   onSignOut?: () => void;
+  /** Skip the "Confirm Sign Out" dialog and call onSignOut immediately */
+  noConfirmSignOut?: boolean;
   /**
    * Show shimmering skeleton placeholders instead of the header
    * (avatar/name/email) and menu rows. The default trigger (when no

@@ -19,7 +19,7 @@ import profilePopoverLoadingSource from "../previews/examples/profile-popover-lo
 
 # ProfilePopover
 
-The single, unified profile menu — used directly by both [`AppHeader`](/app-header) (top-right, via `user`/`variant`) and [`SidebarFooter`](/sidebar#sidebarfooter) (bottom of the sidebar, via `fullName`). There is no separate `AppHeaderProfile` wrapper component — `ProfilePopover` **is** the app header's profile trigger. Renders an avatar/name/email header (with a built-in light/dark theme toggle at the far right, whenever a `ThemeProvider` wraps the tree), a dynamic list of `items` rows, an optional composable section for `children` (only a `RoleSelect` element is accepted), and a **Sign Out** row. `items` and `children` sit flush together in one content block with no divider between them — a divider only separates the header from that block, and that block from **Sign Out**. Nothing renders above **Sign Out** if `items` and `children` are both omitted.
+The single, unified profile menu — used directly by both [`AppHeader`](/app-header) (top-right, via `user`/`variant`) and [`SidebarFooter`](/sidebar#sidebarfooter) (bottom of the sidebar, via `fullName`). There is no separate `AppHeaderProfile` wrapper component — `ProfilePopover` **is** the app header's profile trigger. Renders an avatar/name/email header (with a built-in light/dark theme toggle at the far right, whenever a `ThemeProvider` wraps the tree), a dynamic list of `items` rows, an optional composable section for `children` (only a `RoleSelect` element is accepted), and a **Sign Out** row. `items` defaults to "My Profile", "Account Settings", and "Help and Support" — pass your own `items` array to replace them entirely. `items` and `children` sit flush together in one content block with no divider between them — a divider only separates the header from that block, and that block from **Sign Out**. Clicking **Sign Out** opens a "Confirm Sign Out" dialog before calling `onSignOut`, unless `noConfirmSignOut` is set.
 
 ## Example
 
@@ -62,8 +62,12 @@ Set `loading` to shimmer the default trigger and the header/menu rows inside the
 | `variant` | `"full" \| "avatar"` | `"full"` | Trigger layout when `user` is passed. `"full"` shows avatar + name/role + chevron; `"avatar"` shows only the avatar. Both open the same popover. |
 | `trigger` | `ReactNode` | built-in trigger | Custom trigger element — overrides the built-in trigger entirely (`user` or `fullName` based) |
 | `triggerClassName` | `string` | — | Merged onto the built-in trigger element (ignored when `trigger` is passed) |
-| `items` | `ProfilePopoverItem[]` | — | Menu rows rendered below the header |
-| `onSignOut` | `() => void` | — | Called when "Sign Out" is clicked |
+| `items` | `ProfilePopoverItem[]` | "My Profile" / "Account Settings" / "Help and Support" | Menu rows rendered below the header. Passing `items` replaces the three defaults entirely. |
+| `onMyProfile` | `() => void` | — | Called when the default "My Profile" row is clicked (ignored when `items` is passed) |
+| `onAccountSettings` | `() => void` | — | Called when the default "Account Settings" row is clicked (ignored when `items` is passed) |
+| `onHelpAndSupport` | `() => void` | — | Called when the default "Help and Support" row is clicked (ignored when `items` is passed) |
+| `onSignOut` | `() => void` | — | Called when "Sign Out" is confirmed (or clicked immediately, if `noConfirmSignOut` is set) |
+| `noConfirmSignOut` | `boolean` | `false` | Skip the "Confirm Sign Out" dialog and call `onSignOut` immediately |
 | `loading` | `boolean` | `false` | Shimmer the default trigger and the header/menu rows — see [Loading state](#loading-state) |
 | `loadingLabel` | `string` | `"Loading profile"` | Accessible label announced while loading |
 | `children` | `ReactElement<RoleSelectProps>` | — | Extra composable content rendered directly below `items`, no divider between them — only a `RoleSelect` element is accepted |

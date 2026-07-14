@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
-import { Loader2 } from "lucide-react";
+import { Loader2, Maximize2 } from "lucide-react";
 import { useLaunchpad } from "./hooks/useLaunchpad";
 import { Button } from "../button/Button";
 import {
@@ -19,8 +19,8 @@ import "./styles/launchpad.css";
 
 /**
  * Max apps shown in the popover grid — fixed, not configurable. The
- * built-in "See all" button opens an expanded modal showing every app in
- * `apps` (uncapped) on the same tile system, scaled up.
+ * built-in expand button opens a modal showing every app in `apps`
+ * (uncapped) on the same tile system, scaled up.
  */
 const MAX_APPS = 9;
 
@@ -28,7 +28,7 @@ const MAX_APPS = 9;
 const TITLE = "Launchpad";
 const EXPAND_TITLE = "Launchpad";
 const TRIGGER_LABEL = "Open Launchpad";
-const SEE_ALL_LABEL = "See all";
+const SEE_MORE_LABEL = "See more";
 
 export function Launchpad({
   apps,
@@ -55,6 +55,7 @@ export function Launchpad({
   const [expandOpen, setExpandOpen] = useState(false);
 
   const visibleApps = apps.slice(0, MAX_APPS);
+  const hasOverflow = apps.length > MAX_APPS;
 
   const handleAppSelect = useCallback(
     (app: LaunchpadApp) => {
@@ -111,7 +112,24 @@ export function Launchpad({
               sideOffset={8}
               aria-label={TITLE}
             >
-              <div className="gsl-launchpad__title">{TITLE}</div>
+              <div className="gsl-launchpad__header">
+                <div className="gsl-launchpad__title">{TITLE}</div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="gsl-launchpad__see-more"
+                  onClick={handleSeeAll}
+                  aria-label={hasOverflow ? undefined : SEE_MORE_LABEL}
+                >
+                  {hasOverflow ? (
+                    <span className="gsl-launchpad__see-more-label">
+                      {SEE_MORE_LABEL}
+                    </span>
+                  ) : null}
+                  <Maximize2 size={14} strokeWidth={2} aria-hidden />
+                </Button>
+              </div>
 
               {loading ? (
                 <div
@@ -146,16 +164,9 @@ export function Launchpad({
                     ))}
                   </div>
                 ) : null}
-
-                {apps.length > MAX_APPS ? (
-                  <div className="gsl-launchpad__footer">
-                    <Button variant="outline" onClick={handleSeeAll}>
-                      {SEE_ALL_LABEL}
-                    </Button>
-                  </div>
-                ) : null}
-                {children}
               </div>
+
+              <div className="gsl-launchpad__footer">{children}</div>
             </Popover.Content>
           </Popover.Portal>
         </div>

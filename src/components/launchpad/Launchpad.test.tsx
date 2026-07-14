@@ -15,20 +15,31 @@ const staticApps: LaunchpadApp[] = [
   },
 ];
 
+function roleSelect() {
+  return (
+    <RoleSelect
+      title="View as"
+      roles={[{ id: "admin", name: "Admin" }]}
+      selectedRole="admin"
+      onClickRole={() => {}}
+    />
+  );
+}
+
 describe("Launchpad", () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
   });
 
-  it("renders static apps when the panel is opened, under the fixed Launch Pad title", async () => {
+  it("renders static apps when the panel is opened, under the fixed Launchpad title", async () => {
     const user = userEvent.setup();
 
-    render(<Launchpad apps={staticApps} />);
+    render(<Launchpad apps={staticApps}>{roleSelect()}</Launchpad>);
 
     await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
 
-    expect(screen.getByText("Launch Pad")).toBeInTheDocument();
+    expect(screen.getByText("Launchpad")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Mail/i })).toBeInTheDocument();
   });
 
@@ -36,7 +47,11 @@ describe("Launchpad", () => {
     const user = userEvent.setup();
     const onAppSelect = vi.fn();
 
-    render(<Launchpad apps={staticApps} onAppSelect={onAppSelect} />);
+    render(
+      <Launchpad apps={staticApps} onAppSelect={onAppSelect}>
+        {roleSelect()}
+      </Launchpad>,
+    );
 
     await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
     await user.click(screen.getByRole("link", { name: /Mail/i }));
@@ -49,7 +64,11 @@ describe("Launchpad", () => {
   it("shows only a spinner (no text label) when loading is true", async () => {
     const user = userEvent.setup();
 
-    render(<Launchpad apps={[]} loading />);
+    render(
+      <Launchpad apps={[]} loading>
+        {roleSelect()}
+      </Launchpad>,
+    );
 
     await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
 
@@ -69,7 +88,7 @@ describe("Launchpad", () => {
       icon: <SystemLaunchpadIcon name={`App ${i}`} />,
     }));
 
-    render(<Launchpad apps={apps} />);
+    render(<Launchpad apps={apps}>{roleSelect()}</Launchpad>);
 
     await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
 
@@ -79,14 +98,28 @@ describe("Launchpad", () => {
   it("shows an empty message when not loading and apps is empty", async () => {
     const user = userEvent.setup();
 
-    render(<Launchpad apps={[]} />);
+    render(<Launchpad apps={[]}>{roleSelect()}</Launchpad>);
 
     await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
 
     expect(screen.getByText("No systems available.")).toBeInTheDocument();
   });
 
-  it("opens the expanded Launchpad modal, showing every app uncapped, when See all is clicked", async () => {
+  it("shows the expand button without a 'See more' label when apps fit within the cap", async () => {
+    const user = userEvent.setup();
+
+    render(<Launchpad apps={staticApps}>{roleSelect()}</Launchpad>);
+
+    await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
+
+    const expandButton = screen.getByRole("button", { name: "See more" });
+    expect(expandButton).toBeInTheDocument();
+    expect(
+      document.querySelector(".gsl-launchpad__see-more-label"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows the 'See more' label on the expand button when apps overflow the cap", async () => {
     const user = userEvent.setup();
     const apps: LaunchpadApp[] = Array.from({ length: 12 }, (_, i) => ({
       id: `app-${i}`,
@@ -94,10 +127,27 @@ describe("Launchpad", () => {
       icon: <SystemLaunchpadIcon name={`App ${i}`} />,
     }));
 
-    render(<Launchpad apps={apps} />);
+    render(<Launchpad apps={apps}>{roleSelect()}</Launchpad>);
 
     await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
-    await user.click(screen.getByRole("button", { name: "See all" }));
+
+    expect(
+      document.querySelector(".gsl-launchpad__see-more-label"),
+    ).toHaveTextContent("See more");
+  });
+
+  it("opens the expanded Launchpad modal, showing every app uncapped, when the expand button is clicked", async () => {
+    const user = userEvent.setup();
+    const apps: LaunchpadApp[] = Array.from({ length: 12 }, (_, i) => ({
+      id: `app-${i}`,
+      name: `App ${i}`,
+      icon: <SystemLaunchpadIcon name={`App ${i}`} />,
+    }));
+
+    render(<Launchpad apps={apps}>{roleSelect()}</Launchpad>);
+
+    await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
+    await user.click(screen.getByRole("button", { name: "See more" }));
 
     expect(screen.getByRole("heading", { name: "Launchpad" })).toBeInTheDocument();
     expect(document.querySelectorAll(".gsl-launchpad__expand-grid .gsl-launchpad__tile")).toHaveLength(12);
@@ -107,10 +157,14 @@ describe("Launchpad", () => {
     const user = userEvent.setup();
     const onAppSelect = vi.fn();
 
-    render(<Launchpad apps={staticApps} onAppSelect={onAppSelect} />);
+    render(
+      <Launchpad apps={staticApps} onAppSelect={onAppSelect}>
+        {roleSelect()}
+      </Launchpad>,
+    );
 
     await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
-    await user.click(screen.getByRole("button", { name: "See all" }));
+    await user.click(screen.getByRole("button", { name: "See more" }));
     await user.click(screen.getByRole("link", { name: /Mail/i }));
 
     expect(onAppSelect).toHaveBeenCalledWith(
@@ -119,7 +173,7 @@ describe("Launchpad", () => {
     expect(screen.queryByRole("heading", { name: "Launchpad" })).not.toBeInTheDocument();
   });
 
-  it("renders a role switcher below the grid via children", async () => {
+  it("renders the role switcher below the grid via children", async () => {
     const user = userEvent.setup();
 
     render(
@@ -136,5 +190,19 @@ describe("Launchpad", () => {
     await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
 
     expect(screen.getByText("View as")).toBeInTheDocument();
+  });
+
+  it("renders the role switcher and footer divider outside the scrollable/masked grid area", async () => {
+    const user = userEvent.setup();
+
+    render(<Launchpad apps={staticApps}>{roleSelect()}</Launchpad>);
+
+    await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
+
+    const gridScroll = document.querySelector(".gsl-launchpad__grid-scroll");
+    const footer = document.querySelector(".gsl-launchpad__footer");
+    expect(footer).not.toBeNull();
+    expect(gridScroll?.contains(footer)).toBe(false);
+    expect(footer?.textContent).toContain("View as");
   });
 });

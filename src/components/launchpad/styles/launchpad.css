@@ -125,14 +125,33 @@
   }
 }
 
-.gsl-launchpad__title {
+.gsl-launchpad__header {
+  position: relative;
   padding-top: 16px;
   padding-bottom: 4px;
+}
+
+.gsl-launchpad__title {
   font-family: var(--gsl-font-header);
   font-size: 16px;
   font-weight: 600;
   color: var(--gsl-text);
   text-align: center;
+}
+
+.gsl-launchpad__see-more.gsl-button {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  min-height: auto;
+  padding: 2px 6px;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--gsl-text-secondary);
+}
+
+.gsl-launchpad__see-more .gsl-button__label {
+  gap: 4px;
 }
 
 .gsl-launchpad__grid {
@@ -397,7 +416,7 @@
   border-top: 1px solid var(--gsl-border);
 }
 
-/* "See all" expanded modal — a scaled-up version of the popover: same
+/* Expanded modal — a scaled-up version of the popover: same
    tile system, bigger grid, no standard Modal header/footer chrome.
    Compound selectors (.gsl-modal.gsl-launchpad__expand, etc.) so these
    overrides win regardless of CSS import order relative to modal.css. */
