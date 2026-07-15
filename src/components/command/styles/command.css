@@ -1,13 +1,13 @@
 .clet-command {
-  --clet-command-font: var(--clet-font-body);
+  --clet-command-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  font-family: var(--clet-command-font);
-  color: var(--clet-text);
+  font-family: var(--gsl-command-font, var(--clet-command-font));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-command:not(.clet-command--dialog) {
@@ -28,8 +28,8 @@
 .clet-command-dialog__overlay {
   position: fixed;
   inset: 0;
-  z-index: var(--clet-z-overlay);
-  background: var(--clet-overlay);
+  z-index: var(--gsl-z-overlay, var(--clet-z-overlay));
+  background: var(--gsl-overlay, var(--clet-overlay));
 }
 
 .clet-command-dialog__overlay[data-state="open"] {
@@ -41,24 +41,24 @@
 }
 
 .clet-command-dialog__content {
-  --clet-command-dialog-font: var(--clet-font-body);
+  --clet-command-dialog-font: var(--gsl-font-body, var(--clet-font-body));
 
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: var(--clet-z-modal);
+  z-index: var(--gsl-z-modal, var(--clet-z-modal));
   display: flex;
   width: min(560px, calc(100vw - 32px));
   max-width: 100%;
   max-height: 85vh;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
-  box-shadow: var(--clet-shadow-lg);
-  font-family: var(--clet-command-dialog-font);
-  color: var(--clet-text);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
+  font-family: var(--gsl-command-dialog-font, var(--clet-command-dialog-font));
+  color: var(--gsl-text, var(--clet-text));
   transform: translate(-50%, -50%);
 }
 
@@ -121,7 +121,7 @@
   box-sizing: border-box;
   min-height: 44px;
   padding: 10px 14px;
-  background: var(--clet-bg);
+  background: var(--gsl-bg, var(--clet-bg));
 }
 
 .clet-command:not(.clet-command--dialog) .clet-command__input-wrapper {
@@ -129,20 +129,20 @@
   height: 40px;
   min-height: 40px;
   padding: 0 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-xl);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
 }
 
 .clet-command--dialog .clet-command__input-wrapper {
-  border-bottom: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base) var(--clet-radius-base) 0 0;
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base)) var(--gsl-radius-base, var(--clet-radius-base)) 0 0;
 }
 
 .clet-command__input-icon {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-command__input-clear {
@@ -152,14 +152,14 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: pointer;
   border-radius: 4px;
   transition: color 120ms ease;
 }
 
 .clet-command__input-clear:hover {
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-command__input {
@@ -170,7 +170,7 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   font-family: inherit;
   font-size: 14px;
   line-height: 1.4;
@@ -178,7 +178,7 @@
 }
 
 .clet-command__input::placeholder {
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-command__input:focus-visible {
@@ -186,7 +186,7 @@
 }
 
 .clet-command__input-wrapper:focus-within {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: -2px;
 }
 
@@ -201,14 +201,14 @@
   gap: 4px;
   flex-shrink: 0;
   padding: 4px 8px;
-  border: 1px solid var(--clet-border);
+  border: 1px solid var(--gsl-border, var(--clet-border));
   border-radius: 6px;
-  background: var(--clet-surface-subtle);
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
   font-family: inherit;
   font-size: 12px;
   line-height: 1;
   font-weight: inherit;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-command__shortcut {
@@ -224,12 +224,12 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  z-index: var(--clet-z-select);
+  z-index: var(--gsl-z-select, var(--clet-z-select));
   min-width: var(--radix-popover-trigger-width);
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-xl);
-  box-shadow: var(--clet-shadow-lg);
-  background: var(--clet-bg);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
+  background: var(--gsl-bg, var(--clet-bg));
   overflow: hidden;
 }
 
@@ -242,7 +242,7 @@
   max-height: min(320px, 50dvh);
   overflow: hidden auto;
   padding: 6px;
-  background: var(--clet-bg);
+  background: var(--gsl-bg, var(--clet-bg));
 }
 
 .clet-command:not(.clet-command--dialog) .clet-command__list {
@@ -262,7 +262,7 @@
   font-size: 14px;
   line-height: 1.4;
   text-align: center;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-command__group {
@@ -290,7 +290,7 @@
   width: 100%;
   height: 12px;
   border-radius: 6px;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
   animation: clet-command-skeleton-pulse 1.5s ease-in-out infinite;
 }
 
@@ -306,7 +306,7 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-command__item {
@@ -315,34 +315,34 @@
   gap: 8px;
   min-height: 40px;
   padding: 8px 10px;
-  border-radius: calc(var(--clet-radius-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
   font-size: 14px;
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   cursor: pointer;
   user-select: none;
   transition: background-color 120ms ease, color 120ms ease;
 }
 
 .clet-command__item[data-selected="true"] {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-command__item[data-disabled="true"] {
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .clet-command__item:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: -2px;
 }
 
 .clet-command__separator {
   height: 1px;
   margin: 4px 6px;
-  background: var(--clet-border);
+  background: var(--gsl-border, var(--clet-border));
 }
 
 .clet-command__loading {

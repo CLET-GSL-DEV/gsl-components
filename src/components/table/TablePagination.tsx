@@ -142,13 +142,13 @@ export const TablePagination = forwardRef<
   return (
     <div
       ref={ref}
-      className={cn("clet-table__pagination", classNames?.root, className)}
+      className={cn("clet-table__pagination gsl-table__pagination", classNames?.root, className)}
     >
       {totalItems != null && (
-        <div className={cn("clet-table__page-results", classNames?.results)}>
+        <div className={cn("clet-table__page-results gsl-table__page-results", classNames?.results)}>
           Showing {start}&ndash;{end} of {totalItems}
           <Dropdown
-            className={cn("clet-table__page-size", classNames?.pageSize)}
+            className={cn("clet-table__page-size gsl-table__page-size", classNames?.pageSize)}
             value={String(pageSize)}
             onValueChange={(v) => v && setPageSize(Number(v))}
             options={pageSizeOptions.map((s) => ({
@@ -159,7 +159,7 @@ export const TablePagination = forwardRef<
         </div>
       )}
 
-      <div className={cn("clet-table__pagination-pages", classNames?.pages)}>
+      <div className={cn("clet-table__pagination-pages gsl-table__pagination-pages", classNames?.pages)}>
         <Button
           variant="ghost"
           size="sm"
@@ -175,7 +175,7 @@ export const TablePagination = forwardRef<
           p === "ellipsis" ? (
             <span
               key={`ellipsis-${i}`}
-              className={cn("clet-table__page-ellipsis", classNames?.ellipsis)}
+              className={cn("clet-table__page-ellipsis gsl-table__page-ellipsis", classNames?.ellipsis)}
             >
               &hellip;
             </span>

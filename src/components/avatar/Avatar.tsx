@@ -48,7 +48,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
     <div
       ref={ref}
       className={cn(
-        "clet-avatar",
+        "clet-avatar gsl-avatar",
         typeof size === "string" && `clet-avatar--${size}`,
         classNames?.root,
         className,
@@ -61,14 +61,14 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
     >
       {src && !imgError ? (
         <img
-          className={cn("clet-avatar__image", classNames?.image)}
+          className={cn("clet-avatar__image gsl-avatar__image", classNames?.image)}
           src={src}
           alt={name}
           onError={() => setImgError(true)}
         />
       ) : (
         <span
-          className={cn("clet-avatar__initials", classNames?.initials)}
+          className={cn("clet-avatar__initials gsl-avatar__initials", classNames?.initials)}
           style={{
             background: resolvedBackground,
             fontSize: fontSizeForSize(dimension),

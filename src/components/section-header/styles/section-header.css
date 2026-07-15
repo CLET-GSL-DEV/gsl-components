@@ -1,6 +1,6 @@
 .clet-section-header {
-  --clet-section-header-font: var(--clet-font-body);
-  --clet-section-header-title-font: var(--clet-font-header);
+  --clet-section-header-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-section-header-title-font: var(--gsl-font-header, var(--clet-font-header));
   --clet-section-header-title-size: 40px;
   --clet-section-header-description-size: 14px;
   --clet-section-header-margin-bottom: 24px;
@@ -10,26 +10,26 @@
   align-items: center;
   gap: 4px 16px;
   width: 100%;
-  margin-bottom: var(--clet-section-header-margin-bottom);
-  font-family: var(--clet-section-header-font);
+  margin-bottom: var(--gsl-section-header-margin-bottom, var(--clet-section-header-margin-bottom));
+  font-family: var(--gsl-section-header-font, var(--clet-section-header-font));
 }
 
 .clet-section-header__title {
   grid-column: 1;
   grid-row: 1;
   margin: 0;
-  font-family: var(--clet-section-header-title-font);
-  font-size: var(--clet-section-header-title-size);
+  font-family: var(--gsl-section-header-title-font, var(--clet-section-header-title-font));
+  font-size: var(--gsl-section-header-title-size, var(--clet-section-header-title-size));
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-section-header__description {
   grid-column: 1;
   grid-row: 2;
   margin: 0;
-  font-size: var(--clet-section-header-description-size);
-  color: var(--clet-text-secondary);
+  font-size: var(--gsl-section-header-description-size, var(--clet-section-header-description-size));
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-section-header__actions {

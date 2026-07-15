@@ -1,4 +1,5 @@
-.clet-theme {
+.clet-theme,
+.gsl-theme {
   color-scheme: light dark;
 }
 
@@ -7,18 +8,19 @@
 }
 
 body {
-  background: var(--clet-main-bg);
+  background: var(--gsl-main-bg, var(--clet-main-bg));
 }
 
 :root,
-.clet-theme {
+.clet-theme,
+.gsl-theme {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --clet-font:
     -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue",
     arial, sans-serif;
-  --clet-font-header: "Roboto Serif", var(--clet-font);
-  --clet-font-body: "Lato", var(--clet-font);
+  --clet-font-header: "Roboto Serif", var(--gsl-font, var(--clet-font));
+  --clet-font-body: "Lato", var(--gsl-font, var(--clet-font));
   --clet-text-size-xs: 12px;
   --clet-text-size-sm: 13px;
   --clet-text-size-base: 14px;
@@ -40,7 +42,7 @@ body {
   --clet-z-alert: 1200;
   --clet-z-alert-content: 1201;
   --clet-z-dropdown: 1300;
-  --clet-surface-card: var(--clet-bg);
+  --clet-surface-card: var(--gsl-bg, var(--clet-bg));
 }
 
 /* ── Shared shimmer loading utility ──
@@ -50,7 +52,7 @@ body {
 .clet-skeleton {
   position: relative;
   overflow: hidden;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-skeleton::after {
@@ -61,7 +63,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--clet-shimmer-highlight),
+    var(--gsl-shimmer-highlight, var(--clet-shimmer-highlight)),
     transparent
   );
   animation: clet-shimmer 1.6s ease-in-out infinite;

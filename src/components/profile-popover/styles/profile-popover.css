@@ -5,7 +5,7 @@
   width: 100%;
   padding: 8px;
   border: none;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   background: transparent;
   color: inherit;
   font-family: inherit;
@@ -15,11 +15,11 @@
 }
 
 .clet-profile-menu__trigger:hover {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-profile-menu__trigger:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
@@ -34,7 +34,7 @@
   overflow: hidden;
   font-size: 13px;
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -42,7 +42,7 @@
 .clet-profile-menu__trigger-email {
   overflow: hidden;
   font-size: 11px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -79,12 +79,12 @@
 .clet-app-header__user-name {
   font-size: 13px;
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-app-header__user-role {
   font-size: 11px;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-app-header__sr-only {
@@ -127,12 +127,12 @@
 .clet-profile-menu {
   width: 320px;
   padding: 0;
-  background: var(--clet-bg);
-  border-radius: var(--clet-radius-xl);
-  box-shadow: var(--clet-shadow-md);
-  border: 1px solid var(--clet-border);
+  background: var(--gsl-bg, var(--clet-bg));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
+  border: 1px solid var(--gsl-border, var(--clet-border));
   outline: none;
-  z-index: var(--clet-z-popover);
+  z-index: var(--gsl-z-popover, var(--clet-z-popover));
   opacity: 0;
   transform: translateY(4px);
 }
@@ -181,13 +181,13 @@
 .clet-profile-menu__name {
   font-size: 14px;
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   line-height: 1.4;
 }
 
 .clet-profile-menu__email {
   font-size: 12px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   line-height: 1.4;
   word-break: break-all;
 }
@@ -206,24 +206,24 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .clet-profile-menu__header-action-btn:hover {
-  background: var(--clet-hover);
-  color: var(--clet-text);
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-profile-menu__header-action-btn:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 .clet-profile-menu__divider {
   height: 1px;
-  background: var(--clet-border);
+  background: var(--gsl-border, var(--clet-border));
 }
 
 .clet-profile-menu__items {
@@ -250,9 +250,9 @@
   width: 100%;
   padding: 8px 10px;
   border: none;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   font-family: inherit;
   font-size: 14px;
   text-align: left;
@@ -261,20 +261,20 @@
 }
 
 .clet-profile-menu__item:hover {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-profile-menu__item:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: -2px;
 }
 
 .clet-profile-menu__item--danger {
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-profile-menu__item--danger:hover {
-  background: var(--clet-error-bg);
+  background: var(--gsl-error-bg, var(--clet-error-bg));
 }
 
 /* ── Loading shimmer ────────────────────────────────────── */

@@ -1,69 +1,69 @@
 @theme {
-  --color-background: var(--clet-main-bg);
-  --color-foreground: var(--clet-text);
+  --color-background: var(--gsl-main-bg, var(--clet-main-bg));
+  --color-foreground: var(--gsl-text, var(--clet-text));
 
-  --color-primary: var(--clet-primary);
-  --color-primary-foreground: var(--clet-on-primary);
-  --color-primary-light: var(--clet-primary-light);
+  --color-primary: var(--gsl-primary, var(--clet-primary));
+  --color-primary-foreground: var(--gsl-on-primary, var(--clet-on-primary));
+  --color-primary-light: var(--gsl-primary-light, var(--clet-primary-light));
 
   /* NOTE: --color-secondary intentionally maps to the neutral surface-dark tone
      (existing Tailwind convention in this repo), NOT to the gold brand token
      --clet-secondary. The gold brand color is exposed separately below as
      --color-brand-gold so both remain reachable without changing --color-secondary's
      existing meaning for consumers already using bg-secondary/text-secondary. */
-  --color-secondary: var(--clet-surface-dark);
-  --color-secondary-foreground: var(--clet-text-secondary);
-  --color-brand-gold: var(--clet-secondary);
+  --color-secondary: var(--gsl-surface-dark, var(--clet-surface-dark));
+  --color-secondary-foreground: var(--gsl-text-secondary, var(--clet-text-secondary));
+  --color-brand-gold: var(--gsl-secondary, var(--clet-secondary));
 
-  --color-muted: var(--clet-surface-subtle);
-  --color-muted-foreground: var(--clet-text-secondary);
-  --color-text-muted: var(--clet-text-muted);
+  --color-muted: var(--gsl-surface-subtle, var(--clet-surface-subtle));
+  --color-muted-foreground: var(--gsl-text-secondary, var(--clet-text-secondary));
+  --color-text-muted: var(--gsl-text-muted, var(--clet-text-muted));
 
-  --color-accent: var(--clet-hover);
-  --color-accent-foreground: var(--clet-text);
+  --color-accent: var(--gsl-hover, var(--clet-hover));
+  --color-accent-foreground: var(--gsl-text, var(--clet-text));
 
-  --color-destructive: var(--clet-error);
-  --color-destructive-foreground: var(--clet-error-text);
-  --color-destructive-bg: var(--clet-error-bg);
+  --color-destructive: var(--gsl-error, var(--clet-error));
+  --color-destructive-foreground: var(--gsl-error-text, var(--clet-error-text));
+  --color-destructive-bg: var(--gsl-error-bg, var(--clet-error-bg));
 
-  --color-success: var(--clet-success);
-  --color-success-foreground: var(--clet-on-primary);
+  --color-success: var(--gsl-success, var(--clet-success));
+  --color-success-foreground: var(--gsl-on-primary, var(--clet-on-primary));
 
-  --color-warning: var(--clet-warning);
-  --color-warning-foreground: var(--clet-text);
+  --color-warning: var(--gsl-warning, var(--clet-warning));
+  --color-warning-foreground: var(--gsl-text, var(--clet-text));
 
-  --color-card: var(--clet-bg);
-  --color-card-foreground: var(--clet-text);
+  --color-card: var(--gsl-bg, var(--clet-bg));
+  --color-card-foreground: var(--gsl-text, var(--clet-text));
 
-  --color-popover: var(--clet-bg);
-  --color-popover-foreground: var(--clet-text);
+  --color-popover: var(--gsl-bg, var(--clet-bg));
+  --color-popover-foreground: var(--gsl-text, var(--clet-text));
 
-  --color-panel: var(--clet-surface-panel);
+  --color-panel: var(--gsl-surface-panel, var(--clet-surface-panel));
 
-  --color-border: var(--clet-border);
-  --color-border-strong: var(--clet-border-strong);
-  --color-border-subtle: var(--clet-border-subtle);
-  --color-input: var(--clet-border-strong);
-  --color-ring: var(--clet-focus);
+  --color-border: var(--gsl-border, var(--clet-border));
+  --color-border-strong: var(--gsl-border-strong, var(--clet-border-strong));
+  --color-border-subtle: var(--gsl-border-subtle, var(--clet-border-subtle));
+  --color-input: var(--gsl-border-strong, var(--clet-border-strong));
+  --color-ring: var(--gsl-focus, var(--clet-focus));
 
-  --radius: var(--clet-radius-base);
-  --radius-xl: var(--clet-radius-xl);
-  --radius-2xl: var(--clet-radius-2xl);
+  --radius: var(--gsl-radius-base, var(--clet-radius-base));
+  --radius-xl: var(--gsl-radius-xl, var(--clet-radius-xl));
+  --radius-2xl: var(--gsl-radius-2xl, var(--clet-radius-2xl));
 
-  --font-family-sans: var(--clet-font);
-  --font-family-header: var(--clet-font-header);
-  --font-family-body: var(--clet-font-body);
+  --font-family-sans: var(--gsl-font, var(--clet-font));
+  --font-family-header: var(--gsl-font-header, var(--clet-font-header));
+  --font-family-body: var(--gsl-font-body, var(--clet-font-body));
 
-  --text-xs: var(--clet-text-size-xs);
-  --text-sm: var(--clet-text-size-sm);
-  --text-base: var(--clet-text-size-base);
-  --text-md: var(--clet-text-size-md);
-  --text-lg: var(--clet-text-size-lg);
-  --text-xl: var(--clet-text-size-xl);
+  --text-xs: var(--gsl-text-size-xs, var(--clet-text-size-xs));
+  --text-sm: var(--gsl-text-size-sm, var(--clet-text-size-sm));
+  --text-base: var(--gsl-text-size-base, var(--clet-text-size-base));
+  --text-md: var(--gsl-text-size-md, var(--clet-text-size-md));
+  --text-lg: var(--gsl-text-size-lg, var(--clet-text-size-lg));
+  --text-xl: var(--gsl-text-size-xl, var(--clet-text-size-xl));
 
-  --shadow-sm: var(--clet-shadow-sm);
-  --shadow-md: var(--clet-shadow-md);
-  --shadow-lg: var(--clet-shadow-lg);
+  --shadow-sm: var(--gsl-shadow-sm, var(--clet-shadow-sm));
+  --shadow-md: var(--gsl-shadow-md, var(--clet-shadow-md));
+  --shadow-lg: var(--gsl-shadow-lg, var(--clet-shadow-lg));
 }
 
 /* ── Global token → Tailwind coverage checklist ──
@@ -83,5 +83,5 @@
    - --clet-surface-card (already equal to --clet-bg / --color-card)
    No --clet-success-bg or --clet-warning-bg tokens exist yet (unlike error, which
    has -bg/-text companions) — new variants needing a tinted success/warning
-   background should use color-mix(in srgb, var(--clet-success) N%, transparent)
+   background should use color-mix(in srgb, var(--gsl-success, var(--clet-success)) N%, transparent)
    (see Badge/Notice) rather than inventing new global tokens for a single use. */

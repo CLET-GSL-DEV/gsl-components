@@ -60,16 +60,16 @@ export const AppHeader = ({
     return (
       <div
         className={cn(
-          "clet-app-header",
-          "clet-app-header--mobile",
-          variant === "plain" && "clet-app-header--plain",
+          "clet-app-header gsl-app-header",
+          "clet-app-header--mobile gsl-app-header--mobile",
+          variant === "plain" && "clet-app-header--plain gsl-app-header--plain",
           className,
         )}
         {...props}
       >
         <button
           type="button"
-          className="clet-app-header__menu-btn"
+          className="clet-app-header__menu-btn gsl-app-header__menu-btn"
           aria-label="Open menu"
           aria-expanded={sidebar.open}
           aria-controls={sidebar.sidebarId}
@@ -77,7 +77,7 @@ export const AppHeader = ({
         >
           <Menu size={20} strokeWidth={1.75} aria-hidden />
         </button>
-        <div className="clet-app-header__right">
+        <div className="clet-app-header__right gsl-app-header__right">
           {appSwitcher}
           {profile}
         </div>
@@ -88,8 +88,8 @@ export const AppHeader = ({
   return (
     <div
       className={cn(
-        "clet-app-header",
-        variant === "plain" && "clet-app-header--plain",
+        "clet-app-header gsl-app-header",
+        variant === "plain" && "clet-app-header--plain gsl-app-header--plain",
         className,
       )}
       {...props}
@@ -101,7 +101,7 @@ export const AppHeader = ({
 
 export const AppHeaderActions = ({ className, children, ...props }: AppHeaderActionsProps) => {
   return (
-    <div className={cn("clet-app-header__right", className)} {...props}>
+    <div className={cn("clet-app-header__right gsl-app-header__right", className)} {...props}>
       {children}
     </div>
   );
@@ -115,20 +115,20 @@ export const AppHeaderBranding = ({
   children,
 }: AppHeaderBrandingProps) => {
   return (
-    <div className={cn("clet-app-header__branding", className)}>
-      {logo && <span className="clet-app-header__branding-logo">{logo}</span>}
+    <div className={cn("clet-app-header__branding gsl-app-header__branding", className)}>
+      {logo && <span className="clet-app-header__branding-logo gsl-app-header__branding-logo">{logo}</span>}
       {children ?? (
-        <span className="clet-app-header__branding-text">
+        <span className="clet-app-header__branding-text gsl-app-header__branding-text">
           {title && (
-            <span className="clet-app-header__branding-title">{title}</span>
+            <span className="clet-app-header__branding-title gsl-app-header__branding-title">{title}</span>
           )}
           {title && subtitle && (
-            <span className="clet-app-header__branding-sep" aria-hidden>
+            <span className="clet-app-header__branding-sep gsl-app-header__branding-sep" aria-hidden>
               -
             </span>
           )}
           {subtitle && (
-            <span className="clet-app-header__branding-subtitle">{subtitle}</span>
+            <span className="clet-app-header__branding-subtitle gsl-app-header__branding-subtitle">{subtitle}</span>
           )}
         </span>
       )}

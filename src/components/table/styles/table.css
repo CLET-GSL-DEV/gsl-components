@@ -1,11 +1,11 @@
 /* ── Root ── */
 
 .clet-table {
-  --clet-table-font: var(--clet-font-body);
+  --clet-table-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: flex;
   flex-direction: column;
-  font-family: var(--clet-table-font);
+  font-family: var(--gsl-table-font, var(--clet-table-font));
   position: relative;
 }
 
@@ -35,23 +35,23 @@
   gap: 6px;
   padding: 8px 16px;
   height: stretch;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
   min-width: 320px;
   transition: border-color 150ms ease;
 }
 .clet-table__search:hover {
-  border-color: var(--clet-border-strong);
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
 }
 
 .clet-table__search:focus-within {
-  box-shadow: 0 0 0 1px var(--clet-primary);
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-table__search-icon {
   flex-shrink: 0;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-table__search-input {
@@ -60,14 +60,14 @@
   border: none;
   outline: none;
   background: transparent;
-  font-family: var(--clet-table-font);
+  font-family: var(--gsl-table-font, var(--clet-table-font));
   font-size: 13px;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   line-height: 1.4;
 }
 
 .clet-table__search-input::placeholder {
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-table__search-clear {
@@ -80,17 +80,17 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: pointer;
   transition: color 150ms ease;
 }
 
 .clet-table__search-clear:hover {
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-table__search-clear:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
@@ -102,11 +102,11 @@
   gap: 6px;
   height: 34px;
   padding: 0 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
-  color: var(--clet-text-secondary);
-  font-family: var(--clet-table-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  font-family: var(--gsl-table-font, var(--clet-table-font));
   font-size: 13px;
   cursor: pointer;
   white-space: nowrap;
@@ -123,8 +123,8 @@
   height: 18px;
   padding: 0 5px;
   border-radius: 9px;
-  background: var(--clet-primary);
-  color: var(--clet-on-primary);
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
   font-size: 11px;
   font-weight: 600;
   line-height: 1;
@@ -140,28 +140,28 @@
   margin-bottom: 16px;
 }
 .clet-table__filter-trigger:hover {
-  background: var(--clet-hover);
-  border-color: var(--clet-border-strong);
+  background: var(--gsl-hover, var(--clet-hover));
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
 }
 
 .clet-table__filter-trigger:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 .clet-table__filter-content {
-  --clet-table-filter-font: var(--clet-font-body);
+  --clet-table-filter-font: var(--gsl-font-body, var(--clet-font-body));
 
-  z-index: var(--clet-z-popover);
+  z-index: var(--gsl-z-popover, var(--clet-z-popover));
   min-width: 240px;
   max-width: calc(100vw - 32px);
   padding: 16px;
-  background: var(--clet-bg);
-  border-radius: var(--clet-radius-base);
+  background: var(--gsl-bg, var(--clet-bg));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   box-shadow: 0 1px 10px rgb(0 0 0 / 10%);
 }
 [data-clet-theme="dark"] .clet-table__filter-content {
-  border: 1px solid var(--clet-border);
+  border: 1px solid var(--gsl-border, var(--clet-border));
   box-shadow: 0 1px 20px rgb(0 0 0 / 60%);
 }
 
@@ -184,9 +184,9 @@
   justify-content: center;
   height: 32px;
   padding: 0 14px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  font-family: var(--clet-table-filter-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  font-family: var(--gsl-table-filter-font, var(--clet-table-filter-font));
   font-size: 13px;
   cursor: pointer;
   transition:
@@ -200,7 +200,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  color: var(--clet-error-text);
+  color: var(--gsl-error-text, var(--clet-error-text));
   border: none;
 }
 
@@ -210,9 +210,9 @@
 }
 
 .clet-table__filter-btn--apply {
-  background: var(--clet-primary);
-  color: var(--clet-on-primary);
-  border-color: var(--clet-primary);
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
+  border-color: var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-table__filter-btn--apply:hover {
@@ -266,7 +266,7 @@
   overflow-x: auto;
   scrollbar-width: none;
 
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
 }
 
 .clet-table__content::-webkit-scrollbar {
@@ -286,18 +286,18 @@
 }
 
 .clet-table__content thead th:first-child {
-  border-top-left-radius: var(--clet-radius-base);
+  border-top-left-radius: var(--gsl-radius-base, var(--clet-radius-base));
 }
 .clet-table__content thead th:last-child {
-  border-top-right-radius: var(--clet-radius-base);
+  border-top-right-radius: var(--gsl-radius-base, var(--clet-radius-base));
 }
 
 .clet-table__content th,
 .clet-table__content thead td {
-  background: var(--clet-surface-subtle);
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
   font-size: 12px;
   font-weight: 600;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   text-transform: uppercase;
   letter-spacing: 0.04em;
   height: 40px;
@@ -311,11 +311,11 @@
 }
 
 .clet-table__th--sortable:hover {
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-table__th--sorted {
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-table__th-label {
@@ -325,11 +325,11 @@
 .clet-table__sort-icon {
   display: inline-flex;
   vertical-align: middle;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-table__th--sortable:hover .clet-table__sort-icon {
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 /* Only border-bottom between rows */
@@ -337,14 +337,14 @@
   background: rgb(255 255 255 / 1%);
 }
 .clet-table__content thead tr {
-  border-bottom: 1px solid var(--clet-border);
-  background: var(--clet-surface-subtle);
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
 }
 
 .clet-table__content td {
-  padding: var(--clet-table-cell-padding-y, 12px) 16px;
+  padding: var(--gsl-table-cell-padding-y, var(--clet-table-cell-padding-y, 12px)) 16px;
   font-size: 14px;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -355,22 +355,22 @@
 /* Faint recessed surface with a subtle border all around — for embedding
    inside tabs or cards. Pure CSS override of the default content styling. */
 .clet-table__content--panel {
-  background: var(--clet-surface-panel);
-  border: 1px solid var(--clet-border-subtle);
+  background: var(--gsl-surface-panel, var(--clet-surface-panel));
+  border: 1px solid var(--gsl-border-subtle, var(--clet-border-subtle));
 }
 
 .clet-table__content--panel th,
 .clet-table__content--panel thead td,
 .clet-table__content--panel thead tr {
-  background: var(--clet-surface-panel);
+  background: var(--gsl-surface-panel, var(--clet-surface-panel));
 }
 
 .clet-table__content--panel thead tr {
-  border-bottom: 1px solid var(--clet-border-subtle);
+  border-bottom: 1px solid var(--gsl-border-subtle, var(--clet-border-subtle));
 }
 
 .clet-table__content--panel tbody tr {
-  border-bottom: 1px solid var(--clet-border-subtle);
+  border-bottom: 1px solid var(--gsl-border-subtle, var(--clet-border-subtle));
 }
 
 .clet-table__content--panel tbody tr:last-child {
@@ -389,12 +389,12 @@
 
 .clet-table__empty-icon {
   display: inline-flex;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   opacity: 0.7;
 }
 
 .clet-table__empty-text {
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   font-size: 14px;
 }
 
@@ -406,7 +406,7 @@
   justify-content: flex-end;
   padding: 12px 16px;
   padding-top: 16px;
-  border-top: 1px solid var(--clet-border);
+  border-top: 1px solid var(--gsl-border, var(--clet-border));
   transition: opacity 200ms ease;
 }
 
@@ -441,7 +441,7 @@
   width: 32px;
   height: 32px;
   font-size: 13px;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   user-select: none;
 }
 
@@ -450,7 +450,7 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   white-space: nowrap;
 }
 
@@ -465,12 +465,12 @@
 }
 
 table tbody tr.clet-table__row--clickable:hover {
-  background: var(--clet-hover) !important;
+  background: var(--gsl-hover, var(--clet-hover)) !important;
 }
 
 /* Row height (acts as min-height in table layout) */
 .clet-table__content tbody tr {
-  height: var(--clet-table-row-height, 44px);
+  height: var(--gsl-table-row-height, var(--clet-table-row-height, 44px));
 }
 
 /* ── Selection checkbox cell ── */
@@ -527,7 +527,7 @@ table tbody tr.clet-table__row--clickable:hover {
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   transition:
     background 100ms ease,
@@ -535,12 +535,12 @@ table tbody tr.clet-table__row--clickable:hover {
 }
 
 .clet-table__actions-trigger:hover {
-  background: var(--clet-hover);
-  color: var(--clet-text);
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-table__actions-menu {
-  --clet-table-actions-font: var(--clet-font-body);
+  --clet-table-actions-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: flex;
   flex-direction: column;
@@ -558,35 +558,35 @@ table tbody tr.clet-table__row--clickable:hover {
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: var(--clet-text);
-  font-family: var(--clet-table-actions-font);
+  color: var(--gsl-text, var(--clet-text));
+  font-family: var(--gsl-table-actions-font, var(--clet-table-actions-font));
   font-size: 13px;
   cursor: pointer;
   transition: background 100ms ease;
 }
 
 .clet-table__actions-item:hover {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-table__actions-item--destructive {
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-table__actions-item--destructive:hover {
-  background: var(--clet-error-bg);
+  background: var(--gsl-error-bg, var(--clet-error-bg));
 }
 
 .clet-table__actions-separator {
   height: 1px;
   margin: 2px 8px;
-  background: var(--clet-border);
+  background: var(--gsl-border, var(--clet-border));
 }
 
 .clet-table__actions-section-label {
   padding: 4px 8px 2px;
-  color: var(--clet-text-muted);
-  font-family: var(--clet-table-actions-font);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
+  font-family: var(--gsl-table-actions-font, var(--clet-table-actions-font));
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -611,18 +611,18 @@ table tbody tr.clet-table__row--clickable:hover {
   justify-content: space-between;
   gap: 12px;
   padding: 12px;
-  background: var(--clet-bg);
-  border-top: 1px solid var(--clet-border);
+  background: var(--gsl-bg, var(--clet-bg));
+  border-top: 1px solid var(--gsl-border, var(--clet-border));
   position: sticky;
   bottom: 8px;
   width: 80%;
   margin-inline: auto;
   margin-top: auto;
-  border-radius: var(--clet-radius-base);
-  border: 1px solid var(--clet-border);
-  z-index: var(--clet-z-popover);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  z-index: var(--gsl-z-popover, var(--clet-z-popover));
   pointer-events: auto;
-  box-shadow: var(--clet-shadow-md);
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
 }
 
 .clet-table__bulk-actions-left {
@@ -635,7 +635,7 @@ table tbody tr.clet-table__row--clickable:hover {
 .clet-table__bulk-actions-count {
   font-size: 13px;
   font-weight: 500;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   white-space: nowrap;
 }
 
@@ -645,7 +645,7 @@ table tbody tr.clet-table__row--clickable:hover {
   border: none;
   opacity: 0.5;
   padding: 0;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   background: transparent;
   cursor: pointer;
 
@@ -665,7 +665,7 @@ table tbody tr.clet-table__row--clickable:hover {
 
 .clet-table__bulk-actions-clear:hover {
   opacity: 1;
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-table__bulk-actions-group {
@@ -676,12 +676,12 @@ table tbody tr.clet-table__row--clickable:hover {
 }
 
 .clet-table__bulk-actions-action--destructive {
-  color: var(--clet-error);
-  border-color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-table__bulk-actions-action--destructive:hover {
-  background: var(--clet-error-bg);
+  background: var(--gsl-error-bg, var(--clet-error-bg));
 }
 
 /* ── Skeleton loading ── */
@@ -689,7 +689,7 @@ table tbody tr.clet-table__row--clickable:hover {
 .clet-table__skeleton {
   display: block;
   border-radius: 4px;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
   animation: clet-table-skeleton-pulse 1.5s ease-in-out infinite;
 }
 
@@ -820,8 +820,8 @@ table tbody tr.clet-table__row--clickable:hover {
 /* ── Virtualization ── */
 
 .clet-table__viewport {
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius, var(--clet-radius));
 }
 
 .clet-bulk-import__match-colum-dropdown-label {
@@ -831,7 +831,7 @@ table tbody tr.clet-table__row--clickable:hover {
 }
 
 .clet-bulk-import__mapping-status {
-  color: var(--clet-main-bg);
+  color: var(--gsl-main-bg, var(--clet-main-bg));
   width: 20px;
   height: 20px;
   border-radius: 999px;
@@ -840,8 +840,8 @@ table tbody tr.clet-table__row--clickable:hover {
   justify-content: center;
 }
 .clet-bulk-import__mapping-status--complete {
-  background: var(--clet-success);
+  background: var(--gsl-success, var(--clet-success));
 }
 .clet-bulk-import__mapping-status--pending {
-  border: 1px solid var(--clet-border);
+  border: 1px solid var(--gsl-border, var(--clet-border));
 }

@@ -164,9 +164,9 @@ export const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         aria-invalid={invalidBool || undefined}
         aria-describedby={ariaDescribedby}
         className={cn(
-          "clet-otp-input",
-          invalidBool && "clet-otp-input--invalid",
-          disabled && "clet-otp-input--disabled",
+          "clet-otp-input gsl-otp-input",
+          invalidBool && "clet-otp-input--invalid gsl-otp-input--invalid",
+          disabled && "clet-otp-input--disabled gsl-otp-input--disabled",
           classNames?.root,
           className,
         )}
@@ -188,10 +188,10 @@ export const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
             maxLength={1}
             value={value[i] || ""}
             className={cn(
-              "clet-input",
-              "clet-otp-input__slot",
-              invalidBool && "clet-input--invalid",
-              disabled && "clet-input--disabled",
+              "clet-input gsl-input",
+              "clet-otp-input__slot gsl-otp-input__slot",
+              invalidBool && "clet-input--invalid gsl-input--invalid",
+              disabled && "clet-input--disabled gsl-input--disabled",
               classNames?.slot,
             )}
             onChange={(e) => handleChange(i, e.target.value)}

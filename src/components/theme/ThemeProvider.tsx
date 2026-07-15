@@ -56,9 +56,11 @@ export function ThemeProvider({
     }
 
     document.documentElement.setAttribute("data-clet-theme", resolvedTheme);
+    document.documentElement.setAttribute("data-gsl-theme", resolvedTheme);
 
     return () => {
       document.documentElement.removeAttribute("data-clet-theme");
+      document.documentElement.removeAttribute("data-gsl-theme");
     };
   }, [resolvedTheme]);
 
@@ -89,11 +91,17 @@ export function ThemeProvider({
     [theme, setTheme, resolvedTheme],
   );
 
-  const rootClass = ["clet-theme", className].filter(Boolean).join(" ");
+  const rootClass = ["clet-theme gsl-theme", className].filter(Boolean).join(" ");
 
   return (
     <ThemeContext.Provider value={contextValue}>
-      <div className={rootClass} data-clet-theme={resolvedTheme} style={style} suppressHydrationWarning>
+      <div
+        className={rootClass}
+        data-clet-theme={resolvedTheme}
+        data-gsl-theme={resolvedTheme}
+        style={style}
+        suppressHydrationWarning
+      >
         {children}
       </div>
     </ThemeContext.Provider>

@@ -1,8 +1,8 @@
 .clet-progress-bar {
-  --clet-progress-bar-font: var(--clet-font-body);
+  --clet-progress-bar-font: var(--gsl-font-body, var(--clet-font-body));
   width: 100%;
   max-width: 100%;
-  font-family: var(--clet-progress-bar-font);
+  font-family: var(--gsl-progress-bar-font, var(--clet-progress-bar-font));
 }
 
 .clet-progress-bar--with-value {
@@ -15,7 +15,7 @@
   width: 100%;
   overflow: hidden;
   border-radius: 999px;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-progress-bar--sm .clet-progress-bar__track {
@@ -33,23 +33,23 @@
 }
 
 .clet-progress-bar--default .clet-progress-bar__indicator {
-  background: var(--clet-primary);
+  background: var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-progress-bar--success .clet-progress-bar__indicator {
-  background: var(--clet-success);
+  background: var(--gsl-success, var(--clet-success));
 }
 
 .clet-progress-bar--warning .clet-progress-bar__indicator {
-  background: var(--clet-warning);
+  background: var(--gsl-warning, var(--clet-warning));
 }
 
 .clet-progress-bar--error .clet-progress-bar__indicator {
-  background: var(--clet-error);
+  background: var(--gsl-error, var(--clet-error));
 }
 
 .clet-progress-bar__value {
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   font-size: 12px;
   line-height: 1.4;
 }

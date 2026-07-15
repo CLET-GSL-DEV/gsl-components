@@ -5,45 +5,45 @@
   --clet-modal-max-width-xl: 800px;
   --clet-modal-max-width-2xl: 1024px;
   --clet-modal-gutter: 24px;
-  --clet-modal-font: var(--clet-font-body);
+  --clet-modal-font: var(--gsl-font-body, var(--clet-font-body));
 
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: var(--clet-z-modal);
+  z-index: var(--gsl-z-modal, var(--clet-z-modal));
   display: flex;
-  width: calc(100vw - 2 * var(--clet-modal-gutter));
-  max-width: var(--clet-modal-max-width-lg);
-  max-height: calc(100dvh - 2 * var(--clet-modal-gutter));
+  width: calc(100vw - 2 * var(--gsl-modal-gutter, var(--clet-modal-gutter)));
+  max-width: var(--gsl-modal-max-width-lg, var(--clet-modal-max-width-lg));
+  max-height: calc(100dvh - 2 * var(--gsl-modal-gutter, var(--clet-modal-gutter)));
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-xl);
-  background: var(--clet-bg);
-  box-shadow: var(--clet-shadow-md);
-  font-family: var(--clet-modal-font);
-  color: var(--clet-text);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
+  font-family: var(--gsl-modal-font, var(--clet-modal-font));
+  color: var(--gsl-text, var(--clet-text));
   transform: translate(-50%, -50%);
 }
 
 .clet-modal--sm {
-  max-width: var(--clet-modal-max-width-sm);
+  max-width: var(--gsl-modal-max-width-sm, var(--clet-modal-max-width-sm));
 }
 
 .clet-modal--md {
-  max-width: var(--clet-modal-max-width-md);
+  max-width: var(--gsl-modal-max-width-md, var(--clet-modal-max-width-md));
 }
 
 .clet-modal--lg {
-  max-width: var(--clet-modal-max-width-lg);
+  max-width: var(--gsl-modal-max-width-lg, var(--clet-modal-max-width-lg));
 }
 
 .clet-modal--xl {
-  max-width: var(--clet-modal-max-width-xl);
+  max-width: var(--gsl-modal-max-width-xl, var(--clet-modal-max-width-xl));
 }
 
 .clet-modal--2xl {
-  max-width: var(--clet-modal-max-width-2xl);
+  max-width: var(--gsl-modal-max-width-2xl, var(--clet-modal-max-width-2xl));
 }
 
 .clet-modal[data-state="open"] {
@@ -57,8 +57,8 @@
 .clet-modal__overlay {
   position: fixed;
   inset: 0;
-  z-index: var(--clet-z-overlay);
-  background: var(--clet-overlay);
+  z-index: var(--gsl-z-overlay, var(--clet-z-overlay));
+  background: var(--gsl-overlay, var(--clet-overlay));
 }
 
 .clet-modal__overlay[data-state="open"] {
@@ -81,27 +81,27 @@
   min-height: 40px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--clet-radius-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
 }
 
 .clet-modal__close:hover {
-  background: var(--clet-hover);
-  color: var(--clet-text);
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-modal__close:focus-visible {
-  outline: 2px solid var(--clet-primary);
+  outline: 2px solid var(--gsl-primary, var(--clet-primary));
   outline-offset: 2px;
 }
 
 .clet-modal__header {
   flex-shrink: 0;
   padding: 20px 64px 20px 24px;
-  background: var(--clet-hover);
-  border-bottom: 1px solid var(--clet-border);
+  background: var(--gsl-hover, var(--clet-hover));
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
 }
 
 .clet-modal__title {
@@ -109,14 +109,14 @@
   font-size: 18px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-modal__description {
   margin: 6px 0 0;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-modal__body {
@@ -134,33 +134,33 @@
   justify-content: flex-end;
   gap: 8px;
   padding: 16px;
-  border-top: 1px solid var(--clet-border);
-  background: var(--clet-bg);
+  border-top: 1px solid var(--gsl-border, var(--clet-border));
+  background: var(--gsl-bg, var(--clet-bg));
 }
 
 .clet-modal__confirm-overlay {
   position: fixed;
   inset: 0;
-  z-index: var(--clet-z-alert);
-  background: var(--clet-overlay);
+  z-index: var(--gsl-z-alert, var(--clet-z-alert));
+  background: var(--gsl-overlay, var(--clet-overlay));
   pointer-events: auto;
 }
 
 .clet-modal__confirm {
-  --clet-modal-confirm-font: var(--clet-font-body);
+  --clet-modal-confirm-font: var(--gsl-font-body, var(--clet-font-body));
 
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: var(--clet-z-alert-content);
+  z-index: var(--gsl-z-alert-content, var(--clet-z-alert-content));
   width: min(400px, calc(100vw - 48px));
   padding: 28px 32px 24px;
-  border: 1px solid var(--clet-border);
+  border: 1px solid var(--gsl-border, var(--clet-border));
   border-radius: 12px;
-  background: var(--clet-bg);
-  box-shadow: var(--clet-shadow-lg);
-  font-family: var(--clet-modal-confirm-font);
-  color: var(--clet-text);
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
+  font-family: var(--gsl-modal-confirm-font, var(--clet-modal-confirm-font));
+  color: var(--gsl-text, var(--clet-text));
   transform: translate(-50%, -50%);
 }
 
@@ -174,7 +174,7 @@
   margin: 0 0 28px;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-modal__confirm-actions {

@@ -25,7 +25,7 @@ export const Timeline = forwardRef<HTMLOListElement, TimelineProps>(
     return (
       <ol
         ref={ref}
-        className={cn("clet-timeline", classNames?.root, className)}
+        className={cn("clet-timeline gsl-timeline", classNames?.root, className)}
         {...props}
       >
         {items.map((item, index) =>
@@ -51,21 +51,21 @@ export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(
     return (
       <li
         ref={ref}
-        className={cn("clet-timeline__item", classNames?.root, className)}
+        className={cn("clet-timeline__item gsl-timeline__item", classNames?.root, className)}
         {...props}
       >
-        <div className={cn("clet-timeline__rail", classNames?.rail)}>
+        <div className={cn("clet-timeline__rail gsl-timeline__rail", classNames?.rail)}>
           {isLast ? null : (
             <div
               className={cn(
-                "clet-timeline__connector",
+                "clet-timeline__connector gsl-timeline__connector",
                 classNames?.connector,
               )}
             />
           )}
           <div
             className={cn(
-              "clet-timeline__dot",
+              "clet-timeline__dot gsl-timeline__dot",
               mode && `clet-timeline__dot--${mode}`,
               classNames?.dot,
             )}
@@ -76,7 +76,7 @@ export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(
           </div>
         </div>
         {children ? (
-          <div className={cn("clet-timeline__content", classNames?.content)}>
+          <div className={cn("clet-timeline__content gsl-timeline__content", classNames?.content)}>
             {children}
           </div>
         ) : null}
@@ -93,7 +93,7 @@ export const TimelineTitle = forwardRef<HTMLHeadingElement, TimelineTitleProps>(
     return (
       <Tag
         ref={ref}
-        className={cn("clet-timeline__title", classNames?.title, className)}
+        className={cn("clet-timeline__title gsl-timeline__title", classNames?.title, className)}
         {...props}
       >
         {children}
@@ -107,7 +107,7 @@ export const TimelineData = forwardRef<HTMLParagraphElement, TimelineDataProps>(
     return (
       <p
         ref={ref}
-        className={cn("clet-timeline__data", classNames?.data, className)}
+        className={cn("clet-timeline__data gsl-timeline__data", classNames?.data, className)}
         {...props}
       >
         {children}
@@ -121,7 +121,7 @@ export const TimelineFooter = forwardRef<HTMLDivElement, TimelineFooterProps>(
     return (
       <div
         ref={ref}
-        className={cn("clet-timeline__footer", classNames?.footer, className)}
+        className={cn("clet-timeline__footer gsl-timeline__footer", classNames?.footer, className)}
         {...props}
       >
         {children}

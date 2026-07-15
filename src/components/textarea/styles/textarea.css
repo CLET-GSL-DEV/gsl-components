@@ -1,18 +1,18 @@
 .clet-textarea {
-  --clet-textarea-font: var(--clet-font-body);
+  --clet-textarea-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: block;
   width: 100%;
   min-width: 0;
   min-height: 80px;
   padding: 8px 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background-color: var(--clet-bg);
-  font-family: var(--clet-textarea-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background-color: var(--gsl-bg, var(--clet-bg));
+  font-family: var(--gsl-textarea-font, var(--clet-textarea-font));
   font-size: 14px;
   line-height: 1.5;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   resize: vertical;
   transition:
     border-color 150ms ease,
@@ -21,34 +21,34 @@
 }
 
 .clet-textarea::placeholder {
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-textarea:hover:not(:disabled) {
-  border-color: var(--clet-border-strong);
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
 }
 
 .clet-textarea:focus-visible {
   outline: none;
-  border-color: var(--clet-primary);
-  box-shadow: 0 0 0 1px var(--clet-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-textarea--invalid,
 .clet-textarea[aria-invalid="true"] {
-  border-color: var(--clet-error);
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-textarea--invalid:focus-visible,
 .clet-textarea[aria-invalid="true"]:focus-visible {
-  border-color: var(--clet-error);
-  box-shadow: 0 0 0 1px var(--clet-error);
+  border-color: var(--gsl-error, var(--clet-error));
+  box-shadow: 0 0 0 1px var(--gsl-error, var(--clet-error));
 }
 
 .clet-textarea--disabled,
 .clet-textarea:disabled {
-  background-color: var(--clet-hover);
-  color: var(--clet-text-muted);
+  background-color: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: not-allowed;
 }
 

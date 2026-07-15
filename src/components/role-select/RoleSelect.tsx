@@ -54,16 +54,16 @@ export function RoleSelect({
   };
 
   return (
-    <div className={cn("clet-role-select", className)} style={style}>
+    <div className={cn("clet-role-select gsl-role-select", className)} style={style}>
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
-          <button type="button" className="clet-role-select__trigger">
-            <span className="clet-role-select__trigger-label">
+          <button type="button" className="clet-role-select__trigger gsl-role-select__trigger">
+            <span className="clet-role-select__trigger-label gsl-role-select__trigger-label">
               {title ?? "View as"}
             </span>
-            <span className="clet-role-select__trigger-value">
+            <span className="clet-role-select__trigger-value gsl-role-select__trigger-value">
               {selected?.icon && (
-                <span className="clet-role-select__trigger-icon" aria-hidden>
+                <span className="clet-role-select__trigger-icon gsl-role-select__trigger-icon" aria-hidden>
                   {selected.icon}
                 </span>
               )}
@@ -75,13 +75,13 @@ export function RoleSelect({
 
         <Popover.Portal>
           <Popover.Content
-            className="clet-role-select__popover"
+            className="clet-role-select__popover gsl-role-select__popover"
             side="bottom"
             align="start"
             sideOffset={4}
             role="menu"
           >
-            <ul className="clet-role-select__list">
+            <ul className="clet-role-select__list gsl-role-select__list">
               {roles.map((role) => {
                 const isSelected = role.id === selectedRole;
                 return (
@@ -89,27 +89,27 @@ export function RoleSelect({
                     <button
                       type="button"
                       className={cn(
-                        "clet-role-select__item",
-                        role.disabled && "clet-role-select__item--disabled",
+                        "clet-role-select__item gsl-role-select__item",
+                        role.disabled && "clet-role-select__item--disabled gsl-role-select__item--disabled",
                       )}
                       onClick={() => handleSelect(role)}
                       disabled={role.disabled}
                       aria-pressed={isSelected}
                     >
-                      <span className="clet-role-select__item-content">
+                      <span className="clet-role-select__item-content gsl-role-select__item-content">
                         {role.icon && (
-                          <span className="clet-role-select__item-icon" aria-hidden>
+                          <span className="clet-role-select__item-icon gsl-role-select__item-icon" aria-hidden>
                             {role.icon}
                           </span>
                         )}
-                        <span className="clet-role-select__name">
+                        <span className="clet-role-select__name gsl-role-select__name">
                           {role.name}
                         </span>
                       </span>
                       <span
                         className={cn(
-                          "clet-role-select__radio",
-                          isSelected && "clet-role-select__radio--selected",
+                          "clet-role-select__radio gsl-role-select__radio",
+                          isSelected && "clet-role-select__radio--selected gsl-role-select__radio--selected",
                         )}
                         aria-hidden
                       />

@@ -11,9 +11,9 @@ interface AppSwitcherItemProps {
 function renderIcon(icon: AppItem["icon"]) {
   if (typeof icon === "string") {
     if (icon.startsWith("http") || icon.startsWith("/") || icon.startsWith("data:")) {
-      return <img src={icon} alt="" className="clet-app-switcher__icon-image" />;
+      return <img src={icon} alt="" className="clet-app-switcher__icon-image gsl-app-switcher__icon-image" />;
     }
-    return <span className="clet-app-switcher__icon-emoji">{icon}</span>;
+    return <span className="clet-app-switcher__icon-emoji gsl-app-switcher__icon-emoji">{icon}</span>;
   }
   return icon;
 }
@@ -40,8 +40,8 @@ export function AppSwitcherItem({ app, onSelect }: AppSwitcherItemProps) {
   };
 
   const iconClassName = [
-    "clet-app-switcher__icon",
-    isTileIcon(app.icon) ? "clet-app-switcher__icon--tile" : "",
+    "clet-app-switcher__icon gsl-app-switcher__icon",
+    isTileIcon(app.icon) ? "clet-app-switcher__icon--tile gsl-app-switcher__icon--tile" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -49,16 +49,16 @@ export function AppSwitcherItem({ app, onSelect }: AppSwitcherItemProps) {
   const content = (
     <>
       <span className={iconClassName}>{renderIcon(app.icon)}</span>
-      <span className="clet-app-switcher__name">{app.name}</span>
+      <span className="clet-app-switcher__name gsl-app-switcher__name">{app.name}</span>
       {app.badge && (
-        <span className="clet-app-switcher__badge">{app.badge}</span>
+        <span className="clet-app-switcher__badge gsl-app-switcher__badge">{app.badge}</span>
       )}
     </>
   );
 
   const className = [
-    "clet-app-switcher__item",
-    app.disabled ? "clet-app-switcher__item--disabled" : "",
+    "clet-app-switcher__item gsl-app-switcher__item",
+    app.disabled ? "clet-app-switcher__item--disabled gsl-app-switcher__item--disabled" : "",
   ]
     .filter(Boolean)
     .join(" ");

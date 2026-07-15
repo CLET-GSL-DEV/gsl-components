@@ -1,7 +1,7 @@
 /* ── Root (dropzone) ── */
 
 .clet-upload-field {
-  --clet-upload-field-font: var(--clet-font-body);
+  --clet-upload-field-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: flex;
   flex-direction: column;
@@ -9,9 +9,9 @@
   align-items: center;
   padding: 32px;
   gap: 8px;
-  border: 1px dashed var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
+  border: 1px dashed var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
   cursor: pointer;
   transition:
     border-color 150ms ease,
@@ -20,21 +20,21 @@
 }
 
 .clet-upload-field:focus-visible {
-  border-color: var(--clet-primary);
-  box-shadow: 0 0 0 2px var(--clet-primary-light);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 2px var(--gsl-primary-light, var(--clet-primary-light));
 }
 
 .clet-upload-field:hover {
-  border-color: var(--clet-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-upload-field--drag-over {
-  border-color: var(--clet-primary);
-  background: var(--clet-primary-light);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  background: var(--gsl-primary-light, var(--clet-primary-light));
 }
 
 .clet-upload-field--has-files {
-  background: var(--clet-primary-light);
+  background: var(--gsl-primary-light, var(--clet-primary-light));
 }
 
 .clet-upload-field__input {
@@ -44,11 +44,11 @@
 /* ── Invalid ── */
 
 .clet-upload-field--invalid {
-  border-color: var(--clet-error);
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-upload-field--invalid:focus-visible {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--clet-error) 25%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gsl-error, var(--clet-error)) 25%, transparent);
 }
 
 /* ── Disabled ── */
@@ -67,38 +67,38 @@
   width: 36px;
   height: 36px;
   border-radius: 9999px;
-  background: var(--clet-surface-subtle);
-  color: var(--clet-text-secondary);
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   flex-shrink: 0;
 }
 
 .clet-upload-field--has-files .clet-upload-field__icon {
-  background: var(--clet-main-bg);
-  box-shadow: var(--clet-shadow-md);
+  background: var(--gsl-main-bg, var(--clet-main-bg));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
 }
 
 /* ── Title ── */
 
 .clet-upload-field__title {
   margin: 0;
-  font-family: var(--clet-upload-field-font);
+  font-family: var(--gsl-upload-field-font, var(--clet-upload-field-font));
   font-weight: 500;
-  font-size: var(--clet-text-size-md);
+  font-size: var(--gsl-text-size-md, var(--clet-text-size-md));
   line-height: 24px;
   text-align: center;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 /* ── Subtitle ── */
 
 .clet-upload-field__subtitle {
   margin: 0;
-  font-family: var(--clet-upload-field-font);
+  font-family: var(--gsl-upload-field-font, var(--clet-upload-field-font));
   font-weight: 400;
-  font-size: var(--clet-text-size-base);
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
   line-height: 20px;
   text-align: center;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   margin-bottom: 16px;
 }
 
@@ -118,14 +118,14 @@
   align-items: center;
   padding: 6px 12px;
   gap: 8px;
-  background: var(--clet-bg);
+  background: var(--gsl-bg, var(--clet-bg));
   border: 1px solid transparent;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
 }
 
 .clet-upload-field__file-card--failed {
-  border-color: var(--clet-error);
-  background: color-mix(in srgb, var(--clet-error) 6%, var(--clet-bg));
+  border-color: var(--gsl-error, var(--clet-error));
+  background: color-mix(in srgb, var(--gsl-error, var(--clet-error)) 6%, var(--gsl-bg, var(--clet-bg)));
 }
 
 .clet-upload-field__file-card-icon {
@@ -133,7 +133,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-upload-field__file-card-info {
@@ -145,11 +145,11 @@
 }
 
 .clet-upload-field__file-card-name {
-  font-family: var(--clet-upload-field-font);
+  font-family: var(--gsl-upload-field-font, var(--clet-upload-field-font));
   font-weight: 400;
-  font-size: var(--clet-text-size-base);
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
   line-height: 20px;
-  color: var(--clet-primary);
+  color: var(--gsl-primary, var(--clet-primary));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -159,15 +159,15 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-family: var(--clet-upload-field-font);
+  font-family: var(--gsl-upload-field-font, var(--clet-upload-field-font));
   font-weight: 400;
-  font-size: var(--clet-text-size-xs);
+  font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
   line-height: 16px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-upload-field__file-card-completed-icon {
-  color: var(--clet-success);
+  color: var(--gsl-success, var(--clet-success));
   flex-shrink: 0;
 }
 
@@ -179,10 +179,10 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--clet-upload-field-font);
-  font-size: var(--clet-text-size-xs);
+  font-family: var(--gsl-upload-field-font, var(--clet-upload-field-font));
+  font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
   line-height: 16px;
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-upload-field__file-card-status-dot {
@@ -190,14 +190,14 @@
   height: 6px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: var(--clet-error);
+  background: var(--gsl-error, var(--clet-error));
 }
 
 .clet-upload-field__file-card-retry {
   border: none;
   padding: 0;
   background: transparent;
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
   font: inherit;
   font-weight: 600;
   text-decoration: underline;
@@ -214,14 +214,14 @@
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .clet-upload-field__file-card-cancel:hover {
-  background: var(--clet-hover);
-  color: var(--clet-text);
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-upload-field__file-card-remove {
@@ -234,14 +234,14 @@
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .clet-upload-field__file-card-remove:hover {
-  background: color-mix(in srgb, var(--clet-error) 10%, transparent);
-  color: var(--clet-error);
+  background: color-mix(in srgb, var(--gsl-error, var(--clet-error)) 10%, transparent);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 /* ── Action button ── */
@@ -254,12 +254,12 @@
   height: 36px;
   padding: 0 16px;
   border: none;
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-primary);
-  color: var(--clet-on-primary);
-  font-family: var(--clet-upload-field-font);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
+  font-family: var(--gsl-upload-field-font, var(--clet-upload-field-font));
   font-weight: 500;
-  font-size: var(--clet-text-size-base);
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
   line-height: 20px;
   cursor: pointer;
   transition: background-color 150ms ease;
@@ -270,7 +270,7 @@
 }
 
 .clet-upload-field__action:focus-visible {
-  outline: 2px solid var(--clet-primary);
+  outline: 2px solid var(--gsl-primary, var(--clet-primary));
   outline-offset: 2px;
 }
 
@@ -280,18 +280,18 @@
 }
 
 .clet-upload-field--invalid .clet-upload-field__action {
-  background: var(--clet-error);
+  background: var(--gsl-error, var(--clet-error));
 }
 
 /* ── Error card ── */
 
 .clet-upload-field__action--ghost {
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-upload-field__action--ghost:hover:not(:disabled) {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
   opacity: 1;
 }
 
@@ -300,7 +300,7 @@
 .clet-upload-field__dialog-filename {
   display: block;
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   margin-bottom: 4px;
 }
 

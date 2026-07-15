@@ -1,12 +1,12 @@
 .clet-checkbox {
-  --clet-checkbox-font: var(--clet-font-body);
+  --clet-checkbox-font: var(--gsl-font-body, var(--clet-font-body));
   display: inline-flex;
   align-items: flex-start;
   gap: 8px;
-  font-family: var(--clet-checkbox-font);
+  font-family: var(--gsl-checkbox-font, var(--clet-checkbox-font));
   font-size: 14px;
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   cursor: pointer;
   user-select: none;
 }
@@ -24,9 +24,9 @@
   width: 20px;
   height: 20px;
   margin-top: 1px;
-  border: 1px solid var(--clet-border);
-  border-radius: calc(var(--clet-radius-base) - 2px);
-  background: var(--clet-bg);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
+  background: var(--gsl-bg, var(--clet-bg));
   cursor: inherit;
   transition:
     background-color 150ms ease,
@@ -35,13 +35,13 @@
 }
 
 .clet-checkbox__control[data-state="checked"] {
-  border-color: var(--clet-primary);
-  background: var(--clet-primary);
-  color: var(--clet-on-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
 .clet-checkbox__control:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
@@ -67,5 +67,5 @@
 
 .clet-checkbox__control[data-state="checked"] + .clet-checkbox__label,
 .clet-checkbox:has(.clet-checkbox__control[data-state="checked"]) .clet-checkbox__label {
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }

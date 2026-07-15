@@ -2,8 +2,8 @@
   --width: min(100vw - 32px, 380px);
   --offset-bottom: 24px;
   --offset-right: 24px;
-  --clet-toast-font: var(--clet-font-body);
-  font-family: var(--clet-toast-font);
+  --clet-toast-font: var(--gsl-font-body, var(--clet-font-body));
+  font-family: var(--gsl-toast-font, var(--clet-toast-font));
 }
 
 [data-sonner-toaster].clet-toast__viewport {
@@ -20,16 +20,16 @@
   max-width: 100%;
   min-width: 0;
   padding: 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-xl);
-  background: color-mix(in srgb, var(--clet-bg) 96%, transparent);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  background: color-mix(in srgb, var(--gsl-bg, var(--clet-bg)) 96%, transparent);
   backdrop-filter: blur(8px);
-  box-shadow: var(--clet-shadow-md);
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
   pointer-events: auto;
 }
 
 .clet-toast--default {
-  border-color: var(--clet-border);
+  border-color: var(--gsl-border, var(--clet-border));
 }
 
 .clet-toast [data-icon] {
@@ -77,44 +77,44 @@
   align-items: center;
   justify-content: center;
   margin-top: 2px;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-toast--success .clet-toast__icon {
-  color: var(--clet-success);
+  color: var(--gsl-success, var(--clet-success));
 }
 
 .clet-toast--warning .clet-toast__icon {
-  color: var(--clet-warning);
+  color: var(--gsl-warning, var(--clet-warning));
 }
 
 .clet-toast--error .clet-toast__icon {
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-toast__title {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-toast--success .clet-toast__title {
-  color: var(--clet-success);
+  color: var(--gsl-success, var(--clet-success));
 }
 
 .clet-toast--warning .clet-toast__title {
-  color: var(--clet-warning);
+  color: var(--gsl-warning, var(--clet-warning));
 }
 
 .clet-toast--error .clet-toast__title {
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-toast__description {
   font-size: 13px;
   line-height: 1.5;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-toast__action {

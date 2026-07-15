@@ -18,8 +18,8 @@ const OVERLAY_STROKE = "#000";
 
 function overlayClass(index: number) {
   return cn(
-    "clet-launchpad__tile-overlay",
-    `clet-launchpad__tile-overlay--${index}`,
+    "clet-launchpad__tile-overlay gsl-launchpad__tile-overlay",
+    `clet-launchpad__tile-overlay--${index} gsl-launchpad__tile-overlay--${index}`,
   );
 }
 

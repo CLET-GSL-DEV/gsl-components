@@ -18,20 +18,19 @@ export function LaunchpadIconTile({ name, children, className }: LaunchpadIconTi
   // Gradient and overlay are picked by independent hashes (see
   // stringToColor.ts) so the two vary independently for the same name —
   // both are fixed brand values, so no theme dependency to track.
-  const gradientClass = useMemo(
-    () =>
-      `clet-launchpad__tile--grad-${gradientIndexFromString(name, TILE_GRADIENT_COUNT)}`,
-    [name],
-  );
+  const gradientClass = useMemo(() => {
+    const gradientIndex = gradientIndexFromString(name, TILE_GRADIENT_COUNT);
+    return `clet-launchpad__tile--grad-${gradientIndex} gsl-launchpad__tile--grad-${gradientIndex}`;
+  }, [name]);
   const Overlay = useMemo(
     () => LAUNCHPAD_OVERLAYS[overlayIndexFromString(name, LAUNCHPAD_OVERLAYS.length)],
     [name],
   );
 
   return (
-    <span className={cn("clet-launchpad__tile", gradientClass, className)}>
+    <span className={cn("clet-launchpad__tile gsl-launchpad__tile", gradientClass, className)}>
       <Overlay />
-      <span className="clet-launchpad__tile-glyph">{children}</span>
+      <span className="clet-launchpad__tile-glyph gsl-launchpad__tile-glyph">{children}</span>
     </span>
   );
 }

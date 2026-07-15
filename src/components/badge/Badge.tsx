@@ -18,7 +18,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
     <span
       ref={ref}
       className={cn(
-        "clet-badge",
+        "clet-badge gsl-badge",
         `clet-badge--${variant}`,
         `clet-badge--${size}`,
         classNames?.root,

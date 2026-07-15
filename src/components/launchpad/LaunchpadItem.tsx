@@ -22,15 +22,15 @@ export function LaunchpadItem({ app, onSelect }: LaunchpadItemProps) {
 
   const content = (
     <>
-      <span className="clet-launchpad__icon">{app.icon}</span>
-      <span className="clet-launchpad__name">{app.name}</span>
-      {app.badge && <span className="clet-launchpad__badge">{app.badge}</span>}
+      <span className="clet-launchpad__icon gsl-launchpad__icon">{app.icon}</span>
+      <span className="clet-launchpad__name gsl-launchpad__name">{app.name}</span>
+      {app.badge && <span className="clet-launchpad__badge gsl-launchpad__badge">{app.badge}</span>}
     </>
   );
 
   const className = [
-    "clet-launchpad__item",
-    app.disabled ? "clet-launchpad__item--disabled" : "",
+    "clet-launchpad__item gsl-launchpad__item",
+    app.disabled ? "clet-launchpad__item--disabled gsl-launchpad__item--disabled" : "",
   ]
     .filter(Boolean)
     .join(" ");

@@ -25,7 +25,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       <div
         ref={ref}
         className={cn(
-          "clet-tooltip",
+          "clet-tooltip gsl-tooltip",
           classNames?.root,
           className,
         )}
@@ -45,9 +45,9 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
               side={side}
               sideOffset={4}
               className={cn(
-                "clet-tooltip__content",
-                `clet-tooltip__content--${side}`,
-                open && "clet-tooltip__content--open",
+                "clet-tooltip__content gsl-tooltip__content",
+                `clet-tooltip__content--${side} gsl-tooltip__content--${side}`,
+                open && "clet-tooltip__content--open gsl-tooltip__content--open",
                 classNames?.content,
               )}
               role="tooltip"
@@ -56,7 +56,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             >
               {content}
               <PopoverPrimitive.Arrow
-                className="clet-tooltip__arrow"
+                className="clet-tooltip__arrow gsl-tooltip__arrow"
                 width={8}
                 height={4}
               />

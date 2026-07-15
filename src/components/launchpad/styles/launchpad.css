@@ -1,12 +1,12 @@
 .clet-launchpad {
-  --clet-shadow: var(--clet-shadow-sm);
+  --clet-shadow: var(--gsl-shadow-sm, var(--clet-shadow-sm));
   --clet-item-size: 50px;
   --clet-icon-size: 50px;
-  --clet-launchpad-font: var(--clet-font-body);
+  --clet-launchpad-font: var(--gsl-font-body, var(--clet-font-body));
 
   position: relative;
   display: inline-block;
-  font-family: var(--clet-launchpad-font);
+  font-family: var(--gsl-launchpad-font, var(--clet-launchpad-font));
 }
 
 .clet-launchpad__trigger-wrap {
@@ -19,14 +19,14 @@
   top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
-  z-index: var(--clet-z-tooltip, var(--clet-z-popover));
+  z-index: var(--gsl-z-tooltip, var(--clet-z-tooltip, var(--clet-z-popover)));
   width: max-content;
   max-width: 200px;
   padding: 6px 10px;
   border-radius: 6px;
-  background: var(--clet-text);
-  color: var(--clet-bg);
-  font-family: var(--clet-launchpad-font);
+  background: var(--gsl-text, var(--clet-text));
+  color: var(--gsl-bg, var(--clet-bg));
+  font-family: var(--gsl-launchpad-font, var(--clet-launchpad-font));
   font-size: 11px;
   line-height: 1.35;
   text-align: center;
@@ -45,7 +45,7 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--clet-on-primary);
+  color: var(--gsl-on-primary, var(--clet-on-primary));
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
@@ -55,25 +55,25 @@
 }
 
 .clet-launchpad__trigger:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 .clet-launchpad__panel {
-  --clet-shadow: var(--clet-shadow-sm);
+  --clet-shadow: var(--gsl-shadow-sm, var(--clet-shadow-sm));
   --clet-item-size: 80px;
   --clet-icon-size: 60px;
-  --clet-launchpad-font: var(--clet-font-body);
+  --clet-launchpad-font: var(--gsl-font-body, var(--clet-font-body));
 
-  z-index: var(--clet-z-popover);
+  z-index: var(--gsl-z-popover, var(--clet-z-popover));
   max-height: min(70vh, 520px);
   overflow-y: auto;
   padding: 8px 0;
-  font-family: var(--clet-launchpad-font);
-  background: var(--clet-bg);
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-xl);
-  box-shadow: var(--clet-shadow-md);
+  font-family: var(--gsl-launchpad-font, var(--clet-launchpad-font));
+  background: var(--gsl-bg, var(--clet-bg));
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
   opacity: 0;
   transform: translateY(-4px);
 }
@@ -125,10 +125,10 @@
 }
 
 .clet-launchpad__title {
-  font-family: var(--clet-font-header);
+  font-family: var(--gsl-font-header, var(--clet-font-header));
   font-size: 16px;
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   text-align: center;
 }
 
@@ -140,7 +140,7 @@
   padding: 2px 6px;
   gap: 4px;
   font-size: 11px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-launchpad__see-more .clet-button__label {
@@ -160,12 +160,12 @@
   align-items: center;
   justify-content: start;
   gap: 8px;
-  width: var(--clet-item-size);
-  min-height: var(--clet-item-size);
+  width: var(--gsl-item-size, var(--clet-item-size));
+  min-height: var(--gsl-item-size, var(--clet-item-size));
   border: none;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   text-decoration: none;
   cursor: pointer;
   position: relative;
@@ -173,7 +173,7 @@
 }
 
 .clet-launchpad__item:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
@@ -186,18 +186,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--clet-icon-size);
-  height: var(--clet-icon-size);
+  width: var(--gsl-icon-size, var(--clet-icon-size));
+  height: var(--gsl-icon-size, var(--clet-icon-size));
   flex-shrink: 0;
   overflow: visible;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   background: transparent;
   transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 
 .clet-launchpad__item:hover:not(:disabled, .clet-launchpad__item--disabled) .clet-launchpad__icon {
   transform: scale(1.15);
-  box-shadow: var(--clet-shadow-md);
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
 }
 
 .clet-launchpad__tile {
@@ -208,7 +208,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   color: #fff;
 }
 
@@ -345,7 +345,7 @@
   padding: 24px 16px;
   text-align: center;
   font-size: 13px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-launchpad__skeleton-item {
@@ -353,15 +353,15 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  width: var(--clet-item-size);
-  min-height: var(--clet-item-size);
+  width: var(--gsl-item-size, var(--clet-item-size));
+  min-height: var(--gsl-item-size, var(--clet-item-size));
 }
 
 .clet-launchpad__skeleton-icon {
-  width: var(--clet-icon-size);
-  height: var(--clet-icon-size);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-hover);
+  width: var(--gsl-icon-size, var(--clet-icon-size));
+  height: var(--gsl-icon-size, var(--clet-icon-size));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-hover, var(--clet-hover));
   animation: clet-launchpad-skeleton-pulse 1.1s ease-in-out infinite;
 }
 
@@ -369,7 +369,7 @@
   width: 70%;
   height: 8px;
   border-radius: 4px;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
   animation: clet-launchpad-skeleton-pulse 1.1s ease-in-out infinite;
 }
 
@@ -423,8 +423,8 @@
   padding: 1px 6px;
   font-size: 10px;
   font-weight: 500;
-  color: var(--clet-on-primary);
-  background: var(--clet-focus);
+  color: var(--gsl-on-primary, var(--clet-on-primary));
+  background: var(--gsl-focus, var(--clet-focus));
   border-radius: 4px;
 }
 
@@ -435,7 +435,7 @@
   gap: 8px;
   padding: 8px 16px;
   padding-top: 16px;
-  border-top: 1px solid var(--clet-border);
+  border-top: 1px solid var(--gsl-border, var(--clet-border));
 }
 
 /* Expanded modal — a scaled-up version of the popover: same
@@ -444,7 +444,7 @@
    overrides win regardless of CSS import order relative to modal.css. */
 .clet-modal.clet-launchpad__expand {
   border: none;
-  border-radius: var(--clet-radius-2xl);
+  border-radius: var(--gsl-radius-2xl, var(--clet-radius-2xl));
   padding: 50px;
 }
 
@@ -457,11 +457,11 @@
 
 .clet-modal__title.clet-launchpad__expand-title {
   margin: 0 0 50px;
-  font-family: var(--clet-font-header);
+  font-family: var(--gsl-font-header, var(--clet-font-header));
   font-size: 32px;
   font-weight: 600;
   line-height: 1.2;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   text-align: center;
 }
 

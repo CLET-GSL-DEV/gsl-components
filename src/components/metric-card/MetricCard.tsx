@@ -131,9 +131,9 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
       <div
         ref={ref}
         className={cn(
-          "clet-metric-card",
-          `clet-metric-card--${variant}`,
-          loading && "clet-metric-card--loading",
+          "clet-metric-card gsl-metric-card",
+          `clet-metric-card--${variant} gsl-metric-card--${variant}`,
+          loading && "clet-metric-card--loading gsl-metric-card--loading",
           classNames?.root,
           className,
         )}
@@ -141,50 +141,50 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
         {...props}
       >
         {loading ? (
-          <span className="clet-metric-card__sr-only" role="status">
+          <span className="clet-metric-card__sr-only gsl-metric-card__sr-only" role="status">
             {loadingLabel}
           </span>
         ) : null}
 
-        <div className="clet-metric-card__header" aria-hidden={loading || undefined}>
+        <div className="clet-metric-card__header gsl-metric-card__header" aria-hidden={loading || undefined}>
           {icon ? (
             loading ? (
-              <span className="clet-skeleton clet-metric-card__skeleton-icon" />
+              <span className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-icon gsl-metric-card__skeleton-icon" />
             ) : (
-              <span className={cn("clet-metric-card__icon", classNames?.icon)}>
+              <span className={cn("clet-metric-card__icon gsl-metric-card__icon", classNames?.icon)}>
                 {icon}
               </span>
             )
           ) : null}
           {loading ? (
-            <span className="clet-skeleton clet-metric-card__skeleton-label" />
+            <span className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-label gsl-metric-card__skeleton-label" />
           ) : (
-            <span className={cn("clet-metric-card__label", classNames?.label)}>
+            <span className={cn("clet-metric-card__label gsl-metric-card__label", classNames?.label)}>
               {label}
             </span>
           )}
         </div>
 
         <div
-          className="clet-metric-card__value-row"
+          className="clet-metric-card__value-row gsl-metric-card__value-row"
           aria-hidden={loading || undefined}
         >
           {loading ? (
-            <span className="clet-skeleton clet-metric-card__skeleton-value" />
+            <span className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-value gsl-metric-card__skeleton-value" />
           ) : (
-            <span className={cn("clet-metric-card__value", classNames?.value)}>
+            <span className={cn("clet-metric-card__value gsl-metric-card__value", classNames?.value)}>
               {displayValue}
             </span>
           )}
 
           {trend && trendValue ? (
             loading ? (
-              <span className="clet-skeleton clet-metric-card__skeleton-trend" />
+              <span className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-trend gsl-metric-card__skeleton-trend" />
             ) : (
               <span
                 className={cn(
-                  "clet-metric-card__trend",
-                  `clet-metric-card__trend--${trend}`,
+                  "clet-metric-card__trend gsl-metric-card__trend",
+                  `clet-metric-card__trend--${trend} gsl-metric-card__trend--${trend}`,
                   classNames?.trend,
                 )}
               >
@@ -192,7 +192,7 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
                   <TrendIcon size={14} strokeWidth={2.5} aria-hidden />
                 ) : null}
                 {trendGlyph ? (
-                  <span className="clet-metric-card__trend-glyph" aria-hidden>
+                  <span className="clet-metric-card__trend-glyph gsl-metric-card__trend-glyph" aria-hidden>
                     {trendGlyph}
                   </span>
                 ) : null}
@@ -205,13 +205,13 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
         {description ? (
           loading ? (
             <span
-              className="clet-skeleton clet-metric-card__skeleton-description"
+              className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-description gsl-metric-card__skeleton-description"
               aria-hidden
             />
           ) : (
             <span
               className={cn(
-                "clet-metric-card__description",
+                "clet-metric-card__description gsl-metric-card__description",
                 classNames?.description,
               )}
             >

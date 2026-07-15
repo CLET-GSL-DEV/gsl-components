@@ -13,8 +13,8 @@ export const AppHeaderNotificationItem = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "clet-notif-popover__item",
-        !unread && "clet-notif-popover__item--read",
+        "clet-notif-popover__item gsl-notif-popover__item",
+        !unread && "clet-notif-popover__item--read gsl-notif-popover__item--read",
         classNames?.root,
         className,
       )}
@@ -34,14 +34,14 @@ export const AppHeaderNotificationItem = forwardRef<
       {...props}
     >
       {unread ? (
-        <div className={cn("clet-notif-popover__dot", classNames?.dot)} aria-hidden />
+        <div className={cn("clet-notif-popover__dot gsl-notif-popover__dot", classNames?.dot)} aria-hidden />
       ) : null}
-      <div className={cn("clet-notif-popover__item-body", classNames?.body)}>
-        <div className={cn("clet-notif-popover__body-text", classNames?.text)}>
+      <div className={cn("clet-notif-popover__item-body gsl-notif-popover__item-body", classNames?.body)}>
+        <div className={cn("clet-notif-popover__body-text gsl-notif-popover__body-text", classNames?.text)}>
           {text}
         </div>
         {time ? (
-          <div className={cn("clet-notif-popover__body-time", classNames?.time)}>
+          <div className={cn("clet-notif-popover__body-time gsl-notif-popover__body-time", classNames?.time)}>
             {time}
           </div>
         ) : null}

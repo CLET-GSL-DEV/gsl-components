@@ -1,16 +1,16 @@
 .clet-sheet {
-  --clet-sheet-font: var(--clet-font-body);
+  --clet-sheet-font: var(--gsl-font-body, var(--clet-font-body));
 
   position: fixed;
-  z-index: var(--clet-z-modal);
+  z-index: var(--gsl-z-modal, var(--clet-z-modal));
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--clet-border);
-  background: var(--clet-bg);
-  box-shadow: var(--clet-shadow-lg);
-  font-family: var(--clet-sheet-font);
-  color: var(--clet-text);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
+  font-family: var(--gsl-sheet-font, var(--clet-sheet-font));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-sheet--right {
@@ -80,8 +80,8 @@
 .clet-sheet__overlay {
   position: fixed;
   inset: 0;
-  z-index: var(--clet-z-overlay);
-  background: var(--clet-overlay);
+  z-index: var(--gsl-z-overlay, var(--clet-z-overlay));
+  background: var(--gsl-overlay, var(--clet-overlay));
 }
 
 .clet-sheet__overlay[data-state="open"] {
@@ -104,27 +104,27 @@
   min-height: 40px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--clet-radius-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
 }
 
 .clet-sheet__close:hover {
-  background: var(--clet-hover);
-  color: var(--clet-text);
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-sheet__close:focus-visible {
-  outline: 2px solid var(--clet-primary);
+  outline: 2px solid var(--gsl-primary, var(--clet-primary));
   outline-offset: 2px;
 }
 
 .clet-sheet__header {
   flex-shrink: 0;
   padding: 20px 64px 20px 24px;
-  background: var(--clet-hover);
-  border-bottom: 1px solid var(--clet-border);
+  background: var(--gsl-hover, var(--clet-hover));
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
 }
 
 .clet-sheet__title {
@@ -132,14 +132,14 @@
   font-size: 18px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-sheet__description {
   margin: 6px 0 0;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-sheet__body {
@@ -157,8 +157,8 @@
   justify-content: flex-end;
   gap: 8px;
   padding: 16px 24px;
-  border-top: 1px solid var(--clet-border);
-  background: var(--clet-bg);
+  border-top: 1px solid var(--gsl-border, var(--clet-border));
+  background: var(--gsl-bg, var(--clet-bg));
 }
 
 @keyframes clet-sheet-overlay-in {

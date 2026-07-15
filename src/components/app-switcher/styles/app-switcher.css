@@ -1,12 +1,12 @@
 .clet-app-switcher {
-  --clet-shadow: var(--clet-shadow-sm);
+  --clet-shadow: var(--gsl-shadow-sm, var(--clet-shadow-sm));
   --clet-item-size: 80px;
   --clet-icon-size: 32px;
-  --clet-app-switcher-font: var(--clet-font-body);
+  --clet-app-switcher-font: var(--gsl-font-body, var(--clet-font-body));
 
   position: relative;
   display: inline-block;
-  font-family: var(--clet-app-switcher-font);
+  font-family: var(--gsl-app-switcher-font, var(--clet-app-switcher-font));
 }
 
 .clet-app-switcher__trigger {
@@ -19,35 +19,35 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .clet-app-switcher__trigger:hover {
-  background-color: var(--clet-hover);
+  background-color: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-app-switcher__trigger:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 .clet-app-switcher__panel {
-  --clet-shadow: var(--clet-shadow-sm);
+  --clet-shadow: var(--gsl-shadow-sm, var(--clet-shadow-sm));
   --clet-item-size: 80px;
   --clet-icon-size: 32px;
-  --clet-app-switcher-font: var(--clet-font-body);
+  --clet-app-switcher-font: var(--gsl-font-body, var(--clet-font-body));
 
-  z-index: var(--clet-z-popover);
+  z-index: var(--gsl-z-popover, var(--clet-z-popover));
   min-width: 320px;
   max-width: 360px;
   padding: 8px 0;
-  font-family: var(--clet-app-switcher-font);
-  background: var(--clet-bg);
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-xl);
-  box-shadow: var(--clet-shadow-md);
+  font-family: var(--gsl-app-switcher-font, var(--clet-app-switcher-font));
+  background: var(--gsl-bg, var(--clet-bg));
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
   opacity: 0;
   transform: translateY(-4px);
 }
@@ -83,12 +83,12 @@
   padding: 8px 24px 4px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-app-switcher__grid {
   display: grid;
-  grid-template-columns: repeat(var(--clet-columns, 3), 1fr);
+  grid-template-columns: repeat(var(--gsl-columns, var(--clet-columns, 3)), 1fr);
   gap: 0;
   padding: 8px;
 }
@@ -99,13 +99,13 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: var(--clet-item-size);
-  height: var(--clet-item-size);
+  width: var(--gsl-item-size, var(--clet-item-size));
+  height: var(--gsl-item-size, var(--clet-item-size));
   padding: 8px;
   border: none;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.15s ease;
@@ -113,11 +113,11 @@
 }
 
 .clet-app-switcher__item:hover:not(:disabled, .clet-app-switcher__item--disabled) {
-  background-color: var(--clet-hover);
+  background-color: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-app-switcher__item:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: -2px;
 }
 
@@ -130,12 +130,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--clet-icon-size);
-  height: var(--clet-icon-size);
+  width: var(--gsl-icon-size, var(--clet-icon-size));
+  height: var(--gsl-icon-size, var(--clet-icon-size));
   flex-shrink: 0;
   overflow: hidden;
   border-radius: 50%;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-app-switcher__icon--tile {
@@ -191,11 +191,11 @@
   padding: 24px 16px;
   text-align: center;
   font-size: 13px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-app-switcher__status--error {
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-app-switcher__loading {
@@ -205,7 +205,7 @@
   justify-content: center;
   gap: 12px;
   padding: 24px 16px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-app-switcher__loading-text {
@@ -242,8 +242,8 @@
   padding: 1px 6px;
   font-size: 10px;
   font-weight: 500;
-  color: var(--clet-on-primary);
-  background: var(--clet-focus);
+  color: var(--gsl-on-primary, var(--clet-on-primary));
+  background: var(--gsl-focus, var(--clet-focus));
   border-radius: 4px;
 }
 
@@ -253,14 +253,14 @@
 
 .clet-app-switcher__footer {
   padding: 8px 16px;
-  border-top: 1px solid var(--clet-border);
+  border-top: 1px solid var(--gsl-border, var(--clet-border));
   text-align: center;
   font-size: 13px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-app-switcher__footer a {
-  color: var(--clet-focus);
+  color: var(--gsl-focus, var(--clet-focus));
   text-decoration: none;
 }
 

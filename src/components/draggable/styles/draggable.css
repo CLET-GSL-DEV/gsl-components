@@ -7,7 +7,7 @@
 .clet-draggable--dragging {
   z-index: 1;
   touch-action: none;
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--clet-text) 12%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--gsl-text, var(--clet-text)) 12%, transparent);
 }
 
 .clet-draggable--disabled {
@@ -22,20 +22,20 @@
   min-height: 40px;
   padding: 8px;
   border: 0;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   background: transparent;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: grab;
   touch-action: none;
 }
 
 .clet-draggable__handle:hover:not(:disabled) {
-  color: var(--clet-text-secondary);
-  background: var(--clet-hover);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-draggable__handle:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 

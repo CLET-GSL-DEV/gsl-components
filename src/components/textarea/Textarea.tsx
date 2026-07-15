@@ -13,9 +13,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
       disabled={disabled}
       aria-invalid={invalid || undefined}
       className={cn(
-        "clet-textarea",
-        invalid && "clet-textarea--invalid",
-        disabled && "clet-textarea--disabled",
+        "clet-textarea gsl-textarea",
+        invalid && "clet-textarea--invalid gsl-textarea--invalid",
+        disabled && "clet-textarea--disabled gsl-textarea--disabled",
         classNames?.root,
         className,
       )}

@@ -97,19 +97,19 @@ export function ExportButton<T>({
       </PopoverTrigger>
       <PopoverPortal>
         <PopoverContent
-          className={cn("clet-popover--menu", classNames?.menu)}
+          className={cn("clet-popover--menu gsl-popover--menu", classNames?.menu)}
           side={side}
           align={align}
           sideOffset={sideOffset}
         >
-          <ul className="clet-popover__menu">
+          <ul className="clet-popover__menu gsl-popover__menu">
             {formats.map((format) => {
               const { label: formatLabel, icon: Icon } = FORMAT_CONFIG[format];
               return (
                 <li key={format}>
                   <button
                     type="button"
-                    className={cn("clet-popover__menu-item", classNames?.menuItem)}
+                    className={cn("clet-popover__menu-item gsl-popover__menu-item", classNames?.menuItem)}
                     onClick={() => handleExport(format)}
                   >
                     <Icon size={14} strokeWidth={1.5} aria-hidden />

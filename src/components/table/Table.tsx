@@ -71,7 +71,7 @@ export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
     <TableContext.Provider value={{ paramPrefix }}>
       <div
         ref={ref}
-        className={cn("clet-table", classNames?.root, className)}
+        className={cn("clet-table gsl-table", classNames?.root, className)}
         style={style}
         {...props}
       >
@@ -279,11 +279,11 @@ function TableContentRender<T>(
           setOpenPopoverKey(key);
         }}
         className={cn(
-          (selectable || onRowClick) && "clet-table__row--clickable",
+          (selectable || onRowClick) && "clet-table__row--clickable gsl-table__row--clickable",
         )}
       >
         <td
-          className={cn("clet-table__checkbox-cell", classNames?.checkboxCell)}
+          className={cn("clet-table__checkbox-cell gsl-table__checkbox-cell", classNames?.checkboxCell)}
           onClick={(e) => e.stopPropagation()}
         >
           <Checkbox
@@ -307,7 +307,7 @@ function TableContentRender<T>(
 
         {hasActionsColumn && (
           <td
-            className={cn("clet-table__actions-cell", classNames?.actionsCell)}
+            className={cn("clet-table__actions-cell gsl-table__actions-cell", classNames?.actionsCell)}
             onClick={(e) => e.stopPropagation()}
           >
             <Popover
@@ -319,7 +319,7 @@ function TableContentRender<T>(
               <PopoverAnchor virtualRef={virtualAnchorRef} />
               <PopoverTrigger
                 className={cn(
-                  "clet-table__actions-trigger",
+                  "clet-table__actions-trigger gsl-table__actions-trigger",
                   classNames?.actionsTrigger,
                 )}
                 aria-label="Row actions"
@@ -338,7 +338,7 @@ function TableContentRender<T>(
               <PopoverPortal>
                 <PopoverContent
                   className={cn(
-                    "clet-table__actions-menu",
+                    "clet-table__actions-menu gsl-table__actions-menu",
                     classNames?.actionsMenu,
                   )}
                   side="bottom"
@@ -354,7 +354,7 @@ function TableContentRender<T>(
                     <button
                       type="button"
                       className={cn(
-                        "clet-table__actions-item",
+                        "clet-table__actions-item gsl-table__actions-item",
                         classNames?.actionsItem,
                       )}
                       onClick={(e) =>
@@ -365,16 +365,16 @@ function TableContentRender<T>(
                     </button>
                   )}
                   {selectable && hasCustomActions && (
-                    <div className="clet-table__actions-separator" />
+                    <div className="clet-table__actions-separator gsl-table__actions-separator" />
                   )}
                   {actions?.map((action) => (
                     <button
                       key={action.id}
                       type="button"
                       className={cn(
-                        "clet-table__actions-item",
+                        "clet-table__actions-item gsl-table__actions-item",
                         action.variant === "destructive" &&
-                          "clet-table__actions-item--destructive",
+                          "clet-table__actions-item--destructive gsl-table__actions-item--destructive",
                         classNames?.actionsItem,
                       )}
                       onClick={(e) =>
@@ -386,13 +386,13 @@ function TableContentRender<T>(
                     </button>
                   ))}
                   {showBulkSection && (selectable || hasCustomActions) && (
-                    <div className="clet-table__actions-separator" />
+                    <div className="clet-table__actions-separator gsl-table__actions-separator" />
                   )}
                   {showBulkSection && (
                     <>
                       <div
                         className={cn(
-                          "clet-table__actions-section-label",
+                          "clet-table__actions-section-label gsl-table__actions-section-label",
                           classNames?.actionsSectionLabel,
                         )}
                       >
@@ -401,7 +401,7 @@ function TableContentRender<T>(
                       <button
                         type="button"
                         className={cn(
-                          "clet-table__actions-item",
+                          "clet-table__actions-item gsl-table__actions-item",
                           classNames?.actionsItem,
                         )}
                         onClick={(e) =>
@@ -418,9 +418,9 @@ function TableContentRender<T>(
                             key={action.id}
                             type="button"
                             className={cn(
-                              "clet-table__actions-item",
+                              "clet-table__actions-item gsl-table__actions-item",
                               action.destructive &&
-                                "clet-table__actions-item--destructive",
+                                "clet-table__actions-item--destructive gsl-table__actions-item--destructive",
                               classNames?.actionsItem,
                             )}
                             onClick={(e) =>
@@ -446,7 +446,7 @@ function TableContentRender<T>(
 
   const headerRow = (
     <tr>
-      <th className={cn("clet-table__checkbox-cell", classNames?.checkboxCell)}>
+      <th className={cn("clet-table__checkbox-cell gsl-table__checkbox-cell", classNames?.checkboxCell)}>
         <Checkbox
           checked={allSelected}
           onCheckedChange={handleSelectAll}
@@ -462,8 +462,8 @@ function TableContentRender<T>(
             key={col.id}
             style={colStyle(col)}
             className={cn(
-              col.sortable && "clet-table__th--sortable",
-              isSorted && "clet-table__th--sorted",
+              col.sortable && "clet-table__th--sortable gsl-table__th--sortable",
+              isSorted && "clet-table__th--sorted gsl-table__th--sorted",
               classNames?.th,
             )}
             onClick={() => {
@@ -473,12 +473,12 @@ function TableContentRender<T>(
               setSort({ column: col.id, direction: next });
             }}
           >
-            <span className={cn("clet-table__th-label", classNames?.thLabel)}>
+            <span className={cn("clet-table__th-label gsl-table__th-label", classNames?.thLabel)}>
               {col.header}
             </span>
             {col.sortable && (
               <span
-                className={cn("clet-table__sort-icon", classNames?.sortIcon)}
+                className={cn("clet-table__sort-icon gsl-table__sort-icon", classNames?.sortIcon)}
               >
                 {isSorted ? (
                   dir === "asc" ? (
@@ -496,7 +496,7 @@ function TableContentRender<T>(
       })}
       {hasActionsColumn && (
         <th
-          className={cn("clet-table__actions-cell", classNames?.actionsCell)}
+          className={cn("clet-table__actions-cell gsl-table__actions-cell", classNames?.actionsCell)}
         />
       )}
     </tr>
@@ -507,11 +507,11 @@ function TableContentRender<T>(
       <div
         ref={ref}
         className={cn(
-          "clet-table__content",
-          variant === "panel" && "clet-table__content--panel",
+          "clet-table__content gsl-table__content",
+          variant === "panel" && "clet-table__content--panel gsl-table__content--panel",
           selectable &&
             selectedIds.size > 0 &&
-            "clet-table__content--has-selected",
+            "clet-table__content--has-selected gsl-table__content--has-selected",
           classNames?.root,
           className,
         )}
@@ -524,13 +524,13 @@ function TableContentRender<T>(
                 {selectable && (
                   <th
                     className={cn(
-                      "clet-table__checkbox-cell",
+                      "clet-table__checkbox-cell gsl-table__checkbox-cell",
                       classNames?.checkboxCell,
                     )}
                   >
                     <span
                       className={cn(
-                        "clet-table__skeleton clet-table__skeleton--cb",
+                        "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--cb gsl-table__skeleton--cb",
                         classNames?.skeleton,
                       )}
                     />
@@ -541,7 +541,7 @@ function TableContentRender<T>(
                       <th key={col.id} style={colStyle(col)}>
                         <span
                           className={cn(
-                            "clet-table__th-label",
+                            "clet-table__th-label gsl-table__th-label",
                             classNames?.thLabel,
                           )}
                         >
@@ -553,7 +553,7 @@ function TableContentRender<T>(
                       <th key={i}>
                         <span
                           className={cn(
-                            "clet-table__skeleton clet-table__skeleton--th",
+                            "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--th gsl-table__skeleton--th",
                             classNames?.skeleton,
                           )}
                         />
@@ -562,7 +562,7 @@ function TableContentRender<T>(
                 {hasActionsColumn && (
                   <th
                     className={cn(
-                      "clet-table__actions-cell",
+                      "clet-table__actions-cell gsl-table__actions-cell",
                       classNames?.actionsCell,
                     )}
                   />
@@ -575,13 +575,13 @@ function TableContentRender<T>(
                   {selectable && (
                     <td
                       className={cn(
-                        "clet-table__checkbox-cell",
+                        "clet-table__checkbox-cell gsl-table__checkbox-cell",
                         classNames?.checkboxCell,
                       )}
                     >
                       <span
                         className={cn(
-                          "clet-table__skeleton clet-table__skeleton--cb",
+                          "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--cb gsl-table__skeleton--cb",
                           classNames?.skeleton,
                         )}
                       />
@@ -592,7 +592,7 @@ function TableContentRender<T>(
                         <td key={col.id} style={colStyle(col)}>
                           <span
                             className={cn(
-                              "clet-table__skeleton clet-table__skeleton--td",
+                              "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--td gsl-table__skeleton--td",
                               classNames?.skeleton,
                             )}
                           />
@@ -602,7 +602,7 @@ function TableContentRender<T>(
                         <td key={cellIdx}>
                           <span
                             className={cn(
-                              "clet-table__skeleton clet-table__skeleton--td",
+                              "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--td gsl-table__skeleton--td",
                               classNames?.skeleton,
                             )}
                           />
@@ -611,7 +611,7 @@ function TableContentRender<T>(
                   {hasActionsColumn && (
                     <td
                       className={cn(
-                        "clet-table__actions-cell",
+                        "clet-table__actions-cell gsl-table__actions-cell",
                         classNames?.actionsCell,
                       )}
                     />
@@ -624,7 +624,7 @@ function TableContentRender<T>(
           isVirtual ? (
             <div
               ref={scrollRef}
-              className={cn("clet-table__viewport", classNames?.viewport)}
+              className={cn("clet-table__viewport gsl-table__viewport", classNames?.viewport)}
               style={{ overflow: "auto", flex: 1, minHeight: 0 }}
             >
               <table
@@ -689,10 +689,10 @@ function TableContentRender<T>(
             <tbody>
               <tr>
                 <td colSpan={colSpan || 1}>
-                  <div className={cn("clet-table__empty", classNames?.empty)}>
+                  <div className={cn("clet-table__empty gsl-table__empty", classNames?.empty)}>
                     <div
                       className={cn(
-                        "clet-table__empty-icon",
+                        "clet-table__empty-icon gsl-table__empty-icon",
                         classNames?.emptyIcon,
                       )}
                     >
@@ -700,7 +700,7 @@ function TableContentRender<T>(
                     </div>
                     <div
                       className={cn(
-                        "clet-table__empty-text",
+                        "clet-table__empty-text gsl-table__empty-text",
                         classNames?.emptyText,
                       )}
                     >
@@ -733,7 +733,7 @@ export const TableFooter = forwardRef<HTMLDivElement, TableFooterProps>(
     return (
       <div
         ref={ref}
-        className={cn("clet-table__footer", classNames?.root, className)}
+        className={cn("clet-table__footer gsl-table__footer", classNames?.root, className)}
         {...props}
       >
         {children}

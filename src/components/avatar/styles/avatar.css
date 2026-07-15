@@ -1,5 +1,5 @@
 .clet-avatar {
-  --clet-avatar-font: var(--clet-font-body);
+  --clet-avatar-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: inline-flex;
   align-items: center;
@@ -7,7 +7,7 @@
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  font-family: var(--clet-avatar-font);
+  font-family: var(--gsl-avatar-font, var(--clet-avatar-font));
 }
 
 .clet-avatar__image {
@@ -24,7 +24,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  color: var(--clet-avatar-color, var(--clet-main-bg));
+  color: var(--gsl-avatar-color, var(--clet-avatar-color, var(--clet-main-bg)));
   font-weight: 700;
   line-height: 1;
   text-transform: uppercase;

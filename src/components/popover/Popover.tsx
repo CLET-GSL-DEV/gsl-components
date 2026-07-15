@@ -20,7 +20,7 @@ export const PopoverContent = forwardRef<
   return (
     <PopoverPrimitive.Content
       ref={ref}
-      className={cn("clet-popover", classNames?.content, className)}
+      className={cn("clet-popover gsl-popover", classNames?.content, className)}
       {...props}
     >
       {children}

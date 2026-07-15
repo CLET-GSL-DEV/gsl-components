@@ -1,13 +1,13 @@
 .clet-timeline {
-  --clet-timeline-font: var(--clet-font-body);
+  --clet-timeline-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-family: var(--clet-timeline-font);
-  color: var(--clet-text);
+  font-family: var(--gsl-timeline-font, var(--clet-timeline-font));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-timeline__item {
@@ -72,12 +72,12 @@
   bottom: -32px;
   left: 50%;
   width: 1px;
-  background: var(--clet-border);
+  background: var(--gsl-border, var(--clet-border));
   transform: translateX(-50%) scaleY(0);
   transform-origin: top;
-  animation: clet-timeline-draw var(--clet-timeline-draw-duration) ease-out
+  animation: clet-timeline-draw var(--gsl-timeline-draw-duration, var(--clet-timeline-draw-duration)) ease-out
     forwards
-    calc(var(--clet-timeline-index) * var(--clet-timeline-stagger-step));
+    calc(var(--gsl-timeline-index, var(--clet-timeline-index)) * var(--gsl-timeline-stagger-step, var(--clet-timeline-stagger-step)));
 }
 
 .clet-timeline__item:last-child .clet-timeline__connector {
@@ -94,14 +94,14 @@
   height: 16px;
   margin-top: 4px;
   border-radius: 50%;
-  background: var(--clet-bg);
-  border: 2px solid var(--clet-border);
-  color: var(--clet-text-secondary);
-  box-shadow: 0 0 0 3px var(--clet-timeline-halo, var(--clet-bg));
+  background: var(--gsl-bg, var(--clet-bg));
+  border: 2px solid var(--gsl-border, var(--clet-border));
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  box-shadow: 0 0 0 3px var(--gsl-timeline-halo, var(--clet-timeline-halo, var(--clet-bg)));
   transform: scale(0);
-  animation: clet-timeline-pop var(--clet-timeline-pop-duration) ease-out
+  animation: clet-timeline-pop var(--gsl-timeline-pop-duration, var(--clet-timeline-pop-duration)) ease-out
     forwards
-    calc(var(--clet-timeline-index) * var(--clet-timeline-stagger-step));
+    calc(var(--gsl-timeline-index, var(--clet-timeline-index)) * var(--gsl-timeline-stagger-step, var(--clet-timeline-stagger-step)));
 }
 
 .clet-timeline__dot svg {
@@ -110,12 +110,12 @@
 }
 
 .clet-timeline__dot--primary {
-  background: var(--clet-primary);
-  border-color: var(--clet-primary);
-  color: var(--clet-on-primary);
+  background: var(--gsl-primary, var(--clet-primary));
+  border-color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
   box-shadow:
-    0 0 0 3px var(--clet-timeline-halo, var(--clet-bg)),
-    0 0 0 5px var(--clet-primary-light);
+    0 0 0 3px var(--gsl-timeline-halo, var(--clet-timeline-halo, var(--clet-bg))),
+    0 0 0 5px var(--gsl-primary-light, var(--clet-primary-light));
 }
 
 .clet-timeline__dot--primary::after {
@@ -123,33 +123,33 @@
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  background: var(--clet-primary);
+  background: var(--gsl-primary, var(--clet-primary));
   opacity: 0.4;
   animation: clet-timeline-pulse 1.6s ease-out infinite;
 }
 
 .clet-timeline__dot--success {
-  background: var(--clet-success);
-  border-color: var(--clet-success);
-  color: var(--clet-bg);
+  background: var(--gsl-success, var(--clet-success));
+  border-color: var(--gsl-success, var(--clet-success));
+  color: var(--gsl-bg, var(--clet-bg));
 }
 
 .clet-timeline__dot--warning {
-  background: var(--clet-warning);
-  border-color: var(--clet-warning);
-  color: var(--clet-text);
+  background: var(--gsl-warning, var(--clet-warning));
+  border-color: var(--gsl-warning, var(--clet-warning));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-timeline__dot--error {
-  background: var(--clet-error);
-  border-color: var(--clet-error);
-  color: var(--clet-error-text);
+  background: var(--gsl-error, var(--clet-error));
+  border-color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-timeline__dot--muted {
   background: transparent;
-  border-color: var(--clet-text-muted);
-  color: var(--clet-text-muted);
+  border-color: var(--gsl-text-muted, var(--clet-text-muted));
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-timeline__content {
@@ -162,13 +162,13 @@
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-timeline__data {
   margin: 4px 0 0;
   font-size: 14px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-timeline__data + .clet-timeline__data {
@@ -178,7 +178,7 @@
 .clet-timeline__footer {
   margin-top: 8px;
   font-size: 14px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 @keyframes clet-timeline-draw {

@@ -1,6 +1,8 @@
 :root[data-clet-theme="dark"],
+:root[data-gsl-theme="dark"],
 .dark,
-.clet-theme.dark {
+.clet-theme.dark,
+.gsl-theme.dark {
   --clet-bg: #1f1f1f;
   --clet-text: #e8eaed;
   --clet-text-secondary: #9aa0a6;
@@ -16,7 +18,7 @@
   --clet-primary: #4a7fa8;
   --clet-primary-light: #16232e;
   --clet-secondary: #c8a24b;
-  --clet-focus: var(--clet-primary);
+  --clet-focus: var(--gsl-primary, var(--clet-primary));
   --clet-on-primary: #fff;
   --clet-error: #f87171;
   --clet-error-text: #fca5a5;

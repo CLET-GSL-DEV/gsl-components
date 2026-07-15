@@ -2,16 +2,16 @@
 
 .clet-combobox {
   --clet-combobox-trigger-height: 40px;
-  --clet-combobox-radius: var(--clet-radius-base);
-  --clet-combobox-font: var(--clet-font-body);
-  --clet-combobox-label-size: var(--clet-text-size-base);
+  --clet-combobox-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  --clet-combobox-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-combobox-label-size: var(--gsl-text-size-base, var(--clet-text-size-base));
   --clet-combobox-menu-max-height: 320px;
 
   position: relative;
   display: inline-block;
   width: 100%;
   min-width: 0;
-  font-family: var(--clet-combobox-font);
+  font-family: var(--gsl-combobox-font, var(--clet-combobox-font));
 }
 
 /* ── Trigger ── */
@@ -23,15 +23,15 @@
   gap: 8px;
   width: 100%;
   min-width: 0;
-  height: var(--clet-combobox-trigger-height);
+  height: var(--gsl-combobox-trigger-height, var(--clet-combobox-trigger-height));
   padding: 0 32px 0 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-combobox-radius);
-  background-color: var(--clet-bg);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-combobox-radius, var(--clet-combobox-radius));
+  background-color: var(--gsl-bg, var(--clet-bg));
   font-family: inherit;
-  font-size: var(--clet-combobox-label-size);
+  font-size: var(--gsl-combobox-label-size, var(--clet-combobox-label-size));
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   text-align: left;
   cursor: pointer;
   transition:
@@ -41,21 +41,21 @@
 }
 
 .clet-combobox__trigger:hover:not(:disabled) {
-  border-color: var(--clet-border-strong);
-  background-color: var(--clet-hover);
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
+  background-color: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-combobox__trigger[aria-expanded="true"] {
-  border-color: var(--clet-primary);
-  box-shadow: 0 0 0 1px var(--clet-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-combobox__trigger--invalid {
-  border-color: var(--clet-error);
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-combobox__trigger--invalid[aria-expanded="true"] {
-  box-shadow: 0 0 0 1px var(--clet-error);
+  box-shadow: 0 0 0 1px var(--gsl-error, var(--clet-error));
 }
 
 .clet-combobox__trigger:disabled {
@@ -64,7 +64,7 @@
 }
 
 .clet-combobox__trigger:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
@@ -77,24 +77,24 @@
 }
 
 .clet-combobox__trigger-text--placeholder {
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-combobox__clear {
   flex-shrink: 0;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: pointer;
 }
 
 .clet-combobox__clear:hover {
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-combobox__chevron {
   position: absolute;
   right: 12px;
   flex-shrink: 0;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   pointer-events: none;
   transition: transform 150ms ease;
 }
@@ -113,19 +113,19 @@
    * here. Re-declare them locally so the portaled panel still resolves
    * to the right defaults (and stays overridable via classNames/CSS).
    */
-  --clet-combobox-radius: var(--clet-radius-base);
-  --clet-combobox-label-size: var(--clet-text-size-base);
-  --clet-combobox-font: var(--clet-font-body);
+  --clet-combobox-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  --clet-combobox-label-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  --clet-combobox-font: var(--gsl-font-body, var(--clet-font-body));
   --clet-combobox-menu-max-height: 320px;
 
-  z-index: var(--clet-z-select);
+  z-index: var(--gsl-z-select, var(--clet-z-select));
   width: var(--radix-popover-trigger-width);
   min-width: 200px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-combobox-radius);
-  background: var(--clet-bg);
-  box-shadow: var(--clet-shadow-md);
-  font-family: var(--clet-combobox-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-combobox-radius, var(--clet-combobox-radius));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
+  font-family: var(--gsl-combobox-font, var(--clet-combobox-font));
   overflow: hidden;
 }
 
@@ -151,12 +151,12 @@
   gap: 8px;
   height: 40px;
   padding: 0 12px;
-  border-bottom: 1px solid var(--clet-border);
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
 }
 
 .clet-combobox__input-icon {
   flex-shrink: 0;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-combobox__input {
@@ -166,31 +166,31 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   font-family: inherit;
-  font-size: var(--clet-combobox-label-size);
+  font-size: var(--gsl-combobox-label-size, var(--clet-combobox-label-size));
   line-height: 1.4;
   outline: none;
 }
 
 .clet-combobox__input::placeholder {
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 /* ── List ── */
 
 .clet-combobox__list {
-  max-height: var(--clet-combobox-menu-max-height);
+  max-height: var(--gsl-combobox-menu-max-height, var(--clet-combobox-menu-max-height));
   overflow: hidden auto;
   padding: 6px;
 }
 
 .clet-combobox__empty {
   padding: 24px 12px;
-  font-size: var(--clet-combobox-label-size);
+  font-size: var(--gsl-combobox-label-size, var(--clet-combobox-label-size));
   line-height: 1.4;
   text-align: center;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 /* ── Item ── */
@@ -201,21 +201,21 @@
   gap: 8px;
   min-height: 36px;
   padding: 6px 8px;
-  border-radius: calc(var(--clet-combobox-radius) - 2px);
-  font-size: var(--clet-combobox-label-size);
+  border-radius: calc(var(--gsl-combobox-radius, var(--clet-combobox-radius)) - 2px);
+  font-size: var(--gsl-combobox-label-size, var(--clet-combobox-label-size));
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   cursor: pointer;
   user-select: none;
   transition: background-color 120ms ease;
 }
 
 .clet-combobox__item[data-selected="true"] {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-combobox__item[data-disabled="true"] {
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -224,7 +224,7 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-combobox__item-label {
@@ -239,7 +239,7 @@
 
 .clet-combobox__item-check-single {
   flex-shrink: 0;
-  color: var(--clet-primary);
+  color: var(--gsl-primary, var(--clet-primary));
 }
 
 /* Multi-select checkbox (mirrors Checkbox's visual) */
@@ -251,18 +251,18 @@
   justify-content: center;
   width: 18px;
   height: 18px;
-  border: 1px solid var(--clet-border);
-  border-radius: calc(var(--clet-radius-base) - 4px);
-  background: var(--clet-bg);
-  color: var(--clet-on-primary);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 4px);
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
   transition:
     background-color 150ms ease,
     border-color 150ms ease;
 }
 
 .clet-combobox__item-check--checked {
-  border-color: var(--clet-primary);
-  background: var(--clet-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  background: var(--gsl-primary, var(--clet-primary));
 }
 
 /* ── Animations ── */

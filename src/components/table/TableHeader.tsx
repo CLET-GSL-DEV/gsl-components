@@ -33,7 +33,7 @@ export const TableActions = forwardRef<HTMLDivElement, TableActionsProps>(
     return (
       <div
         ref={ref}
-        className={cn("clet-table__actions", classNames?.root, className)}
+        className={cn("clet-table__actions gsl-table__actions", classNames?.root, className)}
         {...props}
       >
         {children}
@@ -47,7 +47,7 @@ export const TableHeader = forwardRef<HTMLDivElement, TableHeaderProps>(
     return (
       <div
         ref={ref}
-        className={cn("clet-table__header-bar", classNames?.root, className)}
+        className={cn("clet-table__header-bar gsl-table__header-bar", classNames?.root, className)}
         {...props}
       >
         {children}
@@ -126,17 +126,17 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
     }, [onChange]);
 
     return (
-      <div className={cn("clet-table__search", classNames?.root, className)}>
+      <div className={cn("clet-table__search gsl-table__search", classNames?.root, className)}>
         <Search
           size={16}
           strokeWidth={1.5}
-          className={cn("clet-table__search-icon", classNames?.icon)}
+          className={cn("clet-table__search-icon gsl-table__search-icon", classNames?.icon)}
           aria-hidden
         />
         <input
           ref={ref}
           type="text"
-          className={cn("clet-table__search-input", classNames?.input)}
+          className={cn("clet-table__search-input gsl-table__search-input", classNames?.input)}
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
@@ -144,7 +144,7 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
         />
         {value && (
           <div
-            className={cn("clet-table__search-clear", classNames?.clear)}
+            className={cn("clet-table__search-clear gsl-table__search-clear", classNames?.clear)}
             onClick={clear}
             aria-label="Clear search"
           >
@@ -260,8 +260,8 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
         <div
           ref={ref}
           className={cn(
-            "clet-table__filter",
-            "clet-table__filter--spread",
+            "clet-table__filter gsl-table__filter",
+            "clet-table__filter--spread gsl-table__filter--spread",
             classNames?.root,
             className,
           )}
@@ -270,8 +270,8 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
             <form
               ref={formRef}
               className={cn(
-                "clet-table__filter-fields",
-                "clet-table__filter-fields--spread",
+                "clet-table__filter-fields gsl-table__filter-fields",
+                "clet-table__filter-fields--spread gsl-table__filter-fields--spread",
                 classNames?.fields,
               )}
             >
@@ -281,15 +281,15 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
 
           <div
             className={cn(
-              "clet-table__filter-actions",
-              "clet-table__filter-actions--spread",
+              "clet-table__filter-actions gsl-table__filter-actions",
+              "clet-table__filter-actions--spread gsl-table__filter-actions--spread",
               classNames?.actions,
             )}
           >
             <button
               type="button"
               className={cn(
-                "clet-table__filter-btn--reset",
+                "clet-table__filter-btn--reset gsl-table__filter-btn--reset",
                 classNames?.resetButton,
               )}
               onClick={handleReset}
@@ -305,19 +305,19 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
     return (
       <div
         ref={ref}
-        className={cn("clet-table__filter", classNames?.root, className)}
+        className={cn("clet-table__filter gsl-table__filter", classNames?.root, className)}
       >
         <Popover.Root open={open} onOpenChange={setOpen}>
           <Popover.Trigger asChild>
             <Button
-              className={cn("clet-table__filter-trigger", classNames?.trigger)}
+              className={cn("clet-table__filter-trigger gsl-table__filter-trigger", classNames?.trigger)}
               aria-label="Filter"
             >
               <FilterIcon size={14} strokeWidth={1.5} aria-hidden />
               Filters
               {activeCount != null && activeCount > 0 && (
                 <span
-                  className={cn("clet-table__filter-badge", classNames?.badge)}
+                  className={cn("clet-table__filter-badge gsl-table__filter-badge", classNames?.badge)}
                 >
                   {activeCount}
                 </span>
@@ -327,19 +327,19 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
 
           <Popover.Portal>
             <Popover.Content
-              className={cn("clet-table__filter-content", classNames?.content)}
+              className={cn("clet-table__filter-content gsl-table__filter-content", classNames?.content)}
               side="bottom"
               align="end"
               sideOffset={6}
             >
               <div
-                className={cn("clet-table__filter-header", classNames?.header)}
+                className={cn("clet-table__filter-header gsl-table__filter-header", classNames?.header)}
               >
                 <div>Filters</div>
                 <button
                   type="button"
                   className={cn(
-                    "clet-table__filter-btn--reset",
+                    "clet-table__filter-btn--reset gsl-table__filter-btn--reset",
                     classNames?.resetButton,
                   )}
                   onClick={handleReset}
@@ -352,19 +352,19 @@ export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
               {children && (
                 <form
                   ref={formRef}
-                  className={cn("clet-table__filter-fields", classNames?.fields)}
+                  className={cn("clet-table__filter-fields gsl-table__filter-fields", classNames?.fields)}
                 >
                   {children}
                 </form>
               )}
 
               <div
-                className={cn("clet-table__filter-actions", classNames?.actions)}
+                className={cn("clet-table__filter-actions gsl-table__filter-actions", classNames?.actions)}
               >
                 <button
                   type="button"
                   className={cn(
-                    "clet-table__filter-btn clet-table__filter-btn--apply",
+                    "clet-table__filter-btn gsl-table__filter-btn clet-table__filter-btn--apply gsl-table__filter-btn--apply",
                     classNames?.applyButton,
                   )}
                   onClick={handleApply}

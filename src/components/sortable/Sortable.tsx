@@ -80,8 +80,8 @@ export const Sortable = forwardRef<HTMLDivElement, SortableProps>(
           <div
             ref={ref}
             className={cn(
-              "clet-sortable",
-              disabled && "clet-sortable--disabled",
+              "clet-sortable gsl-sortable",
+              disabled && "clet-sortable--disabled gsl-sortable--disabled",
               classNames?.root,
               className,
             )}
@@ -114,8 +114,8 @@ export const SortableList = forwardRef<HTMLDivElement, SortableListProps>(
         <div
           ref={ref}
           className={cn(
-            "clet-sortable__list",
-            strategy === "horizontal" && "clet-sortable__list--horizontal",
+            "clet-sortable__list gsl-sortable__list",
+            strategy === "horizontal" && "clet-sortable__list--horizontal gsl-sortable__list--horizontal",
             classNames?.list,
             className,
           )}
@@ -238,10 +238,10 @@ const SortableItemRoot = forwardRef<
         }
       }}
       className={cn(
-        "clet-sortable__item",
-        isDragging && "clet-sortable__item--dragging",
-        disabled && "clet-sortable__item--disabled",
-        !hasHandle && !disabled && "clet-sortable__item--draggable",
+        "clet-sortable__item gsl-sortable__item",
+        isDragging && "clet-sortable__item--dragging gsl-sortable__item--dragging",
+        disabled && "clet-sortable__item--disabled gsl-sortable__item--disabled",
+        !hasHandle && !disabled && "clet-sortable__item--draggable gsl-sortable__item--draggable",
         classNames?.item,
         className,
       )}
@@ -284,8 +284,8 @@ export const SortableHandle = forwardRef<HTMLButtonElement, SortableHandleProps>
         }}
         type="button"
         className={cn(
-          "clet-sortable__handle",
-          isDragging && "clet-sortable__handle--dragging",
+          "clet-sortable__handle gsl-sortable__handle",
+          isDragging && "clet-sortable__handle--dragging gsl-sortable__handle--dragging",
           classNames?.handle,
           className,
         )}

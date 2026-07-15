@@ -1,20 +1,20 @@
 .clet-app-header {
-  --clet-header-py: var(--clet-app-layout-body-gap, 1rem);
-  --clet-header-px: var(--clet-app-layout-body-gap, 1rem);
-  --clet-app-header-font: var(--clet-font-body);
+  --clet-header-py: var(--gsl-app-layout-body-gap, var(--clet-app-layout-body-gap, 1rem));
+  --clet-header-px: var(--gsl-app-layout-body-gap, var(--clet-app-layout-body-gap, 1rem));
+  --clet-app-header-font: var(--gsl-font-body, var(--clet-font-body));
 
   position: sticky;
   top: 0;
-  z-index: var(--clet-z-header);
+  z-index: var(--gsl-z-header, var(--clet-z-header));
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   width: 100%;
-  padding: var(--clet-header-py) var(--clet-header-px);
-  border-radius: var(--clet-panel-radius, var(--clet-radius-2xl));
-  background: var(--clet-panel-bg, var(--clet-surface-subtle));
-  font-family: var(--clet-app-header-font);
+  padding: var(--gsl-header-py, var(--clet-header-py)) var(--gsl-header-px, var(--clet-header-px));
+  border-radius: var(--gsl-panel-radius, var(--clet-panel-radius, var(--clet-radius-2xl)));
+  background: var(--gsl-panel-bg, var(--clet-panel-bg, var(--clet-surface-subtle)));
+  font-family: var(--gsl-app-header-font, var(--clet-app-header-font));
 }
 
 /* ── Plain variant: square edges, primary background, on-primary text ──
@@ -22,20 +22,20 @@
    and --clet-app-header-color on .clet-app-header--plain (or an ancestor). */
 
 .clet-app-header--plain {
-  --clet-app-header-bg: var(--clet-primary);
-  --clet-app-header-color: var(--clet-on-primary);
+  --clet-app-header-bg: var(--gsl-primary, var(--clet-primary));
+  --clet-app-header-color: var(--gsl-on-primary, var(--clet-on-primary));
   border-radius: 0;
-  background: var(--clet-app-header-bg);
-  color: var(--clet-app-header-color);
+  background: var(--gsl-app-header-bg, var(--clet-app-header-bg));
+  color: var(--gsl-app-header-color, var(--clet-app-header-color));
 }
 
 .clet-app-header--plain .clet-app-header__notif-btn {
-  color: var(--clet-app-header-color);
+  color: var(--gsl-app-header-color, var(--clet-app-header-color));
 }
 
 .clet-app-header--plain .clet-app-header__notif-btn:hover {
   background: rgb(255 255 255 / 15%);
-  color: var(--clet-app-header-color);
+  color: var(--gsl-app-header-color, var(--clet-app-header-color));
 }
 
 .clet-app-header--plain .clet-app-header__profile:hover {
@@ -44,7 +44,7 @@
 
 /* App switcher trigger inherits the on-primary foreground inside the plain header */
 .clet-app-header--plain .clet-app-switcher__trigger {
-  color: var(--clet-app-header-color);
+  color: var(--gsl-app-header-color, var(--clet-app-header-color));
 }
 
 .clet-app-header--plain .clet-app-switcher__trigger:hover {
@@ -60,24 +60,24 @@
 .clet-app-header__branding {
   /* Overridable tokens */
   --clet-branding-color: inherit;
-  --clet-branding-font: var(--clet-font-body);
+  --clet-branding-font: var(--gsl-font-body, var(--clet-font-body));
   --clet-branding-gap: 10px;
   --clet-branding-text-gap: 8px;
   --clet-branding-logo-size: 28px;
-  --clet-branding-title-font: var(--clet-font-header);
+  --clet-branding-title-font: var(--gsl-font-header, var(--clet-font-header));
   --clet-branding-title-size: 20px;
   --clet-branding-title-weight: 700;
-  --clet-branding-title-color: var(--clet-branding-color);
+  --clet-branding-title-color: var(--gsl-branding-color, var(--clet-branding-color));
   --clet-branding-sep-opacity: 0.55;
   --clet-branding-subtitle-size: 16px;
   --clet-branding-subtitle-weight: 400;
-  --clet-branding-subtitle-color: var(--clet-branding-color);
+  --clet-branding-subtitle-color: var(--gsl-branding-color, var(--clet-branding-color));
   display: flex;
   align-items: center;
-  gap: var(--clet-branding-gap);
+  gap: var(--gsl-branding-gap, var(--clet-branding-gap));
   min-width: 0;
-  color: var(--clet-branding-color);
-  font-family: var(--clet-branding-font);
+  color: var(--gsl-branding-color, var(--clet-branding-color));
+  font-family: var(--gsl-branding-font, var(--clet-branding-font));
 }
 
 .clet-app-header__branding-logo {
@@ -89,34 +89,34 @@
 .clet-app-header__branding-logo img,
 .clet-app-header__branding-logo svg {
   display: block;
-  width: var(--clet-branding-logo-size);
-  height: var(--clet-branding-logo-size);
+  width: var(--gsl-branding-logo-size, var(--clet-branding-logo-size));
+  height: var(--gsl-branding-logo-size, var(--clet-branding-logo-size));
 }
 
 .clet-app-header__branding-text {
   display: inline-flex;
   align-items: baseline;
-  gap: var(--clet-branding-text-gap);
+  gap: var(--gsl-branding-text-gap, var(--clet-branding-text-gap));
   min-width: 0;
 }
 
 .clet-app-header__branding-title {
-  font-family: var(--clet-branding-title-font);
-  font-size: var(--clet-branding-title-size);
-  font-weight: var(--clet-branding-title-weight);
-  color: var(--clet-branding-title-color);
+  font-family: var(--gsl-branding-title-font, var(--clet-branding-title-font));
+  font-size: var(--gsl-branding-title-size, var(--clet-branding-title-size));
+  font-weight: var(--gsl-branding-title-weight, var(--clet-branding-title-weight));
+  color: var(--gsl-branding-title-color, var(--clet-branding-title-color));
   white-space: nowrap;
 }
 
 .clet-app-header__branding-sep {
   color: inherit;
-  opacity: var(--clet-branding-sep-opacity);
+  opacity: var(--gsl-branding-sep-opacity, var(--clet-branding-sep-opacity));
 }
 
 .clet-app-header__branding-subtitle {
-  font-size: var(--clet-branding-subtitle-size);
-  font-weight: var(--clet-branding-subtitle-weight);
-  color: var(--clet-branding-subtitle-color);
+  font-size: var(--gsl-branding-subtitle-size, var(--clet-branding-subtitle-size));
+  font-weight: var(--gsl-branding-subtitle-weight, var(--clet-branding-subtitle-weight));
+  color: var(--gsl-branding-subtitle-color, var(--clet-branding-subtitle-color));
   white-space: nowrap;
 }
 
@@ -134,7 +134,7 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   transition:
     background-color 150ms ease,
@@ -142,22 +142,22 @@
 }
 
 .clet-app-header__menu-btn:hover {
-  background: var(--clet-surface-dark);
-  color: var(--clet-text);
+  background: var(--gsl-surface-dark, var(--clet-surface-dark));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-app-header__menu-btn:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 .clet-app-header--plain .clet-app-header__menu-btn {
-  color: var(--clet-app-header-color);
+  color: var(--gsl-app-header-color, var(--clet-app-header-color));
 }
 
 .clet-app-header--plain .clet-app-header__menu-btn:hover {
   background: rgb(255 255 255 / 15%);
-  color: var(--clet-app-header-color);
+  color: var(--gsl-app-header-color, var(--clet-app-header-color));
 }
 
 /* ── Right side group ── */
@@ -179,14 +179,14 @@
 
 .clet-app-header-search.clet-app-header-search.clet-command
   .clet-command__input-wrapper {
-  border-radius: var(--clet-radius-xl);
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
   height: stretch;
   border: none;
 }
 
 .clet-app-header-search.clet-app-header-search.clet-command
   .clet-command__input-wrapper:hover {
-  border: 1px solid var(--clet-border);
+  border: 1px solid var(--gsl-border, var(--clet-border));
 }
 
 .clet-app-header__search-btn {
@@ -195,27 +195,27 @@
   gap: 8px;
   height: 36px;
   padding: 0 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-xl);
-  background: var(--clet-bg);
-  color: var(--clet-text-muted);
-  font-family: var(--clet-app-header-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-text-muted, var(--clet-text-muted));
+  font-family: var(--gsl-app-header-font, var(--clet-app-header-font));
   font-size: 13px;
   cursor: pointer;
   transition: border-color 150ms ease;
 }
 
 .clet-app-header__search-btn:hover {
-  border-color: var(--clet-border-strong);
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
 }
 
 .clet-app-header__search-btn:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 .clet-app-header__search-text {
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-app-header__search-kbd {
@@ -223,11 +223,11 @@
   align-items: center;
   height: 20px;
   padding: 0 5px;
-  border: 1px solid var(--clet-border);
+  border: 1px solid var(--gsl-border, var(--clet-border));
   border-radius: 4px;
-  background: var(--clet-panel-bg, var(--clet-surface-subtle));
+  background: var(--gsl-panel-bg, var(--clet-panel-bg, var(--clet-surface-subtle)));
   font-size: 11px;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   line-height: 1;
   font-family: inherit;
 }
@@ -244,7 +244,7 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   transition:
     background-color 150ms ease,
@@ -252,12 +252,12 @@
 }
 
 .clet-app-header__notif-btn:hover {
-  background: var(--clet-surface-dark);
-  color: var(--clet-text);
+  background: var(--gsl-surface-dark, var(--clet-surface-dark));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-app-header__notif-btn:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
@@ -274,8 +274,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--clet-primary);
-  color: var(--clet-on-primary);
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
   font-size: 12px;
   font-weight: 700;
   line-height: 1;
@@ -297,11 +297,11 @@
   width: 340px;
   max-height: 420px;
   overflow: hidden;
-  border-radius: var(--clet-radius-xl);
-  background: var(--clet-bg);
-  box-shadow: var(--clet-shadow-md);
-  border: 1px solid var(--clet-border);
-  z-index: var(--clet-z-popover);
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  z-index: var(--gsl-z-popover, var(--clet-z-popover));
 }
 
 .clet-notif-popover__header {
@@ -310,7 +310,7 @@
   top: 0;
   z-index: 1;
   padding: 14px 16px 10px;
-  background: var(--clet-bg);
+  background: var(--gsl-bg, var(--clet-bg));
 }
 
 .clet-notif-popover__body {
@@ -328,7 +328,7 @@
 .clet-notif-popover__title {
   font-size: 14px;
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-notif-popover__item {
@@ -341,22 +341,22 @@
 }
 
 .clet-notif-popover__item:hover {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-notif-popover__item--read {
-  background: var(--clet-surface-subtle);
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
 }
 
 .clet-notif-popover__item--read:hover {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-notif-popover__dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--clet-primary);
+  background: var(--gsl-primary, var(--clet-primary));
   flex-shrink: 0;
   margin-top: 5px;
 }
@@ -367,13 +367,13 @@
 }
 
 .clet-notif-popover__item:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: -2px;
 }
 
 .clet-notif-popover__body-text {
   font-size: 13px;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -383,7 +383,7 @@
 
 .clet-notif-popover__body-time {
   font-size: 11px;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   margin-top: 2px;
 }
 
@@ -404,7 +404,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
   flex-shrink: 0;
   margin-top: 5px;
 }
@@ -419,7 +419,7 @@
 .clet-notif-popover__skeleton-line {
   height: 12px;
   border-radius: 4px;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
   animation: clet-skeleton-pulse 1.5s ease-in-out infinite;
 }
 

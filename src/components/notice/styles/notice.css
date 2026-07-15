@@ -1,62 +1,62 @@
 /* ── Root ── */
 
 .clet-notice {
-  --clet-notice-accent: var(--clet-text-secondary);
-  --clet-notice-bg: color-mix(in srgb, var(--clet-border) 15%, transparent);
-  --clet-notice-radius: var(--clet-radius-base);
+  --clet-notice-accent: var(--gsl-text-secondary, var(--clet-text-secondary));
+  --clet-notice-bg: color-mix(in srgb, var(--gsl-border, var(--clet-border)) 15%, transparent);
+  --clet-notice-radius: var(--gsl-radius-base, var(--clet-radius-base));
   --clet-notice-padding: 16px;
-  --clet-notice-font: var(--clet-font-body);
-  --clet-notice-title-size: var(--clet-text-size-base);
-  --clet-notice-body-size: var(--clet-text-size-sm);
+  --clet-notice-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-notice-title-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  --clet-notice-body-size: var(--gsl-text-size-sm, var(--clet-text-size-sm));
 
   display: flex;
   gap: 10px;
-  padding: var(--clet-notice-padding);
+  padding: var(--gsl-notice-padding, var(--clet-notice-padding));
   border: 1px solid transparent;
-  border-radius: var(--clet-notice-radius);
-  background: var(--clet-notice-bg);
-  font-family: var(--clet-notice-font);
-  color: var(--clet-text);
+  border-radius: var(--gsl-notice-radius, var(--clet-notice-radius));
+  background: var(--gsl-notice-bg, var(--clet-notice-bg));
+  font-family: var(--gsl-notice-font, var(--clet-notice-font));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 /* ── Variants (existing tokens only) ── */
 
 .clet-notice--info {
-  --clet-notice-accent: var(--clet-primary);
-  --clet-notice-bg: color-mix(in srgb, var(--clet-primary) 8%, transparent);
+  --clet-notice-accent: var(--gsl-primary, var(--clet-primary));
+  --clet-notice-bg: color-mix(in srgb, var(--gsl-primary, var(--clet-primary)) 8%, transparent);
 }
 
 .clet-notice--success {
-  --clet-notice-accent: var(--clet-success);
-  --clet-notice-bg: color-mix(in srgb, var(--clet-success) 12%, transparent);
+  --clet-notice-accent: var(--gsl-success, var(--clet-success));
+  --clet-notice-bg: color-mix(in srgb, var(--gsl-success, var(--clet-success)) 12%, transparent);
 }
 
 .clet-notice--warning {
-  --clet-notice-accent: var(--clet-warning);
-  --clet-notice-bg: color-mix(in srgb, var(--clet-warning) 14%, transparent);
+  --clet-notice-accent: var(--gsl-warning, var(--clet-warning));
+  --clet-notice-bg: color-mix(in srgb, var(--gsl-warning, var(--clet-warning)) 14%, transparent);
 }
 
 .clet-notice--error {
-  --clet-notice-accent: var(--clet-error);
-  --clet-notice-bg: color-mix(in srgb, var(--clet-error) 10%, transparent);
+  --clet-notice-accent: var(--gsl-error, var(--clet-error));
+  --clet-notice-bg: color-mix(in srgb, var(--gsl-error, var(--clet-error)) 10%, transparent);
 }
 
 /* ── Left border accent ── */
 
 .clet-notice--left-border {
-  border-left: 4px solid var(--clet-notice-accent);
+  border-left: 4px solid var(--gsl-notice-accent, var(--clet-notice-accent));
 }
 
 /* ── Dashed outer border ── */
 
 .clet-notice--dashed {
   border-style: dashed;
-  border-color: color-mix(in srgb, var(--clet-notice-accent) 50%, var(--clet-border));
+  border-color: color-mix(in srgb, var(--gsl-notice-accent, var(--clet-notice-accent)) 50%, var(--gsl-border, var(--clet-border)));
 }
 
 .clet-notice--dashed.clet-notice--left-border {
   border-left-style: solid;
-  border-left-color: var(--clet-notice-accent);
+  border-left-color: var(--gsl-notice-accent, var(--clet-notice-accent));
 }
 
 /* ── Icon ── */
@@ -66,7 +66,7 @@
   flex-shrink: 0;
   align-items: center;
   margin-top: 2px;
-  color: var(--clet-notice-accent);
+  color: var(--gsl-notice-accent, var(--clet-notice-accent));
 }
 
 /* ── Content ── */
@@ -84,16 +84,16 @@
 }
 
 .clet-notice__title {
-  font-size: var(--clet-notice-title-size);
+  font-size: var(--gsl-notice-title-size, var(--clet-notice-title-size));
   font-weight: 600;
   line-height: 1.4;
-  color: var(--clet-notice-accent);
+  color: var(--gsl-notice-accent, var(--clet-notice-accent));
 }
 
 .clet-notice__body {
-  font-size: var(--clet-notice-body-size);
+  font-size: var(--gsl-notice-body-size, var(--clet-notice-body-size));
   line-height: 1.5;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-notice__body ul,

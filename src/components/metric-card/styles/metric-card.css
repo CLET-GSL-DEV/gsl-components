@@ -1,23 +1,23 @@
 .clet-metric-card {
-  --clet-default-metric-card-bg: var(--clet-surface-card);
-  --clet-metric-card-radius: var(--clet-radius-xl);
+  --clet-default-metric-card-bg: var(--gsl-surface-card, var(--clet-surface-card));
+  --clet-metric-card-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
   --clet-metric-card-shadow: none;
 
   /* Overridable type tokens */
-  --clet-metric-card-font: var(--clet-font-body);
-  --clet-metric-card-value-font: var(--clet-font-header);
+  --clet-metric-card-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-metric-card-value-font: var(--gsl-font-header, var(--clet-font-header));
   --clet-metric-card-value-size: 28px;
-  --clet-metric-card-value-color: var(--clet-text);
+  --clet-metric-card-value-color: var(--gsl-text, var(--clet-text));
   --clet-metric-card-description-size: 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 20px;
   border: none;
-  border-radius: var(--clet-metric-card-radius);
-  background: var(--clet-default-metric-card-bg);
-  font-family: var(--clet-metric-card-font);
-  box-shadow: var(--clet-metric-card-shadow);
+  border-radius: var(--gsl-metric-card-radius, var(--clet-metric-card-radius));
+  background: var(--gsl-default-metric-card-bg, var(--clet-default-metric-card-bg));
+  font-family: var(--gsl-metric-card-font, var(--clet-metric-card-font));
+  box-shadow: var(--gsl-metric-card-shadow, var(--clet-metric-card-shadow));
 }
 
 /* ── Variants — only affect trend colors ─────── */
@@ -28,9 +28,9 @@
   --clet-metric-card-value-size: 32px;
   gap: 8px;
   padding: 24px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
   padding-bottom: 38px;
 }
 
@@ -41,7 +41,7 @@
 
 .clet-metric-card--outline .clet-metric-card__label {
   font-size: 10px;
-  color: var(--clet-metric-card-label-color, var(--clet-text-secondary));
+  color: var(--gsl-metric-card-label-color, var(--clet-metric-card-label-color, var(--clet-text-secondary)));
 }
 
 .clet-metric-card--outline .clet-metric-card__header,
@@ -72,7 +72,7 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 /* Icon always muted — no variant coloring */
@@ -81,7 +81,7 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   text-transform: uppercase;
   letter-spacing: 0.04em;
   overflow: hidden;
@@ -99,11 +99,11 @@
 }
 
 .clet-metric-card__value {
-  font-family: var(--clet-metric-card-value-font);
-  font-size: var(--clet-metric-card-value-size);
+  font-family: var(--gsl-metric-card-value-font, var(--clet-metric-card-value-font));
+  font-size: var(--gsl-metric-card-value-size, var(--clet-metric-card-value-size));
   font-weight: 600;
   line-height: 1.2;
-  color: var(--clet-metric-card-value-color);
+  color: var(--gsl-metric-card-value-color, var(--clet-metric-card-value-color));
   letter-spacing: -0.02em;
 }
 
@@ -122,23 +122,23 @@
 }
 
 .clet-metric-card__trend--up {
-  color: var(--clet-success);
+  color: var(--gsl-success, var(--clet-success));
 }
 
 .clet-metric-card__trend--down {
-  color: var(--clet-error);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-metric-card__trend--neutral {
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 /* ── Description ────────────────────────────────────────── */
 
 .clet-metric-card__description {
-  font-size: var(--clet-metric-card-description-size);
+  font-size: var(--gsl-metric-card-description-size, var(--clet-metric-card-description-size));
   line-height: 1.4;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 /* ── Loading shimmer ────────────────────────────────────── */
@@ -162,7 +162,7 @@
 .clet-metric-card__skeleton-icon {
   width: 20px;
   height: 20px;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
 }
 
 .clet-metric-card__skeleton-label {
@@ -173,7 +173,7 @@
 
 .clet-metric-card__skeleton-value {
   width: 120px;
-  height: var(--clet-metric-card-value-size);
+  height: var(--gsl-metric-card-value-size, var(--clet-metric-card-value-size));
   border-radius: 6px;
 }
 

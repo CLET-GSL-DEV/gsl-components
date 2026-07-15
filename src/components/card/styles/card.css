@@ -1,13 +1,13 @@
 .clet-card {
   --clet-card-padding: 20px;
-  --clet-card-font: var(--clet-font-body);
-  --clet-card-title-font: var(--clet-font-header);
+  --clet-card-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-card-title-font: var(--gsl-font-header, var(--clet-font-header));
 
-  background: var(--clet-surface-card);
-  border-radius: var(--clet-radius-xl);
-  padding: var(--clet-card-padding);
-  font-family: var(--clet-card-font);
-  color: var(--clet-text);
+  background: var(--gsl-surface-card, var(--clet-surface-card));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  padding: var(--gsl-card-padding, var(--clet-card-padding));
+  font-family: var(--gsl-card-font, var(--clet-card-font));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-card__header {
@@ -19,10 +19,10 @@
 
 .clet-card__title {
   margin: 0;
-  font-family: var(--clet-card-title-font);
+  font-family: var(--gsl-card-title-font, var(--clet-card-title-font));
   font-size: 20px;
   font-weight: 600;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-card__actions {

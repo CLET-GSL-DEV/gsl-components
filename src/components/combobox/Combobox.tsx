@@ -77,7 +77,7 @@ export function Combobox(props: ComboboxProps) {
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
-      <span className={cn("clet-combobox", classNames?.root, className)}>
+      <span className={cn("clet-combobox gsl-combobox", classNames?.root, className)}>
         <PopoverPrimitive.Trigger asChild>
           <button
             type="button"
@@ -87,22 +87,22 @@ export function Combobox(props: ComboboxProps) {
             aria-label={ariaLabel}
             disabled={disabled}
             className={cn(
-              "clet-combobox__trigger",
-              invalid && "clet-combobox__trigger--invalid",
+              "clet-combobox__trigger gsl-combobox__trigger",
+              invalid && "clet-combobox__trigger--invalid gsl-combobox__trigger--invalid",
               classNames?.trigger,
             )}
           >
             <span
               className={cn(
-                "clet-combobox__trigger-text",
-                !hasValue && "clet-combobox__trigger-text--placeholder",
+                "clet-combobox__trigger-text gsl-combobox__trigger-text",
+                !hasValue && "clet-combobox__trigger-text--placeholder gsl-combobox__trigger-text--placeholder",
               )}
             >
               {triggerLabel}
             </span>
             {clearable && hasValue ? (
               <XCircle
-                className="clet-combobox__clear"
+                className="clet-combobox__clear gsl-combobox__clear"
                 size={16}
                 aria-label="Clear selection"
                 role="button"
@@ -111,7 +111,7 @@ export function Combobox(props: ComboboxProps) {
               />
             ) : null}
             <ChevronDown
-              className="clet-combobox__chevron"
+              className="clet-combobox__chevron gsl-combobox__chevron"
               size={16}
               aria-hidden
               data-state={open ? "open" : "closed"}
@@ -120,27 +120,27 @@ export function Combobox(props: ComboboxProps) {
         </PopoverPrimitive.Trigger>
         <PopoverPrimitive.Portal>
           <PopoverPrimitive.Content
-            className={cn("clet-combobox__content", classNames?.content)}
+            className={cn("clet-combobox__content gsl-combobox__content", classNames?.content)}
             sideOffset={4}
             align="start"
           >
-            <CommandPrimitive className="clet-combobox__command">
-              <div className="clet-combobox__input-wrapper">
+            <CommandPrimitive className="clet-combobox__command gsl-combobox__command">
+              <div className="clet-combobox__input-wrapper gsl-combobox__input-wrapper">
                 <Search
-                  className="clet-combobox__input-icon"
+                  className="clet-combobox__input-icon gsl-combobox__input-icon"
                   size={16}
                   aria-hidden
                 />
                 <CommandPrimitive.Input
-                  className={cn("clet-combobox__input", classNames?.input)}
+                  className={cn("clet-combobox__input gsl-combobox__input", classNames?.input)}
                   placeholder={searchPlaceholder}
                 />
               </div>
               <CommandPrimitive.List
-                className={cn("clet-combobox__list", classNames?.list)}
+                className={cn("clet-combobox__list gsl-combobox__list", classNames?.list)}
               >
                 <CommandPrimitive.Empty
-                  className={cn("clet-combobox__empty", classNames?.empty)}
+                  className={cn("clet-combobox__empty gsl-combobox__empty", classNames?.empty)}
                 >
                   {emptyMessage}
                 </CommandPrimitive.Empty>
@@ -153,26 +153,26 @@ export function Combobox(props: ComboboxProps) {
                       keywords={[option.label]}
                       disabled={option.disabled}
                       onSelect={() => handleSelect(option.value)}
-                      className={cn("clet-combobox__item", classNames?.item)}
+                      className={cn("clet-combobox__item gsl-combobox__item", classNames?.item)}
                     >
                       {option.icon ? (
                         <span
                           className={cn(
-                            "clet-combobox__item-icon",
+                            "clet-combobox__item-icon gsl-combobox__item-icon",
                             classNames?.itemIcon,
                           )}
                         >
                           {option.icon}
                         </span>
                       ) : null}
-                      <span className="clet-combobox__item-label">
+                      <span className="clet-combobox__item-label gsl-combobox__item-label">
                         {option.label}
                       </span>
                       {multiple ? (
                         <span
                           className={cn(
-                            "clet-combobox__item-check",
-                            isSelected && "clet-combobox__item-check--checked",
+                            "clet-combobox__item-check gsl-combobox__item-check",
+                            isSelected && "clet-combobox__item-check--checked gsl-combobox__item-check--checked",
                             classNames?.itemCheck,
                           )}
                           aria-hidden
@@ -184,7 +184,7 @@ export function Combobox(props: ComboboxProps) {
                       ) : isSelected ? (
                         <Check
                           className={cn(
-                            "clet-combobox__item-check-single",
+                            "clet-combobox__item-check-single gsl-combobox__item-check-single",
                             classNames?.itemCheck,
                           )}
                           size={16}

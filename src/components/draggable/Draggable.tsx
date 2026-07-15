@@ -72,9 +72,9 @@ const DraggableRoot = forwardRef<
         }
       }}
       className={cn(
-        "clet-draggable",
-        dragging && "clet-draggable--dragging",
-        disabled && "clet-draggable--disabled",
+        "clet-draggable gsl-draggable",
+        dragging && "clet-draggable--dragging gsl-draggable--dragging",
+        disabled && "clet-draggable--disabled gsl-draggable--disabled",
         classNames?.root,
         className,
       )}
@@ -101,8 +101,8 @@ export const DraggableHandle = forwardRef<HTMLButtonElement, DraggableHandleProp
         ref={ref}
         type="button"
         className={cn(
-          "clet-draggable__handle",
-          dragging && "clet-draggable__handle--dragging",
+          "clet-draggable__handle gsl-draggable__handle",
+          dragging && "clet-draggable__handle--dragging gsl-draggable__handle--dragging",
           classNames?.handle,
           className,
         )}

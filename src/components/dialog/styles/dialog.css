@@ -1,8 +1,8 @@
 .clet-dialog__overlay {
   position: fixed;
   inset: 0;
-  z-index: var(--clet-z-overlay);
-  background: var(--clet-overlay);
+  z-index: var(--gsl-z-overlay, var(--clet-z-overlay));
+  background: var(--gsl-overlay, var(--clet-overlay));
 }
 
 .clet-dialog__overlay[data-state="open"] {
@@ -14,11 +14,11 @@
 }
 
 .clet-dialog__content {
-  --clet-dialog-font: var(--clet-font-body);
+  --clet-dialog-font: var(--gsl-font-body, var(--clet-font-body));
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: var(--clet-z-modal);
+  z-index: var(--gsl-z-modal, var(--clet-z-modal));
   display: flex;
   width: min(480px, calc(100vw - 32px));
   max-width: 100%;
@@ -27,11 +27,11 @@
   gap: 16px;
   overflow-y: auto;
   padding: 16px;
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
-  box-shadow: var(--clet-shadow-lg);
-  font-family: var(--clet-dialog-font);
-  color: var(--clet-text);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
+  font-family: var(--gsl-dialog-font, var(--clet-dialog-font));
+  color: var(--gsl-text, var(--clet-text));
   transform: translate(-50%, -50%);
 }
 
@@ -49,14 +49,14 @@
   font-size: 18px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-dialog__description {
   margin: -8px 0 0;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-dialog__close {
@@ -70,19 +70,19 @@
   min-height: 40px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--clet-radius-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
   background: transparent;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
 }
 
 .clet-dialog__close:hover {
-  background: var(--clet-hover);
-  color: var(--clet-text);
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-dialog__close:focus-visible {
-  outline: 2px solid var(--clet-primary);
+  outline: 2px solid var(--gsl-primary, var(--clet-primary));
   outline-offset: 2px;
 }
 

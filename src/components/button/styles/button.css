@@ -1,15 +1,15 @@
 .clet-button {
-  --clet-button-font: var(--clet-font-body);
+  --clet-button-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
-  color: var(--clet-text);
-  font-family: var(--clet-button-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-text, var(--clet-text));
+  font-family: var(--gsl-button-font, var(--clet-button-font));
   font-size: 14px;
   font-weight: 500;
   line-height: 1.4;
@@ -27,7 +27,7 @@
 }
 
 .clet-button:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
@@ -49,9 +49,9 @@
 }
 
 .clet-button--primary {
-  border-color: var(--clet-primary);
-  background: var(--clet-primary);
-  color: var(--clet-on-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
 .clet-button--primary:hover:not(:disabled) {
@@ -63,13 +63,13 @@
 }
 
 .clet-button--secondary:hover:not(:disabled) {
-  background: var(--clet-hover);
-  border-color: var(--clet-border-strong);
+  background: var(--gsl-hover, var(--clet-hover));
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
 }
 
 .clet-button--outline {
-  border-color: var(--clet-primary);
-  color: var(--clet-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-button--outline:hover:not(:disabled) {
@@ -79,27 +79,27 @@
 .clet-button--ghost {
   border-color: transparent;
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-button--ghost:hover:not(:disabled) {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-button--destructive {
   border-color: transparent;
   background: transparent;
-  color: var(--clet-error-text);
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-button--destructive:hover:not(:disabled) {
-  background: var(--clet-error-bg);
+  background: var(--gsl-error-bg, var(--clet-error-bg));
 }
 
 .clet-button--primary-destructive {
-  border-color: var(--clet-error);
-  background: var(--clet-error);
-  color: var(--clet-on-primary);
+  border-color: var(--gsl-error, var(--clet-error));
+  background: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
 .clet-button--primary-destructive:hover:not(:disabled) {
@@ -107,9 +107,9 @@
 }
 
 .clet-button--success {
-  border-color: var(--clet-success);
-  background: var(--clet-success);
-  color: var(--clet-on-primary);
+  border-color: var(--gsl-success, var(--clet-success));
+  background: var(--gsl-success, var(--clet-success));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
 .clet-button--success:hover:not(:disabled) {

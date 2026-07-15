@@ -26,7 +26,7 @@ export const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(
     return (
       <DialogPrimitive.Overlay
         ref={ref}
-        className={cn("clet-modal__overlay", classNames?.overlay, className)}
+        className={cn("clet-modal__overlay gsl-modal__overlay", classNames?.overlay, className)}
         {...props}
       />
     );
@@ -110,13 +110,13 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
     const confirmNode = useMemo(
       () =>
         createPortal(
-          <div className="clet-modal__confirm-overlay">
-            <div className="clet-modal__confirm">
-              <h2 className="clet-modal__confirm-title">{preventCloseTitle}</h2>
-              <p className="clet-modal__confirm-description">
+          <div className="clet-modal__confirm-overlay gsl-modal__confirm-overlay">
+            <div className="clet-modal__confirm gsl-modal__confirm">
+              <h2 className="clet-modal__confirm-title gsl-modal__confirm-title">{preventCloseTitle}</h2>
+              <p className="clet-modal__confirm-description gsl-modal__confirm-description">
                 {preventCloseDescription}
               </p>
-              <div className="clet-modal__confirm-actions">
+              <div className="clet-modal__confirm-actions gsl-modal__confirm-actions">
                 <Button variant="ghost" onClick={handleCancelConfirm}>
                   Cancel
                 </Button>
@@ -140,7 +140,7 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
       <DialogPrimitive.Content
         ref={composedRef}
         className={cn(
-          "clet-modal",
+          "clet-modal gsl-modal",
           `clet-modal--${size}`,
           classNames?.content,
           className,
@@ -157,7 +157,7 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
           (preventClose ? (
             <button
               type="button"
-              className={cn("clet-modal__close", classNames?.close)}
+              className={cn("clet-modal__close gsl-modal__close", classNames?.close)}
               aria-label="Close modal"
               onClick={requestClose}
             >
@@ -166,7 +166,7 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
           ) : (
             <DialogPrimitive.Close
               type="button"
-              className={cn("clet-modal__close", classNames?.close)}
+              className={cn("clet-modal__close gsl-modal__close", classNames?.close)}
               aria-label="Close modal"
             >
               <X size={16} strokeWidth={2} aria-hidden />
@@ -184,7 +184,7 @@ export const ModalHeader = forwardRef<HTMLElement, ModalHeaderProps>(
     return (
       <header
         ref={ref}
-        className={cn("clet-modal__header", classNames?.header, className)}
+        className={cn("clet-modal__header gsl-modal__header", classNames?.header, className)}
         {...props}
       />
     );
@@ -196,7 +196,7 @@ export const ModalTitle = forwardRef<HTMLHeadingElement, ModalTitleProps>(
     return (
       <DialogPrimitive.Title
         ref={ref}
-        className={cn("clet-modal__title", classNames?.title, className)}
+        className={cn("clet-modal__title gsl-modal__title", classNames?.title, className)}
         {...props}
       />
     );
@@ -211,7 +211,7 @@ export const ModalDescription = forwardRef<
     <DialogPrimitive.Description
       ref={ref}
       className={cn(
-        "clet-modal__description",
+        "clet-modal__description gsl-modal__description",
         classNames?.description,
         className,
       )}
@@ -225,7 +225,7 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
     return (
       <div
         ref={ref}
-        className={cn("clet-modal__body", classNames?.body, className)}
+        className={cn("clet-modal__body gsl-modal__body", classNames?.body, className)}
         {...props}
       />
     );
@@ -237,7 +237,7 @@ export const ModalFooter = forwardRef<HTMLElement, ModalFooterProps>(
     return (
       <footer
         ref={ref}
-        className={cn("clet-modal__footer", classNames?.footer, className)}
+        className={cn("clet-modal__footer gsl-modal__footer", classNames?.footer, className)}
         {...props}
       />
     );

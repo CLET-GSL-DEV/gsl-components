@@ -28,8 +28,8 @@ export function Switch({
     <SwitchPrimitive.Root
       id={id}
       className={cn(
-        "clet-switch__track",
-        invalid && "clet-switch__track--invalid",
+        "clet-switch__track gsl-switch__track",
+        invalid && "clet-switch__track--invalid gsl-switch__track--invalid",
         classNames?.track,
       )}
       checked={checked}
@@ -43,7 +43,7 @@ export function Switch({
       aria-label={!label ? ariaLabel : undefined}
     >
       <SwitchPrimitive.Thumb
-        className={cn("clet-switch__thumb", classNames?.thumb)}
+        className={cn("clet-switch__thumb gsl-switch__thumb", classNames?.thumb)}
       />
     </SwitchPrimitive.Root>
   );
@@ -51,20 +51,20 @@ export function Switch({
   return (
     <Wrapper
       className={cn(
-        "clet-switch",
-        disabled && "clet-switch--disabled",
+        "clet-switch gsl-switch",
+        disabled && "clet-switch--disabled gsl-switch--disabled",
         classNames?.root,
         className,
       )}
     >
       {label && labelPosition === "left" ? (
-        <span className={cn("clet-switch__label", classNames?.label)}>
+        <span className={cn("clet-switch__label gsl-switch__label", classNames?.label)}>
           {label}
         </span>
       ) : null}
       {control}
       {label && labelPosition === "right" ? (
-        <span className={cn("clet-switch__label", classNames?.label)}>
+        <span className={cn("clet-switch__label gsl-switch__label", classNames?.label)}>
           {label}
         </span>
       ) : null}

@@ -35,15 +35,15 @@ export const AppHeaderProfile = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "clet-app-header__profile",
-        isAvatarOnly && "clet-app-header__profile--avatar",
+        "clet-app-header__profile gsl-app-header__profile",
+        isAvatarOnly && "clet-app-header__profile--avatar gsl-app-header__profile--avatar",
         className,
       )}
       aria-busy={loading || undefined}
     >
       {loading ? (
         <span
-          className="clet-skeleton clet-app-header__skeleton-avatar"
+          className="clet-skeleton gsl-skeleton clet-app-header__skeleton-avatar gsl-app-header__skeleton-avatar"
           aria-hidden
         />
       ) : (
@@ -57,23 +57,23 @@ export const AppHeaderProfile = forwardRef<
       {!isAvatarOnly &&
         (loading ? (
           <span
-            className="clet-app-header__user-info clet-app-header__user-info--loading"
+            className="clet-app-header__user-info gsl-app-header__user-info clet-app-header__user-info--loading gsl-app-header__user-info--loading"
             aria-hidden
           >
-            <span className="clet-skeleton clet-app-header__skeleton-name" />
-            <span className="clet-skeleton clet-app-header__skeleton-role" />
+            <span className="clet-skeleton gsl-skeleton clet-app-header__skeleton-name gsl-app-header__skeleton-name" />
+            <span className="clet-skeleton gsl-skeleton clet-app-header__skeleton-role gsl-app-header__skeleton-role" />
           </span>
         ) : (
           <>
-            <div className="clet-app-header__user-info">
-              <span className="clet-app-header__user-name">{user.name}</span>
-              <span className="clet-app-header__user-role">{user.role}</span>
+            <div className="clet-app-header__user-info gsl-app-header__user-info">
+              <span className="clet-app-header__user-name gsl-app-header__user-name">{user.name}</span>
+              <span className="clet-app-header__user-role gsl-app-header__user-role">{user.role}</span>
             </div>
             <ChevronDown size={16} strokeWidth={1.5} aria-hidden />
           </>
         ))}
       {loading ? (
-        <span className="clet-app-header__sr-only" role="status">
+        <span className="clet-app-header__sr-only gsl-app-header__sr-only" role="status">
           {loadingLabel}
         </span>
       ) : null}

@@ -34,11 +34,11 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
         ref={ref}
         role="progressbar"
         className={cn(
-          "clet-progress-bar",
-          `clet-progress-bar--${variant}`,
-          `clet-progress-bar--${size}`,
-          indeterminate && "clet-progress-bar--indeterminate",
-          showValue && "clet-progress-bar--with-value",
+          "clet-progress-bar gsl-progress-bar",
+          `clet-progress-bar--${variant} gsl-progress-bar--${variant}`,
+          `clet-progress-bar--${size} gsl-progress-bar--${size}`,
+          indeterminate && "clet-progress-bar--indeterminate gsl-progress-bar--indeterminate",
+          showValue && "clet-progress-bar--with-value gsl-progress-bar--with-value",
           classNames?.root,
           className,
         )}
@@ -48,10 +48,10 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
         aria-valuenow={indeterminate ? undefined : clampedValue}
         {...props}
       >
-        <div className="clet-progress-bar__track">
+        <div className="clet-progress-bar__track gsl-progress-bar__track">
           <div
             className={cn(
-              "clet-progress-bar__indicator",
+              "clet-progress-bar__indicator gsl-progress-bar__indicator",
               classNames?.indicator,
             )}
             style={
@@ -61,7 +61,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
         </div>
         {showValue ? (
           <span
-            className={cn("clet-progress-bar__value", classNames?.value)}
+            className={cn("clet-progress-bar__value gsl-progress-bar__value", classNames?.value)}
             aria-hidden="true"
           >
             {percent}%

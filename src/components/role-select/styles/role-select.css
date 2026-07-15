@@ -1,9 +1,9 @@
 .clet-role-select {
-  --clet-role-select-font: var(--clet-font-body);
+  --clet-role-select-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: flex;
   flex-direction: column;
-  font-family: var(--clet-role-select-font);
+  font-family: var(--gsl-role-select-font, var(--clet-role-select-font));
 }
 
 /* ── Dropdown-style trigger ── */
@@ -16,10 +16,10 @@
   width: 100%;
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-surface-subtle, var(--clet-bg));
-  color: var(--clet-text);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle, var(--clet-bg)));
+  color: var(--gsl-text, var(--clet-text));
   font-family: inherit;
   font-size: 14px;
   text-align: left;
@@ -30,35 +30,35 @@
 }
 
 .clet-role-select__trigger:hover {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-role-select__trigger:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 .clet-role-select__trigger[data-state="open"] {
-  border-color: var(--clet-primary);
-  box-shadow: 0 0 0 1px var(--clet-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-role-select__trigger-label {
   font-weight: 500;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-role-select__trigger-value {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-role-select__trigger-icon {
   display: inline-flex;
   flex-shrink: 0;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 /* ── Nested role popover ── */
@@ -66,12 +66,12 @@
 .clet-role-select__popover {
   width: var(--radix-popover-trigger-width, 220px);
   padding: 4px;
-  background: var(--clet-bg);
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  box-shadow: var(--clet-shadow-md);
+  background: var(--gsl-bg, var(--clet-bg));
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
   outline: none;
-  z-index: var(--clet-z-select);
+  z-index: var(--gsl-z-select, var(--clet-z-select));
 }
 
 .clet-role-select__list {
@@ -90,9 +90,9 @@
   width: 100%;
   padding: 8px 10px;
   border: none;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   font-family: inherit;
   font-size: 14px;
   text-align: left;
@@ -101,11 +101,11 @@
 }
 
 .clet-role-select__item:hover:not(:disabled) {
-  background-color: var(--clet-hover);
+  background-color: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-role-select__item:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: -2px;
 }
 
@@ -124,7 +124,7 @@
 .clet-role-select__item-icon {
   display: inline-flex;
   flex-shrink: 0;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-role-select__name {
@@ -139,13 +139,13 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid var(--clet-border);
+  border: 2px solid var(--gsl-border, var(--clet-border));
   background: transparent;
   transition: border-color 0.15s ease;
 }
 
 .clet-role-select__radio--selected {
-  border-color: var(--clet-focus);
-  background: var(--clet-focus);
-  box-shadow: inset 0 0 0 3px var(--clet-bg);
+  border-color: var(--gsl-focus, var(--clet-focus));
+  background: var(--gsl-focus, var(--clet-focus));
+  box-shadow: inset 0 0 0 3px var(--gsl-bg, var(--clet-bg));
 }

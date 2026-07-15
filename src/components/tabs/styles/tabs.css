@@ -1,10 +1,10 @@
 .clet-tabs {
-  --clet-tabs-font: var(--clet-font-body);
+  --clet-tabs-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: flex;
   flex-direction: column;
-  font-family: var(--clet-tabs-font);
-  color: var(--clet-text);
+  font-family: var(--gsl-tabs-font, var(--clet-tabs-font));
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-tabs[data-orientation="vertical"] {
@@ -20,15 +20,15 @@
 
 .clet-tabs__list--default {
   padding: 8px 12px 0;
-  border-bottom: 1px solid var(--clet-border);
-  background: var(--clet-surface-card);
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
+  background: var(--gsl-surface-card, var(--clet-surface-card));
 }
 
 .clet-tabs__list--line {
   position: relative;
   gap: 0;
   padding: 0 4px;
-  border-bottom: 1px solid var(--clet-border);
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
   background: transparent;
 }
 
@@ -36,28 +36,28 @@
   flex-direction: column;
   padding: 12px 0;
   border-bottom: none;
-  border-right: 1px solid var(--clet-border);
+  border-right: 1px solid var(--gsl-border, var(--clet-border));
 }
 
 .clet-tabs--pill .clet-tabs__trigger {
-  border-radius: var(--clet-tabs-pill-radius, 9999px);
+  border-radius: var(--gsl-tabs-pill-radius, var(--clet-tabs-pill-radius, 9999px));
 }
 .clet-tabs--pill .clet-tabs__trigger[data-state="active"] {
-  color: var(--clet-on-primary);
+  color: var(--gsl-on-primary, var(--clet-on-primary));
   z-index: 1;
 }
 
 .clet-tabs--pill .clet-tabs__trigger[data-state="active"]:hover {
   background: transparent;
-  color: var(--clet-on-primary);
+  color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 .clet-tabs__trigger {
   padding: 8px 14px;
   border: 1px solid transparent;
-  border-radius: var(--clet-radius-base) var(--clet-radius-base) 0 0;
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base)) var(--gsl-radius-base, var(--clet-radius-base)) 0 0;
   background: transparent;
-  color: var(--clet-text-secondary);
-  font-family: var(--clet-tabs-font);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  font-family: var(--gsl-tabs-font, var(--clet-tabs-font));
   font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
@@ -69,11 +69,11 @@
 }
 
 .clet-tabs__trigger:hover:not(:disabled) {
-  color: var(--clet-text);
-  background: var(--clet-hover);
+  color: var(--gsl-text, var(--clet-text));
+  background: var(--gsl-hover, var(--clet-hover));
 }
 .clet-tabs__trigger:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
@@ -84,10 +84,10 @@
 
 .clet-tabs--default .clet-tabs__trigger[data-state="active"] {
   margin-bottom: -1px;
-  border-color: var(--clet-border);
-  border-bottom-color: var(--clet-bg);
-  background: var(--clet-bg);
-  color: var(--clet-primary);
+  border-color: var(--gsl-border, var(--clet-border));
+  border-bottom-color: var(--gsl-bg, var(--clet-bg));
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-tabs--line .clet-tabs__trigger {
@@ -98,14 +98,14 @@
 }
 
 .clet-tabs--line .clet-tabs__trigger[data-state="active"] {
-  color: var(--clet-primary);
+  color: var(--gsl-primary, var(--clet-primary));
   background: transparent;
 }
 
 .clet-tabs__indicator {
   position: absolute;
   pointer-events: none;
-  background: var(--clet-primary);
+  background: var(--gsl-primary, var(--clet-primary));
   transition:
     transform 150ms ease,
     width 150ms ease,
@@ -115,53 +115,53 @@
 }
 .clet-tabs--pill .clet-tabs__list {
   --clet-tabs-pill-gap: 6px;
-  gap: var(--clet-tabs-pill-gap);
+  gap: var(--gsl-tabs-pill-gap, var(--clet-tabs-pill-gap));
   position: relative;
-  background: var(--clet-surface-subtle);
-  padding: var(--clet-tabs-pill-gap);
-  border-radius: var(--clet-tabs-pill-radius, 999px);
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
+  padding: var(--gsl-tabs-pill-gap, var(--clet-tabs-pill-gap));
+  border-radius: var(--gsl-tabs-pill-radius, var(--clet-tabs-pill-radius, 999px));
   width: fit-content;
 }
 .clet-tabs--pill .clet-tabs__indicator {
-  background: var(--clet-primary);
-  top: var(--clet-tabs-indicator-cross-offset, 0);
-  left: var(--clet-tabs-indicator-offset, 0);
-  width: var(--clet-tabs-indicator-size, 0);
-  height: var(--clet-tabs-indicator-cross-size, 0);
+  background: var(--gsl-primary, var(--clet-primary));
+  top: var(--gsl-tabs-indicator-cross-offset, var(--clet-tabs-indicator-cross-offset, 0));
+  left: var(--gsl-tabs-indicator-offset, var(--clet-tabs-indicator-offset, 0));
+  width: var(--gsl-tabs-indicator-size, var(--clet-tabs-indicator-size, 0));
+  height: var(--gsl-tabs-indicator-cross-size, var(--clet-tabs-indicator-cross-size, 0));
 
-  border-radius: var(--clet-tabs-pill-radius, 9999px);
+  border-radius: var(--gsl-tabs-pill-radius, var(--clet-tabs-pill-radius, 9999px));
 }
 .clet-tabs__list--line[data-orientation="horizontal"] .clet-tabs__indicator {
   bottom: 0;
   left: 0;
   height: 2px;
-  transform: translateX(var(--clet-tabs-indicator-offset, 0));
-  width: var(--clet-tabs-indicator-size, 0);
+  transform: translateX(var(--gsl-tabs-indicator-offset, var(--clet-tabs-indicator-offset, 0)));
+  width: var(--gsl-tabs-indicator-size, var(--clet-tabs-indicator-size, 0));
 }
 
 .clet-tabs__list--line[data-orientation="vertical"] .clet-tabs__indicator {
   top: 0;
   right: 0;
   width: 2px;
-  transform: translateY(var(--clet-tabs-indicator-offset, 0));
-  height: var(--clet-tabs-indicator-size, 0);
+  transform: translateY(var(--gsl-tabs-indicator-offset, var(--clet-tabs-indicator-offset, 0)));
+  height: var(--gsl-tabs-indicator-size, var(--clet-tabs-indicator-size, 0));
 }
 
 .clet-tabs[data-orientation="vertical"] .clet-tabs__trigger {
   width: 100%;
-  border-radius: var(--clet-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   margin-bottom: 0;
   text-align: left;
 }
 
 .clet-tabs[data-orientation="vertical"] .clet-tabs__trigger[data-state="active"] {
   border-color: transparent;
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-tabs__content {
   padding: 16px;
-  background: var(--clet-bg);
+  background: var(--gsl-bg, var(--clet-bg));
   outline: none;
 }
 
@@ -182,7 +182,7 @@
 }
 
 .clet-tabs__content:focus-visible {
-  outline: 2px solid var(--clet-focus);
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: -2px;
 }
 

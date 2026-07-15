@@ -28,7 +28,7 @@ export const SheetOverlay = forwardRef<HTMLDivElement, SheetOverlayProps>(
     return (
       <DialogPrimitive.Overlay
         ref={ref}
-        className={cn("clet-sheet__overlay", classNames?.overlay, className)}
+        className={cn("clet-sheet__overlay gsl-sheet__overlay", classNames?.overlay, className)}
         {...props}
       />
     );
@@ -52,7 +52,7 @@ export const SheetContent = forwardRef<HTMLDivElement, SheetContentProps>(
         ref={ref}
         data-side={side}
         className={cn(
-          "clet-sheet",
+          "clet-sheet gsl-sheet",
           getSideClassName(side),
           classNames?.content,
           className,
@@ -63,7 +63,7 @@ export const SheetContent = forwardRef<HTMLDivElement, SheetContentProps>(
         {showCloseButton ? (
           <DialogPrimitive.Close
             type="button"
-            className={cn("clet-sheet__close", classNames?.close)}
+            className={cn("clet-sheet__close gsl-sheet__close", classNames?.close)}
             aria-label="Close sheet"
           >
             <X size={16} strokeWidth={2} aria-hidden />
@@ -79,7 +79,7 @@ export const SheetHeader = forwardRef<HTMLElement, SheetHeaderProps>(
     return (
       <header
         ref={ref}
-        className={cn("clet-sheet__header", classNames?.header, className)}
+        className={cn("clet-sheet__header gsl-sheet__header", classNames?.header, className)}
         {...props}
       />
     );
@@ -91,7 +91,7 @@ export const SheetTitle = forwardRef<HTMLHeadingElement, SheetTitleProps>(
     return (
       <DialogPrimitive.Title
         ref={ref}
-        className={cn("clet-sheet__title", classNames?.title, className)}
+        className={cn("clet-sheet__title gsl-sheet__title", classNames?.title, className)}
         {...props}
       />
     );
@@ -106,7 +106,7 @@ export const SheetDescription = forwardRef<
     <DialogPrimitive.Description
       ref={ref}
       className={cn(
-        "clet-sheet__description",
+        "clet-sheet__description gsl-sheet__description",
         classNames?.description,
         className,
       )}
@@ -120,7 +120,7 @@ export const SheetBody = forwardRef<HTMLDivElement, SheetBodyProps>(
     return (
       <div
         ref={ref}
-        className={cn("clet-sheet__body", classNames?.body, className)}
+        className={cn("clet-sheet__body gsl-sheet__body", classNames?.body, className)}
         {...props}
       />
     );
@@ -132,7 +132,7 @@ export const SheetFooter = forwardRef<HTMLElement, SheetFooterProps>(
     return (
       <footer
         ref={ref}
-        className={cn("clet-sheet__footer", classNames?.footer, className)}
+        className={cn("clet-sheet__footer gsl-sheet__footer", classNames?.footer, className)}
         {...props}
       />
     );

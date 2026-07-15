@@ -21,24 +21,24 @@ export function TableBulkActions({
     (actions && actions.length > 0) || typeof renderActions === "function";
 
   return (
-    <div className="clet-table__bulk-actions-bar-wrapper">
+    <div className="clet-table__bulk-actions-bar-wrapper gsl-table__bulk-actions-bar-wrapper">
       <div
         className={cn(
-          "clet-table__bulk-actions-bar",
+          "clet-table__bulk-actions-bar gsl-table__bulk-actions-bar",
           classNames?.root,
           className,
         )}
       >
-        <div className="clet-table__bulk-actions-left">
+        <div className="clet-table__bulk-actions-left gsl-table__bulk-actions-left">
           <span
-            className={cn("clet-table__bulk-actions-count", classNames?.count)}
+            className={cn("clet-table__bulk-actions-count gsl-table__bulk-actions-count", classNames?.count)}
           >
             Selected {count}
           </span>
           {onClear && (
             <button
               type="button"
-              className="clet-table__bulk-actions-clear"
+              className="clet-table__bulk-actions-clear gsl-table__bulk-actions-clear"
               onClick={onClear}
               aria-label="Clear selection"
             >
@@ -50,7 +50,7 @@ export function TableBulkActions({
           )}
         </div>
         {hasActions && (
-          <div className="clet-table__bulk-actions-group">
+          <div className="clet-table__bulk-actions-group gsl-table__bulk-actions-group">
             {typeof renderActions === "function"
               ? renderActions({ selectedIds })
               : actions
@@ -61,7 +61,7 @@ export function TableBulkActions({
                       variant={action.destructive ? "outline" : "secondary"}
                       className={cn(
                         action.destructive &&
-                          "clet-table__bulk-actions-action--destructive",
+                          "clet-table__bulk-actions-action--destructive gsl-table__bulk-actions-action--destructive",
                       )}
                       onClick={() => action.onClick(selectedIds)}
                     >

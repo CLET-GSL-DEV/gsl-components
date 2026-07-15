@@ -27,10 +27,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         className={cn(
-          "clet-button",
-          `clet-button--${variant}`,
-          `clet-button--${size}`,
-          loading && "clet-button--loading",
+          "clet-button gsl-button",
+          `clet-button--${variant} gsl-button--${variant}`,
+          `clet-button--${size} gsl-button--${size}`,
+          loading && "clet-button--loading gsl-button--loading",
           classNames?.root,
           className,
         )}
@@ -42,11 +42,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {loading ? (
           <>
             <Spinner size={size} className={classNames?.spinner} />
-            <span className="clet-button__sr-only">{loadingLabel}</span>
+            <span className="clet-button__sr-only gsl-button__sr-only">{loadingLabel}</span>
           </>
         ) : null}
         <span
-          className={cn("clet-button__label", classNames?.label)}
+          className={cn("clet-button__label gsl-button__label", classNames?.label)}
           aria-hidden={loading || undefined}
         >
           {children}

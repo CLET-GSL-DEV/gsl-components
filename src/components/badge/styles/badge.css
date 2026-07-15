@@ -1,5 +1,5 @@
 .clet-badge {
-  --clet-badge-font: var(--clet-font-body);
+  --clet-badge-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: inline-flex;
   align-items: center;
@@ -7,7 +7,7 @@
   overflow: hidden;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-family: var(--clet-badge-font);
+  font-family: var(--gsl-badge-font, var(--clet-badge-font));
   font-weight: 600;
   line-height: 1.4;
   text-overflow: ellipsis;
@@ -25,32 +25,32 @@
 }
 
 .clet-badge--default {
-  background: var(--clet-hover);
-  color: var(--clet-text-secondary);
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-badge--primary {
-  background: var(--clet-primary);
-  color: var(--clet-on-primary);
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
 .clet-badge--success {
-  background: color-mix(in srgb, var(--clet-success) 18%, transparent);
-  color: var(--clet-success);
+  background: color-mix(in srgb, var(--gsl-success, var(--clet-success)) 18%, transparent);
+  color: var(--gsl-success, var(--clet-success));
 }
 
 .clet-badge--warning {
-  background: color-mix(in srgb, var(--clet-warning) 18%, transparent);
-  color: var(--clet-warning);
+  background: color-mix(in srgb, var(--gsl-warning, var(--clet-warning)) 18%, transparent);
+  color: var(--gsl-warning, var(--clet-warning));
 }
 
 .clet-badge--error {
-  background: color-mix(in srgb, var(--clet-error) 18%, transparent);
-  color: var(--clet-error);
+  background: color-mix(in srgb, var(--gsl-error, var(--clet-error)) 18%, transparent);
+  color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-badge--outline {
-  border-color: var(--clet-border);
+  border-color: var(--gsl-border, var(--clet-border));
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }

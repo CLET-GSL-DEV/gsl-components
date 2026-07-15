@@ -1,18 +1,18 @@
 .clet-input {
-  --clet-input-font: var(--clet-font-body);
+  --clet-input-font: var(--gsl-font-body, var(--clet-font-body));
 
   display: block;
   width: 100%;
   min-width: 0;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background-color: var(--clet-bg);
-  font-family: var(--clet-input-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background-color: var(--gsl-bg, var(--clet-bg));
+  font-family: var(--gsl-input-font, var(--clet-input-font));
   font-size: 14px;
   line-height: 1.4;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   transition:
     border-color 150ms ease,
     background-color 150ms ease,
@@ -20,34 +20,34 @@
 }
 
 .clet-input::placeholder {
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-input:hover:not(:disabled) {
-  border-color: var(--clet-border-strong);
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
 }
 
 .clet-input:focus-visible {
   outline: none;
-  border-color: var(--clet-primary);
-  box-shadow: 0 0 0 1px var(--clet-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-input--invalid,
 .clet-input[aria-invalid="true"] {
-  border-color: var(--clet-error);
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-input--invalid:focus-visible,
 .clet-input[aria-invalid="true"]:focus-visible {
-  border-color: var(--clet-error);
-  box-shadow: 0 0 0 1px var(--clet-error);
+  border-color: var(--gsl-error, var(--clet-error));
+  box-shadow: 0 0 0 1px var(--gsl-error, var(--clet-error));
 }
 
 .clet-input--disabled,
 .clet-input:disabled {
-  background-color: var(--clet-hover);
-  color: var(--clet-text-muted);
+  background-color: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: not-allowed;
 }
 

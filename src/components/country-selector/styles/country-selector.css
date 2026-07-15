@@ -1,20 +1,20 @@
 .clet-country-selector {
-  --clet-country-selector-font: var(--clet-font-body);
+  --clet-country-selector-font: var(--gsl-font-body, var(--clet-font-body));
 
   position: relative;
   display: block;
-  font-family: var(--clet-country-selector-font);
+  font-family: var(--gsl-country-selector-font, var(--clet-country-selector-font));
   font-size: 14px;
   width: 100%;
 }
 
 .clet-country-selector--invalid .clet-country-selector__trigger {
-  border-color: var(--clet-error);
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
 .clet-country-selector--invalid.clet-country-selector:focus-within
   .clet-country-selector__trigger {
-  box-shadow: 0 0 0 1px var(--clet-error);
+  box-shadow: 0 0 0 1px var(--gsl-error, var(--clet-error));
 }
 
 .clet-country-selector--disabled {
@@ -29,10 +29,10 @@
   gap: 8px;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
-  color: var(--clet-text);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-text, var(--clet-text));
   font-family: inherit;
   font-size: 14px;
   cursor: pointer;
@@ -41,13 +41,13 @@
 }
 
 .clet-country-selector__trigger:hover {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-country-selector__chevron {
   margin-left: auto;
   flex-shrink: 0;
-  color: var(--clet-text-secondary);
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-country-selector__flag {
@@ -56,21 +56,21 @@
 }
 
 .clet-country-selector__name {
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-country-selector__placeholder {
-  color: var(--clet-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
 }
 
 .clet-country-selector__menu {
-  z-index: var(--clet-z-dropdown);
+  z-index: var(--gsl-z-dropdown, var(--clet-z-dropdown));
   min-width: 260px;
   max-height: 320px;
-  border: 1px solid var(--clet-border);
-  border-radius: var(--clet-radius-base);
-  background: var(--clet-bg);
-  box-shadow: var(--clet-shadow-md);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -78,17 +78,17 @@
 
 .clet-country-selector__search {
   padding: 8px;
-  border-bottom: 1px solid var(--clet-border);
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
 }
 
 .clet-country-selector__search-input {
   width: 100%;
   height: 36px;
   padding: 0 10px;
-  border: 1px solid var(--clet-border);
-  border-radius: calc(var(--clet-radius-base) - 2px);
-  background: var(--clet-bg);
-  color: var(--clet-text);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-text, var(--clet-text));
   font-family: inherit;
   font-size: 13px;
   outline: none;
@@ -96,8 +96,8 @@
 }
 
 .clet-country-selector__search-input:focus {
-  border-color: var(--clet-primary);
-  box-shadow: 0 0 0 1px var(--clet-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
 .clet-country-selector__list {
@@ -113,7 +113,7 @@
   padding: 8px 12px;
   border: none;
   background: transparent;
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
   font-family: inherit;
   font-size: 14px;
   cursor: pointer;
@@ -122,7 +122,7 @@
 
 .clet-country-selector__option:hover,
 .clet-country-selector__option--selected {
-  background: var(--clet-hover);
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-country-selector__option-flag {
@@ -131,7 +131,7 @@
 }
 
 .clet-country-selector__option-name {
-  color: var(--clet-text);
+  color: var(--gsl-text, var(--clet-text));
 }
 
 @media (prefers-reduced-motion: reduce) {
