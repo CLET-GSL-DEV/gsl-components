@@ -1,8 +1,14 @@
 import { useCallback, useMemo } from "react";
-// Import available only when `next` is installed (optional peer dependency)
-// @ts-expect-error — resolved by the consumer's Next.js app
+// Import available only when `next` is installed (optional peer dependency).
+// Uses @ts-ignore rather than @ts-expect-error: whether this errors depends on
+// whether `next`'s types happen to resolve in the current node_modules layout
+// (varies across npm/pnpm and across consumers), and @ts-expect-error fails
+// the build the moment that flips to "resolves fine, no error to suppress".
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- see note above: @ts-ignore is deliberate here
+// @ts-ignore
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-// @ts-expect-error — resolved by the consumer's Next.js app
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- see note above: @ts-ignore is deliberate here
+// @ts-ignore
 import NextLink from "next/link";
 import type {
 	RouterAdapterValue,
