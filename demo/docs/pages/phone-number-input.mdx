@@ -14,6 +14,8 @@ import { PhoneNumberInputPreview } from "../previews/code/PhoneNumberInputPrevie
 import phoneNumberInputSource from "../previews/examples/phone-number-input.example.tsx?raw";
 import { PhoneNumberInputFormPreview } from "../previews/code/PhoneNumberInputFormPreview";
 import phoneNumberInputFormSource from "../previews/examples/phone-number-input-form.example.tsx?raw";
+import { PhoneNumberInputFieldPreview } from "../previews/code/PhoneNumberInputFieldPreview";
+import phoneNumberInputFieldSource from "../previews/examples/phone-number-input-field.example.tsx?raw";
 
 # PhoneNumberInput
 
@@ -40,6 +42,14 @@ Flags are real SVG icons from [`country-flag-icons`](https://www.npmjs.com/packa
 | `className` | `string` | — | Merged onto the root element |
 
 Also accepts remaining `HTMLAttributes<HTMLDivElement>`, excluding `onChange`, `value`, and `defaultValue`.
+
+## Field composition (label, optional tag, hint, error)
+
+<ExampleTabs
+  title="Field + FieldLabel + FieldControl + FieldDescription/FieldError"
+  preview={<PhoneNumberInputFieldPreview />}
+  code={phoneNumberInputFieldSource}
+/>
 
 ## Form validation
 
