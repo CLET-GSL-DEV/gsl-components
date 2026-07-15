@@ -11,7 +11,9 @@ export const meta = {
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { NoticePreview } from "../previews/code/NoticePreview";
+import { NoticeInlinePreview } from "../previews/code/NoticeInlinePreview";
 import noticeVariantsSource from "../previews/examples/notice-variants.example.tsx?raw";
+import noticeInlineSource from "../previews/examples/notice-inline.example.tsx?raw";
 
 # Notice
 
@@ -23,6 +25,19 @@ Boxed, persistent callout — unlike `Toast`, which is transient and stacked in 
   title="Variants, left border, dashed border, and custom color"
   preview={<NoticePreview />}
   code={noticeVariantsSource}
+/>
+
+### Compact / inline usage
+
+There's no separate "inline alert" component — a `Notice` with a small `icon`
+dot and no `title` renders as a compact, single-line status row (tinted
+background, colored dot, no border), suited to sitting inside a card, form
+section, or field group rather than at the page level.
+
+<ExampleTabs
+  title="Dot icon, no title — compact status rows"
+  preview={<NoticeInlinePreview />}
+  code={noticeInlineSource}
 />
 
 ## Props
@@ -80,3 +95,4 @@ Part-level class names merged after base `gsl-notice*` styles:
 - No new brand colors were introduced — `info`/`success`/`warning`/`error` reuse the existing `--gsl-primary`/`--gsl-success`/`--gsl-warning`/`--gsl-error` tokens, tinted for the background via `color-mix()` (the same technique `Badge` uses).
 - The `color` prop only overrides `--gsl-notice-accent` (title/icon/left-border); the background tint is not recomputed from a custom color, since `color-mix()` requires a token reference, not an arbitrary runtime value — pass a `classNames.root` override if a fully custom background is needed.
 - `leftBorder` and `dashed` compose — when both are set, the left edge stays solid (using the accent color) while the remaining three edges are dashed.
+- For a compact "inline alert" look (dot marker, no heading), pass a small round `icon` and omit `title` — see "Compact / inline usage" above. Don't build a separate component for this; it's the same `Notice` box with different props.

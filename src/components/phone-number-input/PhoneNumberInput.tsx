@@ -45,7 +45,7 @@ function formatLocal(local: string, countryCode: CountryCode): string {
 function formatNational(fullNumber: string): string {
   try {
     const pn = parsePhoneNumber(fullNumber);
-    if (pn) return pn.formatNational();
+    if (pn?.isValid()) return pn.formatNational();
   } catch { /* fall through */ }
   return "";
 }
