@@ -1,129 +1,122 @@
-.gsl-app-header {
-  --gsl-header-py: var(--gsl-app-layout-body-gap, 1rem);
-  --gsl-header-px: var(--gsl-app-layout-body-gap, 1rem);
-  --gsl-app-header-font: var(--gsl-font-body);
+.clet-app-header {
+  --clet-header-py: var(--clet-app-layout-body-gap, 1rem);
+  --clet-header-px: var(--clet-app-layout-body-gap, 1rem);
+  --clet-app-header-font: var(--clet-font-body);
 
   position: sticky;
   top: 0;
-  z-index: var(--gsl-z-header);
+  z-index: var(--clet-z-header);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   width: 100%;
-  padding: var(--gsl-header-py) var(--gsl-header-px);
-  border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
-  background: var(--gsl-panel-bg, var(--gsl-surface-subtle));
-  font-family: var(--gsl-app-header-font);
+  padding: var(--clet-header-py) var(--clet-header-px);
+  border-radius: var(--clet-panel-radius, var(--clet-radius-2xl));
+  background: var(--clet-panel-bg, var(--clet-surface-subtle));
+  font-family: var(--clet-app-header-font);
 }
 
 /* ── Plain variant: square edges, primary background, on-primary text ──
-   Background and foreground are overridable tokens — set --gsl-app-header-bg
-   and --gsl-app-header-color on .gsl-app-header--plain (or an ancestor). */
+   Background and foreground are overridable tokens — set --clet-app-header-bg
+   and --clet-app-header-color on .clet-app-header--plain (or an ancestor). */
 
-.gsl-app-header--plain {
+.clet-app-header--plain {
   --clet-app-header-bg: var(--clet-primary);
-  --gsl-app-header-bg: var(--clet-app-header-bg);
   --clet-app-header-color: var(--clet-on-primary);
-  --gsl-app-header-color: var(--clet-app-header-color);
-
   border-radius: 0;
-  background: var(--gsl-app-header-bg);
-  color: var(--gsl-app-header-color);
+  background: var(--clet-app-header-bg);
+  color: var(--clet-app-header-color);
 }
 
-.gsl-app-header--plain .gsl-app-header__notif-btn {
-  color: var(--gsl-app-header-color);
+.clet-app-header--plain .clet-app-header__notif-btn {
+  color: var(--clet-app-header-color);
 }
 
-.gsl-app-header--plain .gsl-app-header__notif-btn:hover {
+.clet-app-header--plain .clet-app-header__notif-btn:hover {
   background: rgb(255 255 255 / 15%);
-  color: var(--gsl-app-header-color);
+  color: var(--clet-app-header-color);
 }
 
-.gsl-app-header--plain .gsl-app-header__profile:hover {
+.clet-app-header--plain .clet-app-header__profile:hover {
   background: rgb(255 255 255 / 15%);
 }
 
 /* App switcher trigger inherits the on-primary foreground inside the plain header */
-.gsl-app-header--plain .gsl-app-switcher__trigger {
-  color: var(--gsl-app-header-color);
+.clet-app-header--plain .clet-app-switcher__trigger {
+  color: var(--clet-app-header-color);
 }
 
-.gsl-app-header--plain .gsl-app-switcher__trigger:hover {
+.clet-app-header--plain .clet-app-switcher__trigger:hover {
   background-color: rgb(255 255 255 / 15%);
 }
 
 /* ── Branding (logo + title/subtitle) ──
    All values are exposed as overridable custom properties; set them on
-   .gsl-app-header__branding (or an ancestor) to re-theme without extra CSS.
+   .clet-app-header__branding (or an ancestor) to re-theme without extra CSS.
    The branding block itself (and the subtitle) read as body text — only the
    title uses the heading font, at its own larger size. */
 
-.gsl-app-header__branding {
+.clet-app-header__branding {
   /* Overridable tokens */
   --clet-branding-color: inherit;
-  --gsl-branding-color: var(--clet-branding-color);
-  --gsl-branding-font: var(--gsl-font-body);
-  --gsl-branding-gap: 10px;
-  --gsl-branding-text-gap: 8px;
-  --gsl-branding-logo-size: 28px;
-  --gsl-branding-title-font: var(--gsl-font-header);
-  --gsl-branding-title-size: 20px;
-  --gsl-branding-title-weight: 700;
+  --clet-branding-font: var(--clet-font-body);
+  --clet-branding-gap: 10px;
+  --clet-branding-text-gap: 8px;
+  --clet-branding-logo-size: 28px;
+  --clet-branding-title-font: var(--clet-font-header);
+  --clet-branding-title-size: 20px;
+  --clet-branding-title-weight: 700;
   --clet-branding-title-color: var(--clet-branding-color);
-  --gsl-branding-title-color: var(--clet-branding-title-color);
-  --gsl-branding-sep-opacity: 0.55;
-  --gsl-branding-subtitle-size: 16px;
-  --gsl-branding-subtitle-weight: 400;
+  --clet-branding-sep-opacity: 0.55;
+  --clet-branding-subtitle-size: 16px;
+  --clet-branding-subtitle-weight: 400;
   --clet-branding-subtitle-color: var(--clet-branding-color);
-  --gsl-branding-subtitle-color: var(--clet-branding-subtitle-color);
-
   display: flex;
   align-items: center;
-  gap: var(--gsl-branding-gap);
+  gap: var(--clet-branding-gap);
   min-width: 0;
-  color: var(--gsl-branding-color);
-  font-family: var(--gsl-branding-font);
+  color: var(--clet-branding-color);
+  font-family: var(--clet-branding-font);
 }
 
-.gsl-app-header__branding-logo {
+.clet-app-header__branding-logo {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
 }
 
-.gsl-app-header__branding-logo img,
-.gsl-app-header__branding-logo svg {
+.clet-app-header__branding-logo img,
+.clet-app-header__branding-logo svg {
   display: block;
-  width: var(--gsl-branding-logo-size);
-  height: var(--gsl-branding-logo-size);
+  width: var(--clet-branding-logo-size);
+  height: var(--clet-branding-logo-size);
 }
 
-.gsl-app-header__branding-text {
+.clet-app-header__branding-text {
   display: inline-flex;
   align-items: baseline;
-  gap: var(--gsl-branding-text-gap);
+  gap: var(--clet-branding-text-gap);
   min-width: 0;
 }
 
-.gsl-app-header__branding-title {
-  font-family: var(--gsl-branding-title-font);
-  font-size: var(--gsl-branding-title-size);
-  font-weight: var(--gsl-branding-title-weight);
-  color: var(--gsl-branding-title-color);
+.clet-app-header__branding-title {
+  font-family: var(--clet-branding-title-font);
+  font-size: var(--clet-branding-title-size);
+  font-weight: var(--clet-branding-title-weight);
+  color: var(--clet-branding-title-color);
   white-space: nowrap;
 }
 
-.gsl-app-header__branding-sep {
+.clet-app-header__branding-sep {
   color: inherit;
-  opacity: var(--gsl-branding-sep-opacity);
+  opacity: var(--clet-branding-sep-opacity);
 }
 
-.gsl-app-header__branding-subtitle {
-  font-size: var(--gsl-branding-subtitle-size);
-  font-weight: var(--gsl-branding-subtitle-weight);
-  color: var(--gsl-branding-subtitle-color);
+.clet-app-header__branding-subtitle {
+  font-size: var(--clet-branding-subtitle-size);
+  font-weight: var(--clet-branding-subtitle-weight);
+  color: var(--clet-branding-subtitle-color);
   white-space: nowrap;
 }
 
@@ -131,7 +124,7 @@
    Shown in place of branding + full actions when AppHeader collapses on
    mobile (inside a SidebarProvider, below the sidebar's mobile breakpoint). */
 
-.gsl-app-header__menu-btn {
+.clet-app-header__menu-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -141,35 +134,35 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
   cursor: pointer;
   transition:
     background-color 150ms ease,
     color 150ms ease;
 }
 
-.gsl-app-header__menu-btn:hover {
-  background: var(--gsl-surface-dark);
-  color: var(--gsl-text);
+.clet-app-header__menu-btn:hover {
+  background: var(--clet-surface-dark);
+  color: var(--clet-text);
 }
 
-.gsl-app-header__menu-btn:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-app-header__menu-btn:focus-visible {
+  outline: 2px solid var(--clet-focus);
   outline-offset: 2px;
 }
 
-.gsl-app-header--plain .gsl-app-header__menu-btn {
-  color: var(--gsl-app-header-color);
+.clet-app-header--plain .clet-app-header__menu-btn {
+  color: var(--clet-app-header-color);
 }
 
-.gsl-app-header--plain .gsl-app-header__menu-btn:hover {
+.clet-app-header--plain .clet-app-header__menu-btn:hover {
   background: rgb(255 255 255 / 15%);
-  color: var(--gsl-app-header-color);
+  color: var(--clet-app-header-color);
 }
 
 /* ── Right side group ── */
 
-.gsl-app-header__right {
+.clet-app-header__right {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -178,70 +171,70 @@
 
 /* ── Search trigger ── */
 
-.gsl-app-header-search.gsl-app-header-search.gsl-command {
+.clet-app-header-search.clet-app-header-search.clet-command {
   display: flex;
   height: stretch;
   max-width: 400px;
 }
 
-.gsl-app-header-search.gsl-app-header-search.gsl-command
-  .gsl-command__input-wrapper {
-  border-radius: var(--gsl-radius-xl);
+.clet-app-header-search.clet-app-header-search.clet-command
+  .clet-command__input-wrapper {
+  border-radius: var(--clet-radius-xl);
   height: stretch;
   border: none;
 }
 
-.gsl-app-header-search.gsl-app-header-search.gsl-command
-  .gsl-command__input-wrapper:hover {
-  border: 1px solid var(--gsl-border);
+.clet-app-header-search.clet-app-header-search.clet-command
+  .clet-command__input-wrapper:hover {
+  border: 1px solid var(--clet-border);
 }
 
-.gsl-app-header__search-btn {
+.clet-app-header__search-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   height: 36px;
   padding: 0 12px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-xl);
-  background: var(--gsl-bg);
-  color: var(--gsl-text-muted);
-  font-family: var(--gsl-app-header-font);
+  border: 1px solid var(--clet-border);
+  border-radius: var(--clet-radius-xl);
+  background: var(--clet-bg);
+  color: var(--clet-text-muted);
+  font-family: var(--clet-app-header-font);
   font-size: 13px;
   cursor: pointer;
   transition: border-color 150ms ease;
 }
 
-.gsl-app-header__search-btn:hover {
-  border-color: var(--gsl-border-strong);
+.clet-app-header__search-btn:hover {
+  border-color: var(--clet-border-strong);
 }
 
-.gsl-app-header__search-btn:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-app-header__search-btn:focus-visible {
+  outline: 2px solid var(--clet-focus);
   outline-offset: 2px;
 }
 
-.gsl-app-header__search-text {
-  color: var(--gsl-text-muted);
+.clet-app-header__search-text {
+  color: var(--clet-text-muted);
 }
 
-.gsl-app-header__search-kbd {
+.clet-app-header__search-kbd {
   display: inline-flex;
   align-items: center;
   height: 20px;
   padding: 0 5px;
-  border: 1px solid var(--gsl-border);
+  border: 1px solid var(--clet-border);
   border-radius: 4px;
-  background: var(--gsl-panel-bg, var(--gsl-surface-subtle));
+  background: var(--clet-panel-bg, var(--clet-surface-subtle));
   font-size: 11px;
-  color: var(--gsl-text-muted);
+  color: var(--clet-text-muted);
   line-height: 1;
   font-family: inherit;
 }
 
 /* ── Notification button ── */
 
-.gsl-app-header__notif-btn {
+.clet-app-header__notif-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -251,38 +244,38 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
   cursor: pointer;
   transition:
     background-color 150ms ease,
     color 150ms ease;
 }
 
-.gsl-app-header__notif-btn:hover {
-  background: var(--gsl-surface-dark);
-  color: var(--gsl-text);
+.clet-app-header__notif-btn:hover {
+  background: var(--clet-surface-dark);
+  color: var(--clet-text);
 }
 
-.gsl-app-header__notif-btn:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-app-header__notif-btn:focus-visible {
+  outline: 2px solid var(--clet-focus);
   outline-offset: 2px;
 }
 
 /* ── Profile ──
-   Base trigger styling (.gsl-app-header__profile, .gsl-app-header__user-*,
+   Base trigger styling (.clet-app-header__profile, .clet-app-header__user-*,
    skeletons) lives in profile-popover.css — ProfilePopover owns the
    `user`/`variant` header-style trigger now. Only header-context overrides
    stay here. */
 
-.gsl-app-header__avatar {
+.clet-app-header__avatar {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--gsl-primary);
-  color: var(--gsl-on-primary);
+  background: var(--clet-primary);
+  color: var(--clet-on-primary);
   font-size: 12px;
   font-weight: 700;
   line-height: 1;
@@ -290,7 +283,7 @@
   flex-shrink: 0;
 }
 
-.gsl-app-header__avatar-img {
+.clet-app-header__avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -298,29 +291,29 @@
 
 /* ── Notifications popover ── */
 
-.gsl-notif-popover {
+.clet-notif-popover {
   display: flex;
   flex-direction: column;
   width: 340px;
   max-height: 420px;
   overflow: hidden;
-  border-radius: var(--gsl-radius-xl);
-  background: var(--gsl-bg);
-  box-shadow: var(--gsl-shadow-md);
-  border: 1px solid var(--gsl-border);
-  z-index: var(--gsl-z-popover);
+  border-radius: var(--clet-radius-xl);
+  background: var(--clet-bg);
+  box-shadow: var(--clet-shadow-md);
+  border: 1px solid var(--clet-border);
+  z-index: var(--clet-z-popover);
 }
 
-.gsl-notif-popover__header {
+.clet-notif-popover__header {
   flex-shrink: 0;
   position: sticky;
   top: 0;
   z-index: 1;
   padding: 14px 16px 10px;
-  background: var(--gsl-bg);
+  background: var(--clet-bg);
 }
 
-.gsl-notif-popover__body {
+.clet-notif-popover__body {
   flex: 1;
   overflow-y: auto;
   min-height: 0;
@@ -328,17 +321,17 @@
   scrollbar-width: none;
 }
 
-.gsl-notif-popover__body::-webkit-scrollbar {
+.clet-notif-popover__body::-webkit-scrollbar {
   display: none;
 }
 
-.gsl-notif-popover__title {
+.clet-notif-popover__title {
   font-size: 14px;
   font-weight: 600;
-  color: var(--gsl-text);
+  color: var(--clet-text);
 }
 
-.gsl-notif-popover__item {
+.clet-notif-popover__item {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -347,40 +340,40 @@
   transition: background-color 150ms ease;
 }
 
-.gsl-notif-popover__item:hover {
-  background: var(--gsl-hover);
+.clet-notif-popover__item:hover {
+  background: var(--clet-hover);
 }
 
-.gsl-notif-popover__item--read {
-  background: var(--gsl-surface-subtle);
+.clet-notif-popover__item--read {
+  background: var(--clet-surface-subtle);
 }
 
-.gsl-notif-popover__item--read:hover {
-  background: var(--gsl-hover);
+.clet-notif-popover__item--read:hover {
+  background: var(--clet-hover);
 }
 
-.gsl-notif-popover__dot {
+.clet-notif-popover__dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--gsl-primary);
+  background: var(--clet-primary);
   flex-shrink: 0;
   margin-top: 5px;
 }
 
-.gsl-notif-popover__item-body {
+.clet-notif-popover__item-body {
   flex: 1;
   min-width: 0;
 }
 
-.gsl-notif-popover__item:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-notif-popover__item:focus-visible {
+  outline: 2px solid var(--clet-focus);
   outline-offset: -2px;
 }
 
-.gsl-notif-popover__body-text {
+.clet-notif-popover__body-text {
   font-size: 13px;
-  color: var(--gsl-text);
+  color: var(--clet-text);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -388,49 +381,49 @@
   overflow: hidden;
 }
 
-.gsl-notif-popover__body-time {
+.clet-notif-popover__body-time {
   font-size: 11px;
-  color: var(--gsl-text-muted);
+  color: var(--clet-text-muted);
   margin-top: 2px;
 }
 
 /* ── Notifications loading skeleton ── */
 
-.gsl-notif-popover__loading {
+.clet-notif-popover__loading {
   padding: 8px 0;
 }
 
-.gsl-notif-popover__skeleton {
+.clet-notif-popover__skeleton {
   display: flex;
   align-items: flex-start;
   gap: 12px;
   padding: 12px 16px;
 }
 
-.gsl-notif-popover__skeleton-dot {
+.clet-notif-popover__skeleton-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--gsl-hover);
+  background: var(--clet-hover);
   flex-shrink: 0;
   margin-top: 5px;
 }
 
-.gsl-notif-popover__skeleton-lines {
+.clet-notif-popover__skeleton-lines {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.gsl-notif-popover__skeleton-line {
+.clet-notif-popover__skeleton-line {
   height: 12px;
   border-radius: 4px;
-  background: var(--gsl-hover);
-  animation: gsl-skeleton-pulse 1.5s ease-in-out infinite;
+  background: var(--clet-hover);
+  animation: clet-skeleton-pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes gsl-skeleton-pulse {
+@keyframes clet-skeleton-pulse {
   0%,
   100% {
     opacity: 1;
@@ -442,9 +435,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-app-header__notif-btn,
-  .gsl-app-header__profile,
-  .gsl-app-header__menu-btn {
+  .clet-app-header__notif-btn,
+  .clet-app-header__profile,
+  .clet-app-header__menu-btn {
     transition: none;
   }
 }

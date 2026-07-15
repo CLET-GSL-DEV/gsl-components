@@ -5,7 +5,7 @@ import { cn } from "../../utils/cn";
 import "./styles/dropdown.css";
 import { useMemo } from "react";
 
-const EMPTY_VALUE = "__gsl_dropdown_none__";
+const EMPTY_VALUE = "__clet_dropdown_none__";
 
 export function Dropdown({
   value,
@@ -55,12 +55,12 @@ export function Dropdown({
       required={required}
       form={form}
     >
-      <div className={cn("gsl-dropdown", classNames?.root, className)}>
+      <div className={cn("clet-dropdown", classNames?.root, className)}>
         <Select.Trigger
           className={cn(
-            "gsl-dropdown__trigger",
-            isPlaceholder && "gsl-dropdown__trigger--placeholder",
-            invalid && "gsl-dropdown__trigger--invalid",
+            "clet-dropdown__trigger",
+            isPlaceholder && "clet-dropdown__trigger--placeholder",
+            invalid && "clet-dropdown__trigger--invalid",
             classNames?.trigger,
           )}
           aria-label={ariaLabel}
@@ -68,7 +68,7 @@ export function Dropdown({
         >
           <Select.Value placeholder={placeholder}>{valueDisplay}</Select.Value>
           <Select.Icon
-            className={cn("gsl-dropdown__trigger-icon", classNames?.icon)}
+            className={cn("clet-dropdown__trigger-icon", classNames?.icon)}
             aria-hidden="true"
           >
             <ChevronDown size={16} strokeWidth={2} aria-hidden />
@@ -78,7 +78,7 @@ export function Dropdown({
 
       <Select.Portal>
         <Select.Content
-          className={cn("gsl-dropdown__menu", classNames?.menu)}
+          className={cn("clet-dropdown__menu", classNames?.menu)}
           position="popper"
           sideOffset={4}
           onPointerDownOutside={(e) => e.stopPropagation()}
@@ -91,7 +91,7 @@ export function Dropdown({
                 // selected, so Radix no longer marks this item "checked"
                 // on its own — restore that highlight manually.
                 data-state={isPlaceholder ? "checked" : undefined}
-                className={cn("gsl-dropdown__option", classNames?.option)}
+                className={cn("clet-dropdown__option", classNames?.option)}
               >
                 <Select.ItemText>{placeholder}</Select.ItemText>
               </Select.Item>
@@ -101,7 +101,7 @@ export function Dropdown({
                 key={option.value}
                 value={option.value}
                 disabled={option.disabled}
-                className={cn("gsl-dropdown__option", classNames?.option)}
+                className={cn("clet-dropdown__option", classNames?.option)}
               >
                 <Select.ItemText>
                   {formatOption

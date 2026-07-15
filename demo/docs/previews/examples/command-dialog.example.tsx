@@ -90,7 +90,7 @@ export function CommandDialogExample() {
       <Button variant="secondary" onClick={() => openWith()}>
         Open command menu
       </Button>
-      <p style={{ margin: 0, fontSize: 14, color: "var(--gsl-text-secondary)" }}>
+      <p style={{ margin: 0, fontSize: 14, color: "var(--clet-text-secondary)" }}>
         Press <kbd>Cmd</kbd>+<kbd>K</kbd> or <kbd>Ctrl</kbd>+<kbd>K</kbd>.{" "}
         {lastAction}
       </p>

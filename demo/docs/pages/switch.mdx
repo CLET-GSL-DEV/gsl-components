@@ -52,7 +52,7 @@ Props for `Switch`. Not `forwardRef` — matches the `Checkbox` convention of a 
 
 ### `SwitchClassNames`
 
-Part-level class names merged after base `gsl-switch*` styles:
+Part-level class names merged after base `clet-switch*` styles:
 
 | Key | Applied to |
 |-----|------------|
@@ -65,15 +65,15 @@ Part-level class names merged after base `gsl-switch*` styles:
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-switch-width` | `44px` | Track width |
-| `--gsl-switch-height` | `24px` | Track height |
-| `--gsl-switch-thumb-size` | `20px` | Thumb diameter |
-| `--gsl-switch-padding` | `2px` | Inset between track edge and thumb |
-| `--gsl-switch-font` | `var(--gsl-font-body)` | Font family for the label |
-| `--gsl-switch-label-size` | `var(--gsl-text-size-base)` | Label font size |
+| `--clet-switch-width` | `44px` | Track width |
+| `--clet-switch-height` | `24px` | Track height |
+| `--clet-switch-thumb-size` | `20px` | Thumb diameter |
+| `--clet-switch-padding` | `2px` | Inset between track edge and thumb |
+| `--clet-switch-font` | `var(--clet-font-body)` | Font family for the label |
+| `--clet-switch-label-size` | `var(--clet-text-size-base)` | Label font size |
 
 ## Notes
 
-- Checked track uses `--gsl-primary`; unchecked uses `--gsl-border-strong`. No custom blue accent is used — the design's on-brand navy matches the library's existing primary token.
-- Hover, focus (`--gsl-focus` outline), and disabled (`opacity: 0.6`) states are handled purely in CSS via Radix's `data-state`/`data-disabled` attributes.
+- Checked track uses `--clet-primary`; unchecked uses `--clet-border-strong`. No custom blue accent is used — the design's on-brand navy matches the library's existing primary token.
+- Hover, focus (`--clet-focus` outline), and disabled (`opacity: 0.6`) states are handled purely in CSS via Radix's `data-state`/`data-disabled` attributes.
 - Clicking the visible `label` toggles the switch, same as `Checkbox`.

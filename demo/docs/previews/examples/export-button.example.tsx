@@ -11,9 +11,9 @@ interface Member {
 }
 
 const members: Member[] = [
-  { id: 1, name: "Kwame Asante", email: "kwame.asante@gsl.edu.gh", role: "Admin", status: "Active", joined: "2024-01-15" },
-  { id: 2, name: "Abena Mensah", email: "abena.mensah@gsl.edu.gh", role: "Editor", status: "Active", joined: "2024-02-03" },
-  { id: 3, name: "Kofi Owusu", email: "kofi.owusu@gsl.edu.gh", role: "Viewer", status: "Inactive", joined: "2024-03-08" },
+  { id: 1, name: "Kwame Asante", email: "kwame.asante@clet.edu.gh", role: "Admin", status: "Active", joined: "2024-01-15" },
+  { id: 2, name: "Abena Mensah", email: "abena.mensah@clet.edu.gh", role: "Editor", status: "Active", joined: "2024-02-03" },
+  { id: 3, name: "Kofi Owusu", email: "kofi.owusu@clet.edu.gh", role: "Viewer", status: "Inactive", joined: "2024-03-08" },
 ];
 
 const columns: ExportColumn<Member>[] = [

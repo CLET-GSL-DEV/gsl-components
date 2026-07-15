@@ -32,7 +32,7 @@ export function SidebarLoadingExample() {
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <button
         type="button"
-        className="gsl-profile-menu__item"
+        className="clet-profile-menu__item"
         style={{ alignSelf: "flex-start" }}
         onClick={() => {
           setLoading(true);
@@ -46,7 +46,7 @@ export function SidebarLoadingExample() {
         <div style={{ maxWidth: 280 }}>
           <Sidebar>
             <SidebarHeader>
-              <span className="gsl-sidebar__header-title">Navigation</span>
+              <span className="clet-sidebar__header-title">Navigation</span>
             </SidebarHeader>
             <SidebarContent>
               <SidebarNav aria-label="Main navigation">

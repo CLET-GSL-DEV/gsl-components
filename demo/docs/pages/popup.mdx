@@ -17,7 +17,7 @@ import popupVariantsSource from "../previews/examples/popup-variants.example.tsx
 
 # Popup
 
-Compound popup primitives for small, anchored confirmation cards — a title, description, optional input, and one or two actions. Wraps `@radix-ui/react-popover`; `PopupContent` applies the GSL popup surface styles.
+Compound popup primitives for small, anchored confirmation cards — a title, description, optional input, and one or two actions. Wraps `@radix-ui/react-popover`; `PopupContent` applies the CLET popup surface styles.
 
 ## Example
 
@@ -45,7 +45,7 @@ Wraps the element that opens the popup. Use `asChild` to merge props onto a chil
 
 ### `PopupContent`
 
-Styled floating card. Accepts Radix content props (`side`, `align`, `sideOffset`, etc.) plus GSL `classNames`.
+Styled floating card. Accepts Radix content props (`side`, `align`, `sideOffset`, etc.) plus CLET `classNames`.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -101,7 +101,7 @@ Extends Radix `PopoverContentProps` with optional `classNames` and `showCloseBut
 
 | Key | Applied to |
 |-----|------------|
-| `content` | Content element (`.gsl-popup`) |
+| `content` | Content element (`.clet-popup`) |
 | `close` | Close button, when `showCloseButton` is set |
 
 ### `PopupHeaderProps`, `PopupTitleProps`, `PopupDescriptionProps`, `PopupBodyProps`
@@ -116,22 +116,22 @@ Extends `HTMLAttributes<HTMLDivElement>` with `layout` and `classNames`.
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-popup-font` | `var(--gsl-font-body)` | Font family override |
-| `--gsl-popup-radius` | `12px` | Card corner radius |
-| `--gsl-popup-padding` | `24px` | Card inner padding |
-| `--gsl-popup-gap` | `24px` | Gap between header/body/footer |
-| `--gsl-popup-width` | `350px` | Card max width (clamped to `100vw - 32px` on narrow screens) |
-| `--gsl-popup-border-width` | `1.5px` | Card border thickness |
-| `--gsl-popup-footer-gap` | `16px` | Gap between footer action buttons |
-| `--gsl-surface-panel` | theme surface | Card background |
-| `--gsl-border-subtle` | theme border | Card border color |
-| `--gsl-shadow-md` | theme shadow | Card elevation |
-| `--gsl-text-size-base` | `14px` | Body/description font size |
-| `--gsl-text-size-md` | `16px` | Title font size |
+| `--clet-popup-font` | `var(--clet-font-body)` | Font family override |
+| `--clet-popup-radius` | `12px` | Card corner radius |
+| `--clet-popup-padding` | `24px` | Card inner padding |
+| `--clet-popup-gap` | `24px` | Gap between header/body/footer |
+| `--clet-popup-width` | `350px` | Card max width (clamped to `100vw - 32px` on narrow screens) |
+| `--clet-popup-border-width` | `1.5px` | Card border thickness |
+| `--clet-popup-footer-gap` | `16px` | Gap between footer action buttons |
+| `--clet-surface-panel` | theme surface | Card background |
+| `--clet-border-subtle` | theme border | Card border color |
+| `--clet-shadow-md` | theme shadow | Card elevation |
+| `--clet-text-size-base` | `14px` | Body/description font size |
+| `--clet-text-size-md` | `16px` | Title font size |
 
 ## Notes
 
-- Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
+- Portaled content inherits the active theme via `data-clet-theme` on `document.documentElement` when using `ThemeProvider`.
 - Use `PopupTrigger asChild` so focus and keyboard behavior stay on your button or link.
 - Wrap footer buttons in `PopupClose asChild` so the card dismisses after a choice is made.
 - Use `PopupFooter layout="stack"` when action labels are long or you want both buttons full width instead of side by side.

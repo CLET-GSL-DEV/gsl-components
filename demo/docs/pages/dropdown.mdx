@@ -17,7 +17,7 @@ import dropdownVariantsSource from "../previews/examples/dropdown-variants.examp
 
 # Dropdown
 
-Select-style dropdown for choosing one option from a list. Built on `@radix-ui/react-select` with GSL styling, optional clearable reset, and part-level `classNames`.
+Select-style dropdown for choosing one option from a list. Built on `@radix-ui/react-select` with CLET styling, optional clearable reset, and part-level `classNames`.
 
 ## Example
 
@@ -66,28 +66,28 @@ Props for `Dropdown`. Controls value, options, placeholder, clearable behavior, 
 
 ### `DropdownClassNames`
 
-Part-level class names merged after base `gsl-dropdown*` styles:
+Part-level class names merged after base `clet-dropdown*` styles:
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Outer wrapper (`.gsl-dropdown`) |
-| `trigger` | Combobox trigger (`.gsl-dropdown__trigger`) |
-| `icon` | Chevron icon (`.gsl-dropdown__trigger-icon`) |
-| `menu` | Menu panel (`.gsl-dropdown__menu`) |
-| `option` | Menu items (`.gsl-dropdown__option`) |
+| `root` | Outer wrapper (`.clet-dropdown`) |
+| `trigger` | Combobox trigger (`.clet-dropdown__trigger`) |
+| `icon` | Chevron icon (`.clet-dropdown__trigger-icon`) |
+| `menu` | Menu panel (`.clet-dropdown__menu`) |
+| `option` | Menu items (`.clet-dropdown__option`) |
 
 ## Design tokens
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-dropdown-font` | `var(--gsl-font-body)` | Font family override |
+| `--clet-dropdown-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
 - The trigger icon is Lucide `ChevronDown` (16px); it rotates when the menu is open.
 - Use `aria-label` (or an external `<label>` associated with the field) so the combobox has an accessible name.
 - When `clearable` is true, choosing the placeholder item calls `onValueChange(null)`.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 
 ### Custom rendering with `formatOption`
 

@@ -49,7 +49,7 @@ Pass `variant="panel"` to `<TableContent>` for a faint recessed surface with
 subtle row dividers and a border all around. It reads well when the table is
 embedded directly in a page — for example inside pill tabs — without a wrapping
 card. The look is a pure CSS override driven by the
-`--gsl-surface-panel` and `--gsl-border-subtle` tokens (both have light and dark
+`--clet-surface-panel` and `--clet-border-subtle` tokens (both have light and dark
 values).
 
 <ExampleTabs
@@ -448,11 +448,11 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root wrapper (`.gsl-table`) |
-| `header` | Header bar (`.gsl-table__header-bar`) |
-| `content` | Content wrapper (`.gsl-table__content`) |
-| `footer` | Footer bar (`.gsl-table__footer`) |
-| `selectionCell` | Selection checkbox cells (`.gsl-table__checkbox-cell`) |
+| `root` | Root wrapper (`.clet-table`) |
+| `header` | Header bar (`.clet-table__header-bar`) |
+| `content` | Content wrapper (`.clet-table__content`) |
+| `footer` | Footer bar (`.clet-table__footer`) |
+| `selectionCell` | Selection checkbox cells (`.clet-table__checkbox-cell`) |
 
 ### `TableBulkAction`
 
@@ -479,79 +479,79 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Bar wrapper (`.gsl-table__bulk-actions-bar`) |
+| `root` | Bar wrapper (`.clet-table__bulk-actions-bar`) |
 | `count` | "Selected N" label |
 
 ### `TableContentClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Content wrapper (`.gsl-table__content`) |
-| `empty` | Empty state container (`.gsl-table__empty`) |
-| `emptyIcon` | Empty state icon (`.gsl-table__empty-icon`) |
-| `emptyText` | Empty state text (`.gsl-table__empty-text`) |
+| `root` | Content wrapper (`.clet-table__content`) |
+| `empty` | Empty state container (`.clet-table__empty`) |
+| `emptyIcon` | Empty state icon (`.clet-table__empty-icon`) |
+| `emptyText` | Empty state text (`.clet-table__empty-text`) |
 | `th` | Column header cells |
-| `thLabel` | Header label text (`.gsl-table__th-label`) |
-| `sortIcon` | Sort indicator (`.gsl-table__sort-icon`) |
-| `checkboxCell` | Selection checkbox cells (`.gsl-table__checkbox-cell`) |
-| `actionsCell` | Actions column cell (`.gsl-table__actions-cell`) |
-| `actionsTrigger` | Kebab trigger button (`.gsl-table__actions-trigger`) |
-| `actionsMenu` | Actions popover content (`.gsl-table__actions-menu`) |
-| `actionsItem` | Individual action item (`.gsl-table__actions-item`) |
-| `actionsSectionLabel` | "Bulk actions" section label inside the row-actions menu, shown when `bulkActions` is set (`.gsl-table__actions-section-label`) |
-| `skeleton` | Loading skeleton spans (`.gsl-table__skeleton--*`) |
-| `viewport` | Virtual scroll viewport (`.gsl-table__viewport`) |
+| `thLabel` | Header label text (`.clet-table__th-label`) |
+| `sortIcon` | Sort indicator (`.clet-table__sort-icon`) |
+| `checkboxCell` | Selection checkbox cells (`.clet-table__checkbox-cell`) |
+| `actionsCell` | Actions column cell (`.clet-table__actions-cell`) |
+| `actionsTrigger` | Kebab trigger button (`.clet-table__actions-trigger`) |
+| `actionsMenu` | Actions popover content (`.clet-table__actions-menu`) |
+| `actionsItem` | Individual action item (`.clet-table__actions-item`) |
+| `actionsSectionLabel` | "Bulk actions" section label inside the row-actions menu, shown when `bulkActions` is set (`.clet-table__actions-section-label`) |
+| `skeleton` | Loading skeleton spans (`.clet-table__skeleton--*`) |
+| `viewport` | Virtual scroll viewport (`.clet-table__viewport`) |
 
 ### `TableSearchClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Search wrapper (`.gsl-table__search`) |
-| `icon` | Search icon (`.gsl-table__search-icon`) |
-| `input` | Search input (`.gsl-table__search-input`) |
-| `clear` | Clear button (`.gsl-table__search-clear`) |
+| `root` | Search wrapper (`.clet-table__search`) |
+| `icon` | Search icon (`.clet-table__search-icon`) |
+| `input` | Search input (`.clet-table__search-input`) |
+| `clear` | Clear button (`.clet-table__search-clear`) |
 
 ### `TableFilterClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Filter wrapper (`.gsl-table__filter`) |
-| `trigger` | Filter trigger button (`.gsl-table__filter-trigger`) |
-| `badge` | Active filter count badge (`.gsl-table__filter-badge`) |
-| `content` | Popover content (`.gsl-table__filter-content`) |
-| `header` | Popover header bar (`.gsl-table__filter-header`) |
-| `resetButton` | Reset button (`.gsl-table__filter-btn--reset`) |
-| `fields` | Filter form fields container (`.gsl-table__filter-fields`) |
-| `actions` | Filter actions bar (`.gsl-table__filter-actions`) |
-| `applyButton` | Apply button (`.gsl-table__filter-btn--apply`) |
+| `root` | Filter wrapper (`.clet-table__filter`) |
+| `trigger` | Filter trigger button (`.clet-table__filter-trigger`) |
+| `badge` | Active filter count badge (`.clet-table__filter-badge`) |
+| `content` | Popover content (`.clet-table__filter-content`) |
+| `header` | Popover header bar (`.clet-table__filter-header`) |
+| `resetButton` | Reset button (`.clet-table__filter-btn--reset`) |
+| `fields` | Filter form fields container (`.clet-table__filter-fields`) |
+| `actions` | Filter actions bar (`.clet-table__filter-actions`) |
+| `applyButton` | Apply button (`.clet-table__filter-btn--apply`) |
 
 ### `TablePaginationClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Pagination wrapper (`.gsl-table__pagination`) |
-| `results` | Results summary (`.gsl-table__page-results`) |
-| `pageSize` | Page size dropdown (`.gsl-table__page-size`) |
-| `pages` | Page number buttons container (`.gsl-table__pagination-pages`) |
-| `ellipsis` | Ellipsis indicator (`.gsl-table__page-ellipsis`) |
+| `root` | Pagination wrapper (`.clet-table__pagination`) |
+| `results` | Results summary (`.clet-table__page-results`) |
+| `pageSize` | Page size dropdown (`.clet-table__page-size`) |
+| `pages` | Page number buttons container (`.clet-table__pagination-pages`) |
+| `ellipsis` | Ellipsis indicator (`.clet-table__page-ellipsis`) |
 
 ### `TableHeaderClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Header bar (`.gsl-table__header-bar`) |
+| `root` | Header bar (`.clet-table__header-bar`) |
 
 ### `TableFooterClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Footer bar (`.gsl-table__footer`) |
+| `root` | Footer bar (`.clet-table__footer`) |
 
 ### `TableActionsClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Actions wrapper (`.gsl-table__actions`) |
+| `root` | Actions wrapper (`.clet-table__actions`) |
 
 ### `PaginationControlsProps`
 
@@ -559,17 +559,17 @@ Props for `TablePagination` — see the props section above.
 
 ## Design tokens
 
-The table uses the standard `--gsl-*` palette. The tokens with the most visual impact:
+The table uses the standard `--clet-*` palette. The tokens with the most visual impact:
 
 | Token | Effect |
 |-------|--------|
-| `--gsl-radius-base` | All border radii |
-| `--gsl-surface-panel` | Background of the `panel` variant content surface |
-| `--gsl-border-subtle` | Row dividers and outer border of the `panel` variant |
-| `--gsl-table-font` | Font family for the table root, search input, and filter trigger — default `var(--gsl-font-body)` |
-| `--gsl-table-filter-font` | Font family for the filter popover's apply/reset buttons — default `var(--gsl-font-body)` |
-| `--gsl-table-actions-font` | Font family for row actions menu items — default `var(--gsl-font-body)` |
-| `--gsl-progress-modal-font` | Font family for the bulk-import progress modal's status text — default `var(--gsl-font-body)` |
+| `--clet-radius-base` | All border radii |
+| `--clet-surface-panel` | Background of the `panel` variant content surface |
+| `--clet-border-subtle` | Row dividers and outer border of the `panel` variant |
+| `--clet-table-font` | Font family for the table root, search input, and filter trigger — default `var(--clet-font-body)` |
+| `--clet-table-filter-font` | Font family for the filter popover's apply/reset buttons — default `var(--clet-font-body)` |
+| `--clet-table-actions-font` | Font family for row actions menu items — default `var(--clet-font-body)` |
+| `--clet-progress-modal-font` | Font family for the bulk-import progress modal's status text — default `var(--clet-font-body)` |
 
 ## Notes
 

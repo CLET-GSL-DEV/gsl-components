@@ -1,30 +1,30 @@
-.gsl-field {
-  --gsl-field-font: var(--gsl-font-body);
+.clet-field {
+  --clet-field-font: var(--clet-font-body);
   display: flex;
   flex-direction: column;
   gap: 6px;
   width: 100%;
   min-width: 0;
-  font-family: var(--gsl-field-font);
+  font-family: var(--clet-field-font);
 }
 
-.gsl-field__label {
+.clet-field__label {
   font-size: 14px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--gsl-text);
+  color: var(--clet-text);
 }
 
-.gsl-field__description {
+.clet-field__description {
   margin: 0;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
 }
 
-.gsl-field__error {
+.clet-field__error {
   margin: 0;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--gsl-error-text);
+  color: var(--clet-error-text);
 }

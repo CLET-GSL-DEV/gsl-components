@@ -33,14 +33,14 @@ describe("Sortable", () => {
 
     const items = screen.getAllByText(/^(alpha|beta|gamma)$/);
     expect(items.map((item) => item.textContent)).toEqual(["alpha", "beta", "gamma"]);
-    expect(document.querySelectorAll(".gsl-sortable__item")).toHaveLength(3);
-    expect(document.querySelector(".gsl-sortable__list")).toBeInTheDocument();
+    expect(document.querySelectorAll(".clet-sortable__item")).toHaveLength(3);
+    expect(document.querySelector(".clet-sortable__list")).toBeInTheDocument();
   });
 
   it("marks disabled state on root and handle", () => {
     renderSortableList({ disabled: true });
 
-    expect(document.querySelector(".gsl-sortable--disabled")).toBeInTheDocument();
+    expect(document.querySelector(".clet-sortable--disabled")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Reorder alpha" })).toBeDisabled();
   });
 
@@ -62,7 +62,7 @@ describe("Sortable", () => {
 
     const handle = screen.getByRole("button", { name: "Reorder alpha" });
     expect(handle).toHaveClass(
-      "gsl-sortable__handle",
+      "clet-sortable__handle",
       "custom-handle",
       "extra-handle",
     );
@@ -91,6 +91,6 @@ describe("Sortable", () => {
       </Sortable>,
     );
 
-    expect(document.querySelector(".gsl-sortable__item--draggable")).toBeInTheDocument();
+    expect(document.querySelector(".clet-sortable__item--draggable")).toBeInTheDocument();
   });
 });

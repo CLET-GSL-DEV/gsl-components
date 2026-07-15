@@ -101,7 +101,7 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
     const themeToggle = themeContext ? (
       <button
         type="button"
-        className="gsl-profile-menu__header-action-btn"
+        className="clet-profile-menu__header-action-btn"
         aria-label={
           themeContext.resolvedTheme === "dark"
             ? "Switch to light mode"
@@ -125,15 +125,15 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
       <div
         ref={ref as React.Ref<HTMLDivElement>}
         className={cn(
-          "gsl-app-header__profile",
-          isAvatarOnly && "gsl-app-header__profile--avatar",
+          "clet-app-header__profile",
+          isAvatarOnly && "clet-app-header__profile--avatar",
           triggerClassName,
         )}
         aria-busy={loading || undefined}
       >
         {loading ? (
           <span
-            className="gsl-skeleton gsl-app-header__skeleton-avatar"
+            className="clet-skeleton clet-app-header__skeleton-avatar"
             aria-hidden
           />
         ) : (
@@ -141,29 +141,29 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
             name={user.name}
             src={user.avatar}
             size={32}
-            backgroundVar="--gsl-profile-avatar-bg"
+            backgroundVar="--clet-profile-avatar-bg"
           />
         )}
         {!isAvatarOnly &&
           (loading ? (
             <span
-              className="gsl-app-header__user-info gsl-app-header__user-info--loading"
+              className="clet-app-header__user-info clet-app-header__user-info--loading"
               aria-hidden
             >
-              <span className="gsl-skeleton gsl-app-header__skeleton-name" />
-              <span className="gsl-skeleton gsl-app-header__skeleton-role" />
+              <span className="clet-skeleton clet-app-header__skeleton-name" />
+              <span className="clet-skeleton clet-app-header__skeleton-role" />
             </span>
           ) : (
             <>
-              <div className="gsl-app-header__user-info">
-                <span className="gsl-app-header__user-name">{user.name}</span>
-                <span className="gsl-app-header__user-role">{user.role}</span>
+              <div className="clet-app-header__user-info">
+                <span className="clet-app-header__user-name">{user.name}</span>
+                <span className="clet-app-header__user-role">{user.role}</span>
               </div>
               <ChevronDown size={16} strokeWidth={1.5} aria-hidden />
             </>
           ))}
         {loading ? (
-          <span className="gsl-app-header__sr-only" role="status">
+          <span className="clet-app-header__sr-only" role="status">
             {loadingLabel}
           </span>
         ) : null}
@@ -172,11 +172,11 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
       <button
         ref={ref as React.Ref<HTMLButtonElement>}
         type="button"
-        className={cn("gsl-profile-menu__trigger", triggerClassName)}
+        className={cn("clet-profile-menu__trigger", triggerClassName)}
       >
         {loading ? (
           <span
-            className="gsl-skeleton gsl-profile-menu__skeleton-avatar"
+            className="clet-skeleton clet-profile-menu__skeleton-avatar"
             aria-hidden
           />
         ) : (
@@ -184,27 +184,27 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
             name={resolvedFullName}
             src={resolvedPhoto}
             size="md"
-            backgroundVar="--gsl-profile-avatar-bg"
+            backgroundVar="--clet-profile-avatar-bg"
           />
         )}
         <div
           className={cn(
-            "gsl-profile-menu__trigger-info",
-            loading && "gsl-profile-menu__trigger-info--loading",
+            "clet-profile-menu__trigger-info",
+            loading && "clet-profile-menu__trigger-info--loading",
           )}
         >
           {loading ? (
             <>
-              <span className="gsl-skeleton gsl-profile-menu__skeleton-name" />
-              <span className="gsl-skeleton gsl-profile-menu__skeleton-email" />
+              <span className="clet-skeleton clet-profile-menu__skeleton-name" />
+              <span className="clet-skeleton clet-profile-menu__skeleton-email" />
             </>
           ) : (
             <>
-              <span className="gsl-profile-menu__trigger-name">
+              <span className="clet-profile-menu__trigger-name">
                 {resolvedFullName}
               </span>
               {resolvedEmail && (
-                <span className="gsl-profile-menu__trigger-email">
+                <span className="clet-profile-menu__trigger-email">
                   {resolvedEmail}
                 </span>
               )}
@@ -225,7 +225,7 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
 
         <Popover.Portal>
           <Popover.Content
-            className={cn("gsl-profile-menu", className)}
+            className={cn("clet-profile-menu", className)}
             side={side}
             align={align}
             sideOffset={sideOffset}
@@ -233,43 +233,43 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
             aria-busy={loading || undefined}
           >
             {loading ? (
-              <span className="gsl-profile-menu__sr-only" role="status">
+              <span className="clet-profile-menu__sr-only" role="status">
                 {loadingLabel}
               </span>
             ) : null}
 
             <div
-              className="gsl-profile-menu__header"
+              className="clet-profile-menu__header"
               aria-hidden={loading || undefined}
             >
               {loading ? (
-                <span className="gsl-skeleton gsl-profile-menu__skeleton-avatar gsl-profile-menu__skeleton-avatar--lg" />
+                <span className="clet-skeleton clet-profile-menu__skeleton-avatar clet-profile-menu__skeleton-avatar--lg" />
               ) : (
                 <Avatar
                   name={resolvedFullName}
                   src={resolvedPhoto}
                   size="lg"
-                  backgroundVar="--gsl-profile-avatar-bg"
+                  backgroundVar="--clet-profile-avatar-bg"
                 />
               )}
               <div
                 className={cn(
-                  "gsl-profile-menu__header-info",
-                  loading && "gsl-profile-menu__header-info--loading",
+                  "clet-profile-menu__header-info",
+                  loading && "clet-profile-menu__header-info--loading",
                 )}
               >
                 {loading ? (
                   <>
-                    <span className="gsl-skeleton gsl-profile-menu__skeleton-name" />
-                    <span className="gsl-skeleton gsl-profile-menu__skeleton-email" />
+                    <span className="clet-skeleton clet-profile-menu__skeleton-name" />
+                    <span className="clet-skeleton clet-profile-menu__skeleton-email" />
                   </>
                 ) : (
                   <>
-                    <span className="gsl-profile-menu__name">
+                    <span className="clet-profile-menu__name">
                       {resolvedFullName}
                     </span>
                     {resolvedEmail && (
-                      <span className="gsl-profile-menu__email">
+                      <span className="clet-profile-menu__email">
                         {resolvedEmail}
                       </span>
                     )}
@@ -277,34 +277,34 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
                 )}
               </div>
               {themeToggle && (
-                <div className="gsl-profile-menu__header-action">
+                <div className="clet-profile-menu__header-action">
                   {themeToggle}
                 </div>
               )}
             </div>
 
-            {hasContent && <div className="gsl-profile-menu__divider" />}
+            {hasContent && <div className="clet-profile-menu__divider" />}
 
             {loading ? (
-              <div className="gsl-profile-menu__items">
+              <div className="clet-profile-menu__items">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="gsl-profile-menu__skeleton-item">
-                    <span className="gsl-skeleton gsl-profile-menu__skeleton-item-icon" />
-                    <span className="gsl-skeleton gsl-profile-menu__skeleton-item-label" />
+                  <div key={i} className="clet-profile-menu__skeleton-item">
+                    <span className="clet-skeleton clet-profile-menu__skeleton-item-icon" />
+                    <span className="clet-skeleton clet-profile-menu__skeleton-item-label" />
                   </div>
                 ))}
               </div>
             ) : hasContent ? (
-              <div className="gsl-profile-menu__content">
+              <div className="clet-profile-menu__content">
                 {hasItems && (
-                  <div className="gsl-profile-menu__items">
+                  <div className="clet-profile-menu__items">
                     {resolvedItems.map((item, index) => (
                       <button
                         key={index}
                         type="button"
                         className={cn(
-                          "gsl-profile-menu__item",
-                          item.danger && "gsl-profile-menu__item--danger",
+                          "clet-profile-menu__item",
+                          item.danger && "clet-profile-menu__item--danger",
                         )}
                         onClick={item.onClick}
                       >
@@ -315,15 +315,15 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
                   </div>
                 )}
 
-                <div className="gsl-profile-menu__items">{children}</div>
+                <div className="clet-profile-menu__items">{children}</div>
               </div>
             ) : null}
 
-            <div className="gsl-profile-menu__divider" />
-            <div className="gsl-profile-menu__items gsl-profile-menu__items--signout">
+            <div className="clet-profile-menu__divider" />
+            <div className="clet-profile-menu__items clet-profile-menu__items--signout">
               <button
                 type="button"
-                className="gsl-profile-menu__item gsl-profile-menu__item--danger"
+                className="clet-profile-menu__item clet-profile-menu__item--danger"
                 onClick={handleSignOutClick}
               >
                 <LogOut size={20} strokeWidth={1.5} aria-hidden />

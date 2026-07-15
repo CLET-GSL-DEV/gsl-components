@@ -29,8 +29,8 @@ function FilePdfIcon({ size = 24 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M14 2v6h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M9 15h6" stroke="var(--gsl-error)" strokeWidth="2" strokeLinecap="round" />
-      <path d="M12 12v6" stroke="var(--gsl-error)" strokeWidth="2" strokeLinecap="round" />
+      <path d="M9 15h6" stroke="var(--clet-error)" strokeWidth="2" strokeLinecap="round" />
+      <path d="M12 12v6" stroke="var(--clet-error)" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -211,11 +211,11 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           ref={ref}
           id={id}
           className={cn(
-            "gsl-upload-field",
-            dragOver && "gsl-upload-field--drag-over",
-            hasFiles && "gsl-upload-field--has-files",
-            invalidBool && "gsl-upload-field--invalid",
-            disabled && "gsl-upload-field--disabled",
+            "clet-upload-field",
+            dragOver && "clet-upload-field--drag-over",
+            hasFiles && "clet-upload-field--has-files",
+            invalidBool && "clet-upload-field--invalid",
+            disabled && "clet-upload-field--disabled",
             classNames?.root,
             className,
           )}
@@ -241,26 +241,26 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
             disabled={disabled}
             name={name}
             onChange={handleChange}
-            className="gsl-upload-field__input"
+            className="clet-upload-field__input"
           />
 
           <div
             className={cn(
-              "gsl-upload-field__icon",
+              "clet-upload-field__icon",
               classNames?.icon,
             )}
           >
             <CloudUpload size={20} strokeWidth={1.75} aria-hidden />
           </div>
-          <p className={cn("gsl-upload-field__title", classNames?.title)}>
+          <p className={cn("clet-upload-field__title", classNames?.title)}>
             Click to upload or drag and drop
           </p>
-          <p className={cn("gsl-upload-field__subtitle", classNames?.subtitle)}>
+          <p className={cn("clet-upload-field__subtitle", classNames?.subtitle)}>
             {subtitle}
           </p>
 
           {hasFiles && (
-            <div className={cn("gsl-upload-field__files", classNames?.files)}>
+            <div className={cn("clet-upload-field__files", classNames?.files)}>
               {files.map((file, i) => {
                 const status = fileStatuses?.[i];
                 const isUploading = status?.status === "uploading";
@@ -271,16 +271,16 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
                   <div
                     key={i}
                     className={cn(
-                      "gsl-upload-field__file-card",
-                      isFailed && "gsl-upload-field__file-card--failed",
+                      "clet-upload-field__file-card",
+                      isFailed && "clet-upload-field__file-card--failed",
                       classNames?.fileCard,
                     )}
                   >
-                    <span className="gsl-upload-field__file-card-icon">
+                    <span className="clet-upload-field__file-card-icon">
                       <FileFormatIcon file={file} size={20} />
                     </span>
-                    <div className="gsl-upload-field__file-card-info">
-                      <span className={cn("gsl-upload-field__file-card-name", classNames?.fileName)}>
+                    <div className="clet-upload-field__file-card-info">
+                      <span className={cn("clet-upload-field__file-card-name", classNames?.fileName)}>
                         {file.name}
                       </span>
                       {isUploading ? (
@@ -288,7 +288,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
                           value={status?.progress ?? 0}
                           size="sm"
                           className={cn(
-                            "gsl-upload-field__file-card-progress",
+                            "clet-upload-field__file-card-progress",
                             classNames?.fileProgress,
                           )}
                           aria-label={`Uploading ${file.name}`}
@@ -296,19 +296,19 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
                       ) : isFailed ? (
                         <span
                           className={cn(
-                            "gsl-upload-field__file-card-status",
+                            "clet-upload-field__file-card-status",
                             classNames?.fileStatusText,
                           )}
                         >
                           <span
-                            className="gsl-upload-field__file-card-status-dot"
+                            className="clet-upload-field__file-card-status-dot"
                             aria-hidden
                           />
                           {status?.error ?? "Failed"}
                           <button
                             type="button"
                             className={cn(
-                              "gsl-upload-field__file-card-retry",
+                              "clet-upload-field__file-card-retry",
                               classNames?.retryButton,
                             )}
                             onClick={(e) => {
@@ -320,12 +320,12 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
                           </button>
                         </span>
                       ) : (
-                        <span className={cn("gsl-upload-field__file-card-size", classNames?.fileSize)}>
+                        <span className={cn("clet-upload-field__file-card-size", classNames?.fileSize)}>
                           {formatSize(file.size)}
                           {isCompleted && (
                             <CheckCircle2
                               className={cn(
-                                "gsl-upload-field__file-card-completed-icon",
+                                "clet-upload-field__file-card-completed-icon",
                                 classNames?.completedIcon,
                               )}
                               size={14}
@@ -340,7 +340,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
                         <button
                           type="button"
                           className={cn(
-                            "gsl-upload-field__file-card-cancel",
+                            "clet-upload-field__file-card-cancel",
                             classNames?.cancelButton,
                           )}
                           onClick={(e) => {
@@ -354,7 +354,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
                       ) : (
                         <button
                           type="button"
-                          className={cn("gsl-upload-field__file-card-remove", classNames?.removeButton)}
+                          className={cn("clet-upload-field__file-card-remove", classNames?.removeButton)}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleRemoveFile(i);
@@ -375,7 +375,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
               variant="primary"
               size="md"
               className={cn(
-                "gsl-upload-field__action",
+                "clet-upload-field__action",
                 classNames?.actionButton,
               )}
               onClick={(e) => {
@@ -398,7 +398,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
               </DialogHeader>
               <DialogDescription>
                 {fileErrorDialog?.name && (
-                  <span className="gsl-upload-field__dialog-filename">{fileErrorDialog.name}</span>
+                  <span className="clet-upload-field__dialog-filename">{fileErrorDialog.name}</span>
                 )}
                 {fileErrorDialog?.message}
               </DialogDescription>

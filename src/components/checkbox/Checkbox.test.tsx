@@ -68,7 +68,7 @@ describe("Checkbox", () => {
       />,
     );
 
-    expect(document.querySelector(".gsl-checkbox")).toHaveClass("custom-root");
+    expect(document.querySelector(".clet-checkbox")).toHaveClass("custom-root");
     expect(screen.getByRole("checkbox", { name: "Custom" })).toHaveClass(
       "custom-control",
     );

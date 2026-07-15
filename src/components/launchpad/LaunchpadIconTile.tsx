@@ -20,7 +20,7 @@ export function LaunchpadIconTile({ name, children, className }: LaunchpadIconTi
   // both are fixed brand values, so no theme dependency to track.
   const gradientClass = useMemo(
     () =>
-      `gsl-launchpad__tile--grad-${gradientIndexFromString(name, TILE_GRADIENT_COUNT)}`,
+      `clet-launchpad__tile--grad-${gradientIndexFromString(name, TILE_GRADIENT_COUNT)}`,
     [name],
   );
   const Overlay = useMemo(
@@ -29,9 +29,9 @@ export function LaunchpadIconTile({ name, children, className }: LaunchpadIconTi
   );
 
   return (
-    <span className={cn("gsl-launchpad__tile", gradientClass, className)}>
+    <span className={cn("clet-launchpad__tile", gradientClass, className)}>
       <Overlay />
-      <span className="gsl-launchpad__tile-glyph">{children}</span>
+      <span className="clet-launchpad__tile-glyph">{children}</span>
     </span>
   );
 }

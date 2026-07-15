@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Scans src/styles/theme/*.css and each component's styles/*.css for --gsl-*
+// Scans src/styles/theme/*.css and each component's styles/*.css for --clet-*
 // custom property definitions, then emits src/generated/components.theme.ts —
-// the typed surface consumed by gslTheme(). Run via `npm run generate:tokens`.
+// the typed surface consumed by cletTheme(). Run via `npm run generate:tokens`.
 import {
   existsSync,
   mkdirSync,
@@ -19,7 +19,7 @@ const outFile = path.join(root, "src/generated/components.theme.ts");
 
 function extractDefinedVars(css) {
   const names = new Set();
-  for (const m of css.matchAll(/(--gsl-[\w-]+)\s*:\s*[^;]+;/g)) {
+  for (const m of css.matchAll(/(--clet-[\w-]+)\s*:\s*[^;]+;/g)) {
     names.add(m[1]);
   }
   return names;
@@ -42,7 +42,7 @@ function toCamelCase(kebab) {
 // Value-type classification. Best-effort: catches common mistakes (wrong
 // JS type, missing "#", non-numeric length) — not full CSS grammar validation.
 function classify(name) {
-  const local = name.replace(/^--gsl-/, "");
+  const local = name.replace(/^--clet-/, "");
   if (/radius/.test(local)) return "length";
   if (/shadow/.test(local)) return "shadow";
   if (/^z(-|$)/.test(local)) return "zIndex";
@@ -61,19 +61,19 @@ function classify(name) {
 }
 
 const VALUE_TYPE_ALIAS = {
-  color: "GslColorValue",
-  length: "GslLengthValue",
-  shadow: "GslShadowValue",
-  zIndex: "GslZIndexValue",
-  opacity: "GslOpacityValue",
-  font: "GslStringValue",
-  duration: "GslStringValue",
-  misc: "GslStringValue",
+  color: "CletColorValue",
+  length: "CletLengthValue",
+  shadow: "CletShadowValue",
+  zIndex: "CletZIndexValue",
+  opacity: "CletOpacityValue",
+  font: "CletStringValue",
+  duration: "CletStringValue",
+  misc: "CletStringValue",
 };
 
-// `stripPrefix` is what's removed before camelCasing — "--gsl-" for global
-// tokens, "--gsl-<component-slug>-" for component tokens (so AppHeader's
-// "--gsl-app-header-bg" becomes the key "bg", not "appHeaderBg").
+// `stripPrefix` is what's removed before camelCasing — "--clet-" for global
+// tokens, "--clet-<component-slug>-" for component tokens (so AppHeader's
+// "--clet-app-header-bg" becomes the key "bg", not "appHeaderBg").
 function collect(vars, stripPrefix, scopeLabel) {
   const seen = new Map();
   const entries = [...vars]
@@ -100,16 +100,16 @@ for (const file of ["base.css", "light.css", "dark.css"]) {
   if (!existsSync(p)) continue;
   for (const v of extractDefinedVars(readFileSync(p, "utf8"))) globalVars.add(v);
 }
-const globalTokens = collect(globalVars, "--gsl-", "global tokens");
+const globalTokens = collect(globalVars, "--clet-", "global tokens");
 
-// ── component-scoped tokens: only vars prefixed --gsl-<component-slug>- ──
+// ── component-scoped tokens: only vars prefixed --clet-<component-slug>- ──
 const componentEntries = [];
 for (const entry of readdirSync(componentsDir, { withFileTypes: true })) {
   if (!entry.isDirectory()) continue;
   const stylesDir = path.join(componentsDir, entry.name, "styles");
   if (!existsSync(stylesDir)) continue;
 
-  const prefix = `--gsl-${entry.name}-`;
+  const prefix = `--clet-${entry.name}-`;
   const vars = new Set();
   for (const file of readdirSync(stylesDir)) {
     if (!file.endsWith(".css")) continue;
@@ -123,7 +123,7 @@ for (const entry of readdirSync(componentsDir, { withFileTypes: true })) {
   const key = toPascalCase(entry.name);
   componentEntries.push({
     key,
-    selector: `.gsl-${entry.name}`,
+    selector: `.clet-${entry.name}`,
     tokens: collect(vars, prefix, key),
   });
 }
@@ -148,12 +148,12 @@ const globalVarMap = renderVarMap(globalTokens);
 const componentInterfaces = componentEntries
   .map(
     (c) =>
-      `export interface Gsl${c.key}Tokens {\n${renderTokenFields(c.tokens)}\n}`,
+      `export interface Clet${c.key}Tokens {\n${renderTokenFields(c.tokens)}\n}`,
   )
   .join("\n\n");
 
 const componentTokenMapEntries = componentEntries
-  .map((c) => `  ${c.key}: Gsl${c.key}Tokens;`)
+  .map((c) => `  ${c.key}: Clet${c.key}Tokens;`)
   .join("\n");
 
 const selectorEntries = componentEntries
@@ -167,7 +167,7 @@ const componentVarMapEntries = componentEntries
 const output = `// GENERATED FILE — do not edit by hand.
 // Run \`npm run generate:tokens\` to refresh after changing theme or component CSS.
 
-export type GslColorValue =
+export type CletColorValue =
   | \`#\${string}\`
   | \`rgb(\${string})\`
   | \`rgba(\${string})\`
@@ -176,7 +176,7 @@ export type GslColorValue =
   | \`oklch(\${string})\`
   | \`var(--\${string})\`;
 
-export type GslLengthValue =
+export type CletLengthValue =
   | \`\${number}px\`
   | \`\${number}rem\`
   | \`\${number}em\`
@@ -184,36 +184,36 @@ export type GslLengthValue =
   | "0"
   | \`var(--\${string})\`;
 
-export type GslZIndexValue = number;
+export type CletZIndexValue = number;
 
-export type GslOpacityValue = number | \`\${number}%\`;
+export type CletOpacityValue = number | \`\${number}%\`;
 
-export type GslShadowValue = string;
+export type CletShadowValue = string;
 
-export type GslStringValue = string;
+export type CletStringValue = string;
 
-// Keys are camelCase (e.g. "primary", "radiusBase") — GSL_GLOBAL_TOKEN_VARS
-// maps each back to its real CSS custom property (e.g. "--gsl-primary").
-export interface GslGlobalTokens {
+// Keys are camelCase (e.g. "primary", "radiusBase") — CLET_GLOBAL_TOKEN_VARS
+// maps each back to its real CSS custom property (e.g. "--clet-primary").
+export interface CletGlobalTokens {
 ${globalInterface}
 }
 
 ${componentInterfaces}
 
-export interface GslComponentTokenMap {
+export interface CletComponentTokenMap {
 ${componentTokenMapEntries}
 }
 
-export const GSL_COMPONENT_SELECTORS: Record<keyof GslComponentTokenMap, string> = {
+export const CLET_COMPONENT_SELECTORS: Record<keyof CletComponentTokenMap, string> = {
 ${selectorEntries}
 };
 
-export const GSL_GLOBAL_TOKEN_VARS: Record<keyof GslGlobalTokens, string> = {
+export const CLET_GLOBAL_TOKEN_VARS: Record<keyof CletGlobalTokens, string> = {
 ${globalVarMap}
 };
 
-export const GSL_COMPONENT_TOKEN_VARS: {
-  [K in keyof GslComponentTokenMap]: Record<keyof GslComponentTokenMap[K], string>;
+export const CLET_COMPONENT_TOKEN_VARS: {
+  [K in keyof CletComponentTokenMap]: Record<keyof CletComponentTokenMap[K], string>;
 } = {
 ${componentVarMapEntries}
 };

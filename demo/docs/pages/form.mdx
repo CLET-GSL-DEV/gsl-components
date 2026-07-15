@@ -17,7 +17,7 @@ import formModalSource from "../previews/examples/form-modal.example.tsx?raw";
 
 # Form
 
-Accessible form building blocks with GSL styling. Compose `Field` with `Input` or `Textarea` for labels, helper text, errors, and control wiring.
+Accessible form building blocks with CLET styling. Compose `Field` with `Input` or `Textarea` for labels, helper text, errors, and control wiring.
 
 For [react-hook-form](https://react-hook-form.com/) integration, see [FormField](/docs/form-field).
 
@@ -92,17 +92,17 @@ Same props as `Input`, for `<textarea>`.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | `.gsl-field` |
-| `label` | `.gsl-field__label` |
-| `description` | `.gsl-field__description` |
-| `error` | `.gsl-field__error` |
+| `root` | `.clet-field` |
+| `label` | `.clet-field__label` |
+| `description` | `.clet-field__description` |
+| `error` | `.clet-field__error` |
 | `control` | Merged onto the slotted control |
 
 ### `InputClassNames` / `TextareaClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | `.gsl-input` / `.gsl-textarea` |
+| `root` | `.clet-input` / `.clet-textarea` |
 
 ## Design tokens
 
@@ -110,23 +110,23 @@ Same props as `Input`, for `<textarea>`.
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-input-font` | `var(--gsl-font-body)` | Font family override |
+| `--clet-input-font` | `var(--clet-font-body)` | Font family override |
 
 ### Textarea
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-textarea-font` | `var(--gsl-font-body)` | Font family override |
+| `--clet-textarea-font` | `var(--clet-font-body)` | Font family override |
 
 ### Field
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-field-font` | `var(--gsl-font-body)` | Font family override |
+| `--clet-field-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
-- Inputs match Dropdown trigger sizing (`40px` height) and use `--gsl-*` tokens for borders, focus, and error states.
+- Inputs match Dropdown trigger sizing (`40px` height) and use `--clet-*` tokens for borders, focus, and error states.
 - `FieldDescription` and `FieldError` only render when they have children.
 - Pair with [FormField](/docs/form-field) for react-hook-form and Zod validation.
 

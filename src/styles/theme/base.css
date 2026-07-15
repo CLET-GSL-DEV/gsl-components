@@ -1,4 +1,4 @@
-.gsl-theme {
+.clet-theme {
   color-scheme: light dark;
 }
 
@@ -7,54 +7,53 @@
 }
 
 body {
-  background: var(--gsl-main-bg);
+  background: var(--clet-main-bg);
 }
 
 :root,
-.gsl-theme {
+.clet-theme {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --gsl-font:
+  --clet-font:
     -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue",
     arial, sans-serif;
-  --gsl-font-header: "Roboto Serif", var(--gsl-font);
-  --gsl-font-body: "Lato", var(--gsl-font);
-  --gsl-text-size-xs: 12px;
-  --gsl-text-size-sm: 13px;
-  --gsl-text-size-base: 14px;
-  --gsl-text-size-md: 16px;
-  --gsl-text-size-lg: 20px;
-  --gsl-text-size-xl: 24px;
-  --gsl-radius-base: 8px;
-  --gsl-radius-xl: 16px;
-  --gsl-radius-2xl: 24px;
-  --gsl-shadow-sm:
+  --clet-font-header: "Roboto Serif", var(--clet-font);
+  --clet-font-body: "Lato", var(--clet-font);
+  --clet-text-size-xs: 12px;
+  --clet-text-size-sm: 13px;
+  --clet-text-size-base: 14px;
+  --clet-text-size-md: 16px;
+  --clet-text-size-lg: 20px;
+  --clet-text-size-xl: 24px;
+  --clet-radius-base: 8px;
+  --clet-radius-xl: 16px;
+  --clet-radius-2xl: 24px;
+  --clet-shadow-sm:
     0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
-  --gsl-shadow-md: 0 10px 24px rgb(60 64 67 / 12%);
-  --gsl-shadow-lg: 0 20px 40px rgb(60 64 67 / 18%);
-  --gsl-z-header: 10;
-  --gsl-z-popover: 1000;
-  --gsl-z-overlay: 1100;
-  --gsl-z-modal: 1101;
-  --gsl-z-select: 1400;
-  --gsl-z-alert: 1200;
-  --gsl-z-alert-content: 1201;
-  --gsl-z-dropdown: 1300;
+  --clet-shadow-md: 0 10px 24px rgb(60 64 67 / 12%);
+  --clet-shadow-lg: 0 20px 40px rgb(60 64 67 / 18%);
+  --clet-z-header: 10;
+  --clet-z-popover: 1000;
+  --clet-z-overlay: 1100;
+  --clet-z-modal: 1101;
+  --clet-z-select: 1400;
+  --clet-z-alert: 1200;
+  --clet-z-alert-content: 1201;
+  --clet-z-dropdown: 1300;
   --clet-surface-card: var(--clet-bg);
-  --gsl-surface-card: var(--clet-surface-card);
 }
 
 /* ── Shared shimmer loading utility ──
-   Compose `.gsl-skeleton` onto a placeholder block to get a consistent
+   Compose `.clet-skeleton` onto a placeholder block to get a consistent
    shimmer sweep across components (metric card, profile card/popover,
    sidebar, etc). Give the block its own width/height/border-radius. */
-.gsl-skeleton {
+.clet-skeleton {
   position: relative;
   overflow: hidden;
-  background: var(--gsl-hover);
+  background: var(--clet-hover);
 }
 
-.gsl-skeleton::after {
+.clet-skeleton::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -62,20 +61,20 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--gsl-shimmer-highlight),
+    var(--clet-shimmer-highlight),
     transparent
   );
-  animation: gsl-shimmer 1.6s ease-in-out infinite;
+  animation: clet-shimmer 1.6s ease-in-out infinite;
 }
 
-@keyframes gsl-shimmer {
+@keyframes clet-shimmer {
   100% {
     transform: translateX(100%);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-skeleton::after {
+  .clet-skeleton::after {
     animation: none;
   }
 }

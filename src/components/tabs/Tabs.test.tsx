@@ -92,7 +92,7 @@ describe("Tabs", () => {
       </Tabs>,
     );
 
-    expect(document.querySelector(".gsl-tabs")).toHaveClass("gsl-tabs--line");
+    expect(document.querySelector(".clet-tabs")).toHaveClass("clet-tabs--line");
   });
 
   it("merges classNames onto list, trigger, and content", () => {
@@ -118,8 +118,8 @@ describe("Tabs", () => {
       </Tabs>,
     );
 
-    expect(document.querySelector(".gsl-tabs")).toHaveClass("custom-tabs");
-    expect(document.querySelector(".gsl-tabs__list")).toHaveClass(
+    expect(document.querySelector(".clet-tabs")).toHaveClass("custom-tabs");
+    expect(document.querySelector(".clet-tabs__list")).toHaveClass(
       "custom-list",
     );
     expect(screen.getByRole("tab", { name: "Account" })).toHaveClass(
@@ -166,8 +166,8 @@ describe("Tabs", () => {
       </Tabs>,
     );
 
-    const list = document.querySelector(".gsl-tabs__list");
-    expect(list?.querySelector(".gsl-tabs__indicator")).toBeInTheDocument();
+    const list = document.querySelector(".clet-tabs__list");
+    expect(list?.querySelector(".clet-tabs__indicator")).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Account" })).toHaveStyle({
       borderStyle: "none",
     });
@@ -185,8 +185,8 @@ describe("Tabs", () => {
       </Tabs>,
     );
 
-    const list = document.querySelector(".gsl-tabs__list");
+    const list = document.querySelector(".clet-tabs__list");
     expect(list).toHaveAttribute("data-orientation", "vertical");
-    expect(list?.querySelector(".gsl-tabs__indicator")).toBeInTheDocument();
+    expect(list?.querySelector(".clet-tabs__indicator")).toBeInTheDocument();
   });
 });

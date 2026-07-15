@@ -13,7 +13,7 @@ export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-section-header", classNames?.root, className)}
+        className={cn("clet-section-header", classNames?.root, className)}
         {...props}
       >
         {children}
@@ -27,7 +27,7 @@ export const SectionTitle = forwardRef<HTMLHeadingElement, SectionTitleProps>(
     return (
       <h2
         ref={ref}
-        className={cn("gsl-section-header__title", classNames?.title, className)}
+        className={cn("clet-section-header__title", classNames?.title, className)}
         {...props}
       />
     );
@@ -42,7 +42,7 @@ export const SectionDescription = forwardRef<
     <p
       ref={ref}
       className={cn(
-        "gsl-section-header__description",
+        "clet-section-header__description",
         classNames?.description,
         className,
       )}
@@ -57,7 +57,7 @@ export const SectionActions = forwardRef<HTMLDivElement, SectionActionsProps>(
       <div
         ref={ref}
         className={cn(
-          "gsl-section-header__actions",
+          "clet-section-header__actions",
           classNames?.actions,
           className,
         )}

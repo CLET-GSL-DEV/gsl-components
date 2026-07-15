@@ -1,14 +1,14 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { GslComponentTokenMap, GslGlobalTokens } from "../generated/components.theme";
+import type { CletComponentTokenMap, CletGlobalTokens } from "../generated/components.theme";
 
-export type GslTheme = "light" | "dark" | "system";
+export type CletTheme = "light" | "dark" | "system";
 
-export type ResolvedGslTheme = "light" | "dark";
+export type ResolvedCletTheme = "light" | "dark";
 
 export interface ThemeProviderProps {
-  theme?: GslTheme;
-  defaultTheme?: GslTheme;
-  onThemeChange?: (theme: GslTheme) => void;
+  theme?: CletTheme;
+  defaultTheme?: CletTheme;
+  onThemeChange?: (theme: CletTheme) => void;
   /** localStorage key for persisting theme across sessions. Omit for no persistence. */
   storageKey?: string;
   className?: string;
@@ -17,31 +17,31 @@ export interface ThemeProviderProps {
 }
 
 export interface ThemeContextValue {
-  theme: GslTheme;
-  setTheme: (theme: GslTheme) => void;
-  resolvedTheme: ResolvedGslTheme;
+  theme: CletTheme;
+  setTheme: (theme: CletTheme) => void;
+  resolvedTheme: ResolvedCletTheme;
 }
 
 export type UseThemeReturn = ThemeContextValue;
 
-export interface GslComponentThemeOverrides<T> {
+export interface CletComponentThemeOverrides<T> {
   /** Applied to both light and dark, per token — a token here is skipped if that mode sets its own value. */
   all?: T;
   light?: T;
   dark?: T;
 }
 
-export type GslComponentThemeConfig = {
-  [K in keyof GslComponentTokenMap]?: GslComponentThemeOverrides<GslComponentTokenMap[K]>;
+export type CletComponentThemeConfig = {
+  [K in keyof CletComponentTokenMap]?: CletComponentThemeOverrides<CletComponentTokenMap[K]>;
 };
 
-export interface GslThemeConfig {
-  /** --gsl-* token overrides applied to both light and dark — per token, skipped if that mode sets its own value below. */
-  all?: GslGlobalTokens;
-  /** --gsl-* token overrides applied under [data-gsl-theme="light"] */
-  light?: GslGlobalTokens;
-  /** --gsl-* token overrides applied under [data-gsl-theme="dark"] */
-  dark?: GslGlobalTokens;
-  /** Per-component --gsl-<component>-* token overrides, keyed by component name (e.g. AppHeader, Card). */
-  components?: GslComponentThemeConfig;
+export interface CletThemeConfig {
+  /** --clet-* token overrides applied to both light and dark — per token, skipped if that mode sets its own value below. */
+  all?: CletGlobalTokens;
+  /** --clet-* token overrides applied under [data-clet-theme="light"] */
+  light?: CletGlobalTokens;
+  /** --clet-* token overrides applied under [data-clet-theme="dark"] */
+  dark?: CletGlobalTokens;
+  /** Per-component --clet-<component>-* token overrides, keyed by component name (e.g. AppHeader, Card). */
+  components?: CletComponentThemeConfig;
 }

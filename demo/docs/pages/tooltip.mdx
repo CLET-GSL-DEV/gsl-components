@@ -45,15 +45,15 @@ Props for `Tooltip`.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Wrapper `<div>` (`.gsl-tooltip`) |
-| `content` | Tooltip bubble `<span>` (`.gsl-tooltip__content`) |
+| `root` | Wrapper `<div>` (`.clet-tooltip`) |
+| `content` | Tooltip bubble `<span>` (`.clet-tooltip__content`) |
 
 ## Design tokens
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-tooltip-font` | `var(--gsl-font-body)` | Font family override |
-| `--gsl-z-tooltip` | `var(--gsl-z-popover)` | Stacking order (z-index) of the tooltip bubble |
+| `--clet-tooltip-font` | `var(--clet-font-body)` | Font family override |
+| `--clet-z-tooltip` | `var(--clet-z-popover)` | Stacking order (z-index) of the tooltip bubble |
 
 ## Notes
 
@@ -61,5 +61,5 @@ Props for `Tooltip`.
 - The arrow is rendered via a `::after` pseudo-element on the content bubble.
 - Tooltip content is not interactive (`pointer-events: none`), so it does not interfere with clicks on the trigger.
 - Respects `prefers-reduced-motion: reduce` by disabling the opacity/visibility transition.
-- `--gsl-z-tooltip` controls the z-index (falls back to `--gsl-z-popover`).
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- `--clet-z-tooltip` controls the z-index (falls back to `--clet-z-popover`).
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

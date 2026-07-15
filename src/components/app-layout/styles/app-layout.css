@@ -1,117 +1,116 @@
-.gsl-app-layout {
-  --gsl-app-layout-gap: 1rem;
-  --gsl-app-layout-body-gap: var(--gsl-app-layout-gap, 1rem);
+.clet-app-layout {
+  --clet-app-layout-gap: 1rem;
+  --clet-app-layout-body-gap: var(--clet-app-layout-gap, 1rem);
   --clet-panel-bg: var(--clet-surface-subtle);
-  --gsl-panel-bg: var(--clet-panel-bg);
-  --gsl-panel-radius: var(--gsl-radius-2xl);
-  --gsl-app-layout-font: var(--gsl-font-body);
+  --clet-panel-radius: var(--clet-radius-2xl);
+  --clet-app-layout-font: var(--clet-font-body);
 
   box-sizing: border-box;
 
   display: flex;
   flex-direction: row;
-  background: var(--gsl-main-bg);
-  font-family: var(--gsl-app-layout-font);
+  background: var(--clet-main-bg);
+  font-family: var(--clet-app-layout-font);
   height: 100vh;
   overflow: hidden;
 }
 
-.gsl-app-layout__breadcrumb {
+.clet-app-layout__breadcrumb {
   flex-shrink: 0;
-  padding: 0 var(--gsl-app-layout-body-gap);
+  padding: 0 var(--clet-app-layout-body-gap);
 }
 
-.gsl-app-layout--stacked .gsl-app-layout__breadcrumb {
-  padding-top: var(--gsl-app-layout-body-gap);
+.clet-app-layout--stacked .clet-app-layout__breadcrumb {
+  padding-top: var(--clet-app-layout-body-gap);
 }
-.gsl-app-layout__content {
-  background: var(--gsl-panel-bg);
-  border-radius: var(--gsl-panel-radius);
-  padding: var(--gsl-app-layout-body-gap);
+.clet-app-layout__content {
+  background: var(--clet-panel-bg);
+  border-radius: var(--clet-panel-radius);
+  padding: var(--clet-app-layout-body-gap);
   box-sizing: border-box;
   flex: 1;
 }
 
-.gsl-app-layout--stacked .gsl-app-layout__content {
-  background: var(--gsl-main-bg);
-  padding: var(--gsl-app-layout-gap, 1rem);
+.clet-app-layout--stacked .clet-app-layout__content {
+  background: var(--clet-main-bg);
+  padding: var(--clet-app-layout-gap, 1rem);
   border-radius: 0;
 }
 
-.gsl-app-layout__body {
+.clet-app-layout__body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--gsl-app-layout-body-gap);
+  gap: var(--clet-app-layout-body-gap);
   flex: 1;
 
-  border-radius: var(--gsl-panel-radius);
+  border-radius: var(--clet-panel-radius);
   overflow: hidden auto;
   scrollbar-width: none;
 
-  padding: var(--gsl-app-layout-gap, 1rem);
-  --gsl-scroll-fade: 1;
-  --gsl-scroll-fade-height: calc(var(--gsl-app-layout-body-gap) * 3);
-  --gsl-scroll-fade-width: 100%;
+  padding: var(--clet-app-layout-gap, 1rem);
+  --clet-scroll-fade: 1;
+  --clet-scroll-fade-height: calc(var(--clet-app-layout-body-gap) * 3);
+  --clet-scroll-fade-width: 100%;
 }
 
-.gsl-app-layout__body::before,
-.gsl-app-layout__body::after {
+.clet-app-layout__body::before,
+.clet-app-layout__body::after {
   content: "";
   position: fixed;
   display: block;
-  width: var(--gsl-scroll-fade-width);
+  width: var(--clet-scroll-fade-width);
   pointer-events: none;
   z-index: 1;
   flex-shrink: 0;
   left: 0;
   right: 0;
-  opacity: calc(var(--gsl-scroll-fade) * 1);
+  opacity: calc(var(--clet-scroll-fade) * 1);
 }
 
-.gsl-app-layout__body::before {
+.clet-app-layout__body::before {
   top: 0;
-  height: var(--gsl-scroll-fade-top-height, var(--gsl-scroll-fade-height));
-  background: linear-gradient(to bottom, var(--gsl-main-bg), transparent);
+  height: var(--clet-scroll-fade-top-height, var(--clet-scroll-fade-height));
+  background: linear-gradient(to bottom, var(--clet-main-bg), transparent);
 }
 
-.gsl-app-layout__body::after {
+.clet-app-layout__body::after {
   bottom: 0;
-  height: var(--gsl-scroll-fade-height);
-  background: linear-gradient(to top, var(--gsl-main-bg), transparent);
+  height: var(--clet-scroll-fade-height);
+  background: linear-gradient(to top, var(--clet-main-bg), transparent);
 }
 
-.gsl-app-layout__body::-webkit-scrollbar {
+.clet-app-layout__body::-webkit-scrollbar {
   display: none;
 }
 
-.gsl-app-layout--stacked .gsl-app-layout__sidebar {
+.clet-app-layout--stacked .clet-app-layout__sidebar {
   padding: 0;
 }
-.gsl-app-layout__sidebar {
+.clet-app-layout__sidebar {
   flex-shrink: 0;
   position: relative;
   z-index: 2;
   width: max-content;
   height: 100%;
 
-  padding: var(--gsl-app-layout-gap, 1rem);
+  padding: var(--clet-app-layout-gap, 1rem);
   padding-right: 0;
 }
 
 /* Stacked variant: full-width header on top, sidebar + content side by side below. No extra styling. */
-.gsl-app-layout--stacked {
+.clet-app-layout--stacked {
   flex-direction: column;
 }
 
-.gsl-app-layout__row {
+.clet-app-layout__row {
   display: flex;
   flex-direction: row;
   flex: 1;
   min-height: 0;
 }
 
-.gsl-app-layout__main {
+.clet-app-layout__main {
   flex: 1;
   min-width: 0;
   overflow: auto;

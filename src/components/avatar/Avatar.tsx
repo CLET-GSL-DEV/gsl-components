@@ -37,7 +37,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
 
   const resolvedTheme =
     typeof document !== "undefined"
-      ? document.documentElement.getAttribute("data-gsl-theme") ?? undefined
+      ? document.documentElement.getAttribute("data-clet-theme") ?? undefined
       : undefined;
 
   const gradient = gradientFromString(name, resolvedTheme);
@@ -48,8 +48,8 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
     <div
       ref={ref}
       className={cn(
-        "gsl-avatar",
-        typeof size === "string" && `gsl-avatar--${size}`,
+        "clet-avatar",
+        typeof size === "string" && `clet-avatar--${size}`,
         classNames?.root,
         className,
       )}
@@ -61,14 +61,14 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
     >
       {src && !imgError ? (
         <img
-          className={cn("gsl-avatar__image", classNames?.image)}
+          className={cn("clet-avatar__image", classNames?.image)}
           src={src}
           alt={name}
           onError={() => setImgError(true)}
         />
       ) : (
         <span
-          className={cn("gsl-avatar__initials", classNames?.initials)}
+          className={cn("clet-avatar__initials", classNames?.initials)}
           style={{
             background: resolvedBackground,
             fontSize: fontSizeForSize(dimension),

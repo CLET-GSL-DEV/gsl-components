@@ -1,5 +1,5 @@
 ---
-description: How to create and extend GSL library components
+description: How to create and extend Clet library components
 globs: src/components/**/*,src/types/**/*
 alwaysApply: false
 ---
@@ -12,18 +12,18 @@ alwaysApply: false
 src/components/{name}/
   {Name}.tsx
   index.ts
-  styles/{name}.css    # BEM: gsl-{name}__*
+  styles/{name}.css    # BEM: clet-{name}__*
   {Name}.test.tsx
 src/types/{name}.ts    # props, classNames, unions
 ```
 
 ## Styling
 
-- Use `--gsl-*` tokens from `src/styles/theme/`; no hardcoded theme colors, sizes, or shadows.
-- Prefix classes `gsl-{component}` / `gsl-{component}__part`.
+- Use `--clet-*` tokens from `src/styles/theme/`; no hardcoded theme colors, sizes, or shadows.
+- Prefix classes `clet-{component}` / `clet-{component}__part`.
 - Import CSS in the component file.
-- Component-scoped tokens: `--gsl-{component}-{name}`, named so `generate-theme-tokens.mjs`'s `classify()` infers the right type (e.g. include `size`/`radius`/`shadow`/`font`/`color` in the name). See the full token & theme checklist in `AGENTS.md`.
-- Color-classified tokens get a `--clet-{name}` alias too (`--clet-{name}: <value>;` then `--gsl-{name}: var(--clet-{name});`) — `--clet-*` is the preferred name in new docs/examples, `--gsl-*` keeps working. Non-color tokens don't get one.
+- Component-scoped tokens: `--clet-{component}-{name}`, named so `generate-theme-tokens.mjs`'s `classify()` infers the right type (e.g. include `size`/`radius`/`shadow`/`font`/`color` in the name). See the full token & theme checklist in `AGENTS.md`.
+- One declaration per token, no alias — every token (color or otherwise) is a single `--clet-{name}` custom property.
 
 ## Responsive
 
@@ -61,10 +61,10 @@ export interface ExampleProps {
 ```
 
 ```tsx
-className={cn("gsl-example", classNames?.root, className)}
+className={cn("clet-example", classNames?.root, className)}
 ```
 
-- Never remove base `gsl-*` classes; append consumer classes (Tailwind-friendly).
+- Never remove base `clet-*` classes; append consumer classes (Tailwind-friendly).
 
 ## Tests
 
@@ -81,7 +81,7 @@ Do not finish component work without all four:
    - **Props** table
    - **Types** section for every exported type/interface/union
    - Nav entry in `demo/docs/nav.ts` (insert in alphabetical order by `slug` in the Components section)
-4. **Tokens & theme** — if any `--gsl-*` token was added or renamed: run `npm run generate:tokens`; if it's a global token (not component-scoped), add a mapping in the `@theme` block at `src/styles/theme/tokens.css`; verify light + dark values exist; refresh the MCP index (`npm run build:mcp`) and confirm via `get_tokens`/`get_component`. Full checklist in `AGENTS.md`.
+4. **Tokens & theme** — if any `--clet-*` token was added or renamed: run `npm run generate:tokens`; if it's a global token (not component-scoped), add a mapping in the `@theme` block at `src/styles/theme/tokens.css`; verify light + dark values exist; refresh the MCP index (`npm run build:mcp`) and confirm via `get_tokens`/`get_component`. Full checklist in `AGENTS.md`.
 
 ### Doc examples (single source)
 

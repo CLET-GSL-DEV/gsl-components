@@ -5,8 +5,8 @@ export function AppHeaderBrandingDeclarativeExample() {
     <div
       style={{
         padding: 16,
-        borderRadius: "var(--gsl-radius-2xl)",
-        background: "var(--gsl-surface-subtle)",
+        borderRadius: "var(--clet-radius-2xl)",
+        background: "var(--clet-surface-subtle)",
       }}
     >
       <AppHeader variant="plain">
@@ -21,8 +21,8 @@ export function AppHeaderBrandingDeclarativeExample() {
             />
           }
         >
-          <span className="gsl-app-header__branding-text">
-            <span className="gsl-app-header__branding-title">GSL PORTAL</span>
+          <span className="clet-app-header__branding-text">
+            <span className="clet-app-header__branding-title">CLET PORTAL</span>
             <Badge variant="outline">Beta</Badge>
           </span>
         </AppHeaderBranding>

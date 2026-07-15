@@ -105,6 +105,6 @@ describe("ExportButton", () => {
 
     const button = screen.getByRole("button", { name: /Export/ });
     expect(button).toBeDisabled();
-    expect(button).toHaveClass("gsl-button--ghost");
+    expect(button).toHaveClass("clet-button--ghost");
   });
 });

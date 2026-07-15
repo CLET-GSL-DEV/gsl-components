@@ -9,15 +9,15 @@ describe("Notice", () => {
 
     expect(screen.getByText("Heads up")).toBeInTheDocument();
     expect(screen.getByText("Body copy")).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveClass("gsl-notice--default");
+    expect(screen.getByRole("status")).toHaveClass("clet-notice--default");
   });
 
   it.each([
-    ["default", "gsl-notice--default"],
-    ["info", "gsl-notice--info"],
-    ["success", "gsl-notice--success"],
-    ["warning", "gsl-notice--warning"],
-    ["error", "gsl-notice--error"],
+    ["default", "clet-notice--default"],
+    ["info", "clet-notice--info"],
+    ["success", "clet-notice--success"],
+    ["warning", "clet-notice--warning"],
+    ["error", "clet-notice--error"],
   ] as const)("applies %s variant class", (variant, expectedClass) => {
     render(
       <Notice variant={variant} title={variant}>
@@ -25,7 +25,7 @@ describe("Notice", () => {
       </Notice>,
     );
 
-    expect(screen.getByText(variant).closest(".gsl-notice")).toHaveClass(
+    expect(screen.getByText(variant).closest(".clet-notice")).toHaveClass(
       expectedClass,
     );
   });
@@ -46,10 +46,10 @@ describe("Notice", () => {
     );
 
     const root = screen.getByRole("status");
-    expect(root).toHaveClass("gsl-notice--left-border", "gsl-notice--dashed");
+    expect(root).toHaveClass("clet-notice--left-border", "clet-notice--dashed");
   });
 
-  it("sets a custom --gsl-notice-accent when color is passed", () => {
+  it("sets a custom --clet-notice-accent when color is passed", () => {
     render(
       <Notice color="#ff00ff" title="Custom">
         Body
@@ -57,7 +57,7 @@ describe("Notice", () => {
     );
 
     const root = screen.getByRole("status");
-    expect(root.style.getPropertyValue("--gsl-notice-accent")).toBe(
+    expect(root.style.getPropertyValue("--clet-notice-accent")).toBe(
       "#ff00ff",
     );
   });
@@ -69,7 +69,7 @@ describe("Notice", () => {
       </Notice>,
     );
 
-    expect(screen.getByTestId("dot").closest(".gsl-notice__icon")).toBeInTheDocument();
+    expect(screen.getByTestId("dot").closest(".clet-notice__icon")).toBeInTheDocument();
   });
 
   it("merges classNames onto root, header, title, and body", () => {
@@ -88,7 +88,7 @@ describe("Notice", () => {
     );
 
     expect(screen.getByRole("status")).toHaveClass("custom-root");
-    expect(document.querySelector(".gsl-notice__header")).toHaveClass(
+    expect(document.querySelector(".clet-notice__header")).toHaveClass(
       "custom-header",
     );
     expect(screen.getByText("Titled")).toHaveClass("custom-title");

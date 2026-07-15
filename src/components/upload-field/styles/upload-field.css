@@ -1,7 +1,7 @@
 /* ── Root (dropzone) ── */
 
-.gsl-upload-field {
-  --gsl-upload-field-font: var(--gsl-font-body);
+.clet-upload-field {
+  --clet-upload-field-font: var(--clet-font-body);
 
   display: flex;
   flex-direction: column;
@@ -9,9 +9,9 @@
   align-items: center;
   padding: 32px;
   gap: 8px;
-  border: 1px dashed var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
+  border: 1px dashed var(--clet-border);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-bg);
   cursor: pointer;
   transition:
     border-color 150ms ease,
@@ -19,92 +19,92 @@
   outline: none;
 }
 
-.gsl-upload-field:focus-visible {
-  border-color: var(--gsl-primary);
-  box-shadow: 0 0 0 2px var(--gsl-primary-light);
+.clet-upload-field:focus-visible {
+  border-color: var(--clet-primary);
+  box-shadow: 0 0 0 2px var(--clet-primary-light);
 }
 
-.gsl-upload-field:hover {
-  border-color: var(--gsl-primary);
+.clet-upload-field:hover {
+  border-color: var(--clet-primary);
 }
 
-.gsl-upload-field--drag-over {
-  border-color: var(--gsl-primary);
-  background: var(--gsl-primary-light);
+.clet-upload-field--drag-over {
+  border-color: var(--clet-primary);
+  background: var(--clet-primary-light);
 }
 
-.gsl-upload-field--has-files {
-  background: var(--gsl-primary-light);
+.clet-upload-field--has-files {
+  background: var(--clet-primary-light);
 }
 
-.gsl-upload-field__input {
+.clet-upload-field__input {
   display: none;
 }
 
 /* ── Invalid ── */
 
-.gsl-upload-field--invalid {
-  border-color: var(--gsl-error);
+.clet-upload-field--invalid {
+  border-color: var(--clet-error);
 }
 
-.gsl-upload-field--invalid:focus-visible {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gsl-error) 25%, transparent);
+.clet-upload-field--invalid:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--clet-error) 25%, transparent);
 }
 
 /* ── Disabled ── */
 
-.gsl-upload-field--disabled {
+.clet-upload-field--disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 /* ── Icon ── */
 
-.gsl-upload-field__icon {
+.clet-upload-field__icon {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
   border-radius: 9999px;
-  background: var(--gsl-surface-subtle);
-  color: var(--gsl-text-secondary);
+  background: var(--clet-surface-subtle);
+  color: var(--clet-text-secondary);
   flex-shrink: 0;
 }
 
-.gsl-upload-field--has-files .gsl-upload-field__icon {
-  background: var(--gsl-main-bg);
-  box-shadow: var(--gsl-shadow-md);
+.clet-upload-field--has-files .clet-upload-field__icon {
+  background: var(--clet-main-bg);
+  box-shadow: var(--clet-shadow-md);
 }
 
 /* ── Title ── */
 
-.gsl-upload-field__title {
+.clet-upload-field__title {
   margin: 0;
-  font-family: var(--gsl-upload-field-font);
+  font-family: var(--clet-upload-field-font);
   font-weight: 500;
-  font-size: var(--gsl-text-size-md);
+  font-size: var(--clet-text-size-md);
   line-height: 24px;
   text-align: center;
-  color: var(--gsl-text);
+  color: var(--clet-text);
 }
 
 /* ── Subtitle ── */
 
-.gsl-upload-field__subtitle {
+.clet-upload-field__subtitle {
   margin: 0;
-  font-family: var(--gsl-upload-field-font);
+  font-family: var(--clet-upload-field-font);
   font-weight: 400;
-  font-size: var(--gsl-text-size-base);
+  font-size: var(--clet-text-size-base);
   line-height: 20px;
   text-align: center;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
   margin-bottom: 16px;
 }
 
 /* ── File cards ── */
 
-.gsl-upload-field__files {
+.clet-upload-field__files {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -112,31 +112,31 @@
   margin-bottom: 16px;
 }
 
-.gsl-upload-field__file-card {
+.clet-upload-field__file-card {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 6px 12px;
   gap: 8px;
-  background: var(--gsl-bg);
+  background: var(--clet-bg);
   border: 1px solid transparent;
-  border-radius: var(--gsl-radius-base);
+  border-radius: var(--clet-radius-base);
 }
 
-.gsl-upload-field__file-card--failed {
-  border-color: var(--gsl-error);
-  background: color-mix(in srgb, var(--gsl-error) 6%, var(--gsl-bg));
+.clet-upload-field__file-card--failed {
+  border-color: var(--clet-error);
+  background: color-mix(in srgb, var(--clet-error) 6%, var(--clet-bg));
 }
 
-.gsl-upload-field__file-card-icon {
+.clet-upload-field__file-card-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
 }
 
-.gsl-upload-field__file-card-info {
+.clet-upload-field__file-card-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -144,67 +144,67 @@
   min-width: 0;
 }
 
-.gsl-upload-field__file-card-name {
-  font-family: var(--gsl-upload-field-font);
+.clet-upload-field__file-card-name {
+  font-family: var(--clet-upload-field-font);
   font-weight: 400;
-  font-size: var(--gsl-text-size-base);
+  font-size: var(--clet-text-size-base);
   line-height: 20px;
-  color: var(--gsl-primary);
+  color: var(--clet-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.gsl-upload-field__file-card-size {
+.clet-upload-field__file-card-size {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-family: var(--gsl-upload-field-font);
+  font-family: var(--clet-upload-field-font);
   font-weight: 400;
-  font-size: var(--gsl-text-size-xs);
+  font-size: var(--clet-text-size-xs);
   line-height: 16px;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
 }
 
-.gsl-upload-field__file-card-completed-icon {
-  color: var(--gsl-success);
+.clet-upload-field__file-card-completed-icon {
+  color: var(--clet-success);
   flex-shrink: 0;
 }
 
-.gsl-upload-field__file-card-progress {
+.clet-upload-field__file-card-progress {
   margin-top: 2px;
 }
 
-.gsl-upload-field__file-card-status {
+.clet-upload-field__file-card-status {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--gsl-upload-field-font);
-  font-size: var(--gsl-text-size-xs);
+  font-family: var(--clet-upload-field-font);
+  font-size: var(--clet-text-size-xs);
   line-height: 16px;
-  color: var(--gsl-error);
+  color: var(--clet-error);
 }
 
-.gsl-upload-field__file-card-status-dot {
+.clet-upload-field__file-card-status-dot {
   width: 6px;
   height: 6px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: var(--gsl-error);
+  background: var(--clet-error);
 }
 
-.gsl-upload-field__file-card-retry {
+.clet-upload-field__file-card-retry {
   border: none;
   padding: 0;
   background: transparent;
-  color: var(--gsl-error);
+  color: var(--clet-error);
   font: inherit;
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
 }
 
-.gsl-upload-field__file-card-cancel {
+.clet-upload-field__file-card-cancel {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -214,17 +214,17 @@
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
   cursor: pointer;
   flex-shrink: 0;
 }
 
-.gsl-upload-field__file-card-cancel:hover {
-  background: var(--gsl-hover);
-  color: var(--gsl-text);
+.clet-upload-field__file-card-cancel:hover {
+  background: var(--clet-hover);
+  color: var(--clet-text);
 }
 
-.gsl-upload-field__file-card-remove {
+.clet-upload-field__file-card-remove {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -234,19 +234,19 @@
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
   cursor: pointer;
   flex-shrink: 0;
 }
 
-.gsl-upload-field__file-card-remove:hover {
-  background: color-mix(in srgb, var(--gsl-error) 10%, transparent);
-  color: var(--gsl-error);
+.clet-upload-field__file-card-remove:hover {
+  background: color-mix(in srgb, var(--clet-error) 10%, transparent);
+  color: var(--clet-error);
 }
 
 /* ── Action button ── */
 
-.gsl-upload-field__action {
+.clet-upload-field__action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -254,65 +254,65 @@
   height: 36px;
   padding: 0 16px;
   border: none;
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-primary);
-  color: var(--gsl-on-primary);
-  font-family: var(--gsl-upload-field-font);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-primary);
+  color: var(--clet-on-primary);
+  font-family: var(--clet-upload-field-font);
   font-weight: 500;
-  font-size: var(--gsl-text-size-base);
+  font-size: var(--clet-text-size-base);
   line-height: 20px;
   cursor: pointer;
   transition: background-color 150ms ease;
 }
 
-.gsl-upload-field__action:hover:not(:disabled) {
+.clet-upload-field__action:hover:not(:disabled) {
   opacity: 0.9;
 }
 
-.gsl-upload-field__action:focus-visible {
-  outline: 2px solid var(--gsl-primary);
+.clet-upload-field__action:focus-visible {
+  outline: 2px solid var(--clet-primary);
   outline-offset: 2px;
 }
 
-.gsl-upload-field__action:disabled {
+.clet-upload-field__action:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.gsl-upload-field--invalid .gsl-upload-field__action {
-  background: var(--gsl-error);
+.clet-upload-field--invalid .clet-upload-field__action {
+  background: var(--clet-error);
 }
 
 /* ── Error card ── */
 
-.gsl-upload-field__action--ghost {
+.clet-upload-field__action--ghost {
   background: transparent;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
 }
 
-.gsl-upload-field__action--ghost:hover:not(:disabled) {
-  background: var(--gsl-hover);
+.clet-upload-field__action--ghost:hover:not(:disabled) {
+  background: var(--clet-hover);
   opacity: 1;
 }
 
 /* ── Error dialog ── */
 
-.gsl-upload-field__dialog-filename {
+.clet-upload-field__dialog-filename {
   display: block;
   font-weight: 600;
-  color: var(--gsl-text);
+  color: var(--clet-text);
   margin-bottom: 4px;
 }
 
 /* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-upload-field {
+  .clet-upload-field {
     transition: none;
   }
 
-  .gsl-upload-field__action,
-  .gsl-upload-field__action--ghost {
+  .clet-upload-field__action,
+  .clet-upload-field__action--ghost {
     transition: none;
   }
 }

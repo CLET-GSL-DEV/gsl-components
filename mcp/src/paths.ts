@@ -24,7 +24,7 @@ export const SOURCE = {
   rules: path.join(REPO_ROOT, "demo/docs/rules"),
   themeDir: path.join(REPO_ROOT, "src/styles/theme"),
   componentsDir: path.join(REPO_ROOT, "src/components"),
-  // The generated, authoritative registry of every --gsl-* token gslTheme()
+  // The generated, authoritative registry of every --clet-* token cletTheme()
   // actually accepts (global + per-component) — see
   // scripts/generate-theme-tokens.mjs. Parsed for token IDENTITY/grouping;
   // actual values still come from the theme CSS files (global) and each
@@ -59,3 +59,12 @@ export const GENERATED_DIR = isDevSource
 export const SKILL_SOURCE_PATH = isDevSource
   ? path.join(__dirname, "..", "skill", "SKILL.md")
   : path.join(__dirname, "skill", "SKILL.md");
+
+/**
+ * The hand-authored image/text-to-components skill doc. Same dev/dist split
+ * as SKILL_SOURCE_PATH; `prepare-dist.mjs` copies the whole `skill/` dir so
+ * this travels to the published tarball automatically.
+ */
+export const SKILL_IMAGE_SOURCE_PATH = isDevSource
+  ? path.join(__dirname, "..", "skill", "image-to-components.md")
+  : path.join(__dirname, "skill", "image-to-components.md");

@@ -146,10 +146,10 @@ function MonthPanel({
   }, [year, month]);
 
   return (
-    <div className="gsl-date-selector__month-panel">
+    <div className="clet-date-range-selector__month-panel">
       <div
         className={cn(
-          "gsl-date-selector__calendar-title",
+          "clet-date-range-selector__calendar-title",
           classNames?.calendarTitle,
         )}
       >
@@ -158,7 +158,7 @@ function MonthPanel({
 
       <div
         className={cn(
-          "gsl-date-selector__calendar-weekdays",
+          "clet-date-range-selector__calendar-weekdays",
           classNames?.calendarWeekdays,
         )}
         role="row"
@@ -167,7 +167,7 @@ function MonthPanel({
           <div
             key={day.full}
             className={cn(
-              "gsl-date-selector__calendar-weekday",
+              "clet-date-range-selector__calendar-weekday",
               classNames?.calendarWeekday,
             )}
             role="columnheader"
@@ -180,7 +180,7 @@ function MonthPanel({
 
       <div
         className={cn(
-          "gsl-date-selector__calendar-grid",
+          "clet-date-range-selector__calendar-grid",
           classNames?.calendarGrid,
         )}
         role="grid"
@@ -235,16 +235,16 @@ function MonthPanel({
                 year: "numeric",
               })}
               className={cn(
-                "gsl-date-selector__calendar-day",
+                "clet-date-range-selector__calendar-day",
                 !isCurrentMonth &&
-                  "gsl-date-selector__calendar-day--outside",
-                isToday && "gsl-date-selector__calendar-day--today",
-                isStart && "gsl-date-selector__calendar-day--selected",
-                isEnd && "gsl-date-selector__calendar-day--selected",
+                  "clet-date-range-selector__calendar-day--outside",
+                isToday && "clet-date-range-selector__calendar-day--today",
+                isStart && "clet-date-range-selector__calendar-day--selected",
+                isEnd && "clet-date-range-selector__calendar-day--selected",
                 inRange &&
-                  "gsl-date-selector__calendar-day--in-range",
-                prevMember && "gsl-date-selector__calendar-day--flat-left",
-                nextMember && "gsl-date-selector__calendar-day--flat-right",
+                  "clet-date-range-selector__calendar-day--in-range",
+                prevMember && "clet-date-range-selector__calendar-day--flat-left",
+                nextMember && "clet-date-range-selector__calendar-day--flat-right",
                 classNames?.calendarDay,
               )}
               onClick={() => onSelect(day)}
@@ -440,9 +440,9 @@ export const DateRangeSelector = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "gsl-date-range-selector",
-        invalid && "gsl-date-range-selector--invalid",
-        disabled && "gsl-date-range-selector--disabled",
+        "clet-date-range-selector",
+        invalid && "clet-date-range-selector--invalid",
+        disabled && "clet-date-range-selector--disabled",
         classNames?.root,
         className,
       )}
@@ -453,8 +453,8 @@ export const DateRangeSelector = forwardRef<
             type="button"
             disabled={disabled}
             className={cn(
-              "gsl-date-selector__trigger",
-              !range.start && !range.end && "gsl-date-selector__trigger--placeholder",
+              "clet-date-range-selector__trigger",
+              !range.start && !range.end && "clet-date-range-selector__trigger--placeholder",
               classNames?.trigger,
             )}
             aria-invalid={invalid || undefined}
@@ -464,10 +464,10 @@ export const DateRangeSelector = forwardRef<
             <Calendar
               size={16}
               strokeWidth={1.75}
-              className="gsl-date-selector__trigger-icon"
+              className="clet-date-range-selector__trigger-icon"
               aria-hidden
             />
-            <span className="gsl-date-selector__trigger-text">
+            <span className="clet-date-range-selector__trigger-text">
               {range.start || range.end ? displayText : placeholder}
             </span>
           </button>
@@ -476,8 +476,8 @@ export const DateRangeSelector = forwardRef<
         <Popover.Portal>
           <Popover.Content
             className={cn(
-              "gsl-date-selector__calendar",
-              "gsl-date-selector__calendar--double",
+              "clet-date-range-selector__calendar",
+              "clet-date-range-selector__calendar--double",
               classNames?.calendar,
             )}
             side="bottom"
@@ -487,7 +487,7 @@ export const DateRangeSelector = forwardRef<
           >
             <div
               className={cn(
-                "gsl-date-selector__calendar-header",
+                "clet-date-range-selector__calendar-header",
                 classNames?.calendarHeader,
               )}
             >
@@ -501,7 +501,7 @@ export const DateRangeSelector = forwardRef<
                 <ChevronLeft size={16} strokeWidth={2} aria-hidden />
               </Button>
 
-              <div className="gsl-date-selector__calendar-header-center">
+              <div className="clet-date-range-selector__calendar-header-center">
                 <Dropdown
                   value={String(leftMonth)}
                   onValueChange={(v: string | null) => {
@@ -531,11 +531,11 @@ export const DateRangeSelector = forwardRef<
               </Button>
             </div>
 
-            <div className="gsl-date-range-selector__body">
+            <div className="clet-date-range-selector__body">
               {hasPresets ? (
                 <div
                   className={cn(
-                    "gsl-date-range-selector__presets",
+                    "clet-date-range-selector__presets",
                     classNames?.presets,
                   )}
                 >
@@ -544,9 +544,9 @@ export const DateRangeSelector = forwardRef<
                       key={preset.label}
                       type="button"
                       className={cn(
-                        "gsl-date-range-selector__preset-item",
+                        "clet-date-range-selector__preset-item",
                         isPresetActive(preset) &&
-                          "gsl-date-range-selector__preset-item--active",
+                          "clet-date-range-selector__preset-item--active",
                         classNames?.presetItem,
                       )}
                       onClick={() => handlePresetSelect(preset)}
@@ -557,7 +557,7 @@ export const DateRangeSelector = forwardRef<
                 </div>
               ) : null}
 
-              <div className="gsl-date-selector__calendar-months">
+              <div className="clet-date-range-selector__calendar-months">
                 <MonthPanel
                   year={viewYear}
                   month={leftMonth}
@@ -585,14 +585,14 @@ export const DateRangeSelector = forwardRef<
 
             <div
               className={cn(
-                "gsl-date-selector__calendar-footer",
+                "clet-date-range-selector__calendar-footer",
                 classNames?.calendarFooter,
               )}
             >
               {hasPresets && pendingRange.start ? (
                 <span
                   className={cn(
-                    "gsl-date-range-selector__summary",
+                    "clet-date-range-selector__summary",
                     classNames?.rangeSummary,
                   )}
                 >
@@ -601,7 +601,7 @@ export const DateRangeSelector = forwardRef<
                   {pendingRange.end ? formatDate(pendingRange.end) : "..."}
                 </span>
               ) : null}
-              <div className="gsl-date-range-selector__footer-actions">
+              <div className="clet-date-range-selector__footer-actions">
                 <Button
                   variant="ghost"
                   size="sm"

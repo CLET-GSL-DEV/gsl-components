@@ -1,13 +1,13 @@
-.gsl-sortable {
+.clet-sortable {
   width: 100%;
   max-width: 100%;
 }
 
-.gsl-sortable--disabled {
+.clet-sortable--disabled {
   opacity: 0.6;
 }
 
-.gsl-sortable__list {
+.clet-sortable__list {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -16,42 +16,42 @@
   min-width: 0;
 }
 
-.gsl-sortable__list--horizontal {
+.clet-sortable__list--horizontal {
   flex-flow: row wrap;
 }
 
-.gsl-sortable__item {
+.clet-sortable__item {
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
   padding: 8px 12px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
+  border: 1px solid var(--clet-border);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-bg);
   box-sizing: border-box;
 }
 
-.gsl-sortable__item--dragging {
+.clet-sortable__item--dragging {
   z-index: 1;
   touch-action: none;
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--gsl-text) 12%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--clet-text) 12%, transparent);
 }
 
-.gsl-sortable__item--draggable {
+.clet-sortable__item--draggable {
   cursor: grab;
   touch-action: none;
 }
 
-.gsl-sortable__item--draggable:active {
+.clet-sortable__item--draggable:active {
   cursor: grabbing;
 }
 
-.gsl-sortable__item--disabled {
+.clet-sortable__item--disabled {
   cursor: not-allowed;
 }
 
-.gsl-sortable__handle {
+.clet-sortable__handle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -60,34 +60,34 @@
   min-height: 40px;
   padding: 8px;
   border: 0;
-  border-radius: var(--gsl-radius-base);
+  border-radius: var(--clet-radius-base);
   background: transparent;
-  color: var(--gsl-text-muted);
+  color: var(--clet-text-muted);
   cursor: grab;
   touch-action: none;
 }
 
-.gsl-sortable__handle:hover:not(:disabled) {
-  color: var(--gsl-text-secondary);
-  background: var(--gsl-hover);
+.clet-sortable__handle:hover:not(:disabled) {
+  color: var(--clet-text-secondary);
+  background: var(--clet-hover);
 }
 
-.gsl-sortable__handle:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-sortable__handle:focus-visible {
+  outline: 2px solid var(--clet-focus);
   outline-offset: 2px;
 }
 
-.gsl-sortable__handle--dragging,
-.gsl-sortable__handle:active:not(:disabled) {
+.clet-sortable__handle--dragging,
+.clet-sortable__handle:active:not(:disabled) {
   cursor: grabbing;
 }
 
-.gsl-sortable__handle:disabled {
+.clet-sortable__handle:disabled {
   cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-sortable__item {
+  .clet-sortable__item {
     transition: none;
   }
 }

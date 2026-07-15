@@ -26,9 +26,9 @@ export function SidebarPlainExample() {
         style={{
           display: "flex",
           height: 280,
-          borderRadius: "var(--gsl-radius-base)",
+          borderRadius: "var(--clet-radius-base)",
           overflow: "hidden",
-          background: "var(--gsl-bg)",
+          background: "var(--clet-bg)",
         }}
       >
         <Sidebar variant="plain">
@@ -57,7 +57,7 @@ export function SidebarPlainExample() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "var(--gsl-text-muted)",
+            color: "var(--clet-text-muted)",
             fontSize: 14,
             padding: 16,
             textAlign: "center",

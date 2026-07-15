@@ -7,8 +7,8 @@ interface Member {
 }
 
 const members: Member[] = [
-  { name: "Kwame Asante", email: "kwame.asante@gsl.edu.gh" },
-  { name: "Abena Mensah", email: "abena.mensah@gsl.edu.gh" },
+  { name: "Kwame Asante", email: "kwame.asante@clet.edu.gh" },
+  { name: "Abena Mensah", email: "abena.mensah@clet.edu.gh" },
 ];
 
 const columns: ExportColumn<Member>[] = [

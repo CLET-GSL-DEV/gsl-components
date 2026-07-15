@@ -33,7 +33,7 @@ describe("NetworkOperator", () => {
     const { container } = render(<NetworkOperator className="custom" />);
     const root = container.firstElementChild!;
     expect(root).toHaveClass("custom");
-    expect(root).toHaveClass("gsl-network-operator");
+    expect(root).toHaveClass("clet-network-operator");
   });
 
   it("shows default value when uncontrolled with defaultValue", () => {

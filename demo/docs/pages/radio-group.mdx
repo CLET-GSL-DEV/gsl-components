@@ -104,16 +104,16 @@ Props for `Radio`. Requires `value`; supports optional `label`, `description`, a
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Group root (`.gsl-radio-group`) |
+| `root` | Group root (`.clet-radio-group`) |
 
 ### `RadioClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Outer wrapper (`.gsl-radio`) |
-| `control` | Radio control (`.gsl-radio__control`) |
-| `indicator` | Checked dot (`.gsl-radio__indicator`) |
-| `content` | Label and description stack (`.gsl-radio__content`) |
+| `root` | Outer wrapper (`.clet-radio`) |
+| `control` | Radio control (`.clet-radio__control`) |
+| `indicator` | Checked dot (`.clet-radio__indicator`) |
+| `content` | Label and description stack (`.clet-radio__content`) |
 | `label` | Visible label text |
 | `description` | Secondary description text |
 
@@ -121,7 +121,7 @@ Props for `Radio`. Requires `value`; supports optional `label`, `description`, a
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-radio-group-font` | `var(--gsl-font-body)` | Font family override |
+| `--clet-radio-group-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
@@ -129,4 +129,4 @@ Props for `Radio`. Requires `value`; supports optional `label`, `description`, a
 - When `description` is set, it is linked to the control via `aria-describedby`.
 - Checked state shows a primary-colored dot inside the circular control.
 - Card variant highlights the selected option with a primary border and light background.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

@@ -18,7 +18,7 @@ import "./styles/stepper.css";
 function StepCheck({ className }: { className?: string }) {
   return (
     <svg
-      className={cn("gsl-stepper__check", className)}
+      className={cn("clet-stepper__check", className)}
       width="14"
       height="14"
       viewBox="0 0 14 14"
@@ -59,13 +59,13 @@ const StepperRoot = forwardRef<HTMLOListElement, StepperProps>(function Stepper(
     <StepperContext.Provider value={contextValue}>
       <ol
         ref={ref}
-        className={cn("gsl-stepper", classNames?.root, className)}
+        className={cn("clet-stepper", classNames?.root, className)}
         {...props}
       >
         {steps.map((step, index) =>
           cloneElement(step, {
             __isLast: index === steps.length - 1,
-            key: step.key ?? `gsl-step-${index}`,
+            key: step.key ?? `clet-step-${index}`,
           }),
         )}
       </ol>
@@ -95,11 +95,11 @@ export const Step = forwardRef<HTMLLIElement, StepProps>(function Step(
   const canClick = clickable && !disabled;
 
   const marker = (
-    <span className={cn("gsl-stepper__marker", classNames?.marker)}>
+    <span className={cn("clet-stepper__marker", classNames?.marker)}>
       <span
         className={cn(
-          "gsl-stepper__number",
-          isComplete && "gsl-stepper__number--hidden",
+          "clet-stepper__number",
+          isComplete && "clet-stepper__number--hidden",
           classNames?.number,
         )}
         aria-hidden={isComplete}
@@ -115,10 +115,10 @@ export const Step = forwardRef<HTMLLIElement, StepProps>(function Step(
       ref={ref}
       aria-current={isActive ? "step" : undefined}
       className={cn(
-        "gsl-stepper__item",
-        `gsl-stepper__item--${state}`,
-        disabled && "gsl-stepper__item--disabled",
-        canClick && "gsl-stepper__item--clickable",
+        "clet-stepper__item",
+        `clet-stepper__item--${state}`,
+        disabled && "clet-stepper__item--disabled",
+        canClick && "clet-stepper__item--clickable",
         classNames?.root,
         className,
       )}
@@ -127,7 +127,7 @@ export const Step = forwardRef<HTMLLIElement, StepProps>(function Step(
       {canClick ? (
         <button
           type="button"
-          className={cn("gsl-stepper__button", classNames?.button)}
+          className={cn("clet-stepper__button", classNames?.button)}
           onClick={() => onValueChange?.(value)}
           aria-label={`Go to step ${value}`}
         >
@@ -142,14 +142,14 @@ export const Step = forwardRef<HTMLLIElement, StepProps>(function Step(
       )}
       {!__isLast ? (
         <span
-          className={cn("gsl-stepper__connector", classNames?.connector)}
+          className={cn("clet-stepper__connector", classNames?.connector)}
           aria-hidden="true"
         >
-          <span className="gsl-stepper__connector-track" aria-hidden="true" />
+          <span className="clet-stepper__connector-track" aria-hidden="true" />
           <span
             className={cn(
-              "gsl-stepper__connector-fill",
-              isComplete && "gsl-stepper__connector-fill--visible",
+              "clet-stepper__connector-fill",
+              isComplete && "clet-stepper__connector-fill--visible",
             )}
             aria-hidden="true"
           />
@@ -164,7 +164,7 @@ export const StepLabel = forwardRef<HTMLSpanElement, StepLabelProps>(
     return (
       <span
         ref={ref}
-        className={cn("gsl-stepper__label", classNames?.root, className)}
+        className={cn("clet-stepper__label", classNames?.root, className)}
         {...props}
       >
         {children}

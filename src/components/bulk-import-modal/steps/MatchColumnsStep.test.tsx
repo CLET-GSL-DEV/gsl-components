@@ -35,7 +35,7 @@ describe("MatchColumnsStep", () => {
       />,
     );
 
-    expect(document.querySelector(".gsl-bulk-import__match-board")).toBeInTheDocument();
+    expect(document.querySelector(".clet-bulk-import__match-board")).toBeInTheDocument();
 
     const yourTable = screen.getByText("Your table");
     const willBecome = screen.getByText("Will become");

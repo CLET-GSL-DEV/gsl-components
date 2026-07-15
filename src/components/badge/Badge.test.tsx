@@ -8,16 +8,16 @@ describe("Badge", () => {
     render(<Badge>New</Badge>);
 
     const badge = screen.getByText("New");
-    expect(badge).toHaveClass("gsl-badge", "gsl-badge--default", "gsl-badge--sm");
+    expect(badge).toHaveClass("clet-badge", "clet-badge--default", "clet-badge--sm");
   });
 
   it.each([
-    ["default", "gsl-badge--default"],
-    ["primary", "gsl-badge--primary"],
-    ["success", "gsl-badge--success"],
-    ["warning", "gsl-badge--warning"],
-    ["error", "gsl-badge--error"],
-    ["outline", "gsl-badge--outline"],
+    ["default", "clet-badge--default"],
+    ["primary", "clet-badge--primary"],
+    ["success", "clet-badge--success"],
+    ["warning", "clet-badge--warning"],
+    ["error", "clet-badge--error"],
+    ["outline", "clet-badge--outline"],
   ] as const)("applies %s variant class", (variant, expectedClass) => {
     render(<Badge variant={variant}>{variant}</Badge>);
 
@@ -27,7 +27,7 @@ describe("Badge", () => {
   it("applies size class names", () => {
     render(<Badge size="md">Medium</Badge>);
 
-    expect(screen.getByText("Medium")).toHaveClass("gsl-badge--md");
+    expect(screen.getByText("Medium")).toHaveClass("clet-badge--md");
   });
 
   it("merges className and classNames.root without dropping base classes", () => {
@@ -38,7 +38,7 @@ describe("Badge", () => {
     );
 
     const badge = screen.getByText("Tagged");
-    expect(badge).toHaveClass("gsl-badge", "custom-root", "extra-root");
+    expect(badge).toHaveClass("clet-badge", "custom-root", "extra-root");
   });
 
   it("forwards ref to the root span", () => {

@@ -65,13 +65,13 @@ const DocsHeader = ({
           <span
             style={{
               marginLeft: 6,
-              color: "var(--gsl-text-muted)",
+              color: "var(--clet-text-muted)",
               fontSize: 12,
             }}
           >
             Search docs...
           </span>
-          <kbd className="gsl-app-header__search-kbd ml-2">⌘K</kbd>
+          <kbd className="clet-app-header__search-kbd ml-2">⌘K</kbd>
         </button>
         <NavLink
           to="/"
@@ -150,7 +150,7 @@ export function DocsPage() {
                 {doc.description && (
                   <span
                     style={{
-                      color: "var(--gsl-text-muted)",
+                      color: "var(--clet-text-muted)",
                       marginLeft: 8,
                       fontSize: 12,
                     }}

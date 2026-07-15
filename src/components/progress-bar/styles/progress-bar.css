@@ -1,65 +1,65 @@
-.gsl-progress-bar {
-  --gsl-progress-bar-font: var(--gsl-font-body);
+.clet-progress-bar {
+  --clet-progress-bar-font: var(--clet-font-body);
   width: 100%;
   max-width: 100%;
-  font-family: var(--gsl-progress-bar-font);
+  font-family: var(--clet-progress-bar-font);
 }
 
-.gsl-progress-bar--with-value {
+.clet-progress-bar--with-value {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.gsl-progress-bar__track {
+.clet-progress-bar__track {
   width: 100%;
   overflow: hidden;
   border-radius: 999px;
-  background: var(--gsl-hover);
+  background: var(--clet-hover);
 }
 
-.gsl-progress-bar--sm .gsl-progress-bar__track {
+.clet-progress-bar--sm .clet-progress-bar__track {
   height: 4px;
 }
 
-.gsl-progress-bar--md .gsl-progress-bar__track {
+.clet-progress-bar--md .clet-progress-bar__track {
   height: 8px;
 }
 
-.gsl-progress-bar__indicator {
+.clet-progress-bar__indicator {
   height: 100%;
   border-radius: inherit;
   transition: width 0.2s ease;
 }
 
-.gsl-progress-bar--default .gsl-progress-bar__indicator {
-  background: var(--gsl-primary);
+.clet-progress-bar--default .clet-progress-bar__indicator {
+  background: var(--clet-primary);
 }
 
-.gsl-progress-bar--success .gsl-progress-bar__indicator {
-  background: var(--gsl-success);
+.clet-progress-bar--success .clet-progress-bar__indicator {
+  background: var(--clet-success);
 }
 
-.gsl-progress-bar--warning .gsl-progress-bar__indicator {
-  background: var(--gsl-warning);
+.clet-progress-bar--warning .clet-progress-bar__indicator {
+  background: var(--clet-warning);
 }
 
-.gsl-progress-bar--error .gsl-progress-bar__indicator {
-  background: var(--gsl-error);
+.clet-progress-bar--error .clet-progress-bar__indicator {
+  background: var(--clet-error);
 }
 
-.gsl-progress-bar__value {
-  color: var(--gsl-text-secondary);
+.clet-progress-bar__value {
+  color: var(--clet-text-secondary);
   font-size: 12px;
   line-height: 1.4;
 }
 
-.gsl-progress-bar--indeterminate .gsl-progress-bar__indicator {
+.clet-progress-bar--indeterminate .clet-progress-bar__indicator {
   width: 40%;
-  animation: gsl-progress-bar-indeterminate 1.2s ease-in-out infinite;
+  animation: clet-progress-bar-indeterminate 1.2s ease-in-out infinite;
 }
 
-@keyframes gsl-progress-bar-indeterminate {
+@keyframes clet-progress-bar-indeterminate {
   0% {
     transform: translateX(-100%);
   }
@@ -70,7 +70,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-progress-bar--indeterminate .gsl-progress-bar__indicator {
+  .clet-progress-bar--indeterminate .clet-progress-bar__indicator {
     width: 50%;
     animation: none;
     transform: none;

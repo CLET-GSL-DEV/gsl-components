@@ -67,7 +67,7 @@ describe("Popover", () => {
     await user.click(screen.getByRole("button", { name: "Open" }));
 
     expect(screen.getByText("Popover body")).toHaveClass(
-      "gsl-popover",
+      "clet-popover",
       "custom-popover",
     );
   });

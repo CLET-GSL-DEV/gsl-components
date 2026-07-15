@@ -33,7 +33,7 @@ describe("Timeline", () => {
     renderTimeline();
 
     const list = screen.getByRole("list");
-    expect(list).toHaveClass("gsl-timeline");
+    expect(list).toHaveClass("clet-timeline");
   });
 
   it("renders all items as listitems", () => {
@@ -47,10 +47,10 @@ describe("Timeline", () => {
     renderTimeline();
 
     const items = screen.getAllByRole("listitem");
-    const lastConnector = items[1].querySelector(".gsl-timeline__connector");
+    const lastConnector = items[1].querySelector(".clet-timeline__connector");
     expect(lastConnector).toBeNull();
 
-    const firstConnector = items[0].querySelector(".gsl-timeline__connector");
+    const firstConnector = items[0].querySelector(".clet-timeline__connector");
     expect(firstConnector).toBeInTheDocument();
   });
 
@@ -61,7 +61,7 @@ describe("Timeline", () => {
     });
 
     const list = screen.getByRole("list");
-    expect(list).toHaveClass("gsl-timeline", "custom-root", "extra-root");
+    expect(list).toHaveClass("clet-timeline", "custom-root", "extra-root");
   });
 
   it("filters out non-TimelineItem children", () => {
@@ -119,9 +119,9 @@ describe("TimelineItem", () => {
 
     const dot = screen
       .getByTestId("item")
-      .querySelector(".gsl-timeline__dot");
+      .querySelector(".clet-timeline__dot");
     expect(dot).toBeInTheDocument();
-    expect(dot).not.toHaveClass("gsl-timeline__dot--primary");
+    expect(dot).not.toHaveClass("clet-timeline__dot--primary");
   });
 
   it("renders mode variants on the dot", () => {
@@ -144,9 +144,9 @@ describe("TimelineItem", () => {
 
       const dot = screen
         .getByTestId(`item-${mode}`)
-        .querySelector(".gsl-timeline__dot");
+        .querySelector(".clet-timeline__dot");
 
-      expect(dot).toHaveClass(`gsl-timeline__dot--${mode}`);
+      expect(dot).toHaveClass(`clet-timeline__dot--${mode}`);
       unmount();
     }
   });
@@ -162,7 +162,7 @@ describe("TimelineItem", () => {
 
     const dot = screen
       .getByTestId("item")
-      .querySelector(".gsl-timeline__dot");
+      .querySelector(".clet-timeline__dot");
     expect(dot).toHaveStyle({
       backgroundColor: "#ff6b6b",
       borderColor: "#ff6b6b",
@@ -180,8 +180,8 @@ describe("TimelineItem", () => {
 
     const dot = screen
       .getByTestId("item")
-      .querySelector(".gsl-timeline__dot");
-    expect(dot).toHaveClass("gsl-timeline__dot--success");
+      .querySelector(".clet-timeline__dot");
+    expect(dot).toHaveClass("clet-timeline__dot--success");
     expect(dot).toHaveStyle({
       backgroundColor: "#ff6b6b",
       borderColor: "#ff6b6b",
@@ -202,7 +202,7 @@ describe("TimelineItem", () => {
 
     const dot = screen
       .getByTestId("item")
-      .querySelector(".gsl-timeline__dot");
+      .querySelector(".clet-timeline__dot");
     expect(dot).toContainElement(screen.getByTestId("custom-icon"));
   });
 
@@ -218,7 +218,7 @@ describe("TimelineItem", () => {
 
     const content = screen
       .getByTestId("item")
-      .querySelector(".gsl-timeline__content");
+      .querySelector(".clet-timeline__content");
     expect(content).toContainElement(screen.getByTestId("title"));
     expect(content).toContainElement(screen.getByTestId("date"));
   });
@@ -231,7 +231,7 @@ describe("TimelineItem", () => {
     );
 
     const item = screen.getByTestId("item");
-    expect(item.querySelector(".gsl-timeline__content")).toBeNull();
+    expect(item.querySelector(".clet-timeline__content")).toBeNull();
   });
 
   it("merges classNames on sub-parts", () => {
@@ -257,12 +257,12 @@ describe("TimelineItem", () => {
 
     const item = screen.getByTestId("item");
     expect(item).toHaveClass("item-root");
-    expect(item.querySelector(".gsl-timeline__rail")).toHaveClass("item-rail");
-    expect(item.querySelector(".gsl-timeline__dot")).toHaveClass("item-dot");
-    expect(item.querySelector(".gsl-timeline__connector")).toHaveClass(
+    expect(item.querySelector(".clet-timeline__rail")).toHaveClass("item-rail");
+    expect(item.querySelector(".clet-timeline__dot")).toHaveClass("item-dot");
+    expect(item.querySelector(".clet-timeline__connector")).toHaveClass(
       "item-connector",
     );
-    expect(item.querySelector(".gsl-timeline__content")).toHaveClass(
+    expect(item.querySelector(".clet-timeline__content")).toHaveClass(
       "item-content",
     );
   });
@@ -280,10 +280,10 @@ describe("TimelineItem", () => {
     );
 
     expect(
-      screen.getByTestId("first").querySelector(".gsl-timeline__connector"),
+      screen.getByTestId("first").querySelector(".clet-timeline__connector"),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId("last").querySelector(".gsl-timeline__connector"),
+      screen.getByTestId("last").querySelector(".clet-timeline__connector"),
     ).toBeNull();
   });
 
@@ -310,7 +310,7 @@ describe("TimelineItem", () => {
 
     const dot = screen
       .getByTestId("item")
-      .querySelector(".gsl-timeline__dot");
+      .querySelector(".clet-timeline__dot");
     expect(dot).toHaveAttribute("aria-hidden", "true");
   });
 });
@@ -327,7 +327,7 @@ describe("TimelineTitle", () => {
 
     const title = screen.getByTestId("title");
     expect(title.tagName).toBe("H3");
-    expect(title).toHaveClass("gsl-timeline__title");
+    expect(title).toHaveClass("clet-timeline__title");
   });
 
   it("renders as the specified heading level", () => {
@@ -360,7 +360,7 @@ describe("TimelineTitle", () => {
     );
 
     const title = screen.getByTestId("title");
-    expect(title).toHaveClass("gsl-timeline__title", "custom-title", "extra-title");
+    expect(title).toHaveClass("clet-timeline__title", "custom-title", "extra-title");
   });
 
   it("exposes forwardRef", () => {
@@ -390,7 +390,7 @@ describe("TimelineData", () => {
 
     const el = screen.getByTestId("data");
     expect(el.tagName).toBe("P");
-    expect(el).toHaveClass("gsl-timeline__data");
+    expect(el).toHaveClass("clet-timeline__data");
   });
 
   it("merges classNames and className", () => {
@@ -409,7 +409,7 @@ describe("TimelineData", () => {
     );
 
     expect(screen.getByTestId("data")).toHaveClass(
-      "gsl-timeline__data",
+      "clet-timeline__data",
       "custom-data",
       "extra-data",
     );
@@ -442,7 +442,7 @@ describe("TimelineFooter", () => {
 
     const el = screen.getByTestId("footer");
     expect(el.tagName).toBe("DIV");
-    expect(el).toHaveClass("gsl-timeline__footer");
+    expect(el).toHaveClass("clet-timeline__footer");
   });
 
   it("merges classNames and className", () => {
@@ -461,7 +461,7 @@ describe("TimelineFooter", () => {
     );
 
     expect(screen.getByTestId("footer")).toHaveClass(
-      "gsl-timeline__footer",
+      "clet-timeline__footer",
       "custom-footer",
       "extra-footer",
     );

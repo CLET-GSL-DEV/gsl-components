@@ -243,38 +243,38 @@ One entry in the `fileStatuses` array:
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root element / dropzone (`.gsl-upload-field`) |
-| `icon` | Cloud upload icon wrapper (`.gsl-upload-field__icon`) |
-| `title` | "Click to upload or drag and drop" text (`.gsl-upload-field__title`) |
-| `subtitle` | File type/size hint text (`.gsl-upload-field__subtitle`) |
-| `files` | File cards container (`.gsl-upload-field__files`) |
-| `fileCard` | Individual file card (`.gsl-upload-field__file-card`) |
-| `fileName` | File name text (`.gsl-upload-field__file-card-name`) |
-| `fileSize` | File size text (`.gsl-upload-field__file-card-size`) |
-| `fileProgress` | Uploading-state progress bar (`.gsl-upload-field__file-card-progress`) |
-| `fileStatusText` | Failed-state status line (`.gsl-upload-field__file-card-status`) |
-| `retryButton` | "Try Again" button (`.gsl-upload-field__file-card-retry`) |
-| `cancelButton` | Cancel (×) button on an uploading file (`.gsl-upload-field__file-card-cancel`) |
-| `completedIcon` | Completed check icon (`.gsl-upload-field__file-card-completed-icon`) |
-| `removeButton` | Remove (trash) button (`.gsl-upload-field__file-card-remove`) |
-| `actionButton` | Upload/Replace button (`.gsl-upload-field__action`) |
+| `root` | Root element / dropzone (`.clet-upload-field`) |
+| `icon` | Cloud upload icon wrapper (`.clet-upload-field__icon`) |
+| `title` | "Click to upload or drag and drop" text (`.clet-upload-field__title`) |
+| `subtitle` | File type/size hint text (`.clet-upload-field__subtitle`) |
+| `files` | File cards container (`.clet-upload-field__files`) |
+| `fileCard` | Individual file card (`.clet-upload-field__file-card`) |
+| `fileName` | File name text (`.clet-upload-field__file-card-name`) |
+| `fileSize` | File size text (`.clet-upload-field__file-card-size`) |
+| `fileProgress` | Uploading-state progress bar (`.clet-upload-field__file-card-progress`) |
+| `fileStatusText` | Failed-state status line (`.clet-upload-field__file-card-status`) |
+| `retryButton` | "Try Again" button (`.clet-upload-field__file-card-retry`) |
+| `cancelButton` | Cancel (×) button on an uploading file (`.clet-upload-field__file-card-cancel`) |
+| `completedIcon` | Completed check icon (`.clet-upload-field__file-card-completed-icon`) |
+| `removeButton` | Remove (trash) button (`.clet-upload-field__file-card-remove`) |
+| `actionButton` | Upload/Replace button (`.clet-upload-field__action`) |
 
 ## Design tokens
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-upload-field-font` | `var(--gsl-font-body)` | Font family for the title, subtitle, file card text, and action button |
-| `--gsl-text-size-md` | `16px` | Title font size |
-| `--gsl-text-size-base` | `14px` | Subtitle, file name, and action button font size |
-| `--gsl-text-size-xs` | `12px` | File size and failed-status text font size |
+| `--clet-upload-field-font` | `var(--clet-font-body)` | Font family for the title, subtitle, file card text, and action button |
+| `--clet-text-size-md` | `16px` | Title font size |
+| `--clet-text-size-base` | `14px` | Subtitle, file name, and action button font size |
+| `--clet-text-size-xs` | `12px` | File size and failed-status text font size |
 
 ## Notes
 
 - The subtitle is auto-generated from `accept` and `maxSize` props (e.g. "Only CSV files are supported. Maximum filesize 10MB.").
 - The action button changes text: "Upload file" when empty, "Replace file" when a file is selected. Only shown in single-file mode (`multiple={false}`).
-- Drop zone turns `--gsl-primary-light` background when files are selected or during drag-over.
+- Drop zone turns `--clet-primary-light` background when files are selected or during drag-over.
 - When `multiple` is true, selecting or dropping new files **replaces** the current set (no append) — this applies to picking new files via the input/drop zone, not to `fileStatuses`, which stays index-aligned with whatever `value` currently holds.
 - Controlled mode: pass `value` and `onChange`. Uncontrolled mode: let the component manage its own state.
 - If **every** newly selected file exceeds `maxSize`, an "Upload failed" dialog appears with a "Try again" action. If only **some** files in a multi-file selection exceed it, those are silently filtered from the accepted set — handle finer-grained per-file validation externally via `fileStatuses`/`onChange` instead.
 - Removing a file via the trash icon removes only that file from the array in multi-file mode — it does not clear the whole selection.
-- The failed-state card gets a `--gsl-error` border and tinted background; no new colors were introduced for any status — uploading uses `ProgressBar`'s default (`--gsl-primary`) variant, completed uses `--gsl-success`, failed uses `--gsl-error`.
+- The failed-state card gets a `--clet-error` border and tinted background; no new colors were introduced for any status — uploading uses `ProgressBar`'s default (`--clet-primary`) variant, completed uses `--clet-success`, failed uses `--clet-error`.

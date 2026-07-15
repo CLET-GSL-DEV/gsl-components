@@ -36,7 +36,7 @@ Click the profile avatar to open the profile popover with variant toggle (cycles
 `AppHeader` accepts a `variant` prop that controls its surface style.
 
 - **`"default"`** (default) — subtle rounded panel surface, matching the rest of the `AppLayout` content area.
-- **`"plain"`** — square edges (no border radius), `--gsl-primary` background, and `--gsl-on-primary` text. Used for dashboard shells where the header should read as a solid top bar rather than a panel.
+- **`"plain"`** — square edges (no border radius), `--clet-primary` background, and `--clet-on-primary` text. Used for dashboard shells where the header should read as a solid top bar rather than a panel.
 
 <ExampleTabs
   title='variant="plain" — solid primary-colored header with branding'
@@ -80,12 +80,12 @@ Logo + title/subtitle slot for the left side of the header, typically used in pl
 ```tsx
 <AppHeaderBranding
   logo={<img src="/logo.png" alt="" width={28} height={28} />}
-  title="GSL PORTAL"
-  subtitle="GSL Component Library"
+  title="CLET PORTAL"
+  subtitle="CLET Component Library"
 />
 ```
 
-`title` is rendered in the heading font (`--gsl-branding-title-font`, `--gsl-branding-title-size`) — everything else in the branding block, including `subtitle`, stays on the body font.
+`title` is rendered in the heading font (`--clet-branding-title-font`, `--clet-branding-title-size`) — everything else in the branding block, including `subtitle`, stays on the body font.
 
 For anything beyond a single title/subtitle pair — a badge next to the title, a stacked two-line layout, a custom element entirely — skip `title`/`subtitle` and pass declarative `children` instead. `AppHeaderBranding` only builds the title/subtitle markup when `children` is omitted, so `children` fully replaces it (the `logo` slot still renders independently):
 
@@ -95,7 +95,7 @@ For anything beyond a single title/subtitle pair — a badge next to the title, 
   code={appHeaderBrandingDeclarativeSource}
 />
 
-Reuse `.gsl-app-header__branding-text` / `.gsl-app-header__branding-title` on your own markup (as above) to inherit the same font/size/color tokens, or write fully custom styles.
+Reuse `.clet-app-header__branding-text` / `.clet-app-header__branding-title` on your own markup (as above) to inherit the same font/size/color tokens, or write fully custom styles.
 
 ### `AppHeaderSearch`
 
@@ -114,7 +114,7 @@ Type to search — the component fires `onSearch` with a debounced value (300ms)
 | `children` | `ReactNode` | — | Rendered inside `CommandList` after groups |
 | `className` | `string` | — | Merged onto the root element |
 
-The input has a pill shape (`--gsl-radius-xl`) and caps at `max-width: 400px`.
+The input has a pill shape (`--clet-radius-xl`) and caps at `max-width: 400px`.
 
 Use `children` for custom rendering inside the results list — useful when you need full control over the `CommandGroup` elements:
 
@@ -139,7 +139,7 @@ Bell button that opens a Radix popover. Pass notification items as `children`. U
 | `children` | `ReactNode` | — | Rendered inside the popover body |
 | `className` | `string` | — | Merged onto the trigger button |
 
-Render each notification as an [`AppHeaderNotificationItem`](#appheadernotificationitem) — don't hand-write `.gsl-notif-popover__*` divs:
+Render each notification as an [`AppHeaderNotificationItem`](#appheadernotificationitem) — don't hand-write `.clet-notif-popover__*` divs:
 
 ```tsx
 <AppHeaderNotifications loading={notifLoading}>
@@ -256,11 +256,11 @@ See the props table above.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Row (`.gsl-notif-popover__item`) |
-| `dot` | Unread dot (`.gsl-notif-popover__dot`) |
-| `body` | Text/time wrapper (`.gsl-notif-popover__item-body`) |
-| `text` | Message text (`.gsl-notif-popover__body-text`) |
-| `time` | Time string (`.gsl-notif-popover__body-time`) |
+| `root` | Row (`.clet-notif-popover__item`) |
+| `dot` | Unread dot (`.clet-notif-popover__dot`) |
+| `body` | Text/time wrapper (`.clet-notif-popover__item-body`) |
+| `text` | Message text (`.clet-notif-popover__body-text`) |
+| `time` | Time string (`.clet-notif-popover__body-time`) |
 
 ### `AppHeaderProfileProps` (deprecated)
 
@@ -282,12 +282,12 @@ See the props table above.
 - Groups render in order. Use `loading: true` on a group to show a pulse bar while results load for that section.
 - `AppHeaderSearch` list only shows when the input has text (`data` is defined) — empty input hides the list entirely.
 - Group items are memoized on `[data]` — list rendering does not re-run on every keystroke, only when fetched data changes.
-- Notification items: use [`AppHeaderNotificationItem`](#appheadernotificationitem) — don't hand-write `.gsl-notif-popover__*` divs.
+- Notification items: use [`AppHeaderNotificationItem`](#appheadernotificationitem) — don't hand-write `.clet-notif-popover__*` divs.
 - The header profile trigger is [`ProfilePopover`](/profile-popover) itself, with `user`/`variant` for the compact avatar + name/role + chevron trigger. See that page for its full prop table, `AppUser`, and the built-in theme toggle. `AppHeaderProfile` is a deprecated thin wrapper around the same component, kept for backward compatibility — see [Profile trigger](#profile-trigger).
 - All header components accept `className` and pass it through to their root element for Tailwind/consumer overrides.
-- The trigger and popover header avatars default to the normal per-name gradient. Set `--gsl-profile-avatar-bg` (unset by default) on any ancestor to override the background for both — see [`ProfilePopover`](/profile-popover).
+- The trigger and popover header avatars default to the normal per-name gradient. Set `--clet-profile-avatar-bg` (unset by default) on any ancestor to override the background for both — see [`ProfilePopover`](/profile-popover).
 - Profile popover opens at `side="top"`, `align="end"`, `sideOffset={8}` — see [`ProfilePopover`](/profile-popover) for the shared implementation.
-- `variant="plain"` sets `--gsl-app-header-bg`/`--gsl-app-header-color` on the root — override either on `.gsl-app-header--plain` (or an ancestor) to re-theme without extra CSS. Notification button, profile hover, and `AppSwitcher` trigger all inherit the on-primary foreground automatically.
+- `variant="plain"` sets `--clet-app-header-bg`/`--clet-app-header-color` on the root — override either on `.clet-app-header--plain` (or an ancestor) to re-theme without extra CSS. Notification button, profile hover, and `AppSwitcher` trigger all inherit the on-primary foreground automatically.
 - **Mobile collapse (automatic):** when `AppHeader` is rendered inside an `AppLayout` (i.e. a `SidebarProvider` is present) and the viewport drops below the sidebar's mobile breakpoint (768px by default), it collapses to a hamburger button on the left — which toggles the sidebar drawer via `SidebarTrigger`'s same `toggle()` — plus, on the right, only the `AppSwitcher` (if one is present) and the profile trigger (`ProfilePopover`, identified by its `componentId`). Branding, search, notifications, and any other actions are dropped. Nothing to opt into — it's derived entirely from the existing children and sidebar context. `AppHeader` used standalone (no `SidebarProvider`) is unaffected and always renders its full children.
 
 ## Design tokens
@@ -296,27 +296,27 @@ See the props table above.
 
 | Token | Fallback | Used for |
 |-------|----------|----------|
-| `--gsl-app-layout-body-gap` | `1rem` | Header padding (horizontal and vertical) |
-| `--gsl-header-py` | `--gsl-app-layout-body-gap` (`1rem`) | Header vertical padding |
-| `--gsl-header-px` | `--gsl-app-layout-body-gap` (`1rem`) | Header horizontal padding |
-| `--gsl-app-header-font` | `--gsl-font-body` | Header font family |
-| `--gsl-panel-radius` | `--gsl-radius-2xl` | Header border radius (`"default"` variant) |
-| `--gsl-panel-bg` | `--gsl-surface-subtle` | Header background (`"default"` variant) |
-| `--gsl-app-header-bg` | `--gsl-primary` | Header background (`"plain"` variant) |
-| `--gsl-app-header-color` | `--gsl-on-primary` | Header text/icon color (`"plain"` variant) |
-| `--gsl-branding-color` | `inherit` | `AppHeaderBranding` text/icon color |
-| `--gsl-branding-font` | `--gsl-font-body` | `AppHeaderBranding` font family for the block (subtitle included) — the title overrides this with `--gsl-branding-title-font` |
-| `--gsl-branding-gap` | `10px` | Gap between logo and text in `AppHeaderBranding` |
-| `--gsl-branding-text-gap` | `8px` | Gap between title and subtitle text |
-| `--gsl-branding-logo-size` | `28px` | Branding logo width/height |
-| `--gsl-branding-title-font` | `--gsl-font-header` | Branding title font family (heading font, distinct from the body font used elsewhere in the block) |
-| `--gsl-branding-title-size` | `20px` | Branding title font size |
-| `--gsl-branding-title-weight` | `700` | Branding title font weight |
-| `--gsl-branding-title-color` | `--gsl-branding-color` | Branding title color |
-| `--gsl-branding-sep-opacity` | `0.55` | Opacity of the separator between title and subtitle |
-| `--gsl-branding-subtitle-size` | `16px` | Branding subtitle font size |
-| `--gsl-branding-subtitle-weight` | `400` | Branding subtitle font weight |
-| `--gsl-branding-subtitle-color` | `--gsl-branding-color` | Branding subtitle color |
+| `--clet-app-layout-body-gap` | `1rem` | Header padding (horizontal and vertical) |
+| `--clet-header-py` | `--clet-app-layout-body-gap` (`1rem`) | Header vertical padding |
+| `--clet-header-px` | `--clet-app-layout-body-gap` (`1rem`) | Header horizontal padding |
+| `--clet-app-header-font` | `--clet-font-body` | Header font family |
+| `--clet-panel-radius` | `--clet-radius-2xl` | Header border radius (`"default"` variant) |
+| `--clet-panel-bg` | `--clet-surface-subtle` | Header background (`"default"` variant) |
+| `--clet-app-header-bg` | `--clet-primary` | Header background (`"plain"` variant) |
+| `--clet-app-header-color` | `--clet-on-primary` | Header text/icon color (`"plain"` variant) |
+| `--clet-branding-color` | `inherit` | `AppHeaderBranding` text/icon color |
+| `--clet-branding-font` | `--clet-font-body` | `AppHeaderBranding` font family for the block (subtitle included) — the title overrides this with `--clet-branding-title-font` |
+| `--clet-branding-gap` | `10px` | Gap between logo and text in `AppHeaderBranding` |
+| `--clet-branding-text-gap` | `8px` | Gap between title and subtitle text |
+| `--clet-branding-logo-size` | `28px` | Branding logo width/height |
+| `--clet-branding-title-font` | `--clet-font-header` | Branding title font family (heading font, distinct from the body font used elsewhere in the block) |
+| `--clet-branding-title-size` | `20px` | Branding title font size |
+| `--clet-branding-title-weight` | `700` | Branding title font weight |
+| `--clet-branding-title-color` | `--clet-branding-color` | Branding title color |
+| `--clet-branding-sep-opacity` | `0.55` | Opacity of the separator between title and subtitle |
+| `--clet-branding-subtitle-size` | `16px` | Branding subtitle font size |
+| `--clet-branding-subtitle-weight` | `400` | Branding subtitle font weight |
+| `--clet-branding-subtitle-color` | `--clet-branding-color` | Branding subtitle color |
 
 ### Avatar
 
@@ -324,5 +324,5 @@ Avatar doesn't have its own doc page — it's rendered inside [`ProfilePopover`]
 
 | Token | Fallback | Used for |
 |-------|----------|----------|
-| `--gsl-avatar-font` | `--gsl-font-body` | Avatar font family |
+| `--clet-avatar-font` | `--clet-font-body` | Avatar font family |
 

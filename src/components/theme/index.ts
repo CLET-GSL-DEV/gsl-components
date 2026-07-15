@@ -1,22 +1,22 @@
 export { ThemeProvider } from "./ThemeProvider";
 export { useTheme } from "./useTheme";
-export { gslTheme } from "./gslTheme";
+export { cletTheme } from "./cletTheme";
 export type {
-  GslComponentThemeConfig,
-  GslComponentThemeOverrides,
-  GslTheme,
-  GslThemeConfig,
-  ResolvedGslTheme,
+  CletComponentThemeConfig,
+  CletComponentThemeOverrides,
+  CletTheme,
+  CletThemeConfig,
+  ResolvedCletTheme,
   ThemeProviderProps,
   UseThemeReturn,
 } from "../../types/theme";
 export type {
-  GslColorValue,
-  GslComponentTokenMap,
-  GslGlobalTokens,
-  GslLengthValue,
-  GslOpacityValue,
-  GslShadowValue,
-  GslStringValue,
-  GslZIndexValue,
+  CletColorValue,
+  CletComponentTokenMap,
+  CletGlobalTokens,
+  CletLengthValue,
+  CletOpacityValue,
+  CletShadowValue,
+  CletStringValue,
+  CletZIndexValue,
 } from "../../generated/components.theme";

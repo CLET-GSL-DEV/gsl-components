@@ -8,7 +8,7 @@ components: app-layout, app-header, sidebar
 
 Adopt the new layout shell as a set, not individually: `AppLayout variant="stacked"` (header spans
 full width on top, sidebar + content side by side below), `AppHeader variant="plain"` (square
-corners, `--gsl-primary` background, on-primary text, continuous top bar), and `Sidebar
+corners, `--clet-primary` background, on-primary text, continuous top bar), and `Sidebar
 variant="plain"` (transparent background + right border instead of a panel surface). All required
 for new/touched screens — none required for existing screens to keep compiling.
 
@@ -118,7 +118,7 @@ components: table
 
 New or touched `Table`s use all three together: `TableContent variant="panel"` (not `"default"`),
 `TableFilter variant="spread"` (not the default `"popover"`), and `TableFooter
-className="gsl-table__footer--no-border"` (a real library class, not a demo hack).
+className="clet-table__footer--no-border"` (a real library class, not a demo hack).
 
 ===RULE===
 id: page-composition-other-preferred-variants

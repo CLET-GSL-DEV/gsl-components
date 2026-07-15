@@ -158,14 +158,14 @@ export function DemoLayout2() {
                   className="demo-home__sidebar-logo"
                 />
               }
-              title="GSL PORTAL"
-              subtitle="GSL Component Library"
+              title="CLET PORTAL"
+              subtitle="CLET Component Library"
             />
             <AppHeaderActions>
               <VersionSwitcher active="current" />
               <button
                 type="button"
-                className="gsl-app-header__notif-btn"
+                className="clet-app-header__notif-btn"
                 aria-label="Documentation"
                 onClick={() => navigate("/docs")}
               >

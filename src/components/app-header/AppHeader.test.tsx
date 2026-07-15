@@ -32,7 +32,7 @@ function renderFullHeader() {
   return render(
     <SidebarProvider>
       <AppHeader variant="plain">
-        <AppHeaderBranding title="GSL PORTAL" />
+        <AppHeaderBranding title="CLET PORTAL" />
         <AppHeaderActions>
           <AppSwitcher apps={[{ id: "a", name: "App A", icon: <SystemAppIcon name="App A" /> }]} />
           <AppHeaderNotifications />
@@ -61,7 +61,7 @@ describe("AppHeader", () => {
     mockMatchMedia(false);
     renderFullHeader();
 
-    expect(screen.getByText("GSL PORTAL")).toBeInTheDocument();
+    expect(screen.getByText("CLET PORTAL")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Notifications" }),
     ).toBeInTheDocument();
@@ -82,7 +82,7 @@ describe("AppHeader", () => {
     expect(screen.getByText("KA")).toBeInTheDocument();
 
     // Dropped on mobile
-    expect(screen.queryByText("GSL PORTAL")).not.toBeInTheDocument();
+    expect(screen.queryByText("CLET PORTAL")).not.toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: "Notifications" }),
     ).not.toBeInTheDocument();
@@ -97,7 +97,7 @@ describe("AppHeaderActions", () => {
 
   it("renders with right-side class", () => {
     const { container } = render(<AppHeaderActions>X</AppHeaderActions>);
-    expect(container.firstElementChild).toHaveClass("gsl-app-header__right");
+    expect(container.firstElementChild).toHaveClass("clet-app-header__right");
   });
 });
 
@@ -236,7 +236,7 @@ describe("AppHeaderNotifications", () => {
 
     await user.click(screen.getByRole("button", { name: "Notifications" }));
     // Popover renders in portal — query document for skeleton class
-    expect(document.querySelector(".gsl-notif-popover__skeleton")).toBeInTheDocument();
+    expect(document.querySelector(".clet-notif-popover__skeleton")).toBeInTheDocument();
   });
 });
 
@@ -257,21 +257,21 @@ describe("AppHeaderNotificationItem", () => {
     const { rerender, container } = render(
       <AppHeaderNotificationItem text="Hi" unread />,
     );
-    expect(container.querySelector(".gsl-notif-popover__dot")).toBeInTheDocument();
+    expect(container.querySelector(".clet-notif-popover__dot")).toBeInTheDocument();
     expect(container.firstElementChild).not.toHaveClass(
-      "gsl-notif-popover__item--read",
+      "clet-notif-popover__item--read",
     );
 
     rerender(<AppHeaderNotificationItem text="Hi" />);
-    expect(container.querySelector(".gsl-notif-popover__dot")).not.toBeInTheDocument();
+    expect(container.querySelector(".clet-notif-popover__dot")).not.toBeInTheDocument();
     expect(container.firstElementChild).toHaveClass(
-      "gsl-notif-popover__item--read",
+      "clet-notif-popover__item--read",
     );
   });
 
   it("is not focusable/clickable without onClick", () => {
     render(<AppHeaderNotificationItem text="Hi" />);
-    const row = screen.getByText("Hi").closest(".gsl-notif-popover__item");
+    const row = screen.getByText("Hi").closest(".clet-notif-popover__item");
     expect(row).not.toHaveAttribute("role");
     expect(row).not.toHaveAttribute("tabindex");
   });

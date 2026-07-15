@@ -57,8 +57,8 @@ describe("Switch", () => {
   it("supports label on the left via labelPosition", () => {
     render(<Switch label="Email alerts" labelPosition="left" />);
 
-    const wrapper = screen.getByText("Email alerts").closest(".gsl-switch");
-    expect(wrapper?.firstElementChild).toHaveClass("gsl-switch__label");
+    const wrapper = screen.getByText("Email alerts").closest(".clet-switch");
+    expect(wrapper?.firstElementChild).toHaveClass("clet-switch__label");
   });
 
   it("reflects data-state on the track", () => {
@@ -80,9 +80,9 @@ describe("Switch", () => {
       />,
     );
 
-    expect(document.querySelector(".gsl-switch")).toHaveClass("custom-root");
+    expect(document.querySelector(".clet-switch")).toHaveClass("custom-root");
     expect(screen.getByRole("switch")).toHaveClass("custom-track");
-    expect(document.querySelector(".gsl-switch__thumb")).toHaveClass(
+    expect(document.querySelector(".clet-switch__thumb")).toHaveClass(
       "custom-thumb",
     );
     expect(screen.getByText("Email alerts")).toHaveClass("custom-label");

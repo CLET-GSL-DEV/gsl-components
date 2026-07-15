@@ -45,7 +45,7 @@ Props for `Badge`. Extends `HTMLAttributes<HTMLSpanElement>` with `variant`, `si
 
 ### `BadgeClassNames`
 
-Part-level class names merged after base `gsl-badge*` styles:
+Part-level class names merged after base `clet-badge*` styles:
 
 | Key | Applied to |
 |-----|------------|
@@ -63,10 +63,10 @@ Part-level class names merged after base `gsl-badge*` styles:
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-badge-font` | `var(--gsl-font-body)` | Font family for the badge label |
+| `--clet-badge-font` | `var(--clet-font-body)` | Font family for the badge label |
 
 ## Notes
 
 - Badges are display-only; they do not include interactive hover or focus styles.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 - Long labels truncate with an ellipsis when space is constrained (`max-width: 100%`).

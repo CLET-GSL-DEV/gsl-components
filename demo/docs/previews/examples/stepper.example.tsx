@@ -13,7 +13,7 @@ export function StepperExample() {
 
   return (
     <section
-      className="gsl-card"
+      className="clet-card"
       style={{
         padding: "24px",
         display: "flex",
@@ -33,7 +33,7 @@ export function StepperExample() {
       <div style={{ display: "flex", gap: "8px", paddingTop: "32px" }}>
         <button
           type="button"
-          className="gsl-button gsl-button--secondary"
+          className="clet-button clet-button--secondary"
           onClick={() => setValue((v) => Math.max(1, v - 1))}
           disabled={value === 1}
         >
@@ -41,7 +41,7 @@ export function StepperExample() {
         </button>
         <button
           type="button"
-          className="gsl-button gsl-button--primary"
+          className="clet-button clet-button--primary"
           onClick={() => setValue((v) => Math.min(steps.length, v + 1))}
           disabled={value === steps.length}
         >

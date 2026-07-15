@@ -17,7 +17,7 @@ const user = {
   name: "Kwame Asante",
   role: "Admin",
   initials: "KA",
-  email: "kwame@gsl.edu.gh",
+  email: "kwame@clet.edu.gh",
 };
 
 const roles = [
@@ -84,9 +84,9 @@ export function AppHeaderExample() {
           heading: "Projects",
           items: [
             {
-              value: "gsl-platform",
-              label: "GSL Platform",
-              onSelect: () => console.log("Selected project:", "GSL Platform"),
+              value: "clet-platform",
+              label: "CLET Platform",
+              onSelect: () => console.log("Selected project:", "CLET Platform"),
             },
           ],
         },
@@ -97,7 +97,7 @@ export function AppHeaderExample() {
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <button
         type="button"
-        className="gsl-profile-menu__item"
+        className="clet-profile-menu__item"
         style={{ alignSelf: "flex-start" }}
         onClick={() => setProfileVariant(nextProfileVariant)}
       >
@@ -139,14 +139,14 @@ export function AppHeaderExample() {
       <div
         style={{
           height: 120,
-          borderRadius: "var(--gsl-radius-2xl)",
-          background: "var(--gsl-surface-subtle)",
+          borderRadius: "var(--clet-radius-2xl)",
+          background: "var(--clet-surface-subtle)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           fontSize: 14,
-          color: "var(--gsl-text-muted)",
-          border: "1px dashed var(--gsl-border)",
+          color: "var(--clet-text-muted)",
+          border: "1px dashed var(--clet-border)",
         }}
       >
         Page content goes here

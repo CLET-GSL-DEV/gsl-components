@@ -19,7 +19,7 @@ import dateRangePresetsSource from "../previews/examples/date-range-presets.exam
 
 # DateRangeSelector
 
-Date range picker for choosing a start and end date from a two-month calendar popover. Built on `@radix-ui/react-popover` with GSL styling, auto-swap to keep start before end, year/month dropdown selectors for quick navigation, Apply/Cancel buttons for explicit confirmation, and part-level `classNames`.
+Date range picker for choosing a start and end date from a two-month calendar popover. Built on `@radix-ui/react-popover` with CLET styling, auto-swap to keep start before end, year/month dropdown selectors for quick navigation, Apply/Cancel buttons for explicit confirmation, and part-level `classNames`.
 
 ## Example
 
@@ -130,40 +130,40 @@ One entry in the `presets` array:
 
 ### `DateRangeSelectorClassNames`
 
-Part-level class names merged after base `gsl-date-selector*` styles:
+Part-level class names merged after base `clet-date-selector*` styles:
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Outer wrapper (`.gsl-date-range-selector`) |
-| `trigger` | Trigger button (`.gsl-date-selector__trigger`) |
-| `calendar` | Calendar panel (`.gsl-date-selector__calendar`) |
-| `calendarHeader` | Month/year navigation row (`.gsl-date-selector__calendar-header`) |
+| `root` | Outer wrapper (`.clet-date-range-selector`) |
+| `trigger` | Trigger button (`.clet-date-selector__trigger`) |
+| `calendar` | Calendar panel (`.clet-date-selector__calendar`) |
+| `calendarHeader` | Month/year navigation row (`.clet-date-selector__calendar-header`) |
 | `calendarNav` | Previous/next month arrows |
-| `calendarTitle` | Month label above each month panel (`.gsl-date-selector__calendar-title`) |
-| `calendarWeekdays` | Weekday labels container (`.gsl-date-selector__calendar-weekdays`) |
-| `calendarWeekday` | Individual weekday label (`.gsl-date-selector__calendar-weekday`) |
-| `calendarGrid` | Calendar day grid (`.gsl-date-selector__calendar-grid`) |
-| `calendarDay` | Individual day button (`.gsl-date-selector__calendar-day`) |
-| `calendarFooter` | Footer row (`.gsl-date-selector__calendar-footer`) |
+| `calendarTitle` | Month label above each month panel (`.clet-date-selector__calendar-title`) |
+| `calendarWeekdays` | Weekday labels container (`.clet-date-selector__calendar-weekdays`) |
+| `calendarWeekday` | Individual weekday label (`.clet-date-selector__calendar-weekday`) |
+| `calendarGrid` | Calendar day grid (`.clet-date-selector__calendar-grid`) |
+| `calendarDay` | Individual day button (`.clet-date-selector__calendar-day`) |
+| `calendarFooter` | Footer row (`.clet-date-selector__calendar-footer`) |
 | `applyButton` | Apply button |
 | `cancelButton` | Cancel button |
-| `presets` | Presets rail (`.gsl-date-range-selector__presets`) |
-| `presetItem` | Individual preset button (`.gsl-date-range-selector__preset-item`) |
-| `rangeSummary` | "Range: ..." footer summary (`.gsl-date-range-selector__summary`) |
+| `presets` | Presets rail (`.clet-date-range-selector__presets`) |
+| `presetItem` | Individual preset button (`.clet-date-range-selector__preset-item`) |
+| `rangeSummary` | "Range: ..." footer summary (`.clet-date-range-selector__summary`) |
 
 ## Design tokens
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-date-range-selector-font` | `--gsl-font-body` | Trigger button font family |
-| `--gsl-date-range-selector-trigger-height` | `40px` | Trigger button height |
-| `--gsl-date-range-selector-calendar-min-width` | `256px` | Calendar popover minimum width (single-month base; the double-month layout scales from this) |
-| `--gsl-date-range-selector-calendar-padding` | `12px` | Calendar popover inner padding |
-| `--gsl-date-range-selector-weekday-height` | `32px` | Weekday label row height |
-| `--gsl-date-selector-calendar-font` | `--gsl-font-body` | Calendar popover font family (header title, weekday labels, and day cells) |
-| `--gsl-text-size-base` | `14px` | Trigger and month-title font size |
-| `--gsl-text-size-xs` | `12px` | Weekday label font size |
-| `--gsl-text-size-sm` | `13px` | Day cell, preset item, and range summary font size |
+| `--clet-date-range-selector-font` | `--clet-font-body` | Trigger button font family |
+| `--clet-date-range-selector-trigger-height` | `40px` | Trigger button height |
+| `--clet-date-range-selector-calendar-min-width` | `256px` | Calendar popover minimum width (single-month base; the double-month layout scales from this) |
+| `--clet-date-range-selector-calendar-padding` | `12px` | Calendar popover inner padding |
+| `--clet-date-range-selector-weekday-height` | `32px` | Weekday label row height |
+| `--clet-date-selector-calendar-font` | `--clet-font-body` | Calendar popover font family (header title, weekday labels, and day cells) |
+| `--clet-text-size-base` | `14px` | Trigger and month-title font size |
+| `--clet-text-size-xs` | `12px` | Weekday label font size |
+| `--clet-text-size-sm` | `13px` | Day cell, preset item, and range summary font size |
 
 ## Notes
 

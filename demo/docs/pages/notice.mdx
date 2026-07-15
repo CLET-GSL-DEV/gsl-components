@@ -64,7 +64,7 @@ Props for `Notice`. Extends `HTMLAttributes<HTMLDivElement>` with `title` omitte
 
 ### `NoticeClassNames`
 
-Part-level class names merged after base `gsl-notice*` styles:
+Part-level class names merged after base `clet-notice*` styles:
 
 | Key | Applied to |
 |-----|------------|
@@ -82,17 +82,17 @@ Part-level class names merged after base `gsl-notice*` styles:
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-notice-accent` | `var(--gsl-text-secondary)` | Title/icon/left-border color; overridden per variant and by the `color` prop |
-| `--gsl-notice-bg` | tinted from `--gsl-border` | Background tint; overridden per variant via `color-mix()` |
-| `--gsl-notice-radius` | `var(--gsl-radius-base)` | Corner radius |
-| `--gsl-notice-padding` | `16px` | Inner padding |
-| `--gsl-notice-font` | `var(--gsl-font-body)` | Font family |
-| `--gsl-notice-title-size` | `var(--gsl-text-size-base)` | Title font size |
-| `--gsl-notice-body-size` | `var(--gsl-text-size-sm)` | Body font size |
+| `--clet-notice-accent` | `var(--clet-text-secondary)` | Title/icon/left-border color; overridden per variant and by the `color` prop |
+| `--clet-notice-bg` | tinted from `--clet-border` | Background tint; overridden per variant via `color-mix()` |
+| `--clet-notice-radius` | `var(--clet-radius-base)` | Corner radius |
+| `--clet-notice-padding` | `16px` | Inner padding |
+| `--clet-notice-font` | `var(--clet-font-body)` | Font family |
+| `--clet-notice-title-size` | `var(--clet-text-size-base)` | Title font size |
+| `--clet-notice-body-size` | `var(--clet-text-size-sm)` | Body font size |
 
 ## Notes
 
-- No new brand colors were introduced — `info`/`success`/`warning`/`error` reuse the existing `--gsl-primary`/`--gsl-success`/`--gsl-warning`/`--gsl-error` tokens, tinted for the background via `color-mix()` (the same technique `Badge` uses).
-- The `color` prop only overrides `--gsl-notice-accent` (title/icon/left-border); the background tint is not recomputed from a custom color, since `color-mix()` requires a token reference, not an arbitrary runtime value — pass a `classNames.root` override if a fully custom background is needed.
+- No new brand colors were introduced — `info`/`success`/`warning`/`error` reuse the existing `--clet-primary`/`--clet-success`/`--clet-warning`/`--clet-error` tokens, tinted for the background via `color-mix()` (the same technique `Badge` uses).
+- The `color` prop only overrides `--clet-notice-accent` (title/icon/left-border); the background tint is not recomputed from a custom color, since `color-mix()` requires a token reference, not an arbitrary runtime value — pass a `classNames.root` override if a fully custom background is needed.
 - `leftBorder` and `dashed` compose — when both are set, the left edge stays solid (using the accent color) while the remaining three edges are dashed.
 - For a compact "inline alert" look (dot marker, no heading), pass a small round `icon` and omit `title` — see "Compact / inline usage" above. Don't build a separate component for this; it's the same `Notice` box with different props.

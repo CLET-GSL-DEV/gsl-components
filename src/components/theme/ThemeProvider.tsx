@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { GslTheme, ThemeProviderProps } from "../../types/theme";
+import type { CletTheme, ThemeProviderProps } from "../../types/theme";
 import { getSystemTheme, resolveTheme } from "./resolveTheme";
 import { ThemeContext } from "./ThemeContext";
 
@@ -7,7 +7,7 @@ export function ThemeProvider({
   theme: controlledTheme,
   defaultTheme = "system",
   onThemeChange,
-  storageKey = "gsl-theme",
+  storageKey = "clet-theme",
   className,
   style,
   children,
@@ -26,7 +26,7 @@ export function ThemeProvider({
   }, [storageKey, defaultTheme]);
 
   const [uncontrolledTheme, setUncontrolledTheme] =
-    useState<GslTheme>(resolvedDefault);
+    useState<CletTheme>(resolvedDefault);
   const isControlled = controlledTheme !== undefined;
   const theme = isControlled ? controlledTheme : uncontrolledTheme;
   const [systemTheme, setSystemTheme] = useState(getSystemTheme);
@@ -55,15 +55,15 @@ export function ThemeProvider({
       return;
     }
 
-    document.documentElement.setAttribute("data-gsl-theme", resolvedTheme);
+    document.documentElement.setAttribute("data-clet-theme", resolvedTheme);
 
     return () => {
-      document.documentElement.removeAttribute("data-gsl-theme");
+      document.documentElement.removeAttribute("data-clet-theme");
     };
   }, [resolvedTheme]);
 
   const setTheme = useCallback(
-    (nextTheme: GslTheme) => {
+    (nextTheme: CletTheme) => {
       if (isControlled) {
         onThemeChange?.(nextTheme);
         return;
@@ -89,11 +89,11 @@ export function ThemeProvider({
     [theme, setTheme, resolvedTheme],
   );
 
-  const rootClass = ["gsl-theme", className].filter(Boolean).join(" ");
+  const rootClass = ["clet-theme", className].filter(Boolean).join(" ");
 
   return (
     <ThemeContext.Provider value={contextValue}>
-      <div className={rootClass} data-gsl-theme={resolvedTheme} style={style} suppressHydrationWarning>
+      <div className={rootClass} data-clet-theme={resolvedTheme} style={style} suppressHydrationWarning>
         {children}
       </div>
     </ThemeContext.Provider>

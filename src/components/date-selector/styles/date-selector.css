@@ -1,8 +1,8 @@
 /* ── Root ── */
 
-.gsl-date-selector {
-  --gsl-date-selector-font: var(--gsl-font-body);
-  --gsl-date-selector-trigger-height: 40px;
+.clet-date-selector {
+  --clet-date-selector-font: var(--clet-font-body);
+  --clet-date-selector-trigger-height: 40px;
 
   display: inline-block;
   min-width: 0;
@@ -11,21 +11,21 @@
 
 /* ── Trigger ── */
 
-.gsl-date-selector__trigger {
+.clet-date-selector__trigger {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   width: 100%;
   min-width: 0;
-  height: var(--gsl-date-selector-trigger-height);
+  height: var(--clet-date-selector-trigger-height);
   padding: 0 12px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background-color: var(--gsl-bg);
-  font-family: var(--gsl-date-selector-font);
-  font-size: var(--gsl-text-size-base);
+  border: 1px solid var(--clet-border);
+  border-radius: var(--clet-radius-base);
+  background-color: var(--clet-bg);
+  font-family: var(--clet-date-selector-font);
+  font-size: var(--clet-text-size-base);
   line-height: 1.4;
-  color: var(--gsl-text);
+  color: var(--clet-text);
   cursor: pointer;
   transition:
     border-color 150ms ease,
@@ -34,12 +34,12 @@
   text-align: left;
 }
 
-.gsl-date-selector__trigger-icon {
+.clet-date-selector__trigger-icon {
   flex-shrink: 0;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
 }
 
-.gsl-date-selector__trigger-text {
+.clet-date-selector__trigger-text {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -47,213 +47,216 @@
   white-space: nowrap;
 }
 
-.gsl-date-selector__trigger--placeholder .gsl-date-selector__trigger-text {
-  color: var(--gsl-text-secondary);
+.clet-date-selector__trigger--placeholder .clet-date-selector__trigger-text {
+  color: var(--clet-text-secondary);
 }
 
-.gsl-date-selector__trigger:hover:not(:disabled) {
-  border-color: var(--gsl-border-strong);
+.clet-date-selector__trigger:hover:not(:disabled) {
+  border-color: var(--clet-border-strong);
 }
 
-.gsl-date-selector__trigger:focus-visible {
+.clet-date-selector__trigger:focus-visible {
   outline: none;
-  border-color: var(--gsl-primary);
-  box-shadow: 0 0 0 1px var(--gsl-primary);
+  border-color: var(--clet-primary);
+  box-shadow: 0 0 0 1px var(--clet-primary);
 }
 
 /* ── Invalid ── */
 
-.gsl-date-selector--invalid .gsl-date-selector__trigger,
-.gsl-date-selector__trigger[aria-invalid="true"] {
-  border-color: var(--gsl-error);
+.clet-date-selector--invalid .clet-date-selector__trigger,
+.clet-date-selector__trigger[aria-invalid="true"] {
+  border-color: var(--clet-error);
 }
 
-.gsl-date-selector--invalid .gsl-date-selector__trigger:focus-visible,
-.gsl-date-selector__trigger[aria-invalid="true"]:focus-visible {
-  border-color: var(--gsl-error);
-  box-shadow: 0 0 0 1px var(--gsl-error);
+.clet-date-selector--invalid .clet-date-selector__trigger:focus-visible,
+.clet-date-selector__trigger[aria-invalid="true"]:focus-visible {
+  border-color: var(--clet-error);
+  box-shadow: 0 0 0 1px var(--clet-error);
 }
 
 /* ── Disabled ── */
 
-.gsl-date-selector--disabled .gsl-date-selector__trigger,
-.gsl-date-selector__trigger:disabled {
-  background-color: var(--gsl-hover);
-  color: var(--gsl-text-muted);
+.clet-date-selector--disabled .clet-date-selector__trigger,
+.clet-date-selector__trigger:disabled {
+  background-color: var(--clet-hover);
+  color: var(--clet-text-muted);
   cursor: not-allowed;
 }
 
 /* ── Calendar popover ── */
 
-.gsl-date-selector__calendar {
-  --gsl-date-selector-calendar-font: var(--gsl-font-body);
-  --gsl-date-selector-calendar-min-width: 256px;
-  --gsl-date-selector-calendar-padding: 20px;
-  --gsl-date-selector-nav-size: 32px;
-  --gsl-date-selector-weekday-height: 32px;
-  --gsl-date-selector-day-gap: 4px;
-  --gsl-date-selector-day-inset: 2px;
+.clet-date-selector__calendar {
+  --clet-date-selector-calendar-font: var(--clet-font-body);
+  --clet-date-selector-calendar-min-width: 256px;
+  --clet-date-selector-calendar-padding: 20px;
+  --clet-date-selector-nav-size: 32px;
+  --clet-date-selector-weekday-height: 32px;
+  --clet-date-selector-day-gap: 4px;
+  --clet-date-selector-day-inset: 2px;
 
-  z-index: var(--gsl-z-dropdown);
-  min-width: var(--gsl-date-selector-calendar-min-width);
-  padding: var(--gsl-date-selector-calendar-padding);
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
-  box-shadow: var(--gsl-shadow-md);
-  font-family: var(--gsl-date-selector-calendar-font);
-  color: var(--gsl-text);
+  z-index: var(--clet-z-dropdown);
+  min-width: var(--clet-date-selector-calendar-min-width);
+  padding: var(--clet-date-selector-calendar-padding);
+  border: 1px solid var(--clet-border);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-bg);
+  box-shadow: var(--clet-shadow-md);
+  font-family: var(--clet-date-selector-calendar-font);
+  color: var(--clet-text);
 }
 
-.gsl-date-selector__calendar[data-state="open"] {
-  animation: gsl-date-selector-calendar-in 150ms ease forwards;
+.clet-date-selector__calendar[data-state="open"] {
+  animation: clet-date-selector-calendar-in 150ms ease forwards;
 }
 
-.gsl-date-selector__calendar[data-state="closed"] {
-  animation: gsl-date-selector-calendar-out 100ms ease forwards;
+.clet-date-selector__calendar[data-state="closed"] {
+  animation: clet-date-selector-calendar-out 100ms ease forwards;
 }
 
 /* ── Calendar header ── */
 
-.gsl-date-selector__calendar-header {
+.clet-date-selector__calendar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
   padding: 4px;
-  border-radius: var(--gsl-radius-xl);
-  background: var(--gsl-surface-subtle);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-surface-subtle);
 }
 
-.gsl-date-selector__calendar-title {
-  font-size: var(--gsl-text-size-base);
+.clet-date-selector__calendar-title {
+  font-size: var(--clet-text-size-base);
   font-weight: 500;
-  color: var(--gsl-text);
+  color: var(--clet-text);
   user-select: none;
 }
 
-.gsl-date-selector__calendar-nav {
+.clet-date-selector__calendar-nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--gsl-date-selector-nav-size);
-  min-height: var(--gsl-date-selector-nav-size);
+  min-width: var(--clet-date-selector-nav-size);
+  min-height: var(--clet-date-selector-nav-size);
   padding: 0;
   border: none;
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
-  color: var(--gsl-text-secondary);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-bg);
+  color: var(--clet-text-secondary);
   cursor: pointer;
 }
 
-.gsl-date-selector__calendar-nav:hover {
-  background: var(--gsl-hover);
-  color: var(--gsl-text);
+.clet-date-selector__calendar-nav:hover {
+  background: var(--clet-hover);
+  color: var(--clet-text);
 }
 
-.gsl-date-selector__calendar-nav:focus-visible {
-  outline: 2px solid var(--gsl-primary);
+.clet-date-selector__calendar-nav:focus-visible {
+  outline: 2px solid var(--clet-primary);
   outline-offset: 2px;
 }
 
 /* ── Weekday labels ── */
 
-.gsl-date-selector__calendar-weekdays {
+.clet-date-selector__calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--gsl-date-selector-day-gap);
+  gap: var(--clet-date-selector-day-gap);
   margin-bottom: 8px;
 }
 
-.gsl-date-selector__calendar-weekday {
+.clet-date-selector__calendar-weekday {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: var(--gsl-date-selector-weekday-height);
-  font-size: var(--gsl-text-size-xs);
+  height: var(--clet-date-selector-weekday-height);
+  font-size: var(--clet-text-size-xs);
   font-weight: 500;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
   user-select: none;
 }
 
 /* ── Day grid ── */
 
-.gsl-date-selector__calendar-grid {
+.clet-date-selector__calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 }
 
-.gsl-date-selector__calendar-day {
+.clet-date-selector__calendar-day {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  aspect-ratio: 1;
-  padding: var(--gsl-date-selector-day-inset);
+  width: 40px;
+  height: 40px;
+  padding: var(--clet-date-selector-day-inset);
   border: none;
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-surface-subtle);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-main-bg);
   background-clip: content-box;
-  font-family: var(--gsl-date-selector-calendar-font);
-  font-size: var(--gsl-text-size-sm);
+  font-family: var(--clet-date-selector-calendar-font);
+  font-size: var(--clet-text-size-sm);
   font-weight: 500;
-  color: var(--gsl-text);
+  color: var(--clet-text);
   cursor: pointer;
   transition: background-color 100ms ease;
 }
 
-.gsl-date-selector__calendar-day:hover:not(:disabled, .gsl-date-selector__calendar-day--selected) {
-  background: var(--gsl-hover);
+.clet-date-selector__calendar-day:hover:not(
+    :disabled,
+    .clet-date-selector__calendar-day--selected
+  ) {
+  background: var(--clet-hover);
 }
 
-.gsl-date-selector__calendar-day:focus-visible {
-  outline: 2px solid var(--gsl-primary);
+.clet-date-selector__calendar-day:focus-visible {
+  outline: 2px solid var(--clet-primary);
   outline-offset: -2px;
 }
 
-.gsl-date-selector__calendar-day--outside {
+.clet-date-selector__calendar-day--outside {
   background: transparent;
-  color: var(--gsl-text-muted);
+  color: var(--clet-text-muted);
   cursor: default;
 }
 
-.gsl-date-selector__calendar-day--outside:hover {
+.clet-date-selector__calendar-day--outside:hover {
   background: transparent;
 }
 
-.gsl-date-selector__calendar-day--today {
+.clet-date-selector__calendar-day--today {
   font-weight: 600;
-  box-shadow: inset 0 0 0 1px var(--gsl-border-strong);
+  box-shadow: inset 0 0 0 1px var(--clet-border-strong);
 }
 
-.gsl-date-selector__calendar-day--selected {
-  background: var(--gsl-primary);
-  color: var(--gsl-on-primary);
+.clet-date-selector__calendar-day--selected {
+  background: var(--clet-primary);
+  color: var(--clet-on-primary);
   font-weight: 500;
 }
 
-.gsl-date-selector__calendar-day--selected:hover {
-  background: var(--gsl-primary);
+.clet-date-selector__calendar-day--selected:hover {
+  background: var(--clet-primary);
 }
 
-.gsl-date-selector__calendar-day--selected.gsl-date-selector__calendar-day--today {
-  box-shadow: inset 0 0 0 1px var(--gsl-on-primary);
+.clet-date-selector__calendar-day--selected.clet-date-selector__calendar-day--today {
+  box-shadow: inset 0 0 0 1px var(--clet-on-primary);
 }
 
-.gsl-date-selector__calendar-day:disabled {
+.clet-date-selector__calendar-day:disabled {
   background: transparent;
-  color: var(--gsl-text-muted);
+  color: var(--clet-text-muted);
   cursor: not-allowed;
 }
 
-.gsl-date-selector__calendar-day:disabled:hover {
+.clet-date-selector__calendar-day:disabled:hover {
   background: transparent;
 }
 
 /* ── Animations ── */
 
-@keyframes gsl-date-selector-calendar-in {
+@keyframes clet-date-selector-calendar-in {
   from {
     opacity: 0;
     transform: translateY(-4px);
@@ -265,7 +268,7 @@
   }
 }
 
-@keyframes gsl-date-selector-calendar-out {
+@keyframes clet-date-selector-calendar-out {
   from {
     opacity: 1;
     transform: translateY(0);
@@ -280,17 +283,17 @@
 /* ── Responsive ── */
 
 @media (width <= 768px) {
-  .gsl-date-selector__calendar {
+  .clet-date-selector__calendar {
     min-width: 280px;
     padding: 16px;
   }
 
-  .gsl-date-selector__calendar-nav {
+  .clet-date-selector__calendar-nav {
     min-width: 40px;
     min-height: 40px;
   }
 
-  .gsl-date-selector__calendar-weekday {
+  .clet-date-selector__calendar-weekday {
     height: 36px;
   }
 }
@@ -298,16 +301,16 @@
 /* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-date-selector__trigger {
+  .clet-date-selector__trigger {
     transition: none;
   }
 
-  .gsl-date-selector__calendar-day {
+  .clet-date-selector__calendar-day {
     transition: none;
   }
 
-  .gsl-date-selector__calendar[data-state="open"],
-  .gsl-date-selector__calendar[data-state="closed"] {
+  .clet-date-selector__calendar[data-state="open"],
+  .clet-date-selector__calendar[data-state="closed"] {
     animation: none;
   }
 }

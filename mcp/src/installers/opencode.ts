@@ -30,7 +30,10 @@ export async function install(cwd: string): Promise<InstallResult> {
     path.join(cwd, "AGENTS.md"),
     "rfdtech-ui",
     "<!-- rfdtech-ui -->\nUse the `rfdtech-ui` MCP server (`search_components`, `get_component`, " +
-      "`get_rules`) before building UI with `@rfdtech/components`.\n",
+      "`get_rules`) before building UI with `@rfdtech/components`. Given a screenshot, image, " +
+      "mockup, or description of a screen to build, decompose it and map every element to an " +
+      "existing `@rfdtech/components` component/variant via the MCP before writing markup — " +
+      "only build custom UI if the user explicitly asks for it.\n",
     "Agent notes"
   );
 

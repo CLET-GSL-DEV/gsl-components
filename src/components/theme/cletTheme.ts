@@ -1,11 +1,11 @@
 import {
-  GSL_COMPONENT_SELECTORS,
-  GSL_COMPONENT_TOKEN_VARS,
-  GSL_GLOBAL_TOKEN_VARS,
+  CLET_COMPONENT_SELECTORS,
+  CLET_COMPONENT_TOKEN_VARS,
+  CLET_GLOBAL_TOKEN_VARS,
 } from "../../generated/components.theme";
-import type { GslThemeConfig } from "../../types/theme";
+import type { CletThemeConfig } from "../../types/theme";
 
-const STYLE_TAG_ID = "gsl-theme-overrides";
+const STYLE_TAG_ID = "clet-theme-overrides";
 
 type TokenValues = Record<string, string | number | undefined>;
 type VarMap = Record<string, string>;
@@ -29,7 +29,7 @@ function componentRule(
   varMap: VarMap,
 ): string {
   if (!vars || Object.keys(vars).length === 0) return "";
-  return `[data-gsl-theme="${mode}"] ${selector} {\n${toDeclarations(vars, varMap)}\n}`;
+  return `[data-clet-theme="${mode}"] ${selector} {\n${toDeclarations(vars, varMap)}\n}`;
 }
 
 // Merges "all" underneath a mode's own overrides, per token — a token set
@@ -40,34 +40,34 @@ function withDefaults(all: TokenValues | undefined, mode: TokenValues | undefine
 }
 
 /**
- * Injects a <style> tag overriding --gsl-* tokens for light/dark mode,
+ * Injects a <style> tag overriding --clet-* tokens for light/dark mode,
  * globally and/or per component. Selectors are matched to the specificity
  * the library's own CSS uses for that token, so the override wins via
  * source order (this tag is appended after the library stylesheet)
  * rather than needing !important. Keys are camelCase (e.g. "primary",
- * "radiusBase") and are translated to their real --gsl-* custom property.
+ * "radiusBase") and are translated to their real --clet-* custom property.
  */
-export function gslTheme(config: GslThemeConfig): void {
+export function cletTheme(config: CletThemeConfig): void {
   if (typeof document === "undefined") return;
 
   const all = config.all as TokenValues | undefined;
 
   const rules = [
     globalRule(
-      ':root[data-gsl-theme="light"], .gsl-theme[data-gsl-theme="light"]',
+      ':root[data-clet-theme="light"], .clet-theme[data-clet-theme="light"]',
       withDefaults(all, config.light as TokenValues | undefined),
-      GSL_GLOBAL_TOKEN_VARS,
+      CLET_GLOBAL_TOKEN_VARS,
     ),
     globalRule(
-      ':root[data-gsl-theme="dark"], .gsl-theme[data-gsl-theme="dark"]',
+      ':root[data-clet-theme="dark"], .clet-theme[data-clet-theme="dark"]',
       withDefaults(all, config.dark as TokenValues | undefined),
-      GSL_GLOBAL_TOKEN_VARS,
+      CLET_GLOBAL_TOKEN_VARS,
     ),
   ];
 
   for (const [component, overrides] of Object.entries(config.components ?? {})) {
-    const selector = GSL_COMPONENT_SELECTORS[component as keyof typeof GSL_COMPONENT_SELECTORS];
-    const varMap = GSL_COMPONENT_TOKEN_VARS[component as keyof typeof GSL_COMPONENT_TOKEN_VARS];
+    const selector = CLET_COMPONENT_SELECTORS[component as keyof typeof CLET_COMPONENT_SELECTORS];
+    const varMap = CLET_COMPONENT_TOKEN_VARS[component as keyof typeof CLET_COMPONENT_TOKEN_VARS];
     if (!selector || !varMap || !overrides) continue;
     const componentAll = overrides.all as TokenValues | undefined;
     rules.push(

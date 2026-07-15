@@ -1,5 +1,5 @@
-.gsl-progress-modal {
-  --gsl-progress-modal-font: var(--gsl-font-body);
+.clet-progress-modal {
+  --clet-progress-modal-font: var(--clet-font-body);
 
   display: flex;
   flex-direction: column;
@@ -8,13 +8,13 @@
   padding: 32px 24px 24px;
 }
 
-.gsl-progress-modal__progress {
+.clet-progress-modal__progress {
   width: 100%;
 }
 
-.gsl-progress-modal__text {
+.clet-progress-modal__text {
   margin: 0;
   font-size: 14px;
-  color: var(--gsl-text-secondary);
-  font-family: var(--gsl-progress-modal-font);
+  color: var(--clet-text-secondary);
+  font-family: var(--clet-progress-modal-font);
 }

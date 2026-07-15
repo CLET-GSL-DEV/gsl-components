@@ -25,7 +25,7 @@ A dropdown-style trigger (label + current role + chevron) that opens a small pop
   code={roleSelectSource}
 />
 
-Selecting a role opens a "Confirm Role Switch" dialog ("Are you sure you want to switch to the {role} portal?") before calling `onClickRole` — pass `noConfirm` to call it immediately instead.
+Selecting a role opens a "Confirm Role Switch" dialog (asking whether you want to switch to that role's portal) before calling `onClickRole` — pass `noConfirm` to call it immediately instead.
 
 Each `Role` can optionally carry an `icon` — it's shown before the name in the list, and next to the name on the trigger once selected.
 
@@ -55,4 +55,4 @@ Each `Role` can optionally carry an `icon` — it's shown before the name in the
 ## Notes
 
 - Disabled roles render inert — no click handler, no confirm dialog.
-- The trigger, popover, and confirm dialog reuse the same design tokens as the rest of the popover family (`--gsl-border`, `--gsl-bg`, `--gsl-shadow-md`, `--gsl-radius-base`).
+- The trigger, popover, and confirm dialog reuse the same design tokens as the rest of the popover family (`--clet-border`, `--clet-bg`, `--clet-shadow-md`, `--clet-radius-base`).

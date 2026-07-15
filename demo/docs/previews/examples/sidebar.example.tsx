@@ -69,7 +69,7 @@ export function SidebarExample() {
           <SidebarOverlay />
           <Sidebar>
             <SidebarHeader>
-              <div className="gsl-sidebar__header-brand">
+              <div className="clet-sidebar__header-brand">
                 <span
                   aria-hidden="true"
                   style={{
@@ -80,15 +80,15 @@ export function SidebarExample() {
                     width: 32,
                     height: 32,
                     borderRadius: "50%",
-                    background: "var(--gsl-primary-light)",
-                    color: "var(--gsl-primary)",
+                    background: "var(--clet-primary-light)",
+                    color: "var(--clet-primary)",
                     fontSize: 11,
                     fontWeight: 700,
                   }}
                 >
-                  GSL
+                  CLET
                 </span>
-                <span className="gsl-sidebar__header-title">NBES</span>
+                <span className="clet-sidebar__header-title">NBES</span>
               </div>
               <SidebarCollapse />
             </SidebarHeader>
@@ -145,12 +145,12 @@ export function SidebarExample() {
           style={{
             minWidth: 0,
             padding: 16,
-            border: "1px solid var(--gsl-border)",
-            borderRadius: "var(--gsl-radius-base)",
-            background: "var(--gsl-bg)",
+            border: "1px solid var(--clet-border)",
+            borderRadius: "var(--clet-radius-base)",
+            background: "var(--clet-bg)",
           }}
         >
-          <p style={{ margin: 0, fontSize: 14, color: "var(--gsl-text-secondary)" }}>
+          <p style={{ margin: 0, fontSize: 14, color: "var(--clet-text-secondary)" }}>
             Main content area. On desktop, use the collapse control to switch to
             an icon-only rail. On viewports 768px and below, use the menu button
             to open the offcanvas sidebar.

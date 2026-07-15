@@ -417,7 +417,7 @@ export function DemoLayout() {
               <VersionSwitcher active="legacy" />
               <button
                 type="button"
-                className="gsl-app-header__notif-btn"
+                className="clet-app-header__notif-btn"
                 aria-label="Documentation"
                 onClick={() => navigate("/docs")}
               >

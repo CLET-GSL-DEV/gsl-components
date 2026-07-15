@@ -31,7 +31,7 @@ Show brief, accessible notifications from anywhere in your app. Wrap the tree in
 
 ## Icons
 
-Pass any `ReactNode` to `icon` in `toast()` to render a leading icon in the `.gsl-toast__icon` slot. Icons sit to the left of the title and description in the toast flex row.
+Pass any `ReactNode` to `icon` in `toast()` to render a leading icon in the `.clet-toast__icon` slot. Icons sit to the left of the title and description in the toast flex row.
 
 - **Any React node** — SVG components (e.g. Lucide), emoji, or custom markup
 - **Variant tinting** — `success`, `warning`, and `error` variants apply semantic color to the icon slot; `default` uses muted text color
@@ -86,7 +86,7 @@ import { ToastProvider, Toaster } from "@rfdtech/components";
 | `id` | `string` | auto-generated | Stable id for updates |
 | `title` | `ReactNode` | — | Primary message |
 | `description` | `ReactNode` | — | Supporting text |
-| `icon` | `ReactNode` | — | Optional leading icon in `.gsl-toast__icon`; tinted by variant (`success` / `warning` / `error`) |
+| `icon` | `ReactNode` | — | Optional leading icon in `.clet-toast__icon`; tinted by variant (`success` / `warning` / `error`) |
 | `variant` | `ToastVariant` | `"default"` | Visual style |
 | `duration` | `number` | provider default | Visible time in ms; use `Infinity` to persist |
 | `action` | `ToastAction` | — | Optional action button `{ label, onClick }` |
@@ -102,7 +102,7 @@ import { ToastProvider, Toaster } from "@rfdtech/components";
 
 ### `Toaster`
 
-Renders the Sonner viewport with GSL styling.
+Renders the Sonner viewport with CLET styling.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -119,30 +119,30 @@ Renders the Sonner viewport with GSL styling.
 
 | Key | Applied to |
 |-----|------------|
-| `viewport` | `.gsl-toast__viewport` |
-| `toast` | `.gsl-toast` |
-| `icon` | `.gsl-toast__icon` |
-| `title` | `.gsl-toast__title` |
-| `description` | `.gsl-toast__description` |
-| `actionButton` | `.gsl-toast__action` |
-| `closeButton` | `.gsl-toast__close` |
-| `default` / `success` / `warning` / `error` | Variant modifiers on `.gsl-toast` |
+| `viewport` | `.clet-toast__viewport` |
+| `toast` | `.clet-toast` |
+| `icon` | `.clet-toast__icon` |
+| `title` | `.clet-toast__title` |
+| `description` | `.clet-toast__description` |
+| `actionButton` | `.clet-toast__action` |
+| `closeButton` | `.clet-toast__close` |
+| `default` / `success` / `warning` / `error` | Variant modifiers on `.clet-toast` |
 
 ## Design tokens
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-toast-font` | `var(--gsl-font-body)` | Font family for the toast viewport and its content |
+| `--clet-toast-font` | `var(--clet-font-body)` | Font family for the toast viewport and its content |
 
 ## Notes
 
-- Toast notifications are powered by [Sonner](https://sonner.emilkowal.ski/) with GSL styling via `unstyled` class names.
-- Toast layout uses a flex row: optional leading icon (`.gsl-toast__icon`), main content column (title, description, action), and close control.
+- Toast notifications are powered by [Sonner](https://sonner.emilkowal.ski/) with CLET styling via `unstyled` class names.
+- Toast layout uses a flex row: optional leading icon (`.clet-toast__icon`), main content column (title, description, action), and close control.
 - Pass `icon` in `toast()` with any `ReactNode`; use `aria-hidden` on decorative SVGs when the title is sufficient.
 - Render a single `Toaster` near the app root (sibling to your routes is fine).
 - Viewport is bottom-right on desktop and inset full-width on screens `<= 768px`.
 - Respects `prefers-reduced-motion: reduce` (no entry/exit animation).
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes.
 - `swipeDirection` and `label` provider props from the previous Radix implementation are not supported.
 
 ## Do

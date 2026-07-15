@@ -21,9 +21,9 @@ export function RadioGroup({
     <RadioGroupProvider variant={variant}>
       <RadioGroupPrimitive.Root
         className={cn(
-          "gsl-radio-group",
-          variant === "card" && "gsl-radio-group--card",
-          disabled && "gsl-radio-group--disabled",
+          "clet-radio-group",
+          variant === "card" && "clet-radio-group--card",
+          disabled && "clet-radio-group--disabled",
           classNames?.root,
           className,
         )}

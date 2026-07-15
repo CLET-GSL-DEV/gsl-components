@@ -15,7 +15,7 @@ import dateSelectorSource from "../previews/examples/date-selector.example.tsx?r
 
 # DateSelector
 
-Date picker for choosing a single date from a calendar grid. Built on `@radix-ui/react-popover` with GSL styling, month/year navigation arrows, weekday headers, and native `Date.toLocaleDateString` formatting.
+Date picker for choosing a single date from a calendar grid. Built on `@radix-ui/react-popover` with CLET styling, month/year navigation arrows, weekday headers, and native `Date.toLocaleDateString` formatting.
 
 ## Example
 
@@ -83,39 +83,39 @@ See the props table above.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root wrapper (`.gsl-date-selector`) |
-| `trigger` | Trigger button (`.gsl-date-selector__trigger`) |
-| `calendar` | Calendar panel (`.gsl-date-selector__calendar`) |
-| `calendarHeader` | Month/year header row (`.gsl-date-selector__calendar-header`) |
-| `calendarTitle` | Month/year text (`.gsl-date-selector__calendar-title`) |
-| `calendarNav` | Navigation buttons (`.gsl-date-selector__calendar-nav`) |
-| `calendarWeekdays` | Weekday row (`.gsl-date-selector__calendar-weekdays`) |
-| `calendarWeekday` | Individual weekday label (`.gsl-date-selector__calendar-weekday`) |
-| `calendarGrid` | Day grid (`.gsl-date-selector__calendar-grid`) |
-| `calendarDay` | Day cell (`.gsl-date-selector__calendar-day`) |
+| `root` | Root wrapper (`.clet-date-selector`) |
+| `trigger` | Trigger button (`.clet-date-selector__trigger`) |
+| `calendar` | Calendar panel (`.clet-date-selector__calendar`) |
+| `calendarHeader` | Month/year header row (`.clet-date-selector__calendar-header`) |
+| `calendarTitle` | Month/year text (`.clet-date-selector__calendar-title`) |
+| `calendarNav` | Navigation buttons (`.clet-date-selector__calendar-nav`) |
+| `calendarWeekdays` | Weekday row (`.clet-date-selector__calendar-weekdays`) |
+| `calendarWeekday` | Individual weekday label (`.clet-date-selector__calendar-weekday`) |
+| `calendarGrid` | Day grid (`.clet-date-selector__calendar-grid`) |
+| `calendarDay` | Day cell (`.clet-date-selector__calendar-day`) |
 
 ## Design tokens
 
 | Token | Used for |
 |-------|----------|
-| `--gsl-radius-base` | Trigger and calendar border radius |
-| `--gsl-date-selector-font` | Font family for the trigger |
-| `--gsl-date-selector-calendar-font` | Font family for the calendar popover and day cells |
-| `--gsl-date-selector-trigger-height` | Trigger button height (`40px`) |
-| `--gsl-date-selector-calendar-min-width` | Calendar popover minimum width (`256px`) |
-| `--gsl-date-selector-calendar-padding` | Calendar popover inner padding (`12px`) |
-| `--gsl-date-selector-nav-size` | Prev/next month nav button size (`32px`) |
-| `--gsl-date-selector-weekday-height` | Weekday label row height (`32px`) |
-| `--gsl-text-size-base` | Trigger and month-title font size (`14px`) |
-| `--gsl-text-size-xs` | Weekday label font size (`12px`) |
-| `--gsl-text-size-sm` | Day cell font size (`13px`) |
+| `--clet-radius-base` | Trigger and calendar border radius |
+| `--clet-date-selector-font` | Font family for the trigger |
+| `--clet-date-selector-calendar-font` | Font family for the calendar popover and day cells |
+| `--clet-date-selector-trigger-height` | Trigger button height (`40px`) |
+| `--clet-date-selector-calendar-min-width` | Calendar popover minimum width (`256px`) |
+| `--clet-date-selector-calendar-padding` | Calendar popover inner padding (`12px`) |
+| `--clet-date-selector-nav-size` | Prev/next month nav button size (`32px`) |
+| `--clet-date-selector-weekday-height` | Weekday label row height (`32px`) |
+| `--clet-text-size-base` | Trigger and month-title font size (`14px`) |
+| `--clet-text-size-xs` | Weekday label font size (`12px`) |
+| `--clet-text-size-sm` | Day cell font size (`13px`) |
 
 ## Notes
 
 - Formatting uses `Date.toLocaleDateString()` — locale-aware and does not require a date library.
 - Navigation arrows move by month. Clicking the month/year text resets to today.
 - Days from adjacent months are shown muted and selectable.
-- The popover calendar uses `--gsl-shadow-md` and matches the trigger width.
+- The popover calendar uses `--clet-shadow-md` and matches the trigger width.
 
 ## Don't
 

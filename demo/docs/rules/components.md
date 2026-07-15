@@ -175,7 +175,7 @@ severity: dont
 components: card
 
 Don't add `px-6`, `py-4`, or similar padding utilities inside Card content. Card has a built-in
-`--gsl-card-padding` token that already supplies correct, consistent padding.
+`--clet-card-padding` token that already supplies correct, consistent padding.
 
 ===RULE===
 id: components-card-footer-no-border
@@ -279,8 +279,8 @@ severity: dont
 components: app-header
 
 Render each `AppHeaderNotifications` child as an `AppHeaderNotificationItem` (`text`, `time`,
-`unread`, optional `onClick`) — never hand-write `.gsl-notif-popover__item` /
-`.gsl-notif-popover__dot` / `.gsl-notif-popover__body-text` divs directly. The component also
+`unread`, optional `onClick`) — never hand-write `.clet-notif-popover__item` /
+`.clet-notif-popover__dot` / `.clet-notif-popover__body-text` divs directly. The component also
 makes the row keyboard-focusable (Enter/Space) when `onClick` is passed, which hand-rolled divs
 don't get for free.
 
@@ -309,4 +309,4 @@ over `"default"`; `SidebarGroup` `collapsible` (accordion groups) over flat non-
 `TableContent` `variant="panel"` over `"default"`; `TableFilter` `variant="spread"` over the
 default `"popover"`. Default to these in new work. If asked to "convert this app to the new design
 system," scan for usages of the components above and swap them to the preferred variant, then ask
-before overriding any of the consuming app's own `--gsl-*` color token overrides.
+before overriding any of the consuming app's own `--clet-*` color token overrides.

@@ -1,57 +1,55 @@
-.gsl-metric-card {
+.clet-metric-card {
   --clet-default-metric-card-bg: var(--clet-surface-card);
-  --gsl-default-metric-card-bg: var(--clet-default-metric-card-bg);
-  --gsl-metric-card-radius: var(--gsl-radius-xl);
-  --gsl-metric-card-shadow: none;
+  --clet-metric-card-radius: var(--clet-radius-xl);
+  --clet-metric-card-shadow: none;
 
   /* Overridable type tokens */
-  --gsl-metric-card-font: var(--gsl-font-body);
-  --gsl-metric-card-value-font: var(--gsl-font-header);
-  --gsl-metric-card-value-size: 28px;
+  --clet-metric-card-font: var(--clet-font-body);
+  --clet-metric-card-value-font: var(--clet-font-header);
+  --clet-metric-card-value-size: 28px;
   --clet-metric-card-value-color: var(--clet-text);
-  --gsl-metric-card-value-color: var(--clet-metric-card-value-color);
-  --gsl-metric-card-description-size: 12px;
+  --clet-metric-card-description-size: 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 20px;
   border: none;
-  border-radius: var(--gsl-metric-card-radius);
-  background: var(--gsl-default-metric-card-bg);
-  font-family: var(--gsl-metric-card-font);
-  box-shadow: var(--gsl-metric-card-shadow);
+  border-radius: var(--clet-metric-card-radius);
+  background: var(--clet-default-metric-card-bg);
+  font-family: var(--clet-metric-card-font);
+  box-shadow: var(--clet-metric-card-shadow);
 }
 
 /* ── Variants — only affect trend colors ─────── */
 
 /* ── Outline variant: no fill, bordered, larger value, unified 8px gaps ── */
 
-.gsl-metric-card--outline {
-  --gsl-metric-card-value-size: 32px;
+.clet-metric-card--outline {
+  --clet-metric-card-value-size: 32px;
   gap: 8px;
   padding: 24px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
+  border: 1px solid var(--clet-border);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-bg);
   padding-bottom: 38px;
 }
 
-.gsl-metric-card--outline .gsl-metric-card__value-row {
+.clet-metric-card--outline .clet-metric-card__value-row {
   align-items: center;
   gap: 12px;
 }
 
-.gsl-metric-card--outline .gsl-metric-card__label {
+.clet-metric-card--outline .clet-metric-card__label {
   font-size: 10px;
-  color: var(--gsl-metric-card-label-color, var(--gsl-text-secondary));
+  color: var(--clet-metric-card-label-color, var(--clet-text-secondary));
 }
 
-.gsl-metric-card--outline .gsl-metric-card__header,
-.gsl-metric-card--outline .gsl-metric-card__value-row {
+.clet-metric-card--outline .clet-metric-card__header,
+.clet-metric-card--outline .clet-metric-card__value-row {
   margin-bottom: 0;
 }
 
-.gsl-metric-card__trend-glyph {
+.clet-metric-card__trend-glyph {
   display: inline-flex;
   align-items: center;
   font-size: 12px;
@@ -60,30 +58,30 @@
 
 /* ── Top row: icon + label ──────────────────────────────── */
 
-.gsl-metric-card__header {
+.clet-metric-card__header {
   display: flex;
   align-items: center;
   gap: 6px;
   margin-bottom: 20px;
 }
 
-.gsl-metric-card__icon {
+.clet-metric-card__icon {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: var(--gsl-text-muted);
+  color: var(--clet-text-muted);
 }
 
 /* Icon always muted — no variant coloring */
 
-.gsl-metric-card__label {
+.clet-metric-card__label {
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   overflow: hidden;
@@ -93,19 +91,19 @@
 
 /* ── Value row ──────────────────────────────────────────── */
 
-.gsl-metric-card__value-row {
+.clet-metric-card__value-row {
   display: flex;
   align-items: baseline;
   gap: 8px;
   margin-bottom: 4px;
 }
 
-.gsl-metric-card__value {
-  font-family: var(--gsl-metric-card-value-font);
-  font-size: var(--gsl-metric-card-value-size);
+.clet-metric-card__value {
+  font-family: var(--clet-metric-card-value-font);
+  font-size: var(--clet-metric-card-value-size);
   font-weight: 600;
   line-height: 1.2;
-  color: var(--gsl-metric-card-value-color);
+  color: var(--clet-metric-card-value-color);
   letter-spacing: -0.02em;
 }
 
@@ -113,7 +111,7 @@
 
 /* ── Trend ──────────────────────────────────────────────── */
 
-.gsl-metric-card__trend {
+.clet-metric-card__trend {
   display: inline-flex;
   align-items: center;
   gap: 2px;
@@ -123,33 +121,33 @@
   white-space: nowrap;
 }
 
-.gsl-metric-card__trend--up {
-  color: var(--gsl-success);
+.clet-metric-card__trend--up {
+  color: var(--clet-success);
 }
 
-.gsl-metric-card__trend--down {
-  color: var(--gsl-error);
+.clet-metric-card__trend--down {
+  color: var(--clet-error);
 }
 
-.gsl-metric-card__trend--neutral {
-  color: var(--gsl-text-muted);
+.clet-metric-card__trend--neutral {
+  color: var(--clet-text-muted);
 }
 
 /* ── Description ────────────────────────────────────────── */
 
-.gsl-metric-card__description {
-  font-size: var(--gsl-metric-card-description-size);
+.clet-metric-card__description {
+  font-size: var(--clet-metric-card-description-size);
   line-height: 1.4;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
 }
 
 /* ── Loading shimmer ────────────────────────────────────── */
 
-.gsl-metric-card--loading {
+.clet-metric-card--loading {
   pointer-events: none;
 }
 
-.gsl-metric-card__sr-only {
+.clet-metric-card__sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -161,31 +159,31 @@
   border: 0;
 }
 
-.gsl-metric-card__skeleton-icon {
+.clet-metric-card__skeleton-icon {
   width: 20px;
   height: 20px;
-  border-radius: var(--gsl-radius-base);
+  border-radius: var(--clet-radius-base);
 }
 
-.gsl-metric-card__skeleton-label {
+.clet-metric-card__skeleton-label {
   width: 96px;
   height: 12px;
   border-radius: 4px;
 }
 
-.gsl-metric-card__skeleton-value {
+.clet-metric-card__skeleton-value {
   width: 120px;
-  height: var(--gsl-metric-card-value-size);
+  height: var(--clet-metric-card-value-size);
   border-radius: 6px;
 }
 
-.gsl-metric-card__skeleton-trend {
+.clet-metric-card__skeleton-trend {
   width: 48px;
   height: 14px;
   border-radius: 4px;
 }
 
-.gsl-metric-card__skeleton-description {
+.clet-metric-card__skeleton-description {
   width: 70%;
   height: 12px;
   border-radius: 4px;
@@ -194,8 +192,8 @@
 /* ── Responsive ─────────────────────────────────────────── */
 
 @media (width <= 768px) {
-  .gsl-metric-card {
-    --gsl-metric-card-value-size: 24px;
+  .clet-metric-card {
+    --clet-metric-card-value-size: 24px;
     padding: 16px;
   }
 }

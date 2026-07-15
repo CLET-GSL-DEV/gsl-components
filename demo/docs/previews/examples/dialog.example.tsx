@@ -48,10 +48,10 @@ export function DialogExample() {
                   style={{
                     height: 40,
                     padding: "0 12px",
-                    border: "1px solid var(--gsl-border)",
-                    borderRadius: "var(--gsl-radius-base)",
-                    background: "var(--gsl-bg)",
-                    color: "var(--gsl-text)",
+                    border: "1px solid var(--clet-border)",
+                    borderRadius: "var(--clet-radius-base)",
+                    background: "var(--clet-bg)",
+                    color: "var(--clet-text)",
                   }}
                 />
               </label>
@@ -63,10 +63,10 @@ export function DialogExample() {
                   style={{
                     height: 40,
                     padding: "0 12px",
-                    border: "1px solid var(--gsl-border)",
-                    borderRadius: "var(--gsl-radius-base)",
-                    background: "var(--gsl-bg)",
-                    color: "var(--gsl-text)",
+                    border: "1px solid var(--clet-border)",
+                    borderRadius: "var(--clet-radius-base)",
+                    background: "var(--clet-bg)",
+                    color: "var(--clet-text)",
                   }}
                 />
               </label>

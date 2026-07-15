@@ -34,9 +34,9 @@ describe("PhoneNumberInput", () => {
   it("applies invalid styling and aria-invalid", () => {
     render(<PhoneNumberInput invalid />);
     expect(
-      document.querySelector(".gsl-phone-number-input--invalid"),
+      document.querySelector(".clet-phone-number-input--invalid"),
     ).toBeInTheDocument();
-    expect(document.querySelector(".gsl-phone-number-input")).toHaveAttribute(
+    expect(document.querySelector(".clet-phone-number-input")).toHaveAttribute(
       "aria-invalid",
       "true",
     );
@@ -45,7 +45,7 @@ describe("PhoneNumberInput", () => {
   it("applies disabled styling", () => {
     render(<PhoneNumberInput disabled />);
     expect(
-      document.querySelector(".gsl-phone-number-input--disabled"),
+      document.querySelector(".clet-phone-number-input--disabled"),
     ).toBeInTheDocument();
   });
 
@@ -74,16 +74,16 @@ describe("PhoneNumberInput", () => {
       />,
     );
     expect(
-      document.querySelector(".gsl-phone-number-input"),
+      document.querySelector(".clet-phone-number-input"),
     ).toHaveClass("custom-root");
     expect(
-      document.querySelector(".gsl-phone-number-input"),
+      document.querySelector(".clet-phone-number-input"),
     ).toHaveClass("custom-classname");
     expect(
-      document.querySelector(".gsl-phone-number-input__prefix"),
+      document.querySelector(".clet-phone-number-input__prefix"),
     ).toHaveClass("custom-prefix");
     expect(
-      document.querySelector(".gsl-phone-number-input__input"),
+      document.querySelector(".clet-phone-number-input__input"),
     ).toHaveClass("custom-input");
   });
 
@@ -267,12 +267,12 @@ describe("PhoneNumberInput", () => {
     const user = userEvent.setup();
     render(<PhoneNumberInput />);
     expect(
-      document.querySelector(".gsl-phone-number-input__chevron--open"),
+      document.querySelector(".clet-phone-number-input__chevron--open"),
     ).not.toBeInTheDocument();
     await user.click(screen.getByText("+1").closest("button")!);
     await screen.findByRole("listbox");
     expect(
-      document.querySelector(".gsl-phone-number-input__chevron--open"),
+      document.querySelector(".clet-phone-number-input__chevron--open"),
     ).toBeInTheDocument();
   });
 
@@ -283,7 +283,7 @@ describe("PhoneNumberInput", () => {
     const options = await screen.findAllByRole("option");
     expect(options.length).toBe(countries.length);
     expect(
-      options[0].querySelector(".gsl-phone-number-input__option-flag"),
+      options[0].querySelector(".clet-phone-number-input__option-flag"),
     ).toBeInTheDocument();
     expect(options[0].textContent).toContain("+93");
   });

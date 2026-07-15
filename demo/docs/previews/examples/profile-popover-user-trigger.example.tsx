@@ -6,7 +6,7 @@ const user = {
   name: "Kwame Asante",
   role: "Admin",
   initials: "KA",
-  email: "kwame@gsl.edu.gh",
+  email: "kwame@clet.edu.gh",
 };
 
 const roles = [
@@ -23,7 +23,7 @@ export function ProfilePopoverUserTriggerExample() {
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <button
         type="button"
-        className="gsl-profile-menu__item"
+        className="clet-profile-menu__item"
         style={{ alignSelf: "flex-start" }}
         onClick={() => setVariant((v) => (v === "full" ? "avatar" : "full"))}
       >
@@ -34,8 +34,8 @@ export function ProfilePopoverUserTriggerExample() {
         style={{
           display: "inline-flex",
           padding: 8,
-          borderRadius: "var(--gsl-radius-2xl)",
-          background: "var(--gsl-surface-subtle)",
+          borderRadius: "var(--clet-radius-2xl)",
+          background: "var(--clet-surface-subtle)",
         }}
       >
         <ProfilePopover

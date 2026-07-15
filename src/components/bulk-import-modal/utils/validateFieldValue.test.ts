@@ -87,11 +87,11 @@ describe("validateFieldValue", () => {
           label: "Email",
           type: "email",
           validate: (value) =>
-            value.endsWith("@gsl.edu.gh") ? null : "Must use a GSL email",
+            value.endsWith("@clet.edu.gh") ? null : "Must use a CLET email",
         },
         "a@example.com",
       ),
-    ).toBe("Must use a GSL email");
+    ).toBe("Must use a CLET email");
   });
 });
 
@@ -158,9 +158,9 @@ describe("getFieldHint", () => {
         key: "email",
         label: "Email",
         description: "Work email address",
-        example: "student@gsl.edu.gh",
+        example: "student@clet.edu.gh",
       }),
-    ).toBe("Work email address Example: student@gsl.edu.gh");
+    ).toBe("Work email address Example: student@clet.edu.gh");
   });
 
   it("builds hints from schema rules", () => {

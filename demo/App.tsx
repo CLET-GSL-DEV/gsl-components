@@ -13,7 +13,7 @@ export const routes: RouteRecord[] = [
   {
     path: "/",
     element: (
-      <ThemeProvider defaultTheme="system" storageKey="gsl-theme">
+      <ThemeProvider defaultTheme="system" storageKey="clet-theme">
         <Outlet />
       </ThemeProvider>
     ),

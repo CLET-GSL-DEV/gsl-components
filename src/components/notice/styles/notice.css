@@ -1,113 +1,103 @@
 /* ── Root ── */
 
-.gsl-notice {
+.clet-notice {
   --clet-notice-accent: var(--clet-text-secondary);
-  --gsl-notice-accent: var(--clet-notice-accent);
   --clet-notice-bg: color-mix(in srgb, var(--clet-border) 15%, transparent);
-  --gsl-notice-bg: var(--clet-notice-bg);
-  --gsl-notice-radius: var(--gsl-radius-base);
-  --gsl-notice-padding: 16px;
-  --gsl-notice-font: var(--gsl-font-body);
-  --gsl-notice-title-size: var(--gsl-text-size-base);
-  --gsl-notice-body-size: var(--gsl-text-size-sm);
+  --clet-notice-radius: var(--clet-radius-base);
+  --clet-notice-padding: 16px;
+  --clet-notice-font: var(--clet-font-body);
+  --clet-notice-title-size: var(--clet-text-size-base);
+  --clet-notice-body-size: var(--clet-text-size-sm);
 
   display: flex;
   gap: 10px;
-  padding: var(--gsl-notice-padding);
+  padding: var(--clet-notice-padding);
   border: 1px solid transparent;
-  border-radius: var(--gsl-notice-radius);
-  background: var(--gsl-notice-bg);
-  font-family: var(--gsl-notice-font);
-  color: var(--gsl-text);
+  border-radius: var(--clet-notice-radius);
+  background: var(--clet-notice-bg);
+  font-family: var(--clet-notice-font);
+  color: var(--clet-text);
 }
 
 /* ── Variants (existing tokens only) ── */
 
-.gsl-notice--info {
+.clet-notice--info {
   --clet-notice-accent: var(--clet-primary);
-  --gsl-notice-accent: var(--clet-notice-accent);
   --clet-notice-bg: color-mix(in srgb, var(--clet-primary) 8%, transparent);
-  --gsl-notice-bg: var(--clet-notice-bg);
 }
 
-.gsl-notice--success {
+.clet-notice--success {
   --clet-notice-accent: var(--clet-success);
-  --gsl-notice-accent: var(--clet-notice-accent);
   --clet-notice-bg: color-mix(in srgb, var(--clet-success) 12%, transparent);
-  --gsl-notice-bg: var(--clet-notice-bg);
 }
 
-.gsl-notice--warning {
+.clet-notice--warning {
   --clet-notice-accent: var(--clet-warning);
-  --gsl-notice-accent: var(--clet-notice-accent);
   --clet-notice-bg: color-mix(in srgb, var(--clet-warning) 14%, transparent);
-  --gsl-notice-bg: var(--clet-notice-bg);
 }
 
-.gsl-notice--error {
+.clet-notice--error {
   --clet-notice-accent: var(--clet-error);
-  --gsl-notice-accent: var(--clet-notice-accent);
   --clet-notice-bg: color-mix(in srgb, var(--clet-error) 10%, transparent);
-  --gsl-notice-bg: var(--clet-notice-bg);
 }
 
 /* ── Left border accent ── */
 
-.gsl-notice--left-border {
-  border-left: 4px solid var(--gsl-notice-accent);
+.clet-notice--left-border {
+  border-left: 4px solid var(--clet-notice-accent);
 }
 
 /* ── Dashed outer border ── */
 
-.gsl-notice--dashed {
+.clet-notice--dashed {
   border-style: dashed;
-  border-color: color-mix(in srgb, var(--gsl-notice-accent) 50%, var(--gsl-border));
+  border-color: color-mix(in srgb, var(--clet-notice-accent) 50%, var(--clet-border));
 }
 
-.gsl-notice--dashed.gsl-notice--left-border {
+.clet-notice--dashed.clet-notice--left-border {
   border-left-style: solid;
-  border-left-color: var(--gsl-notice-accent);
+  border-left-color: var(--clet-notice-accent);
 }
 
 /* ── Icon ── */
 
-.gsl-notice__icon {
+.clet-notice__icon {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
   margin-top: 2px;
-  color: var(--gsl-notice-accent);
+  color: var(--clet-notice-accent);
 }
 
 /* ── Content ── */
 
-.gsl-notice__content {
+.clet-notice__content {
   display: flex;
   flex-direction: column;
   gap: 4px;
   min-width: 0;
 }
 
-.gsl-notice__header {
+.clet-notice__header {
   display: flex;
   align-items: center;
 }
 
-.gsl-notice__title {
-  font-size: var(--gsl-notice-title-size);
+.clet-notice__title {
+  font-size: var(--clet-notice-title-size);
   font-weight: 600;
   line-height: 1.4;
-  color: var(--gsl-notice-accent);
+  color: var(--clet-notice-accent);
 }
 
-.gsl-notice__body {
-  font-size: var(--gsl-notice-body-size);
+.clet-notice__body {
+  font-size: var(--clet-notice-body-size);
   line-height: 1.5;
-  color: var(--gsl-text);
+  color: var(--clet-text);
 }
 
-.gsl-notice__body ul,
-.gsl-notice__body ol {
+.clet-notice__body ul,
+.clet-notice__body ol {
   margin: 0;
   padding-left: 20px;
 }

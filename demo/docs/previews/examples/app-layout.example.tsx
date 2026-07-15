@@ -22,7 +22,7 @@ const user = {
   name: "Kwame Asante",
   role: "Admin",
   initials: "KA",
-  email: "kwame@gsl.edu.gh",
+  email: "kwame@clet.edu.gh",
 };
 
 const roles = [
@@ -62,9 +62,9 @@ export function AppLayoutExample() {
           heading: "Projects",
           items: [
             {
-              value: "gsl-platform",
-              label: "GSL Platform",
-              onSelect: () => console.log("Selected project:", "GSL Platform"),
+              value: "clet-platform",
+              label: "CLET Platform",
+              onSelect: () => console.log("Selected project:", "CLET Platform"),
             },
           ],
         },
@@ -72,7 +72,7 @@ export function AppLayoutExample() {
     : [];
 
   return (
-    <div style={{ height: 400, borderRadius: "var(--gsl-radius-2xl)", overflow: "hidden" }}>
+    <div style={{ height: 400, borderRadius: "var(--clet-radius-2xl)", overflow: "hidden" }}>
       <AppLayout>
         <AppHeader>
           <AppHeaderSearch
@@ -118,7 +118,7 @@ export function AppLayoutExample() {
               alignItems: "center",
               justifyContent: "center",
               height: "100%",
-              color: "var(--gsl-text-muted)",
+              color: "var(--clet-text-muted)",
               fontSize: 14,
             }}
           >

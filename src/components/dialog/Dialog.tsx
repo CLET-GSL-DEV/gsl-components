@@ -23,7 +23,7 @@ export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
     return (
       <DialogPrimitive.Overlay
         ref={ref}
-        className={cn("gsl-dialog__overlay", classNames?.overlay, className)}
+        className={cn("clet-dialog__overlay", classNames?.overlay, className)}
         {...props}
       />
     );
@@ -38,14 +38,14 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
     return (
       <DialogPrimitive.Content
         ref={ref}
-        className={cn("gsl-dialog__content", classNames?.content, className)}
+        className={cn("clet-dialog__content", classNames?.content, className)}
         {...props}
       >
         {children}
         {showCloseButton ? (
           <DialogPrimitive.Close
             type="button"
-            className={cn("gsl-dialog__close", classNames?.close)}
+            className={cn("clet-dialog__close", classNames?.close)}
             aria-label="Close dialog"
           >
             <X size={16} strokeWidth={2} aria-hidden />
@@ -61,7 +61,7 @@ export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(
     return (
       <DialogPrimitive.Title
         ref={ref}
-        className={cn("gsl-dialog__title", classNames?.title, className)}
+        className={cn("clet-dialog__title", classNames?.title, className)}
         {...props}
       />
     );
@@ -76,7 +76,7 @@ export const DialogDescription = forwardRef<
     <DialogPrimitive.Description
       ref={ref}
       className={cn(
-        "gsl-dialog__description",
+        "clet-dialog__description",
         classNames?.description,
         className,
       )}
@@ -90,7 +90,7 @@ export const DialogHeader = forwardRef<HTMLDivElement, DialogHeaderProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-dialog__header", classNames?.header, className)}
+        className={cn("clet-dialog__header", classNames?.header, className)}
         {...props}
       >
         {children}
@@ -104,7 +104,7 @@ export const DialogBody = forwardRef<HTMLDivElement, DialogBodyProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-dialog__body", classNames?.body, className)}
+        className={cn("clet-dialog__body", classNames?.body, className)}
         {...props}
       >
         {children}
@@ -118,7 +118,7 @@ export const DialogFooter = forwardRef<HTMLDivElement, DialogFooterProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-dialog__footer", classNames?.footer, className)}
+        className={cn("clet-dialog__footer", classNames?.footer, className)}
         {...props}
       >
         {children}

@@ -1,24 +1,24 @@
-.gsl-dialog__overlay {
+.clet-dialog__overlay {
   position: fixed;
   inset: 0;
-  z-index: var(--gsl-z-overlay);
-  background: var(--gsl-overlay);
+  z-index: var(--clet-z-overlay);
+  background: var(--clet-overlay);
 }
 
-.gsl-dialog__overlay[data-state="open"] {
-  animation: gsl-dialog-overlay-in 0.15s ease forwards;
+.clet-dialog__overlay[data-state="open"] {
+  animation: clet-dialog-overlay-in 0.15s ease forwards;
 }
 
-.gsl-dialog__overlay[data-state="closed"] {
-  animation: gsl-dialog-overlay-out 0.1s ease forwards;
+.clet-dialog__overlay[data-state="closed"] {
+  animation: clet-dialog-overlay-out 0.1s ease forwards;
 }
 
-.gsl-dialog__content {
-  --gsl-dialog-font: var(--gsl-font-body);
+.clet-dialog__content {
+  --clet-dialog-font: var(--clet-font-body);
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: var(--gsl-z-modal);
+  z-index: var(--clet-z-modal);
   display: flex;
   width: min(480px, calc(100vw - 32px));
   max-width: 100%;
@@ -27,39 +27,39 @@
   gap: 16px;
   overflow-y: auto;
   padding: 16px;
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
-  box-shadow: var(--gsl-shadow-lg);
-  font-family: var(--gsl-dialog-font);
-  color: var(--gsl-text);
+  border-radius: var(--clet-radius-base);
+  background: var(--clet-bg);
+  box-shadow: var(--clet-shadow-lg);
+  font-family: var(--clet-dialog-font);
+  color: var(--clet-text);
   transform: translate(-50%, -50%);
 }
 
-.gsl-dialog__content[data-state="open"] {
-  animation: gsl-dialog-content-in 0.15s ease forwards;
+.clet-dialog__content[data-state="open"] {
+  animation: clet-dialog-content-in 0.15s ease forwards;
 }
 
-.gsl-dialog__content[data-state="closed"] {
-  animation: gsl-dialog-content-out 0.1s ease forwards;
+.clet-dialog__content[data-state="closed"] {
+  animation: clet-dialog-content-out 0.1s ease forwards;
 }
 
-.gsl-dialog__title {
+.clet-dialog__title {
   margin: 0;
   padding-right: 40px;
   font-size: 18px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--gsl-text);
+  color: var(--clet-text);
 }
 
-.gsl-dialog__description {
+.clet-dialog__description {
   margin: -8px 0 0;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
 }
 
-.gsl-dialog__close {
+.clet-dialog__close {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -70,23 +70,23 @@
   min-height: 40px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--gsl-radius-base) - 2px);
+  border-radius: calc(var(--clet-radius-base) - 2px);
   background: transparent;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
   cursor: pointer;
 }
 
-.gsl-dialog__close:hover {
-  background: var(--gsl-hover);
-  color: var(--gsl-text);
+.clet-dialog__close:hover {
+  background: var(--clet-hover);
+  color: var(--clet-text);
 }
 
-.gsl-dialog__close:focus-visible {
-  outline: 2px solid var(--gsl-primary);
+.clet-dialog__close:focus-visible {
+  outline: 2px solid var(--clet-primary);
   outline-offset: 2px;
 }
 
-@keyframes gsl-dialog-overlay-in {
+@keyframes clet-dialog-overlay-in {
   from {
     opacity: 0;
   }
@@ -96,7 +96,7 @@
   }
 }
 
-@keyframes gsl-dialog-overlay-out {
+@keyframes clet-dialog-overlay-out {
   from {
     opacity: 1;
   }
@@ -106,7 +106,7 @@
   }
 }
 
-@keyframes gsl-dialog-content-in {
+@keyframes clet-dialog-content-in {
   from {
     opacity: 0;
     transform: translate(-50%, calc(-50% + 8px));
@@ -118,7 +118,7 @@
   }
 }
 
-@keyframes gsl-dialog-content-out {
+@keyframes clet-dialog-content-out {
   from {
     opacity: 1;
     transform: translate(-50%, -50%);
@@ -130,20 +130,20 @@
   }
 }
 
-.gsl-dialog__header {
+.clet-dialog__header {
   padding-bottom: 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.gsl-dialog__body {
+.clet-dialog__body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
 }
 
-.gsl-dialog__footer {
+.clet-dialog__footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -153,10 +153,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-dialog__overlay[data-state="open"],
-  .gsl-dialog__overlay[data-state="closed"],
-  .gsl-dialog__content[data-state="open"],
-  .gsl-dialog__content[data-state="closed"] {
+  .clet-dialog__overlay[data-state="open"],
+  .clet-dialog__overlay[data-state="closed"],
+  .clet-dialog__content[data-state="open"],
+  .clet-dialog__content[data-state="closed"] {
     animation: none;
   }
 }

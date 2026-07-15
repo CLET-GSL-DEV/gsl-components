@@ -14,7 +14,7 @@ function OptionalLabel() {
     <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
       Phone Number <span style={{ fontWeight: 400 }}>(Optional)</span>
       <Tooltip content="We'll only use this to reach you about your application.">
-        <Info size={14} style={{ color: "var(--gsl-text-secondary)" }} />
+        <Info size={14} style={{ color: "var(--clet-text-secondary)" }} />
       </Tooltip>
     </span>
   );

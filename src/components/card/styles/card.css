@@ -1,38 +1,38 @@
-.gsl-card {
-  --gsl-card-padding: 20px;
-  --gsl-card-font: var(--gsl-font-body);
-  --gsl-card-title-font: var(--gsl-font-header);
+.clet-card {
+  --clet-card-padding: 20px;
+  --clet-card-font: var(--clet-font-body);
+  --clet-card-title-font: var(--clet-font-header);
 
-  background: var(--gsl-surface-card);
-  border-radius: var(--gsl-radius-xl);
-  padding: var(--gsl-card-padding);
-  font-family: var(--gsl-card-font);
-  color: var(--gsl-text);
+  background: var(--clet-surface-card);
+  border-radius: var(--clet-radius-xl);
+  padding: var(--clet-card-padding);
+  font-family: var(--clet-card-font);
+  color: var(--clet-text);
 }
 
-.gsl-card__header {
+.clet-card__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
 }
 
-.gsl-card__title {
+.clet-card__title {
   margin: 0;
-  font-family: var(--gsl-card-title-font);
+  font-family: var(--clet-card-title-font);
   font-size: 20px;
   font-weight: 600;
-  color: var(--gsl-text);
+  color: var(--clet-text);
 }
 
-.gsl-card__actions {
+.clet-card__actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 @media (width <= 768px) {
-  .gsl-card {
-    --gsl-card-padding: 16px;
+  .clet-card {
+    --clet-card-padding: 16px;
   }
 }

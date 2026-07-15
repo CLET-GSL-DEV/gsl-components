@@ -79,9 +79,9 @@ export function Launchpad({
 	return (
 		<>
 			<Popover.Root open={open} onOpenChange={setOpen}>
-				<div className={cn("gsl-launchpad", className)} style={style}>
+				<div className={cn("clet-launchpad", className)} style={style}>
 					<div
-						className="gsl-launchpad__trigger-wrap"
+						className="clet-launchpad__trigger-wrap"
 						onMouseEnter={() => setTooltipOpen(true)}
 						onMouseLeave={() => setTooltipOpen(false)}
 						onFocus={() => setTooltipOpen(true)}
@@ -90,14 +90,14 @@ export function Launchpad({
 						<Popover.Trigger asChild>
 							<button
 								type="button"
-								className="gsl-launchpad__trigger"
+								className="clet-launchpad__trigger"
 								aria-label={TRIGGER_LABEL}
 							>
 								{trigger ?? <LaunchpadGridIcon />}
 							</button>
 						</Popover.Trigger>
 						{tooltipOpen && (
-							<div className="gsl-launchpad__trigger-tooltip" role="tooltip">
+							<div className="clet-launchpad__trigger-tooltip" role="tooltip">
 								{TRIGGER_LABEL}
 							</div>
 						)}
@@ -105,19 +105,19 @@ export function Launchpad({
 
 					<Popover.Portal>
 						<Popover.Content
-							className="gsl-launchpad__panel"
+							className="clet-launchpad__panel"
 							side="bottom"
 							align="end"
 							sideOffset={8}
 							aria-label={TITLE}
 						>
-							<div className="gsl-launchpad__header">
-								<div className="gsl-launchpad__title">{TITLE}</div>
+							<div className="clet-launchpad__header">
+								<div className="clet-launchpad__title">{TITLE}</div>
 								<Button
 									type="button"
 									variant="ghost"
 									size="sm"
-									className="gsl-launchpad__see-more"
+									className="clet-launchpad__see-more"
 									onClick={handleSeeAll}
 									aria-label={SEE_MORE_LABEL}
 								>
@@ -126,29 +126,29 @@ export function Launchpad({
 							</div>
 
 							{!loading && apps.length === 0 ? (
-								<div className="gsl-launchpad__status">
+								<div className="clet-launchpad__status">
 									No systems available.
 								</div>
 							) : null}
 
-							<div className="gsl-launchpad__grid-scroll">
+							<div className="clet-launchpad__grid-scroll">
 								{loading ? (
 									<div
-										className="gsl-launchpad__grid"
+										className="clet-launchpad__grid"
 										aria-busy="true"
 										aria-label="Loading"
 									>
 										{Array.from({ length: MAX_APPS }).map((_, index) => (
-											<div className="gsl-launchpad__skeleton-item" key={index}>
-												<div className="gsl-launchpad__skeleton-icon" />
-												<div className="gsl-launchpad__skeleton-name" />
+											<div className="clet-launchpad__skeleton-item" key={index}>
+												<div className="clet-launchpad__skeleton-icon" />
+												<div className="clet-launchpad__skeleton-name" />
 											</div>
 										))}
 									</div>
 								) : null}
 
 								{!loading && visibleApps.length > 0 ? (
-									<div className="gsl-launchpad__grid">
+									<div className="clet-launchpad__grid">
 										{visibleApps.map((app) => (
 											<LaunchpadItem
 												key={app.id}
@@ -160,7 +160,7 @@ export function Launchpad({
 								) : null}
 							</div>
 
-							<div className="gsl-launchpad__footer">{children}</div>
+							<div className="clet-launchpad__footer">{children}</div>
 						</Popover.Content>
 					</Popover.Portal>
 				</div>
@@ -172,14 +172,14 @@ export function Launchpad({
 					<ModalContent
 						size="2xl"
 						showCloseButton
-						className="gsl-launchpad__expand"
+						className="clet-launchpad__expand"
 						aria-describedby={undefined}
 					>
-						<ModalTitle className="gsl-launchpad__expand-title">
+						<ModalTitle className="clet-launchpad__expand-title">
 							{EXPAND_TITLE}
 						</ModalTitle>
-						<div className="gsl-launchpad__expand-scroll">
-							<div className="gsl-launchpad__grid gsl-launchpad__expand-grid">
+						<div className="clet-launchpad__expand-scroll">
+							<div className="clet-launchpad__grid clet-launchpad__expand-grid">
 								{apps.map((app) => (
 									<LaunchpadItem
 										key={app.id}
@@ -193,7 +193,7 @@ export function Launchpad({
 							<img
 								src={adinkraSymbolStrip}
 								alt=""
-								className="gsl-launchpad__expand-base"
+								className="clet-launchpad__expand-base"
 							/>
 						) : null}
 					</ModalContent>

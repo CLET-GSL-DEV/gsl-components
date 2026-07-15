@@ -41,7 +41,7 @@ describe("AppLayout", () => {
     );
     expect(screen.getByText("Header")).toBeInTheDocument();
     expect(screen.getByText("Body")).toBeInTheDocument();
-    expect(container.querySelector(".gsl-app-header")).toBeInTheDocument();
+    expect(container.querySelector(".clet-app-header")).toBeInTheDocument();
   });
 
   it("positions AppSidebar in sidebar area", () => {
@@ -53,7 +53,7 @@ describe("AppLayout", () => {
         </AppLayout>
       </RenderInRouter>,
     );
-    const sidebarWrapper = container.querySelector(".gsl-app-layout__sidebar");
+    const sidebarWrapper = container.querySelector(".clet-app-layout__sidebar");
     expect(sidebarWrapper).toBeInTheDocument();
     expect(sidebarWrapper).toHaveTextContent("Sidebar");
   });
@@ -69,11 +69,11 @@ describe("AppLayout", () => {
         </AppLayout>
       </RenderInRouter>,
     );
-    const breadcrumbWrapper = container.querySelector(".gsl-app-layout__breadcrumb");
+    const breadcrumbWrapper = container.querySelector(".clet-app-layout__breadcrumb");
     expect(breadcrumbWrapper).toBeInTheDocument();
     expect(breadcrumbWrapper).toHaveTextContent("Users");
     expect(breadcrumbWrapper).toHaveTextContent("John");
-    expect(container.querySelector(".gsl-breadcrumb")).toBeInTheDocument();
+    expect(container.querySelector(".clet-breadcrumb")).toBeInTheDocument();
   });
 
   it("hides breadcrumbs when context is empty", () => {
@@ -84,7 +84,7 @@ describe("AppLayout", () => {
         </AppLayout>
       </RenderInRouter>,
     );
-    expect(container.querySelector(".gsl-app-layout__breadcrumb")).not.toBeInTheDocument();
+    expect(container.querySelector(".clet-app-layout__breadcrumb")).not.toBeInTheDocument();
   });
 
   it("forwards ref", () => {
@@ -107,9 +107,9 @@ describe("AppLayout", () => {
         </AppLayout>
       </RenderInRouter>,
     );
-    const root = container.querySelector(".gsl-app-layout")!;
+    const root = container.querySelector(".clet-app-layout")!;
     expect(root).toHaveClass("custom");
-    expect(root).toHaveClass("gsl-app-layout");
+    expect(root).toHaveClass("clet-app-layout");
   });
 
   it("passes component className to layout wrapper", () => {
@@ -121,8 +121,8 @@ describe("AppLayout", () => {
         </AppLayout>
       </RenderInRouter>,
     );
-    const header = container.querySelector(".gsl-app-header");
-    const content = container.querySelector(".gsl-app-layout__content");
+    const header = container.querySelector(".clet-app-header");
+    const content = container.querySelector(".clet-app-layout__content");
     expect(header).toHaveClass("header-custom");
     expect(content).toHaveClass("body-custom");
   });
@@ -136,7 +136,7 @@ describe("AppLayout", () => {
         </AppLayout>
       </RenderInRouter>,
     );
-    const header = container.querySelector(".gsl-app-header");
+    const header = container.querySelector(".clet-app-header");
     expect(header).toHaveAttribute("id", "main-header");
     expect(header).toHaveAttribute("data-test", "x");
   });

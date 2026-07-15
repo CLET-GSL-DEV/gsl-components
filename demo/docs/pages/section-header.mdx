@@ -58,16 +58,16 @@ Extend the matching native HTML element attributes with an optional `classNames`
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-section-header-font` | `var(--gsl-font-body)` | Root font family |
-| `--gsl-section-header-title-font` | `var(--gsl-font-header)` | Title font family |
-| `--gsl-section-header-title-size` | `40px` | Title font size |
-| `--gsl-section-header-description-size` | `14px` | Description font size |
-| `--gsl-section-header-margin-bottom` | `24px` | Space below the header, before the section's content |
+| `--clet-section-header-font` | `var(--clet-font-body)` | Root font family |
+| `--clet-section-header-title-font` | `var(--clet-font-header)` | Title font family |
+| `--clet-section-header-title-size` | `40px` | Title font size |
+| `--clet-section-header-description-size` | `14px` | Description font size |
+| `--clet-section-header-margin-bottom` | `24px` | Space below the header, before the section's content |
 
 ## Notes
 
 - `SectionTitle` and `SectionDescription` are optional siblings — `SectionHeader` works with just a title.
 - `SectionActions` is optional too; omit it when there's nothing to put on the right.
 - Below 640px, `SectionActions` drops to a new row below the title/description instead of sitting beside them.
-- `SectionHeader` carries its own bottom margin (`--gsl-section-header-margin-bottom`) — don't add page-level spacing on top of it.
+- `SectionHeader` carries its own bottom margin (`--clet-section-header-margin-bottom`) — don't add page-level spacing on top of it.
 - The primary-variant button in `SectionActions` must always include a leading icon (e.g. `<Plus size={14} strokeWidth={1.5} />`); other buttons in the row are icon-optional.

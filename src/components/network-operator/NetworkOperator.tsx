@@ -28,6 +28,10 @@ const DEFAULT_OPERATORS: NetworkOperatorOption[] = [
   },
 ];
 
+/**
+ * @deprecated Standalone network-operator picker, superseded by the searchable
+ * `Combobox` (build an operator list with `options`) — see the migration guide.
+ */
 export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
   function NetworkOperator(
     {
@@ -64,9 +68,9 @@ export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
       <div
         ref={ref}
         className={cn(
-          "gsl-network-operator",
-          invalid && "gsl-network-operator--invalid",
-          disabled && "gsl-network-operator--disabled",
+          "clet-network-operator",
+          invalid && "clet-network-operator--invalid",
+          disabled && "clet-network-operator--disabled",
           classNames?.root,
           className,
         )}
@@ -78,7 +82,7 @@ export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
               type="button"
               disabled={disabled}
               className={cn(
-                "gsl-network-operator__trigger",
+                "clet-network-operator__trigger",
                 classNames?.trigger,
               )}
               aria-haspopup="listbox"
@@ -92,27 +96,27 @@ export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
                       src={selected.image}
                       alt=""
                       className={cn(
-                        "gsl-network-operator__image",
+                        "clet-network-operator__image",
                         classNames?.image,
                       )}
                     />
                   ) : null}
-                  <span className="gsl-network-operator__label">
+                  <span className="clet-network-operator__label">
                     {selected.label}
                   </span>
                 </>
               ) : (
-                <span className="gsl-network-operator__placeholder">
+                <span className="clet-network-operator__placeholder">
                   {placeholder}
                 </span>
               )}
-              <ChevronDown size={14} strokeWidth={2} aria-hidden className="gsl-network-operator__chevron" />
+              <ChevronDown size={14} strokeWidth={2} aria-hidden className="clet-network-operator__chevron" />
             </button>
           </Popover.Trigger>
 
           <Popover.Portal>
             <Popover.Content
-              className={cn("gsl-network-operator__menu", classNames?.menu)}
+              className={cn("clet-network-operator__menu", classNames?.menu)}
               side="bottom"
               align="start"
               sideOffset={4}
@@ -126,9 +130,9 @@ export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
                   role="option"
                   aria-selected={selectedValue === opt.value}
                   className={cn(
-                    "gsl-network-operator__option",
+                    "clet-network-operator__option",
                     selectedValue === opt.value &&
-                      "gsl-network-operator__option--selected",
+                      "clet-network-operator__option--selected",
                     classNames?.option,
                   )}
                   onClick={() => handleSelect(opt.value)}
@@ -138,12 +142,12 @@ export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
                       src={opt.image}
                       alt=""
                       className={cn(
-                        "gsl-network-operator__image",
+                        "clet-network-operator__image",
                         classNames?.image,
                       )}
                     />
                   ) : null}
-                  <span className="gsl-network-operator__option-label">
+                  <span className="clet-network-operator__option-label">
                     {opt.label}
                   </span>
                 </button>

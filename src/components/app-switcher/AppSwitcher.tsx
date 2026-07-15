@@ -61,8 +61,8 @@ export function AppSwitcher({
     [onAppSelect, closeOnSelect, close],
   );
 
-  const rootClass = ["gsl-app-switcher", className].filter(Boolean).join(" ");
-  const panelClass = ["gsl-app-switcher__panel"].filter(Boolean).join(" ");
+  const rootClass = ["clet-app-switcher", className].filter(Boolean).join(" ");
+  const panelClass = ["clet-app-switcher__panel"].filter(Boolean).join(" ");
   const popoverPlacement = getPopoverPlacement(placement);
 
   return (
@@ -71,7 +71,7 @@ export function AppSwitcher({
         <Popover.Trigger asChild>
           <button
             type="button"
-            className="gsl-app-switcher__trigger"
+            className="clet-app-switcher__trigger"
             aria-label={triggerLabel}
           >
             {trigger ?? <GridIcon />}
@@ -86,38 +86,38 @@ export function AppSwitcher({
             sideOffset={8}
             aria-label={title ?? "Apps"}
           >
-            {title && <div className="gsl-app-switcher__title">{title}</div>}
+            {title && <div className="clet-app-switcher__title">{title}</div>}
 
             {loading ? (
               <div
-                className="gsl-app-switcher__loading"
+                className="clet-app-switcher__loading"
                 aria-busy="true"
                 aria-label={loadingLabel}
               >
                 <Loader2
-                  className="gsl-app-switcher__spinner"
+                  className="clet-app-switcher__spinner"
                   size={24}
                   strokeWidth={2}
                   aria-hidden
                 />
-                <span className="gsl-app-switcher__loading-text">
+                <span className="clet-app-switcher__loading-text">
                   {loadingLabel}
                 </span>
               </div>
             ) : null}
 
             {!loading && apps.length === 0 ? (
-              <div className="gsl-app-switcher__status">
+              <div className="clet-app-switcher__status">
                 No systems available.
               </div>
             ) : null}
 
             {!loading && visibleApps.length > 0 ? (
               <div
-                className="gsl-app-switcher__grid"
+                className="clet-app-switcher__grid"
                 style={
                   {
-                    "--gsl-columns": columns,
+                    "--clet-columns": columns,
                   } as React.CSSProperties
                 }
               >
@@ -132,11 +132,11 @@ export function AppSwitcher({
             ) : null}
 
             {children && (
-              <div className="gsl-app-switcher__extra">{children}</div>
+              <div className="clet-app-switcher__extra">{children}</div>
             )}
 
             {footer && (
-              <div className="gsl-app-switcher__footer">{footer}</div>
+              <div className="clet-app-switcher__footer">{footer}</div>
             )}
           </Popover.Content>
         </Popover.Portal>

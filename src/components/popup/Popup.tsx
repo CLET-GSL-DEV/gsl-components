@@ -34,14 +34,14 @@ export const PopupContent = forwardRef<HTMLDivElement, PopupContentProps>(
       <PopoverPrimitive.Content
         ref={ref}
         sideOffset={sideOffset}
-        className={cn("gsl-popup", classNames?.content, className)}
+        className={cn("clet-popup", classNames?.content, className)}
         {...props}
       >
         {children}
         {showCloseButton ? (
           <PopoverPrimitive.Close
             type="button"
-            className={cn("gsl-popup__close", classNames?.close)}
+            className={cn("clet-popup__close", classNames?.close)}
             aria-label="Close"
           >
             <X size={14} strokeWidth={2} aria-hidden />
@@ -57,7 +57,7 @@ export const PopupHeader = forwardRef<HTMLDivElement, PopupHeaderProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-popup__header", classNames?.header, className)}
+        className={cn("clet-popup__header", classNames?.header, className)}
         {...props}
       >
         {children}
@@ -71,7 +71,7 @@ export const PopupTitle = forwardRef<HTMLHeadingElement, PopupTitleProps>(
     return (
       <h3
         ref={ref}
-        className={cn("gsl-popup__title", classNames?.title, className)}
+        className={cn("clet-popup__title", classNames?.title, className)}
         {...props}
       />
     );
@@ -86,7 +86,7 @@ export const PopupDescription = forwardRef<
     <p
       ref={ref}
       className={cn(
-        "gsl-popup__description",
+        "clet-popup__description",
         classNames?.description,
         className,
       )}
@@ -100,7 +100,7 @@ export const PopupBody = forwardRef<HTMLDivElement, PopupBodyProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-popup__body", classNames?.body, className)}
+        className={cn("clet-popup__body", classNames?.body, className)}
         {...props}
       >
         {children}
@@ -118,8 +118,8 @@ export const PopupFooter = forwardRef<HTMLDivElement, PopupFooterProps>(
       <div
         ref={ref}
         className={cn(
-          "gsl-popup__footer",
-          `gsl-popup__footer--${layout}`,
+          "clet-popup__footer",
+          `clet-popup__footer--${layout}`,
           classNames?.footer,
           className,
         )}

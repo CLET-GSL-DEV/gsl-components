@@ -33,14 +33,14 @@ interface User {
 }
 
 const initialUsers: User[] = [
-  { id: 1, name: "Kwame Asante", email: "kwame@gsl.edu.gh", role: "Admin", status: "Active" },
-  { id: 2, name: "Abena Mensah", email: "abena@gsl.edu.gh", role: "Editor", status: "Active" },
-  { id: 3, name: "Kofi Owusu", email: "kofi@gsl.edu.gh", role: "Viewer", status: "Inactive" },
-  { id: 4, name: "Esi Boateng", email: "esi@gsl.edu.gh", role: "Editor", status: "Active" },
-  { id: 5, name: "Yaw Adom", email: "yaw@gsl.edu.gh", role: "Viewer", status: "Pending" },
-  { id: 6, name: "Nana Yeboah", email: "nana@gsl.edu.gh", role: "Admin", status: "Active" },
-  { id: 7, name: "Akua Donkor", email: "akua@gsl.edu.gh", role: "Editor", status: "Active" },
-  { id: 8, name: "Kwesi Appiah", email: "kwesi@gsl.edu.gh", role: "Viewer", status: "Inactive" },
+  { id: 1, name: "Kwame Asante", email: "kwame@clet.edu.gh", role: "Admin", status: "Active" },
+  { id: 2, name: "Abena Mensah", email: "abena@clet.edu.gh", role: "Editor", status: "Active" },
+  { id: 3, name: "Kofi Owusu", email: "kofi@clet.edu.gh", role: "Viewer", status: "Inactive" },
+  { id: 4, name: "Esi Boateng", email: "esi@clet.edu.gh", role: "Editor", status: "Active" },
+  { id: 5, name: "Yaw Adom", email: "yaw@clet.edu.gh", role: "Viewer", status: "Pending" },
+  { id: 6, name: "Nana Yeboah", email: "nana@clet.edu.gh", role: "Admin", status: "Active" },
+  { id: 7, name: "Akua Donkor", email: "akua@clet.edu.gh", role: "Editor", status: "Active" },
+  { id: 8, name: "Kwesi Appiah", email: "kwesi@clet.edu.gh", role: "Viewer", status: "Inactive" },
 ];
 
 function statusVariant(status: string) {
@@ -75,27 +75,27 @@ function RowActionsMenu({
         <button
           type="button"
           aria-label={`Actions for ${user.name}`}
-          className="gsl-dropdown__trigger"
+          className="clet-dropdown__trigger"
           style={{
             width: 32,
             height: 32,
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            border: "1px solid var(--gsl-border)",
-            borderRadius: "var(--gsl-radius-base)",
+            border: "1px solid var(--clet-border)",
+            borderRadius: "var(--clet-radius-base)",
             background: "transparent",
           }}
         >
           <MoreHorizontal size={16} strokeWidth={1.5} />
         </button>
       </PopoverTrigger>
-      <PopoverContent side="bottom" align="end" sideOffset={4} className="gsl-popover--menu">
-        <div className="gsl-popover__menu" role="menu">
+      <PopoverContent side="bottom" align="end" sideOffset={4} className="clet-popover--menu">
+        <div className="clet-popover__menu" role="menu">
           <PopoverClose asChild>
             <button
               type="button"
-              className="gsl-popover__menu-item"
+              className="clet-popover__menu-item"
               role="menuitem"
               onClick={() => onView(user)}
             >
@@ -106,7 +106,7 @@ function RowActionsMenu({
           <PopoverClose asChild>
             <button
               type="button"
-              className="gsl-popover__menu-item"
+              className="clet-popover__menu-item"
               role="menuitem"
               onClick={() => onEdit(user)}
             >
@@ -117,7 +117,7 @@ function RowActionsMenu({
           <PopoverClose asChild>
             <button
               type="button"
-              className="gsl-popover__menu-item gsl-popover__menu-item--destructive"
+              className="clet-popover__menu-item clet-popover__menu-item--destructive"
               role="menuitem"
               onClick={() => onDelete(user)}
             >

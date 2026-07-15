@@ -297,7 +297,7 @@ export function Dashboard2Page() {
           bulkActions={bulkActions}
           bulkActionsFooter
         />
-        <TableFooter className="gsl-table__footer--no-border">
+        <TableFooter className="clet-table__footer--no-border">
           <TablePagination
             totalPages={totalPages}
             totalItems={filtered.length}

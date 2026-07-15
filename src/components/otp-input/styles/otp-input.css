@@ -1,9 +1,9 @@
-.gsl-otp-input {
+.clet-otp-input {
   display: flex;
   gap: 8px;
 }
 
-.gsl-otp-input__slot {
+.clet-otp-input__slot {
   width: 40px;
   height: 40px;
   padding: 0;
@@ -11,12 +11,12 @@
   appearance: textfield;
 }
 
-.gsl-otp-input__slot::-webkit-outer-spin-button,
-.gsl-otp-input__slot::-webkit-inner-spin-button {
+.clet-otp-input__slot::-webkit-outer-spin-button,
+.clet-otp-input__slot::-webkit-inner-spin-button {
   appearance: none;
   margin: 0;
 }
 
-.gsl-otp-input--disabled {
+.clet-otp-input--disabled {
   opacity: 0.6;
 }

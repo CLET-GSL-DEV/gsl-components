@@ -16,7 +16,7 @@ export function ProfilePopoverLoadingExample() {
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <button
         type="button"
-        className="gsl-profile-menu__item"
+        className="clet-profile-menu__item"
         style={{ alignSelf: "flex-start" }}
         onClick={() => {
           setLoading(true);

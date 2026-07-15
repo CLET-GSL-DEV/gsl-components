@@ -32,7 +32,7 @@ describe("CountrySelector", () => {
     const { container } = render(<CountrySelector className="custom" />);
     const root = container.firstElementChild!;
     expect(root).toHaveClass("custom");
-    expect(root).toHaveClass("gsl-country-selector");
+    expect(root).toHaveClass("clet-country-selector");
   });
 
   it("opens popover and selects a country", async () => {

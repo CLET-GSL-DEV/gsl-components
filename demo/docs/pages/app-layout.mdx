@@ -122,14 +122,14 @@ When `items` is empty, the breadcrumb section is hidden entirely.
 
 | Token | Fallback | Used for |
 |-------|----------|----------|
-| `--gsl-app-layout-body-gap` | `1rem` | Gap between layout sections |
-| `--gsl-app-layout-gap` | `1rem` | Outer padding and flex gap |
-| `--gsl-panel-bg` | `--gsl-surface-subtle` | Content area background |
-| `--gsl-panel-radius` | `--gsl-radius-2xl` | Content area and body border radius |
-| `--gsl-app-layout-font` | `--gsl-font-body` | Font family for the root layout element |
-| `--gsl-scroll-fade` | `1` | Opacity multiplier for the top/bottom scroll fade overlays on the body |
-| `--gsl-scroll-fade-height` | `calc(var(--gsl-app-layout-body-gap) * 3)` | Height of the bottom (and, unless overridden, top) scroll fade overlay |
-| `--gsl-scroll-fade-width` | `100%` | Width of the top/bottom scroll fade overlays |
+| `--clet-app-layout-body-gap` | `1rem` | Gap between layout sections |
+| `--clet-app-layout-gap` | `1rem` | Outer padding and flex gap |
+| `--clet-panel-bg` | `--clet-surface-subtle` | Content area background |
+| `--clet-panel-radius` | `--clet-radius-2xl` | Content area and body border radius |
+| `--clet-app-layout-font` | `--clet-font-body` | Font family for the root layout element |
+| `--clet-scroll-fade` | `1` | Opacity multiplier for the top/bottom scroll fade overlays on the body |
+| `--clet-scroll-fade-height` | `calc(var(--clet-app-layout-body-gap) * 3)` | Height of the bottom (and, unless overridden, top) scroll fade overlay |
+| `--clet-scroll-fade-width` | `100%` | Width of the top/bottom scroll fade overlays |
 
 ## Notes
 
@@ -140,4 +140,4 @@ When `items` is empty, the breadcrumb section is hidden entirely.
 - Auto-positioning works by reading `componentId` from the child element's render function — only direct children are scanned.
 - Do NOT wrap children in Fragments, conditionals, or unknown elements — `AppLayout` only auto-positions components with `componentId` matching `"AppHeader"`, `"AppSidebar"`, or `"AppBody"`. Anything else is silently ignored and won't render.
 - Breadcrumbs are rendered from context. Call `useBreadcrumbs()` from any child, AppLayout handles the rest. When items is empty, breadcrumbs are hidden.
-- Content area background differs by variant: `"default"` fills the content area with `--gsl-panel-bg` (a distinct panel card); `"stacked"` uses `--gsl-main-bg` directly instead, so it reads flush with the page rather than as a separate panel.
+- Content area background differs by variant: `"default"` fills the content area with `--clet-panel-bg` (a distinct panel card); `"stacked"` uses `--clet-main-bg` directly instead, so it reads flush with the page rather than as a separate panel.

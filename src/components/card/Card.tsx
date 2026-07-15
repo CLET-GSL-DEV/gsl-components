@@ -10,7 +10,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   return (
     <div
       ref={ref}
-      className={cn("gsl-card", className)}
+      className={cn("clet-card", className)}
       {...props}
     >
       {children}
@@ -25,7 +25,7 @@ export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(function C
   return (
     <div
       ref={ref}
-      className={cn("gsl-card__header", className)}
+      className={cn("clet-card__header", className)}
       {...props}
     >
       {children}
@@ -40,7 +40,7 @@ export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(function
   return (
     <h3
       ref={ref}
-      className={cn("gsl-card__title", className)}
+      className={cn("clet-card__title", className)}
       {...props}
     >
       {children}
@@ -55,7 +55,7 @@ export const CardActions = forwardRef<HTMLDivElement, CardActionsProps>(function
   return (
     <div
       ref={ref}
-      className={cn("gsl-card__actions", className)}
+      className={cn("clet-card__actions", className)}
       {...props}
     >
       {children}

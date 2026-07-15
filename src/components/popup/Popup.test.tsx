@@ -111,9 +111,9 @@ describe("Popup", () => {
 
     await user.click(screen.getByRole("button", { name: "Open" }));
 
-    expect(screen.getByText("Body content").closest(".gsl-popup__body")).not.toBeNull();
-    expect(screen.getByText("Confirm").closest(".gsl-popup__footer")).toHaveClass(
-      "gsl-popup__footer--stack",
+    expect(screen.getByText("Body content").closest(".clet-popup__body")).not.toBeNull();
+    expect(screen.getByText("Confirm").closest(".clet-popup__footer")).toHaveClass(
+      "clet-popup__footer--stack",
     );
   });
 
@@ -151,8 +151,8 @@ describe("Popup", () => {
 
     await user.click(screen.getByRole("button", { name: "Open" }));
 
-    expect(screen.getByText("Title").closest(".gsl-popup")).toHaveClass(
-      "gsl-popup",
+    expect(screen.getByText("Title").closest(".clet-popup")).toHaveClass(
+      "clet-popup",
       "custom-popup",
     );
   });

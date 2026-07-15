@@ -2,10 +2,10 @@ export const meta = {
   title: "Migration guide: v1 → v2",
   description: "Agent instructions for upgrading to v2 and the new design system",
   category: "Guide",
-  keywords: ["migration", "upgrade", "v2", "breaking changes", "deprecated", "new design system", "AppHeaderProfile", "ProfilePopover", "Launchpad", "AppSwitcher", "rebrand", "AppLayout", "Sidebar", "RoleSelect", "stacked layout", "CountrySelector", "Combobox"],
+  keywords: ["migration", "upgrade", "v2", "breaking changes", "deprecated", "new design system", "AppHeaderProfile", "ProfilePopover", "Launchpad", "AppSwitcher", "rebrand", "AppLayout", "Sidebar", "RoleSelect", "stacked layout", "CountrySelector", "Combobox", "NetworkOperator"],
   since: "2.0.0",
   status: "guide",
-  related: ["changelog", "getting-started", "theme", "app-header", "app-switcher", "launchpad", "table", "sidebar", "profile-popover", "role-select", "app-layout", "metric-card", "tabs", "country-selector", "combobox"],
+  related: ["changelog", "getting-started", "theme", "app-header", "app-switcher", "launchpad", "table", "sidebar", "profile-popover", "role-select", "app-layout", "metric-card", "tabs", "country-selector", "combobox", "network-operator"],
 };
 
 # Migration guide: v1 → v2 — Agent Instructions
@@ -94,33 +94,33 @@ Better: switch to `Launchpad` (see §6).
 
 ## 5. Rebrand: new default colors and typography
 
-**If no `--gsl-*` overrides set:**
+**If no `--clet-*` overrides set:**
 
-- `--gsl-primary`/`--gsl-primary-light`: red (`#dc2626`/`#ef4444`) → navy (`#051b2c`/`#4a7fa8`)
-- New `--gsl-secondary` (gold `#c8a24b`) — default `SidebarLink` active-link color
-- New typography: `--gsl-font-header` (Roboto Serif), `--gsl-font-body` (Lato) via `@fontsource/lato`, `@fontsource/roboto-serif`
+- `--clet-primary`/`--clet-primary-light`: red (`#dc2626`/`#ef4444`) → navy (`#051b2c`/`#4a7fa8`)
+- New `--clet-secondary` (gold `#c8a24b`) — default `SidebarLink` active-link color
+- New typography: `--clet-font-header` (Roboto Serif), `--clet-font-body` (Lato) via `@fontsource/lato`, `@fontsource/roboto-serif`
 
-**To override:** put the call in `src/gsl.theme.ts` (see [Theme](/docs/theme#recommended-file-srcgsltheme-ts) for the recommended file convention) and side-effect-import it once in your entry point:
+**To override:** put the call in `src/clet.theme.ts` (see [Theme](/docs/theme#recommended-file-srcclettheme-ts) for the recommended file convention) and side-effect-import it once in your entry point:
 
-```ts title="src/gsl.theme.ts"
-import { gslTheme } from "@rfdtech/components";
-gslTheme({ all: { primary: "#dc2626", primaryLight: "#fef2f2" } });
+```ts title="src/clet.theme.ts"
+import { cletTheme } from "@rfdtech/components";
+cletTheme({ all: { primary: "#dc2626", primaryLight: "#fef2f2" } });
 ```
 
 ```ts title="src/main.tsx"
 import "@rfdtech/components/style.css";
-import "./gsl.theme";
+import "./clet.theme";
 ```
 
 ```css
-:root { --gsl-font-header: var(--gsl-font); --gsl-font-body: var(--gsl-font); }
+:root { --clet-font-header: var(--clet-font); --clet-font-body: var(--clet-font); }
 ```
 
 **To keep new defaults: do nothing.** See `.legacy-theme` in `demo/demo.css` for the old red look reference.
 
-**Migrating a project that already has `--gsl-*` token overrides?** Find every existing override of
-a *known* `--gsl-*` token — a `gslTheme()` call (`src/gsl.theme.ts` or elsewhere) or hand-written
-CSS setting a real `--gsl-*` custom property, cross-checked against `get_tokens()`. This is about
+**Migrating a project that already has `--clet-*` token overrides?** Find every existing override of
+a *known* `--clet-*` token — a `cletTheme()` call (`src/clet.theme.ts` or elsewhere) or hand-written
+CSS setting a real `--clet-*` custom property, cross-checked against `get_tokens()`. This is about
 recognized library tokens only — not custom/arbitrary CSS variables or component-local one-off
 styling. List every one found and **ask the user about each token individually** — keep the
 existing override, or drop it for the new approved default. Don't decide silently, and don't batch
@@ -184,6 +184,29 @@ themselves changed.
 +/>
 ```
 
+## 8. `NetworkOperator` → `Combobox`
+
+**Deprecation, not breaking.** `NetworkOperator` still works unchanged. No forced migration, no removal date. It receives no new features or design updates.
+
+**When you encounter `NetworkOperator`:** replace with `Combobox` — build the option list from `NetworkOperator`'s `options` shape (`{ value, label, image? }`); `image` maps to `Combobox`'s per-option `icon` (pass an `<img>` element).
+
+```diff
+-import { NetworkOperator } from "@rfdtech/components";
++import { Combobox } from "@rfdtech/components";
+
+-<NetworkOperator value={operator} onChange={setOperator} options={operators} />
++<Combobox
++  aria-label="Network operator"
++  options={operators.map((o) => ({
++    value: o.value,
++    label: o.label,
++    icon: o.image ? <img src={o.image} alt="" /> : undefined,
++  }))}
++  value={operator}
++  onValueChange={setOperator}
++/>
+```
+
 ## Adopting the new design system
 
 This is the actual "v2" migration. §1–§7 are about not breaking on version bump. This section is about looking like the new design system. None required for existing screens to compile. All required for new/touched screens.
@@ -208,7 +231,7 @@ Adopt as a set, not individually:
 ```
 
 - **`AppLayout variant="stacked"`**: header spans full width on top, sidebar + content side by side below. Default (`"default"`) runs sidebar full-height on left, header only spans content column.
-- **`AppHeader variant="plain"`**: square corners, `--gsl-primary` background, on-primary text. Continuous top bar with branding.
+- **`AppHeader variant="plain"`**: square corners, `--clet-primary` background, on-primary text. Continuous top bar with branding.
 - **`Sidebar variant="plain"`**: transparent bg + right border instead of panel surface. Removes boxed-in panel-inside-panel look.
 
 **`SidebarGroup collapsible`:** All nav groups use accordion sections, not flat lists. Initialize with `Main` group expanded, others collapsed.
@@ -297,7 +320,7 @@ Neither `ProfilePopover` above passes `items` — both render the default "My Pr
 | ----------- | -------- | ------ |
 | `TableContent` | `variant="panel"` | `"default"` |
 | `TableFilter` | `variant="spread"` | `"popover"` (default) |
-| `TableFooter` | `className="gsl-table__footer--no-border"` | default top border |
+| `TableFooter` | `className="clet-table__footer--no-border"` | default top border |
 
 ```diff
  <Table paramPrefix="members">
@@ -311,13 +334,13 @@ Neither `ProfilePopover` above passes `items` — both render the default "My Pr
 -  <TableContent variant="panel" columns={columns} data={data} rowKey={...} />
 +  <TableContent variant="panel" columns={columns} data={data} rowKey={...} />
 -  <TableFooter>
-+  <TableFooter className="gsl-table__footer--no-border">
++  <TableFooter className="clet-table__footer--no-border">
      <TablePagination ... />
    </TableFooter>
  </Table>
 ```
 
-`gsl-table__footer--no-border` is a real library class (`.gsl-table__footer--no-border { border-top: none; }`), not a demo hack.
+`clet-table__footer--no-border` is a real library class (`.clet-table__footer--no-border { border-top: none; }`), not a demo hack.
 
 ### Other preferred variants
 
@@ -341,7 +364,7 @@ All variants above are additive — no deadline to migrate old screens. But any 
 - [ ] Pass `maxItems={apps.length}` to any `AppSwitcher` with >6 apps, or switch to `Launchpad` (§3)
 - [ ] Add explicit `rowActions` Select/Deselect to `selectable`-only tables that need it (§4)
 - [ ] Decide to keep or override new brand colors/typography (§5)
-- [ ] If the project already has `--gsl-*` token overrides, list every known-token override found and ask the user per-token whether to keep it or adopt the new default — never decide silently (§5)
+- [ ] If the project already has `--clet-*` token overrides, list every known-token override found and ask the user per-token whether to keep it or adopt the new default — never decide silently (§5)
 
 **Design system adoption (the actual "looks like v2" bar — for new/touched screens):**
 
@@ -355,7 +378,7 @@ All variants above are additive — no deadline to migrate old screens. But any 
 - [ ] `RoleSelect` wired into all three locations (`Launchpad`, header `ProfilePopover`, sidebar footer `ProfilePopover`) from the same state, whenever the system allows more than one role — not just one or two of the three ("One role switcher")
 - [ ] Header `ProfilePopover` uses `variant="avatar"` when sidebar footer exists ("One role switcher")
 - [ ] Neither `ProfilePopover` passes a custom `items` array unless the system needs rows other than the built-in "My Profile"/"Account Settings"/"Help and Support" defaults ("One role switcher")
-- [ ] New/touched `Table`s use all three: `TableContent variant="panel"`, `TableFilter variant="spread"`, `TableFooter className="gsl-table__footer--no-border"`
+- [ ] New/touched `Table`s use all three: `TableContent variant="panel"`, `TableFilter variant="spread"`, `TableFooter className="clet-table__footer--no-border"`
 - [ ] `MetricCard variant="outline"`, `Tabs variant="pill"` on new usage
 - [ ] New page headers use `SectionHeader`/`SectionTitle`/`SectionDescription`/`SectionActions`
 - [ ] `Launchpad`'s expand button shows its icon always, its "See more" label only once `apps.length` exceeds 9 — never the old bordered "See all" button

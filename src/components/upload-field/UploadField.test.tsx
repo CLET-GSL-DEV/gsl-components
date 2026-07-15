@@ -27,12 +27,12 @@ describe("UploadField", () => {
 
   it("renders upload button", () => {
     render(<UploadField />);
-    expect(document.querySelector(".gsl-upload-field__action")).toHaveTextContent("Upload file");
+    expect(document.querySelector(".clet-upload-field__action")).toHaveTextContent("Upload file");
   });
 
   it("renders cloud upload icon", () => {
     render(<UploadField />);
-    expect(document.querySelector(".gsl-upload-field__icon .lucide-cloud-upload")).toBeInTheDocument();
+    expect(document.querySelector(".clet-upload-field__icon .lucide-cloud-upload")).toBeInTheDocument();
   });
 
   it("forwards ref to the root element", () => {
@@ -43,23 +43,23 @@ describe("UploadField", () => {
 
   it("applies invalid styling and aria-invalid", () => {
     render(<UploadField invalid />);
-    expect(document.querySelector(".gsl-upload-field--invalid")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-upload-field")).toHaveAttribute("aria-invalid", "true");
+    expect(document.querySelector(".clet-upload-field--invalid")).toBeInTheDocument();
+    expect(document.querySelector(".clet-upload-field")).toHaveAttribute("aria-invalid", "true");
   });
 
   it("respects aria-invalid over invalid prop", () => {
     render(<UploadField invalid={false} aria-invalid="true" />);
-    expect(document.querySelector(".gsl-upload-field--invalid")).toBeInTheDocument();
+    expect(document.querySelector(".clet-upload-field--invalid")).toBeInTheDocument();
   });
 
   it("applies disabled styling and class", () => {
     render(<UploadField disabled />);
-    expect(document.querySelector(".gsl-upload-field--disabled")).toBeInTheDocument();
+    expect(document.querySelector(".clet-upload-field--disabled")).toBeInTheDocument();
   });
 
   it("forwards aria-describedby", () => {
     render(<UploadField aria-describedby="desc-id" />);
-    expect(document.querySelector(".gsl-upload-field")).toHaveAttribute("aria-describedby", "desc-id");
+    expect(document.querySelector(".clet-upload-field")).toHaveAttribute("aria-describedby", "desc-id");
   });
 
   it("merges classNames onto parts", () => {
@@ -72,8 +72,8 @@ describe("UploadField", () => {
         }}
       />,
     );
-    expect(document.querySelector(".gsl-upload-field")).toHaveClass("custom-root");
-    expect(document.querySelector(".gsl-upload-field")).toHaveClass("custom-classname");
+    expect(document.querySelector(".clet-upload-field")).toHaveClass("custom-root");
+    expect(document.querySelector(".clet-upload-field")).toHaveClass("custom-classname");
   });
 
   it("triggers onChange with single file on selection", () => {
@@ -108,7 +108,7 @@ describe("UploadField", () => {
     await user.click(removeButton);
 
     expect(onChange).toHaveBeenCalledWith(null);
-    expect(document.querySelector(".gsl-upload-field__action")).toHaveTextContent("Upload file");
+    expect(document.querySelector(".clet-upload-field__action")).toHaveTextContent("Upload file");
   });
 
   it("does not show remove button when disabled", () => {
@@ -119,18 +119,18 @@ describe("UploadField", () => {
 
   it("applies drag-over class when dragging over dropzone", () => {
     render(<UploadField />);
-    const dropzone = document.querySelector(".gsl-upload-field")!;
+    const dropzone = document.querySelector(".clet-upload-field")!;
     fireEvent.dragOver(dropzone, { bubbles: true });
-    expect(document.querySelector(".gsl-upload-field--drag-over")).toBeInTheDocument();
+    expect(document.querySelector(".clet-upload-field--drag-over")).toBeInTheDocument();
   });
 
   it("removes drag-over class on drag leave", () => {
     render(<UploadField />);
-    const dropzone = document.querySelector(".gsl-upload-field")!;
+    const dropzone = document.querySelector(".clet-upload-field")!;
     fireEvent.dragOver(dropzone, { bubbles: true });
-    expect(document.querySelector(".gsl-upload-field--drag-over")).toBeInTheDocument();
+    expect(document.querySelector(".clet-upload-field--drag-over")).toBeInTheDocument();
     fireEvent.dragLeave(dropzone, { bubbles: true });
-    expect(document.querySelector(".gsl-upload-field--drag-over")).not.toBeInTheDocument();
+    expect(document.querySelector(".clet-upload-field--drag-over")).not.toBeInTheDocument();
   });
 
   it("handles multiple files when multiple is true", () => {
@@ -175,7 +175,7 @@ describe("UploadField", () => {
   it("displays correct icon for pdf files", () => {
     const file = createFile("doc.pdf", "application/pdf");
     render(<UploadField value={file} onChange={() => {}} />);
-    const fileIcon = document.querySelector(".gsl-upload-field__file-card-icon");
+    const fileIcon = document.querySelector(".clet-upload-field__file-card-icon");
     expect(fileIcon?.querySelector("svg")).toBeInTheDocument();
   });
 
@@ -210,7 +210,7 @@ describe("UploadField", () => {
     expect(screen.getByRole("button", { name: "Replace file" })).toBeInTheDocument();
 
     rerender(<UploadField value={null} onChange={() => {}} />);
-    expect(document.querySelector(".gsl-upload-field__action")).toHaveTextContent("Upload file");
+    expect(document.querySelector(".clet-upload-field__action")).toHaveTextContent("Upload file");
   });
 
   // Uncontrolled mode
@@ -277,9 +277,9 @@ describe("UploadField file status", () => {
       />,
     );
 
-    expect(document.querySelector(".gsl-progress-bar")).toBeInTheDocument();
+    expect(document.querySelector(".clet-progress-bar")).toBeInTheDocument();
     expect(
-      document.querySelector(".gsl-progress-bar__indicator"),
+      document.querySelector(".clet-progress-bar__indicator"),
     ).toHaveStyle({ width: "40%" });
 
     const cancelButton = screen.getByRole("button", {
@@ -303,7 +303,7 @@ describe("UploadField file status", () => {
     );
 
     expect(
-      document.querySelector(".gsl-upload-field__file-card-completed-icon"),
+      document.querySelector(".clet-upload-field__file-card-completed-icon"),
     ).toBeInTheDocument();
 
     const removeButton = screen.getByRole("button", {
@@ -328,7 +328,7 @@ describe("UploadField file status", () => {
     );
 
     expect(
-      document.querySelector(".gsl-upload-field__file-card--failed"),
+      document.querySelector(".clet-upload-field__file-card--failed"),
     ).toBeInTheDocument();
     expect(screen.getByText("Network error")).toBeInTheDocument();
 

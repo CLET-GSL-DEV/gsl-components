@@ -32,7 +32,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     return (
       <nav
         ref={ref}
-        className={cn("gsl-breadcrumb", classNames?.root, className)}
+        className={cn("clet-breadcrumb", classNames?.root, className)}
         aria-label={ariaLabel}
         {...props}
       >
@@ -47,7 +47,7 @@ export const BreadcrumbList = forwardRef<HTMLOListElement, BreadcrumbListProps>(
     return (
       <ol
         ref={ref}
-        className={cn("gsl-breadcrumb__list", classNames?.list, className)}
+        className={cn("clet-breadcrumb__list", classNames?.list, className)}
         {...props}
       >
         {children}
@@ -61,7 +61,7 @@ export const BreadcrumbItem = forwardRef<HTMLLIElement, BreadcrumbItemProps>(
     return (
       <li
         ref={ref}
-        className={cn("gsl-breadcrumb__item", classNames?.item, className)}
+        className={cn("clet-breadcrumb__item", classNames?.item, className)}
         {...props}
       >
         {children}
@@ -83,7 +83,7 @@ export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>
     ref,
   ) {
     const linkClassName = cn(
-      "gsl-breadcrumb__link",
+      "clet-breadcrumb__link",
       classNames?.link,
       className,
     );
@@ -122,7 +122,7 @@ export const BreadcrumbPage = forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
     return (
       <span
         ref={ref}
-        className={cn("gsl-breadcrumb__page", classNames?.page, className)}
+        className={cn("clet-breadcrumb__page", classNames?.page, className)}
         aria-current="page"
         {...props}
       >
@@ -145,7 +145,7 @@ export const BreadcrumbSeparator = forwardRef<
       role="presentation"
       aria-hidden="true"
       className={cn(
-        "gsl-breadcrumb__separator",
+        "clet-breadcrumb__separator",
         classNames?.separator,
         className,
       )}
@@ -174,14 +174,14 @@ export const BreadcrumbEllipsis = forwardRef<
   return (
     <span
       ref={ref}
-      className={cn("gsl-breadcrumb__ellipsis", classNames?.ellipsis, className)}
+      className={cn("clet-breadcrumb__ellipsis", classNames?.ellipsis, className)}
       {...props}
     >
       {children ?? (
         <MoreHorizontal size={16} strokeWidth={2} aria-hidden="true" />
       )}
       <span
-        className={cn("gsl-breadcrumb__sr-only", classNames?.srOnly)}
+        className={cn("clet-breadcrumb__sr-only", classNames?.srOnly)}
       >
         {srLabel}
       </span>

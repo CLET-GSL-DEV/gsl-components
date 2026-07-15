@@ -1,16 +1,16 @@
-.gsl-toast__viewport {
+.clet-toast__viewport {
   --width: min(100vw - 32px, 380px);
   --offset-bottom: 24px;
   --offset-right: 24px;
-  --gsl-toast-font: var(--gsl-font-body);
-  font-family: var(--gsl-toast-font);
+  --clet-toast-font: var(--clet-font-body);
+  font-family: var(--clet-toast-font);
 }
 
-[data-sonner-toaster].gsl-toast__viewport {
+[data-sonner-toaster].clet-toast__viewport {
   z-index: 1000;
 }
 
-[data-sonner-toast].gsl-toast {
+[data-sonner-toast].clet-toast {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   grid-template-rows: auto auto;
@@ -20,29 +20,29 @@
   max-width: 100%;
   min-width: 0;
   padding: 12px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-xl);
-  background: color-mix(in srgb, var(--gsl-bg) 96%, transparent);
+  border: 1px solid var(--clet-border);
+  border-radius: var(--clet-radius-xl);
+  background: color-mix(in srgb, var(--clet-bg) 96%, transparent);
   backdrop-filter: blur(8px);
-  box-shadow: var(--gsl-shadow-md);
+  box-shadow: var(--clet-shadow-md);
   pointer-events: auto;
 }
 
-.gsl-toast--default {
-  border-color: var(--gsl-border);
+.clet-toast--default {
+  border-color: var(--clet-border);
 }
 
-.gsl-toast [data-icon] {
+.clet-toast [data-icon] {
   grid-column: 1;
   grid-row: 1;
 }
 
-.gsl-toast:has([data-action]) [data-icon] {
+.clet-toast:has([data-action]) [data-icon] {
   grid-row: 1 / 3;
   align-self: start;
 }
 
-.gsl-toast [data-content] {
+.clet-toast [data-content] {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -51,77 +51,77 @@
   min-width: 0;
 }
 
-.gsl-toast:not(:has([data-icon])) [data-content] {
+.clet-toast:not(:has([data-icon])) [data-content] {
   grid-column: 1 / 3;
 }
 
-.gsl-toast [data-close-button] {
+.clet-toast [data-close-button] {
   grid-column: 3;
   grid-row: 1;
   justify-self: end;
 }
 
-.gsl-toast [data-action] {
+.clet-toast [data-action] {
   grid-column: 2 / 4;
   grid-row: 2;
   justify-self: end;
 }
 
-.gsl-toast:not(:has([data-icon])) [data-action] {
+.clet-toast:not(:has([data-icon])) [data-action] {
   grid-column: 1 / 4;
 }
 
-.gsl-toast__icon {
+.clet-toast__icon {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   margin-top: 2px;
-  color: var(--gsl-text-muted);
+  color: var(--clet-text-muted);
 }
 
-.gsl-toast--success .gsl-toast__icon {
-  color: var(--gsl-success);
+.clet-toast--success .clet-toast__icon {
+  color: var(--clet-success);
 }
 
-.gsl-toast--warning .gsl-toast__icon {
-  color: var(--gsl-warning);
+.clet-toast--warning .clet-toast__icon {
+  color: var(--clet-warning);
 }
 
-.gsl-toast--error .gsl-toast__icon {
-  color: var(--gsl-error);
+.clet-toast--error .clet-toast__icon {
+  color: var(--clet-error);
 }
 
-.gsl-toast__title {
+.clet-toast__title {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.4;
-  color: var(--gsl-text);
+  color: var(--clet-text);
 }
 
-.gsl-toast--success .gsl-toast__title {
-  color: var(--gsl-success);
+.clet-toast--success .clet-toast__title {
+  color: var(--clet-success);
 }
 
-.gsl-toast--warning .gsl-toast__title {
-  color: var(--gsl-warning);
+.clet-toast--warning .clet-toast__title {
+  color: var(--clet-warning);
 }
 
-.gsl-toast--error .gsl-toast__title {
-  color: var(--gsl-error);
+.clet-toast--error .clet-toast__title {
+  color: var(--clet-error);
 }
 
-.gsl-toast__description {
+.clet-toast__description {
   font-size: 13px;
   line-height: 1.5;
-  color: var(--gsl-text-secondary);
+  color: var(--clet-text-secondary);
 }
 
-.gsl-toast__action {
-  /* styled via gsl-button gsl-button--secondary gsl-button--sm */
+.clet-toast__action {
+  /* styled via clet-button clet-button--secondary clet-button--sm */
 }
 
-.gsl-toast__close {
+.clet-toast__close {
   margin: -6px -6px 0 0;
   min-width: 32px;
   padding: 4px;
@@ -130,7 +130,7 @@
 }
 
 @media (width <= 768px) {
-  .gsl-toast__viewport {
+  .clet-toast__viewport {
     --offset-right: 16px;
     --offset-left: 16px;
     --offset-bottom: 16px;
@@ -139,7 +139,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-toast {
+  .clet-toast {
     animation: none;
   }
 }

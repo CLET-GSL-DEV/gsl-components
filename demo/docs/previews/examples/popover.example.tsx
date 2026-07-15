@@ -23,16 +23,16 @@ export function PopoverExample() {
         side="bottom"
         align="end"
         sideOffset={4}
-        className="gsl-popover--menu"
+        className="clet-popover--menu"
       >
-        <div className="gsl-popover__menu" role="menu">
+        <div className="clet-popover__menu" role="menu">
           {menuItems.map(({ label, icon: Icon, destructive }) => (
             <PopoverClose asChild key={label}>
               <button
                 type="button"
                 className={[
-                  "gsl-popover__menu-item",
-                  destructive ? "gsl-popover__menu-item--destructive" : "",
+                  "clet-popover__menu-item",
+                  destructive ? "clet-popover__menu-item--destructive" : "",
                 ]
                   .filter(Boolean)
                   .join(" ")}

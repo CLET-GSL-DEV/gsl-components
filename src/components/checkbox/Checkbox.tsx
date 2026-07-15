@@ -26,15 +26,15 @@ export function Checkbox({
   return (
     <Wrapper
       className={cn(
-        "gsl-checkbox",
-        disabled && "gsl-checkbox--disabled",
+        "clet-checkbox",
+        disabled && "clet-checkbox--disabled",
         classNames?.root,
         className,
       )}
     >
       <CheckboxPrimitive.Root
         id={id}
-        className={cn("gsl-checkbox__control", classNames?.control)}
+        className={cn("clet-checkbox__control", classNames?.control)}
         checked={checked}
         defaultChecked={defaultChecked}
         onCheckedChange={onCheckedChange}
@@ -45,10 +45,10 @@ export function Checkbox({
         aria-label={!label ? ariaLabel : undefined}
       >
         <CheckboxPrimitive.Indicator
-          className={cn("gsl-checkbox__indicator", classNames?.indicator)}
+          className={cn("clet-checkbox__indicator", classNames?.indicator)}
         >
           <Check
-            className={cn("gsl-checkbox__icon", classNames?.icon)}
+            className={cn("clet-checkbox__icon", classNames?.icon)}
             size={14}
             strokeWidth={2.5}
             aria-hidden
@@ -56,7 +56,7 @@ export function Checkbox({
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
       {label ? (
-        <span className={cn("gsl-checkbox__label", classNames?.label)}>
+        <span className={cn("clet-checkbox__label", classNames?.label)}>
           {label}
         </span>
       ) : null}

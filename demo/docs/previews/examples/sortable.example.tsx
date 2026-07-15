@@ -22,9 +22,9 @@ export function SortableExample() {
         width: "100%",
         maxWidth: 360,
         padding: 12,
-        border: "1px dashed var(--gsl-border)",
-        borderRadius: "var(--gsl-radius-base)",
-        background: "var(--gsl-surface-subtle)",
+        border: "1px dashed var(--clet-border)",
+        borderRadius: "var(--clet-radius-base)",
+        background: "var(--clet-surface-subtle)",
       }}
     >
       <Sortable items={items} onReorder={(ids) => setItems(ids as string[])}>

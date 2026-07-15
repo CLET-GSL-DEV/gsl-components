@@ -4,9 +4,9 @@ export function MetricCardExample() {
   return (
     <div
       style={{
-        background: "var(--gsl-surface-subtle)",
+        background: "var(--clet-surface-subtle)",
         padding: 20,
-        borderRadius: "var(--gsl-radius-xl)",
+        borderRadius: "var(--clet-radius-xl)",
         width: "100%",
       }}
     >

@@ -2,7 +2,7 @@ export const meta = {
   title: "Theme",
   description: "Theme provider",
   category: "Guide",
-  keywords: ["theme", "dark mode", "light mode", "theme provider", "design tokens", "tailwind", "gsltheme", "runtime theme override", "component tokens", "customize colors"],
+  keywords: ["theme", "dark mode", "light mode", "theme provider", "design tokens", "tailwind", "clettheme", "runtime theme override", "component tokens", "customize colors"],
   since: "1.3.0",
   status: "guide",
   related: ["getting-started"],
@@ -60,80 +60,80 @@ function ThemeSwitcher() {
 
 ## CSS tokens
 
-Tokens are defined in `theme.css` and applied on `.gsl-theme` and `document.documentElement` (for portaled overlays such as modals and popovers).
+Tokens are defined in `theme.css` and applied on `.clet-theme` and `document.documentElement` (for portaled overlays such as modals and popovers).
 
-Every **color** token below also has a `--clet-*` alias with the identical value (e.g. `--gsl-primary` / `--clet-primary`) — **prefer `--clet-*` in new code**; `--gsl-*` keeps working unchanged (each `--gsl-*` color token is defined as `var(--clet-*)` under the hood, so overriding either name has the same effect). Non-color tokens (radius, shadow, z-index, font) only have a `--gsl-*` name.
+Every **color** token below also has a `--clet-*` alias with the identical value (e.g. `--clet-primary` / `--clet-primary`) — **prefer `--clet-*` in new code**; `--clet-*` keeps working unchanged (each `--clet-*` color token is defined as `var(--clet-*)` under the hood, so overriding either name has the same effect). Non-color tokens (radius, shadow, z-index, font) only have a `--clet-*` name.
 
 ### Colors
 
 | Token | Use |
 |-------|-----|
-| `--gsl-bg` | Input, popover, and card backgrounds |
-| `--gsl-text` | Body text |
-| `--gsl-text-secondary` | Secondary text, icons |
-| `--gsl-text-muted` | Muted/placeholder text |
-| `--gsl-border` | Borders |
-| `--gsl-border-strong` | Hover borders, active borders |
-| `--gsl-hover` | Hover backgrounds |
-| `--gsl-surface-subtle` | Sidebar, panel backgrounds |
-| `--gsl-surface-dark` | Active sidebar states |
-| `--gsl-surface-card` | Card component background (defaults to `--gsl-bg`) |
-| `--gsl-main-bg` | Page/app layout background |
-| `--gsl-overlay` | Modal/dialog backdrops |
+| `--clet-bg` | Input, popover, and card backgrounds |
+| `--clet-text` | Body text |
+| `--clet-text-secondary` | Secondary text, icons |
+| `--clet-text-muted` | Muted/placeholder text |
+| `--clet-border` | Borders |
+| `--clet-border-strong` | Hover borders, active borders |
+| `--clet-hover` | Hover backgrounds |
+| `--clet-surface-subtle` | Sidebar, panel backgrounds |
+| `--clet-surface-dark` | Active sidebar states |
+| `--clet-surface-card` | Card component background (defaults to `--clet-bg`) |
+| `--clet-main-bg` | Page/app layout background |
+| `--clet-overlay` | Modal/dialog backdrops |
 
 ### Semantic
 
 | Token | Use |
 |-------|-----|
-| `--gsl-primary` | Buttons, focus rings, accents, avatar bg |
-| `--gsl-primary-light` | Focus ring background, selected backgrounds |
-| `--gsl-secondary` | Gold brand accent (e.g. active `SidebarLink`) |
-| `--gsl-on-primary` | Text on primary backgrounds |
-| `--gsl-focus` | Focus ring color (defaults to `--gsl-primary`) |
-| `--gsl-error` | Invalid borders, error text, destructive actions |
-| `--gsl-error-text` | Error message text |
-| `--gsl-error-bg` | Destructive action hover background |
-| `--gsl-success` | Success trend, success variant color |
-| `--gsl-warning` | Warning trend, warning variant color |
+| `--clet-primary` | Buttons, focus rings, accents, avatar bg |
+| `--clet-primary-light` | Focus ring background, selected backgrounds |
+| `--clet-secondary` | Gold brand accent (e.g. active `SidebarLink`) |
+| `--clet-on-primary` | Text on primary backgrounds |
+| `--clet-focus` | Focus ring color (defaults to `--clet-primary`) |
+| `--clet-error` | Invalid borders, error text, destructive actions |
+| `--clet-error-text` | Error message text |
+| `--clet-error-bg` | Destructive action hover background |
+| `--clet-success` | Success trend, success variant color |
+| `--clet-warning` | Warning trend, warning variant color |
 
 ### Radius
 
 | Token | Default | Use |
 |-------|---------|-----|
-| `--gsl-radius-base` | `8px` | Default border radius for inputs, menus, cards |
-| `--gsl-radius-xl` | `16px` | Pill inputs, header search bar, popovers |
-| `--gsl-radius-2xl` | `24px` | Sidebar, app layout panels |
+| `--clet-radius-base` | `8px` | Default border radius for inputs, menus, cards |
+| `--clet-radius-xl` | `16px` | Pill inputs, header search bar, popovers |
+| `--clet-radius-2xl` | `24px` | Sidebar, app layout panels |
 
 ### Shadow
 
 | Token | Use |
 |-------|-----|
-| `--gsl-shadow-sm` | Subtle elevation |
-| `--gsl-shadow-md` | Medium popovers, dropdowns |
-| `--gsl-shadow-lg` | Large popovers, command dialog |
+| `--clet-shadow-sm` | Subtle elevation |
+| `--clet-shadow-md` | Medium popovers, dropdowns |
+| `--clet-shadow-lg` | Large popovers, command dialog |
 
 ### Z-index
 
 | Token | Value | Use |
 |-------|-------|-----|
-| `--gsl-z-popover` | `1000` | Popovers, dropdowns |
-| `--gsl-z-overlay` | `1100` | Modal/dialog overlays |
-| `--gsl-z-modal` | `1101` | Modal content |
-| `--gsl-z-select` | `1200` | Radix select popovers |
-| `--gsl-z-alert` | `1200` | Alert dialogs |
-| `--gsl-z-alert-content` | `1201` | Alert dialog content |
-| `--gsl-z-dropdown` | `1300` | Dropdown menus (highest) |
+| `--clet-z-popover` | `1000` | Popovers, dropdowns |
+| `--clet-z-overlay` | `1100` | Modal/dialog overlays |
+| `--clet-z-modal` | `1101` | Modal content |
+| `--clet-z-select` | `1200` | Radix select popovers |
+| `--clet-z-alert` | `1200` | Alert dialogs |
+| `--clet-z-alert-content` | `1201` | Alert dialog content |
+| `--clet-z-dropdown` | `1300` | Dropdown menus (highest) |
 
 ### Other
 
 | Token | Use |
 |-------|-----|
-| `--gsl-font` | Font family stack |
+| `--clet-font` | Font family stack |
 
-Override any `--gsl-*` CSS variable with the `gslTheme()` runtime helper, or
+Override any `--clet-*` CSS variable with the `cletTheme()` runtime helper, or
 by hand with plain CSS.
 
-### `gslTheme()` (recommended)
+### `cletTheme()` (recommended)
 
 Call once at startup, after importing the library CSS. It injects a
 `<style>` tag with the light/dark overrides — no CSS file, no build
@@ -141,9 +141,9 @@ config:
 
 ```ts title="src/main.tsx"
 import "@rfdtech/components/style.css";
-import { gslTheme } from "@rfdtech/components";
+import { cletTheme } from "@rfdtech/components";
 
-gslTheme({
+cletTheme({
   all: {
     primary: "#1d4ed8", // used by both modes unless a mode below overrides it
   },
@@ -161,8 +161,8 @@ gslTheme({
 });
 ```
 
-Keys are the **camelCase** form of the `--gsl-*` token names documented
-above (`--gsl-primary` → `primary`, `--gsl-radius-base` → `radiusBase`).
+Keys are the **camelCase** form of the `--clet-*` token names documented
+above (`--clet-primary` → `primary`, `--clet-radius-base` → `radiusBase`).
 `all`, `light`, and `dark` are all optional:
 
 - `all` applies to both modes, **per token** — set a token in `all` and
@@ -170,22 +170,22 @@ above (`--gsl-primary` → `primary`, `--gsl-radius-base` → `radiusBase`).
 - A token set in `light`/`dark` always wins over the same token in `all`.
 - Omit a token everywhere to leave the library's own default untouched.
 
-Calling `gslTheme()` again (e.g. on hot reload) replaces the previous
+Calling `cletTheme()` again (e.g. on hot reload) replaces the previous
 overrides rather than stacking a new `<style>` tag.
 
-#### Recommended file: `src/gsl.theme.ts`
+#### Recommended file: `src/clet.theme.ts`
 
 There's no build-time auto-discovery for a theme file (no Vite plugin scans
-for one, unlike e.g. `tailwind.config.ts`) — `gslTheme()` is a plain runtime
+for one, unlike e.g. `tailwind.config.ts`) — `cletTheme()` is a plain runtime
 function, so it has to be explicitly imported once. To keep every consumer's
-override in the same predictable place, put the `gslTheme(...)` call in its
-own file named **`src/gsl.theme.ts`** and import it for its side effect,
+override in the same predictable place, put the `cletTheme(...)` call in its
+own file named **`src/clet.theme.ts`** and import it for its side effect,
 right after the library CSS, in your entry point:
 
-```ts title="src/gsl.theme.ts"
-import { gslTheme } from "@rfdtech/components";
+```ts title="src/clet.theme.ts"
+import { cletTheme } from "@rfdtech/components";
 
-gslTheme({
+cletTheme({
   all: { primary: "#1d4ed8" },
   dark: { primary: "#ef4444", primaryLight: "#3f1515" },
 });
@@ -193,21 +193,21 @@ gslTheme({
 
 ```ts title="src/main.tsx"
 import "@rfdtech/components/style.css";
-import "./gsl.theme"; // side-effect import — runs gslTheme() once at startup
+import "./clet.theme"; // side-effect import — runs cletTheme() once at startup
 import { ThemeProvider } from "@rfdtech/components";
 ```
 
 One file, one canonical name, imported once — not a hard requirement (any
 file/location works, since it's just a function call), but the convention
-every GSL project should follow so a theme override is always easy to find.
+every CLET project should follow so a theme override is always easy to find.
 
 #### Type safety
 
-`gslTheme()` is fully typed against the library's real token set — both
+`cletTheme()` is fully typed against the library's real token set — both
 the **key** and the **value**:
 
 - Unknown or mistyped keys are a type error (`primry` won't compile, and
-  neither will the raw CSS string `"--gsl-primary"` — keys are camelCase).
+  neither will the raw CSS string `"--clet-primary"` — keys are camelCase).
 - Each token only accepts values shaped like its CSS group:
 
 | Group | Accepts | Example tokens |
@@ -219,7 +219,7 @@ the **key** and the **value**:
 | Shadow / font / misc | any `string` (shadow and font syntax is too varied to constrain further) | `shadowMd`, `font` |
 
 ```ts
-gslTheme({
+cletTheme({
   light: {
     zHeader: 20, // ✅ number
     // zHeader: "20", ❌ type error — z-index tokens are numbers
@@ -236,13 +236,13 @@ values).
 #### Component-scoped overrides
 
 Some components expose their own local tokens (e.g. `AppHeader`'s
-`--gsl-app-header-bg`, exposed here as `bg`) in addition to the global
+`--clet-app-header-bg`, exposed here as `bg`) in addition to the global
 ones above. Target a component by name under `components`; only that
 component's own tokens are valid there, and each also supports
 `all`/`light`/`dark`:
 
 ```ts
-gslTheme({
+cletTheme({
   components: {
     AppHeader: {
       all: { font: "Inter, sans-serif" },
@@ -287,11 +287,11 @@ these selectors:
 | Selector | When it matches |
 |----------|-----------------|
 | `:root` | No theme attribute is set (no `ThemeProvider` mounted) |
-| `:root[data-gsl-theme="light"]` | Light mode on `<html>` — `ThemeProvider` writes the attribute here |
-| `:root[data-gsl-theme="dark"]` | Dark mode on `<html>` |
-| `.gsl-theme` | A consumer wrapper `<div class="gsl-theme">` |
-| `.gsl-theme[data-gsl-theme="light"]` | Wrapper + light attribute |
-| `.gsl-theme[data-gsl-theme="dark"]` | Wrapper + dark attribute |
+| `:root[data-clet-theme="light"]` | Light mode on `<html>` — `ThemeProvider` writes the attribute here |
+| `:root[data-clet-theme="dark"]` | Dark mode on `<html>` |
+| `.clet-theme` | A consumer wrapper `<div class="clet-theme">` |
+| `.clet-theme[data-clet-theme="light"]` | Wrapper + light attribute |
+| `.clet-theme[data-clet-theme="dark"]` | Wrapper + dark attribute |
 
 A bare `:root { ... }` only matches the first row, so the library's
 default keeps winning on rows 2–6 once `ThemeProvider` mounts. To
@@ -300,10 +300,10 @@ values (don't chain `var(--something)` — just write the color):
 
 ```css title="src/styles/theme.css"
 :root,
-:root[data-gsl-theme="light"],
-.gsl-theme[data-gsl-theme="light"],
-:root[data-gsl-theme="dark"],
-.gsl-theme[data-gsl-theme="dark"] {
+:root[data-clet-theme="light"],
+.clet-theme[data-clet-theme="light"],
+:root[data-clet-theme="dark"],
+.clet-theme[data-clet-theme="dark"] {
   --clet-primary: #1d4ed8;
   --clet-primary-light: #eff6ff;
   --clet-focus: #1d4ed8;
@@ -314,12 +314,12 @@ values (don't chain `var(--something)` — just write the color):
 That one block overrides the primary color in light mode, dark mode,
 and the unthemed fallback. The same shape works for any other color
 token — list every selector, hardcode the value, using its `--clet-*`
-name (or the equivalent `--gsl-*` name — both work). Non-color tokens
-only have a `--gsl-*` name.
+name (or the equivalent `--clet-*` name — both work). Non-color tokens
+only have a `--clet-*` name.
 
 ## Tailwind v4 integration
 
-All `--gsl-*` tokens are registered with Tailwind v4's token system via a `@theme` block shipped in `style.css`. No extra configuration needed.
+All `--clet-*` tokens are registered with Tailwind v4's token system via a `@theme` block shipped in `style.css`. No extra configuration needed.
 
 ### Consumer setup
 
@@ -332,20 +332,20 @@ The consumer's Tailwind build processes the `@theme` block and generates utility
 
 | Utility | Resolves to |
 |---------|-------------|
-| `bg-primary` / `text-primary` | `var(--gsl-primary)` |
-| `bg-primary-foreground` / `text-primary-foreground` | `var(--gsl-on-primary)` |
-| `bg-background` / `text-foreground` | `var(--gsl-main-bg)` / `var(--gsl-text)` |
-| `bg-secondary` / `text-secondary-foreground` | `var(--gsl-surface-dark)` / `var(--gsl-text-secondary)` |
-| `bg-muted` / `text-muted-foreground` | `var(--gsl-surface-subtle)` / `var(--gsl-text-secondary)` |
-| `bg-accent` / `text-accent-foreground` | `var(--gsl-hover)` / `var(--gsl-text)` |
-| `bg-destructive` / `text-destructive-foreground` | `var(--gsl-error)` / `var(--gsl-error-text)` |
-| `bg-card` / `text-card-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
-| `bg-popover` / `text-popover-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
-| `border` / `input` / `ring` | `var(--gsl-border)` / `var(--gsl-border-strong)` / `var(--gsl-focus)` |
-| `bg-success` / `bg-warning` | `var(--gsl-success)` / `var(--gsl-warning)` |
-| `rounded-lg` | `var(--gsl-radius-base)` |
-| `shadow-sm` / `shadow-md` / `shadow-lg` | `var(--gsl-shadow-sm)` / etc. |
-| `font-sans` | `var(--gsl-font)` |
+| `bg-primary` / `text-primary` | `var(--clet-primary)` |
+| `bg-primary-foreground` / `text-primary-foreground` | `var(--clet-on-primary)` |
+| `bg-background` / `text-foreground` | `var(--clet-main-bg)` / `var(--clet-text)` |
+| `bg-secondary` / `text-secondary-foreground` | `var(--clet-surface-dark)` / `var(--clet-text-secondary)` |
+| `bg-muted` / `text-muted-foreground` | `var(--clet-surface-subtle)` / `var(--clet-text-secondary)` |
+| `bg-accent` / `text-accent-foreground` | `var(--clet-hover)` / `var(--clet-text)` |
+| `bg-destructive` / `text-destructive-foreground` | `var(--clet-error)` / `var(--clet-error-text)` |
+| `bg-card` / `text-card-foreground` | `var(--clet-bg)` / `var(--clet-text)` |
+| `bg-popover` / `text-popover-foreground` | `var(--clet-bg)` / `var(--clet-text)` |
+| `border` / `input` / `ring` | `var(--clet-border)` / `var(--clet-border-strong)` / `var(--clet-focus)` |
+| `bg-success` / `bg-warning` | `var(--clet-success)` / `var(--clet-warning)` |
+| `rounded-lg` | `var(--clet-radius-base)` |
+| `shadow-sm` / `shadow-md` / `shadow-lg` | `var(--clet-shadow-sm)` / etc. |
+| `font-sans` | `var(--clet-font)` |
 
 ### Dark mode
 
@@ -354,11 +354,11 @@ Both conventions are supported:
 | Selector | Convention |
 |----------|-----------|
 | `<html class="dark">` | Tailwind v4 default |
-| `<html data-gsl-theme="dark">` | GSL native (`ThemeProvider`) |
+| `<html data-clet-theme="dark">` | CLET native (`ThemeProvider`) |
 
 ### Non-Tailwind consumers
 
-No impact. Browsers silently ignore `@theme` as an unknown at-rule. GSL components continue to reference `--gsl-*` tokens directly.
+No impact. Browsers silently ignore `@theme` as an unknown at-rule. CLET components continue to reference `--clet-*` tokens directly.
 
 ## Controlled mode
 

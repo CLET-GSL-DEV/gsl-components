@@ -33,7 +33,7 @@ Compound sidebar primitives for app shells and section navigation. Desktop shows
 
 `Sidebar` accepts a `variant` prop that controls its surface style.
 
-- **`"default"`** (default) — card panel surface (`--gsl-surface-subtle` background, rounded corners).
+- **`"default"`** (default) — card panel surface (`--clet-surface-subtle` background, rounded corners).
 - **`"plain"`** — transparent background with a right border instead of the card panel, and no border radius. Used for dashboard shells where the sidebar should sit flush against the layout edge.
 
 <ExampleTabs
@@ -128,7 +128,7 @@ Mobile backdrop. Click closes the drawer. Not rendered on desktop.
 
 ### `SidebarHeader`
 
-Top branding or metadata slot. Use `gsl-sidebar__header-brand` and `gsl-sidebar__header-title` for logo + title layout alongside `SidebarCollapse`.
+Top branding or metadata slot. Use `clet-sidebar__header-brand` and `clet-sidebar__header-title` for logo + title layout alongside `SidebarCollapse`.
 
 ### `SidebarContent`
 
@@ -142,7 +142,7 @@ Bottom slot separated by a top border. A plain wrapper — typically holds a [`P
 <SidebarFooter>
   <ProfilePopover
     fullName="Kwame Asante"
-    email="kwame@gsl.edu.gh"
+    email="kwame@clet.edu.gh"
     items={[
       { icon: <User size={20} />, label: "My Profile", onClick: () => navigate("/profile") },
       { icon: <Settings size={20} />, label: "Account Settings", onClick: () => navigate("/settings") },
@@ -230,7 +230,7 @@ Styled navigation link.
 |------|------|---------|-------------|
 | `active` | `boolean` | `false` | Applies active link styling |
 | `asChild` | `boolean` | `false` | Merge props onto the child element |
-| `icon` | `ReactNode` | — | Optional leading icon; label wraps in `.gsl-sidebar__link-label` for collapse |
+| `icon` | `ReactNode` | — | Optional leading icon; label wraps in `.clet-sidebar__link-label` for collapse |
 | `loading` | `boolean` | `false` | Render a shimmering skeleton placeholder instead of the icon/label — see [Loading state](#loading-state) |
 | `loadingLabel` | `string` | `"Loading"` | Accessible label announced while loading |
 | `classNames` | `SidebarLinkClassNames` | — | Part-level class overrides |
@@ -287,7 +287,7 @@ Props for `SidebarBadge`.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Aside (`.gsl-sidebar`) |
+| `root` | Aside (`.clet-sidebar`) |
 
 ### Other `*ClassNames`
 
@@ -312,25 +312,25 @@ Props for `SidebarBadge`.
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-sidebar-font` | `var(--gsl-font-body)` | Font family override for the sidebar root, links, and trigger button |
-| `--gsl-sidebar-text` | `var(--gsl-text)` | Base text color for the sidebar root |
-| `--gsl-sidebar-bg` | `var(--gsl-bg)` | Sidebar surface background — the single override point referenced by every background declaration in the sidebar's CSS |
-| `--gsl-sidebar-link-text` | `var(--gsl-text-secondary)` | Default (inactive) link and collapse-button icon color |
-| `--gsl-sidebar-link-hover-bg` | `var(--gsl-surface-dark)` | Link background on hover |
-| `--gsl-sidebar-link-hover-text` | `var(--gsl-text)` | Link text color on hover |
-| `--gsl-sidebar-link-active-bg` | `var(--gsl-surface-dark)` | Background of the active link |
-| `--gsl-sidebar-link-active-text` | `var(--gsl-primary)` | Text color of the active link |
-| `--gsl-sidebar-label-text` | `var(--gsl-text)` | Group label / group-toggle text color |
-| `--gsl-sidebar-badge-bg` | `var(--gsl-primary)` | Badge background color (`var(--gsl-hover)` on active links) |
-| `--gsl-sidebar-badge-color` | `var(--gsl-on-primary)` | Badge text color (`var(--gsl-text-secondary)` on active links) |
-| `--gsl-sidebar-mask-size` | `48px` | Height of the top/bottom scroll fade mask on `.gsl-sidebar__content` |
-| `--gsl-sidebar-mask-top` | `0px` | Top fade mask offset; animates to `--gsl-sidebar-mask-size` once scrolled |
-| `--gsl-sidebar-mask-bottom` | `0px` | Bottom fade mask offset; animates to `--gsl-sidebar-mask-size` while more content is below |
+| `--clet-sidebar-font` | `var(--clet-font-body)` | Font family override for the sidebar root, links, and trigger button |
+| `--clet-sidebar-text` | `var(--clet-text)` | Base text color for the sidebar root |
+| `--clet-sidebar-bg` | `var(--clet-bg)` | Sidebar surface background — the single override point referenced by every background declaration in the sidebar's CSS |
+| `--clet-sidebar-link-text` | `var(--clet-text-secondary)` | Default (inactive) link and collapse-button icon color |
+| `--clet-sidebar-link-hover-bg` | `var(--clet-surface-dark)` | Link background on hover |
+| `--clet-sidebar-link-hover-text` | `var(--clet-text)` | Link text color on hover |
+| `--clet-sidebar-link-active-bg` | `var(--clet-surface-dark)` | Background of the active link |
+| `--clet-sidebar-link-active-text` | `var(--clet-primary)` | Text color of the active link |
+| `--clet-sidebar-label-text` | `var(--clet-text)` | Group label / group-toggle text color |
+| `--clet-sidebar-badge-bg` | `var(--clet-primary)` | Badge background color (`var(--clet-hover)` on active links) |
+| `--clet-sidebar-badge-color` | `var(--clet-on-primary)` | Badge text color (`var(--clet-text-secondary)` on active links) |
+| `--clet-sidebar-mask-size` | `48px` | Height of the top/bottom scroll fade mask on `.clet-sidebar__content` |
+| `--clet-sidebar-mask-top` | `0px` | Top fade mask offset; animates to `--clet-sidebar-mask-size` once scrolled |
+| `--clet-sidebar-mask-bottom` | `0px` | Bottom fade mask offset; animates to `--clet-sidebar-mask-size` while more content is below |
 
 ## Notes
 
-- Desktop renders a **card panel** (`--gsl-bg` background, 24px radius, icon + label rows) by default. Active links use a neutral gray pill, not primary color.
-- `variant="plain"` swaps the card panel for a transparent background with a right border (`--gsl-border`) and no radius — use it alongside `AppHeader`'s `"plain"` variant for a flush dashboard shell.
+- Desktop renders a **card panel** (`--clet-bg` background, 24px radius, icon + label rows) by default. Active links use a neutral gray pill, not primary color.
+- `variant="plain"` swaps the card panel for a transparent background with a right border (`--clet-border`) and no radius — use it alongside `AppHeader`'s `"plain"` variant for a flush dashboard shell.
 - Use `SidebarCollapse` in the header to collapse to a **72px icon rail** on desktop; group labels, link labels, badges, and footer content hide automatically.
 - `SidebarGroup` with `collapsible` renders its first `SidebarGroupLabel` as a button and animates the content open/close with an opacity transition. The label looks identical to the static label when not collapsible — same font, size, color, and padding. The content area stays in the layout when folded (items fade to invisible but the space is reserved) so toggling doesn't shift items below it. Set `defaultExpanded` for the initial state or use `expanded` + `onExpandedChange` for controlled state. The animation respects `prefers-reduced-motion`.
 - Mobile breakpoint defaults to **768px**; override with `breakpoint` on `SidebarProvider` if needed.
@@ -339,4 +339,4 @@ Props for `SidebarBadge`.
 - Slide transitions are disabled when `prefers-reduced-motion: reduce` is set.
 - `SidebarBadge` renders a trailing pill on the right of a link row; badges hide automatically when the sidebar is collapsed.
 - When collapsed, each `SidebarLink` automatically shows a `Tooltip` (positioned to the right) with the link's label text on hover. Links with no label text skip the tooltip.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

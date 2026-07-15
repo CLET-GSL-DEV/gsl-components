@@ -248,7 +248,7 @@ describe("ProfilePopover — user/variant header trigger", () => {
       <ProfilePopover user={user} variant="avatar" />,
     );
 
-    const trigger = container.querySelector(".gsl-app-header__profile")!;
+    const trigger = container.querySelector(".clet-app-header__profile")!;
     await userEvents.click(trigger);
     expect(screen.getByRole("menu")).toBeInTheDocument();
   });

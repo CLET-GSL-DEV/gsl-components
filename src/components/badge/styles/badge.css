@@ -1,5 +1,5 @@
-.gsl-badge {
-  --gsl-badge-font: var(--gsl-font-body);
+.clet-badge {
+  --clet-badge-font: var(--clet-font-body);
 
   display: inline-flex;
   align-items: center;
@@ -7,50 +7,50 @@
   overflow: hidden;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-family: var(--gsl-badge-font);
+  font-family: var(--clet-badge-font);
   font-weight: 600;
   line-height: 1.4;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.gsl-badge--sm {
+.clet-badge--sm {
   padding: 2px 8px;
   font-size: 11px;
 }
 
-.gsl-badge--md {
+.clet-badge--md {
   padding: 2px 10px;
   font-size: 12px;
 }
 
-.gsl-badge--default {
-  background: var(--gsl-hover);
-  color: var(--gsl-text-secondary);
+.clet-badge--default {
+  background: var(--clet-hover);
+  color: var(--clet-text-secondary);
 }
 
-.gsl-badge--primary {
-  background: var(--gsl-primary);
-  color: var(--gsl-on-primary);
+.clet-badge--primary {
+  background: var(--clet-primary);
+  color: var(--clet-on-primary);
 }
 
-.gsl-badge--success {
-  background: color-mix(in srgb, var(--gsl-success) 18%, transparent);
-  color: var(--gsl-success);
+.clet-badge--success {
+  background: color-mix(in srgb, var(--clet-success) 18%, transparent);
+  color: var(--clet-success);
 }
 
-.gsl-badge--warning {
-  background: color-mix(in srgb, var(--gsl-warning) 18%, transparent);
-  color: var(--gsl-warning);
+.clet-badge--warning {
+  background: color-mix(in srgb, var(--clet-warning) 18%, transparent);
+  color: var(--clet-warning);
 }
 
-.gsl-badge--error {
-  background: color-mix(in srgb, var(--gsl-error) 18%, transparent);
-  color: var(--gsl-error);
+.clet-badge--error {
+  background: color-mix(in srgb, var(--clet-error) 18%, transparent);
+  color: var(--clet-error);
 }
 
-.gsl-badge--outline {
-  border-color: var(--gsl-border);
+.clet-badge--outline {
+  border-color: var(--clet-border);
   background: transparent;
-  color: var(--gsl-text);
+  color: var(--clet-text);
 }

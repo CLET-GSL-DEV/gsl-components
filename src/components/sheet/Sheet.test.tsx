@@ -82,9 +82,9 @@ describe("Sheet", () => {
 
     await user.click(screen.getByRole("button", { name: "Open sheet" }));
 
-    expect(document.querySelector(".gsl-sheet__header")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-sheet__body")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-sheet__footer")).toBeInTheDocument();
+    expect(document.querySelector(".clet-sheet__header")).toBeInTheDocument();
+    expect(document.querySelector(".clet-sheet__body")).toBeInTheDocument();
+    expect(document.querySelector(".clet-sheet__footer")).toBeInTheDocument();
   });
 
   it("closes when Escape is pressed", async () => {
@@ -105,7 +105,7 @@ describe("Sheet", () => {
     await user.click(screen.getByRole("button", { name: "Open sheet" }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    const overlay = document.querySelector(".gsl-sheet__overlay");
+    const overlay = document.querySelector(".clet-sheet__overlay");
     expect(overlay).toBeTruthy();
     await user.click(overlay!);
 
@@ -130,7 +130,7 @@ describe("Sheet", () => {
     await user.click(screen.getByRole("button", { name: "Open sheet" }));
 
     const sheet = screen.getByRole("dialog");
-    expect(sheet).toHaveClass("gsl-sheet", "gsl-sheet--left");
+    expect(sheet).toHaveClass("clet-sheet", "clet-sheet--left");
     expect(sheet).toHaveAttribute("data-side", "left");
   });
 
@@ -146,17 +146,17 @@ describe("Sheet", () => {
 
     await user.click(screen.getByRole("button", { name: "Open sheet" }));
 
-    expect(document.querySelector(".gsl-sheet__overlay")).toHaveClass(
-      "gsl-sheet__overlay",
+    expect(document.querySelector(".clet-sheet__overlay")).toHaveClass(
+      "clet-sheet__overlay",
       "custom-overlay",
     );
     expect(screen.getByRole("dialog")).toHaveClass(
-      "gsl-sheet",
-      "gsl-sheet--right",
+      "clet-sheet",
+      "clet-sheet--right",
       "custom-content",
     );
-    expect(document.querySelector(".gsl-sheet__header")).toHaveClass(
-      "gsl-sheet__header",
+    expect(document.querySelector(".clet-sheet__header")).toHaveClass(
+      "clet-sheet__header",
       "custom-header",
     );
   });

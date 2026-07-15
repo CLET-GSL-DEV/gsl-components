@@ -51,7 +51,7 @@ const Lottie = lazy(() => import("lottie-react"));
 function CheckmarkIcon() {
   return (
     <svg
-      className="gsl-bulk-import__stepper-check"
+      className="clet-bulk-import__stepper-check"
       width="14"
       height="14"
       viewBox="0 0 14 14"
@@ -253,16 +253,16 @@ export function BulkImportModal({
   }, [flow.parsed, headerRowDraft, fields]);
 
   const dialogClass = useMemo(
-    () => ["gsl-bulk-import", className].filter(Boolean).join(" "),
+    () => ["clet-bulk-import", className].filter(Boolean).join(" "),
     [className],
   );
 
   const bodyStepClass = useMemo(() => {
     const map: Record<number, string> = {
-      [BulkImportStep.UPLOAD]: "gsl-bulk-import__body--upload",
-      [BulkImportStep.SELECT_HEADER_ROW]: "gsl-bulk-import__body--header",
-      [BulkImportStep.MATCH_COLUMNS]: "gsl-bulk-import__body--match",
-      [BulkImportStep.VALIDATE_DATA]: "gsl-bulk-import__body--validate",
+      [BulkImportStep.UPLOAD]: "clet-bulk-import__body--upload",
+      [BulkImportStep.SELECT_HEADER_ROW]: "clet-bulk-import__body--header",
+      [BulkImportStep.MATCH_COLUMNS]: "clet-bulk-import__body--match",
+      [BulkImportStep.VALIDATE_DATA]: "clet-bulk-import__body--validate",
     };
     return map[flow.step] ?? "";
   }, [flow.step]);
@@ -280,9 +280,9 @@ export function BulkImportModal({
           onInteractOutside={preventOverlayClose}
           aria-describedby={undefined}
         >
-          <ModalTitle className="gsl-bulk-import__header">
-            <nav className="gsl-bulk-import__stepper" aria-label="Import steps">
-              <ol className="gsl-bulk-import__stepper-list">
+          <ModalTitle className="clet-bulk-import__header">
+            <nav className="clet-bulk-import__stepper" aria-label="Import steps">
+              <ol className="clet-bulk-import__stepper-list">
                 {STEPS.map((stepItem, index) => {
                   const isActive = flow.step === stepItem.id;
                   const isComplete = flow.maxStep > stepItem.id;
@@ -292,13 +292,13 @@ export function BulkImportModal({
                     <li
                       key={stepItem.id}
                       className={[
-                        "gsl-bulk-import__stepper-item",
-                        isActive ? "gsl-bulk-import__stepper-item--active" : "",
+                        "clet-bulk-import__stepper-item",
+                        isActive ? "clet-bulk-import__stepper-item--active" : "",
                         isComplete
-                          ? "gsl-bulk-import__stepper-item--complete"
+                          ? "clet-bulk-import__stepper-item--complete"
                           : "",
                         canClick
-                          ? "gsl-bulk-import__stepper-item--clickable"
+                          ? "clet-bulk-import__stepper-item--clickable"
                           : "",
                       ]
                         .filter(Boolean)
@@ -308,16 +308,16 @@ export function BulkImportModal({
                       {canClick ? (
                         <button
                           type="button"
-                          className="gsl-bulk-import__stepper-button"
+                          className="clet-bulk-import__stepper-button"
                           onClick={() => handleGoToStep(stepItem.id)}
                           aria-label={`Go to step ${stepItem.id}: ${stepItem.label}`}
                         >
-                          <span className="gsl-bulk-import__stepper-marker">
+                          <span className="clet-bulk-import__stepper-marker">
                             <span
                               className={[
-                                "gsl-bulk-import__stepper-number",
+                                "clet-bulk-import__stepper-number",
                                 isComplete
-                                  ? "gsl-bulk-import__stepper-number--hidden"
+                                  ? "clet-bulk-import__stepper-number--hidden"
                                   : "",
                               ]
                                 .filter(Boolean)
@@ -328,18 +328,18 @@ export function BulkImportModal({
                             </span>
                             {isComplete && <CheckmarkIcon />}
                           </span>
-                          <span className="gsl-bulk-import__stepper-label">
+                          <span className="clet-bulk-import__stepper-label">
                             {stepItem.label}
                           </span>
                         </button>
                       ) : (
                         <>
-                          <span className="gsl-bulk-import__stepper-marker">
+                          <span className="clet-bulk-import__stepper-marker">
                             <span
                               className={[
-                                "gsl-bulk-import__stepper-number",
+                                "clet-bulk-import__stepper-number",
                                 isComplete
-                                  ? "gsl-bulk-import__stepper-number--hidden"
+                                  ? "clet-bulk-import__stepper-number--hidden"
                                   : "",
                               ]
                                 .filter(Boolean)
@@ -350,25 +350,25 @@ export function BulkImportModal({
                             </span>
                             {isComplete && <CheckmarkIcon />}
                           </span>
-                          <span className="gsl-bulk-import__stepper-label">
+                          <span className="clet-bulk-import__stepper-label">
                             {stepItem.label}
                           </span>
                         </>
                       )}
                       {!isLast && (
                         <span
-                          className="gsl-bulk-import__stepper-connector"
+                          className="clet-bulk-import__stepper-connector"
                           aria-hidden="true"
                         >
                           <span
-                            className="gsl-bulk-import__stepper-connector-track"
+                            className="clet-bulk-import__stepper-connector-track"
                             aria-hidden="true"
                           />
                           <span
                             className={[
-                              "gsl-bulk-import__stepper-connector-fill",
+                              "clet-bulk-import__stepper-connector-fill",
                               isComplete
-                                ? "gsl-bulk-import__stepper-connector-fill--visible"
+                                ? "clet-bulk-import__stepper-connector-fill--visible"
                                 : "",
                             ]
                               .filter(Boolean)
@@ -385,7 +385,7 @@ export function BulkImportModal({
           </ModalTitle>
 
           <ModalBody
-            className={["gsl-bulk-import__body", bodyStepClass]
+            className={["clet-bulk-import__body", bodyStepClass]
               .filter(Boolean)
               .join(" ")}
           >
@@ -438,32 +438,32 @@ export function BulkImportModal({
 
             <div
               className={[
-                "gsl-bulk-import__loading",
+                "clet-bulk-import__loading",
                 flow.isProcessingLarge
-                  ? "gsl-bulk-import__loading--visible"
+                  ? "clet-bulk-import__loading--visible"
                   : "",
               ].join(" ")}
             >
-              <h3 className="gsl-bulk-import__step-title">Processing</h3>
-              <p className="gsl-bulk-import__step-note">
+              <h3 className="clet-bulk-import__step-title">Processing</h3>
+              <p className="clet-bulk-import__step-note">
                 {flow.step === BulkImportStep.VALIDATE_DATA
                   ? "Validating your records..."
                   : "Parsing your data..."}
               </p>
-              <div className="gsl-bulk-import__loading-center">
+              <div className="clet-bulk-import__loading-center">
                 <Suspense fallback={null}>
                   <Lottie
                     animationData={animationData}
                     loop
                     autoplay
-                    className="gsl-bulk-import__lottie"
+                    className="clet-bulk-import__lottie"
                   />
                 </Suspense>
-                <div className="gsl-bulk-import__loading-bar">
+                <div className="clet-bulk-import__loading-bar">
                   <ProgressBar value={flow.processingProgress} size="md" />
                 </div>
                 {flow.processingTotal > 0 && (
-                  <p className="gsl-bulk-import__loading-counter">
+                  <p className="clet-bulk-import__loading-counter">
                     {Math.round(
                       (flow.processingProgress / 100) * flow.processingTotal,
                     ).toLocaleString()}
@@ -478,12 +478,12 @@ export function BulkImportModal({
           {(flow.step > BulkImportStep.UPLOAD ||
             flow.parsed !== null ||
             flow.uploadedFile !== null) && (
-            <ModalFooter className="gsl-bulk-import__footer">
+            <ModalFooter className="clet-bulk-import__footer">
               {flow.step > BulkImportStep.UPLOAD && (
                 <Button
                   variant="outline"
                   size="md"
-                  className="gsl-bulk-import__footer-action"
+                  className="clet-bulk-import__footer-action"
                   disabled={flow.isProcessingLarge}
                   onClick={handleGoBack}
                 >
@@ -495,7 +495,7 @@ export function BulkImportModal({
                 <Button
                   variant="primary"
                   size="md"
-                  className="gsl-bulk-import__footer-action"
+                  className="clet-bulk-import__footer-action"
                   disabled={flow.isProcessingLarge || !canGoNext}
                   onClick={handleGoNext}
                 >
@@ -505,7 +505,7 @@ export function BulkImportModal({
                 <Button
                   variant="primary"
                   size="md"
-                  className="gsl-bulk-import__footer-action"
+                  className="clet-bulk-import__footer-action"
                   disabled={flow.isProcessingLarge || !canConfirm}
                   onClick={handleConfirm}
                 >

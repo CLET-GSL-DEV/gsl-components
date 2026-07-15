@@ -25,16 +25,16 @@ interface AuditLogEntry {
 }
 
 const auditLog: AuditLogEntry[] = [
-  { id: 1, actor: "kwame@gsl.edu.gh", action: "Login", target: "Portal", status: "success", timestamp: new Date("2026-06-01T09:12:00") },
-  { id: 2, actor: "abena@gsl.edu.gh", action: "Export report", target: "Finance", status: "success", timestamp: new Date("2026-06-04T14:03:00") },
-  { id: 3, actor: "kofi@gsl.edu.gh", action: "Failed login", target: "Portal", status: "failed", timestamp: new Date("2026-06-10T08:45:00") },
-  { id: 4, actor: "esi@gsl.edu.gh", action: "Update permissions", target: "User: yaw@gsl.edu.gh", status: "warning", timestamp: new Date("2026-06-15T11:20:00") },
-  { id: 5, actor: "yaw@gsl.edu.gh", action: "Delete record", target: "Claims", status: "warning", timestamp: new Date("2026-06-18T16:32:00") },
-  { id: 6, actor: "nana@gsl.edu.gh", action: "Login", target: "Portal", status: "success", timestamp: new Date("2026-06-22T09:01:00") },
-  { id: 7, actor: "akua@gsl.edu.gh", action: "Approve claim", target: "Claims", status: "success", timestamp: new Date("2026-06-25T13:47:00") },
-  { id: 8, actor: "kwesi@gsl.edu.gh", action: "Failed login", target: "Portal", status: "failed", timestamp: new Date("2026-06-29T07:58:00") },
-  { id: 9, actor: "adwoa@gsl.edu.gh", action: "Export report", target: "Finance", status: "success", timestamp: new Date("2026-07-02T10:15:00") },
-  { id: 10, actor: "kobina@gsl.edu.gh", action: "Update permissions", target: "User: esi@gsl.edu.gh", status: "warning", timestamp: new Date("2026-07-06T15:40:00") },
+  { id: 1, actor: "kwame@clet.edu.gh", action: "Login", target: "Portal", status: "success", timestamp: new Date("2026-06-01T09:12:00") },
+  { id: 2, actor: "abena@clet.edu.gh", action: "Export report", target: "Finance", status: "success", timestamp: new Date("2026-06-04T14:03:00") },
+  { id: 3, actor: "kofi@clet.edu.gh", action: "Failed login", target: "Portal", status: "failed", timestamp: new Date("2026-06-10T08:45:00") },
+  { id: 4, actor: "esi@clet.edu.gh", action: "Update permissions", target: "User: yaw@clet.edu.gh", status: "warning", timestamp: new Date("2026-06-15T11:20:00") },
+  { id: 5, actor: "yaw@clet.edu.gh", action: "Delete record", target: "Claims", status: "warning", timestamp: new Date("2026-06-18T16:32:00") },
+  { id: 6, actor: "nana@clet.edu.gh", action: "Login", target: "Portal", status: "success", timestamp: new Date("2026-06-22T09:01:00") },
+  { id: 7, actor: "akua@clet.edu.gh", action: "Approve claim", target: "Claims", status: "success", timestamp: new Date("2026-06-25T13:47:00") },
+  { id: 8, actor: "kwesi@clet.edu.gh", action: "Failed login", target: "Portal", status: "failed", timestamp: new Date("2026-06-29T07:58:00") },
+  { id: 9, actor: "adwoa@clet.edu.gh", action: "Export report", target: "Finance", status: "success", timestamp: new Date("2026-07-02T10:15:00") },
+  { id: 10, actor: "kobina@clet.edu.gh", action: "Update permissions", target: "User: esi@clet.edu.gh", status: "warning", timestamp: new Date("2026-07-06T15:40:00") },
 ];
 
 function statusVariant(status: AuditLogEntry["status"]) {
@@ -153,11 +153,11 @@ export function DateRangeFilterExample() {
               textAlign: "center",
             }}
           >
-            <ShieldAlert size={32} strokeWidth={1.5} color="var(--gsl-error)" />
-            <p style={{ margin: 0, fontSize: 14, fontWeight: 500, color: "var(--gsl-error-text)" }}>
+            <ShieldAlert size={32} strokeWidth={1.5} color="var(--clet-error)" />
+            <p style={{ margin: 0, fontSize: 14, fontWeight: 500, color: "var(--clet-error-text)" }}>
               You don&apos;t have permission to view this audit log.
             </p>
-            <p style={{ margin: 0, fontSize: 13, color: "var(--gsl-text-muted)" }}>
+            <p style={{ margin: 0, fontSize: 13, color: "var(--clet-text-muted)" }}>
               Contact an administrator if you believe this is a mistake.
             </p>
           </div>

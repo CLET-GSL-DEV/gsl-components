@@ -35,7 +35,7 @@ describe("DateRangeSelector", () => {
     const { container } = render(<DateRangeSelector className="custom" />);
     const root = container.firstElementChild!;
     expect(root).toHaveClass("custom");
-    expect(root).toHaveClass("gsl-date-range-selector");
+    expect(root).toHaveClass("clet-date-range-selector");
   });
 
   it("shows placeholder when no dates are selected", () => {
@@ -456,7 +456,7 @@ describe("DateRangeSelector presets", () => {
     const preset = screen.getByRole("button", { name: "Last 7 days" });
     await user.click(preset);
 
-    expect(preset).toHaveClass("gsl-date-range-selector__preset-item--active");
+    expect(preset).toHaveClass("clet-date-range-selector__preset-item--active");
   });
 
   it("clears the active preset when a day is clicked manually afterward", async () => {
@@ -466,14 +466,14 @@ describe("DateRangeSelector presets", () => {
     await user.click(screen.getByRole("button"));
     const preset = screen.getByRole("button", { name: "Last 7 days" });
     await user.click(preset);
-    expect(preset).toHaveClass("gsl-date-range-selector__preset-item--active");
+    expect(preset).toHaveClass("clet-date-range-selector__preset-item--active");
 
     const days = screen.getAllByRole("gridcell");
     const enabled = days.filter((d) => !d.hasAttribute("disabled"));
     await user.click(enabled[0]);
 
     expect(preset).not.toHaveClass(
-      "gsl-date-range-selector__preset-item--active",
+      "clet-date-range-selector__preset-item--active",
     );
   });
 });

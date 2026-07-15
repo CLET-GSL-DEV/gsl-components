@@ -85,7 +85,7 @@ export const Command = forwardRef<HTMLDivElement, CommandProps>(
         >
           <CommandPrimitive
             ref={ref}
-            className={cn("gsl-command", classNames?.root, className)}
+            className={cn("clet-command", classNames?.root, className)}
             {...props}
           >
             {children}
@@ -151,18 +151,18 @@ export const CommandDialog = forwardRef<HTMLDivElement, CommandDialogProps>(
       <CommandPrimitive.Dialog
         ref={ref}
         className={cn(
-          "gsl-command",
-          "gsl-command--dialog",
+          "clet-command",
+          "clet-command--dialog",
           classNames?.dialog,
           className,
         )}
         overlayClassName={cn(
-          "gsl-command-dialog__overlay",
+          "clet-command-dialog__overlay",
           classNames?.overlay,
           overlayClassName,
         )}
         contentClassName={cn(
-          "gsl-command-dialog__content",
+          "clet-command-dialog__content",
           classNames?.content,
           contentClassName,
         )}
@@ -215,7 +215,7 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
     const input = (
       <>
         <Search
-          className="gsl-command__input-icon"
+          className="clet-command__input-icon"
           aria-hidden="true"
           size={16}
           strokeWidth={2}
@@ -226,13 +226,13 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
             if (typeof ref === "function") ref(node);
             else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
           }}
-          className={cn("gsl-command__input", classNames?.input, className)}
+          className={cn("clet-command__input", classNames?.input, className)}
           onInput={(e) => setHasValue((e.target as HTMLInputElement).value.length > 0)}
           {...props}
         />
         {hasValue && (
           <div
-            className="gsl-command__input-clear"
+            className="clet-command__input-clear"
             onClick={() => {
               if (inputRef.current) {
                 inputRef.current.value = "";
@@ -247,11 +247,11 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
           </div>
         )}
         {!hasValue && shortcutLabels.length > 0 ? (
-          <kbd className="gsl-command__input-shortcut" aria-hidden="true">
+          <kbd className="clet-command__input-shortcut" aria-hidden="true">
             {shortcutLabels.map((label, index) => (
               <span
                 key={`${label}-${index}`}
-                className="gsl-command__shortcut-key"
+                className="clet-command__shortcut-key"
               >
                 {label}
               </span>
@@ -267,7 +267,7 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
           <div
             ref={popover.inputWrapperRef}
             className={cn(
-              "gsl-command__input-wrapper",
+              "clet-command__input-wrapper",
               classNames?.wrapper,
             )}
             onFocus={handleFocus}
@@ -281,7 +281,7 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
 
     return (
       <div
-        className={cn("gsl-command__input-wrapper", classNames?.wrapper)}
+        className={cn("clet-command__input-wrapper", classNames?.wrapper)}
       >
         {input}
       </div>
@@ -296,7 +296,7 @@ export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
     if (popover?.isInline) {
       return (
         <PopoverPrimitive.Content
-            className="gsl-command__popover"
+            className="clet-command__popover"
             sideOffset={4}
             align="start"
             forceMount
@@ -310,7 +310,7 @@ export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
             <CommandPrimitive.List
               ref={ref}
               className={cn(
-                "gsl-command__list",
+                "clet-command__list",
                 classNames?.list,
                 className,
               )}
@@ -325,7 +325,7 @@ export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
     return (
       <CommandPrimitive.List
         ref={ref}
-        className={cn("gsl-command__list", classNames?.list, className)}
+        className={cn("clet-command__list", classNames?.list, className)}
         {...props}
       >
         {children}
@@ -339,7 +339,7 @@ export const CommandEmpty = forwardRef<HTMLDivElement, CommandEmptyProps>(
     return (
       <CommandPrimitive.Empty
         ref={ref}
-        className={cn("gsl-command__empty", classNames?.empty, className)}
+        className={cn("clet-command__empty", classNames?.empty, className)}
         {...props}
       >
         {children}
@@ -363,21 +363,21 @@ export const CommandGroup = forwardRef<HTMLDivElement, CommandGroupProps>(
     return (
       <CommandPrimitive.Group
         ref={ref}
-        className={cn("gsl-command__group", classNames?.group, className)}
+        className={cn("clet-command__group", classNames?.group, className)}
         {...props}
       >
         {loading ? (
           <div
             className={cn(
-              "gsl-command__group-loading",
+              "clet-command__group-loading",
               classNames?.groupLoading,
             )}
             role="status"
             aria-label={loadingLabel}
           >
             {[1, 2, 3].map((i) => (
-              <div key={i} className="gsl-command__skeleton">
-                <div className="gsl-command__skeleton-line" />
+              <div key={i} className="clet-command__skeleton">
+                <div className="clet-command__skeleton-line" />
               </div>
             ))}
           </div>
@@ -394,7 +394,7 @@ export const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
     return (
       <CommandPrimitive.Item
         ref={ref}
-        className={cn("gsl-command__item", classNames?.item, className)}
+        className={cn("clet-command__item", classNames?.item, className)}
         {...props}
       >
         {children}
@@ -408,7 +408,7 @@ export const CommandShortcut = forwardRef<HTMLElement, CommandShortcutProps>(
     return (
       <kbd
         ref={ref}
-        className={cn("gsl-command__shortcut", classNames?.shortcut, className)}
+        className={cn("clet-command__shortcut", classNames?.shortcut, className)}
       >
         {children}
       </kbd>
@@ -423,7 +423,7 @@ export const CommandSeparator = forwardRef<
   return (
     <CommandPrimitive.Separator
       ref={ref}
-      className={cn("gsl-command__separator", classNames?.separator, className)}
+      className={cn("clet-command__separator", classNames?.separator, className)}
       {...props}
     />
   );
@@ -434,7 +434,7 @@ export const CommandLoading = forwardRef<HTMLDivElement, CommandLoadingProps>(
     return (
       <CommandPrimitive.Loading
         ref={ref}
-        className={cn("gsl-command__loading", classNames?.loading, className)}
+        className={cn("clet-command__loading", classNames?.loading, className)}
         {...props}
       >
         {children}

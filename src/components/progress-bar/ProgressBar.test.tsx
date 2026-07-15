@@ -10,7 +10,7 @@ describe("ProgressBar", () => {
     const progressbar = screen.getByRole("progressbar", {
       name: "Upload progress",
     });
-    expect(progressbar).toHaveClass("gsl-progress-bar", "gsl-progress-bar--default");
+    expect(progressbar).toHaveClass("clet-progress-bar", "clet-progress-bar--default");
     expect(progressbar).toHaveAttribute("aria-valuenow", "60");
     expect(progressbar).toHaveAttribute("aria-valuemin", "0");
     expect(progressbar).toHaveAttribute("aria-valuemax", "100");
@@ -29,7 +29,7 @@ describe("ProgressBar", () => {
     render(<ProgressBar indeterminate label="Loading" />);
 
     const progressbar = screen.getByRole("progressbar", { name: "Loading" });
-    expect(progressbar).toHaveClass("gsl-progress-bar--indeterminate");
+    expect(progressbar).toHaveClass("clet-progress-bar--indeterminate");
     expect(progressbar).not.toHaveAttribute("aria-valuenow");
   });
 
@@ -37,15 +37,15 @@ describe("ProgressBar", () => {
     render(<ProgressBar value={50} variant="success" size="md" />);
 
     const progressbar = screen.getByRole("progressbar");
-    expect(progressbar).toHaveClass("gsl-progress-bar--success", "gsl-progress-bar--md");
+    expect(progressbar).toHaveClass("clet-progress-bar--success", "clet-progress-bar--md");
   });
 
   it("renders percentage text when showValue is true", () => {
     render(<ProgressBar value={75} showValue />);
 
-    expect(screen.getByText("75%")).toHaveClass("gsl-progress-bar__value");
+    expect(screen.getByText("75%")).toHaveClass("clet-progress-bar__value");
     expect(screen.getByRole("progressbar")).toHaveClass(
-      "gsl-progress-bar--with-value",
+      "clet-progress-bar--with-value",
     );
   });
 
@@ -59,8 +59,8 @@ describe("ProgressBar", () => {
     );
 
     const progressbar = screen.getByRole("progressbar");
-    expect(progressbar).toHaveClass("gsl-progress-bar", "custom-root", "extra-root");
-    expect(progressbar.querySelector(".gsl-progress-bar__indicator")).toHaveClass(
+    expect(progressbar).toHaveClass("clet-progress-bar", "custom-root", "extra-root");
+    expect(progressbar.querySelector(".clet-progress-bar__indicator")).toHaveClass(
       "custom-indicator",
     );
   });

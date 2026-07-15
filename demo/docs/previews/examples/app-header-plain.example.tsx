@@ -14,7 +14,7 @@ const user = {
   name: "Kwame Asante",
   role: "Admin",
   initials: "KA",
-  email: "kwame@gsl.edu.gh",
+  email: "kwame@clet.edu.gh",
 };
 
 const roles = [
@@ -49,21 +49,21 @@ export function AppHeaderPlainExample() {
     <div
       style={{
         padding: 16,
-        borderRadius: "var(--gsl-radius-2xl)",
-        background: "var(--gsl-surface-subtle)",
+        borderRadius: "var(--clet-radius-2xl)",
+        background: "var(--clet-surface-subtle)",
       }}
     >
       <AppHeader variant="plain">
-        <AppHeaderBranding title="GSL PORTAL" subtitle="Component Library" />
+        <AppHeaderBranding title="CLET PORTAL" subtitle="Component Library" />
         <AppHeaderActions>
           <AppSwitcher apps={apps} title="System directory" />
           <AppHeaderNotifications>
             {notifications.map((n) => (
-              <div key={n.id} className="gsl-notif-popover__item">
-                {n.unread && <div className="gsl-notif-popover__dot" />}
-                <div className="gsl-notif-popover__body">
-                  <div className="gsl-notif-popover__body-text">{n.text}</div>
-                  <div className="gsl-notif-popover__body-time">{n.time}</div>
+              <div key={n.id} className="clet-notif-popover__item">
+                {n.unread && <div className="clet-notif-popover__dot" />}
+                <div className="clet-notif-popover__body">
+                  <div className="clet-notif-popover__body-text">{n.text}</div>
+                  <div className="clet-notif-popover__body-time">{n.time}</div>
                 </div>
               </div>
             ))}

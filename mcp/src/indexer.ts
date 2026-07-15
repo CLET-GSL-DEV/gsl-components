@@ -155,10 +155,10 @@ async function buildRules(): Promise<{
 // ───────────────────────── tokens ─────────────────────────
 
 // Mirrors scripts/generate-theme-tokens.mjs's `classify()` so tokens.json's
-// "group" field lines up with the same value-type buckets gslTheme() enforces
+// "group" field lines up with the same value-type buckets cletTheme() enforces
 // at the type level (color/length/shadow/zIndex/opacity/duration/misc).
 function classifyToken(cssVar: string): string {
-  const local = cssVar.replace(/^--gsl-/, "");
+  const local = cssVar.replace(/^--clet-/, "");
   if (/radius/.test(local)) return "length";
   if (/shadow/.test(local)) return "shadow";
   if (/^z(-|$)/.test(local)) return "zIndex";
@@ -167,7 +167,7 @@ function classifyToken(cssVar: string): string {
   if (/(size|gap|width|height|padding|margin|px$|py$|-px-|-py-)/.test(local)) return "length";
   if (/(duration|transition|delay|stagger)/.test(local)) return "duration";
   if (
-    /(color|^bg$|-bg$|bg-|background|border|accent|track|success|warning|error|primary|surface|hover|overlay|text|focus|current)/.test(
+    /(color|^bg$|-bg$|bg-|background|border|accent|track|success|warning|error|primary|secondary|surface|hover|overlay|text|focus|current|highlight|shimmer)/.test(
       local
     )
   )
@@ -182,10 +182,10 @@ interface TokenRegistryEntry {
 }
 
 /**
- * Parses src/generated/components.theme.ts — the file gslTheme() itself is
+ * Parses src/generated/components.theme.ts — the file cletTheme() itself is
  * typed against — for the authoritative list of every overridable token.
  * This is what makes tokens.json/get_tokens() match the real runtime API
- * surface (including ~70+ component-scoped tokens like --gsl-card-padding
+ * surface (including ~70+ component-scoped tokens like --clet-card-padding
  * that never appear in the 3 global theme CSS files).
  */
 async function readTokenRegistry(): Promise<TokenRegistryEntry[]> {
@@ -193,16 +193,16 @@ async function readTokenRegistry(): Promise<TokenRegistryEntry[]> {
   const source = await readFile(SOURCE.generatedTheme, "utf8");
   const entries: TokenRegistryEntry[] = [];
 
-  const globalBlock = source.match(/export const GSL_GLOBAL_TOKEN_VARS[^{]*\{([\s\S]*?)\n\};/)?.[1] ?? "";
-  for (const m of globalBlock.matchAll(/^\s{2}\w+:\s*"(--gsl-[\w-]+)",\s*$/gm)) {
+  const globalBlock = source.match(/export const CLET_GLOBAL_TOKEN_VARS[^{]*\{([\s\S]*?)\n\};/)?.[1] ?? "";
+  for (const m of globalBlock.matchAll(/^\s{2}\w+:\s*"(--clet-[\w-]+)",\s*$/gm)) {
     entries.push({ cssVar: m[1] });
   }
 
   const componentSection =
-    source.match(/export const GSL_COMPONENT_TOKEN_VARS[\s\S]*?=\s*\{([\s\S]*)\n\};\s*$/)?.[1] ?? "";
+    source.match(/export const CLET_COMPONENT_TOKEN_VARS[\s\S]*?=\s*\{([\s\S]*)\n\};\s*$/)?.[1] ?? "";
   for (const compMatch of componentSection.matchAll(/^\s{2}(\w+):\s*\{([\s\S]*?)\n\s{2}\},\s*$/gm)) {
     const [, component, body] = compMatch;
-    for (const m of body.matchAll(/^\s{4}\w+:\s*"(--gsl-[\w-]+)",\s*$/gm)) {
+    for (const m of body.matchAll(/^\s{4}\w+:\s*"(--clet-[\w-]+)",\s*$/gm)) {
       entries.push({ component, cssVar: m[1] });
     }
   }
@@ -215,6 +215,7 @@ function pascalToKebab(pascal: string): string {
   return pascal.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 }
 
+/** Component-scoped values, keyed by bare local name (no "--clet-" prefix). */
 async function readComponentCssValues(slug: string): Promise<Map<string, string>> {
   const values = new Map<string, string>();
   const stylesDir = path.join(SOURCE.componentsDir, slug, "styles");
@@ -222,7 +223,7 @@ async function readComponentCssValues(slug: string): Promise<Map<string, string>
   for (const file of await readdir(stylesDir)) {
     if (!file.endsWith(".css")) continue;
     const css = await readFile(path.join(stylesDir, file), "utf8");
-    for (const m of css.matchAll(/(--gsl-[\w-]+)\s*:\s*([^;]+);/g)) {
+    for (const m of css.matchAll(/--clet-([\w-]+)\s*:\s*([^;]+);/g)) {
       if (!values.has(m[1])) values.set(m[1], m[2].trim()); // first declaration = base value
     }
   }
@@ -241,14 +242,14 @@ export interface TokenOutEntry {
 async function buildTokens(): Promise<Record<string, TokenOutEntry>> {
   const tokens: Record<string, TokenOutEntry> = {};
 
-  // Global token VALUES (unchanged: base/light/dark theme CSS).
+  // Global token VALUES, keyed by bare local name, per theme.
   const globalValues: Record<string, Record<string, string>> = {};
   const files: Record<string, string> = { base: "base.css", light: "light.css", dark: "dark.css" };
   for (const [theme, file] of Object.entries(files)) {
     const p = path.join(SOURCE.themeDir, file);
     if (!existsSync(p)) continue;
     const css = await readFile(p, "utf8");
-    for (const m of css.matchAll(/(--gsl-[\w-]+)\s*:\s*([^;]+);/g)) {
+    for (const m of css.matchAll(/--clet-([\w-]+)\s*:\s*([^;]+);/g)) {
       (globalValues[m[1]] ??= {})[theme] = m[2].trim();
     }
   }
@@ -258,10 +259,11 @@ async function buildTokens(): Promise<Record<string, TokenOutEntry>> {
 
   for (const entry of registry) {
     if (!entry.component) {
+      const localName = entry.cssVar.replace(/^--clet-/, "");
       tokens[entry.cssVar] = {
         group: classifyToken(entry.cssVar),
         scope: "global",
-        ...globalValues[entry.cssVar],
+        ...globalValues[localName],
       };
       continue;
     }
@@ -278,11 +280,13 @@ async function buildTokens(): Promise<Record<string, TokenOutEntry>> {
     const slug = pascalToKebab(component);
     const cssValues = await readComponentCssValues(slug);
     for (const cssVar of cssVars) {
+      const localName = cssVar.replace(/^--clet-/, "");
+      const base = cssValues.get(localName);
       tokens[cssVar] = {
         group: classifyToken(cssVar),
         scope: "component",
         component: slug,
-        ...(cssValues.has(cssVar) ? { base: cssValues.get(cssVar)! } : {}),
+        ...(base ? { base } : {}),
       };
     }
   }

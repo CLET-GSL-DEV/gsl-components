@@ -17,7 +17,7 @@ describe("Textarea", () => {
     render(<Textarea invalid aria-label="Message" />);
 
     const textarea = screen.getByRole("textbox", { name: "Message" });
-    expect(textarea).toHaveClass("gsl-textarea--invalid");
+    expect(textarea).toHaveClass("clet-textarea--invalid");
     expect(textarea).toHaveAttribute("aria-invalid", "true");
   });
 
@@ -25,7 +25,7 @@ describe("Textarea", () => {
     render(<Textarea disabled aria-label="Message" />);
 
     expect(screen.getByRole("textbox", { name: "Message" })).toHaveClass(
-      "gsl-textarea--disabled",
+      "clet-textarea--disabled",
     );
   });
 });

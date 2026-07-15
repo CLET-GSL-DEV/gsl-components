@@ -6,7 +6,7 @@ import { cn } from "../../utils/cn";
  * swooshes, each with a fixed size/anchor baked in (an overlay's alignment
  * is part of its identity; it's never reused with another overlay's
  * placement). Marks are solid white — dimmed to a translucent sheen via the
- * `.gsl-launchpad__tile-overlay` opacity rule — so they read consistently
+ * `.clet-launchpad__tile-overlay` opacity rule — so they read consistently
  * against all 9 gradients (same reasoning as the white glyph on top: every
  * gradient in the palette is dark/saturated enough to carry white). A dark
  * stroke would all but disappear on the darker gradients in the set.
@@ -18,8 +18,8 @@ const OVERLAY_STROKE = "#000";
 
 function overlayClass(index: number) {
   return cn(
-    "gsl-launchpad__tile-overlay",
-    `gsl-launchpad__tile-overlay--${index}`,
+    "clet-launchpad__tile-overlay",
+    `clet-launchpad__tile-overlay--${index}`,
   );
 }
 
@@ -160,7 +160,7 @@ function LaunchpadOverlay6() {
 
 // 7 — w-95% bottom-right
 function LaunchpadOverlay7() {
-  const maskId = `gsl-launchpad-icon-overlay-7-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  const maskId = `clet-launchpad-icon-overlay-7-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
     <svg
       className={overlayClass(7)}
@@ -184,7 +184,7 @@ function LaunchpadOverlay7() {
 
 // 8 — w-full, top-10%
 function LaunchpadOverlay8() {
-  const maskId = `gsl-launchpad-icon-overlay-8-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  const maskId = `clet-launchpad-icon-overlay-8-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
     <svg
       className={overlayClass(8)}

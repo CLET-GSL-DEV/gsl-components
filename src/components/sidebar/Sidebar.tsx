@@ -70,11 +70,11 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
       ref={ref}
       id={sidebarId}
       className={cn(
-        "gsl-sidebar",
-        variant === "plain" && "gsl-sidebar--plain",
-        isMobile && "gsl-sidebar--mobile",
-        isMobile && open && "gsl-sidebar--mobile-open",
-        !isMobile && collapsed && "gsl-sidebar--collapsed",
+        "clet-sidebar",
+        variant === "plain" && "clet-sidebar--plain",
+        isMobile && "clet-sidebar--mobile",
+        isMobile && open && "clet-sidebar--mobile-open",
+        !isMobile && collapsed && "clet-sidebar--collapsed",
         classNames?.root,
         className,
       )}
@@ -104,8 +104,8 @@ export const SidebarOverlay = forwardRef<
       ref={ref}
       type="button"
       className={cn(
-        "gsl-sidebar__overlay",
-        open && "gsl-sidebar__overlay--visible",
+        "clet-sidebar__overlay",
+        open && "clet-sidebar__overlay--visible",
         classNames?.overlay,
         className,
       )}
@@ -135,7 +135,7 @@ export const SidebarTrigger = forwardRef<
     <button
       ref={ref}
       type="button"
-      className={cn("gsl-sidebar__trigger", classNames?.trigger, className)}
+      className={cn("clet-sidebar__trigger", classNames?.trigger, className)}
       aria-expanded={open}
       aria-controls={sidebarId}
       onClick={(event) => {
@@ -167,7 +167,7 @@ export const SidebarCollapse = forwardRef<
     <button
       ref={ref}
       type="button"
-      className={cn("gsl-sidebar__collapse", classNames?.collapse, className)}
+      className={cn("clet-sidebar__collapse", classNames?.collapse, className)}
       aria-expanded={!collapsed}
       aria-controls={sidebarId}
       aria-label="Toggle sidebar"
@@ -189,7 +189,7 @@ export const SidebarHeader = forwardRef<HTMLDivElement, SidebarHeaderProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-sidebar__header", classNames?.header, className)}
+        className={cn("clet-sidebar__header", classNames?.header, className)}
       >
         {children}
       </div>
@@ -202,7 +202,7 @@ export const SidebarBrand = forwardRef<HTMLDivElement, SidebarBrandProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-sidebar__header-brand", classNames?.root, className)}
+        className={cn("clet-sidebar__header-brand", classNames?.root, className)}
       >
         {children}
       </div>
@@ -247,9 +247,9 @@ export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
       <div
         ref={setRefs}
         className={cn(
-          "gsl-sidebar__content",
-          scrolledDown && "gsl-sidebar__content--scrolled",
-          showScrollHint && "gsl-sidebar__content--more-below",
+          "clet-sidebar__content",
+          scrolledDown && "clet-sidebar__content--scrolled",
+          showScrollHint && "clet-sidebar__content--more-below",
           classNames?.content,
           className,
         )}
@@ -258,7 +258,7 @@ export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
         {showScrollHint && (
           <button
             type="button"
-            className="gsl-sidebar__scroll-hint"
+            className="clet-sidebar__scroll-hint"
             onClick={handleScrollHint}
             aria-label="Scroll for more"
           >
@@ -275,7 +275,7 @@ export const SidebarFooter = forwardRef<HTMLDivElement, SidebarFooterProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-sidebar__footer", classNames?.footer, className)}
+        className={cn("clet-sidebar__footer", classNames?.footer, className)}
       >
         {children}
       </div>
@@ -297,7 +297,7 @@ export const SidebarNav = forwardRef<HTMLElement, SidebarNavProps>(
     return (
       <nav
         ref={ref}
-        className={cn("gsl-sidebar__nav", classNames?.nav, className)}
+        className={cn("clet-sidebar__nav", classNames?.nav, className)}
         aria-label={ariaLabel}
         {...props}
       >
@@ -382,20 +382,20 @@ export const SidebarGroup = forwardRef<HTMLDivElement, SidebarGroupProps>(
       <SidebarGroupContext.Provider value={ctx}>
         <div
           ref={ref}
-          className={cn("gsl-sidebar__group", classNames?.group, className)}
+          className={cn("clet-sidebar__group", classNames?.group, className)}
         >
           {label}
           {hasTrigger ? (
             <div
               id={contentId}
               className={cn(
-                "gsl-sidebar__group-content",
+                "clet-sidebar__group-content",
                 classNames?.groupContent,
               )}
               data-state={expanded ? "expanded" : "collapsed"}
               inert={!expanded}
             >
-              <div className="gsl-sidebar__group-content-inner">
+              <div className="clet-sidebar__group-content-inner">
                 {contentChildren}
               </div>
             </div>
@@ -421,8 +421,8 @@ export const SidebarGroupLabel = forwardRef<
         type="button"
         id={ctx.toggleId}
         className={cn(
-          "gsl-sidebar__group-label",
-          "gsl-sidebar__group-toggle",
+          "clet-sidebar__group-label",
+          "clet-sidebar__group-toggle",
           classNames?.groupLabel,
           ctx.groupToggleClassName,
           className,
@@ -433,7 +433,7 @@ export const SidebarGroupLabel = forwardRef<
       >
         {children}
         <ChevronDown
-          className="gsl-sidebar__group-label-icon"
+          className="clet-sidebar__group-label-icon"
           size={20}
           strokeWidth={1}
           aria-hidden
@@ -446,7 +446,7 @@ export const SidebarGroupLabel = forwardRef<
     <p
       ref={ref as React.Ref<HTMLParagraphElement>}
       className={cn(
-        "gsl-sidebar__group-label",
+        "clet-sidebar__group-label",
         classNames?.groupLabel,
         className,
       )}
@@ -461,7 +461,7 @@ export const SidebarItem = forwardRef<HTMLDivElement, SidebarItemProps>(
     return (
       <div
         ref={ref}
-        className={cn("gsl-sidebar__item", classNames?.item, className)}
+        className={cn("clet-sidebar__item", classNames?.item, className)}
       >
         {children}
       </div>
@@ -480,7 +480,7 @@ export const SidebarBadge = forwardRef<HTMLSpanElement, SidebarBadgeProps>(
     return (
       <span
         ref={ref}
-        className={cn("gsl-sidebar__link-badge", classNames?.badge, className)}
+        className={cn("clet-sidebar__link-badge", classNames?.badge, className)}
       >
         {children}
       </span>
@@ -525,28 +525,28 @@ export const SidebarLink = forwardRef<
   const { collapsed } = useSidebar();
   const { Link } = getRouterAdapter();
   const linkClassName = cn(
-    "gsl-sidebar__link",
-    active && "gsl-sidebar__link--active",
-    loading && "gsl-sidebar__link--loading",
+    "clet-sidebar__link",
+    active && "clet-sidebar__link--active",
+    loading && "clet-sidebar__link--loading",
     classNames?.link,
     className,
   );
 
   if (loading) {
     return (
-      <span className="gsl-sidebar__link-wrapper">
+      <span className="clet-sidebar__link-wrapper">
         <div className={linkClassName} aria-busy="true">
           {icon ? (
             <span
-              className="gsl-skeleton gsl-sidebar__skeleton-icon"
+              className="clet-skeleton clet-sidebar__skeleton-icon"
               aria-hidden
             />
           ) : null}
           <span
-            className="gsl-skeleton gsl-sidebar__skeleton-label"
+            className="clet-skeleton clet-sidebar__skeleton-label"
             aria-hidden
           />
-          <span className="gsl-sidebar__sr-only">{loadingLabel}</span>
+          <span className="clet-sidebar__sr-only">{loadingLabel}</span>
         </div>
       </span>
     );
@@ -583,8 +583,8 @@ export const SidebarLink = forwardRef<
 
   const linkContent = (
     <>
-      {icon ? <span className="gsl-sidebar__link-icon">{icon}</span> : null}
-      <span className="gsl-sidebar__link-label">{labelItems}</span>
+      {icon ? <span className="clet-sidebar__link-icon">{icon}</span> : null}
+      <span className="clet-sidebar__link-label">{labelItems}</span>
       {badgeElement}
     </>
   );
@@ -616,7 +616,7 @@ export const SidebarLink = forwardRef<
   );
 
   const linkWrapper = (
-    <span className="gsl-sidebar__link-wrapper">{wrappedInner}</span>
+    <span className="clet-sidebar__link-wrapper">{wrappedInner}</span>
   );
 
   if (collapsed && tooltipText) {

@@ -83,12 +83,12 @@ export function OtpVerifyDialogExample() {
                 onComplete={(value) => verify(value)}
               />
               {status === "error" && (
-                <p style={{ margin: 0, fontSize: 13, color: "var(--gsl-error-text)" }}>
+                <p style={{ margin: 0, fontSize: 13, color: "var(--clet-error-text)" }}>
                   Incorrect code. Please try again.
                 </p>
               )}
               {status === "success" && (
-                <p style={{ margin: 0, fontSize: 13, color: "var(--gsl-success)" }}>
+                <p style={{ margin: 0, fontSize: 13, color: "var(--clet-success)" }}>
                   Verified successfully.
                 </p>
               )}

@@ -23,16 +23,16 @@ function MappingStatus({ mapped }: { mapped: boolean }) {
     <span
       key={mapped ? "complete" : "pending"}
       className={[
-        "gsl-bulk-import__mapping-status",
+        "clet-bulk-import__mapping-status",
         mapped
-          ? "gsl-bulk-import__mapping-status--complete"
-          : "gsl-bulk-import__mapping-status--pending",
+          ? "clet-bulk-import__mapping-status--complete"
+          : "clet-bulk-import__mapping-status--pending",
       ].join(" ")}
       aria-hidden="true"
     >
       {mapped ? (
         <svg
-          className="gsl-bulk-import__mapping-status-check"
+          className="clet-bulk-import__mapping-status-check"
           width="12"
           height="12"
           viewBox="0 0 14 14"
@@ -58,12 +58,12 @@ function formatPreviewValue(value: string | undefined): string {
 
 function openLinkedDropdown(columnIndex: number) {
   const control = document.querySelector<HTMLElement>(
-    `.gsl-bulk-import__target-column-control[data-column-index="${columnIndex}"]`,
+    `.clet-bulk-import__target-column-control[data-column-index="${columnIndex}"]`,
   );
   if (!control) return;
 
   const trigger = control.querySelector<HTMLButtonElement>(
-    ".gsl-dropdown__trigger",
+    ".clet-dropdown__trigger",
   );
   trigger?.click();
 }
@@ -92,7 +92,7 @@ export function MatchColumnsStep({
       option: { value: string; label: string } | null,
       state: "selected" | "idle" | "empty",
     ) => (
-      <span className="gsl-bulk-import__match-colum-dropdown-label">
+      <span className="clet-bulk-import__match-colum-dropdown-label">
         {state !== "idle" && <MappingStatus mapped={state === "selected"} />}
         <span>{state === "empty" ? "Select Column" : option?.label}</span>
       </span>
@@ -101,9 +101,9 @@ export function MatchColumnsStep({
   );
 
   return (
-    <div className="gsl-bulk-import__step gsl-bulk-import__step--match">
-      <div className="gsl-bulk-import__step-header">
-        <h3 className="gsl-bulk-import__step-title">Match Columns</h3>
+    <div className="clet-bulk-import__step clet-bulk-import__step--match">
+      <div className="clet-bulk-import__step-header">
+        <h3 className="clet-bulk-import__step-title">Match Columns</h3>
         <Button variant="outline" size="sm" onClick={onResetMapping}>
           <svg
             width="14"
@@ -121,19 +121,19 @@ export function MatchColumnsStep({
           Reset mapping
         </Button>
       </div>
-      <p className="gsl-bulk-import__match-toolbar-hint">
+      <p className="clet-bulk-import__match-toolbar-hint">
         Map each column to a field, or exclude unused columns with the × button.
         All columns must be mapped before proceeding.
       </p>
 
-      <div className="gsl-bulk-import__match-layout">
-        <div className="gsl-bulk-import__match-board">
-          <p className="gsl-bulk-import__match-heading">Your table</p>
-          <div className="gsl-bulk-import__match-track gsl-bulk-import__match-track--source">
+      <div className="clet-bulk-import__match-layout">
+        <div className="clet-bulk-import__match-board">
+          <p className="clet-bulk-import__match-heading">Your table</p>
+          <div className="clet-bulk-import__match-track clet-bulk-import__match-track--source">
             {visibleColumns.map((column) => (
               <div
                 key={column.index}
-                className="gsl-bulk-import__match-column gsl-bulk-import__source-column"
+                className="clet-bulk-import__match-column clet-bulk-import__source-column"
                 data-column-index={column.index}
                 onClick={() => openLinkedDropdown(column.index)}
                 role="button"
@@ -145,13 +145,13 @@ export function MatchColumnsStep({
                   }
                 }}
               >
-                <div className="gsl-bulk-import__source-column-header">
-                  <span className="gsl-bulk-import__source-column-label">
+                <div className="clet-bulk-import__source-column-header">
+                  <span className="clet-bulk-import__source-column-label">
                     {column.label}
                   </span>
                   <button
                     type="button"
-                    className="gsl-bulk-import__exclude-column"
+                    className="clet-bulk-import__exclude-column"
                     aria-label={`Exclude column ${column.label}`}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -161,11 +161,11 @@ export function MatchColumnsStep({
                     ×
                   </button>
                 </div>
-                <div className="gsl-bulk-import__source-column-preview">
+                <div className="clet-bulk-import__source-column-preview">
                   {previewLimit.map((row, rowIndex) => (
                     <span
                       key={rowIndex}
-                      className="gsl-bulk-import__source-column-preview-row"
+                      className="clet-bulk-import__source-column-preview-row"
                     >
                       {formatPreviewValue(row[column.index])}
                     </span>
@@ -175,10 +175,10 @@ export function MatchColumnsStep({
             ))}
           </div>
 
-          <p className="gsl-bulk-import__match-heading gsl-bulk-import__match-heading--target">
+          <p className="clet-bulk-import__match-heading clet-bulk-import__match-heading--target">
             Will become
           </p>
-          <div className="gsl-bulk-import__match-track gsl-bulk-import__match-track--target">
+          <div className="clet-bulk-import__match-track clet-bulk-import__match-track--target">
             {visibleColumns.map((column) => {
               const mappedFieldKey = sourceColumnMapping[column.index] ?? null;
               const isMapped = mappedFieldKey !== null;
@@ -186,10 +186,10 @@ export function MatchColumnsStep({
               return (
                 <div
                   key={column.index}
-                  className="gsl-bulk-import__match-column gsl-bulk-import__target-column"
+                  className="clet-bulk-import__match-column clet-bulk-import__target-column"
                 >
                   <div
-                    className="gsl-bulk-import__target-column-control"
+                    className="clet-bulk-import__target-column-control"
                     data-column-index={column.index}
                   >
                     <FieldMappingSelect

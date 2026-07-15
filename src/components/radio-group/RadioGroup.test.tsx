@@ -90,14 +90,14 @@ describe("RadioGroup", () => {
       </RadioGroup>,
     );
 
-    expect(document.querySelector(".gsl-radio-group")).toHaveClass(
+    expect(document.querySelector(".clet-radio-group")).toHaveClass(
       "custom-group",
     );
     expect(screen.getByRole("radio", { name: "Email" })).toHaveClass(
       "custom-control",
     );
     expect(screen.getByText("Email")).toHaveClass("custom-label");
-    expect(document.querySelector(".gsl-radio")).toHaveClass("custom-radio");
+    expect(document.querySelector(".clet-radio")).toHaveClass("custom-radio");
   });
 
   it("supports aria-label when no visible label is provided", () => {
@@ -127,7 +127,7 @@ describe("RadioGroup", () => {
       screen.getByText("For individuals getting started."),
     ).toBeInTheDocument();
     expect(screen.getByText("For individuals getting started.")).toHaveClass(
-      "gsl-radio__description",
+      "clet-radio__description",
     );
   });
 
@@ -161,10 +161,10 @@ describe("RadioGroup", () => {
       </RadioGroup>,
     );
 
-    expect(document.querySelector(".gsl-radio-group")).toHaveClass(
-      "gsl-radio-group--card",
+    expect(document.querySelector(".clet-radio-group")).toHaveClass(
+      "clet-radio-group--card",
     );
-    expect(document.querySelector(".gsl-radio")).toHaveClass("gsl-radio--card");
+    expect(document.querySelector(".clet-radio")).toHaveClass("clet-radio--card");
   });
 
   it("selects card option and calls onValueChange", async () => {

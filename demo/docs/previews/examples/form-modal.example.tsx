@@ -101,9 +101,9 @@ function CreateUserForm({ onDone }: { onDone: () => void }) {
             role="alert"
             style={{
               padding: "10px 12px",
-              borderRadius: "var(--gsl-radius-base)",
-              background: "var(--gsl-error-bg, #fef2f2)",
-              color: "var(--gsl-error-text, #b91c1c)",
+              borderRadius: "var(--clet-radius-base)",
+              background: "var(--clet-error-bg, #fef2f2)",
+              color: "var(--clet-error-text, #b91c1c)",
               fontSize: 14,
             }}
           >
@@ -132,7 +132,7 @@ function CreateUserForm({ onDone }: { onDone: () => void }) {
             <Field invalid={!!fieldState.error}>
               <FieldLabel>Email</FieldLabel>
               <FieldControl>
-                <Input type="email" placeholder="ama@gsl.edu.gh" {...field} />
+                <Input type="email" placeholder="ama@clet.edu.gh" {...field} />
               </FieldControl>
               <FieldError>{fieldState.error?.message}</FieldError>
             </Field>

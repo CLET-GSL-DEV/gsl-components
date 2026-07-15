@@ -49,13 +49,13 @@ Props for `ProgressBar`. Extends `HTMLAttributes<HTMLDivElement>` with `value`, 
 
 ### `ProgressBarClassNames`
 
-Part-level class names merged after base `gsl-progress-bar*` styles:
+Part-level class names merged after base `clet-progress-bar*` styles:
 
 | Key | Applied to |
 |-----|------------|
 | `root` | Outer `role="progressbar"` element |
-| `indicator` | Fill bar (`.gsl-progress-bar__indicator`) |
-| `value` | Percentage label (`.gsl-progress-bar__value`) |
+| `indicator` | Fill bar (`.clet-progress-bar__indicator`) |
+| `value` | Percentage label (`.clet-progress-bar__value`) |
 
 ### `ProgressBarVariant`
 
@@ -69,10 +69,10 @@ Part-level class names merged after base `gsl-progress-bar*` styles:
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-progress-bar-font` | `--gsl-font-body` | Font family for the root element (inherited by the percentage value label) |
+| `--clet-progress-bar-font` | `--clet-font-body` | Font family for the root element (inherited by the percentage value label) |
 
 ## Notes
 
 - Provide `label` (or `aria-label`) when the progress bar is not described by visible surrounding text.
 - Indeterminate animation is disabled under `prefers-reduced-motion: reduce` (static partial fill).
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

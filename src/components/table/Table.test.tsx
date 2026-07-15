@@ -168,7 +168,7 @@ describe("Table", () => {
     expect(screen.getByText("Name")).toBeInTheDocument();
     expect(screen.getByText("Email")).toBeInTheDocument();
     // Skeleton cells render (3 rows × 2 columns = 6 skeleton td)
-    const skeletons = container.querySelectorAll(".gsl-table__skeleton--td");
+    const skeletons = container.querySelectorAll(".clet-table__skeleton--td");
     expect(skeletons.length).toBe(6);
     // No empty state text
     expect(screen.queryByText("No results")).not.toBeInTheDocument();
@@ -263,7 +263,7 @@ describe("Table", () => {
       </Table>,
     );
 
-    const iconWrapper = container.querySelector(".gsl-table__empty-icon");
+    const iconWrapper = container.querySelector(".clet-table__empty-icon");
     expect(iconWrapper).toBeInTheDocument();
     // An Inbox SVG icon should be rendered inside the wrapper
     expect(iconWrapper?.querySelector("svg")).toBeInTheDocument();
@@ -376,7 +376,7 @@ describe("Table", () => {
     );
 
     // One checkbox skeleton in header + 2 rows = 3 checkbox skeletons
-    const cbs = container.querySelectorAll(".gsl-table__skeleton--cb");
+    const cbs = container.querySelectorAll(".clet-table__skeleton--cb");
     expect(cbs.length).toBe(3);
   });
 
@@ -397,7 +397,7 @@ describe("Table", () => {
 
     // Select-all checkbox in header + row checkbox + 2 data cells
     const checkboxes = container.querySelectorAll(
-      ".gsl-table__checkbox-cell",
+      ".clet-table__checkbox-cell",
     );
     expect(checkboxes.length).toBe(2); // header + 1 row
   });

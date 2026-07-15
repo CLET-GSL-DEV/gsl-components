@@ -73,11 +73,11 @@ describe("Launchpad", () => {
 		await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
 
 		const skeletonGrid = document.querySelector(
-			".gsl-launchpad__grid[aria-busy='true']",
+			".clet-launchpad__grid[aria-busy='true']",
 		);
 		expect(skeletonGrid).toBeInTheDocument();
 		expect(
-			skeletonGrid?.querySelectorAll(".gsl-launchpad__skeleton-item"),
+			skeletonGrid?.querySelectorAll(".clet-launchpad__skeleton-item"),
 		).toHaveLength(9);
 		expect(screen.queryByRole("link")).not.toBeInTheDocument();
 	});
@@ -94,7 +94,7 @@ describe("Launchpad", () => {
 
 		await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
 
-		expect(document.querySelectorAll(".gsl-launchpad__tile")).toHaveLength(9);
+		expect(document.querySelectorAll(".clet-launchpad__tile")).toHaveLength(9);
 	});
 
 	it("shows an empty message when not loading and apps is empty", async () => {
@@ -136,7 +136,7 @@ describe("Launchpad", () => {
 		).toBeInTheDocument();
 		expect(
 			document.querySelectorAll(
-				".gsl-launchpad__expand-grid .gsl-launchpad__tile",
+				".clet-launchpad__expand-grid .clet-launchpad__tile",
 			),
 		).toHaveLength(12);
 	});
@@ -189,8 +189,8 @@ describe("Launchpad", () => {
 
 		await user.click(screen.getByRole("button", { name: "Open Launchpad" }));
 
-		const gridScroll = document.querySelector(".gsl-launchpad__grid-scroll");
-		const footer = document.querySelector(".gsl-launchpad__footer");
+		const gridScroll = document.querySelector(".clet-launchpad__grid-scroll");
+		const footer = document.querySelector(".clet-launchpad__footer");
 		expect(footer).not.toBeNull();
 		expect(gridScroll?.contains(footer)).toBe(false);
 		expect(footer?.textContent).toContain("View as");

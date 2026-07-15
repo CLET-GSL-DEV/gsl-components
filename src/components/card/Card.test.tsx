@@ -11,7 +11,7 @@ describe("Card", () => {
   it("merges className on root", () => {
     const { container } = render(<Card className="custom">X</Card>);
     expect(container.firstElementChild).toHaveClass("custom");
-    expect(container.firstElementChild).toHaveClass("gsl-card");
+    expect(container.firstElementChild).toHaveClass("clet-card");
   });
 
   it("forwards ref", () => {

@@ -77,7 +77,7 @@ A discriminated union on `multiple` — when `multiple: true`, `value`/`onValueC
 
 ### `ComboboxClassNames`
 
-Part-level class names merged after base `gsl-combobox*` styles:
+Part-level class names merged after base `clet-combobox*` styles:
 
 | Key | Applied to |
 |-----|------------|
@@ -95,15 +95,15 @@ Part-level class names merged after base `gsl-combobox*` styles:
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-combobox-trigger-height` | `40px` | Trigger button height |
-| `--gsl-combobox-radius` | `var(--gsl-radius-base)` | Trigger and popover corner radius |
-| `--gsl-combobox-font` | `var(--gsl-font-body)` | Font family |
-| `--gsl-combobox-label-size` | `var(--gsl-text-size-base)` | Trigger/search/item font size |
-| `--gsl-combobox-menu-max-height` | `320px` | Max height of the scrollable option list |
+| `--clet-combobox-trigger-height` | `40px` | Trigger button height |
+| `--clet-combobox-radius` | `var(--clet-radius-base)` | Trigger and popover corner radius |
+| `--clet-combobox-font` | `var(--clet-font-body)` | Font family |
+| `--clet-combobox-label-size` | `var(--clet-text-size-base)` | Trigger/search/item font size |
+| `--clet-combobox-menu-max-height` | `320px` | Max height of the scrollable option list |
 
 ## Notes
 
 - Single-select closes the popover on selection; multi-select keeps it open so several options can be toggled in one pass, matching the checkbox-row pattern.
 - Search matches against each option's `label` via cmdk's `keywords`, while `value` stays the stable identifier passed to `onValueChange` — labels don't need to be unique for selection to work correctly.
-- The multi-select checkbox visual reuses the same checked-state colors as `Checkbox` (`--gsl-primary` background, white check); single-select shows a plain check mark instead of a checkbox box.
+- The multi-select checkbox visual reuses the same checked-state colors as `Checkbox` (`--clet-primary` background, white check); single-select shows a plain check mark instead of a checkbox box.
 - The internal search input already carries the ARIA `combobox` role (from `cmdk`); the trigger button intentionally uses `aria-haspopup="listbox"` instead, to avoid two conflicting `combobox` roles being present at once when open.

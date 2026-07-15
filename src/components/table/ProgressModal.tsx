@@ -40,7 +40,7 @@ export const ProgressModal = forwardRef<HTMLDivElement, ProgressModalProps>(
             preventClose
             onInteractOutside={prevent}
             onEscapeKeyDown={prevent}
-            className={cn("gsl-progress-modal", classNames?.root, className)}
+            className={cn("clet-progress-modal", classNames?.root, className)}
             aria-label="Processing your document"
             {...props}
           >
@@ -52,7 +52,7 @@ export const ProgressModal = forwardRef<HTMLDivElement, ProgressModalProps>(
                 style={{ width: 160, height: 160 }}
               />
             </Suspense>
-            <div className="gsl-progress-modal__progress">
+            <div className="clet-progress-modal__progress">
               <ProgressBar value={progress} size="md" />
             </div>
           </ModalContent>

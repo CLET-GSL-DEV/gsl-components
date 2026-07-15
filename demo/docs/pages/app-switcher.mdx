@@ -19,7 +19,7 @@ import appSwitcherLoadingSource from "../previews/examples/app-switcher-loading.
 
 > **Deprecated — no longer maintained.** Use [`Launchpad`](/docs/launchpad) instead. `AppSwitcher` remains exported for existing consumers and won't be removed without a major-version breaking-change entry, but it receives no new features or design updates going forward; `Launchpad` is where new work happens.
 
-Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products. Pass `apps` from your own data layer and use `loading` while data is being fetched.
+Google Apps–style 9-dot launcher for switching between CLET systems. Drop it into your header to let users jump between products. Pass `apps` from your own data layer and use `loading` while data is being fetched.
 
 ## Examples
 
@@ -91,10 +91,10 @@ const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-shadow` | `--gsl-shadow-sm` | Shadow theming hook on the root element |
-| `--gsl-item-size` | `80px` | Width and height of each app grid item |
-| `--gsl-icon-size` | `32px` | Width and height of the icon slot inside each item |
-| `--gsl-app-switcher-font` | `--gsl-font-body` | Font family for the root element |
+| `--clet-shadow` | `--clet-shadow-sm` | Shadow theming hook on the root element |
+| `--clet-item-size` | `80px` | Width and height of each app grid item |
+| `--clet-icon-size` | `32px` | Width and height of the icon slot inside each item |
+| `--clet-app-switcher-font` | `--clet-font-body` | Font family for the root element |
 
 ## Notes
 
@@ -102,4 +102,4 @@ const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
 - Fetch apps in your application and pass `apps` + `loading`; AppSwitcher does not call APIs internally.
 - Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, `AppIconTile`.
 - For systems without a logo yet, pass `icon={<SystemAppIcon name="System Name" />}` — it renders a rounded-square tile with a deterministic gradient background, a subtle pattern texture, and the system's initials, all derived from `name` via a hash (same name always produces the same tile). Build a custom glyph-on-tile icon the same way with `<AppIconTile name="System Name"><YourIcon /></AppIconTile>`.
-- Override shared tokens on `.gsl-app-switcher` for theming (see [Theme](/docs/theme)).
+- Override shared tokens on `.clet-app-switcher` for theming (see [Theme](/docs/theme)).

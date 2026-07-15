@@ -56,7 +56,7 @@ function renderSidebar({
       <SidebarOverlay />
       <Sidebar>
         <SidebarHeader>
-          GSL Admin
+          CLET Admin
           <SidebarCollapse />
         </SidebarHeader>
         <SidebarContent>
@@ -95,8 +95,8 @@ describe("Sidebar", () => {
     await user.click(trigger);
 
     expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(document.querySelector(".gsl-sidebar")).toHaveClass(
-      "gsl-sidebar--mobile-open",
+    expect(document.querySelector(".clet-sidebar")).toHaveClass(
+      "clet-sidebar--mobile-open",
     );
   });
 
@@ -126,7 +126,7 @@ describe("Sidebar", () => {
     renderSidebar();
 
     expect(screen.getByRole("link", { name: "Dashboard" })).toHaveClass(
-      "gsl-sidebar__link--active",
+      "clet-sidebar__link--active",
     );
   });
 
@@ -158,7 +158,7 @@ describe("Sidebar", () => {
     );
 
     expect(document.querySelector(".custom-provider")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-sidebar")).toHaveClass("custom-sidebar");
+    expect(document.querySelector(".clet-sidebar")).toHaveClass("custom-sidebar");
     expect(screen.getByText("Brand")).toHaveClass("custom-header");
     expect(document.querySelector(".custom-content")).toBeInTheDocument();
     expect(document.querySelector(".custom-nav")).toBeInTheDocument();
@@ -188,8 +188,8 @@ describe("Sidebar", () => {
     );
 
     const link = screen.getByRole("link", { name: "Reports" });
-    expect(link).toHaveClass("gsl-sidebar__link");
-    expect(link).toHaveClass("gsl-sidebar__link--active");
+    expect(link).toHaveClass("clet-sidebar__link");
+    expect(link).toHaveClass("clet-sidebar__link--active");
     expect(link).toHaveClass("child-link");
   });
 
@@ -213,9 +213,9 @@ describe("Sidebar", () => {
     );
 
     expect(screen.getByTestId("users-icon").parentElement).toHaveClass(
-      "gsl-sidebar__link-icon",
+      "clet-sidebar__link-icon",
     );
-    expect(screen.getByText("Users")).toHaveClass("gsl-sidebar__link-label");
+    expect(screen.getByText("Users")).toHaveClass("clet-sidebar__link-label");
   });
 
   it("toggles collapsed state from SidebarCollapse on desktop", async () => {
@@ -226,15 +226,15 @@ describe("Sidebar", () => {
 
     const collapse = screen.getByRole("button", { name: "Toggle sidebar" });
     expect(collapse).toHaveAttribute("aria-expanded", "true");
-    expect(document.querySelector(".gsl-sidebar")).not.toHaveClass(
-      "gsl-sidebar--collapsed",
+    expect(document.querySelector(".clet-sidebar")).not.toHaveClass(
+      "clet-sidebar--collapsed",
     );
 
     await user.click(collapse);
 
     expect(collapse).toHaveAttribute("aria-expanded", "false");
-    expect(document.querySelector(".gsl-sidebar")).toHaveClass(
-      "gsl-sidebar--collapsed",
+    expect(document.querySelector(".clet-sidebar")).toHaveClass(
+      "clet-sidebar--collapsed",
     );
   });
 
@@ -281,7 +281,7 @@ describe("Sidebar", () => {
     );
 
     const badge = screen.getByText("New");
-    expect(badge).toHaveClass("gsl-sidebar__link-badge");
+    expect(badge).toHaveClass("clet-sidebar__link-badge");
     expect(screen.getByRole("link", { name: /Notifications/ })).toContainElement(
       badge,
     );
@@ -491,8 +491,8 @@ describe("Sidebar", () => {
 
     const label = screen.getByText("Static");
     expect(label.tagName).toBe("P");
-    expect(label).toHaveClass("gsl-sidebar__group-label");
-    expect(label).not.toHaveClass("gsl-sidebar__group-toggle");
+    expect(label).toHaveClass("clet-sidebar__group-label");
+    expect(label).not.toHaveClass("clet-sidebar__group-toggle");
   });
 
   it("renders SidebarGroupLabel as a button with aria-expanded=true when group is collapsible", () => {
@@ -517,8 +517,8 @@ describe("Sidebar", () => {
 
     const trigger = screen.getByRole("button", { name: "Settings" });
     expect(trigger.tagName).toBe("BUTTON");
-    expect(trigger).toHaveClass("gsl-sidebar__group-label");
-    expect(trigger).toHaveClass("gsl-sidebar__group-toggle");
+    expect(trigger).toHaveClass("clet-sidebar__group-label");
+    expect(trigger).toHaveClass("clet-sidebar__group-toggle");
     expect(trigger).toHaveAttribute("aria-expanded", "true");
     expect(trigger).toHaveAttribute("aria-controls");
   });
@@ -548,7 +548,7 @@ describe("Sidebar", () => {
     const content = document.getElementById(controlsId ?? "");
 
     expect(content).toBeInTheDocument();
-    expect(content).toHaveClass("gsl-sidebar__group-content");
+    expect(content).toHaveClass("clet-sidebar__group-content");
     expect(content).toHaveAttribute("data-state", "expanded");
   });
 
@@ -772,7 +772,7 @@ describe("Sidebar", () => {
     );
 
     expect(
-      document.querySelector(".gsl-sidebar__group-content"),
+      document.querySelector(".clet-sidebar__group-content"),
     ).not.toBeInTheDocument();
   });
 
@@ -839,7 +839,7 @@ describe("SidebarFooter", () => {
 
     const footer = container.firstElementChild!;
     expect(footer).toHaveClass(
-      "gsl-sidebar__footer",
+      "clet-sidebar__footer",
       "footer-class",
       "extra-class",
     );

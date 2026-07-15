@@ -26,7 +26,11 @@ Before generating or editing UI code that uses `@rfdtech/components`:
    `RoleSelect` wired into all three locations when the system has multiple roles, `Launchpad` over
    the deprecated `AppSwitcher`, the `Table`/`MetricCard`/`Tabs` variant set, and more. Also see
    `get_component("migration-v2")` for the full migration/adoption checklist.
-7. **Migrating a project that already overrides `--gsl-*` tokens?** Never decide silently. Find
-   every existing override of a *known* token (`gslTheme()` calls, or CSS setting a real `--gsl-*`
-   property — not custom/arbitrary variables), list them, and ask the user about each one
-   individually: keep it, or drop it for the new approved default. See `get_rules("theming")`.
+7. **Migrating a project that already overrides tokens?** Never decide silently. Find every
+   existing override of a *known* token — `gslTheme()` calls, or CSS setting a real `--clet-*` or
+   legacy `--gsl-*` color token (not custom/arbitrary variables) — list them, and ask the user
+   about each one individually: keep it, or drop it for the new approved default. Every color
+   token has both a `--clet-*` name (preferred — use this for any *new* override you write) and a
+   `--gsl-*` alias (legacy, still functional — only relevant when reading/preserving existing
+   consumer code, never write new overrides with it). Non-color tokens (radius/shadow/font/
+   spacing/z-index) only have a `--gsl-*` name. See `get_rules("theming")`.

@@ -19,7 +19,7 @@ import phoneNumberInputFieldSource from "../previews/examples/phone-number-input
 
 # PhoneNumberInput
 
-Phone number input with a country code selector (flag + dial code prefix). Built on `@radix-ui/react-popover` with GSL styling. Auto-detects the country from the number prefix as the user types. Supports controlled and uncontrolled value.
+Phone number input with a country code selector (flag + dial code prefix). Built on `@radix-ui/react-popover` with CLET styling. Auto-detects the country from the number prefix as the user types. Supports controlled and uncontrolled value.
 
 Flags are real SVG icons from [`country-flag-icons`](https://www.npmjs.com/package/country-flag-icons), not emoji — they render consistently across operating systems and browsers (unlike emoji flags, which some platforms render as a two-letter country code instead of a flag).
 
@@ -97,22 +97,22 @@ See the props table above.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root wrapper (`.gsl-phone-number-input`) |
-| `prefix` | Country code prefix (`.gsl-phone-number-input__prefix`) |
-| `input` | Phone number input (`.gsl-phone-number-input__input`) |
-| `dropdown` | Country code dropdown (`.gsl-phone-number-input__dropdown`) |
+| `root` | Root wrapper (`.clet-phone-number-input`) |
+| `prefix` | Country code prefix (`.clet-phone-number-input__prefix`) |
+| `input` | Phone number input (`.clet-phone-number-input__input`) |
+| `dropdown` | Country code dropdown (`.clet-phone-number-input__dropdown`) |
 
 ## Design tokens
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-radius-base` | `8px` | Input border radius |
-| `--gsl-phone-number-input-font` | `var(--gsl-font-body)` | Font family for the phone number input field |
-| `--gsl-phone-number-input-dropdown-font` | `var(--gsl-font-body)` | Font family for the country dropdown search input and option list |
-| `--gsl-phone-number-input-height` | `40px` | Root height |
-| `--gsl-phone-number-input-dropdown-width` | `320px` | Country dropdown width |
-| `--gsl-phone-number-input-dropdown-max-height` | `300px` | Country dropdown max height before scrolling |
-| `--gsl-text-size-base` | `14px` | Prefix, input, search input, and option font size |
+| `--clet-radius-base` | `8px` | Input border radius |
+| `--clet-phone-number-input-font` | `var(--clet-font-body)` | Font family for the phone number input field |
+| `--clet-phone-number-input-dropdown-font` | `var(--clet-font-body)` | Font family for the country dropdown search input and option list |
+| `--clet-phone-number-input-height` | `40px` | Root height |
+| `--clet-phone-number-input-dropdown-width` | `320px` | Country dropdown width |
+| `--clet-phone-number-input-dropdown-max-height` | `300px` | Country dropdown max height before scrolling |
+| `--clet-text-size-base` | `14px` | Prefix, input, search input, and option font size |
 
 ## Notes
 
