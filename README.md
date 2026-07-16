@@ -120,8 +120,63 @@ also still works unchanged for existing overrides (every internal
 `var(--clet-*)` read resolves as `var(--gsl-*, var(--clet-*))`, so
 overriding either name works identically — `--gsl-*` wins if both are
 set). **Prefer `--clet-*` in new override code**; `--gsl-*` is a
-permanent compatibility alias, not a deprecated one. Override any
-token by declaring a new value on the same selectors the library uses.
+permanent compatibility alias, not a deprecated one.
+
+**Use the `cletTheme()` runtime helper (recommended)** — no separate
+CSS file, no build config. Import it from the package root alongside
+the library CSS, and call it once at startup:
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+import { cletTheme } from "@rfdtech/components";
+
+cletTheme({
+  all: {
+    primary: "#1d4ed8", // used by both modes unless a mode below overrides it
+    primaryLight: "#eff6ff",
+    focus: "#1d4ed8",
+    onPrimary: "#ffffff",
+  },
+});
+```
+
+Keys are the **camelCase** form of the `--clet-*` token name
+(`--clet-primary` → `primary`, `--clet-primary-light` → `primaryLight`),
+and `all`/`light`/`dark` are all optional — a token set in `light` or
+`dark` wins over the same token in `all`. `cletTheme()` is fully typed
+against the library's real token set, so a misspelled or wrong-cased
+key (or a value shaped wrong for its token, e.g. a non-color string for
+`primary`) is a compile error, not a silent no-op. Calling it again
+(e.g. on hot reload) replaces the previous overrides instead of
+stacking a new `<style>` tag.
+
+To keep every project's override in one predictable place, put the
+`cletTheme(...)` call in its own **`src/clet.theme.ts`** file and
+import it for its side effect, right after the library CSS:
+
+```ts title="src/clet.theme.ts"
+import { cletTheme } from "@rfdtech/components";
+
+cletTheme({
+  all: { primary: "#1d4ed8" },
+  dark: { primary: "#ef4444", primaryLight: "#3f1515" },
+});
+```
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+import "./clet.theme"; // side-effect import — runs cletTheme() once at startup
+import { ThemeProvider } from "@rfdtech/components";
+```
+
+See the [Theme](/docs/theme#clettheme-recommended) docs page for
+component-scoped overrides, the full token/value type reference, and
+type-safety details.
+
+**Alternative: plain CSS, no JS.** Override any token by declaring a
+new value on the same selectors the library uses — useful if you'd
+rather not add a runtime call, or need the override present before any
+JS runs.
 
 **Step 1 — Import the library CSS** so its defaults are loaded:
 
