@@ -2,7 +2,7 @@ export const meta = {
   title: "Migration guide: v1 → v2",
   description: "Agent instructions for upgrading to v2 and the new design system",
   category: "Guide",
-  keywords: ["migration", "upgrade", "v2", "breaking changes", "deprecated", "new design system", "AppHeaderProfile", "ProfilePopover", "Launchpad", "AppSwitcher", "rebrand", "AppLayout", "Sidebar", "RoleSelect", "stacked layout", "CountrySelector", "Combobox", "NetworkOperator"],
+  keywords: ["migration", "upgrade", "v2", "breaking changes", "deprecated", "new design system", "AppHeaderProfile", "ProfilePopover", "Launchpad", "AppSwitcher", "rebrand", "AppLayout", "Sidebar", "RoleSelect", "stacked layout", "CountrySelector", "Combobox", "NetworkOperator", "gsl-to-clet", "cletTheme", "gslTheme", "rename", "TableFooter", "noBorder"],
   since: "2.0.0",
   status: "guide",
   related: ["changelog", "getting-started", "theme", "app-header", "app-switcher", "launchpad", "table", "sidebar", "profile-popover", "role-select", "app-layout", "metric-card", "tabs", "country-selector", "combobox", "network-operator"],
@@ -207,9 +207,29 @@ themselves changed.
 +/>
 ```
 
+## 9. Naming rename: `.gsl-*` → `.clet-*`, `gslTheme()` → `cletTheme()`
+
+**Non-breaking.** Every `.gsl-*` CSS class, `--gsl-*` custom property, `data-gsl-theme` attribute, `.gsl-theme` root class, and the `gslTheme()` theming API function was renamed to its `.clet-*`/`--clet-*`/`data-clet-theme`/`.clet-theme`/`cletTheme()` counterpart. **Every old name keeps working, unchanged, with no forced migration and no removal date** — this is a permanent compatibility alias, not a deprecation:
+
+- **Classes**: every rendered element carries both classes (e.g. `class="clet-sidebar gsl-sidebar"`) — existing `.gsl-*` selectors in your own CSS keep matching without any change.
+- **Custom properties**: every internal `var(--clet-<name>)` read resolves as `var(--gsl-<name>, var(--clet-<name>))` — overriding either `--gsl-<name>` or `--clet-<name>` (globally or per-component) works identically; `--gsl-<name>` wins if both are set.
+- **Theme attribute/root class**: `ThemeProvider` sets both `data-clet-theme` and `data-gsl-theme` on `<html>` and its wrapper `<div>`, carrying both `clet-theme` and `gsl-theme` classes.
+- **JS API**: `gslTheme()` is now an alias of `cletTheme()` (same function, same behavior). Legacy type names (`GslTheme`, `GslThemeConfig`, `GslComponentThemeConfig`, `GslComponentThemeOverrides`, `ResolvedGslTheme`, `GslColorValue`, `GslComponentTokenMap`, `GslGlobalTokens`, `GslLengthValue`, `GslOpacityValue`, `GslShadowValue`, `GslStringValue`, `GslZIndexValue`) are re-exported as aliases of their `Clet*` equivalents.
+
+**What to actually do:** nothing is required for existing code to keep working. For new or touched code, prefer the `clet-*` spelling — it's the preferred name going forward, even though `gsl-*` isn't scheduled for removal:
+
+```diff
+-gslTheme({ all: { primary: "#083755" } });
+-import type { GslThemeConfig } from "@rfdtech/components";
++cletTheme({ all: { primary: "#083755" } });
++import type { CletThemeConfig } from "@rfdtech/components";
+```
+
+See [Theme](/docs/theme) and [Customize tokens](/README.md#7-customize-tokens) for the full token reference; every color token also has a `--clet-*` alias documented there.
+
 ## Adopting the new design system
 
-This is the actual "v2" migration. §1–§7 are about not breaking on version bump. This section is about looking like the new design system. None required for existing screens to compile. All required for new/touched screens.
+This is the actual "v2" migration. §1–§9 are about not breaking on version bump. This section is about looking like the new design system. None required for existing screens to compile. All required for new/touched screens.
 
 ### Layout shell: `AppLayout variant="stacked"` + `AppHeader variant="plain"` + `Sidebar variant="plain"`
 
@@ -320,7 +340,7 @@ Neither `ProfilePopover` above passes `items` — both render the default "My Pr
 | ----------- | -------- | ------ |
 | `TableContent` | `variant="panel"` | `"default"` |
 | `TableFilter` | `variant="spread"` | `"popover"` (default) |
-| `TableFooter` | `className="clet-table__footer--no-border"` | default top border |
+| `TableFooter` | `noBorder` | default top border |
 
 ```diff
  <Table paramPrefix="members">
@@ -334,13 +354,13 @@ Neither `ProfilePopover` above passes `items` — both render the default "My Pr
 -  <TableContent variant="panel" columns={columns} data={data} rowKey={...} />
 +  <TableContent variant="panel" columns={columns} data={data} rowKey={...} />
 -  <TableFooter>
-+  <TableFooter className="clet-table__footer--no-border">
++  <TableFooter noBorder>
      <TablePagination ... />
    </TableFooter>
  </Table>
 ```
 
-`clet-table__footer--no-border` is a real library class (`.clet-table__footer--no-border { border-top: none; }`), not a demo hack.
+`noBorder` is a real `TableFooterProps` prop (applies `.clet-table__footer--no-border { border-top: none; }` internally), not a demo hack. Older code passing `className="clet-table__footer--no-border"` by hand still works — prefer `noBorder` in new/touched code.
 
 ### Other preferred variants
 
@@ -378,7 +398,7 @@ All variants above are additive — no deadline to migrate old screens. But any 
 - [ ] `RoleSelect` wired into all three locations (`Launchpad`, header `ProfilePopover`, sidebar footer `ProfilePopover`) from the same state, whenever the system allows more than one role — not just one or two of the three ("One role switcher")
 - [ ] Header `ProfilePopover` uses `variant="avatar"` when sidebar footer exists ("One role switcher")
 - [ ] Neither `ProfilePopover` passes a custom `items` array unless the system needs rows other than the built-in "My Profile"/"Account Settings"/"Help and Support" defaults ("One role switcher")
-- [ ] New/touched `Table`s use all three: `TableContent variant="panel"`, `TableFilter variant="spread"`, `TableFooter className="clet-table__footer--no-border"`
+- [ ] New/touched `Table`s use all three: `TableContent variant="panel"`, `TableFilter variant="spread"`, `TableFooter noBorder`
 - [ ] `MetricCard variant="outline"`, `Tabs variant="pill"` on new usage
 - [ ] New page headers use `SectionHeader`/`SectionTitle`/`SectionDescription`/`SectionActions`
 - [ ] `Launchpad`'s expand button shows its icon always, its "See more" label only once `apps.length` exceeds 9 — never the old bordered "See all" button

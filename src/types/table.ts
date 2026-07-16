@@ -176,6 +176,8 @@ export interface TableFooterClassNames {
 export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {
   classNames?: TableFooterClassNames;
   className?: string;
+  /** Removes the footer's top border. Prefer this over hand-writing `className="clet-table__footer--no-border"`. */
+  noBorder?: boolean;
 }
 
 export interface TableSearchClassNames {

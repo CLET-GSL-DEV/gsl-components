@@ -117,8 +117,8 @@ severity: do
 components: table
 
 New or touched `Table`s use all three together: `TableContent variant="panel"` (not `"default"`),
-`TableFilter variant="spread"` (not the default `"popover"`), and `TableFooter
-className="clet-table__footer--no-border"` (a real library class, not a demo hack).
+`TableFilter variant="spread"` (not the default `"popover"`), and `TableFooter noBorder` (a real
+`TableFooterProps` prop, not a demo hack).
 
 ===RULE===
 id: page-composition-other-preferred-variants

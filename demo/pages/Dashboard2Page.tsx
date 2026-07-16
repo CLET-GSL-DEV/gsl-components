@@ -297,7 +297,7 @@ export function Dashboard2Page() {
           bulkActions={bulkActions}
           bulkActionsFooter
         />
-        <TableFooter className="clet-table__footer--no-border">
+        <TableFooter noBorder>
           <TablePagination
             totalPages={totalPages}
             totalItems={filtered.length}

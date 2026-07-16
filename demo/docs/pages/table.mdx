@@ -357,11 +357,12 @@ Layout wrapper for the header bar. Typically contains `<TableSearch>` and `<Tabl
 
 ## `<TableFooter>`
 
-Layout wrapper for the footer bar with `border-top`. Typically contains `<TablePagination>`.
+Layout wrapper for the footer bar with `border-top`. Typically contains `<TablePagination>`. Pass `noBorder` to remove the top border — preferred inside `TableContent variant="panel"` layouts, where the panel itself already provides a boundary.
 
 | Prop | Type | Description |
 |------|------|-------------|
 | `children` | `ReactNode` | Footer content |
+| `noBorder` | `boolean` | Removes the footer's top border |
 | `classNames` | `TableFooterClassNames` | — | Part-level class overrides |
 | `className` | `string` | Merged onto the footer bar |
 

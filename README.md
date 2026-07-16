@@ -1,6 +1,6 @@
 # Clet Components
 
-Shared React component library for Clet projects. The `--gsl-*` CSS tokens, `.gsl-*` class names, and the `@rfdtech/components` package name are kept unchanged for backward compatibility; every color token also has an equivalent `--clet-*` alias (see [Customize tokens](#7-customize-tokens)).
+Shared React component library for Clet projects. CSS tokens and class names use the `--clet-*`/`.clet-*` naming (e.g. `--clet-primary`, `.clet-sidebar`); the original `--gsl-*`/`.gsl-*` spelling is kept as a permanent, unchanged alias for backward compatibility, and the `@rfdtech/components` package name is unaffected (see [Customize tokens](#7-customize-tokens)).
 
 Requires React 18+ and a bundler that processes CSS (Vite, Webpack, etc.).
 
@@ -38,11 +38,11 @@ import { ThemeProvider } from "@rfdtech/components";
 </ThemeProvider>
 ```
 
-Supports `"light"`, `"dark"`, and `"system"` (follows `prefers-color-scheme`). Use `useTheme()` to read or change the active theme at runtime. Design tokens apply to `.gsl-theme`, `document.documentElement`, and all components (including portaled modals and popovers).
+Supports `"light"`, `"dark"`, and `"system"` (follows `prefers-color-scheme`). Use `useTheme()` to read or change the active theme at runtime. Design tokens apply to `.clet-theme` (the legacy `.gsl-theme` class is also present on the same element), `document.documentElement`, and all components (including portaled modals and popovers).
 
 ### 4. Tailwind v4 integration
 
-If your project uses Tailwind v4, all `--gsl-*` design tokens are automatically available as utility classes. Import `style.css` after `tailwindcss` in your CSS entry:
+If your project uses Tailwind v4, all `--clet-*` design tokens are automatically available as utility classes. Import `style.css` after `tailwindcss` in your CSS entry:
 
 ```css
 /* app/src/index.css */
@@ -54,23 +54,25 @@ The `@theme` block ships inside `style.css`. The consumer's Tailwind build proce
 
 | Utility | Resolves to |
 | --------- | ------------- |
-| `bg-primary` / `text-primary` | `var(--gsl-primary)` |
-| `bg-primary-foreground` / `text-primary-foreground` | `var(--gsl-on-primary)` |
-| `bg-background` / `text-foreground` | `var(--gsl-main-bg)` / `var(--gsl-text)` |
-| `bg-secondary` / `text-secondary-foreground` | `var(--gsl-surface-dark)` / `var(--gsl-text-secondary)` |
-| `bg-muted` / `text-muted-foreground` | `var(--gsl-surface-subtle)` / `var(--gsl-text-secondary)` |
-| `bg-accent` / `text-accent-foreground` | `var(--gsl-hover)` / `var(--gsl-text)` |
-| `bg-destructive` / `text-destructive-foreground` | `var(--gsl-error)` / `var(--gsl-error-text)` |
-| `bg-card` / `text-card-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
-| `bg-popover` / `text-popover-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
-| `border` / `input` / `ring` | `var(--gsl-border)` / `var(--gsl-border-strong)` / `var(--gsl-focus)` |
-| `rounded-lg` | `var(--gsl-radius-base)` |
-| `shadow-sm` / `shadow-md` / `shadow-lg` | `var(--gsl-shadow-sm)` / etc. |
-| `font-sans` | `var(--gsl-font)` |
+| `bg-primary` / `text-primary` | `var(--clet-primary)` |
+| `bg-primary-foreground` / `text-primary-foreground` | `var(--clet-on-primary)` |
+| `bg-background` / `text-foreground` | `var(--clet-main-bg)` / `var(--clet-text)` |
+| `bg-secondary` / `text-secondary-foreground` | `var(--clet-surface-dark)` / `var(--clet-text-secondary)` |
+| `bg-muted` / `text-muted-foreground` | `var(--clet-surface-subtle)` / `var(--clet-text-secondary)` |
+| `bg-accent` / `text-accent-foreground` | `var(--clet-hover)` / `var(--clet-text)` |
+| `bg-destructive` / `text-destructive-foreground` | `var(--clet-error)` / `var(--clet-error-text)` |
+| `bg-card` / `text-card-foreground` | `var(--clet-bg)` / `var(--clet-text)` |
+| `bg-popover` / `text-popover-foreground` | `var(--clet-bg)` / `var(--clet-text)` |
+| `border` / `input` / `ring` | `var(--clet-border)` / `var(--clet-border-strong)` / `var(--clet-focus)` |
+| `rounded-lg` | `var(--clet-radius-base)` |
+| `shadow-sm` / `shadow-md` / `shadow-lg` | `var(--clet-shadow-sm)` / etc. |
+| `font-sans` | `var(--clet-font)` |
 
-**Dark mode** supports both conventions: `<html class="dark">` (Tailwind default) and `<html data-gsl-theme="dark">`.
+Every entry above is actually generated as `var(--gsl-<name>, var(--clet-<name>))` — overriding either the `--clet-*` name (preferred) or the legacy `--gsl-*` name works identically; `--gsl-*` wins if both are set.
 
-**Non-Tailwind consumers** are unaffected. Browsers silently ignore `@theme` as an unknown at-rule. All `--gsl-*` tokens continue to work as CSS custom properties.
+**Dark mode** supports both conventions: `<html class="dark">` (Tailwind default) and `<html data-clet-theme="dark">` (`data-gsl-theme="dark"` is also written to the same element and matches equally).
+
+**Non-Tailwind consumers** are unaffected. Browsers silently ignore `@theme` as an unknown at-rule. All `--clet-*` tokens (and their legacy `--gsl-*` aliases) continue to work as CSS custom properties.
 
 ### 6. AI-assisted development (automatic)
 
@@ -111,14 +113,15 @@ See the [RouterAdapter](/docs/router-adapter) docs page for full setup.
 
 ### 7. Customize tokens
 
-Components read `--gsl-*` CSS variables. Every color token also has a
-`--clet-*` alias with the exact same value — **prefer `--clet-*` in new
-override code**; `--gsl-*` keeps working unchanged for existing overrides
-(each `--gsl-*` color token is now defined as `var(--clet-*)`, so overriding
-either name works — `--clet-*` is just the newer, preferred spelling).
-Non-color tokens (radius, shadow, font, spacing) only have a `--gsl-*` name;
-there is no `--clet-*` equivalent for those. Override any token by
-declaring a new value on the same selectors the library uses.
+Components read `--clet-*` CSS variables — every token, color and
+non-color alike (radius, shadow, font, spacing, z-index included), is
+declared under the `--clet-*` name. The original `--gsl-*` spelling
+also still works unchanged for existing overrides (every internal
+`var(--clet-*)` read resolves as `var(--gsl-*, var(--clet-*))`, so
+overriding either name works identically — `--gsl-*` wins if both are
+set). **Prefer `--clet-*` in new override code**; `--gsl-*` is a
+permanent compatibility alias, not a deprecated one. Override any
+token by declaring a new value on the same selectors the library uses.
 
 **Step 1 — Import the library CSS** so its defaults are loaded:
 
@@ -141,11 +144,11 @@ these selectors:
 | Selector | When it matches |
 |----------|-----------------|
 | `:root` | No theme attribute is set (no `ThemeProvider` mounted) |
-| `:root[data-gsl-theme="light"]` | Light mode on `<html>` — `ThemeProvider` writes the attribute here |
-| `:root[data-gsl-theme="dark"]` | Dark mode on `<html>` |
-| `.gsl-theme` | A consumer wrapper `<div class="gsl-theme">` |
-| `.gsl-theme[data-gsl-theme="light"]` | Wrapper + light attribute |
-| `.gsl-theme[data-gsl-theme="dark"]` | Wrapper + dark attribute |
+| `:root[data-clet-theme="light"]` | Light mode on `<html>` — `ThemeProvider` writes the attribute here (also writes the legacy `data-gsl-theme="light"`, which matches identically) |
+| `:root[data-clet-theme="dark"]` | Dark mode on `<html>` |
+| `.clet-theme` | A consumer wrapper `<div class="clet-theme">` (the legacy `.gsl-theme` class is also present on the same element) |
+| `.clet-theme[data-clet-theme="light"]` | Wrapper + light attribute |
+| `.clet-theme[data-clet-theme="dark"]` | Wrapper + dark attribute |
 
 A bare `:root { ... }` only matches the first row, so the library's
 default keeps winning on rows 2–6 once `ThemeProvider` mounts. To
@@ -154,10 +157,10 @@ values (don't chain `var(--something)` — just write the color):
 
 ```css title="src/styles/theme.css"
 :root,
-:root[data-gsl-theme="light"],
-.gsl-theme[data-gsl-theme="light"],
-:root[data-gsl-theme="dark"],
-.gsl-theme[data-gsl-theme="dark"] {
+:root[data-clet-theme="light"],
+.clet-theme[data-clet-theme="light"],
+:root[data-clet-theme="dark"],
+.clet-theme[data-clet-theme="dark"] {
   --clet-primary: #1d4ed8;
   --clet-primary-light: #eff6ff;
   --clet-focus: #1d4ed8;
@@ -191,7 +194,7 @@ name for the same value:
 | `success` | `#16a34a` | Success states |
 | `warning` | `#eab308` | Warnings |
 
-`BulkImportModal` also accepts legacy aliases (`--gsl-bulk-import-primary`, etc.) that map to the shared tokens.
+`BulkImportModal` also has its own component-scoped tokens (`--clet-bulk-import-primary`, etc., falling back to the shared tokens above when unset) — the legacy `--gsl-bulk-import-primary` spelling also still works.
 
 See the [Theme](/docs/theme) docs page for the full token reference (radius, shadows, z-index, fonts) and controlled mode.
 
@@ -482,24 +485,24 @@ Also exported: `useBulkImportFlow`, step components, and utilities (`parseSpread
 
 ### Theming
 
-The modal uses a **near full-viewport** layout with a compulsory gutter on all sides (24px desktop, 16px mobile), enforced by overlay padding. Override shared tokens on `.gsl-bulk-import` via the `className` prop (see [Shared theming](#shared-theming)):
+The modal uses a **near full-viewport** layout with a compulsory gutter on all sides (24px desktop, 16px mobile), enforced by overlay padding. Override shared tokens on `.clet-bulk-import` (the legacy `.gsl-bulk-import` class is also present on the same element) via the `className` prop (see [Shared theming](#shared-theming)):
 
 ```css
 .my-import {
-  --gsl-primary: #dc2626;
-  --gsl-primary-light: #fef2f2;
-  --gsl-success: #16a34a;
-  --gsl-error-bg: #fef2f2;
+  --clet-primary: #dc2626;
+  --clet-primary-light: #fef2f2;
+  --clet-success: #16a34a;
+  --clet-error-bg: #fef2f2;
 }
 ```
 
-Legacy aliases (`--gsl-bulk-import-primary`, `--gsl-bulk-import-primary-light`, etc.) still work and map to the shared tokens.
+The component-scoped `--clet-bulk-import-primary`, `--clet-bulk-import-primary-light`, etc. (and their legacy `--gsl-bulk-import-primary` spellings) still work too, and fall back to the shared tokens above when unset.
 
-To change the gutter size, override `--gsl-bulk-import-gutter` on `.gsl-bulk-import__overlay` in your app CSS (do not override modal width/height — the dialog always fills the padded overlay area):
+To change the gutter size, override `--clet-bulk-import-gutter` on `.clet-bulk-import__overlay` in your app CSS (do not override modal width/height — the dialog always fills the padded overlay area):
 
 ```css
-.gsl-bulk-import__overlay {
-  --gsl-bulk-import-gutter: 32px;
+.clet-bulk-import__overlay {
+  --clet-bulk-import-gutter: 32px;
 }
 ```
 
@@ -532,7 +535,7 @@ Props: `variant`, `size`, `loading`, `loadingLabel`, `classNames`, and standard 
 
 ## Card
 
-Surface card wrapper with optional header and design tokens for padding and background. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for inner spacing. See the [Card](/docs/card) docs page for props and exported types.
+Surface card wrapper with optional header and design tokens for padding and background. Uses `--clet-surface-card` for background and `--clet-card-padding` for inner spacing. See the [Card](/docs/card) docs page for props and exported types.
 
 ```tsx
 import { Card } from "@rfdtech/components";
@@ -879,7 +882,7 @@ Props: `label`, `value`, `icon`, `description`, `trend`, `trendValue`, `variant`
 
 ## Modal
 
-Centered modal with four size variants (`sm`, `md`, `lg`, `xl`), popover-style border, and optional close-prevention. Size tokens are independently customizable via `--gsl-modal-max-width-*`. See the [Modal](/docs/modal) docs page for props and exported types.
+Centered modal with four size variants (`sm`, `md`, `lg`, `xl`), popover-style border, and optional close-prevention. Size tokens are independently customizable via `--clet-modal-max-width-*`. See the [Modal](/docs/modal) docs page for props and exported types.
 
 ```tsx
 import {
@@ -1198,7 +1201,7 @@ const [step, setStep] = useState(3);
 </Stepper>
 ```
 
-Exports: `Stepper`, `Step`, `StepLabel`. Also available as `Stepper.Step`, `Stepper.StepLabel` for compound-style imports. Props: `Stepper` — `value`, `clickable`, `onValueChange`, `classNames`, `className`, `children`. `Step` — `value`, `disabled`, `classNames`, `className`, `children`. `StepLabel` — `classNames`, `className`, `children`. Exported types: `StepperProps`, `StepProps`, `StepLabelProps`, `StepperClassNames`, `StepClassNames`, `StepLabelClassNames`, `StepperContextValue`, `StepState`, `StepInternalProps`. Retheme via `--gsl-stepper-accent` (defaults to `--gsl-primary`) and related `--gsl-stepper-*` custom properties.
+Exports: `Stepper`, `Step`, `StepLabel`. Also available as `Stepper.Step`, `Stepper.StepLabel` for compound-style imports. Props: `Stepper` — `value`, `clickable`, `onValueChange`, `classNames`, `className`, `children`. `Step` — `value`, `disabled`, `classNames`, `className`, `children`. `StepLabel` — `classNames`, `className`, `children`. Exported types: `StepperProps`, `StepProps`, `StepLabelProps`, `StepperClassNames`, `StepClassNames`, `StepLabelClassNames`, `StepperContextValue`, `StepState`, `StepInternalProps`. Retheme via `--clet-stepper-accent` (defaults to `--clet-primary`) and related `--clet-stepper-*` custom properties.
 
 ## Switch
 

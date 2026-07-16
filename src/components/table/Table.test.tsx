@@ -21,6 +21,16 @@ describe("Table", () => {
     expect(screen.getByText("Footer")).toBeInTheDocument();
   });
 
+  it("applies the no-border class when TableFooter noBorder is set", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableFooter noBorder>Footer</TableFooter>
+      </Table>,
+    );
+
+    expect(screen.getByText("Footer")).toHaveClass("clet-table__footer--no-border");
+  });
+
   it("renders search and accepts input", async () => {
     const user = userEvent.setup();
     render(

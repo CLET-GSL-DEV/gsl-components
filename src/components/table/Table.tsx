@@ -729,11 +729,16 @@ export const TableContent = forwardRef(TableContentRender) as <T>(
 ) => React.ReactElement;
 
 export const TableFooter = forwardRef<HTMLDivElement, TableFooterProps>(
-  function TableFooter({ classNames, className, children, ...props }, ref) {
+  function TableFooter({ classNames, className, noBorder, children, ...props }, ref) {
     return (
       <div
         ref={ref}
-        className={cn("clet-table__footer gsl-table__footer", classNames?.root, className)}
+        className={cn(
+          "clet-table__footer gsl-table__footer",
+          noBorder && "clet-table__footer--no-border",
+          classNames?.root,
+          className,
+        )}
         {...props}
       >
         {children}

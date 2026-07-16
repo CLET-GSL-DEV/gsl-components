@@ -1,11 +1,17 @@
 .clet-metric-card {
-  --clet-default-metric-card-bg: var(--gsl-surface-card, var(--clet-surface-card));
+  --clet-default-metric-card-bg: var(
+    --gsl-surface-card,
+    var(--clet-surface-card)
+  );
   --clet-metric-card-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
   --clet-metric-card-shadow: none;
 
   /* Overridable type tokens */
   --clet-metric-card-font: var(--gsl-font-body, var(--clet-font-body));
-  --clet-metric-card-value-font: var(--gsl-font-header, var(--clet-font-header));
+  --clet-metric-card-value-font: var(
+    --gsl-font-header,
+    var(--clet-font-header)
+  );
   --clet-metric-card-value-size: 28px;
   --clet-metric-card-value-color: var(--gsl-text, var(--clet-text));
   --clet-metric-card-description-size: 12px;
@@ -15,7 +21,10 @@
   padding: 20px;
   border: none;
   border-radius: var(--gsl-metric-card-radius, var(--clet-metric-card-radius));
-  background: var(--gsl-default-metric-card-bg, var(--clet-default-metric-card-bg));
+  background: var(
+    --gsl-default-metric-card-bg,
+    var(--clet-default-metric-card-bg)
+  );
   font-family: var(--gsl-metric-card-font, var(--clet-metric-card-font));
   box-shadow: var(--gsl-metric-card-shadow, var(--clet-metric-card-shadow));
 }
@@ -41,7 +50,10 @@
 
 .clet-metric-card--outline .clet-metric-card__label {
   font-size: 10px;
-  color: var(--gsl-metric-card-label-color, var(--clet-metric-card-label-color, var(--clet-text-secondary)));
+  color: var(
+    --gsl-metric-card-label-color,
+    var(--clet-metric-card-label-color, var(--clet-text-secondary))
+  );
 }
 
 .clet-metric-card--outline .clet-metric-card__header,
@@ -81,7 +93,7 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  color: var(--gsl-secondary, var(--clet-secondary));
   text-transform: uppercase;
   letter-spacing: 0.04em;
   overflow: hidden;
@@ -99,11 +111,20 @@
 }
 
 .clet-metric-card__value {
-  font-family: var(--gsl-metric-card-value-font, var(--clet-metric-card-value-font));
-  font-size: var(--gsl-metric-card-value-size, var(--clet-metric-card-value-size));
+  font-family: var(
+    --gsl-metric-card-value-font,
+    var(--clet-metric-card-value-font)
+  );
+  font-size: var(
+    --gsl-metric-card-value-size,
+    var(--clet-metric-card-value-size)
+  );
   font-weight: 600;
   line-height: 1.2;
-  color: var(--gsl-metric-card-value-color, var(--clet-metric-card-value-color));
+  color: var(
+    --gsl-metric-card-value-color,
+    var(--clet-metric-card-value-color)
+  );
   letter-spacing: -0.02em;
 }
 
@@ -136,7 +157,10 @@
 /* ── Description ────────────────────────────────────────── */
 
 .clet-metric-card__description {
-  font-size: var(--gsl-metric-card-description-size, var(--clet-metric-card-description-size));
+  font-size: var(
+    --gsl-metric-card-description-size,
+    var(--clet-metric-card-description-size)
+  );
   line-height: 1.4;
   color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
