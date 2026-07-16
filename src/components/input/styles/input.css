@@ -1,56 +1,58 @@
-.gsl-input {
+.clet-input {
+  --clet-input-font: var(--gsl-font-body, var(--clet-font-body));
+
   display: block;
   width: 100%;
   min-width: 0;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background-color: var(--gsl-bg);
-  font-family: var(--gsl-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background-color: var(--gsl-bg, var(--clet-bg));
+  font-family: var(--gsl-input-font, var(--clet-input-font));
   font-size: 14px;
   line-height: 1.4;
-  color: var(--gsl-text);
+  color: var(--gsl-text, var(--clet-text));
   transition:
     border-color 150ms ease,
     background-color 150ms ease,
     box-shadow 150ms ease;
 }
 
-.gsl-input::placeholder {
-  color: var(--gsl-text-secondary);
+.clet-input::placeholder {
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
-.gsl-input:hover:not(:disabled) {
-  border-color: var(--gsl-border-strong);
+.clet-input:hover:not(:disabled) {
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
 }
 
-.gsl-input:focus-visible {
+.clet-input:focus-visible {
   outline: none;
-  border-color: var(--gsl-primary);
-  box-shadow: 0 0 0 1px var(--gsl-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
-.gsl-input--invalid,
-.gsl-input[aria-invalid="true"] {
-  border-color: var(--gsl-error);
+.clet-input--invalid,
+.clet-input[aria-invalid="true"] {
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
-.gsl-input--invalid:focus-visible,
-.gsl-input[aria-invalid="true"]:focus-visible {
-  border-color: var(--gsl-error);
-  box-shadow: 0 0 0 1px var(--gsl-error);
+.clet-input--invalid:focus-visible,
+.clet-input[aria-invalid="true"]:focus-visible {
+  border-color: var(--gsl-error, var(--clet-error));
+  box-shadow: 0 0 0 1px var(--gsl-error, var(--clet-error));
 }
 
-.gsl-input--disabled,
-.gsl-input:disabled {
-  background-color: var(--gsl-hover);
-  color: var(--gsl-text-muted);
+.clet-input--disabled,
+.clet-input:disabled {
+  background-color: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-input {
+  .clet-input {
     transition: none;
   }
 }

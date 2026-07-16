@@ -1,6 +1,12 @@
 export const meta = {
   title: "PhoneNumberInput",
   description: "Phone input with country codes",
+  category: "Components",
+  keywords: ["phone number", "phone input", "country code", "dial code", "telephone"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["country-selector", "network-operator", "form-field"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -8,10 +14,14 @@ import { PhoneNumberInputPreview } from "../previews/code/PhoneNumberInputPrevie
 import phoneNumberInputSource from "../previews/examples/phone-number-input.example.tsx?raw";
 import { PhoneNumberInputFormPreview } from "../previews/code/PhoneNumberInputFormPreview";
 import phoneNumberInputFormSource from "../previews/examples/phone-number-input-form.example.tsx?raw";
+import { PhoneNumberInputFieldPreview } from "../previews/code/PhoneNumberInputFieldPreview";
+import phoneNumberInputFieldSource from "../previews/examples/phone-number-input-field.example.tsx?raw";
 
 # PhoneNumberInput
 
-Phone number input with a country code selector (flag + dial code prefix). Built on `@radix-ui/react-popover` with GSL styling. Auto-detects the country from the number prefix as the user types. Supports controlled and uncontrolled value.
+Phone number input with a country code selector (flag + dial code prefix). Built on `@radix-ui/react-popover` with CLET styling. Auto-detects the country from the number prefix as the user types. Supports controlled and uncontrolled value.
+
+Flags are real SVG icons from [`country-flag-icons`](https://www.npmjs.com/package/country-flag-icons), not emoji — they render consistently across operating systems and browsers (unlike emoji flags, which some platforms render as a two-letter country code instead of a flag).
 
 ## Example
 
@@ -32,6 +42,14 @@ Phone number input with a country code selector (flag + dial code prefix). Built
 | `className` | `string` | — | Merged onto the root element |
 
 Also accepts remaining `HTMLAttributes<HTMLDivElement>`, excluding `onChange`, `value`, and `defaultValue`.
+
+## Field composition (label, optional tag, hint, error)
+
+<ExampleTabs
+  title="Field + FieldLabel + FieldControl + FieldDescription/FieldError"
+  preview={<PhoneNumberInputFieldPreview />}
+  code={phoneNumberInputFieldSource}
+/>
 
 ## Form validation
 
@@ -79,20 +97,27 @@ See the props table above.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root wrapper (`.gsl-phone-number-input`) |
-| `prefix` | Country code prefix (`.gsl-phone-number-input__prefix`) |
-| `input` | Phone number input (`.gsl-phone-number-input__input`) |
-| `dropdown` | Country code dropdown (`.gsl-phone-number-input__dropdown`) |
+| `root` | Root wrapper (`.clet-phone-number-input`) |
+| `prefix` | Country code prefix (`.clet-phone-number-input__prefix`) |
+| `input` | Phone number input (`.clet-phone-number-input__input`) |
+| `dropdown` | Country code dropdown (`.clet-phone-number-input__dropdown`) |
 
 ## Design tokens
 
-| Token | Used for |
-|-------|----------|
-| `--gsl-radius-base` | Input border radius |
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-radius-base` | `8px` | Input border radius |
+| `--clet-phone-number-input-font` | `var(--clet-font-body)` | Font family for the phone number input field |
+| `--clet-phone-number-input-dropdown-font` | `var(--clet-font-body)` | Font family for the country dropdown search input and option list |
+| `--clet-phone-number-input-height` | `40px` | Root height |
+| `--clet-phone-number-input-dropdown-width` | `320px` | Country dropdown width |
+| `--clet-phone-number-input-dropdown-max-height` | `300px` | Country dropdown max height before scrolling |
+| `--clet-text-size-base` | `14px` | Prefix, input, search input, and option font size |
 
 ## Notes
 
 - Country auto-detection: as the user types, the component matches the prefix against dial codes and updates the selected country. The sorted check uses longest dial code first to avoid partial matches (e.g., `+233` matches Ghana, not `+23`).
-- Countries are from the `countries` utility — same dataset used by `CountrySelector`.
+- Countries are from the `countries` utility — same dataset used by the deprecated `CountrySelector`.
 - The value includes the full number with the dial code prefix (e.g. `+2332054321022`). The `+` prefix is always included.
 - Changing the country dropdown updates the dial code prefix in the input value.
+- Each flag icon renders with `role="img"` and an `aria-label` of `"{country name} flag"` for accessibility.

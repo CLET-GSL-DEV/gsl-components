@@ -33,7 +33,7 @@ describe("Stepper", () => {
     renderStepper();
 
     const list = screen.getByRole("list");
-    expect(list).toHaveClass("gsl-stepper");
+    expect(list).toHaveClass("clet-stepper");
     expect(screen.getAllByRole("listitem")).toHaveLength(3);
   });
 
@@ -47,7 +47,7 @@ describe("Stepper", () => {
     );
 
     expect(screen.getByRole("list")).toHaveClass(
-      "gsl-stepper",
+      "clet-stepper",
       "custom-root",
       "extra",
     );
@@ -88,14 +88,14 @@ describe("Step state", () => {
     renderStepper({ value: 2 });
 
     const items = screen.getAllByRole("listitem");
-    expect(items[0]).toHaveClass("gsl-stepper__item--complete");
+    expect(items[0]).toHaveClass("clet-stepper__item--complete");
   });
 
   it("marks the active step and sets aria-current", () => {
     renderStepper({ value: 2 });
 
     const items = screen.getAllByRole("listitem");
-    expect(items[1]).toHaveClass("gsl-stepper__item--active");
+    expect(items[1]).toHaveClass("clet-stepper__item--active");
     expect(items[1]).toHaveAttribute("aria-current", "step");
   });
 
@@ -103,7 +103,7 @@ describe("Step state", () => {
     renderStepper({ value: 2 });
 
     const items = screen.getAllByRole("listitem");
-    expect(items[2]).toHaveClass("gsl-stepper__item--upcoming");
+    expect(items[2]).toHaveClass("clet-stepper__item--upcoming");
   });
 
   it("shows the step number for incomplete steps", () => {
@@ -111,19 +111,19 @@ describe("Step state", () => {
 
     const items = screen.getAllByRole("listitem");
     // active step (2) shows its number
-    expect(items[1].querySelector(".gsl-stepper__number")).toHaveTextContent("2");
+    expect(items[1].querySelector(".clet-stepper__number")).toHaveTextContent("2");
     // upcoming step (3) shows its number
-    expect(items[2].querySelector(".gsl-stepper__number")).toHaveTextContent("3");
+    expect(items[2].querySelector(".clet-stepper__number")).toHaveTextContent("3");
   });
 
   it("shows a check icon for complete steps and hides the number", () => {
     renderStepper({ value: 2 });
 
     const items = screen.getAllByRole("listitem");
-    const completeMarker = items[0].querySelector(".gsl-stepper__marker");
-    expect(completeMarker?.querySelector(".gsl-stepper__check")).toBeInTheDocument();
-    expect(items[0].querySelector(".gsl-stepper__number")).toHaveClass(
-      "gsl-stepper__number--hidden",
+    const completeMarker = items[0].querySelector(".clet-stepper__marker");
+    expect(completeMarker?.querySelector(".clet-stepper__check")).toBeInTheDocument();
+    expect(items[0].querySelector(".clet-stepper__number")).toHaveClass(
+      "clet-stepper__number--hidden",
     );
   });
 
@@ -131,19 +131,19 @@ describe("Step state", () => {
     renderStepper({ value: 2 });
 
     const items = screen.getAllByRole("listitem");
-    expect(items[0].querySelector(".gsl-stepper__connector")).toBeInTheDocument();
-    expect(items[1].querySelector(".gsl-stepper__connector")).toBeInTheDocument();
-    expect(items[2].querySelector(".gsl-stepper__connector")).toBeNull();
+    expect(items[0].querySelector(".clet-stepper__connector")).toBeInTheDocument();
+    expect(items[1].querySelector(".clet-stepper__connector")).toBeInTheDocument();
+    expect(items[2].querySelector(".clet-stepper__connector")).toBeNull();
   });
 
   it("fills the connector of a completed step", () => {
     renderStepper({ value: 2 });
 
     const items = screen.getAllByRole("listitem");
-    const completeFill = items[0].querySelector(".gsl-stepper__connector-fill");
-    const activeFill = items[1].querySelector(".gsl-stepper__connector-fill");
-    expect(completeFill).toHaveClass("gsl-stepper__connector-fill--visible");
-    expect(activeFill).not.toHaveClass("gsl-stepper__connector-fill--visible");
+    const completeFill = items[0].querySelector(".clet-stepper__connector-fill");
+    const activeFill = items[1].querySelector(".clet-stepper__connector-fill");
+    expect(completeFill).toHaveClass("clet-stepper__connector-fill--visible");
+    expect(activeFill).not.toHaveClass("clet-stepper__connector-fill--visible");
   });
 
   it("exposes forwardRef on Step", () => {
@@ -182,8 +182,8 @@ describe("Step state", () => {
 
     const item = screen.getByTestId("item");
     expect(item).toHaveClass("item-root");
-    expect(item.querySelector(".gsl-stepper__marker")).toHaveClass("item-marker");
-    expect(item.querySelector(".gsl-stepper__connector")).toHaveClass(
+    expect(item.querySelector(".clet-stepper__marker")).toHaveClass("item-marker");
+    expect(item.querySelector(".clet-stepper__connector")).toHaveClass(
       "item-connector",
     );
   });
@@ -226,7 +226,7 @@ describe("Step clickable", () => {
     );
 
     const disabledItem = screen.getByTestId("disabled");
-    expect(disabledItem).toHaveClass("gsl-stepper__item--disabled");
+    expect(disabledItem).toHaveClass("clet-stepper__item--disabled");
     expect(disabledItem.querySelector("button")).toBeNull();
     expect(screen.getAllByRole("button")).toHaveLength(1);
   });
@@ -244,7 +244,7 @@ describe("StepLabel", () => {
 
     const lbl = screen.getByTestId("lbl");
     expect(lbl.tagName).toBe("SPAN");
-    expect(lbl).toHaveClass("gsl-stepper__label");
+    expect(lbl).toHaveClass("clet-stepper__label");
     expect(lbl).toHaveTextContent("Upload Document");
   });
 
@@ -264,7 +264,7 @@ describe("StepLabel", () => {
     );
 
     expect(screen.getByTestId("lbl")).toHaveClass(
-      "gsl-stepper__label",
+      "clet-stepper__label",
       "lbl-extra",
       "lbl-more",
     );

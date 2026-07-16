@@ -52,7 +52,7 @@ const DocsHeader = ({
   return (
     <header className={cn("demo-header", headerHidden ? "demo-header-up" : "")}>
       <Link to="/" className="demo-logo">
-        GSL Components
+        Clet Components
       </Link>
       <nav className="demo-nav">
         <button
@@ -65,13 +65,13 @@ const DocsHeader = ({
           <span
             style={{
               marginLeft: 6,
-              color: "var(--gsl-text-muted)",
+              color: "var(--clet-text-muted)",
               fontSize: 12,
             }}
           >
             Search docs...
           </span>
-          <kbd className="gsl-app-header__search-kbd ml-2">⌘K</kbd>
+          <kbd className="clet-app-header__search-kbd ml-2">⌘K</kbd>
         </button>
         <NavLink
           to="/"
@@ -115,8 +115,8 @@ export function DocsPage() {
       const p = getDocPage(slug);
       return {
         slug,
-        title: p?.meta.title ?? slug,
-        description: p?.meta.description ?? "",
+        title: p?.meta?.title ?? slug,
+        description: p?.meta?.description ?? "",
       };
     });
   }, []);
@@ -150,7 +150,7 @@ export function DocsPage() {
                 {doc.description && (
                   <span
                     style={{
-                      color: "var(--gsl-text-muted)",
+                      color: "var(--clet-text-muted)",
                       marginLeft: 8,
                       fontSize: 12,
                     }}

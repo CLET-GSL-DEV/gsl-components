@@ -65,7 +65,7 @@ describe("AppSwitcher", () => {
     await user.click(screen.getByRole("button", { name: "Open app switcher" }));
 
     expect(screen.getByText("Loading systems...")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-app-switcher__spinner")).toBeInTheDocument();
+    expect(document.querySelector(".clet-app-switcher__spinner")).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
@@ -87,7 +87,7 @@ describe("AppSwitcher", () => {
 
     await user.click(screen.getByRole("button", { name: "Open app switcher" }));
 
-    const image = document.querySelector(".gsl-app-switcher__icon-image");
+    const image = document.querySelector(".clet-app-switcher__icon-image");
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute("src", "https://example.com/icon.png");
   });

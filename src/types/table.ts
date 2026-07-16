@@ -1,6 +1,9 @@
-import type { HTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
-
-/* ── Column definition ── */
+import type {
+  HTMLAttributes,
+  InputHTMLAttributes,
+  MouseEvent,
+  ReactNode,
+} from "react";
 
 export interface TableColumn<T> {
   id: string;
@@ -16,16 +19,12 @@ export interface TableColumn<T> {
   align?: "left" | "center" | "right";
 }
 
-/* ── Sort ── */
-
 export type SortDirection = "asc" | "desc";
 
 export interface TableSortState {
   column: string;
   direction: SortDirection;
 }
-
-/* ── Row Actions ── */
 
 export interface TableRowAction<T> {
   id: string;
@@ -36,8 +35,6 @@ export interface TableRowAction<T> {
   /** If provided, must return true for the action to appear for this row */
   condition?: (row: T) => boolean;
 }
-
-/* ── Bulk Actions ── */
 
 export interface TableBulkAction {
   id: string;
@@ -70,8 +67,6 @@ export interface TableBulkActionsProps {
   className?: string;
 }
 
-/* ── ClassNames ── */
-
 export interface TableClassNames {
   root?: string;
   header?: string;
@@ -79,8 +74,6 @@ export interface TableClassNames {
   footer?: string;
   selectionCell?: string;
 }
-
-/* ── Props ── */
 
 export interface TableProps extends HTMLAttributes<HTMLDivElement> {
   classNames?: TableClassNames;
@@ -121,6 +114,7 @@ export interface TableContentClassNames {
   actionsTrigger?: string;
   actionsMenu?: string;
   actionsItem?: string;
+  actionsSectionLabel?: string;
   skeleton?: string;
   viewport?: string;
 }
@@ -155,6 +149,22 @@ export interface TableContentProps<
   onSelectionChange?: (selectedIds: Set<string | number>) => void;
   /** Row-level actions rendered as a kebab dropdown at the end of each row */
   rowActions?: TableRowAction<T>[];
+  /**
+   * Bulk actions surfaced inside the row-actions menu (kebab click or
+   * right-click) as a "Bulk actions" section below the row's own actions —
+   * always includes a "Select all" / "Deselect all" toggle, with the rest of
+   * the list appearing once one or more rows are selected.
+   */
+  bulkActions?: TableBulkAction[];
+  /**
+   * When true, also renders the `TableBulkActions` bar at the bottom of the
+   * table automatically, wired to the same `bulkActions`/`selectedIds` — no
+   * need to place `<TableBulkActions>` yourself as a sibling. When false
+   * (default), `bulkActions` only surface inside the row-actions menu.
+   */
+  bulkActionsFooter?: boolean;
+  /** Called when a row is clicked (in addition to selection toggling, when `selectable` is set) */
+  onRowClick?: (row: T, event: MouseEvent<HTMLTableRowElement>) => void;
   /** Row height in px. Set this to enable virtual scrolling. Parent <Table> must have a height set. */
   virtualRowHeight?: number;
 }
@@ -166,6 +176,8 @@ export interface TableFooterClassNames {
 export interface TableFooterProps extends HTMLAttributes<HTMLDivElement> {
   classNames?: TableFooterClassNames;
   className?: string;
+  /** Removes the footer's top border. Prefer this over hand-writing `className="clet-table__footer--no-border"`. */
+  noBorder?: boolean;
 }
 
 export interface TableSearchClassNames {
@@ -198,12 +210,16 @@ export interface TableFilterClassNames {
   applyButton?: string;
 }
 
+export type TableFilterVariant = "popover" | "spread";
+
 export interface TableFilterProps {
   children?: ReactNode;
   onApply?: () => void;
   onReset?: () => void;
   applyLabel?: string;
   resetLabel?: string;
+  /** "popover" (default) opens the fields in a popover panel. "spread" removes the popover and lays the fields out inline as a flex row. */
+  variant?: TableFilterVariant;
   classNames?: TableFilterClassNames;
   className?: string;
 }

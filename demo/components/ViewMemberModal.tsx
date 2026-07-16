@@ -47,7 +47,7 @@ export function ViewMemberModal({ member, open, onOpenChange }: ViewMemberModalP
             <Avatar name={member.name} size="lg" />
             <div>
               <ModalTitle>{member.name}</ModalTitle>
-              <div style={{ fontSize: 13, color: "var(--gsl-text-muted)", marginTop: 2 }}>
+              <div style={{ fontSize: 13, color: "var(--clet-text-muted)", marginTop: 2 }}>
                 {member.email}
               </div>
             </div>
@@ -76,7 +76,7 @@ export function ViewMemberModal({ member, open, onOpenChange }: ViewMemberModalP
               <span className="demo-member-detail__label">Last Login</span>
               <span className="demo-member-detail__value">
                 {member.lastLoginDate}
-                <span style={{ color: "var(--gsl-text-muted)", marginLeft: 8 }}>
+                <span style={{ color: "var(--clet-text-muted)", marginLeft: 8 }}>
                   <Clock size={13} style={{ verticalAlign: -1, marginRight: 4 }} />
                   {member.lastLoginTime}
                 </span>

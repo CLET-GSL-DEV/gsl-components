@@ -1,15 +1,23 @@
 export const meta = {
   title: "Form",
   description: "Form field primitives",
+  category: "Components",
+  keywords: ["form", "field", "input", "textarea", "label", "form validation"],
+  since: "1.8.0",
+  status: "stable",
+  related: ["form-field", "dropdown", "modal"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { FieldPreview } from "../previews/code/FieldPreview";
+import { FormModalPreview } from "../previews/code/FormModalPreview";
 import fieldSource from "../previews/examples/field.example.tsx?raw";
+import formModalSource from "../previews/examples/form-modal.example.tsx?raw";
 
 # Form
 
-Accessible form building blocks with GSL styling. Compose `Field` with `Input` or `Textarea` for labels, helper text, errors, and control wiring.
+Accessible form building blocks with CLET styling. Compose `Field` with `Input` or `Textarea` for labels, helper text, errors, and control wiring.
 
 For [react-hook-form](https://react-hook-form.com/) integration, see [FormField](/docs/form-field).
 
@@ -19,6 +27,20 @@ For [react-hook-form](https://react-hook-form.com/) integration, see [FormField]
   title="Field layout"
   preview={<FieldPreview />}
   code={fieldSource}
+/>
+
+## Form inside a Modal, with an async submit
+
+The most common real-world shape: a `Form` inside a `Modal`, submitting asynchronously. No
+`<form>` element is needed — call `form.handleSubmit(onSubmit)` from the submit button's
+`onClick`. Async option loading (a `Dropdown` disabled with a loading placeholder), a root-level
+error surfaced via `form.setError("root", ...)` on failure, and a submit `Button` using
+`loading`/`loadingLabel` all come from one real pattern (a "create user" modal).
+
+<ExampleTabs
+  title="Async create-user form in a Modal"
+  preview={<FormModalPreview />}
+  code={formModalSource}
 />
 
 ## Field anatomy
@@ -70,20 +92,48 @@ Same props as `Input`, for `<textarea>`.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | `.gsl-field` |
-| `label` | `.gsl-field__label` |
-| `description` | `.gsl-field__description` |
-| `error` | `.gsl-field__error` |
+| `root` | `.clet-field` |
+| `label` | `.clet-field__label` |
+| `description` | `.clet-field__description` |
+| `error` | `.clet-field__error` |
 | `control` | Merged onto the slotted control |
 
 ### `InputClassNames` / `TextareaClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | `.gsl-input` / `.gsl-textarea` |
+| `root` | `.clet-input` / `.clet-textarea` |
+
+## Design tokens
+
+### Input
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-input-font` | `var(--clet-font-body)` | Font family override |
+
+### Textarea
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-textarea-font` | `var(--clet-font-body)` | Font family override |
+
+### Field
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-field-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
-- Inputs match Dropdown trigger sizing (`40px` height) and use `--gsl-*` tokens for borders, focus, and error states.
+- Inputs match Dropdown trigger sizing (`40px` height) and use `--clet-*` tokens for borders, focus, and error states.
 - `FieldDescription` and `FieldError` only render when they have children.
 - Pair with [FormField](/docs/form-field) for react-hook-form and Zod validation.
+
+## Do
+
+- For required-field indication across a whole form, add one line near the top (e.g. `<p className="text-sm text-error -mt-2">All fields are required</p>`) instead of a `*` on every label.
+
+## Don't
+
+- Don't wrap fields in unnecessary extra divs, or add labels/descriptions the design doesn't call for.

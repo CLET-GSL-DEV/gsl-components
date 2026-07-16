@@ -1,6 +1,6 @@
-# GSL Components — Agent Knowledge
+# Clet Components — Agent Knowledge
 
-References: [`.cursor/rules/gsl-component-authoring.mdc`](.cursor/rules/gsl-component-authoring.mdc) — always consult first.
+References: [`.cursor/rules/clet-component-authoring.mdc`](.cursor/rules/clet-component-authoring.mdc) — always consult first.
 
 ---
 
@@ -10,9 +10,45 @@ References: [`.cursor/rules/gsl-component-authoring.mdc`](.cursor/rules/gsl-comp
 - **Package**: `@rfdtech/components` — shared component library
 - **Entry**: `src/index.ts` — imports `theme.css`, re-exports all components
 - **Demo**: `npm run demo` uses `vite.demo.config.ts`, aliases `@rfdtech/components` → `src/index.ts`
-- **Available Radix deps**: `@radix-ui/react-popover`, `@radix-ui/react-select`, `@radix-ui/react-checkbox`, `@radix-ui/react-dialog`, `@radix-ui/react-tabs`, `@radix-ui/react-radio-group`, `@radix-ui/react-alert-dialog`
+- **Available Radix deps**: `@radix-ui/react-popover`, `@radix-ui/react-select`, `@radix-ui/react-checkbox`, `@radix-ui/react-dialog`, `@radix-ui/react-tabs`, `@radix-ui/react-radio-group`, `@radix-ui/react-alert-dialog`, `@radix-ui/react-switch`
 - **Other deps**: `lucide-react`, `cmdk`, `sonner`, `@dnd-kit/*`
 - **CSS-in-JS**: None. Plain CSS files imported in components via Vite.
+
+## Design system versioning — prefer "new design system"
+
+The library has a current, preferred set of component variants ("new design
+system"), demonstrated live in the demo app at `/` (current — `Dashboard2Page`)
+vs. `/legacy` (a frozen snapshot of the old v1 look — `DemoPage`, reachable
+via the version dropdown in that sidebar). The old look uses the pre-rebrand
+red color tokens, scoped via the `.legacy-theme` class in `demo/demo.css` —
+it does not affect the library's actual defaults. See the
+[v2 migration guide](demo/docs/pages/migration-v2.mdx) for the full breaking
+change list.
+
+**New design system variants** (prefer these by default in new work):
+
+| Component | Prefer | Over |
+|-----------|--------|------|
+| `AppHeader` | `variant="plain"` | `variant="default"` |
+| `MetricCard` | `variant="outline"` | `variant="default"` |
+| `SidebarGroup` | `collapsible` (accordion groups) | flat, non-collapsible groups |
+| `TableContent` | `variant="panel"` | `variant="default"` |
+| `TableFilter` | `variant="spread"` | `variant="popover"` (default) |
+
+Brand tokens: `--clet-primary` (navy) and `--clet-secondary` (gold) in
+`src/styles/theme/light.css` / `dark.css` are the current defaults — not
+something to "convert," they already apply everywhere by default.
+
+**If a user asks to "convert this app to use the new design system"**: scan
+the codebase for usages of the components above and swap them to the
+preferred variant. Then **ask** whether to also update colors — don't touch
+the consuming app's existing `--clet-*` token overrides unprompted. If the
+user says yes, override the consuming app's color token overrides with the
+library's current defaults (the navy/gold values above).
+
+If this file or the MCP docs data (`mcp/generated/*.json`) don't yet reflect
+a "new design system" status for a component/variant you're working with,
+this table is the source of truth until they're updated.
 
 ## No new dependencies
 
@@ -55,8 +91,8 @@ export const Example = forwardRef<HTMLInputElement, ExampleProps>(
       <div
         aria-invalid={invalid || undefined}
         className={cn(
-          "gsl-example",
-          invalid && "gsl-example--invalid",
+          "clet-example",
+          invalid && "clet-example--invalid",
           classNames?.root,
           className,
         )}
@@ -71,7 +107,7 @@ export const Example = forwardRef<HTMLInputElement, ExampleProps>(
 
 - `invalid` → error border + `aria-invalid`
 - `disabled` → gray out, `cursor: not-allowed`, no interaction
-- `classNames?.{part}` → merged via `cn()` after base `gsl-*` class
+- `classNames?.{part}` → merged via `cn()` after base `clet-*` class
 - `className` → merged onto root (same effect as `classNames.root`)
 
 ### RHF integration
@@ -97,19 +133,32 @@ RHF is **not** baked into any input component. Integration is entirely at the co
 
 ## Styling
 
-- **Tokens**: `--gsl-bg`, `--gsl-text`, `--gsl-text-secondary`, `--gsl-border`, `--gsl-border-strong`, `--gsl-hover`, `--gsl-primary`, `--gsl-primary-light`, `--gsl-error`, `--gsl-radius`, `--gsl-font`, `--gsl-z-popover`, `--gsl-z-select`, `--gsl-shadow-sm/md/lg`, `--gsl-overlay`
-- **No hardcoded colors**. Only `--gsl-*` tokens.
-- **BEM naming**: `gsl-component`, `gsl-component__part`, `gsl-component--modifier`
+- **Tokens**: `--clet-bg`, `--clet-text`, `--clet-text-secondary`, `--clet-border`, `--clet-border-strong`, `--clet-hover`, `--clet-primary`, `--clet-primary-light`, `--clet-error`, `--clet-radius`, `--clet-font`, `--clet-z-popover`, `--clet-z-select`, `--clet-shadow-sm/md/lg`, `--clet-overlay`
+- **Single naming convention**: every token — color or otherwise — is a `--clet-*` custom property. There is no legacy alias; do not invent or reference a second name for any token.
+- **No hardcoded colors**. Only `--clet-*`/`--clet-*` tokens.
+- **BEM naming**: `clet-component`, `clet-component__part`, `clet-component--modifier`
 - **CSS imported in the component file**: `import "./styles/example.css"`
-- **Input standard look**: 40px height, 0 12px padding, `var(--gsl-border)` 1px solid, `var(--gsl-radius)` border-radius, 14px font
-- **Focus**: `outline: none; border-color: var(--gsl-primary); box-shadow: 0 0 0 1px var(--gsl-primary)`
-- **Disabled**: `background-color: var(--gsl-hover); color: var(--gsl-text-muted); cursor: not-allowed`
-- **Invalid**: `border-color: var(--gsl-error)` + same for focus shadow
+- **Input standard look**: 40px height, 0 12px padding, `var(--clet-border)` 1px solid, `var(--clet-radius)` border-radius, 14px font
+- **Focus**: `outline: none; border-color: var(--clet-primary); box-shadow: 0 0 0 1px var(--clet-primary)`
+- **Disabled**: `background-color: var(--clet-hover); color: var(--clet-text-muted); cursor: not-allowed`
+- **Invalid**: `border-color: var(--clet-error)` + same for focus shadow
 - **Reduced motion**: `@media (prefers-reduced-motion: reduce) { transition: none; }`
+
+## Adding or changing a component — token & theme checklist
+
+Run through this for **every** new component and every CSS change to an existing one, before it ships:
+
+1. **No hardcoded values.** Every color, font-size, radius, shadow, and z-index in the component's CSS must be a `var(--clet-*)` reference — never a literal hex/px/rgb.
+2. **Name component-scoped tokens so `classify()` infers the right type.** Declare them as `--clet-<slug>-<name>` at the component's root rule in `src/components/<slug>/styles/<slug>.css`. `scripts/generate-theme-tokens.mjs` checks patterns **in order** and stops at the first match: `radius` → length, `shadow` → shadow, `z-`/`z$` → zIndex, `font` → font (typed as a loose string), `opacity` → opacity, then `size`/`gap`/`width`/`height`/`padding`/`margin`/`px`/`py` → length, then `duration`/`transition`/`delay` → duration, then a long color-keyword list (`color`, `bg`, `border`, `text`, `primary`, …) → color, else misc. Order matters: a name containing **both** `font` and `size` (e.g. a hypothetical `--clet-font-size-*`) is classified as `font`/string, not length, because `font` is checked first — that's why the global text-size scale is named `--clet-text-size-*`, not `--clet-font-size-*`. When adding a length-ish token, avoid pairing `font` with a length keyword in the same name; a badly named token gets a looser `CletStringValue` type in `cletTheme()` instead of the stricter `CletLengthValue`.
+3. **Run `npm run generate:tokens`** after adding or renaming any `--clet-*` token in CSS. This regenerates `src/generated/components.theme.ts` (the typed surface `cletTheme()` type-checks against, and the same registry the MCP's `get_tokens` reads) — never hand-edit that generated file. Skipping this step means the token is real in CSS but invisible to `cletTheme()` and to agents querying the docs MCP.
+4. **Global tokens must also get a Tailwind `@theme` mapping.** If the token is a *global* one (defined in `src/styles/theme/{base,light,dark}.css`, not component-scoped), add a corresponding line in the `@theme` block in `src/styles/theme/tokens.css` (e.g. `--color-foo: var(--clet-foo);` or `--text-foo: var(--clet-font-size-foo);`) so Tailwind auto-generates the utility class. Component-scoped tokens (`--clet-<slug>-*`) do NOT get an `@theme` entry — they're consumed directly in that component's CSS and overridden via `cletTheme({ components: { ... } })`. Check the running coverage checklist comment at the bottom of `tokens.css` and update it if you deliberately skip a mapping.
+5. **Verify light + dark values exist** for any new global color token — add both, never just one mode.
+6. **Rebuild/refresh the MCP index** before considering the work done: restart the dev MCP server (it auto-rebuilds `mcp/generated/*.json` from source when stale) or run `npm run build:mcp`, then confirm the component/tokens are visible via `list_components` / `get_component` / `get_tokens`.
+7. **One declaration per token — no alias.** Define the token once as `--clet-<name>: <value>;`. Do not add a second declaration or alias for it; `npm run generate:tokens` and the MCP indexer (`mcp/src/indexer.ts`) both read `--clet-*` declarations directly.
 
 ## Module layout
 
-Per `.cursor/rules/gsl-component-authoring.mdc`:
+Per `.cursor/rules/clet-component-authoring.mdc`:
 
 ```
 src/components/{name}/
@@ -260,14 +309,14 @@ PR rules:
 ### Props & components
 - **Props are self-contained per component**: Each component defines its own interface. Don't extend base props interfaces. Don't use `[key: string]: unknown`.
 - **`forwardRef` on all input-like components**: Required for RHF `{...field}` integration.
-- **`classNames` sub-object for internal elements**: `classNames?.{part}` merged via `cn()` after the base `gsl-*` class. `className` on root = `classNames.root`.
+- **`classNames` sub-object for internal elements**: `classNames?.{part}` merged via `cn()` after the base `clet-*` class. `className` on root = `classNames.root`.
 
 ### Styling
-- BEM naming: `gsl-component`, `gsl-component__part`, `gsl-component--modifier`
+- BEM naming: `clet-component`, `clet-component__part`, `clet-component--modifier`
 - **No inline styles**. Use CSS classes. Inline `style={{}}` objects are only acceptable when a value is genuinely dynamic (computed from JS at runtime, e.g. `transform: translateY(${item.start}px)`). Static style properties — position, width, fontSize, padding, colors — belong in CSS files. Never pass a static style object into JSX.
 - CSS imported in the component file. No CSS-in-JS.
-- Only `--gsl-*` tokens. No hardcoded colors.
-- `invalid` → `aria-invalid` + error border. `disabled` → `cursor: not-allowed` + no interaction. Standard 40px height, border-radius `--gsl-radius`, etc.
+- Only `--clet-*` tokens. No hardcoded colors.
+- `invalid` → `aria-invalid` + error border. `disabled` → `cursor: not-allowed` + no interaction. Standard 40px height, border-radius `--clet-radius`, etc.
 
 ### Misc patterns
 - OTP paste from any slot: handler takes `(index, event)`, fills `newDigits[index + i]`
@@ -287,3 +336,6 @@ When documenting components, read the actual type definitions from `src/types/*.
 - Propose gaps or missing scenarios to the user.
 - Only add tests the user explicitly approves.
 - Cover: forwardRef, invalid styling, disabled state, key interactions (typing, paste, keyboard nav, onChange).
+
+<!-- rfdtech-ui -->
+Use the `rfdtech-ui` MCP server (`search_components`, `get_component`, `get_rules`) before building UI with `@rfdtech/components`. Given a screenshot, image, mockup, or description of a screen to build, decompose it and map every element to an existing `@rfdtech/components` component/variant via the MCP before writing markup — only build custom UI if the user explicitly asks for it.

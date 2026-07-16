@@ -21,21 +21,21 @@ export function Toaster({ classNames, className }: ToasterProps) {
       theme={themeContext?.resolvedTheme ?? "system"}
       visibleToasts={defaults.limit}
       duration={defaults.duration}
-      className={cn("gsl-toast__viewport", classNames?.viewport, className)}
+      className={cn("clet-toast__viewport gsl-toast__viewport", classNames?.viewport, className)}
       toastOptions={{
         unstyled: true,
         closeButton: true,
         classNames: {
-          toast: "gsl-toast",
-          title: "gsl-toast__title",
-          description: "gsl-toast__description",
-          actionButton: "gsl-button gsl-button--secondary gsl-button--sm",
-          closeButton: "gsl-button gsl-button--sm gsl-toast__close",
-          icon: "gsl-toast__icon",
-          default: "gsl-toast--default",
-          success: "gsl-toast--success",
-          warning: "gsl-toast--warning",
-          error: "gsl-toast--error",
+          toast: "clet-toast gsl-toast",
+          title: "clet-toast__title gsl-toast__title",
+          description: "clet-toast__description gsl-toast__description",
+          actionButton: "clet-button gsl-button clet-button--secondary gsl-button--secondary clet-button--sm gsl-button--sm",
+          closeButton: "clet-button gsl-button clet-button--sm gsl-button--sm clet-toast__close gsl-toast__close",
+          icon: "clet-toast__icon gsl-toast__icon",
+          default: "clet-toast--default gsl-toast--default",
+          success: "clet-toast--success gsl-toast--success",
+          warning: "clet-toast--warning gsl-toast--warning",
+          error: "clet-toast--error gsl-toast--error",
         },
       }}
     />

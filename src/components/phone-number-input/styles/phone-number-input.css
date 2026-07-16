@@ -1,158 +1,169 @@
-.gsl-phone-number-input {
+.clet-phone-number-input {
+  --clet-phone-number-input-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-phone-number-input-height: 40px;
+
   display: flex;
   align-items: center;
   position: relative;
-  height: 40px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
+  height: var(--gsl-phone-number-input-height, var(--clet-phone-number-input-height));
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
   transition:
     border-color 0.15s,
     box-shadow 0.15s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-phone-number-input {
+  .clet-phone-number-input {
     transition: none;
   }
 }
 
-.gsl-phone-number-input:focus-within {
-  border-color: var(--gsl-primary);
-  box-shadow: 0 0 0 1px var(--gsl-primary);
+.clet-phone-number-input:focus-within {
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
-.gsl-phone-number-input--invalid {
-  border-color: var(--gsl-error);
+.clet-phone-number-input--invalid {
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
-.gsl-phone-number-input--invalid:focus-within {
-  border-color: var(--gsl-error);
-  box-shadow: 0 0 0 1px var(--gsl-error);
+.clet-phone-number-input--invalid:focus-within {
+  border-color: var(--gsl-error, var(--clet-error));
+  box-shadow: 0 0 0 1px var(--gsl-error, var(--clet-error));
 }
 
-.gsl-phone-number-input--disabled {
-  background: var(--gsl-hover);
-  color: var(--gsl-text-muted);
+.clet-phone-number-input--disabled {
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-.gsl-phone-number-input--disabled .gsl-phone-number-input__input {
+.clet-phone-number-input--disabled .clet-phone-number-input__input {
   cursor: not-allowed;
 }
 
-.gsl-phone-number-input__prefix {
+.clet-phone-number-input__prefix {
   display: flex;
   align-items: center;
   gap: 6px;
   height: 100%;
   padding: 0 8px 0 12px;
   border: none;
-  border-right: 1px solid var(--gsl-border);
+  border-right: 1px solid var(--gsl-border, var(--clet-border));
   background: transparent;
-  color: var(--gsl-text);
-  font-size: 14px;
+  color: var(--gsl-text, var(--clet-text));
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
   outline: none;
-  border-radius: var(--gsl-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
 }
 
-.gsl-phone-number-input--disabled .gsl-phone-number-input__prefix {
+.clet-phone-number-input--disabled .clet-phone-number-input__prefix {
   cursor: not-allowed;
 }
 
-.gsl-phone-number-input__prefix:hover:not(:disabled) {
-  background: var(--gsl-hover);
+.clet-phone-number-input__prefix:hover:not(:disabled) {
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
-.gsl-phone-number-input__flag {
-  font-size: 18px;
-  line-height: 1;
+.clet-phone-number-input__flag {
+  display: block;
+  width: 20px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  object-fit: cover;
 }
 
-.gsl-phone-number-input__dial {
-  font-size: 14px;
+.clet-phone-number-input__dial {
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
   font-weight: 500;
 }
 
-.gsl-phone-number-input__chevron {
-  color: var(--gsl-text-secondary);
+.clet-phone-number-input__chevron {
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   transition: transform 0.2s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-phone-number-input__chevron {
+  .clet-phone-number-input__chevron {
     transition: none;
   }
 }
 
-.gsl-phone-number-input__chevron--open {
+.clet-phone-number-input__chevron--open {
   transform: rotate(180deg);
 }
 
-.gsl-phone-number-input__input {
+.clet-phone-number-input__input {
   flex: 1;
   height: 100%;
   padding: 0 12px;
   border: none;
   background: transparent;
-  color: var(--gsl-text);
-  font-size: 14px;
-  font-family: var(--gsl-font);
+  color: var(--gsl-text, var(--clet-text));
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  font-family: var(--gsl-phone-number-input-font, var(--clet-phone-number-input-font));
   outline: none;
   min-width: 0;
 }
 
-.gsl-phone-number-input__input::placeholder {
-  color: var(--gsl-text-secondary);
+.clet-phone-number-input__input::placeholder {
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
-.gsl-phone-number-input__dropdown {
-  z-index: var(--gsl-z-select, 50);
-  width: 320px;
-  max-height: 300px;
-  border-radius: var(--gsl-radius-base);
-  border: 1px solid var(--gsl-border);
-  background: var(--gsl-bg);
-  box-shadow: var(--gsl-shadow-lg);
+.clet-phone-number-input__dropdown {
+  --clet-phone-number-input-dropdown-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-phone-number-input-dropdown-width: 320px;
+  --clet-phone-number-input-dropdown-max-height: 300px;
+
+  z-index: var(--gsl-z-select, var(--clet-z-select, 50));
+  width: var(--gsl-phone-number-input-dropdown-width, var(--clet-phone-number-input-dropdown-width));
+  max-height: var(--gsl-phone-number-input-dropdown-max-height, var(--clet-phone-number-input-dropdown-max-height));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.gsl-phone-number-input__search {
+.clet-phone-number-input__search {
   padding: 8px;
-  border-bottom: 1px solid var(--gsl-border);
+  border-bottom: 1px solid var(--gsl-border, var(--clet-border));
 }
 
-.gsl-phone-number-input__search-input {
+.clet-phone-number-input__search-input {
   width: 100%;
   height: 36px;
   padding: 0 10px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
-  color: var(--gsl-text);
-  font-size: 14px;
-  font-family: var(--gsl-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-text, var(--clet-text));
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  font-family: var(--gsl-phone-number-input-dropdown-font, var(--clet-phone-number-input-dropdown-font));
   outline: none;
   box-sizing: border-box;
 }
 
-.gsl-phone-number-input__search-input:focus {
-  border-color: var(--gsl-primary);
-  box-shadow: 0 0 0 1px var(--gsl-primary);
+.clet-phone-number-input__search-input:focus {
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
-.gsl-phone-number-input__list {
+.clet-phone-number-input__list {
   overflow-y: scroll;
   flex: 1;
 }
 
-.gsl-phone-number-input__option {
+.clet-phone-number-input__option {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -160,28 +171,31 @@
   padding: 8px 12px;
   border: none;
   background: transparent;
-  color: var(--gsl-text);
-  font-size: 14px;
-  font-family: var(--gsl-font);
+  color: var(--gsl-text, var(--clet-text));
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  font-family: var(--gsl-phone-number-input-dropdown-font, var(--clet-phone-number-input-dropdown-font));
   cursor: pointer;
   text-align: left;
 }
 
-.gsl-phone-number-input__option:hover {
-  background: var(--gsl-hover);
+.clet-phone-number-input__option:hover {
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
-.gsl-phone-number-input__option--selected {
-  background: var(--gsl-primary-light);
+.clet-phone-number-input__option--selected {
+  background: var(--gsl-primary-light, var(--clet-primary-light));
 }
 
-.gsl-phone-number-input__option-flag {
-  font-size: 18px;
-  line-height: 1;
+.clet-phone-number-input__option-flag {
+  display: block;
+  width: 20px;
+  height: 14px;
   flex-shrink: 0;
+  border-radius: 2px;
+  object-fit: cover;
 }
 
-.gsl-phone-number-input__option-name {
+.clet-phone-number-input__option-name {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -189,7 +203,7 @@
   white-space: nowrap;
 }
 
-.gsl-phone-number-input__option-dial {
-  color: var(--gsl-text-secondary);
+.clet-phone-number-input__option-dial {
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
   flex-shrink: 0;
 }

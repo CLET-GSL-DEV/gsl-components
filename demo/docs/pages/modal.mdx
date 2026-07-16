@@ -1,6 +1,12 @@
 export const meta = {
   title: "Modal",
   description: "Centered overlay with size variants",
+  category: "Components",
+  keywords: ["modal", "overlay", "review dialog", "full screen modal", "workflow modal"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["dialog", "sheet"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -27,17 +33,17 @@ Click **Review changes** to open the modal with `?modal=review-changes`. Close t
 
 | Size | Token | Max width |
 |------|-------|-----------|
-| `sm` | `--gsl-modal-max-width-sm` | 400px |
-| `md` | `--gsl-modal-max-width-md` | 512px |
-| `lg` (default) | `--gsl-modal-max-width-lg` | 640px |
-| `xl` | `--gsl-modal-max-width-xl` | 800px |
-| `2xl` | `--gsl-modal-max-width-2xl` | 1024px |
+| `sm` | `--clet-modal-max-width-sm` | 400px |
+| `md` | `--clet-modal-max-width-md` | 512px |
+| `lg` (default) | `--clet-modal-max-width-lg` | 640px |
+| `xl` | `--clet-modal-max-width-xl` | 800px |
+| `2xl` | `--clet-modal-max-width-2xl` | 1024px |
 
 Override any size token to customize without touching the CSS classes:
 
 ```css
 :root {
-  --gsl-modal-max-width-lg: 720px;
+  --clet-modal-max-width-lg: 720px;
 }
 ```
 
@@ -100,7 +106,7 @@ Centered modal shell with size variants, optional close control, and close-preve
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `showCloseButton` | `boolean` | `false` | Shows a top-right close control with an accessible label |
-| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | `"lg"` | Controls max-width via the corresponding `--gsl-modal-max-width-*` token |
+| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | `"lg"` | Controls max-width via the corresponding `--clet-modal-max-width-*` token |
 | `preventClose` | `boolean` | `false` | When true, intercepts close attempts and shows a confirmation dialog |
 | `preventCloseTitle` | `string` | `"Discard changes?"` | Title for the close-confirmation overlay |
 | `preventCloseDescription` | `string` | `"You have unsaved changes..."` | Description for the close-confirmation overlay |
@@ -183,40 +189,60 @@ Extend native `div` / `footer` attributes with optional `classNames`.
 
 | Key | Applied to |
 |-----|------------|
-| `overlay` | Overlay element (`.gsl-modal__overlay`) |
+| `overlay` | Overlay element (`.clet-modal__overlay`) |
 
 ### `ModalContentClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `content` | Shell element (`.gsl-modal`) |
-| `close` | Built-in close button (`.gsl-modal__close`) |
+| `content` | Shell element (`.clet-modal`) |
+| `close` | Built-in close button (`.clet-modal__close`) |
 
 ### `ModalHeaderClassNames` / `ModalTitleClassNames` / `ModalDescriptionClassNames`
 
 | Type | Key | Applied to |
 |------|-----|------------|
-| `ModalHeaderClassNames` | `header` | Header element (`.gsl-modal__header`) |
-| `ModalTitleClassNames` | `title` | Title element (`.gsl-modal__title`) |
-| `ModalDescriptionClassNames` | `description` | Description element (`.gsl-modal__description`) |
+| `ModalHeaderClassNames` | `header` | Header element (`.clet-modal__header`) |
+| `ModalTitleClassNames` | `title` | Title element (`.clet-modal__title`) |
+| `ModalDescriptionClassNames` | `description` | Description element (`.clet-modal__description`) |
 
 ### `ModalBodyClassNames` / `ModalFooterClassNames`
 
 | Type | Key | Applied to |
 |------|-----|------------|
-| `ModalBodyClassNames` | `body` | Body element (`.gsl-modal__body`) |
-| `ModalFooterClassNames` | `footer` | Footer element (`.gsl-modal__footer`) |
+| `ModalBodyClassNames` | `body` | Body element (`.clet-modal__body`) |
+| `ModalFooterClassNames` | `footer` | Footer element (`.clet-modal__footer`) |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-modal-font` | `var(--clet-font-body)` | Font family override for the modal shell |
+| `--clet-modal-confirm-font` | `var(--clet-font-body)` | Font family override for the `preventClose` confirmation dialog |
+| `--clet-modal-gutter` | `24px` | Viewport gutter reserved around the modal shell when sizing its width/height (set to `0` below 768px, where the modal fills the viewport) |
+
+See [Sizes](#sizes) above for the `--clet-modal-max-width-*` tokens.
 
 ## Notes
 
 - The modal is centered in the viewport with `top: 50%; left: 50%; transform: translate(-50%, -50%)`.
-- Border and shadow match the popover style (`1px solid var(--gsl-border)`, `var(--gsl-shadow-sm)`, `var(--gsl-radius-xl)`).
-- Default size is `lg` (640px). Override per-size max-widths via `--gsl-modal-max-width-{size}` tokens.
+- Border and shadow match the popover style (`1px solid var(--clet-border)`, `var(--clet-shadow-sm)`, `var(--clet-radius-xl)`).
+- Default size is `lg` (640px). Override per-size max-widths via `--clet-modal-max-width-{size}` tokens.
 - On mobile (≤768px) the modal fills the viewport without gutters or border-radius.
 - `ModalBody` scrolls internally when content exceeds the available height.
 - The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
 - `preventClose` shows a confirmation dialog before closing. Pass `onOpenChange` to `ModalContent` for close-control.
-- Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
+- Portaled content inherits the active theme via `data-clet-theme` on `document.documentElement` when using `ThemeProvider`.
 - Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
-- Base `gsl-modal*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-modal*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 - **URL-driven open state** is the recommended pattern: use `useModalSearchParam` with `open`, `onOpenChange`, and `openWith` (see [URL state](#url-state) above).
+
+## Do
+
+- Follow the structure `Modal > ModalPortal > ModalOverlay + ModalContent(showCloseButton, size) > ModalHeader(ModalTitle, ModalDescription) > Form > ModalBody > ModalFooter`.
+- Give `Field`/`Textarea` inside `ModalBody` a `className="w-full"` so they fill the width.
+- Use `bg-surface-muted/20` (not plain `bg-surface-muted`) for subtle card backgrounds inside a modal.
+
+## Don't
+
+- Wrap the form contents in a literal `<form>` element; call `form.handleSubmit(onSubmit)` from the submit button's `onClick` instead.

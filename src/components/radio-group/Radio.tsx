@@ -24,36 +24,36 @@ export function Radio({
   return (
     <Wrapper
       className={cn(
-        "gsl-radio",
-        variant === "card" && "gsl-radio--card",
-        disabled && "gsl-radio--disabled",
+        "clet-radio gsl-radio",
+        variant === "card" && "clet-radio--card gsl-radio--card",
+        disabled && "clet-radio--disabled gsl-radio--disabled",
         classNames?.root,
         className,
       )}
     >
       <RadioGroupPrimitive.Item
         id={id}
-        className={cn("gsl-radio__control", classNames?.control)}
+        className={cn("clet-radio__control gsl-radio__control", classNames?.control)}
         value={value}
         disabled={disabled}
         aria-label={!hasText ? ariaLabel : undefined}
         aria-describedby={description ? descriptionId : undefined}
       >
         <RadioGroupPrimitive.Indicator
-          className={cn("gsl-radio__indicator", classNames?.indicator)}
+          className={cn("clet-radio__indicator gsl-radio__indicator", classNames?.indicator)}
         />
       </RadioGroupPrimitive.Item>
       {hasText ? (
-        <span className={cn("gsl-radio__content", classNames?.content)}>
+        <span className={cn("clet-radio__content gsl-radio__content", classNames?.content)}>
           {label ? (
-            <span className={cn("gsl-radio__label", classNames?.label)}>
+            <span className={cn("clet-radio__label gsl-radio__label", classNames?.label)}>
               {label}
             </span>
           ) : null}
           {description ? (
             <span
               id={descriptionId}
-              className={cn("gsl-radio__description", classNames?.description)}
+              className={cn("clet-radio__description gsl-radio__description", classNames?.description)}
             >
               {description}
             </span>

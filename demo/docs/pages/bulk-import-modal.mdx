@@ -1,6 +1,12 @@
 export const meta = {
   title: "BulkImportModal",
   description: "Spreadsheet import wizard",
+  category: "Components",
+  keywords: ["bulk import", "csv upload", "xlsx import", "spreadsheet import", "batch import"],
+  since: "0.4.0",
+  status: "stable",
+  related: ["modal", "upload-field", "dropdown"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -40,6 +46,20 @@ Click **Open bulk import** to launch the multi-step import modal with sample dat
 | `maxFileSizeBytes` | `number` | `5242880` | Maximum upload size (5 MB) |
 | `allowImportWithWarnings` | `boolean` | `false` | Allow import when only warnings exist |
 | `defaultState` | `BulkImportFlowDefaultState` | — | Seed initial flow state for progress preservation across open/close cycles |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-bulk-import-primary` | `--clet-primary` | Primary accent color (buttons, dropzone border, checkbox/radio accents, switch track, focus outlines) |
+| `--clet-bulk-import-primary-light` | `--clet-primary-light` | Selected row background, outline button hover background |
+| `--clet-bulk-import-success` | `--clet-success` | Stepper active/complete marker color, connector fill, mapping status "complete" badge |
+| `--clet-bulk-import-warning` | `--clet-warning` | Mapping status "pending" badge border |
+| `--clet-bulk-import-error-bg` | `--clet-error-bg` | Validate step cell error background |
+| `--clet-bulk-import-gutter` | `24px` (`16px` on mobile) | Modal inset from the viewport edges |
+| `--clet-shadow` | `--clet-shadow-lg` | Modal box-shadow |
+| `--clet-radius-base` | `12px` | Modal border-radius (component-scoped override of the base radius token) |
+| `--clet-bulk-import-font` | `--clet-font-body` | Modal font family (also used for the uploaded file name text) |
 
 ## Notes
 

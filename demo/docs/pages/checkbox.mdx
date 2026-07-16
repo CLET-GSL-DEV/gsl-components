@@ -1,6 +1,12 @@
 export const meta = {
   title: "Checkbox",
   description: "Accessible checkbox",
+  category: "Components",
+  keywords: ["checkbox", "toggle", "boolean input", "form checkbox"],
+  since: "1.4.0",
+  status: "stable",
+  related: ["radio-group", "form-field"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -9,7 +15,7 @@ import checkboxSource from "../previews/examples/checkbox.example.tsx?raw";
 
 # Checkbox
 
-Accessible checkbox built on `@radix-ui/react-checkbox` with GSL styling, optional label, and part-level `classNames`.
+Accessible checkbox built on `@radix-ui/react-checkbox` with CLET styling, optional label, and part-level `classNames`.
 
 ## Example
 
@@ -44,18 +50,24 @@ Props for `Checkbox`. Supports controlled and uncontrolled usage with an optiona
 
 ### `CheckboxClassNames`
 
-Part-level class names merged after base `gsl-checkbox*` styles:
+Part-level class names merged after base `clet-checkbox*` styles:
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Outer wrapper (`.gsl-checkbox`) |
-| `control` | Checkbox control (`.gsl-checkbox__control`) |
+| `root` | Outer wrapper (`.clet-checkbox`) |
+| `control` | Checkbox control (`.clet-checkbox__control`) |
 | `indicator` | Checked indicator container |
 | `icon` | Lucide check icon |
 | `label` | Visible label text |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-checkbox-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
 - Provide `label` or `aria-label` so the checkbox has an accessible name.
 - Checked state shows a Lucide `Check` icon on the primary background.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

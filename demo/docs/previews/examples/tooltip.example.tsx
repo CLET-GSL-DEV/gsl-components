@@ -16,11 +16,11 @@ export function TooltipExample() {
           type="button"
           style={{
             padding: "8px 14px",
-            border: "1px solid var(--gsl-border)",
-            borderRadius: "var(--gsl-radius-base)",
-            background: "var(--gsl-bg)",
-            color: "var(--gsl-text)",
-            fontFamily: "var(--gsl-font)",
+            border: "1px solid var(--clet-border)",
+            borderRadius: "var(--clet-radius-base)",
+            background: "var(--clet-bg)",
+            color: "var(--clet-text)",
+            fontFamily: "var(--clet-font)",
             fontSize: 14,
             cursor: "default",
           }}
@@ -33,11 +33,11 @@ export function TooltipExample() {
           type="button"
           style={{
             padding: "8px 14px",
-            border: "1px solid var(--gsl-border)",
-            borderRadius: "var(--gsl-radius-base)",
-            background: "var(--gsl-bg)",
-            color: "var(--gsl-text)",
-            fontFamily: "var(--gsl-font)",
+            border: "1px solid var(--clet-border)",
+            borderRadius: "var(--clet-radius-base)",
+            background: "var(--clet-bg)",
+            color: "var(--clet-text)",
+            fontFamily: "var(--clet-font)",
             fontSize: 14,
             cursor: "default",
           }}
@@ -50,11 +50,11 @@ export function TooltipExample() {
           type="button"
           style={{
             padding: "8px 14px",
-            border: "1px solid var(--gsl-border)",
-            borderRadius: "var(--gsl-radius-base)",
-            background: "var(--gsl-bg)",
-            color: "var(--gsl-text)",
-            fontFamily: "var(--gsl-font)",
+            border: "1px solid var(--clet-border)",
+            borderRadius: "var(--clet-radius-base)",
+            background: "var(--clet-bg)",
+            color: "var(--clet-text)",
+            fontFamily: "var(--clet-font)",
             fontSize: 14,
             cursor: "default",
           }}
@@ -67,11 +67,11 @@ export function TooltipExample() {
           type="button"
           style={{
             padding: "8px 14px",
-            border: "1px solid var(--gsl-border)",
-            borderRadius: "var(--gsl-radius-base)",
-            background: "var(--gsl-bg)",
-            color: "var(--gsl-text)",
-            fontFamily: "var(--gsl-font)",
+            border: "1px solid var(--clet-border)",
+            borderRadius: "var(--clet-radius-base)",
+            background: "var(--clet-bg)",
+            color: "var(--clet-text)",
+            fontFamily: "var(--clet-font)",
             fontSize: 14,
             cursor: "default",
           }}

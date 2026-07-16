@@ -1,16 +1,24 @@
 export const meta = {
   title: "Tabs",
   description: "Tabbed panels",
+  category: "Components",
+  keywords: ["tabs", "tabbed panels", "segmented control", "pill tabs", "line tabs"],
+  since: "1.5.0",
+  status: "stable",
+  related: ["table"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { TabsPreview } from "../previews/code/TabsPreview";
 import { TabsLinePreview } from "../previews/code/TabsLinePreview";
 import { TabsPillExample } from "../previews/examples/tabs-pill.example";
+import { TableTabsFilterPreview } from "../previews/code/TableTabsFilterPreview";
 
 import tabsSource from "../previews/examples/tabs.example.tsx?raw";
 import tabsLineSource from "../previews/examples/tabs-line.example.tsx?raw";
 import tabsPillSource from "../previews/examples/tabs-pill.example.tsx?raw";
+import tableTabsFilterSource from "../previews/examples/table-tabs-filter.example.tsx?raw";
 
 # Tabs
 
@@ -45,6 +53,19 @@ Use `variant="pill"` on `Tabs` for a pill-style indicator instead of the enclose
   code={tabsPillSource}
 />
 
+
+## Tabs as a table filter
+
+A common pattern: status tabs ("All" / "Active" / "Pending") act as a segment filter over a
+single shared `Table` — one `TableContent` instance whose `data` is filtered by the active tab,
+not a separate table per tab (see [Table's panel variant](/docs/table) for the separate-table-per-tab
+pattern instead).
+
+<ExampleTabs
+  title="Tabs filtering one shared table"
+  preview={<TableTabsFilterPreview />}
+  code={tableTabsFilterSource}
+/>
 
 ## Components
 
@@ -126,26 +147,26 @@ Props for `TabsContent`. Extends Radix content props with `classNames` and `clas
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root wrapper (`.gsl-tabs`) |
+| `root` | Root wrapper (`.clet-tabs`) |
 
 ### `TabsListClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `list` | Tab list (`.gsl-tabs__list`) |
-| `indicator` | Sliding line indicator (`.gsl-tabs__indicator`; line variant only) |
+| `list` | Tab list (`.clet-tabs__list`) |
+| `indicator` | Sliding line indicator (`.clet-tabs__indicator`; line variant only) |
 
 ### `TabsTriggerClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `trigger` | Tab button (`.gsl-tabs__trigger`) |
+| `trigger` | Tab button (`.clet-tabs__trigger`) |
 
 ### `TabsContentClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `content` | Tab panel (`.gsl-tabs__content`) |
+| `content` | Tab panel (`.clet-tabs__content`) |
 
 ## Notes
 
@@ -154,7 +175,7 @@ Props for `TabsContent`. Extends Radix content props with `classNames` and `clas
 - `variant="line"` uses a sliding indicator that moves between active triggers (bottom underline horizontally, right-edge bar vertically); indicator motion is disabled when `prefers-reduced-motion: reduce` is set.
 - `variant="pill"` uses a pill-style indicator that slides between active triggers with a shared pill-shaped container; indicator motion is disabled when `prefers-reduced-motion: reduce` is set.
 - Active panels fade and slide in briefly when switching tabs; animation is disabled when `prefers-reduced-motion: reduce` is set.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 
 ## CSS Custom Properties
 
@@ -162,5 +183,6 @@ These tokens allow overriding pill visual values at any level (consumer project,
 
 | Token | Default | Description |
 |-------|---------|-------------|
-| `--gsl-tabs-pill-radius` | `9999px` | Border-radius of pill triggers, the active indicator, and the pill list container. Set to a smaller value (e.g. `8px`) for a softer pill. |
-| `--gsl-tabs-pill-gap` | `6px` | Gap and padding between pill items and around the pill list. |
+| `--clet-tabs-font` | `var(--clet-font-body)` | Font family override for the tabs root and triggers |
+| `--clet-tabs-pill-radius` | `9999px` | Border-radius of pill triggers, the active indicator, and the pill list container. Set to a smaller value (e.g. `8px`) for a softer pill. |
+| `--clet-tabs-pill-gap` | `6px` | Gap and padding between pill items and around the pill list. |

@@ -1,0 +1,138 @@
+export const meta = {
+  title: "Popup",
+  description: "Compact floating card for confirmations and quick actions",
+  category: "Components",
+  keywords: ["popup", "floating card", "confirm", "quick action", "popover"],
+  since: "1.5.0",
+  status: "stable",
+  related: ["popover", "tooltip", "dialog"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { PopupPreview } from "../previews/code/PopupPreview";
+import { PopupVariantsPreview } from "../previews/code/PopupVariantsPreview";
+import popupSource from "../previews/examples/popup.example.tsx?raw";
+import popupVariantsSource from "../previews/examples/popup-variants.example.tsx?raw";
+
+# Popup
+
+Compound popup primitives for small, anchored confirmation cards — a title, description, optional input, and one or two actions. Wraps `@radix-ui/react-popover`; `PopupContent` applies the CLET popup surface styles.
+
+## Example
+
+<ExampleTabs title="Confirmation popup" preview={<PopupPreview />} code={popupSource} />
+
+## Variants
+
+Every slot (`PopupHeader`/`PopupTitle`/`PopupDescription`/`PopupBody`/`PopupFooter`) is independently optional, and `PopupFooter` supports a `"row"` (side-by-side, equal width) or `"stack"` (full width) layout — combine them freely: title + description with row or stack buttons, an optional input body, description-only, or title-only with a single button.
+
+<ExampleTabs
+  title="Title/description/body combinations, row and stack footers"
+  preview={<PopupVariantsPreview />}
+  code={popupVariantsSource}
+/>
+
+## Components
+
+### `Popup`
+
+Root wrapper. Accepts Radix `Popover.Root` props such as `open`, `defaultOpen`, and `onOpenChange`.
+
+### `PopupTrigger`
+
+Wraps the element that opens the popup. Use `asChild` to merge props onto a child such as `Button`.
+
+### `PopupContent`
+
+Styled floating card. Accepts Radix content props (`side`, `align`, `sideOffset`, etc.) plus CLET `classNames`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `PopupContentClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the content element |
+| `showCloseButton` | `boolean` | `false` | Renders a small close (`×`) button in the top-right corner |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"` | Preferred placement |
+| `align` | `"start" \| "center" \| "end"` | `"center"` | Alignment relative to trigger |
+| `sideOffset` | `number` | `8` | Distance from the trigger |
+
+Also accepts remaining Radix `Popover.Content` props.
+
+### `PopupHeader`
+
+Groups `PopupTitle` and `PopupDescription` with consistent spacing.
+
+### `PopupTitle`
+
+Renders an `<h3>` for the card's title.
+
+### `PopupDescription`
+
+Renders a `<p>` for supporting copy below the title.
+
+### `PopupBody`
+
+Generic content slot — use it to hold an `Input` or any custom content between the header and footer.
+
+### `PopupFooter`
+
+Holds one or two action buttons.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `layout` | `"row" \| "stack"` | `"row"` | `"row"` places buttons side by side (equal width); `"stack"` places them full width, one above the other |
+| `classNames` | `PopupFooterClassNames` | — | Part-level class overrides |
+
+### Other exports
+
+| Export | Radix primitive | Notes |
+|--------|-----------------|-------|
+| `PopupPortal` | `Portal` | Renders content in a portal |
+| `PopupAnchor` | `Anchor` | Alternative positioning anchor |
+| `PopupClose` | `Close` | Closes the popup when activated — wrap footer buttons with `asChild` to dismiss on click |
+
+## Types
+
+### `PopupContentProps`
+
+Extends Radix `PopoverContentProps` with optional `classNames` and `showCloseButton`.
+
+### `PopupContentClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `content` | Content element (`.clet-popup`) |
+| `close` | Close button, when `showCloseButton` is set |
+
+### `PopupHeaderProps`, `PopupTitleProps`, `PopupDescriptionProps`, `PopupBodyProps`
+
+Extend the matching native HTML element attributes with an optional `classNames` part-override.
+
+### `PopupFooterProps`
+
+Extends `HTMLAttributes<HTMLDivElement>` with `layout` and `classNames`.
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-popup-font` | `var(--clet-font-body)` | Font family override |
+| `--clet-popup-radius` | `12px` | Card corner radius |
+| `--clet-popup-padding` | `24px` | Card inner padding |
+| `--clet-popup-gap` | `24px` | Gap between header/body/footer |
+| `--clet-popup-width` | `350px` | Card max width (clamped to `100vw - 32px` on narrow screens) |
+| `--clet-popup-border-width` | `1.5px` | Card border thickness |
+| `--clet-popup-footer-gap` | `16px` | Gap between footer action buttons |
+| `--clet-surface-panel` | theme surface | Card background |
+| `--clet-border-subtle` | theme border | Card border color |
+| `--clet-shadow-md` | theme shadow | Card elevation |
+| `--clet-text-size-base` | `14px` | Body/description font size |
+| `--clet-text-size-md` | `16px` | Title font size |
+
+## Notes
+
+- Portaled content inherits the active theme via `data-clet-theme` on `document.documentElement` when using `ThemeProvider`.
+- Use `PopupTrigger asChild` so focus and keyboard behavior stay on your button or link.
+- Wrap footer buttons in `PopupClose asChild` so the card dismisses after a choice is made.
+- Use `PopupFooter layout="stack"` when action labels are long or you want both buttons full width instead of side by side.
+- Omit `PopupHeader`/`PopupDescription`/`PopupBody` freely — every slot is optional; only `PopupContent` is required.

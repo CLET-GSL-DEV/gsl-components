@@ -54,8 +54,8 @@ describe("OtpInput", () => {
       />,
     );
 
-    expect(document.querySelector(".gsl-otp-input")).toHaveClass("custom-root");
-    expect(document.querySelector(".gsl-otp-input")).toHaveClass("custom-classname");
+    expect(document.querySelector(".clet-otp-input")).toHaveClass("custom-root");
+    expect(document.querySelector(".clet-otp-input")).toHaveClass("custom-classname");
     screen.getAllByRole("textbox").forEach((input) => {
       expect(input).toHaveClass("custom-slot");
     });

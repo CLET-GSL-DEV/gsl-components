@@ -1,21 +1,22 @@
-.gsl-checkbox {
+.clet-checkbox {
+  --clet-checkbox-font: var(--gsl-font-body, var(--clet-font-body));
   display: inline-flex;
   align-items: flex-start;
   gap: 8px;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-checkbox-font, var(--clet-checkbox-font));
   font-size: 14px;
   line-height: 1.4;
-  color: var(--gsl-text);
+  color: var(--gsl-text, var(--clet-text));
   cursor: pointer;
   user-select: none;
 }
 
-.gsl-checkbox--disabled {
+.clet-checkbox--disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-.gsl-checkbox__control {
+.clet-checkbox__control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -23,9 +24,9 @@
   width: 20px;
   height: 20px;
   margin-top: 1px;
-  border: 1px solid var(--gsl-border);
-  border-radius: calc(var(--gsl-radius-base) - 2px);
-  background: var(--gsl-bg);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
+  background: var(--gsl-bg, var(--clet-bg));
   cursor: inherit;
   transition:
     background-color 150ms ease,
@@ -33,38 +34,38 @@
     box-shadow 150ms ease;
 }
 
-.gsl-checkbox__control[data-state="checked"] {
-  border-color: var(--gsl-primary);
-  background: var(--gsl-primary);
-  color: var(--gsl-on-primary);
+.clet-checkbox__control[data-state="checked"] {
+  border-color: var(--gsl-primary, var(--clet-primary));
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
-.gsl-checkbox__control:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-checkbox__control:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
-.gsl-checkbox__control:disabled {
+.clet-checkbox__control:disabled {
   cursor: not-allowed;
 }
 
-.gsl-checkbox__indicator {
+.clet-checkbox__indicator {
   display: flex;
   align-items: center;
   justify-content: center;
   color: currentcolor;
 }
 
-.gsl-checkbox__icon {
+.clet-checkbox__icon {
   width: 14px;
   height: 14px;
 }
 
-.gsl-checkbox__label {
+.clet-checkbox__label {
   line-height: 1.4;
 }
 
-.gsl-checkbox__control[data-state="checked"] + .gsl-checkbox__label,
-.gsl-checkbox:has(.gsl-checkbox__control[data-state="checked"]) .gsl-checkbox__label {
-  color: var(--gsl-text);
+.clet-checkbox__control[data-state="checked"] + .clet-checkbox__label,
+.clet-checkbox:has(.clet-checkbox__control[data-state="checked"]) .clet-checkbox__label {
+  color: var(--gsl-text, var(--clet-text));
 }

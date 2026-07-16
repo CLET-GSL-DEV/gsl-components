@@ -1,6 +1,12 @@
 export const meta = {
   title: "Card",
   description: "Surface card container",
+  category: "Components",
+  keywords: ["card", "surface", "container", "panel", "content wrapper"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["metric-card", "badge"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -9,7 +15,7 @@ import cardSource from "../previews/examples/card.example.tsx?raw";
 
 # Card
 
-Surface card wrapper for grouping content. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for spacing — both overridable via CSS custom properties or `className`.
+Surface card wrapper for grouping content. Uses `--clet-surface-card` for background and `--clet-card-padding` for spacing — both overridable via CSS custom properties or `className`.
 
 ## Example
 
@@ -51,12 +57,23 @@ Also accepts remaining `HTMLAttributes<HTMLDivElement>`.
 
 | Token | Fallback | Used for |
 |-------|----------|----------|
-| `--gsl-surface-card` | `--gsl-bg` | Card background |
-| `--gsl-card-padding` | `20px` | Inner padding (16px on mobile) |
+| `--clet-surface-card` | `--clet-bg` | Card background |
+| `--clet-card-padding` | `20px` | Inner padding (16px on mobile) |
+| `--clet-card-font` | `--clet-font-body` | Card font family |
+| `--clet-card-title-font` | `--clet-font-header` | `CardTitle` font family |
 
-Override padding via `--gsl-card-padding` or tailwind padding classes through `className`.
+Override padding via `--clet-card-padding` or tailwind padding classes through `className`.
 
 ## Notes
 
-- On mobile (`<= 768px`), padding reduces to 16px via `--gsl-card-padding`.
+- On mobile (`<= 768px`), padding reduces to 16px via `--clet-card-padding`.
 - Use `className` to override background, border-radius, shadow, or any root style.
+
+## Do
+
+- For scrollable card content, use `Card className="flex flex-col"` with an inner `flex-1 overflow-y-auto min-h-0` region — `min-h-0` is required for the flex-overflow scroll to work.
+
+## Don't
+
+- Add explicit padding (`px-6`, `py-4`) inside Card content — Card has a built-in `--clet-card-padding` token.
+- Add `border-t` on card footers — keep the flow borderless.

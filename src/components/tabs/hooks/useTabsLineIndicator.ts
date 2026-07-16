@@ -12,10 +12,10 @@ interface TabsLineIndicatorState {
 }
 
 const hiddenStyle: CSSProperties = {
-  ["--gsl-tabs-indicator-offset" as string]: "0px",
-  ["--gsl-tabs-indicator-size" as string]: "0px",
-  ["--gsl-tabs-indicator-cross-offset" as string]: "0px",
-  ["--gsl-tabs-indicator-cross-size" as string]: "0px",
+  ["--clet-tabs-indicator-offset" as string]: "0px",
+  ["--clet-tabs-indicator-size" as string]: "0px",
+  ["--clet-tabs-indicator-cross-offset" as string]: "0px",
+  ["--clet-tabs-indicator-cross-size" as string]: "0px",
 };
 
 export function useTabsLineIndicator(
@@ -36,7 +36,7 @@ export function useTabsLineIndicator(
     }
 
     const activeTrigger = list.querySelector<HTMLElement>(
-      '.gsl-tabs__trigger[data-state="active"]',
+      '.clet-tabs__trigger[data-state="active"]',
     );
 
     if (!activeTrigger) {
@@ -55,10 +55,10 @@ export function useTabsLineIndicator(
       setState({
         visible: true,
         style: {
-          ["--gsl-tabs-indicator-offset" as string]: `${triggerRect.top - listRect.top}px`,
-          ["--gsl-tabs-indicator-size" as string]: `${triggerRect.height}px`,
-          ["--gsl-tabs-indicator-cross-offset" as string]: `${triggerRect.left - listRect.left}px`,
-          ["--gsl-tabs-indicator-cross-size" as string]: `${triggerRect.width}px`,
+          ["--clet-tabs-indicator-offset" as string]: `${triggerRect.top - listRect.top}px`,
+          ["--clet-tabs-indicator-size" as string]: `${triggerRect.height}px`,
+          ["--clet-tabs-indicator-cross-offset" as string]: `${triggerRect.left - listRect.left}px`,
+          ["--clet-tabs-indicator-cross-size" as string]: `${triggerRect.width}px`,
         },
       });
       return;
@@ -67,10 +67,10 @@ export function useTabsLineIndicator(
     setState({
       visible: true,
       style: {
-        ["--gsl-tabs-indicator-offset" as string]: `${triggerRect.left - listRect.left}px`,
-        ["--gsl-tabs-indicator-size" as string]: `${triggerRect.width}px`,
-        ["--gsl-tabs-indicator-cross-offset" as string]: `${triggerRect.top - listRect.top}px`,
-        ["--gsl-tabs-indicator-cross-size" as string]: `${triggerRect.height}px`,
+        ["--clet-tabs-indicator-offset" as string]: `${triggerRect.left - listRect.left}px`,
+        ["--clet-tabs-indicator-size" as string]: `${triggerRect.width}px`,
+        ["--clet-tabs-indicator-cross-offset" as string]: `${triggerRect.top - listRect.top}px`,
+        ["--clet-tabs-indicator-cross-size" as string]: `${triggerRect.height}px`,
       },
     });
   }, [enabled, listRef]);
@@ -93,7 +93,7 @@ export function useTabsLineIndicator(
       const resizeObserver = new ResizeObserver(updateIndicator);
       resizeObserver.observe(list);
 
-      for (const trigger of list.querySelectorAll(".gsl-tabs__trigger")) {
+      for (const trigger of list.querySelectorAll(".clet-tabs__trigger")) {
         resizeObserver.observe(trigger);
       }
 

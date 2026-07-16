@@ -42,7 +42,7 @@ describe("Toast", () => {
       expect(screen.getByText("Profile saved")).toBeInTheDocument();
     });
     expect(screen.getByText("Your changes were applied.")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-toast--success")).toBeInTheDocument();
+    expect(document.querySelector(".clet-toast--success")).toBeInTheDocument();
   });
 
   it("dismisses a toast via the close button", async () => {
@@ -84,7 +84,7 @@ describe("Toast", () => {
     await waitFor(() => {
       expect(
         document.querySelector(
-          "[data-sonner-toaster].gsl-toast__viewport.custom-viewport",
+          "[data-sonner-toaster].clet-toast__viewport.custom-viewport",
         ),
       ).toBeInTheDocument();
     });
@@ -121,7 +121,7 @@ describe("Toast", () => {
     await waitFor(() => {
       expect(screen.getByTestId("toast-icon")).toBeInTheDocument();
     });
-    expect(document.querySelector(".gsl-toast__icon")).toBeInTheDocument();
+    expect(document.querySelector(".clet-toast__icon")).toBeInTheDocument();
   });
 
   it("renders action and close together", async () => {

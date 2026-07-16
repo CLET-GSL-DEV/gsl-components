@@ -1,6 +1,8 @@
 export { AppHeader, AppHeaderActions, AppHeaderBranding } from "./AppHeader";
 export { AppHeaderSearch } from "./AppHeaderSearch";
 export { AppHeaderNotifications } from "./AppHeaderNotifications";
+export { AppHeaderNotificationItem } from "./AppHeaderNotificationItem";
+/** @deprecated Use `ProfilePopover` directly — see the migration guide. */
 export { AppHeaderProfile } from "./AppHeaderProfile";
 export type {
   AppHeaderProps,
@@ -10,6 +12,7 @@ export type {
   AppHeaderSearchDataGroup,
   AppHeaderSearchItem,
   AppHeaderNotificationsProps,
+  AppHeaderNotificationItemProps,
+  AppHeaderNotificationItemClassNames,
   AppHeaderProfileProps,
-  AppUser,
 } from "../../types/app-header";

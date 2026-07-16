@@ -1,6 +1,12 @@
 export const meta = {
   title: "AppSwitcher",
-  description: "9-dot app launcher",
+  description: "Deprecated — use Launchpad instead",
+  category: "Components",
+  keywords: ["app switcher", "9-dot menu", "app launcher", "product switcher", "grid menu", "deprecated"],
+  since: "0.4.0",
+  status: "deprecated",
+  related: ["app-header", "launchpad"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -11,7 +17,9 @@ import appSwitcherLoadingSource from "../previews/examples/app-switcher-loading.
 
 # AppSwitcher
 
-Google Apps–style 9-dot launcher for switching between GSL systems. Drop it into your header to let users jump between products. Pass `apps` from your own data layer and use `loading` while data is being fetched.
+> **Deprecated — no longer maintained.** Use [`Launchpad`](/docs/launchpad) instead. `AppSwitcher` remains exported for existing consumers and won't be removed without a major-version breaking-change entry, but it receives no new features or design updates going forward; `Launchpad` is where new work happens.
+
+Google Apps–style 9-dot launcher for switching between CLET systems. Drop it into your header to let users jump between products. Pass `apps` from your own data layer and use `loading` while data is being fetched.
 
 ## Examples
 
@@ -35,13 +43,15 @@ Google Apps–style 9-dot launcher for switching between GSL systems. Drop it in
 | `loading` | `boolean` | `false` | Shows a spinner in the panel instead of the grid |
 | `loadingLabel` | `string` | `"Loading systems..."` | Accessible label while loading |
 | `columns` | `number` | `3` | Grid column count |
+| `maxItems` | `number` | `6` | Maximum number of apps rendered in the grid |
 | `title` | `string` | — | Panel header title |
 | `onAppSelect` | `(app: AppItem) => void` | — | Called when an app is selected |
 | `open` | `boolean` | — | Controlled open state |
 | `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
 | `triggerLabel` | `string` | `"Open app switcher"` | Accessible label for the trigger |
 | `trigger` | `ReactNode` | 9-dot icon | Custom trigger element |
-| `footer` | `ReactNode` | — | Footer content below the grid |
+| `footer` | `ReactNode` | — | Footer content below the grid (and below `children`, if present) |
+| `children` | `ReactElement<RoleSelectProps>` | — | A [`RoleSelect`](/role-select) rendered directly below the grid, with no divider/border — only a `RoleSelect` element is accepted |
 | `placement` | `"bottom-end" \| "bottom-start" \| "bottom"` | `"bottom-end"` | Panel position |
 | `closeOnSelect` | `boolean` | `true` | Close panel after selection |
 | `className` | `string` | — | Root CSS class |
@@ -77,9 +87,19 @@ import { useAppSwitcher } from "@rfdtech/components";
 const { open, toggle, close, triggerRef, panelRef } = useAppSwitcher();
 ```
 
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-shadow` | `--clet-shadow-sm` | Shadow theming hook on the root element |
+| `--clet-item-size` | `80px` | Width and height of each app grid item |
+| `--clet-icon-size` | `32px` | Width and height of the icon slot inside each item |
+| `--clet-app-switcher-font` | `--clet-font-body` | Font family for the root element |
+
 ## Notes
 
 - Image URLs on `AppItem.icon` render as round cropped icons inside the grid.
 - Fetch apps in your application and pass `apps` + `loading`; AppSwitcher does not call APIs internally.
-- Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`.
-- Override shared tokens on `.gsl-app-switcher` for theming (see [Theme](/docs/theme)).
+- Also exported: `AppSwitcherItem`, `GridIcon`, `SystemAppIcon`, `AppIconTile`.
+- For systems without a logo yet, pass `icon={<SystemAppIcon name="System Name" />}` — it renders a rounded-square tile with a deterministic gradient background, a subtle pattern texture, and the system's initials, all derived from `name` via a hash (same name always produces the same tile). Build a custom glyph-on-tile icon the same way with `<AppIconTile name="System Name"><YourIcon /></AppIconTile>`.
+- Override shared tokens on `.clet-app-switcher` for theming (see [Theme](/docs/theme)).

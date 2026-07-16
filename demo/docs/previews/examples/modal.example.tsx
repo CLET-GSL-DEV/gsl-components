@@ -43,7 +43,7 @@ export function ModalExample() {
               <ModalTitle>Review changes</ModalTitle>
             </ModalHeader>
             <ModalBody>
-              <p style={{ margin: "0 0 12px", fontSize: 14, color: "var(--gsl-text-secondary)" }}>
+              <p style={{ margin: "0 0 12px", fontSize: 14, color: "var(--clet-text-secondary)" }}>
                 Confirm the items below before publishing.
                 {dirty && " Close prevention is active — try clicking the X or overlay."}
               </p>

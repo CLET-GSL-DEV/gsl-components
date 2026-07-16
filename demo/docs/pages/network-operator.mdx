@@ -1,6 +1,12 @@
 export const meta = {
   title: "NetworkOperator",
-  description: "Network operator picker",
+  description: "Deprecated — use Combobox instead",
+  category: "Components",
+  keywords: ["network operator", "mtn", "vodafone", "airteltigo", "telco picker", "deprecated"],
+  since: "1.9.0",
+  status: "deprecated",
+  related: ["country-selector", "phone-number-input", "combobox"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -8,6 +14,8 @@ import { NetworkOperatorPreview } from "../previews/code/NetworkOperatorPreview"
 import networkOperatorSource from "../previews/examples/network-operator.example.tsx?raw";
 
 # NetworkOperator
+
+> **Deprecated — no longer maintained.** Use [`Combobox`](/docs/combobox) (build an operator list with `options`) instead. `NetworkOperator` remains exported for existing consumers and won't be removed without a major-version breaking-change entry, but it receives no new features or design updates going forward. See the [migration guide](/docs/migration-v2).
 
 Network operator selector with operator image thumbnails (MTN, Vodafone, AirtelTigo, Glo), search filtering, and keyboard navigation. Wraps a Radix popover with a trigger that shows the selected operator's logo and name.
 
@@ -81,17 +89,18 @@ See the props table above.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root wrapper (`.gsl-network-operator`) |
-| `trigger` | Trigger button (`.gsl-network-operator__trigger`) |
-| `menu` | Popover menu (`.gsl-network-operator__menu`) |
-| `option` | Option item (`.gsl-network-operator__option`) |
-| `image` | Operator image (`.gsl-network-operator__image`) |
+| `root` | Root wrapper (`.clet-network-operator`) |
+| `trigger` | Trigger button (`.clet-network-operator__trigger`) |
+| `menu` | Popover menu (`.clet-network-operator__menu`) |
+| `option` | Option item (`.clet-network-operator__option`) |
+| `image` | Operator image (`.clet-network-operator__image`) |
 
 ## Design tokens
 
 | Token | Used for |
 |-------|----------|
-| `--gsl-radius-base` | Trigger border radius |
+| `--clet-radius-base` | Trigger border radius |
+| `--clet-network-operator-font` | Font family for the root element and trigger (defaults to `--clet-font-body`) |
 
 ## Notes
 

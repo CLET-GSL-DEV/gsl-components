@@ -40,7 +40,7 @@ describe("Breadcrumb", () => {
     renderBreadcrumbTrail();
 
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
-    expect(nav).toHaveClass("gsl-breadcrumb");
+    expect(nav).toHaveClass("clet-breadcrumb");
   });
 
   it("exposes aria-current on the current page", () => {
@@ -48,17 +48,17 @@ describe("Breadcrumb", () => {
 
     const currentPage = screen.getByText("Profile");
     expect(currentPage).toHaveAttribute("aria-current", "page");
-    expect(currentPage).toHaveClass("gsl-breadcrumb__page");
+    expect(currentPage).toHaveClass("clet-breadcrumb__page");
   });
 
   it("renders links with breadcrumb link styles", () => {
     renderBreadcrumbTrail();
 
     expect(screen.getByRole("link", { name: "Home" })).toHaveClass(
-      "gsl-breadcrumb__link",
+      "clet-breadcrumb__link",
     );
     expect(screen.getByRole("link", { name: "Settings" })).toHaveClass(
-      "gsl-breadcrumb__link",
+      "clet-breadcrumb__link",
     );
   });
 
@@ -78,14 +78,14 @@ describe("Breadcrumb", () => {
     );
 
     const link = screen.getByRole("link", { name: "Reports" });
-    expect(link).toHaveClass("gsl-breadcrumb__link");
+    expect(link).toHaveClass("clet-breadcrumb__link");
     expect(link).toHaveClass("child-link");
   });
 
   it("renders separator as aria-hidden with default chevron", () => {
     const { container } = renderBreadcrumbTrail();
 
-    const separators = container.querySelectorAll(".gsl-breadcrumb__separator");
+    const separators = container.querySelectorAll(".clet-breadcrumb__separator");
     expect(separators).toHaveLength(2);
     separators.forEach((separator) => {
       expect(separator).toHaveAttribute("aria-hidden", "true");
@@ -100,6 +100,6 @@ describe("Breadcrumb", () => {
     });
 
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
-    expect(nav).toHaveClass("gsl-breadcrumb", "custom-root", "extra-root");
+    expect(nav).toHaveClass("clet-breadcrumb", "custom-root", "extra-root");
   });
 });

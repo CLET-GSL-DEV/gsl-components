@@ -10,6 +10,7 @@ import {
   TableBulkActions,
   TableFooter,
   TablePagination,
+  Dropdown,
   Badge,
 } from "@rfdtech/components";
 import { Trash2, Eye, Edit } from "lucide-react";
@@ -23,18 +24,18 @@ interface User {
 }
 
 const initialUsers: User[] = [
-  { id: 1, name: "Kwame Asante", email: "kwame@gsl.edu.gh", role: "Admin", status: "Active" },
-  { id: 2, name: "Abena Mensah", email: "abena@gsl.edu.gh", role: "Editor", status: "Active" },
-  { id: 3, name: "Kofi Owusu", email: "kofi@gsl.edu.gh", role: "Viewer", status: "Inactive" },
-  { id: 4, name: "Esi Boateng", email: "esi@gsl.edu.gh", role: "Editor", status: "Active" },
-  { id: 5, name: "Yaw Adom", email: "yaw@gsl.edu.gh", role: "Viewer", status: "Pending" },
-  { id: 6, name: "Nana Yeboah", email: "nana@gsl.edu.gh", role: "Admin", status: "Active" },
-  { id: 7, name: "Akua Donkor", email: "akua@gsl.edu.gh", role: "Editor", status: "Active" },
-  { id: 8, name: "Kwesi Appiah", email: "kwesi@gsl.edu.gh", role: "Viewer", status: "Inactive" },
-  { id: 9, name: "Adwoa Sarpong", email: "adwoa@gsl.edu.gh", role: "Editor", status: "Active" },
-  { id: 10, name: "Kobina Ennin", email: "kobina@gsl.edu.gh", role: "Viewer", status: "Pending" },
-  { id: 11, name: "Efua Sutherland", email: "efua@gsl.edu.gh", role: "Editor", status: "Active" },
-  { id: 12, name: "Paapa Essiedu", email: "paapa@gsl.edu.gh", role: "Viewer", status: "Inactive" },
+  { id: 1, name: "Kwame Asante", email: "kwame@clet.edu.gh", role: "Admin", status: "Active" },
+  { id: 2, name: "Abena Mensah", email: "abena@clet.edu.gh", role: "Editor", status: "Active" },
+  { id: 3, name: "Kofi Owusu", email: "kofi@clet.edu.gh", role: "Viewer", status: "Inactive" },
+  { id: 4, name: "Esi Boateng", email: "esi@clet.edu.gh", role: "Editor", status: "Active" },
+  { id: 5, name: "Yaw Adom", email: "yaw@clet.edu.gh", role: "Viewer", status: "Pending" },
+  { id: 6, name: "Nana Yeboah", email: "nana@clet.edu.gh", role: "Admin", status: "Active" },
+  { id: 7, name: "Akua Donkor", email: "akua@clet.edu.gh", role: "Editor", status: "Active" },
+  { id: 8, name: "Kwesi Appiah", email: "kwesi@clet.edu.gh", role: "Viewer", status: "Inactive" },
+  { id: 9, name: "Adwoa Sarpong", email: "adwoa@clet.edu.gh", role: "Editor", status: "Active" },
+  { id: 10, name: "Kobina Ennin", email: "kobina@clet.edu.gh", role: "Viewer", status: "Pending" },
+  { id: 11, name: "Efua Sutherland", email: "efua@clet.edu.gh", role: "Editor", status: "Active" },
+  { id: 12, name: "Paapa Essiedu", email: "paapa@clet.edu.gh", role: "Viewer", status: "Inactive" },
 ];
 
 function statusVariant(status: string) {
@@ -78,6 +79,7 @@ export function TableExample() {
   const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
     defaultPageSize: 5,
   });
+  const [roleValue, setRoleValue] = useState(filters.role ?? "");
 
   const filtered = users.filter(
     (u) => {
@@ -101,12 +103,18 @@ export function TableExample() {
       <TableHeader>
         <TableSearch placeholder="Search users..." />
         <TableFilter>
-          <select name="role">
-            <option value="">All roles</option>
-            <option value="Admin">Admin</option>
-            <option value="Editor">Editor</option>
-            <option value="Viewer">Viewer</option>
-          </select>
+          <Dropdown
+            name="role"
+            value={roleValue || null}
+            onValueChange={(v) => setRoleValue(v ?? "")}
+            options={[
+              { value: "Admin", label: "Admin" },
+              { value: "Editor", label: "Editor" },
+              { value: "Viewer", label: "Viewer" },
+            ]}
+            placeholder="All roles"
+            aria-label="Filter by role"
+          />
         </TableFilter>
       </TableHeader>
       <TableContent

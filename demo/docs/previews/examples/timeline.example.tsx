@@ -1,4 +1,4 @@
-import { AlertTriangle, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import {
   Timeline,
   TimelineData,
@@ -36,14 +36,14 @@ const history = [
 
 export function TimelineExample() {
   return (
-    <section className="gsl-card" style={{ padding: "24px" }}>
+    <section className="clet-card" style={{ padding: "24px" }}>
       <h2
-        className="gsl-card__title"
+        className="clet-card__title"
         style={{
           margin: "0 0 24px",
           fontSize: "20px",
           fontWeight: 600,
-          color: "var(--gsl-text)",
+          color: "var(--clet-text)",
         }}
       >
         Case History

@@ -1,6 +1,6 @@
-# GSL Components
+# Clet Components
 
-Shared React component library for Ghana School of Law (GSL) projects.
+Shared React component library for Clet projects. CSS tokens and class names use the `--clet-*`/`.clet-*` naming (e.g. `--clet-primary`, `.clet-sidebar`); the original `--gsl-*`/`.gsl-*` spelling is kept as a permanent, unchanged alias for backward compatibility, and the `@rfdtech/components` package name is unaffected (see [Customize tokens](#7-customize-tokens)).
 
 Requires React 18+ and a bundler that processes CSS (Vite, Webpack, etc.).
 
@@ -38,11 +38,11 @@ import { ThemeProvider } from "@rfdtech/components";
 </ThemeProvider>
 ```
 
-Supports `"light"`, `"dark"`, and `"system"` (follows `prefers-color-scheme`). Use `useTheme()` to read or change the active theme at runtime. Design tokens apply to `.gsl-theme`, `document.documentElement`, and all components (including portaled modals and popovers).
+Supports `"light"`, `"dark"`, and `"system"` (follows `prefers-color-scheme`). Use `useTheme()` to read or change the active theme at runtime. Design tokens apply to `.clet-theme` (the legacy `.gsl-theme` class is also present on the same element), `document.documentElement`, and all components (including portaled modals and popovers).
 
 ### 4. Tailwind v4 integration
 
-If your project uses Tailwind v4, all `--gsl-*` design tokens are automatically available as utility classes. Import `style.css` after `tailwindcss` in your CSS entry:
+If your project uses Tailwind v4, all `--clet-*` design tokens are automatically available as utility classes. Import `style.css` after `tailwindcss` in your CSS entry:
 
 ```css
 /* app/src/index.css */
@@ -54,25 +54,41 @@ The `@theme` block ships inside `style.css`. The consumer's Tailwind build proce
 
 | Utility | Resolves to |
 | --------- | ------------- |
-| `bg-primary` / `text-primary` | `var(--gsl-primary)` |
-| `bg-primary-foreground` / `text-primary-foreground` | `var(--gsl-on-primary)` |
-| `bg-background` / `text-foreground` | `var(--gsl-page-bg)` / `var(--gsl-text)` |
-| `bg-secondary` / `text-secondary-foreground` | `var(--gsl-surface-dark)` / `var(--gsl-text-secondary)` |
-| `bg-muted` / `text-muted-foreground` | `var(--gsl-surface-subtle)` / `var(--gsl-text-secondary)` |
-| `bg-accent` / `text-accent-foreground` | `var(--gsl-hover)` / `var(--gsl-text)` |
-| `bg-destructive` / `text-destructive-foreground` | `var(--gsl-error)` / `var(--gsl-error-text)` |
-| `bg-card` / `text-card-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
-| `bg-popover` / `text-popover-foreground` | `var(--gsl-bg)` / `var(--gsl-text)` |
-| `border` / `input` / `ring` | `var(--gsl-border)` / `var(--gsl-border-strong)` / `var(--gsl-focus)` |
-| `rounded-lg` | `var(--gsl-radius-base)` |
-| `shadow-sm` / `shadow-md` / `shadow-lg` | `var(--gsl-shadow-sm)` / etc. |
-| `font-sans` | `var(--gsl-font)` |
+| `bg-primary` / `text-primary` | `var(--clet-primary)` |
+| `bg-primary-foreground` / `text-primary-foreground` | `var(--clet-on-primary)` |
+| `bg-background` / `text-foreground` | `var(--clet-main-bg)` / `var(--clet-text)` |
+| `bg-secondary` / `text-secondary-foreground` | `var(--clet-surface-dark)` / `var(--clet-text-secondary)` |
+| `bg-muted` / `text-muted-foreground` | `var(--clet-surface-subtle)` / `var(--clet-text-secondary)` |
+| `bg-accent` / `text-accent-foreground` | `var(--clet-hover)` / `var(--clet-text)` |
+| `bg-destructive` / `text-destructive-foreground` | `var(--clet-error)` / `var(--clet-error-text)` |
+| `bg-card` / `text-card-foreground` | `var(--clet-bg)` / `var(--clet-text)` |
+| `bg-popover` / `text-popover-foreground` | `var(--clet-bg)` / `var(--clet-text)` |
+| `border` / `input` / `ring` | `var(--clet-border)` / `var(--clet-border-strong)` / `var(--clet-focus)` |
+| `rounded-lg` | `var(--clet-radius-base)` |
+| `shadow-sm` / `shadow-md` / `shadow-lg` | `var(--clet-shadow-sm)` / etc. |
+| `font-sans` | `var(--clet-font)` |
 
-**Dark mode** supports both conventions: `<html class="dark">` (Tailwind default) and `<html data-gsl-theme="dark">`.
+Every entry above is actually generated as `var(--gsl-<name>, var(--clet-<name>))` — overriding either the `--clet-*` name (preferred) or the legacy `--gsl-*` name works identically; `--gsl-*` wins if both are set.
 
-**Non-Tailwind consumers** are unaffected. Browsers silently ignore `@theme` as an unknown at-rule. All `--gsl-*` tokens continue to work as CSS custom properties.
+**Dark mode** supports both conventions: `<html class="dark">` (Tailwind default) and `<html data-clet-theme="dark">` (`data-gsl-theme="dark"` is also written to the same element and matches equally).
 
-### 6. Next.js App Router
+**Non-Tailwind consumers** are unaffected. Browsers silently ignore `@theme` as an unknown at-rule. All `--clet-*` tokens (and their legacy `--gsl-*` aliases) continue to work as CSS custom properties.
+
+### 6. AI-assisted development (automatic)
+
+`npm install` also wires up an MCP server + skill doc for any AI coding tool it detects in your project — **Claude Code**, **Cursor**, **Codex**, and **OpenCode** — so agents search real components, pull authoritative prop types, and follow the library's design rules instead of inventing APIs. This runs via this package's own `postinstall` script (`scripts/postinstall.mjs`) — no separate command, no action needed. It's idempotent and safe to re-run. Set `RFDUI_SKIP_SETUP=1` to opt out (e.g. in CI). See [`mcp/README.md`](./mcp/README.md) for the `rfdui` CLI (`setup`, `doctor`, `search`, `update`) if you want to run it manually or check its status.
+
+**If your package manager blocked the install script**, run setup manually — `npx rfdui setup` always works regardless of package manager or script-blocking config. Otherwise, to let it run automatically on the next install:
+
+- **pnpm** (v8+) blocks lifecycle scripts from dependencies by default and prints `Ignored build scripts: @rfdtech/components` after install. Approve it, then reinstall:
+  ```bash
+  pnpm approve-builds @rfdtech/components   # or: pnpm approve-builds (interactive picker)
+  pnpm install
+  ```
+  This writes `@rfdtech/components: true` under `allowBuilds` in `pnpm-workspace.yaml` (pnpm 11+; older pnpm uses `onlyBuiltDependencies` instead — same idea, different key).
+- **npm** runs `postinstall` by default — nothing to approve. If it didn't run, your project or user `.npmrc` likely sets `ignore-scripts=true` (common in locked-down CI), or you ran `npm install --ignore-scripts`. Either drop that flag/setting for a local install, or just run `npx rfdui setup` manually — that always works even with scripts globally disabled.
+
+### 7. Next.js App Router
 
 The library ships a `/next` subpath for Next.js App Router. All components and hooks work with Next.js by wrapping your app in `RouterAdapterProvider`:
 
@@ -97,8 +113,70 @@ See the [RouterAdapter](/docs/router-adapter) docs page for full setup.
 
 ### 7. Customize tokens
 
-GSL components read `--gsl-*` CSS variables. Override any of them by
-declaring a new value on the same selectors the library uses.
+Components read `--clet-*` CSS variables — every token, color and
+non-color alike (radius, shadow, font, spacing, z-index included), is
+declared under the `--clet-*` name. The original `--gsl-*` spelling
+also still works unchanged for existing overrides (every internal
+`var(--clet-*)` read resolves as `var(--gsl-*, var(--clet-*))`, so
+overriding either name works identically — `--gsl-*` wins if both are
+set). **Prefer `--clet-*` in new override code**; `--gsl-*` is a
+permanent compatibility alias, not a deprecated one.
+
+**Use the `cletTheme()` runtime helper (recommended)** — no separate
+CSS file, no build config. Import it from the package root alongside
+the library CSS, and call it once at startup:
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+import { cletTheme } from "@rfdtech/components";
+
+cletTheme({
+  all: {
+    primary: "#1d4ed8", // used by both modes unless a mode below overrides it
+    primaryLight: "#eff6ff",
+    focus: "#1d4ed8",
+    onPrimary: "#ffffff",
+  },
+});
+```
+
+Keys are the **camelCase** form of the `--clet-*` token name
+(`--clet-primary` → `primary`, `--clet-primary-light` → `primaryLight`),
+and `all`/`light`/`dark` are all optional — a token set in `light` or
+`dark` wins over the same token in `all`. `cletTheme()` is fully typed
+against the library's real token set, so a misspelled or wrong-cased
+key (or a value shaped wrong for its token, e.g. a non-color string for
+`primary`) is a compile error, not a silent no-op. Calling it again
+(e.g. on hot reload) replaces the previous overrides instead of
+stacking a new `<style>` tag.
+
+To keep every project's override in one predictable place, put the
+`cletTheme(...)` call in its own **`src/clet.theme.ts`** file and
+import it for its side effect, right after the library CSS:
+
+```ts title="src/clet.theme.ts"
+import { cletTheme } from "@rfdtech/components";
+
+cletTheme({
+  all: { primary: "#1d4ed8" },
+  dark: { primary: "#ef4444", primaryLight: "#3f1515" },
+});
+```
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+import "./clet.theme"; // side-effect import — runs cletTheme() once at startup
+import { ThemeProvider } from "@rfdtech/components";
+```
+
+See the [Theme](/docs/theme#clettheme-recommended) docs page for
+component-scoped overrides, the full token/value type reference, and
+type-safety details.
+
+**Alternative: plain CSS, no JS.** Override any token by declaring a
+new value on the same selectors the library uses — useful if you'd
+rather not add a runtime call, or need the override present before any
+JS runs.
 
 **Step 1 — Import the library CSS** so its defaults are loaded:
 
@@ -121,11 +199,11 @@ these selectors:
 | Selector | When it matches |
 |----------|-----------------|
 | `:root` | No theme attribute is set (no `ThemeProvider` mounted) |
-| `:root[data-gsl-theme="light"]` | Light mode on `<html>` — `ThemeProvider` writes the attribute here |
-| `:root[data-gsl-theme="dark"]` | Dark mode on `<html>` |
-| `.gsl-theme` | A consumer wrapper `<div class="gsl-theme">` |
-| `.gsl-theme[data-gsl-theme="light"]` | Wrapper + light attribute |
-| `.gsl-theme[data-gsl-theme="dark"]` | Wrapper + dark attribute |
+| `:root[data-clet-theme="light"]` | Light mode on `<html>` — `ThemeProvider` writes the attribute here (also writes the legacy `data-gsl-theme="light"`, which matches identically) |
+| `:root[data-clet-theme="dark"]` | Dark mode on `<html>` |
+| `.clet-theme` | A consumer wrapper `<div class="clet-theme">` (the legacy `.gsl-theme` class is also present on the same element) |
+| `.clet-theme[data-clet-theme="light"]` | Wrapper + light attribute |
+| `.clet-theme[data-clet-theme="dark"]` | Wrapper + dark attribute |
 
 A bare `:root { ... }` only matches the first row, so the library's
 default keeps winning on rows 2–6 once `ThemeProvider` mounts. To
@@ -134,39 +212,44 @@ values (don't chain `var(--something)` — just write the color):
 
 ```css title="src/styles/theme.css"
 :root,
-:root[data-gsl-theme="light"],
-.gsl-theme[data-gsl-theme="light"],
-:root[data-gsl-theme="dark"],
-.gsl-theme[data-gsl-theme="dark"] {
-  --gsl-primary: #1d4ed8;
-  --gsl-primary-light: #eff6ff;
-  --gsl-focus: #1d4ed8;
-  --gsl-on-primary: #ffffff;
+:root[data-clet-theme="light"],
+.clet-theme[data-clet-theme="light"],
+:root[data-clet-theme="dark"],
+.clet-theme[data-clet-theme="dark"] {
+  --clet-primary: #1d4ed8;
+  --clet-primary-light: #eff6ff;
+  --clet-focus: #1d4ed8;
+  --clet-on-primary: #ffffff;
 }
 ```
 
 That one block overrides the primary color in light mode, dark mode,
-and the unthemed fallback. The same shape works for any other
-`--gsl-*` token — list every selector, hardcode the value.
+and the unthemed fallback. The same shape works for any other color
+token — list every selector, hardcode the value, and use its `--clet-*`
+name (or the equivalent `--gsl-*` name — both work identically).
 
 ## Design tokens
 
-Quick reference of commonly used tokens and their light-mode defaults:
+Quick reference of commonly used color tokens and their light-mode defaults.
+Each has both a `--clet-*` (preferred) and `--gsl-*` (legacy, still works)
+name for the same value:
 
-| Token | Light default | Use |
+| Token (`--clet-*` / `--gsl-*`) | Light default | Use |
 | ------- | --------------- | ----- |
-| `--gsl-primary` | `#dc2626` | Buttons, focus rings, accents |
-| `--gsl-primary-light` | `#fef2f2` | Selected rows, hover fills |
-| `--gsl-bg` | `#ffffff` | Surfaces |
-| `--gsl-text` | `#3c4043` | Body text |
-| `--gsl-text-secondary` | `#5f6368` | Labels, muted UI |
-| `--gsl-border` | `#dadce0` | Borders |
-| `--gsl-hover` | `#f1f3f4` | Row/cell hover |
-| `--gsl-error` / `--gsl-error-bg` | `#dc2626` / `#fef2f2` | Errors |
-| `--gsl-success` | `#16a34a` | Success states |
-| `--gsl-warning` | `#eab308` | Warnings |
+| `primary` | `#083755` | Buttons, focus rings, accents |
+| `primary-light` | `#e7ebee` | Selected rows, hover fills |
+| `secondary` | `#c8a24b` | Gold accent (e.g. active `SidebarLink`) |
+| `bg` | `#ffffff` | Surfaces |
+| `main-bg` | `#fafafa` | Page/app-layout background |
+| `text` | `#3c4043` | Body text |
+| `text-secondary` | `#5f6368` | Labels, muted UI |
+| `border` | `#dadce0` | Borders |
+| `hover` | `#f1f3f4` | Row/cell hover |
+| `error` / `error-bg` | `#dc2626` / `#fef2f2` | Errors |
+| `success` | `#16a34a` | Success states |
+| `warning` | `#eab308` | Warnings |
 
-`BulkImportModal` also accepts legacy aliases (`--gsl-bulk-import-primary`, etc.) that map to the shared tokens.
+`BulkImportModal` also has its own component-scoped tokens (`--clet-bulk-import-primary`, etc., falling back to the shared tokens above when unset) — the legacy `--gsl-bulk-import-primary` spelling also still works.
 
 See the [Theme](/docs/theme) docs page for the full token reference (radius, shadows, z-index, fonts) and controlled mode.
 
@@ -197,7 +280,7 @@ Exports: `useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`,
 
 ## AppHeader
 
-Compound header bar with `AppHeader`, `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderNotifications`, and `AppHeaderProfile`. Nest search on the left and group switcher, notifications, and profile inside `AppHeaderActions` on the right.
+Compound header bar with `AppHeader`, `AppHeaderSearch`, `AppHeaderActions`, and `AppHeaderNotifications`. Nest search on the left and group switcher, notifications, and profile inside `AppHeaderActions` on the right. The profile trigger is [`ProfilePopover`](/docs/profile-popover) itself (pass `user`/`variant` for the compact header-style trigger) — there's no separate `AppHeaderProfile` component.
 
 See the [AppHeader](/docs/app-header) docs page for props and exported types.
 
@@ -207,7 +290,8 @@ import {
   AppHeaderActions,
   AppHeaderSearch,
   AppHeaderNotifications,
-  AppHeaderProfile,
+  AppHeaderNotificationItem,
+  ProfilePopover,
   AppSwitcher,
 } from "@rfdtech/components";
 
@@ -217,20 +301,20 @@ import {
     <AppSwitcher apps={apps} />
     <AppHeaderNotifications loading={loading}>
       {notifications.map((n) => (
-        <div key={n.id} className="gsl-notif-popover__item">
-          <div className="gsl-notif-popover__body-text">{n.text}</div>
-          <div className="gsl-notif-popover__body-time">{n.time}</div>
-        </div>
+        <AppHeaderNotificationItem key={n.id} text={n.text} time={n.time} unread={n.unread} />
       ))}
     </AppHeaderNotifications>
-    <AppHeaderProfile user={{ name: "Kwame", role: "Admin", initials: "KA" }} variant="basic">
-      <button className="gsl-profile-popover__action">Settings</button>
-    </AppHeaderProfile>
+    <ProfilePopover
+      user={{ name: "Kwame", role: "Admin", initials: "KA" }}
+      variant="avatar"
+      items={[{ label: "Settings", onClick: () => navigate("/settings") }]}
+      onSignOut={signOut}
+    />
   </AppHeaderActions>
 </AppHeader>
 ```
 
-Props: `AppHeader` — `className`, `children`. `AppHeaderActions` — `className`, `children`. Exported types: `AppHeaderProps`, `AppHeaderActionsProps`, `AppHeaderSearchProps`, `AppHeaderSearchDataGroup`, `AppHeaderSearchItem`, `AppHeaderNotificationsProps`, `AppHeaderProfileProps`, `AppUser`.
+Props: `AppHeader` — `className`, `children`. `AppHeaderActions` — `className`, `children`. Exported types: `AppHeaderProps`, `AppHeaderActionsProps`, `AppHeaderSearchProps`, `AppHeaderSearchDataGroup`, `AppHeaderSearchItem`, `AppHeaderNotificationsProps`, `AppHeaderNotificationItemProps`. See [ProfilePopover](/docs/profile-popover) for `ProfilePopoverProps` and `AppUser`.
 
 ## AppLayout
 
@@ -456,24 +540,24 @@ Also exported: `useBulkImportFlow`, step components, and utilities (`parseSpread
 
 ### Theming
 
-The modal uses a **near full-viewport** layout with a compulsory gutter on all sides (24px desktop, 16px mobile), enforced by overlay padding. Override shared tokens on `.gsl-bulk-import` via the `className` prop (see [Shared theming](#shared-theming)):
+The modal uses a **near full-viewport** layout with a compulsory gutter on all sides (24px desktop, 16px mobile), enforced by overlay padding. Override shared tokens on `.clet-bulk-import` (the legacy `.gsl-bulk-import` class is also present on the same element) via the `className` prop (see [Shared theming](#shared-theming)):
 
 ```css
 .my-import {
-  --gsl-primary: #dc2626;
-  --gsl-primary-light: #fef2f2;
-  --gsl-success: #16a34a;
-  --gsl-error-bg: #fef2f2;
+  --clet-primary: #dc2626;
+  --clet-primary-light: #fef2f2;
+  --clet-success: #16a34a;
+  --clet-error-bg: #fef2f2;
 }
 ```
 
-Legacy aliases (`--gsl-bulk-import-primary`, `--gsl-bulk-import-primary-light`, etc.) still work and map to the shared tokens.
+The component-scoped `--clet-bulk-import-primary`, `--clet-bulk-import-primary-light`, etc. (and their legacy `--gsl-bulk-import-primary` spellings) still work too, and fall back to the shared tokens above when unset.
 
-To change the gutter size, override `--gsl-bulk-import-gutter` on `.gsl-bulk-import__overlay` in your app CSS (do not override modal width/height — the dialog always fills the padded overlay area):
+To change the gutter size, override `--clet-bulk-import-gutter` on `.clet-bulk-import__overlay` in your app CSS (do not override modal width/height — the dialog always fills the padded overlay area):
 
 ```css
-.gsl-bulk-import__overlay {
-  --gsl-bulk-import-gutter: 32px;
+.clet-bulk-import__overlay {
+  --clet-bulk-import-gutter: 32px;
 }
 ```
 
@@ -506,7 +590,7 @@ Props: `variant`, `size`, `loading`, `loadingLabel`, `classNames`, and standard 
 
 ## Card
 
-Surface card wrapper with optional header and design tokens for padding and background. Uses `--gsl-surface-card` for background and `--gsl-card-padding` for inner spacing. See the [Card](/docs/card) docs page for props and exported types.
+Surface card wrapper with optional header and design tokens for padding and background. Uses `--clet-surface-card` for background and `--clet-card-padding` for inner spacing. See the [Card](/docs/card) docs page for props and exported types.
 
 ```tsx
 import { Card } from "@rfdtech/components";
@@ -540,9 +624,23 @@ import { Checkbox } from "@rfdtech/components";
 
 Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `disabled`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `CheckboxProps`, `CheckboxClassNames`.
 
-## CountrySelector
+## Combobox
 
-Country selector dropdown with flag emoji, country name, search filtering, and keyboard navigation. Built on `@radix-ui/react-popover`. See the [CountrySelector](/docs/country-selector) docs page for props and exported types.
+Searchable option list built on `cmdk`, opened from a trigger button — supports single selection, multi-selection with checkboxes, and a per-option leading icon. Unlike `Dropdown` (Radix `Select`-based), it has search built in. See the [Combobox](/docs/combobox) docs page for props and exported types.
+
+```tsx
+import { Combobox } from "@rfdtech/components";
+
+<Combobox aria-label="Field" options={options} value={value} onValueChange={setValue} clearable />
+
+<Combobox aria-label="Field" options={options} value={values} onValueChange={setValues} multiple />
+```
+
+Props: `options`, `multiple`, `value`, `onValueChange`, `placeholder`, `searchPlaceholder`, `disabled`, `invalid`, `clearable`, `emptyMessage`, `aria-label`, `classNames`, `className`, `name`. Exported types: `ComboboxProps`, `ComboboxOption`, `ComboboxClassNames`.
+
+## CountrySelector (Deprecated)
+
+**Deprecated** — use [`Combobox`](#combobox) for general country selection, or [`PhoneNumberInput`](#phonenumberinput)'s own built-in country picker for phone numbers. Country selector dropdown with flag emoji, country name, search filtering, and keyboard navigation. Built on `@radix-ui/react-popover`. See the [CountrySelector](/docs/country-selector) docs page for props and exported types.
 
 ```tsx
 import { CountrySelector } from "@rfdtech/components";
@@ -839,7 +937,7 @@ Props: `label`, `value`, `icon`, `description`, `trend`, `trendValue`, `variant`
 
 ## Modal
 
-Centered modal with four size variants (`sm`, `md`, `lg`, `xl`), popover-style border, and optional close-prevention. Size tokens are independently customizable via `--gsl-modal-max-width-*`. See the [Modal](/docs/modal) docs page for props and exported types.
+Centered modal with four size variants (`sm`, `md`, `lg`, `xl`), popover-style border, and optional close-prevention. Size tokens are independently customizable via `--clet-modal-max-width-*`. See the [Modal](/docs/modal) docs page for props and exported types.
 
 ```tsx
 import {
@@ -893,6 +991,24 @@ import { NetworkOperator } from "@rfdtech/components";
 ```
 
 Props: `value`, `defaultValue`, `onChange`, `options`, `placeholder`, `invalid`, `disabled`, `classNames`, `className`. Exported types: `NetworkOperatorProps`, `NetworkOperatorOption`, `NetworkOperatorClassNames`.
+
+## Notice
+
+Boxed, persistent callout for scoped context, policy explanations, or a standing status message — unlike `Toast`, it renders inline and doesn't auto-dismiss. See the [Notice](/docs/notice) docs page for props and exported types.
+
+```tsx
+import { Notice } from "@rfdtech/components";
+
+<Notice variant="warning" leftBorder dashed title="Your scope for this composer">
+  <ul>
+    <li>Templates: Admissions Directorate only · Audience: 4 pre-approved groups.</li>
+  </ul>
+</Notice>
+
+<Notice variant="success">This will send directly.</Notice>
+```
+
+Props: `variant`, `color`, `title`, `icon`, `leftBorder`, `dashed`, `classNames`, `className`, `children`. Exported types: `NoticeProps`, `NoticeClassNames`, `NoticeVariant`.
 
 ## OtpInput
 
@@ -1140,7 +1256,21 @@ const [step, setStep] = useState(3);
 </Stepper>
 ```
 
-Exports: `Stepper`, `Step`, `StepLabel`. Also available as `Stepper.Step`, `Stepper.StepLabel` for compound-style imports. Props: `Stepper` — `value`, `clickable`, `onValueChange`, `classNames`, `className`, `children`. `Step` — `value`, `disabled`, `classNames`, `className`, `children`. `StepLabel` — `classNames`, `className`, `children`. Exported types: `StepperProps`, `StepProps`, `StepLabelProps`, `StepperClassNames`, `StepClassNames`, `StepLabelClassNames`, `StepperContextValue`, `StepState`, `StepInternalProps`. Retheme via `--gsl-stepper-accent` (defaults to `--gsl-primary`) and related `--gsl-stepper-*` custom properties.
+Exports: `Stepper`, `Step`, `StepLabel`. Also available as `Stepper.Step`, `Stepper.StepLabel` for compound-style imports. Props: `Stepper` — `value`, `clickable`, `onValueChange`, `classNames`, `className`, `children`. `Step` — `value`, `disabled`, `classNames`, `className`, `children`. `StepLabel` — `classNames`, `className`, `children`. Exported types: `StepperProps`, `StepProps`, `StepLabelProps`, `StepperClassNames`, `StepClassNames`, `StepLabelClassNames`, `StepperContextValue`, `StepState`, `StepInternalProps`. Retheme via `--clet-stepper-accent` (defaults to `--clet-primary`) and related `--clet-stepper-*` custom properties.
+
+## Switch
+
+Binary on/off toggle built on `@radix-ui/react-switch`, with an optional label ("Switch + Text"). See the [Switch](/docs/switch) docs page for props and exported types.
+
+```tsx
+import { Switch } from "@rfdtech/components";
+
+<Switch aria-label="Notifications" checked={enabled} onCheckedChange={setEnabled} />
+
+<Switch label="Email alerts" checked={enabled} onCheckedChange={setEnabled} />
+```
+
+Props: `checked`, `defaultChecked`, `onCheckedChange`, `label`, `labelPosition`, `disabled`, `invalid`, `required`, `name`, `value`, `id`, `aria-label`, `classNames`, `className`. Exported types: `SwitchProps`, `SwitchClassNames`.
 
 ## Table
 
@@ -1294,9 +1424,7 @@ import { UploadField } from "@rfdtech/components";
 <UploadField accept="image/*" maxSize={5 * 1024 * 1024} />
 ```
 
-Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `name`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
-
-Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `placeholder`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`.
+Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `name`, `fileStatuses`, `onCancel`, `onRetry`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`, `UploadFieldFileStatus`, `UploadFieldFileStatusKind`. Also exports `FileFormatIcon` for rendering the same file-type icon standalone.
 
 ## Development
 

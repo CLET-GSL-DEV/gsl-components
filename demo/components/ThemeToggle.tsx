@@ -1,5 +1,5 @@
 import { Dropdown, ThemeProvider, useTheme } from "@rfdtech/components";
-import type { GslTheme } from "@rfdtech/components";
+import type { CletTheme } from "@rfdtech/components";
 
 const themeOptions = [
   { value: "light", label: "Light" },
@@ -16,7 +16,7 @@ export function ThemeToggle() {
       <Dropdown
         aria-label="Color theme"
         value={theme}
-        onValueChange={(value) => setTheme((value ?? "system") as GslTheme)}
+        onValueChange={(value) => setTheme((value ?? "system") as CletTheme)}
         options={themeOptions}
       />
     </label>

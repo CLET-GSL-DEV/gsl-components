@@ -1,11 +1,19 @@
 export const meta = {
   title: "MetricCard",
   description: "Metric display card",
+  category: "Components",
+  keywords: ["metric card", "stat card", "kpi card", "dashboard metric", "trend indicator"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["card", "badge"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { MetricCardPreview } from "../previews/code/MetricCardPreview";
+import { MetricCardLoadingPreview } from "../previews/code/MetricCardLoadingPreview";
 import metricCardSource from "../previews/examples/metric-card.example.tsx?raw";
+import metricCardLoadingSource from "../previews/examples/metric-card-loading.example.tsx?raw";
 
 # MetricCard
 
@@ -17,6 +25,16 @@ Metric display card for dashboards and overviews. Renders a compact card with a 
   title="Metric cards"
   preview={<MetricCardPreview />}
   code={metricCardSource}
+/>
+
+## Loading state
+
+Set `loading` to show shimmering skeleton placeholders instead of the label/value/trend/description content — useful while the metric value is still being fetched. The skeleton shape follows whichever of `icon`, `trend`, and `description` you pass, so the loaded and loading layouts line up.
+
+<ExampleTabs
+  title="Loading state"
+  preview={<MetricCardLoadingPreview />}
+  code={metricCardLoadingSource}
 />
 
 ## Props
@@ -31,6 +49,8 @@ Metric display card for dashboards and overviews. Renders a compact card with a 
 | `trendValue` | `string` | — | Formatted trend text (e.g. `"+12.5%"`) |
 | `variant` | `"default" \| "outline"` | `"default"` | Card style — `"outline"` is a bordered, no-fill card with chevron trend icons |
 | `color` | `string` | — | Custom CSS color for the trend indicator; overrides variant |
+| `loading` | `boolean` | `false` | Show shimmering skeleton placeholders instead of the label/value/trend/description |
+| `loadingLabel` | `string` | `"Loading metric"` | Accessible label announced while loading |
 | `classNames` | `MetricCardClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root element |
 
@@ -42,11 +62,11 @@ Variants only affect the **trend indicator color**, not the background or text o
 
 | Variant | Trend color |
 |---------|-------------|
-| `"default"` | `--gsl-success` (up), `--gsl-error` (down), `--gsl-text-muted` (neutral) |
-| `"primary"` | `--gsl-primary` |
-| `"success"` | `--gsl-success` |
-| `"warning"` | `--gsl-warning` |
-| `"error"` | `--gsl-error` |
+| `"default"` | `--clet-success` (up), `--clet-error` (down), `--clet-text-muted` (neutral) |
+| `"primary"` | `--clet-primary` |
+| `"success"` | `--clet-success` |
+| `"warning"` | `--clet-warning` |
+| `"error"` | `--clet-error` |
 
 Override with the `color` prop (any CSS value) for custom accent colors.
 
@@ -54,7 +74,7 @@ Override with the `color` prop (any CSS value) for custom accent colors.
 
 Set `variant="outline"` for a bordered, no-fill card. It differs structurally from the default:
 
-- **No background** — transparent card with a `1px` border in `--gsl-border`, radius `--gsl-radius-base`.
+- **Page background** — uses `--clet-main-bg` (not the default variant's `--clet-default-metric-card-bg`) with a `1px` border in `--clet-border`, radius `--clet-radius-base` — reads as a bordered cutout against a panel background rather than a filled card.
 - **Chevron trend icons** — `up` renders a chevron up, `down` a chevron down, `neutral` a dash.
 - **No `+`/`-` prefix** — a leading sign is stripped from `trendValue` (pass `"12.5%"`, not `"+12.5%"`).
 - **Larger value** — `32px` font size.
@@ -81,12 +101,12 @@ See the props table above.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root element (`.gsl-metric-card`) |
-| `icon` | Icon wrapper (`.gsl-metric-card__icon`) |
-| `label` | Label text (`.gsl-metric-card__label`) |
-| `value` | Value text (`.gsl-metric-card__value`) |
-| `description` | Description text (`.gsl-metric-card__description`) |
-| `trend` | Trend indicator (`.gsl-metric-card__trend`) |
+| `root` | Root element (`.clet-metric-card`) |
+| `icon` | Icon wrapper (`.clet-metric-card__icon`) |
+| `label` | Label text (`.clet-metric-card__label`) |
+| `value` | Value text (`.clet-metric-card__value`) |
+| `description` | Description text (`.clet-metric-card__description`) |
+| `trend` | Trend indicator (`.clet-metric-card__trend`) |
 
 Also exported: `MetricCardVariant`, `MetricTrend`.
 
@@ -94,15 +114,24 @@ Also exported: `MetricCardVariant`, `MetricTrend`.
 
 | Token | Default | Used for |
 |-------|---------|----------|
-| `--gsl-metric-card-value-size` | `28px` (`32px` outline) | Main value (header) font size |
-| `--gsl-metric-card-value-color` | `--gsl-text` | Main value (header) color |
-| `--gsl-metric-card-description-size` | `13px` | Description font size |
+| `--clet-metric-card-font` | `--clet-font-body` | Card font family |
+| `--clet-metric-card-value-font` | `--clet-font-header` | Main value (header) font family — now defaults to the theme's header font token `--clet-font-header` |
+| `--clet-metric-card-value-size` | `28px` (`32px` outline) | Main value (header) font size |
+| `--clet-metric-card-value-color` | `--clet-text` | Main value (header) color |
+| `--clet-metric-card-description-size` | `13px` | Description font size |
+| `--clet-default-metric-card-bg` | `--clet-surface-card` | Card background — `"default"`/color variants only |
+| `--clet-metric-card-radius` | `--clet-radius-xl` | Card border-radius |
+| `--clet-metric-card-shadow` | `none` | Card box-shadow |
 
-Override card background via `--gsl-default-metric-card-bg`, radius via `--gsl-metric-card-radius`, or shadow via `--gsl-metric-card-shadow`.
+Override card background via `--clet-default-metric-card-bg`, radius via `--clet-metric-card-radius`, or shadow via `--clet-metric-card-shadow`. The `"outline"` variant reads the global `--clet-main-bg` directly instead of `--clet-default-metric-card-bg` — override `--clet-main-bg` (or `classNames.root`) to change it.
 
 ## Notes
 
 - Background and text remain neutral across all variants — only the trend indicator changes color. Use the `color` prop for full control.
-- The icon always renders in `--gsl-text-muted` regardless of variant.
+- The icon always renders in `--clet-text-muted` regardless of variant.
 - Card width is determined by the parent container. Use a grid or flex wrapper for layout.
 - On mobile (`<= 768px`), padding reduces to 16px and value font size to 24px.
+
+## Do
+
+- Use `classNames={{root: "shadow-primary"}}` for a primary-tinted drop shadow instead of the default `none` shadow.

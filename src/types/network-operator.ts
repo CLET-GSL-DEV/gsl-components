@@ -1,5 +1,9 @@
 import type { HTMLAttributes } from "react";
 
+/**
+ * @deprecated `NetworkOperator` is deprecated in favor of `Combobox` (build an
+ * operator list with `options`) — see the migration guide.
+ */
 export interface NetworkOperatorOption {
   value: string;
   label: string;
@@ -14,6 +18,10 @@ export interface NetworkOperatorClassNames {
   image?: string;
 }
 
+/**
+ * @deprecated `NetworkOperator` is deprecated in favor of `Combobox` (build an
+ * operator list with `options`) — see the migration guide.
+ */
 export interface NetworkOperatorProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
   invalid?: boolean;
   disabled?: boolean;

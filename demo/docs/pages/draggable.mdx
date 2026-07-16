@@ -1,6 +1,12 @@
 export const meta = {
   title: "Draggable",
   description: "Repositionable panel",
+  category: "Components",
+  keywords: ["draggable", "drag panel", "repositionable", "drag and drop", "movable panel"],
+  since: "1.8.0",
+  status: "stable",
+  related: ["sortable"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -96,8 +102,8 @@ Headless hook if you need custom markup. Returns `position`, `dragging`, `rootRe
 
 | Key | Applied to |
 |-----|------------|
-| `root` | `.gsl-draggable` |
-| `handle` | `.gsl-draggable__handle` |
+| `root` | `.clet-draggable` |
+| `handle` | `.clet-draggable__handle` |
 
 ## Notes
 
@@ -105,4 +111,4 @@ Headless hook if you need custom markup. Returns `position`, `dragging`, `rootRe
 - If no `DraggableHandle` is rendered, the entire root surface initiates dragging.
 - List reordering is handled by [Sortable](/docs/sortable), not `Draggable`.
 - Respects `prefers-reduced-motion: reduce` (no transform transition).
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes.

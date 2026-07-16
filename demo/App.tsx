@@ -6,7 +6,6 @@ import { DemoLayout } from "./components/DemoLayout";
 import { DemoLayout2 } from "./components/DemoLayout2";
 import { DemoPage } from "./pages/DemoPage";
 import { Dashboard2Page } from "./pages/Dashboard2Page";
-import { MembersPage } from "./pages/MembersPage";
 import { DocsPage } from "./pages/DocsPage";
 import { getAllDocSlugs } from "./docs/registry";
 
@@ -14,32 +13,38 @@ export const routes: RouteRecord[] = [
   {
     path: "/",
     element: (
-      <ThemeProvider defaultTheme="system" storageKey="gsl-theme">
+      <ThemeProvider defaultTheme="system" storageKey="clet-theme">
         <Outlet />
       </ThemeProvider>
     ),
     children: [
       {
-        element: <DemoLayout />,
-        children: [
-          { index: true, element: <DemoPage /> },
-          { path: "members", element: <MembersPage /> },
-        ],
+        // Current (new design system) — the main dashboard
+        element: <DemoLayout2 />,
+        children: [{ index: true, element: <Dashboard2Page /> }],
       },
       {
-        element: <DemoLayout2 />,
-        children: [{ path: "dashboard2", element: <Dashboard2Page /> }],
+        // Previous version, unchanged, reachable via the version switcher
+        element: <DemoLayout />,
+        children: [{ path: "legacy", element: <DemoPage /> }],
       },
       {
         path: "docs",
-        element: <ClientOnly>{() => <Navigate to="/docs/getting-started" replace />}</ClientOnly>,
+        element: (
+          <ClientOnly>
+            {() => <Navigate to="/docs/getting-started" replace />}
+          </ClientOnly>
+        ),
       },
       {
         path: "docs/:componentId",
         element: <DocsPage />,
         getStaticPaths: () => getAllDocSlugs().map((slug) => `docs/${slug}`),
       },
-      { path: "*", element: <ClientOnly>{() => <Navigate to="/" replace />}</ClientOnly> },
+      {
+        path: "*",
+        element: <ClientOnly>{() => <Navigate to="/" replace />}</ClientOnly>,
+      },
     ],
   },
 ];

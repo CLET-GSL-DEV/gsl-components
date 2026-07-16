@@ -1,4 +1,6 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactElement, ReactNode } from "react";
+import type { RoleSelect } from "../components/role-select/RoleSelect";
+import type { RoleSelectProps } from "./role-select";
 
 export interface AppItem {
   /** Unique identifier for the app */
@@ -32,6 +34,8 @@ export interface AppSwitcherProps {
   onAppSelect?: (app: AppItem) => void;
   /** Number of columns in the grid (default: 3) */
   columns?: number;
+  /** Maximum number of apps rendered in the grid (default: 6) */
+  maxItems?: number;
   /** Accessible label for the trigger button */
   triggerLabel?: string;
   /** Custom trigger element (replaces default 9-dot icon) */
@@ -40,6 +44,11 @@ export interface AppSwitcherProps {
   title?: string;
   /** Footer content (e.g. "More from Google" link) */
   footer?: ReactNode;
+  /**
+   * Extra composable content rendered below the grid — only a
+   * `RoleSelect` element is accepted (e.g. a "switch role" control).
+   */
+  children?: ReactElement<RoleSelectProps, typeof RoleSelect>;
   /** Additional CSS class for the root container */
   className?: string;
   /** Inline styles for the root container */

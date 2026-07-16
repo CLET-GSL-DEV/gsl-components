@@ -1,6 +1,7 @@
-import type { HTMLAttributes, ReactNode } from "react";
-
-// ── AppHeader ──
+import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { RoleSelect } from "../components/role-select/RoleSelect";
+import type { RoleSelectProps } from "./role-select";
+import type { AppUser } from "./profile-popover";
 
 export interface AppHeaderProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -17,8 +18,6 @@ export interface AppHeaderActionsProps {
   children?: ReactNode;
 }
 
-// ── AppHeaderBranding ──
-
 export interface AppHeaderBrandingProps {
   className?: string;
   /** Inline logo node (e.g. an <img> or icon). */
@@ -30,8 +29,6 @@ export interface AppHeaderBrandingProps {
   /** Custom content, overrides title/subtitle rendering. */
   children?: ReactNode;
 }
-
-// ── AppHeaderSearch ──
 
 export interface AppHeaderSearchItem {
   value: string;
@@ -62,8 +59,6 @@ export interface AppHeaderSearchProps {
   children?: ReactNode;
 }
 
-// ── AppHeaderNotifications ──
-
 export interface AppHeaderNotificationsProps {
   className?: string;
   children?: ReactNode;
@@ -73,25 +68,65 @@ export interface AppHeaderNotificationsProps {
   loadingLabel?: string;
 }
 
-// ── AppHeaderProfile ──
-
-export interface AppUser {
-  name: string;
-  role: string;
-  email?: string;
-  avatar?: string;
-  initials: string;
+export interface AppHeaderNotificationItemClassNames {
+  root?: string;
+  dot?: string;
+  body?: string;
+  text?: string;
+  time?: string;
 }
 
+export interface AppHeaderNotificationItemProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "onClick"
+> {
+  /** Notification message content */
+  text: ReactNode;
+  /** Relative/formatted time string (e.g. "2m ago") */
+  time?: ReactNode;
+  /** Shows a leading unread dot. Read items get a subtle background instead (default false) */
+  unread?: boolean;
+  /** Called when the row is clicked (also fires on Enter/Space when set, since the row becomes keyboard-focusable) */
+  onClick?: () => void;
+  classNames?: AppHeaderNotificationItemClassNames;
+  className?: string;
+}
+
+// ── AppHeaderProfile (deprecated — use ProfilePopover directly) ──
+
+/**
+ * @deprecated Use `ProfilePopover` directly (pass `user`/`variant` for the same trigger).
+ * `AppHeaderProfile` is kept as a thin wrapper for backward compatibility and receives no
+ * further features, but it isn't going away — see the [migration guide](/docs/migration-v2).
+ */
 export interface AppHeaderProfileProps {
   user: AppUser;
-  children?: ReactNode;
+  /** Extra composable content rendered below "Help & Support" — only a `RoleSelect` element is accepted */
+  children?: ReactElement<RoleSelectProps, typeof RoleSelect>;
   className?: string;
   /**
-   * Render variant.
-   * "full" shows large avatar + email + carded actions.
-   * "basic" shows compact inline avatar + name/role + flat actions.
-   * "avatar" shows only the avatar in the header (no name/role/chevron) and opens the full profile popover on click.
+   * Render variant for the header trigger row.
+   * "full" shows avatar + name/role + chevron.
+   * "avatar" shows only the avatar (no name/role/chevron).
+   * Both open the same `ProfilePopover` menu on click.
    */
-  variant?: "full" | "basic" | "avatar";
+  variant?: "full" | "avatar";
+  /**
+   * @deprecated No longer rendered. `ProfilePopover`'s header now always shows a built-in
+   * light/dark theme toggle when a `ThemeProvider` is present, and nothing when it isn't —
+   * this prop is accepted for backward compatibility but has no effect.
+   */
+  headerAction?: ReactNode;
+  /** Show shimmering skeleton placeholders instead of the avatar/name/role, in both the trigger and the opened popover */
+  loading?: boolean;
+  /** Accessible label announced while loading (default: "Loading profile") */
+  loadingLabel?: string;
+  /** Called when "My Profile" is clicked */
+  onProfileClick?: () => void;
+  /** Called when "Account Settings" is clicked */
+  onSettingsClick?: () => void;
+  /** Called when "Help & Support" is clicked */
+  onHelpClick?: () => void;
+  /** Called when "Sign Out" is clicked */
+  onSignOut?: () => void;
 }

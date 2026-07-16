@@ -72,7 +72,7 @@ export const AppHeaderSearch = forwardRef<
     <Command
       label={label}
       shouldFilter={false}
-      className={cn("gsl-app-header-search ", className)}
+      className={cn("clet-app-header-search gsl-app-header-search", className)}
     >
       <CommandInput
         ref={ref}

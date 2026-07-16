@@ -1,11 +1,19 @@
 export const meta = {
   title: "OtpInput",
   description: "One-time password input",
+  category: "Components",
+  keywords: ["otp", "one-time password", "verification code", "2fa", "mfa input", "pin code"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["dialog", "form-field"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { OtpInputPreview } from "../previews/code/OtpInputPreview";
+import { OtpVerifyDialogPreview } from "../previews/code/OtpVerifyDialogPreview";
 import otpInputSource from "../previews/examples/otp-input.example.tsx?raw";
+import otpVerifyDialogSource from "../previews/examples/otp-verify-dialog.example.tsx?raw";
 
 # OtpInput
 
@@ -14,6 +22,18 @@ One-time password input with configurable digit length, paste-from-any-slot supp
 ## Example
 
 <ExampleTabs title="Basic OTP" preview={<OtpInputPreview />} code={otpInputSource} />
+
+## Verification gate inside a Dialog
+
+The real-world shape: `OtpInput` composed inside a `Dialog` as a verify-before-continue flow —
+`invalid` on a failed check, `onComplete` auto-triggering verification, and a submit `Button`
+disabled until the code is complete and showing `loading`/`loadingLabel` while verifying.
+
+<ExampleTabs
+  title="OTP verification dialog"
+  preview={<OtpVerifyDialogPreview />}
+  code={otpVerifyDialogSource}
+/>
 
 ## Props
 
@@ -73,14 +93,14 @@ See the props table above.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root flex container (`.gsl-otp-input`) |
-| `slot` | Individual digit input (`.gsl-otp-input__slot`) |
+| `root` | Root flex container (`.clet-otp-input`) |
+| `slot` | Individual digit input (`.clet-otp-input__slot`) |
 
 ## Design tokens
 
 | Token | Used for |
 |-------|----------|
-| `--gsl-radius-base` | Slot border radius |
+| `--clet-radius-base` | Slot border radius |
 
 ## Notes
 

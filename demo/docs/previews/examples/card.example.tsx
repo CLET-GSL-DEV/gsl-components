@@ -4,9 +4,9 @@ export function CardExample() {
   return (
     <div
       style={{
-        background: "var(--gsl-surface-subtle)",
+        background: "var(--clet-surface-subtle)",
         padding: 20,
-        borderRadius: "var(--gsl-radius-xl)",
+        borderRadius: "var(--clet-radius-xl)",
       }}
     >
       <div
@@ -25,9 +25,9 @@ export function CardExample() {
                 style={{
                   padding: "4px 12px",
                   fontSize: 12,
-                  border: "1px solid var(--gsl-border)",
-                  borderRadius: "var(--gsl-radius)",
-                  background: "var(--gsl-bg)",
+                  border: "1px solid var(--clet-border)",
+                  borderRadius: "var(--clet-radius)",
+                  background: "var(--clet-bg)",
                   cursor: "pointer",
                 }}
               >
@@ -39,7 +39,7 @@ export function CardExample() {
             style={{
               margin: 0,
               fontSize: 14,
-              color: "var(--gsl-text-secondary)",
+              color: "var(--clet-text-secondary)",
               lineHeight: 1.6,
             }}
           >
@@ -51,7 +51,7 @@ export function CardExample() {
             style={{
               margin: 0,
               fontSize: 14,
-              color: "var(--gsl-text-secondary)",
+              color: "var(--clet-text-secondary)",
               lineHeight: 1.6,
             }}
           >
@@ -67,7 +67,7 @@ export function CardExample() {
             style={{
               margin: 0,
               fontSize: 14,
-              color: "var(--gsl-text-secondary)",
+              color: "var(--clet-text-secondary)",
               lineHeight: 1.6,
             }}
           >

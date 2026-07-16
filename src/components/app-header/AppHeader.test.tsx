@@ -5,14 +5,87 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { AppHeader } from "./AppHeader";
 import { AppHeaderActions } from "./AppHeader";
+import { AppHeaderBranding } from "./AppHeader";
 import { AppHeaderSearch } from "./AppHeaderSearch";
 import { AppHeaderNotifications } from "./AppHeaderNotifications";
-import { AppHeaderProfile } from "./AppHeaderProfile";
+import { AppHeaderNotificationItem } from "./AppHeaderNotificationItem";
+import { AppSwitcher } from "../app-switcher/AppSwitcher";
+import { SystemAppIcon } from "../app-switcher/SystemAppIcon";
+import { ProfilePopover } from "../profile-popover/ProfilePopover";
+import { SidebarProvider } from "../sidebar/SidebarContext";
+
+function mockMatchMedia(isMobile: boolean) {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: vi.fn().mockImplementation((query: string) => ({
+      matches: isMobile,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
+function renderFullHeader() {
+  return render(
+    <SidebarProvider>
+      <AppHeader variant="plain">
+        <AppHeaderBranding title="CLET PORTAL" />
+        <AppHeaderActions>
+          <AppSwitcher apps={[{ id: "a", name: "App A", icon: <SystemAppIcon name="App A" /> }]} />
+          <AppHeaderNotifications />
+          <ProfilePopover
+            user={{ name: "Kwame Asante", role: "Admin", initials: "KA" }}
+            variant="avatar"
+          />
+        </AppHeaderActions>
+      </AppHeader>
+    </SidebarProvider>,
+  );
+}
 
 describe("AppHeader", () => {
   it("renders children", () => {
     render(<AppHeader>Hello</AppHeader>);
     expect(screen.getByText("Hello")).toBeInTheDocument();
+  });
+
+  it("renders standalone without a SidebarProvider", () => {
+    render(<AppHeader>Hello</AppHeader>);
+    expect(screen.getByText("Hello")).toBeInTheDocument();
+  });
+
+  it("renders full children on desktop", () => {
+    mockMatchMedia(false);
+    renderFullHeader();
+
+    expect(screen.getByText("CLET PORTAL")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Notifications" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Open app switcher" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Open menu" })).not.toBeInTheDocument();
+  });
+
+  it("collapses to menu + app switcher + profile on mobile", () => {
+    mockMatchMedia(true);
+    renderFullHeader();
+
+    expect(screen.getByRole("button", { name: "Open menu" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Open app switcher" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("KA")).toBeInTheDocument();
+
+    // Dropped on mobile
+    expect(screen.queryByText("CLET PORTAL")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Notifications" }),
+    ).not.toBeInTheDocument();
   });
 });
 
@@ -24,7 +97,7 @@ describe("AppHeaderActions", () => {
 
   it("renders with right-side class", () => {
     const { container } = render(<AppHeaderActions>X</AppHeaderActions>);
-    expect(container.firstElementChild).toHaveClass("gsl-app-header__right");
+    expect(container.firstElementChild).toHaveClass("clet-app-header__right");
   });
 });
 
@@ -163,57 +236,60 @@ describe("AppHeaderNotifications", () => {
 
     await user.click(screen.getByRole("button", { name: "Notifications" }));
     // Popover renders in portal — query document for skeleton class
-    expect(document.querySelector(".gsl-notif-popover__skeleton")).toBeInTheDocument();
+    expect(document.querySelector(".clet-notif-popover__skeleton")).toBeInTheDocument();
   });
 });
 
-describe("AppHeaderProfile", () => {
-  const user = {
-    name: "Kwame",
-    role: "Admin",
-    initials: "KA",
-    email: "kwame@example.com",
-  };
-
-  it("renders user name and role in trigger", () => {
-    render(<AppHeaderProfile user={user} />);
-    expect(screen.getByText("Kwame")).toBeInTheDocument();
-    expect(screen.getByText("Admin")).toBeInTheDocument();
+describe("AppHeaderNotificationItem", () => {
+  it("renders text and time", () => {
+    render(<AppHeaderNotificationItem text="New comment" time="2m ago" />);
+    expect(screen.getByText("New comment")).toBeInTheDocument();
+    expect(screen.getByText("2m ago")).toBeInTheDocument();
   });
 
   it("forwards ref", () => {
     const ref = createRef<HTMLDivElement>();
-    render(<AppHeaderProfile user={user} ref={ref} />);
+    render(<AppHeaderNotificationItem ref={ref} text="Hi" />);
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
-  it("opens full popover with email on click", async () => {
-    const userEvents = userEvent.setup();
-    render(<AppHeaderProfile user={user} variant="full" />);
-
-    await userEvents.click(screen.getByText("Kwame"));
-    expect(screen.getByText("kwame@example.com")).toBeInTheDocument();
-  });
-
-  it("renders basic popover without email", async () => {
-    const userEvents = userEvent.setup();
-    render(<AppHeaderProfile user={user} variant="basic" />);
-
-    await userEvents.click(screen.getByText("Kwame"));
-    expect(screen.queryByText("kwame@example.com")).not.toBeInTheDocument();
-    // Admin appears in both trigger and popover — verify at least 2 instances
-    expect(screen.getAllByText("Admin").length).toBeGreaterThanOrEqual(2);
-  });
-
-  it("renders action buttons as children", async () => {
-    const userEvents = userEvent.setup();
-    render(
-      <AppHeaderProfile user={user} variant="full">
-        <button data-testid="action-btn">Settings</button>
-      </AppHeaderProfile>,
+  it("shows the unread dot only when unread", () => {
+    const { rerender, container } = render(
+      <AppHeaderNotificationItem text="Hi" unread />,
+    );
+    expect(container.querySelector(".clet-notif-popover__dot")).toBeInTheDocument();
+    expect(container.firstElementChild).not.toHaveClass(
+      "clet-notif-popover__item--read",
     );
 
-    await userEvents.click(screen.getByText("Kwame"));
-    expect(screen.getByTestId("action-btn")).toBeInTheDocument();
+    rerender(<AppHeaderNotificationItem text="Hi" />);
+    expect(container.querySelector(".clet-notif-popover__dot")).not.toBeInTheDocument();
+    expect(container.firstElementChild).toHaveClass(
+      "clet-notif-popover__item--read",
+    );
+  });
+
+  it("is not focusable/clickable without onClick", () => {
+    render(<AppHeaderNotificationItem text="Hi" />);
+    const row = screen.getByText("Hi").closest(".clet-notif-popover__item");
+    expect(row).not.toHaveAttribute("role");
+    expect(row).not.toHaveAttribute("tabindex");
+  });
+
+  it("calls onClick when clicked or activated via keyboard", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    render(<AppHeaderNotificationItem text="Hi" onClick={onClick} />);
+
+    const row = screen.getByRole("button");
+    await user.click(row);
+    expect(onClick).toHaveBeenCalledTimes(1);
+
+    row.focus();
+    await user.keyboard("{Enter}");
+    expect(onClick).toHaveBeenCalledTimes(2);
+
+    await user.keyboard(" ");
+    expect(onClick).toHaveBeenCalledTimes(3);
   });
 });

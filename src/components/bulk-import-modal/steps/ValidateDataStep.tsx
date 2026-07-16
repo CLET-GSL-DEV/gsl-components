@@ -13,8 +13,6 @@ import { validateFieldValue } from "../utils/validateFieldValue";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { BACKGROUND_VALIDATION_CHUNK_SIZE } from "../constants";
 
-// ── Types ──
-
 interface ColumnDef {
   key: string;
   label: string;
@@ -48,8 +46,6 @@ interface CellInputProps {
   onDirty: (cellKey: string, value: string, field: BulkImportField) => void;
 }
 
-// ── Helpers ──
-
 function buildErrorMap(errors: BulkImportValidationError[]) {
   const map = new Map<string, string>();
   for (const issue of errors) {
@@ -77,8 +73,6 @@ function patchRows(
     return patched;
   });
 }
-
-// ── CellInput ──
 
 function CellInput({
   rowId,
@@ -111,12 +105,12 @@ function CellInput({
   }, []);
 
   return (
-    <span className="gsl-bulk-import__cell-inner">
+    <span className="clet-bulk-import__cell-inner gsl-bulk-import__cell-inner">
       <input
         type="text"
         className={[
-          "gsl-bulk-import__cell-input",
-          errorMessage ? "gsl-bulk-import__cell-input--error" : "",
+          "clet-bulk-import__cell-input gsl-bulk-import__cell-input",
+          errorMessage ? "clet-bulk-import__cell-input--error gsl-bulk-import__cell-input--error" : "",
         ]
           .filter(Boolean)
           .join(" ")}
@@ -126,7 +120,7 @@ function CellInput({
         onChange={handleChange}
       />
       {errorMessage && (
-        <span className="gsl-bulk-import__cell-error-tooltip" role="tooltip">
+        <span className="clet-bulk-import__cell-error-tooltip gsl-bulk-import__cell-error-tooltip" role="tooltip">
           {errorMessage}
         </span>
       )}
@@ -134,13 +128,9 @@ function CellInput({
   );
 }
 
-// ── Constants ──
-
 const ROW_HEIGHT = 44;
 
 type SelectionState = "ALL" | Set<number>;
-
-// ── Component ──
 
 export function ValidateDataStep({
   fields,
@@ -156,8 +146,7 @@ export function ValidateDataStep({
   const [selection, setSelection] = useState<SelectionState>(new Set());
   const [showOnlyErrors, setShowOnlyErrors] = useState(false);
 
-  // ── Local validation state (per-cell instant + background full scan) ──
-
+  // Local validation: per-cell instant checks plus a background full scan.
   const [localValidation, setLocalValidation] = useState<
     BulkImportValidationError[]
   >([]);
@@ -238,8 +227,7 @@ export function ValidateDataStep({
     [startBackgroundValidation],
   );
 
-  // ── Merged errors: flow errors for clean cells, local validation for dirty cells ──
-
+  // Merge flow errors (clean cells) with local validation (dirty cells).
   const flowErrorMap = useMemo(() => buildErrorMap(errors), [errors]);
   const localErrorMap = useMemo(
     () => buildErrorMap(localValidation),
@@ -274,8 +262,6 @@ export function ValidateDataStep({
     [activeErrors],
   );
 
-  // ── Visible columns ──
-
   const dataKeys = useMemo(() => {
     if (mappedRows.length === 0) return new Set<string>();
     return new Set(Object.keys(mappedRows[0]));
@@ -295,8 +281,6 @@ export function ValidateDataStep({
     [visibleFields],
   );
 
-  // ── Visible rows ──
-
   const visibleRows: VisibleRow[] = useMemo(
     () =>
       mappedRows
@@ -310,8 +294,6 @@ export function ValidateDataStep({
     () => visibleRows.map(({ rowId }) => rowId),
     [visibleRows],
   );
-
-  // ── Selection ──
 
   const allSelected = useMemo(() => {
     if (selection === "ALL") return visibleRows.length > 0;
@@ -353,8 +335,7 @@ export function ValidateDataStep({
     setSelection(new Set());
   }, [selection, onDiscardSelectedRows]);
 
-  // ── Step result (used by BulkImportModal on Confirm) ──
-
+  // Step result, read by BulkImportModal on Confirm.
   const activeErrorList = useMemo(() => {
     const cleanFlowErrors = errors.filter(
       (e) => !dirtyCellKeys.has(`${e.row}:${e.fieldKey}`),
@@ -386,8 +367,7 @@ export function ValidateDataStep({
     onCanConfirmChange,
   ]);
 
-  // ── Cleanup: clear dirty cells on unmount / data change ──
-
+  // Clear dirty cells on unmount / data change.
   useEffect(() => {
     return () => {
       if (bgTimerRef.current) clearTimeout(bgTimerRef.current);
@@ -395,8 +375,6 @@ export function ValidateDataStep({
       dirtyCellsRef.current = {};
     };
   }, [dirtyCellsRef]);
-
-  // ── Virtualizer ──
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({
@@ -428,12 +406,10 @@ export function ValidateDataStep({
 
   const colCount = columns.length + 1;
 
-  // ── Render ──
-
   return (
-    <div className="gsl-bulk-import__step gsl-bulk-import__step--validate">
-      <div className="gsl-bulk-import__step-header">
-        <h3 className="gsl-bulk-import__step-title">Validate data</h3>
+    <div className="clet-bulk-import__step gsl-bulk-import__step clet-bulk-import__step--validate gsl-bulk-import__step--validate">
+      <div className="clet-bulk-import__step-header gsl-bulk-import__step-header">
+        <h3 className="clet-bulk-import__step-title gsl-bulk-import__step-title">Validate data</h3>
         {discardedRows.length > 0 && (
           <Button variant="outline" size="sm" onClick={onResetDiscardedRows}>
             Reset discarded rows
@@ -441,8 +417,8 @@ export function ValidateDataStep({
         )}
       </div>
 
-      <div className="gsl-bulk-import__validate-toolbar">
-        <div className="gsl-bulk-import__validate-actions">
+      <div className="clet-bulk-import__validate-toolbar gsl-bulk-import__validate-toolbar">
+        <div className="clet-bulk-import__validate-actions gsl-bulk-import__validate-actions">
           <Button
             variant="outline"
             size="sm"
@@ -452,18 +428,18 @@ export function ValidateDataStep({
             Discard selected rows
             {someSelected && selection !== "ALL" && ` (${selection.size})`}
           </Button>
-          <label className="gsl-bulk-import__switch">
+          <label className="clet-bulk-import__switch gsl-bulk-import__switch">
             <input
               type="checkbox"
               role="switch"
-              className="gsl-bulk-import__switch-input"
+              className="clet-bulk-import__switch-input gsl-bulk-import__switch-input"
               checked={showOnlyErrors}
               onChange={(event) => setShowOnlyErrors(event.target.checked)}
             />
-            <span className="gsl-bulk-import__switch-track" aria-hidden="true">
-              <span className="gsl-bulk-import__switch-thumb" />
+            <span className="clet-bulk-import__switch-track gsl-bulk-import__switch-track" aria-hidden="true">
+              <span className="clet-bulk-import__switch-thumb gsl-bulk-import__switch-thumb" />
             </span>
-            <span className="gsl-bulk-import__switch-label">
+            <span className="clet-bulk-import__switch-label gsl-bulk-import__switch-label">
               Show only rows with errors{" "}
               {rowsWithErrors.size > 0 && `(${rowsWithErrors.size})`}
             </span>
@@ -472,8 +448,8 @@ export function ValidateDataStep({
       </div>
 
       {visibleRows.length === 0 ? (
-        <div className="gsl-bulk-import__validate-empty-wrap">
-          <p className="gsl-bulk-import__validate-empty">
+        <div className="clet-bulk-import__validate-empty-wrap gsl-bulk-import__validate-empty-wrap">
+          <p className="clet-bulk-import__validate-empty gsl-bulk-import__validate-empty">
             {showOnlyErrors ? "No rows with errors." : "No rows to validate."}
           </p>
           {showOnlyErrors && (
@@ -487,12 +463,12 @@ export function ValidateDataStep({
           )}
         </div>
       ) : (
-        <div className="gsl-bulk-import__table-wrap--validate">
-          <div ref={scrollRef} className="gsl-bulk-import__validate-scroll">
-            <table className="gsl-bulk-import__validate-table">
+        <div className="clet-bulk-import__table-wrap--validate gsl-bulk-import__table-wrap--validate">
+          <div ref={scrollRef} className="clet-bulk-import__validate-scroll gsl-bulk-import__validate-scroll">
+            <table className="clet-bulk-import__validate-table gsl-bulk-import__validate-table">
               <thead>
                 <tr>
-                  <th className="gsl-bulk-import__validate-th-checkbox">
+                  <th className="clet-bulk-import__validate-th-checkbox gsl-bulk-import__validate-th-checkbox">
                     <Checkbox
                       checked={
                         allSelected
@@ -506,7 +482,7 @@ export function ValidateDataStep({
                     />
                   </th>
                   {columns.map((col) => (
-                    <th key={col.key} className="gsl-bulk-import__validate-th">
+                    <th key={col.key} className="clet-bulk-import__validate-th gsl-bulk-import__validate-th">
                       {col.label}
                     </th>
                   ))}
@@ -514,12 +490,12 @@ export function ValidateDataStep({
               </thead>
               <tbody>
                 <tr
-                  className="gsl-bulk-import__validate-spacer-row"
+                  className="clet-bulk-import__validate-spacer-row gsl-bulk-import__validate-spacer-row"
                   style={{ height: totalHeight }}
                 >
                   <td
                     colSpan={colCount}
-                    className="gsl-bulk-import__validate-spacer-td"
+                    className="clet-bulk-import__validate-spacer-td gsl-bulk-import__validate-spacer-td"
                   >
                     {items.map((item) => {
                       const { row, rowId } = visibleRows[item.index];
@@ -530,27 +506,27 @@ export function ValidateDataStep({
                         <div
                           key={item.key}
                           data-index={item.index}
-                          className="gsl-bulk-import__validate-row-container"
+                          className="clet-bulk-import__validate-row-container gsl-bulk-import__validate-row-container"
                           style={{
                             height: `${item.size}px`,
                             transform: `translateY(${item.start}px)`,
                           }}
                         >
-                          <table className="gsl-bulk-import__validate-row-table">
+                          <table className="clet-bulk-import__validate-row-table gsl-bulk-import__validate-row-table">
                             <tbody>
                               <tr
                                 data-selected={isSelected || undefined}
                                 className={[
-                                  "gsl-bulk-import__data-row",
+                                  "clet-bulk-import__data-row gsl-bulk-import__data-row",
                                   isSelected
-                                    ? "gsl-bulk-import__data-row--selected"
+                                    ? "clet-bulk-import__data-row--selected gsl-bulk-import__data-row--selected"
                                     : "",
                                 ]
                                   .filter(Boolean)
                                   .join(" ")}
                                 style={{ height: ROW_HEIGHT }}
                               >
-                                <td className="gsl-bulk-import__validate-td-checkbox">
+                                <td className="clet-bulk-import__validate-td-checkbox gsl-bulk-import__validate-td-checkbox">
                                   <Checkbox
                                     checked={isSelected}
                                     onCheckedChange={() =>
@@ -568,9 +544,9 @@ export function ValidateDataStep({
                                     <td
                                       key={field.key}
                                       className={[
-                                        "gsl-bulk-import__validate-td",
+                                        "clet-bulk-import__validate-td gsl-bulk-import__validate-td",
                                         errorMessage
-                                          ? "gsl-bulk-import__cell--error"
+                                          ? "clet-bulk-import__cell--error gsl-bulk-import__cell--error"
                                           : "",
                                       ]
                                         .filter(Boolean)

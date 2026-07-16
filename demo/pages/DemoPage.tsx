@@ -1,5 +1,6 @@
 import type { TableColumn, TableBulkAction, TableRowAction } from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
+import { useMockQuery } from "demo/hooks/useMockQuery";
 import { useCallback, useMemo, useState } from "react";
 import {
   Users,
@@ -10,6 +11,7 @@ import {
   UserX,
   Eye,
   Edit,
+  UserPlus,
 } from "lucide-react";
 import {
   Table,
@@ -22,6 +24,10 @@ import {
   TablePagination,
   MetricCard,
   Card,
+  SectionActions,
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
   Dropdown,
   Modal,
   ModalPortal,
@@ -68,6 +74,7 @@ export function DemoPage() {
   const [members, setMembers] = useState(gslMembers);
   const [selected, setSelected] = useState<Set<string | number>>(new Set());
   const [viewMember, setViewMember] = useState<GslMember | null>(null);
+  const { loading: metricsLoading } = useMockQuery(null, 1200);
 
   const filtered = members.filter((m) => {
     const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase());
@@ -128,11 +135,27 @@ export function DemoPage() {
 
   return (
     <>
+      <SectionHeader>
+        <SectionTitle>Dashboard</SectionTitle>
+        <SectionDescription>
+          Overview of your organization&apos;s members and activity.
+        </SectionDescription>
+        <SectionActions>
+          <Button variant="outline" size="md">
+            Export
+          </Button>
+          <Button variant="primary" size="md">
+            <UserPlus size={14} strokeWidth={1.5} />
+            Add Member
+          </Button>
+        </SectionActions>
+      </SectionHeader>
+
       <div className="demo-home__metrics">
-        <MetricCard label="Total Members" value={members.length} icon={<Users size={16} strokeWidth={1.5} />} description="Across all departments" trend="up" trendValue="+12%" />
-        <MetricCard label="Active Members" value={members.filter((m) => m.status === "Active").length} icon={<UserCheck size={16} strokeWidth={1.5} />} description="Currently active" trend="up" trendValue="+5%" />
-        <MetricCard label="New This Month" value={members.filter((m) => m.joined >= "2025-01-01").length} icon={<CalendarPlus size={16} strokeWidth={1.5} />} description="Joined this year" trend="down" trendValue="-3%" />
-        <MetricCard label="Engagement Rate" value="94.2%" icon={<Activity size={16} strokeWidth={1.5} />} description="Average daily activity" trend="up" trendValue="+1.2%" />
+        <MetricCard loading={metricsLoading} label="Total Members" value={members.length} icon={<Users size={16} strokeWidth={1.5} />} description="Across all departments" trend="up" trendValue="+12%" />
+        <MetricCard loading={metricsLoading} label="Active Members" value={members.filter((m) => m.status === "Active").length} icon={<UserCheck size={16} strokeWidth={1.5} />} description="Currently active" trend="up" trendValue="+5%" />
+        <MetricCard loading={metricsLoading} label="New This Month" value={members.filter((m) => m.joined >= "2025-01-01").length} icon={<CalendarPlus size={16} strokeWidth={1.5} />} description="Joined this year" trend="down" trendValue="-3%" />
+        <MetricCard loading={metricsLoading} label="Engagement Rate" value="94.2%" icon={<Activity size={16} strokeWidth={1.5} />} description="Average daily activity" trend="up" trendValue="+1.2%" />
       </div>
 
       <Card>
@@ -142,8 +165,8 @@ export function DemoPage() {
             <TableFilter>
               <div className="demo-home__filter-field">
                 <label className="demo-home__filter-label">Status</label>
-                <input type="hidden" name="status" value={statusValue} />
                 <Dropdown
+                  name="status"
                   value={statusValue}
                   onValueChange={(v) => setStatusValue(v ?? "")}
                   options={[
@@ -156,8 +179,8 @@ export function DemoPage() {
               </div>
               <div className="demo-home__filter-field">
                 <label className="demo-home__filter-label">Role</label>
-                <input type="hidden" name="role" value={roleValue} />
                 <Dropdown
+                  name="role"
                   value={roleValue}
                   onValueChange={(v) => setRoleValue(v ?? "")}
                   options={[

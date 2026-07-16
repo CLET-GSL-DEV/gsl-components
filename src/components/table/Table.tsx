@@ -15,16 +15,17 @@ import {
   ArrowUp,
   ArrowDown,
   MoreHorizontal,
-  Inbox,
   TableIcon,
 } from "lucide-react";
 import { Checkbox } from "../checkbox/Checkbox";
 import {
   Popover,
+  PopoverAnchor,
   PopoverTrigger,
   PopoverContent,
   PopoverPortal,
 } from "../popover/Popover";
+import { TableBulkActions } from "./TableBulkActions";
 import type {
   TableColumn,
   TableContentProps,
@@ -36,8 +37,6 @@ import "./styles/table.css";
 import { TableContext } from "./TableContext";
 
 const DEFAULT_TABLE_EMPTY_ICON = <TableIcon size={40} strokeWidth={1} />;
-
-/* ── Helpers ── */
 
 function getCellValue<T>(row: T, col: TableColumn<T>): ReactNode {
   if (col.accessorFn) return col.accessorFn(row);
@@ -60,8 +59,6 @@ function colStyle(col: {
   return style;
 }
 
-/* ── Root ── */
-
 export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
   { className, classNames, paramPrefix, height, children, ...props },
   ref,
@@ -74,7 +71,7 @@ export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
     <TableContext.Provider value={{ paramPrefix }}>
       <div
         ref={ref}
-        className={cn("gsl-table", classNames?.root, className)}
+        className={cn("clet-table gsl-table", classNames?.root, className)}
         style={style}
         {...props}
       >
@@ -83,8 +80,6 @@ export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
     </TableContext.Provider>
   );
 });
-
-/* ── Content ── */
 
 function TableContentRender<T>(
   props: TableContentProps<T>,
@@ -103,6 +98,9 @@ function TableContentRender<T>(
     selectedIds = new Set(),
     onSelectionChange,
     rowActions,
+    bulkActions,
+    bulkActionsFooter = false,
+    onRowClick,
     virtualRowHeight,
     emptyIcon,
     emptyText,
@@ -127,6 +125,36 @@ function TableContentRender<T>(
   const [openPopoverKey, setOpenPopoverKey] = useState<string | number | null>(
     null,
   );
+
+  // Right-clicking outside the (portaled) popover content closes it via
+  // Radix's own pointerdown-outside handling — which fires on mousedown,
+  // before our row's onContextMenu even runs. Snapshot which row was open
+  // in the pointerdown capture phase (fires before that) so the contextmenu
+  // handler can still tell "closing an open menu" apart from "opening one".
+  const wasOpenKeyRef = useRef<string | number | null>(null);
+
+  // Shared virtual anchor for the row-actions popover: kebab clicks snap it to
+  // the trigger button's rect, right-clicks snap it to the cursor point, so
+  // the same Popover can be positioned either way without remounting.
+  const anchorRectRef = useRef({ x: 0, y: 0, width: 0, height: 0 });
+  const virtualAnchorRef = useRef({
+    getBoundingClientRect: (): DOMRect => {
+      const { x, y, width, height } = anchorRectRef.current;
+      return {
+        x,
+        y,
+        width,
+        height,
+        top: y,
+        left: x,
+        right: x + width,
+        bottom: y + height,
+        toJSON() {
+          return this;
+        },
+      } as DOMRect;
+    },
+  });
 
   const columns = useMemo(() => rawColumns ?? [], [rawColumns]);
   const data = useMemo(() => rawData ?? [], [rawData]);
@@ -172,7 +200,14 @@ function TableContentRender<T>(
   );
 
   const hasRowActions = rowActions && rowActions.length > 0;
-  const hasActionsColumn = selectable || hasRowActions;
+  const hasBulkActions = Boolean(
+    selectable && bulkActions && bulkActions.length > 0,
+  );
+  // The kebab actions column only exists to hold rowActions and/or
+  // bulkActions (plus a Select/Deselect toggle when selectable). With
+  // neither, selection is already handled by the checkbox column, so
+  // there's nothing for it to show — don't render an empty kebab column.
+  const hasActionsColumn = hasRowActions || hasBulkActions;
 
   // Extra colSpan when selectable or actions column adds a column
   const colSpan =
@@ -205,6 +240,8 @@ function TableContentRender<T>(
       ? rowActions!.filter((a) => !a.condition || a.condition(row))
       : null;
     const hasCustomActions = actions && actions.length > 0;
+    const showBulkSection = hasBulkActions;
+    const hasSelection = selectedIds.size > 0;
 
     const handleActionClick = (
       e: React.MouseEvent<HTMLButtonElement>,
@@ -219,16 +256,34 @@ function TableContentRender<T>(
     return (
       <tr
         key={key}
-        onClick={() => selectable && handleToggleRow(key)}
+        onClick={(e) => {
+          if (selectable) handleToggleRow(key);
+          onRowClick?.(row, e);
+        }}
+        onPointerDownCapture={(e) => {
+          if (e.button === 2) wasOpenKeyRef.current = openPopoverKey;
+        }}
         onContextMenu={(e) => {
           if (!hasActionsColumn) return;
           e.preventDefault();
+          if (wasOpenKeyRef.current === key) {
+            setOpenPopoverKey(null);
+            return;
+          }
+          anchorRectRef.current = {
+            x: e.clientX,
+            y: e.clientY,
+            width: 0,
+            height: 0,
+          };
           setOpenPopoverKey(key);
         }}
-        className={cn(selectable && "gsl-table__row--clickable")}
+        className={cn(
+          (selectable || onRowClick) && "clet-table__row--clickable gsl-table__row--clickable",
+        )}
       >
         <td
-          className={cn("gsl-table__checkbox-cell", classNames?.checkboxCell)}
+          className={cn("clet-table__checkbox-cell gsl-table__checkbox-cell", classNames?.checkboxCell)}
           onClick={(e) => e.stopPropagation()}
         >
           <Checkbox
@@ -252,7 +307,7 @@ function TableContentRender<T>(
 
         {hasActionsColumn && (
           <td
-            className={cn("gsl-table__actions-cell", classNames?.actionsCell)}
+            className={cn("clet-table__actions-cell gsl-table__actions-cell", classNames?.actionsCell)}
             onClick={(e) => e.stopPropagation()}
           >
             <Popover
@@ -261,30 +316,45 @@ function TableContentRender<T>(
                 setOpenPopoverKey(open ? key : null);
               }}
             >
+              <PopoverAnchor virtualRef={virtualAnchorRef} />
               <PopoverTrigger
                 className={cn(
-                  "gsl-table__actions-trigger",
+                  "clet-table__actions-trigger gsl-table__actions-trigger",
                   classNames?.actionsTrigger,
                 )}
                 aria-label="Row actions"
+                onClick={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  anchorRectRef.current = {
+                    x: rect.x,
+                    y: rect.y,
+                    width: rect.width,
+                    height: rect.height,
+                  };
+                }}
               >
                 <MoreHorizontal size={14} strokeWidth={1.5} />
               </PopoverTrigger>
               <PopoverPortal>
                 <PopoverContent
                   className={cn(
-                    "gsl-table__actions-menu",
+                    "clet-table__actions-menu gsl-table__actions-menu",
                     classNames?.actionsMenu,
                   )}
                   side="bottom"
                   align="end"
                   sideOffset={4}
+                  onContextMenu={(e) => {
+                    // Second right-click often lands on the open menu, not the row.
+                    e.preventDefault();
+                    setOpenPopoverKey(null);
+                  }}
                 >
                   {selectable && (
                     <button
                       type="button"
                       className={cn(
-                        "gsl-table__actions-item",
+                        "clet-table__actions-item gsl-table__actions-item",
                         classNames?.actionsItem,
                       )}
                       onClick={(e) =>
@@ -295,16 +365,16 @@ function TableContentRender<T>(
                     </button>
                   )}
                   {selectable && hasCustomActions && (
-                    <div className="gsl-table__actions-separator" />
+                    <div className="clet-table__actions-separator gsl-table__actions-separator" />
                   )}
                   {actions?.map((action) => (
                     <button
                       key={action.id}
                       type="button"
                       className={cn(
-                        "gsl-table__actions-item",
+                        "clet-table__actions-item gsl-table__actions-item",
                         action.variant === "destructive" &&
-                          "gsl-table__actions-item--destructive",
+                          "clet-table__actions-item--destructive gsl-table__actions-item--destructive",
                         classNames?.actionsItem,
                       )}
                       onClick={(e) =>
@@ -315,6 +385,56 @@ function TableContentRender<T>(
                       {action.label}
                     </button>
                   ))}
+                  {showBulkSection && (selectable || hasCustomActions) && (
+                    <div className="clet-table__actions-separator gsl-table__actions-separator" />
+                  )}
+                  {showBulkSection && (
+                    <>
+                      <div
+                        className={cn(
+                          "clet-table__actions-section-label gsl-table__actions-section-label",
+                          classNames?.actionsSectionLabel,
+                        )}
+                      >
+                        Bulk actions
+                      </div>
+                      <button
+                        type="button"
+                        className={cn(
+                          "clet-table__actions-item gsl-table__actions-item",
+                          classNames?.actionsItem,
+                        )}
+                        onClick={(e) =>
+                          handleActionClick(e, () =>
+                            handleSelectAll(!allSelected),
+                          )
+                        }
+                      >
+                        {allSelected ? "Deselect all" : "Select all"}
+                      </button>
+                      {hasSelection &&
+                        bulkActions!.map((action) => (
+                          <button
+                            key={action.id}
+                            type="button"
+                            className={cn(
+                              "clet-table__actions-item gsl-table__actions-item",
+                              action.destructive &&
+                                "clet-table__actions-item--destructive gsl-table__actions-item--destructive",
+                              classNames?.actionsItem,
+                            )}
+                            onClick={(e) =>
+                              handleActionClick(e, () =>
+                                action.onClick(selectedIds),
+                              )
+                            }
+                          >
+                            {action.icon}
+                            {action.label}
+                          </button>
+                        ))}
+                    </>
+                  )}
                 </PopoverContent>
               </PopoverPortal>
             </Popover>
@@ -326,7 +446,7 @@ function TableContentRender<T>(
 
   const headerRow = (
     <tr>
-      <th className={cn("gsl-table__checkbox-cell", classNames?.checkboxCell)}>
+      <th className={cn("clet-table__checkbox-cell gsl-table__checkbox-cell", classNames?.checkboxCell)}>
         <Checkbox
           checked={allSelected}
           onCheckedChange={handleSelectAll}
@@ -342,8 +462,8 @@ function TableContentRender<T>(
             key={col.id}
             style={colStyle(col)}
             className={cn(
-              col.sortable && "gsl-table__th--sortable",
-              isSorted && "gsl-table__th--sorted",
+              col.sortable && "clet-table__th--sortable gsl-table__th--sortable",
+              isSorted && "clet-table__th--sorted gsl-table__th--sorted",
               classNames?.th,
             )}
             onClick={() => {
@@ -353,12 +473,12 @@ function TableContentRender<T>(
               setSort({ column: col.id, direction: next });
             }}
           >
-            <span className={cn("gsl-table__th-label", classNames?.thLabel)}>
+            <span className={cn("clet-table__th-label gsl-table__th-label", classNames?.thLabel)}>
               {col.header}
             </span>
             {col.sortable && (
               <span
-                className={cn("gsl-table__sort-icon", classNames?.sortIcon)}
+                className={cn("clet-table__sort-icon gsl-table__sort-icon", classNames?.sortIcon)}
               >
                 {isSorted ? (
                   dir === "asc" ? (
@@ -376,203 +496,231 @@ function TableContentRender<T>(
       })}
       {hasActionsColumn && (
         <th
-          className={cn("gsl-table__actions-cell", classNames?.actionsCell)}
+          className={cn("clet-table__actions-cell gsl-table__actions-cell", classNames?.actionsCell)}
         />
       )}
     </tr>
   );
 
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "gsl-table__content",
-        variant === "panel" && "gsl-table__content--panel",
-        selectable &&
-          selectedIds.size > 0 &&
-          "gsl-table__content--has-selected",
-        classNames?.root,
-        className,
-      )}
-      {...rest}
-    >
-      {loading ? (
-        <table>
-          <thead>
-            <tr>
-              {selectable && (
-                <th
-                  className={cn(
-                    "gsl-table__checkbox-cell",
-                    classNames?.checkboxCell,
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "gsl-table__skeleton gsl-table__skeleton--cb",
-                      classNames?.skeleton,
-                    )}
-                  />
-                </th>
-              )}
-              {columns.length > 0
-                ? columns.map((col) => (
-                    <th key={col.id} style={colStyle(col)}>
-                      <span
-                        className={cn(
-                          "gsl-table__th-label",
-                          classNames?.thLabel,
-                        )}
-                      >
-                        {col.header}
-                      </span>
-                    </th>
-                  ))
-                : Array.from({ length: loadingRows }, (_, i) => (
-                    <th key={i}>
-                      <span
-                        className={cn(
-                          "gsl-table__skeleton gsl-table__skeleton--th",
-                          classNames?.skeleton,
-                        )}
-                      />
-                    </th>
-                  ))}
-              {hasActionsColumn && (
-                <th
-                  className={cn(
-                    "gsl-table__actions-cell",
-                    classNames?.actionsCell,
-                  )}
-                />
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {Array.from({ length: loadingRows }, (_, rowIdx) => (
-              <tr key={rowIdx}>
+    <>
+      <div
+        ref={ref}
+        className={cn(
+          "clet-table__content gsl-table__content",
+          variant === "panel" && "clet-table__content--panel gsl-table__content--panel",
+          selectable &&
+            selectedIds.size > 0 &&
+            "clet-table__content--has-selected gsl-table__content--has-selected",
+          classNames?.root,
+          className,
+        )}
+        {...rest}
+      >
+        {loading ? (
+          <table>
+            <thead>
+              <tr>
                 {selectable && (
-                  <td
+                  <th
                     className={cn(
-                      "gsl-table__checkbox-cell",
+                      "clet-table__checkbox-cell gsl-table__checkbox-cell",
                       classNames?.checkboxCell,
                     )}
                   >
                     <span
                       className={cn(
-                        "gsl-table__skeleton gsl-table__skeleton--cb",
+                        "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--cb gsl-table__skeleton--cb",
                         classNames?.skeleton,
                       )}
                     />
-                  </td>
+                  </th>
                 )}
                 {columns.length > 0
                   ? columns.map((col) => (
-                      <td key={col.id} style={colStyle(col)}>
+                      <th key={col.id} style={colStyle(col)}>
                         <span
                           className={cn(
-                            "gsl-table__skeleton gsl-table__skeleton--td",
-                            classNames?.skeleton,
+                            "clet-table__th-label gsl-table__th-label",
+                            classNames?.thLabel,
                           )}
-                        />
-                      </td>
+                        >
+                          {col.header}
+                        </span>
+                      </th>
                     ))
-                  : Array.from({ length: loadingRows }, (_, cellIdx) => (
-                      <td key={cellIdx}>
+                  : Array.from({ length: loadingRows }, (_, i) => (
+                      <th key={i}>
                         <span
                           className={cn(
-                            "gsl-table__skeleton gsl-table__skeleton--td",
+                            "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--th gsl-table__skeleton--th",
                             classNames?.skeleton,
                           )}
                         />
-                      </td>
+                      </th>
                     ))}
                 {hasActionsColumn && (
-                  <td
+                  <th
                     className={cn(
-                      "gsl-table__actions-cell",
+                      "clet-table__actions-cell gsl-table__actions-cell",
                       classNames?.actionsCell,
                     )}
                   />
                 )}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : hasData ? (
-        isVirtual ? (
-          <div
-            ref={scrollRef}
-            className={cn("gsl-table__viewport", classNames?.viewport)}
-            style={{ overflow: "auto", flex: 1, minHeight: 0 }}
-          >
-            <table
-              style={{
-                tableLayout: "fixed",
-                width: "100%",
-                borderCollapse: "collapse",
-              }}
+            </thead>
+            <tbody>
+              {Array.from({ length: loadingRows }, (_, rowIdx) => (
+                <tr key={rowIdx}>
+                  {selectable && (
+                    <td
+                      className={cn(
+                        "clet-table__checkbox-cell gsl-table__checkbox-cell",
+                        classNames?.checkboxCell,
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--cb gsl-table__skeleton--cb",
+                          classNames?.skeleton,
+                        )}
+                      />
+                    </td>
+                  )}
+                  {columns.length > 0
+                    ? columns.map((col) => (
+                        <td key={col.id} style={colStyle(col)}>
+                          <span
+                            className={cn(
+                              "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--td gsl-table__skeleton--td",
+                              classNames?.skeleton,
+                            )}
+                          />
+                        </td>
+                      ))
+                    : Array.from({ length: loadingRows }, (_, cellIdx) => (
+                        <td key={cellIdx}>
+                          <span
+                            className={cn(
+                              "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--td gsl-table__skeleton--td",
+                              classNames?.skeleton,
+                            )}
+                          />
+                        </td>
+                      ))}
+                  {hasActionsColumn && (
+                    <td
+                      className={cn(
+                        "clet-table__actions-cell gsl-table__actions-cell",
+                        classNames?.actionsCell,
+                      )}
+                    />
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : hasData ? (
+          isVirtual ? (
+            <div
+              ref={scrollRef}
+              className={cn("clet-table__viewport gsl-table__viewport", classNames?.viewport)}
+              style={{ overflow: "auto", flex: 1, minHeight: 0 }}
             >
-              <thead>{headerRow}</thead>
-              <tbody>
-                <tr
-                  style={{
-                    height: virtualizer.getTotalSize(),
-                    position: "relative",
-                  }}
-                >
-                  <td colSpan={colSpan} style={{ padding: 0 }}>
-                    <div style={{ position: "relative", width: "100%" }}>
-                      {virtualRows.map((vRow) => {
-                        const row = sorted[vRow.index];
-                        return (
-                          <div
-                            key={vRow.key}
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              left: 0,
-                              width: "100%",
-                              transform: `translateY(${vRow.start}px)`,
-                            }}
-                          >
-                            <table
+              <table
+                style={{
+                  tableLayout: "fixed",
+                  width: "100%",
+                  borderCollapse: "collapse",
+                }}
+              >
+                <thead>{headerRow}</thead>
+                <tbody>
+                  <tr
+                    style={{
+                      height: virtualizer.getTotalSize(),
+                      position: "relative",
+                    }}
+                  >
+                    <td colSpan={colSpan} style={{ padding: 0 }}>
+                      <div style={{ position: "relative", width: "100%" }}>
+                        {virtualRows.map((vRow) => {
+                          const row = sorted[vRow.index];
+                          return (
+                            <div
+                              key={vRow.key}
                               style={{
-                                tableLayout: "fixed",
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
                                 width: "100%",
-                                borderCollapse: "collapse",
+                                transform: `translateY(${vRow.start}px)`,
                               }}
                             >
-                              <tbody>{renderRow(row, vRow.index)}</tbody>
-                            </table>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
+                              <table
+                                style={{
+                                  tableLayout: "fixed",
+                                  width: "100%",
+                                  borderCollapse: "collapse",
+                                }}
+                              >
+                                <tbody>{renderRow(row, vRow.index)}</tbody>
+                              </table>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <table>
+              <thead>{headerRow}</thead>
+              <tbody>{sorted.map((row, i) => renderRow(row, i))}</tbody>
             </table>
-          </div>
+          )
+        ) : children ? (
+          children
         ) : (
           <table>
             <thead>{headerRow}</thead>
-            <tbody>{sorted.map((row, i) => renderRow(row, i))}</tbody>
+            <tbody>
+              <tr>
+                <td colSpan={colSpan || 1}>
+                  <div className={cn("clet-table__empty gsl-table__empty", classNames?.empty)}>
+                    <div
+                      className={cn(
+                        "clet-table__empty-icon gsl-table__empty-icon",
+                        classNames?.emptyIcon,
+                      )}
+                    >
+                      {emptyIcon ?? DEFAULT_TABLE_EMPTY_ICON}
+                    </div>
+                    <div
+                      className={cn(
+                        "clet-table__empty-text gsl-table__empty-text",
+                        classNames?.emptyText,
+                      )}
+                    >
+                      {emptyText ?? "No results"}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
-        )
-      ) : children ? (
-        children
-      ) : (
-        <div className={cn("gsl-table__empty", classNames?.empty)}>
-          <div className={cn("gsl-table__empty-icon", classNames?.emptyIcon)}>
-            {emptyIcon ?? DEFAULT_TABLE_EMPTY_ICON}
-          </div>
-          <div className={cn("gsl-table__empty-text", classNames?.emptyText)}>
-            {emptyText ?? "No results"}
-          </div>
-        </div>
+        )}
+      </div>
+      {bulkActionsFooter && (
+        <TableBulkActions
+          selectedIds={selectedIds}
+          onClear={() => onSelectionChange?.(new Set())}
+          actions={bulkActions}
+        />
       )}
-    </div>
+    </>
   );
 }
 
@@ -580,14 +728,17 @@ export const TableContent = forwardRef(TableContentRender) as <T>(
   props: TableContentProps<T> & { ref?: Ref<HTMLDivElement> },
 ) => React.ReactElement;
 
-/* ── Footer ── */
-
 export const TableFooter = forwardRef<HTMLDivElement, TableFooterProps>(
-  function TableFooter({ classNames, className, children, ...props }, ref) {
+  function TableFooter({ classNames, className, noBorder, children, ...props }, ref) {
     return (
       <div
         ref={ref}
-        className={cn("gsl-table__footer", classNames?.root, className)}
+        className={cn(
+          "clet-table__footer gsl-table__footer",
+          noBorder && "clet-table__footer--no-border",
+          classNames?.root,
+          className,
+        )}
         {...props}
       >
         {children}

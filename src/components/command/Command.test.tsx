@@ -48,8 +48,8 @@ describe("Command", () => {
     renderInlineCommand();
 
     expect(screen.getByRole("combobox")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-command__input-wrapper")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-command__input-icon")).toBeInTheDocument();
+    expect(document.querySelector(".clet-command__input-wrapper")).toBeInTheDocument();
+    expect(document.querySelector(".clet-command__input-icon")).toBeInTheDocument();
 
     // Focus to open the popover so items are mounted
     await user.click(screen.getByRole("combobox"));
@@ -64,9 +64,9 @@ describe("Command", () => {
     // Focus to open the popover
     await user.click(screen.getByRole("combobox"));
 
-    const popover = document.querySelector(".gsl-command__popover");
+    const popover = document.querySelector(".clet-command__popover");
     expect(popover).toBeInTheDocument();
-    const list = popover?.querySelector(".gsl-command__list");
+    const list = popover?.querySelector(".clet-command__list");
     expect(list).toBeInTheDocument();
   });
 
@@ -108,8 +108,8 @@ describe("Command", () => {
       </Command>,
     );
 
-    expect(document.querySelector(".gsl-command")).toHaveClass("custom-command");
-    expect(document.querySelector(".gsl-command__input-wrapper")).toHaveClass(
+    expect(document.querySelector(".clet-command")).toHaveClass("custom-command");
+    expect(document.querySelector(".clet-command__input-wrapper")).toHaveClass(
       "custom-wrapper",
     );
     expect(screen.getByRole("combobox")).toHaveClass("custom-input");
@@ -126,10 +126,10 @@ describe("Command", () => {
       </CommandDialog>,
     );
 
-    const shortcut = document.querySelector("kbd.gsl-command__input-shortcut");
+    const shortcut = document.querySelector("kbd.clet-command__input-shortcut");
     expect(shortcut).toBeInTheDocument();
     expect(
-      shortcut?.querySelectorAll(".gsl-command__shortcut-key").length,
+      shortcut?.querySelectorAll(".clet-command__shortcut-key").length,
     ).toBeGreaterThan(0);
   });
 
@@ -144,7 +144,7 @@ describe("Command", () => {
     );
 
     expect(
-      document.querySelector(".gsl-command__input-shortcut"),
+      document.querySelector(".clet-command__input-shortcut"),
     ).not.toBeInTheDocument();
   });
 
@@ -169,8 +169,8 @@ describe("Command", () => {
       </Command>,
     );
 
-    expect(document.querySelector(".gsl-command__group-loading")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-command__skeleton-line")).toBeInTheDocument();
+    expect(document.querySelector(".clet-command__group-loading")).toBeInTheDocument();
+    expect(document.querySelector(".clet-command__skeleton-line")).toBeInTheDocument();
     expect(screen.queryByText("Email")).not.toBeInTheDocument();
     expect(document.querySelector('[role="status"][aria-label="Loading fields"]')).toBeInTheDocument();
   });
@@ -186,7 +186,7 @@ describe("Command", () => {
       </Command>,
     );
 
-    expect(document.querySelector(".gsl-command__group-loading")).not.toBeInTheDocument();
+    expect(document.querySelector(".clet-command__group-loading")).not.toBeInTheDocument();
     expect(document.querySelector('[data-value="email"]')).toBeInTheDocument();
   });
 
@@ -202,7 +202,7 @@ describe("Command", () => {
       </CommandDialog>,
     );
 
-    expect(document.querySelector(".gsl-command__group-loading")).toBeInTheDocument();
+    expect(document.querySelector(".clet-command__group-loading")).toBeInTheDocument();
     expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
   });
 
@@ -247,7 +247,7 @@ describe("Command", () => {
       </Command>,
     );
 
-    const shortcut = document.querySelector(".gsl-command__shortcut");
+    const shortcut = document.querySelector(".clet-command__shortcut");
     expect(shortcut).toBeInTheDocument();
   });
 

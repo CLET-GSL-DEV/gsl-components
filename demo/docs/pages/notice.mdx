@@ -1,0 +1,98 @@
+export const meta = {
+  title: "Notice",
+  description: "Boxed callout for scoped context, policy, or status messages",
+  category: "Components",
+  keywords: ["notice", "callout", "alert", "banner", "info box"],
+  since: "2.1.0",
+  status: "stable",
+  related: ["badge", "toast"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { NoticePreview } from "../previews/code/NoticePreview";
+import { NoticeInlinePreview } from "../previews/code/NoticeInlinePreview";
+import noticeVariantsSource from "../previews/examples/notice-variants.example.tsx?raw";
+import noticeInlineSource from "../previews/examples/notice-inline.example.tsx?raw";
+
+# Notice
+
+Boxed, persistent callout — unlike `Toast`, which is transient and stacked in a viewport, `Notice` renders inline wherever it's placed and stays until removed from the tree. Use it for scoped context ("your scope for this composer"), policy explanations, or a standing status message.
+
+## Example
+
+<ExampleTabs
+  title="Variants, left border, dashed border, and custom color"
+  preview={<NoticePreview />}
+  code={noticeVariantsSource}
+/>
+
+### Compact / inline usage
+
+There's no separate "inline alert" component — a `Notice` with a small `icon`
+dot and no `title` renders as a compact, single-line status row (tinted
+background, colored dot, no border), suited to sitting inside a card, form
+section, or field group rather than at the page level.
+
+<ExampleTabs
+  title="Dot icon, no title — compact status rows"
+  preview={<NoticeInlinePreview />}
+  code={noticeInlineSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `NoticeVariant` | `"default"` | Token-driven accent + tinted background |
+| `color` | `CSSProperties["color"]` | — | Custom accent color, overriding the variant's token color |
+| `title` | `ReactNode` | — | Bold heading line |
+| `icon` | `ReactNode` | — | Optional leading icon or dot, tinted with the accent color |
+| `leftBorder` | `boolean` | `false` | Thick colored left border accent |
+| `dashed` | `boolean` | `false` | Dashed outer border instead of solid |
+| `classNames` | `NoticeClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root (same as `classNames.root`) |
+| `children` | `ReactNode` | — | Body content — plain text or a list |
+
+Also accepts standard native `div` attributes (`id`, `aria-*`, `role`, etc.) — `role` defaults to `"alert"` for the `error` variant and `"status"` otherwise, but can be overridden.
+
+## Types
+
+### `NoticeProps`
+
+Props for `Notice`. Extends `HTMLAttributes<HTMLDivElement>` with `title` omitted (redefined as `ReactNode` for the heading, instead of the native string-only tooltip attribute). `forwardRef`-enabled.
+
+### `NoticeClassNames`
+
+Part-level class names merged after base `clet-notice*` styles:
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer `<div>` |
+| `icon` | Leading icon wrapper |
+| `header` | Header row wrapping `title` |
+| `title` | Title `<span>` |
+| `body` | Body `<div>` wrapping `children` |
+
+### `NoticeVariant`
+
+`"default" | "info" | "success" | "warning" | "error"`
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-notice-accent` | `var(--clet-text-secondary)` | Title/icon/left-border color; overridden per variant and by the `color` prop |
+| `--clet-notice-bg` | tinted from `--clet-border` | Background tint; overridden per variant via `color-mix()` |
+| `--clet-notice-radius` | `var(--clet-radius-base)` | Corner radius |
+| `--clet-notice-padding` | `16px` | Inner padding |
+| `--clet-notice-font` | `var(--clet-font-body)` | Font family |
+| `--clet-notice-title-size` | `var(--clet-text-size-base)` | Title font size |
+| `--clet-notice-body-size` | `var(--clet-text-size-sm)` | Body font size |
+
+## Notes
+
+- No new brand colors were introduced — `info`/`success`/`warning`/`error` reuse the existing `--clet-primary`/`--clet-success`/`--clet-warning`/`--clet-error` tokens, tinted for the background via `color-mix()` (the same technique `Badge` uses).
+- The `color` prop only overrides `--clet-notice-accent` (title/icon/left-border); the background tint is not recomputed from a custom color, since `color-mix()` requires a token reference, not an arbitrary runtime value — pass a `classNames.root` override if a fully custom background is needed.
+- `leftBorder` and `dashed` compose — when both are set, the left edge stays solid (using the accent color) while the remaining three edges are dashed.
+- For a compact "inline alert" look (dot marker, no heading), pass a small round `icon` and omit `title` — see "Compact / inline usage" above. Don't build a separate component for this; it's the same `Notice` box with different props.

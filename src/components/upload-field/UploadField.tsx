@@ -1,5 +1,13 @@
-import { CloudUpload, FileImage, FilePlay, FileText, Trash2 } from "lucide-react";
-import { forwardRef, useCallback, useRef, useState, type ReactNode } from "react";
+import {
+  CheckCircle2,
+  CloudUpload,
+  FileImage,
+  FilePlay,
+  FileText,
+  Trash2,
+  X,
+} from "lucide-react";
+import { forwardRef, useCallback, useRef, useState } from "react";
 import {
   Dialog,
   DialogPortal,
@@ -11,6 +19,7 @@ import {
   DialogFooter,
 } from "../dialog/Dialog";
 import { Button } from "../button/Button";
+import { ProgressBar } from "../progress-bar/ProgressBar";
 import type { UploadFieldProps } from "../../types/upload-field";
 import { cn } from "../../utils/cn";
 import "./styles/upload-field.css";
@@ -20,26 +29,28 @@ function FilePdfIcon({ size = 24 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M14 2v6h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M9 15h6" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" />
-      <path d="M12 12v6" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" />
+      <path d="M9 15h6" stroke="var(--gsl-error, var(--clet-error))" strokeWidth="2" strokeLinecap="round" />
+      <path d="M12 12v6" stroke="var(--gsl-error, var(--clet-error))" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
 
-const fileIcons: Record<string, () => ReactNode> = {
-  pdf: () => <FilePdfIcon size={20} />,
-  image: () => <FileImage size={20} strokeWidth={1.5} aria-hidden />,
-  video: () => <FilePlay size={20} strokeWidth={1.5} aria-hidden />,
-  text: () => <FileText size={20} strokeWidth={1.5} aria-hidden />,
-};
-
-function getFileTypeIcon(file: File) {
+function getFileKind(file: File): "pdf" | "image" | "video" | "text" {
   const type = file.type;
   const name = file.name.toLowerCase();
-  if (type.startsWith("image/") || name.match(/\.(png|jpg|jpeg|gif|webp|svg|bmp)$/)) return fileIcons.image();
-  if (type.startsWith("video/") || name.match(/\.(mp4|webm|avi|mov|mkv)$/)) return fileIcons.video();
-  if (name.endsWith(".pdf")) return fileIcons.pdf();
-  return fileIcons.text();
+  if (type.startsWith("image/") || name.match(/\.(png|jpg|jpeg|gif|webp|svg|bmp)$/)) return "image";
+  if (type.startsWith("video/") || name.match(/\.(mp4|webm|avi|mov|mkv)$/)) return "video";
+  if (name.endsWith(".pdf")) return "pdf";
+  return "text";
+}
+
+/** File-type badge icon (PDF/image/video/generic) for a given `File`. Also used internally by `UploadField`'s file cards. */
+export function FileFormatIcon({ file, size = 20 }: { file: File; size?: number }) {
+  const kind = getFileKind(file);
+  if (kind === "pdf") return <FilePdfIcon size={size} />;
+  if (kind === "image") return <FileImage size={size} strokeWidth={1.5} aria-hidden />;
+  if (kind === "video") return <FilePlay size={size} strokeWidth={1.5} aria-hidden />;
+  return <FileText size={size} strokeWidth={1.5} aria-hidden />;
 }
 
 function formatSize(bytes: number) {
@@ -85,6 +96,9 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       value: controlledValue,
       onChange,
       name,
+      fileStatuses,
+      onCancel,
+      onRetry,
       id,
       "aria-invalid": ariaInvalid,
       "aria-describedby": ariaDescribedby,
@@ -169,6 +183,18 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       if (!disabled) inputRef.current?.click();
     }, [disabled]);
 
+    const handleRemoveFile = useCallback(
+      (index: number) => {
+        if (!Array.isArray(value)) {
+          setValue(null);
+          return;
+        }
+        const next = value.filter((_, i) => i !== index);
+        setValue(next.length > 0 ? next : null);
+      },
+      [value, setValue],
+    );
+
     const invalidBool = ariaInvalid !== undefined ? !!ariaInvalid : invalid;
     const hasFiles = value ? (Array.isArray(value) ? value.length > 0 : true) : false;
     const files = value ? (Array.isArray(value) ? value : [value]) : [];
@@ -185,11 +211,11 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           ref={ref}
           id={id}
           className={cn(
-            "gsl-upload-field",
-            dragOver && "gsl-upload-field--drag-over",
-            hasFiles && "gsl-upload-field--has-files",
-            invalidBool && "gsl-upload-field--invalid",
-            disabled && "gsl-upload-field--disabled",
+            "clet-upload-field gsl-upload-field",
+            dragOver && "clet-upload-field--drag-over gsl-upload-field--drag-over",
+            hasFiles && "clet-upload-field--has-files gsl-upload-field--has-files",
+            invalidBool && "clet-upload-field--invalid gsl-upload-field--invalid",
+            disabled && "clet-upload-field--disabled gsl-upload-field--disabled",
             classNames?.root,
             className,
           )}
@@ -215,57 +241,132 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
             disabled={disabled}
             name={name}
             onChange={handleChange}
-            className="gsl-upload-field__input"
+            className="clet-upload-field__input gsl-upload-field__input"
           />
 
           <div
             className={cn(
-              "gsl-upload-field__icon",
+              "clet-upload-field__icon gsl-upload-field__icon",
               classNames?.icon,
             )}
           >
             <CloudUpload size={20} strokeWidth={1.75} aria-hidden />
           </div>
-          <p className={cn("gsl-upload-field__title", classNames?.title)}>
+          <p className={cn("clet-upload-field__title gsl-upload-field__title", classNames?.title)}>
             Click to upload or drag and drop
           </p>
-          <p className={cn("gsl-upload-field__subtitle", classNames?.subtitle)}>
+          <p className={cn("clet-upload-field__subtitle gsl-upload-field__subtitle", classNames?.subtitle)}>
             {subtitle}
           </p>
 
           {hasFiles && (
-            <div className={cn("gsl-upload-field__files", classNames?.files)}>
-              {files.map((file, i) => (
-                <div
-                  key={i}
-                  className={cn("gsl-upload-field__file-card", classNames?.fileCard)}
-                >
-                  <span className="gsl-upload-field__file-card-icon">
-                    {getFileTypeIcon(file)}
-                  </span>
-                  <div className="gsl-upload-field__file-card-info">
-                    <span className={cn("gsl-upload-field__file-card-name", classNames?.fileName)}>
-                      {file.name}
+            <div className={cn("clet-upload-field__files gsl-upload-field__files", classNames?.files)}>
+              {files.map((file, i) => {
+                const status = fileStatuses?.[i];
+                const isUploading = status?.status === "uploading";
+                const isCompleted = status?.status === "completed";
+                const isFailed = status?.status === "failed";
+
+                return (
+                  <div
+                    key={i}
+                    className={cn(
+                      "clet-upload-field__file-card gsl-upload-field__file-card",
+                      isFailed && "clet-upload-field__file-card--failed gsl-upload-field__file-card--failed",
+                      classNames?.fileCard,
+                    )}
+                  >
+                    <span className="clet-upload-field__file-card-icon gsl-upload-field__file-card-icon">
+                      <FileFormatIcon file={file} size={20} />
                     </span>
-                    <span className={cn("gsl-upload-field__file-card-size", classNames?.fileSize)}>
-                      {formatSize(file.size)}
-                    </span>
+                    <div className="clet-upload-field__file-card-info gsl-upload-field__file-card-info">
+                      <span className={cn("clet-upload-field__file-card-name gsl-upload-field__file-card-name", classNames?.fileName)}>
+                        {file.name}
+                      </span>
+                      {isUploading ? (
+                        <ProgressBar
+                          value={status?.progress ?? 0}
+                          size="sm"
+                          className={cn(
+                            "clet-upload-field__file-card-progress gsl-upload-field__file-card-progress",
+                            classNames?.fileProgress,
+                          )}
+                          aria-label={`Uploading ${file.name}`}
+                        />
+                      ) : isFailed ? (
+                        <span
+                          className={cn(
+                            "clet-upload-field__file-card-status gsl-upload-field__file-card-status",
+                            classNames?.fileStatusText,
+                          )}
+                        >
+                          <span
+                            className="clet-upload-field__file-card-status-dot gsl-upload-field__file-card-status-dot"
+                            aria-hidden
+                          />
+                          {status?.error ?? "Failed"}
+                          <button
+                            type="button"
+                            className={cn(
+                              "clet-upload-field__file-card-retry gsl-upload-field__file-card-retry",
+                              classNames?.retryButton,
+                            )}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onRetry?.(file, i);
+                            }}
+                          >
+                            Try Again
+                          </button>
+                        </span>
+                      ) : (
+                        <span className={cn("clet-upload-field__file-card-size gsl-upload-field__file-card-size", classNames?.fileSize)}>
+                          {formatSize(file.size)}
+                          {isCompleted && (
+                            <CheckCircle2
+                              className={cn(
+                                "clet-upload-field__file-card-completed-icon gsl-upload-field__file-card-completed-icon",
+                                classNames?.completedIcon,
+                              )}
+                              size={14}
+                              aria-label="Completed"
+                            />
+                          )}
+                        </span>
+                      )}
+                    </div>
+                    {!disabled &&
+                      (isUploading ? (
+                        <button
+                          type="button"
+                          className={cn(
+                            "clet-upload-field__file-card-cancel gsl-upload-field__file-card-cancel",
+                            classNames?.cancelButton,
+                          )}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onCancel?.(file, i);
+                          }}
+                          aria-label={`Cancel upload of ${file.name}`}
+                        >
+                          <X size={16} strokeWidth={1.75} aria-hidden />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className={cn("clet-upload-field__file-card-remove gsl-upload-field__file-card-remove", classNames?.removeButton)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveFile(i);
+                          }}
+                          aria-label={`Remove ${file.name}`}
+                        >
+                          <Trash2 size={16} strokeWidth={1.75} aria-hidden />
+                        </button>
+                      ))}
                   </div>
-                  {!disabled && (
-                    <button
-                      type="button"
-                      className={cn("gsl-upload-field__file-card-remove", classNames?.removeButton)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setValue(null);
-                      }}
-                      aria-label="Remove file"
-                    >
-                      <Trash2 size={16} strokeWidth={1.75} aria-hidden />
-                    </button>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
@@ -274,7 +375,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
               variant="primary"
               size="md"
               className={cn(
-                "gsl-upload-field__action",
+                "clet-upload-field__action gsl-upload-field__action",
                 classNames?.actionButton,
               )}
               onClick={(e) => {
@@ -297,7 +398,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
               </DialogHeader>
               <DialogDescription>
                 {fileErrorDialog?.name && (
-                  <span className="gsl-upload-field__dialog-filename">{fileErrorDialog.name}</span>
+                  <span className="clet-upload-field__dialog-filename gsl-upload-field__dialog-filename">{fileErrorDialog.name}</span>
                 )}
                 {fileErrorDialog?.message}
               </DialogDescription>

@@ -13,9 +13,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       disabled={disabled}
       aria-invalid={invalid || undefined}
       className={cn(
-        "gsl-input",
-        invalid && "gsl-input--invalid",
-        disabled && "gsl-input--disabled",
+        "clet-input gsl-input",
+        invalid && "clet-input--invalid gsl-input--invalid",
+        disabled && "clet-input--disabled gsl-input--disabled",
         classNames?.root,
         className,
       )}

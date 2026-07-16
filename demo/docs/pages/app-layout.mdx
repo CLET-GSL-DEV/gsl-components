@@ -1,6 +1,12 @@
 export const meta = {
   title: "AppLayout",
   description: "Application shell layout",
+  category: "Components",
+  keywords: ["app layout", "application shell", "layout container", "sidebar layout", "page shell"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["app-header", "sidebar", "breadcrumb"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -28,8 +34,10 @@ Application layout container that auto-positions `AppHeader`, `AppSidebar`, and 
 - **`"default"`** (default) — the sidebar spans the full height on the left, and the header sits above the content only.
 - **`"stacked"`** — the header spans the full width on top, with the sidebar and content side by side below it. No extra styling.
 
+The example below is the dashboard shell combination: `variant="stacked"` on `AppLayout` paired with [`AppHeader`'s `"plain"` variant](/docs/app-header#variants) and [`Sidebar`'s `"plain"` variant](/docs/sidebar#variants), plus collapsible nav groups. Use this combo when the header and sidebar should read as one solid dashboard frame rather than floating panels.
+
 <ExampleTabs
-  title='variant="stacked" — full-width header on top, sidebar + content side by side'
+  title='variant="stacked" — full-width plain header on top, plain sidebar + content side by side'
   preview={<AppLayoutStackedPreview />}
   code={appLayoutStackedSource}
 />
@@ -114,10 +122,14 @@ When `items` is empty, the breadcrumb section is hidden entirely.
 
 | Token | Fallback | Used for |
 |-------|----------|----------|
-| `--gsl-app-layout-body-gap` | `1rem` | Gap between layout sections |
-| `--gsl-app-layout-gap` | `1rem` | Outer padding and flex gap |
-| `--gsl-panel-bg` | `--gsl-surface-subtle` | Content area background |
-| `--gsl-panel-radius` | `--gsl-radius-2xl` | Content area and body border radius |
+| `--clet-app-layout-body-gap` | `1rem` | Gap between layout sections |
+| `--clet-app-layout-gap` | `1rem` | Outer padding and flex gap |
+| `--clet-panel-bg` | `--clet-surface-subtle` | Content area background |
+| `--clet-panel-radius` | `--clet-radius-2xl` | Content area and body border radius |
+| `--clet-app-layout-font` | `--clet-font-body` | Font family for the root layout element |
+| `--clet-scroll-fade` | `1` | Opacity multiplier for the top/bottom scroll fade overlays on the body |
+| `--clet-scroll-fade-height` | `calc(var(--clet-app-layout-body-gap) * 3)` | Height of the bottom (and, unless overridden, top) scroll fade overlay |
+| `--clet-scroll-fade-width` | `100%` | Width of the top/bottom scroll fade overlays |
 
 ## Notes
 
@@ -128,3 +140,4 @@ When `items` is empty, the breadcrumb section is hidden entirely.
 - Auto-positioning works by reading `componentId` from the child element's render function — only direct children are scanned.
 - Do NOT wrap children in Fragments, conditionals, or unknown elements — `AppLayout` only auto-positions components with `componentId` matching `"AppHeader"`, `"AppSidebar"`, or `"AppBody"`. Anything else is silently ignored and won't render.
 - Breadcrumbs are rendered from context. Call `useBreadcrumbs()` from any child, AppLayout handles the rest. When items is empty, breadcrumbs are hidden.
+- Content area background differs by variant: `"default"` fills the content area with `--clet-panel-bg` (a distinct panel card); `"stacked"` uses `--clet-main-bg` directly instead, so it reads flush with the page rather than as a separate panel.

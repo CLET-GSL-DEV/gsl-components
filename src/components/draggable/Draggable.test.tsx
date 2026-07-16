@@ -13,7 +13,7 @@ describe("Draggable", () => {
       </div>,
     );
 
-    expect(container.querySelector(".gsl-draggable")).toBeInTheDocument();
+    expect(container.querySelector(".clet-draggable")).toBeInTheDocument();
     expect(screen.getByText("Panel content")).toBeInTheDocument();
   });
 
@@ -24,7 +24,7 @@ describe("Draggable", () => {
       </Draggable>,
     );
 
-    const root = container.querySelector(".gsl-draggable") as HTMLElement;
+    const root = container.querySelector(".clet-draggable") as HTMLElement;
     expect(root.style.transform).toBe("translate(24px, 16px)");
   });
 
@@ -35,7 +35,7 @@ describe("Draggable", () => {
       </Draggable>,
     );
 
-    const root = container.querySelector(".gsl-draggable") as HTMLElement;
+    const root = container.querySelector(".clet-draggable") as HTMLElement;
     expect(root.style.transform).toBe("translate(8px, 12px)");
   });
 
@@ -46,7 +46,7 @@ describe("Draggable", () => {
       </Draggable>,
     );
 
-    expect(document.querySelector(".gsl-draggable--disabled")).toBeInTheDocument();
+    expect(document.querySelector(".clet-draggable--disabled")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Drag panel" })).toBeDisabled();
   });
 
@@ -62,7 +62,7 @@ describe("Draggable", () => {
     );
 
     const handle = screen.getByRole("button", { name: "Drag panel" });
-    expect(handle).toHaveClass("gsl-draggable__handle", "custom-handle", "extra-handle");
+    expect(handle).toHaveClass("clet-draggable__handle", "custom-handle", "extra-handle");
   });
 
   it("calls onPositionChange when dragging the handle", () => {

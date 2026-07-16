@@ -34,7 +34,9 @@ const configs: Record<string, () => ReturnType<typeof defineConfig>> = {
 						id === "react-router-dom" ||
 						id.startsWith("react-router-dom/") ||
 						id === "react-router" ||
-						id.startsWith("react-router/"),
+						id.startsWith("react-router/") ||
+						id === "xlsx" ||
+						id.startsWith("xlsx/"),
 					output: {
 						globals: {
 							react: "React",
@@ -67,7 +69,9 @@ const configs: Record<string, () => ReturnType<typeof defineConfig>> = {
 						id === "react/jsx-runtime" ||
 						id === "next/navigation" ||
 						id === "next/link" ||
-						id.startsWith("next/"),
+						id.startsWith("next/") ||
+						id === "xlsx" ||
+						id.startsWith("xlsx/"),
 					output: {
 						globals: {
 							react: "React",

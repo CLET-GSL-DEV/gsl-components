@@ -1,6 +1,12 @@
 export const meta = {
   title: "Timeline",
   description: "Vertical timeline for ordered events and history",
+  category: "Components",
+  keywords: ["timeline", "vertical timeline", "activity feed", "history log", "event log"],
+  since: "1.22.0",
+  status: "stable",
+  related: ["stepper"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -39,7 +45,7 @@ Single event entry. Renders the dot + connector rail on the left and `children` 
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mode` | `"primary" \| "success" \| "warning" \| "error" \| "muted"` | — | Dot color variant from GSL primitives; no prop = neutral outlined dot |
+| `mode` | `"primary" \| "success" \| "warning" \| "error" \| "muted"` | — | Dot color variant from CLET primitives; no prop = neutral outlined dot |
 | `color` | `string` | — | Custom CSS color for the dot; overrides the mode's background and border |
 | `icon` | `ReactNode` | — | Replaces the default dot fill (e.g. `Check` / `AlertTriangle`) |
 | `classNames` | `TimelineItemClassNames` | — | Part-level class overrides |
@@ -116,13 +122,18 @@ Exported from `@rfdtech/components`:
 
 ### Tokens
 
-Dot mode colors use existing GSL tokens. Customize the dot halo via `--gsl-timeline-halo`:
+Dot mode colors use existing CLET tokens. Customize the dot halo via `--clet-timeline-halo`:
 
 | Token | Default | Used by |
 |-------|---------|---------|
-| `--gsl-primary` | Theme primary | `mode="primary"` |
-| `--gsl-success` | `#16a34a` | `mode="success"` |
-| `--gsl-warning` | `#eab308` | `mode="warning"` |
-| `--gsl-error` | `#dc2626` | `mode="error"` |
-| `--gsl-text-muted` | `#9ca3af` | `mode="muted"` |
-| `--gsl-timeline-halo` | `--gsl-bg` | Ring behind the dot that covers the connector line |
+| `--clet-primary` | Theme primary | `mode="primary"` |
+| `--clet-success` | `#16a34a` | `mode="success"` |
+| `--clet-warning` | `#eab308` | `mode="warning"` |
+| `--clet-error` | `#dc2626` | `mode="error"` |
+| `--clet-text-muted` | `#9ca3af` | `mode="muted"` |
+| `--clet-timeline-halo` | `--clet-bg` | Ring behind the dot that covers the connector line |
+| `--clet-timeline-font` | `--clet-font-body` | Font family for the root `<ol>` |
+| `--clet-timeline-stagger-step` | `60ms` | Per-item animation delay increment (multiplied by item index) |
+| `--clet-timeline-draw-duration` | `300ms` | Duration of the connector line draw-in animation |
+| `--clet-timeline-pop-duration` | `200ms` | Duration of the dot pop-in animation |
+| `--clet-timeline-index` | `0` | Item index used to compute staggered animation delay; set automatically per item |

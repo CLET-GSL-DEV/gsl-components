@@ -1,0 +1,404 @@
+export const meta = {
+  title: "Migration guide: v1 → v2",
+  description: "Agent instructions for upgrading to v2 and the new design system",
+  category: "Guide",
+  keywords: ["migration", "upgrade", "v2", "breaking changes", "deprecated", "new design system", "AppHeaderProfile", "ProfilePopover", "Launchpad", "AppSwitcher", "rebrand", "AppLayout", "Sidebar", "RoleSelect", "stacked layout", "CountrySelector", "Combobox", "NetworkOperator", "gsl-to-clet", "cletTheme", "gslTheme", "rename", "TableFooter", "noBorder"],
+  since: "2.0.0",
+  status: "guide",
+  related: ["changelog", "getting-started", "theme", "app-header", "app-switcher", "launchpad", "table", "sidebar", "profile-popover", "role-select", "app-layout", "metric-card", "tabs", "country-selector", "combobox", "network-operator"],
+};
+
+# Migration guide: v1 → v2 — Agent Instructions
+
+Agent-only. All breaking changes and deprecations between `1.22.0` and current, organized as directives. See [Changelog](/docs/changelog) for dated list.
+
+## 1. `AppHeaderProfile` → `ProfilePopover`
+
+**Deprecation, not breaking.** `AppHeaderProfile` still works (thin wrapper around `ProfilePopover`). No forced migration, no removal date. `ProfilePopover` gets all new features.
+
+**When you encounter `AppHeaderProfile`:**
+
+- Replace with `ProfilePopover` using `user` and `variant` props for same trigger
+- `onProfileClick`/`onSettingsClick`/`onHelpClick` map directly to `ProfilePopover`'s `onMyProfile`/`onAccountSettings`/`onHelpAndSupport` — `items` now defaults to those three rows built in ("My Profile", "Account Settings", "Help and Support"), so you no longer hand-build them via `items`
+- `headerAction` prop silently ignored on both — delete it. Popover header now always shows built-in theme toggle when `ThemeProvider` is in tree
+- Sign Out now opens a "Confirm Sign Out" dialog before calling `onSignOut` — pass `noConfirmSignOut` to keep the old immediate-fire behavior
+
+```diff
+-import { AppHeaderProfile } from "@rfdtech/components";
++import { ProfilePopover } from "@rfdtech/components";
+
+-<AppHeaderProfile user={user} variant="avatar">
+-  <RoleSelect roles={roles} selectedRole={role} onClickRole={setRole} />
+-</AppHeaderProfile>
++<ProfilePopover user={user} variant="avatar">
++  <RoleSelect roles={roles} selectedRole={role} onClickRole={setRole} />
++</ProfilePopover>
+```
+
+`items`, `loading`/`loadingLabel`, `onSignOut`, `children` carry over unchanged.
+
+**Wiring `onProfileClick`/`onSettingsClick`/`onHelpClick` to the built-in default rows:**
+
+```tsx
+<ProfilePopover
+  user={user}
+  variant="avatar"
+  onMyProfile={goToProfile}
+  onAccountSettings={goToSettings}
+  onHelpAndSupport={goToHelp}
+  onSignOut={signOut}
+/>
+```
+
+Only pass `items` if you need rows *other than* "My Profile"/"Account Settings"/"Help and Support" — a passed-in `items` array fully replaces the three defaults, it does not merge with them. Prefer the defaults (via `onMyProfile`/`onAccountSettings`/`onHelpAndSupport`) unless the system genuinely needs different rows.
+
+Only `"full"` and `"avatar"` variants remain on both components (no `"basic"`).
+
+## 2. `AppItem.icon` → `SystemAppIcon` or `AppIconTile`
+
+`AppSwitcher`'s `AppItem.icon` now accepts `ReactNode` only — closed to `<SystemAppIcon name="..." />` (auto-generated initials tile) or `<AppIconTile name="...">custom glyph</AppIconTile>`. Every app icon renders on the shared 9-gradient/9-overlay tile system.
+
+```diff
+-  { id: "analytics", name: "Analytics", icon: "https://cdn.example.com/analytics.png" },
++  { id: "analytics", name: "Analytics", icon: <SystemAppIcon name="Analytics" /> },
+-  { id: "custom", name: "Custom App", icon: <MyCustomLogo /> },
++  { id: "custom", name: "Custom App", icon: <AppIconTile name="Custom App"><MyCustomLogo /></AppIconTile> },
+];
+```
+
+## 3. `AppSwitcher` maxItems default is 6
+
+Default `maxItems` is 6. Migrate grids with >6 apps:
+
+```diff
+-<AppSwitcher apps={apps} />
++<AppSwitcher apps={apps} maxItems={apps.length} />
+```
+
+Better: switch to `Launchpad` (see §6).
+
+## 4. `Table`: selection-only loses kebab column
+
+`Table` with `selectable` but no `rowActions` no longer renders an empty kebab column. If you relied on the Select/Deselect entry there, add explicit row action:
+
+```diff
+ <TableContent
+   selectable
+   selectedIds={selected}
+   onSelectionChange={setSelected}
++  rowActions={[
++    { id: "select", label: isSelected ? "Deselect" : "Select", onClick: toggleRow },
++  ]}
+ />
+```
+
+## 5. Rebrand: new default colors and typography
+
+**If no `--clet-*` overrides set:**
+
+- `--clet-primary`/`--clet-primary-light`: red (`#dc2626`/`#ef4444`) → navy (`#051b2c`/`#4a7fa8`)
+- New `--clet-secondary` (gold `#c8a24b`) — default `SidebarLink` active-link color
+- New typography: `--clet-font-header` (Roboto Serif), `--clet-font-body` (Lato) via `@fontsource/lato`, `@fontsource/roboto-serif`
+
+**To override:** put the call in `src/clet.theme.ts` (see [Theme](/docs/theme#recommended-file-srcclettheme-ts) for the recommended file convention) and side-effect-import it once in your entry point:
+
+```ts title="src/clet.theme.ts"
+import { cletTheme } from "@rfdtech/components";
+cletTheme({ all: { primary: "#dc2626", primaryLight: "#fef2f2" } });
+```
+
+```ts title="src/main.tsx"
+import "@rfdtech/components/style.css";
+import "./clet.theme";
+```
+
+```css
+:root { --clet-font-header: var(--clet-font); --clet-font-body: var(--clet-font); }
+```
+
+**To keep new defaults: do nothing.** See `.legacy-theme` in `demo/demo.css` for the old red look reference.
+
+**Migrating a project that already has `--clet-*` token overrides?** Find every existing override of
+a *known* `--clet-*` token — a `cletTheme()` call (`src/clet.theme.ts` or elsewhere) or hand-written
+CSS setting a real `--clet-*` custom property, cross-checked against `get_tokens()`. This is about
+recognized library tokens only — not custom/arbitrary CSS variables or component-local one-off
+styling. List every one found and **ask the user about each token individually** — keep the
+existing override, or drop it for the new approved default. Don't decide silently, and don't batch
+it into one yes/no: some overrides are deliberate brand choices worth keeping, others only ever
+existed to match the *old* pre-rebrand defaults and should be dropped now that those defaults
+themselves changed.
+
+## 6. Prefer `Launchpad` over deprecated `AppSwitcher`
+
+`AppSwitcher` deprecated, no new features. `Launchpad` is the replacement — independent component tree.
+
+**Not a drop-in replacement.** Re-author the app list and trigger:
+
+```diff
+-import { AppSwitcher, SystemAppIcon } from "@rfdtech/components";
++import { Launchpad, SystemLaunchpadIcon } from "@rfdtech/components";
+
+ const apps = [
+-  { id: "analytics", name: "Analytics", icon: <SystemAppIcon name="Analytics" /> },
++  { id: "analytics", name: "Analytics", icon: <SystemLaunchpadIcon name="Analytics" /> },
+ ];
+
+-<AppSwitcher apps={apps} maxItems={apps.length} footer={<CustomFooter />} />
++<Launchpad apps={apps} onAppSelect={(app) => navigate(app.href)}>
++  <RoleSelect roles={roles} selectedRole={role} onClickRole={setRole} />
++</Launchpad>
+```
+
+**Launchpad differences:**
+
+- Icon type: `SystemLaunchpadIcon`/`LaunchpadIconTile` only (not `SystemAppIcon`/`AppIconTile`)
+- Grid: fixed 3×3 (9 apps), not configurable. The expand button opens a 5-column modal with every app
+- No `maxItems`/`columns`/generic `footer` slot. `children` is **required** and only accepts a single `RoleSelect` — omitting it is a type error, not just a lint warning
+- No `title`/`triggerLabel`/`loadingLabel`/`onSeeAll`/`seeAllLabel`/`placement`/`closeOnSelect`
+- Title always "Launchpad", trigger always "Open Launchpad", selecting app always closes popover
+- No bordered "See all" footer button anymore. A small ghost `sm` button sits at the top right of the panel next to the title — its expand icon is always visible, and its "See more" text label only appears once `apps.length` exceeds the 9-app cap. Never force the label always-on or reintroduce the old bordered button.
+
+**Stay on `AppSwitcher` if you need: flexible column count, uncapped grid without "See all" modal, or custom `footer`. Check with team before building new custom-footer `AppSwitcher` usage.**
+
+## 7. `CountrySelector` → `Combobox` or `PhoneNumberInput`'s country picker
+
+**Deprecation, not breaking.** `CountrySelector` still works unchanged. No forced migration, no removal date. It receives no new features or design updates.
+
+**When you encounter `CountrySelector`:**
+
+- For a standalone country picker (not tied to a phone number), replace with `Combobox` — build the option list from the `countries` shape (`{ value: code, label: name }`) and pass it via `options`
+- For phone-number entry, use `PhoneNumberInput` directly — its built-in country picker already covers this case; don't pair a separate `CountrySelector` with a plain text input
+- `CountrySelector`'s flags are emoji; `Combobox` has no built-in flag rendering — pass a flag as each option's `icon` (e.g. from `country-flag-icons/react/3x2`, the same package `PhoneNumberInput` now uses) if flags are needed
+
+```diff
+-import { CountrySelector } from "@rfdtech/components";
++import { Combobox } from "@rfdtech/components";
++import { countries } from "some-country-data-source";
+
+-<CountrySelector value={country} onChange={setCountry} />
++<Combobox
++  aria-label="Country"
++  options={countries.map((c) => ({ value: c.code, label: c.name }))}
++  value={country}
++  onValueChange={setCountry}
++/>
+```
+
+## 8. `NetworkOperator` → `Combobox`
+
+**Deprecation, not breaking.** `NetworkOperator` still works unchanged. No forced migration, no removal date. It receives no new features or design updates.
+
+**When you encounter `NetworkOperator`:** replace with `Combobox` — build the option list from `NetworkOperator`'s `options` shape (`{ value, label, image? }`); `image` maps to `Combobox`'s per-option `icon` (pass an `<img>` element).
+
+```diff
+-import { NetworkOperator } from "@rfdtech/components";
++import { Combobox } from "@rfdtech/components";
+
+-<NetworkOperator value={operator} onChange={setOperator} options={operators} />
++<Combobox
++  aria-label="Network operator"
++  options={operators.map((o) => ({
++    value: o.value,
++    label: o.label,
++    icon: o.image ? <img src={o.image} alt="" /> : undefined,
++  }))}
++  value={operator}
++  onValueChange={setOperator}
++/>
+```
+
+## 9. Naming rename: `.gsl-*` → `.clet-*`, `gslTheme()` → `cletTheme()`
+
+**Non-breaking.** Every `.gsl-*` CSS class, `--gsl-*` custom property, `data-gsl-theme` attribute, `.gsl-theme` root class, and the `gslTheme()` theming API function was renamed to its `.clet-*`/`--clet-*`/`data-clet-theme`/`.clet-theme`/`cletTheme()` counterpart. **Every old name keeps working, unchanged, with no forced migration and no removal date** — this is a permanent compatibility alias, not a deprecation:
+
+- **Classes**: every rendered element carries both classes (e.g. `class="clet-sidebar gsl-sidebar"`) — existing `.gsl-*` selectors in your own CSS keep matching without any change.
+- **Custom properties**: every internal `var(--clet-<name>)` read resolves as `var(--gsl-<name>, var(--clet-<name>))` — overriding either `--gsl-<name>` or `--clet-<name>` (globally or per-component) works identically; `--gsl-<name>` wins if both are set.
+- **Theme attribute/root class**: `ThemeProvider` sets both `data-clet-theme` and `data-gsl-theme` on `<html>` and its wrapper `<div>`, carrying both `clet-theme` and `gsl-theme` classes.
+- **JS API**: `gslTheme()` is now an alias of `cletTheme()` (same function, same behavior). Legacy type names (`GslTheme`, `GslThemeConfig`, `GslComponentThemeConfig`, `GslComponentThemeOverrides`, `ResolvedGslTheme`, `GslColorValue`, `GslComponentTokenMap`, `GslGlobalTokens`, `GslLengthValue`, `GslOpacityValue`, `GslShadowValue`, `GslStringValue`, `GslZIndexValue`) are re-exported as aliases of their `Clet*` equivalents.
+
+**What to actually do:** nothing is required for existing code to keep working. For new or touched code, prefer the `clet-*` spelling — it's the preferred name going forward, even though `gsl-*` isn't scheduled for removal:
+
+```diff
+-gslTheme({ all: { primary: "#083755" } });
+-import type { GslThemeConfig } from "@rfdtech/components";
++cletTheme({ all: { primary: "#083755" } });
++import type { CletThemeConfig } from "@rfdtech/components";
+```
+
+See [Theme](/docs/theme) and [Customize tokens](/README.md#7-customize-tokens) for the full token reference; every color token also has a `--clet-*` alias documented there.
+
+## Adopting the new design system
+
+This is the actual "v2" migration. §1–§9 are about not breaking on version bump. This section is about looking like the new design system. None required for existing screens to compile. All required for new/touched screens.
+
+### Layout shell: `AppLayout variant="stacked"` + `AppHeader variant="plain"` + `Sidebar variant="plain"`
+
+Adopt as a set, not individually:
+
+```diff
+-<AppLayout>
++<AppLayout variant="stacked">
+   <AppHeader variant="plain">...</AppHeader>
+   <AppSidebar>
+     <SidebarOverlay />
+-    <Sidebar>
++    <Sidebar variant="plain">
+       ...
+     </Sidebar>
+   </AppSidebar>
+   <AppBody><Outlet /></AppBody>
+ </AppLayout>
+```
+
+- **`AppLayout variant="stacked"`**: header spans full width on top, sidebar + content side by side below. Default (`"default"`) runs sidebar full-height on left, header only spans content column.
+- **`AppHeader variant="plain"`**: square corners, `--clet-primary` background, on-primary text. Continuous top bar with branding.
+- **`Sidebar variant="plain"`**: transparent bg + right border instead of panel surface. Removes boxed-in panel-inside-panel look.
+
+**`SidebarGroup collapsible`:** All nav groups use accordion sections, not flat lists. Initialize with `Main` group expanded, others collapsed.
+
+**`SidebarFooter` must host a `ProfilePopover`:** Use `fullName`/`email` mode (not `user`/`variant`). Full name, email, role get stable real-estate-rich home here. Never omit sidebar footer — this is new relative to the old default layout shell (`DemoLayout`), which never required one.
+
+**No `SidebarTrigger`:** The old default layout shell renders `<SidebarTrigger>Menu</SidebarTrigger>` to manually toggle the sidebar. The new shell (`DemoLayout2`) drops it entirely — don't render `SidebarTrigger` in new/touched layouts. `SidebarProvider` is used with its defaults and no manual collapse control.
+
+**`SidebarBadge` — numeric counts only, not decorative text:** Compose it inside a `SidebarLink`'s children (`{link.badge && <SidebarBadge>{link.badge}</SidebarBadge>}`). Reserve it for a live count of actionable items on that nav destination (e.g. `8` unread alerts) — the number should reflect real pending/important items, not a static placeholder. The one exception is a short text badge like `"New"` for a feature callout (e.g. on a newly-added "Documentation" link) — don't invent other text badges beyond that pattern.
+
+**Branding lives in `AppHeader` via `AppHeaderBranding`, NOT in sidebar:**
+
+```tsx
+<AppHeader variant="plain">
+  <AppHeaderBranding
+    logo={<img src="/clet-logo.png" alt="" width={28} height={28} />}
+    title="YOUR PORTAL"
+    subtitle="Your Product Name"
+  />
+  <AppHeaderActions>...</AppHeaderActions>
+</AppHeader>
+```
+
+`Sidebar` has NO `SidebarHeader`/`SidebarBrand` when `AppHeaderBranding` is used. Same logo must not appear twice on screen. **Use the current brand logo (`clet-logo.png`) for any new system** — `gsl-logo.png` is the older mark used only by the legacy default layout shell (`DemoLayout`); don't reuse it for new work.
+
+### Use built-in `loading` states — never hand-roll placeholders
+
+Every component below supports a real `loading` prop with shimmering skeleton. Use it. Never render `"..."` placeholders, hand-rolled `<Spinner />`, or omit-until-ready.
+
+| Component | Loading prop | Replaces |
+| ----------- | ------------- | ---------- |
+| `Launchpad` / `AppSwitcher` | `loading` | Disabled/empty trigger or nothing until apps arrive |
+| `AppHeaderNotifications` | `loading` | Empty popover or hand-rolled spinner |
+| `ProfilePopover` | `loading` + `loadingLabel` | `"..."` or nothing for name/email/avatar |
+| `SidebarLink` | `loading` + `loadingLabel` | Not rendering nav items until data resolves, or full-page spinner |
+| `MetricCard` | `loading` + `loadingLabel` | `"..."` or `"N/A"` in `value`/`description` |
+| `TableContent` | `loading` + `loadingRows` | Empty table, spinner overlay, or hide-until-ready |
+
+**SidebarLink pattern:**
+
+```tsx
+{navLoading ? (
+  <SidebarGroup>
+    {Array.from({ length: 6 }).map((_, i) => (
+      <SidebarLink key={i} loading icon={<span />}>Loading</SidebarLink>
+    ))}
+  </SidebarGroup>
+) : (
+  navGroups.map((group) => /* real nav */)
+)}
+```
+
+### One role switcher, consistent across all three locations
+
+`RoleSelect` is required `children` on `Launchpad`, and accepted `children` on `ProfilePopover` (header) and `ProfilePopover` (sidebar footer). **Whenever a system allows a user to have more than one role — true for most systems — wire the same `RoleSelect` state into all three: `Launchpad`, the header `ProfilePopover`, and the sidebar footer `ProfilePopover`.** Don't add it to only one or two.
+
+```tsx
+const [selectedRole, setSelectedRole] = useState(roles[0].id);
+const roleSelectProps = { title: "View as", roles, selectedRole, onClickRole: (r) => setSelectedRole(r.id) };
+
+// Header
+<ProfilePopover variant="avatar" user={user} onSignOut={onSignOut}>
+  <RoleSelect {...roleSelectProps} />
+</ProfilePopover>
+
+// Sidebar footer
+<SidebarFooter>
+  <ProfilePopover fullName={user.name} email={user.email} onSignOut={onSignOut}>
+    <RoleSelect {...roleSelectProps} />
+  </ProfilePopover>
+</SidebarFooter>
+
+// Launchpad — RoleSelect is required here, not optional
+<Launchpad apps={apps} onAppSelect={onAppSelect}>
+  <RoleSelect {...roleSelectProps} />
+</Launchpad>
+```
+
+Neither `ProfilePopover` above passes `items` — both render the default "My Profile"/"Account Settings"/"Help and Support" rows. Only add `items` if the system needs different rows.
+
+**Header `ProfilePopover` uses `variant="avatar"` when sidebar footer popover exists.** Reserve `variant="full"` for headers with NO sidebar footer.
+
+### Table family — adopt together
+
+| Component | Prefer | Over |
+| ----------- | -------- | ------ |
+| `TableContent` | `variant="panel"` | `"default"` |
+| `TableFilter` | `variant="spread"` | `"popover"` (default) |
+| `TableFooter` | `noBorder` | default top border |
+
+```diff
+ <Table paramPrefix="members">
+   <TableHeader>
+     <TableSearch placeholder="Search members..." />
+-    <TableFilter>
++    <TableFilter variant="spread">
+       <Dropdown name="role" ... />
+     </TableFilter>
+   </TableHeader>
+-  <TableContent variant="panel" columns={columns} data={data} rowKey={...} />
++  <TableContent variant="panel" columns={columns} data={data} rowKey={...} />
+-  <TableFooter>
++  <TableFooter noBorder>
+     <TablePagination ... />
+   </TableFooter>
+ </Table>
+```
+
+`noBorder` is a real `TableFooterProps` prop (applies `.clet-table__footer--no-border { border-top: none; }` internally), not a demo hack. Older code passing `className="clet-table__footer--no-border"` by hand still works — prefer `noBorder` in new/touched code.
+
+### Other preferred variants
+
+| Component | Prefer | Over |
+|-----------|--------|------|
+| `MetricCard` | `variant="outline"` | `"default"` |
+| `Tabs` | `variant="pill"` | `"default"` |
+
+Use `SectionHeader` (with `SectionTitle`/`SectionDescription`/`SectionActions`) for page headers — never hand-rolled `<div>`s.
+
+All variants above are additive — no deadline to migrate old screens. But any screen built fresh or substantially touched must use these variants.
+
+## Checklist
+
+**Compatibility (keeps existing screens compiling — do when touching file):**
+
+- [ ] Migrate `AppHeaderProfile` → `ProfilePopover` where convenient (no removal date) (§1)
+- [ ] Add `RoleSelect` to `Launchpad` when migrating it — it's required now, not optional (§6)
+- [ ] Wire `onProfileClick`/`onSettingsClick`/`onHelpClick` handlers to `onMyProfile`/`onAccountSettings`/`onHelpAndSupport` — the three rows render by default now, don't hand-build them via `items` (§1)
+- [ ] Convert every `AppSwitcher` → `Launchpad` when possible (§6) — `AppSwitcher` is deprecated
+- [ ] Pass `maxItems={apps.length}` to any `AppSwitcher` with >6 apps, or switch to `Launchpad` (§3)
+- [ ] Add explicit `rowActions` Select/Deselect to `selectable`-only tables that need it (§4)
+- [ ] Decide to keep or override new brand colors/typography (§5)
+- [ ] If the project already has `--clet-*` token overrides, list every known-token override found and ask the user per-token whether to keep it or adopt the new default — never decide silently (§5)
+
+**Design system adoption (the actual "looks like v2" bar — for new/touched screens):**
+
+- [ ] New `AppSwitcher`-like work uses `Launchpad` first (§6) — `AppSwitcher` is deprecated, no new features
+- [ ] New/rebuilt layout shells use `AppLayout variant="stacked"` + `AppHeader variant="plain"` + `Sidebar variant="plain"` + collapsible `SidebarGroup`s together ("Layout shell")
+- [ ] Every layout has `SidebarFooter` with `ProfilePopover` in `fullName`/`email` mode — never omit it ("Layout shell")
+- [ ] No `SidebarTrigger` in new layouts — that's an old default-layout-shell-only pattern ("Layout shell")
+- [ ] `SidebarBadge` shows a real numeric count of actionable items, not decorative text (`"New"` is the one exception) ("Layout shell")
+- [ ] Branding in `AppHeader` via `AppHeaderBranding` using the current logo (`clet-logo.png`), never duplicated in sidebar, never the legacy `gsl-logo.png` ("Layout shell")
+- [ ] Every loading-props table component uses its real `loading` prop — never hand-rolled `"..."` or spinner ("Use built-in loading states")
+- [ ] `RoleSelect` wired into all three locations (`Launchpad`, header `ProfilePopover`, sidebar footer `ProfilePopover`) from the same state, whenever the system allows more than one role — not just one or two of the three ("One role switcher")
+- [ ] Header `ProfilePopover` uses `variant="avatar"` when sidebar footer exists ("One role switcher")
+- [ ] Neither `ProfilePopover` passes a custom `items` array unless the system needs rows other than the built-in "My Profile"/"Account Settings"/"Help and Support" defaults ("One role switcher")
+- [ ] New/touched `Table`s use all three: `TableContent variant="panel"`, `TableFilter variant="spread"`, `TableFooter noBorder`
+- [ ] `MetricCard variant="outline"`, `Tabs variant="pill"` on new usage
+- [ ] New page headers use `SectionHeader`/`SectionTitle`/`SectionDescription`/`SectionActions`
+- [ ] `Launchpad`'s expand button shows its icon always, its "See more" label only once `apps.length` exceeds 9 — never the old bordered "See all" button

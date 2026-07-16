@@ -1,16 +1,18 @@
-.gsl-textarea {
+.clet-textarea {
+  --clet-textarea-font: var(--gsl-font-body, var(--clet-font-body));
+
   display: block;
   width: 100%;
   min-width: 0;
   min-height: 80px;
   padding: 8px 12px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background-color: var(--gsl-bg);
-  font-family: var(--gsl-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background-color: var(--gsl-bg, var(--clet-bg));
+  font-family: var(--gsl-textarea-font, var(--clet-textarea-font));
   font-size: 14px;
   line-height: 1.5;
-  color: var(--gsl-text);
+  color: var(--gsl-text, var(--clet-text));
   resize: vertical;
   transition:
     border-color 150ms ease,
@@ -18,40 +20,40 @@
     box-shadow 150ms ease;
 }
 
-.gsl-textarea::placeholder {
-  color: var(--gsl-text-secondary);
+.clet-textarea::placeholder {
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
-.gsl-textarea:hover:not(:disabled) {
-  border-color: var(--gsl-border-strong);
+.clet-textarea:hover:not(:disabled) {
+  border-color: var(--gsl-border-strong, var(--clet-border-strong));
 }
 
-.gsl-textarea:focus-visible {
+.clet-textarea:focus-visible {
   outline: none;
-  border-color: var(--gsl-primary);
-  box-shadow: 0 0 0 1px var(--gsl-primary);
+  border-color: var(--gsl-primary, var(--clet-primary));
+  box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
-.gsl-textarea--invalid,
-.gsl-textarea[aria-invalid="true"] {
-  border-color: var(--gsl-error);
+.clet-textarea--invalid,
+.clet-textarea[aria-invalid="true"] {
+  border-color: var(--gsl-error, var(--clet-error));
 }
 
-.gsl-textarea--invalid:focus-visible,
-.gsl-textarea[aria-invalid="true"]:focus-visible {
-  border-color: var(--gsl-error);
-  box-shadow: 0 0 0 1px var(--gsl-error);
+.clet-textarea--invalid:focus-visible,
+.clet-textarea[aria-invalid="true"]:focus-visible {
+  border-color: var(--gsl-error, var(--clet-error));
+  box-shadow: 0 0 0 1px var(--gsl-error, var(--clet-error));
 }
 
-.gsl-textarea--disabled,
-.gsl-textarea:disabled {
-  background-color: var(--gsl-hover);
-  color: var(--gsl-text-muted);
+.clet-textarea--disabled,
+.clet-textarea:disabled {
+  background-color: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-textarea {
+  .clet-textarea {
     transition: none;
   }
 }

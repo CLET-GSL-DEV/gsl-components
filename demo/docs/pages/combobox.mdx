@@ -1,0 +1,109 @@
+export const meta = {
+  title: "Combobox",
+  description: "Searchable single- and multi-select popover list",
+  category: "Components",
+  keywords: ["combobox", "multi select", "searchable select", "autocomplete", "typeahead"],
+  since: "2.1.0",
+  status: "stable",
+  related: ["dropdown", "command"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { ComboboxPreview } from "../previews/code/ComboboxPreview";
+import { ComboboxMultiPreview } from "../previews/code/ComboboxMultiPreview";
+import { ComboboxIconsPreview } from "../previews/code/ComboboxIconsPreview";
+import comboboxSingleSource from "../previews/examples/combobox-single.example.tsx?raw";
+import comboboxMultiSource from "../previews/examples/combobox-multi.example.tsx?raw";
+import comboboxIconsSource from "../previews/examples/combobox-icons.example.tsx?raw";
+
+# Combobox
+
+Searchable option list built on `cmdk`, opened from a trigger button (unlike `Dropdown`, which is Radix `Select`-based and has no search). Supports single selection, multi-selection with checkboxes, and a per-option leading icon adornment.
+
+## Example
+
+<ExampleTabs
+  title="Single select with search"
+  preview={<ComboboxPreview />}
+  code={comboboxSingleSource}
+/>
+
+<ExampleTabs
+  title="Multi-select with checkboxes"
+  preview={<ComboboxMultiPreview />}
+  code={comboboxMultiSource}
+/>
+
+<ExampleTabs
+  title="Per-option leading icon"
+  preview={<ComboboxIconsPreview />}
+  code={comboboxIconsSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `options` | `ComboboxOption[]` | — | The option list |
+| `multiple` | `boolean` | `false` | Enables multi-select mode; changes `value`/`onValueChange` to arrays |
+| `value` | `string \| null` (single) or `string[]` (multi) | — | Controlled selection |
+| `onValueChange` | `(value) => void` | — | Fires on selection change |
+| `placeholder` | `string` | `"Select"` | Trigger text when nothing is selected |
+| `searchPlaceholder` | `string` | `"Search..."` | Search input placeholder |
+| `disabled` | `boolean` | `false` | Disables the trigger |
+| `invalid` | `boolean` | `false` | Error styling + `aria-invalid` |
+| `clearable` | `boolean` | `false` | Shows a clear control when a selection exists |
+| `emptyMessage` | `ReactNode` | `"No results"` | Shown when search matches nothing |
+| `aria-label` | `string` | — | Accessible name for the trigger button |
+| `classNames` | `ComboboxClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root wrapper |
+| `name` | `string` | — | Renders a hidden input for native form submission (comma-joined in multi mode) |
+
+## Types
+
+### `ComboboxProps`
+
+A discriminated union on `multiple` — when `multiple: true`, `value`/`onValueChange` are typed as `string[]`; otherwise `string | null`.
+
+### `ComboboxOption`
+
+| Key | Type | Description |
+|-----|------|--------------|
+| `value` | `string` | Unique option value |
+| `label` | `string` | Display label; also used for search matching |
+| `disabled` | `boolean?` | Excludes the option from selection |
+| `icon` | `ReactNode?` | Leading adornment (e.g. a star icon) |
+
+### `ComboboxClassNames`
+
+Part-level class names merged after base `clet-combobox*` styles:
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer wrapper `<span>` |
+| `trigger` | Trigger `<button>` |
+| `content` | Popover content |
+| `input` | Search `<input>` |
+| `list` | Option list |
+| `item` | Each option row |
+| `itemIcon` | Leading icon wrapper |
+| `itemCheck` | Trailing check/checkbox indicator |
+| `empty` | "No results" message |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-combobox-trigger-height` | `40px` | Trigger button height |
+| `--clet-combobox-radius` | `var(--clet-radius-base)` | Trigger and popover corner radius |
+| `--clet-combobox-font` | `var(--clet-font-body)` | Font family |
+| `--clet-combobox-label-size` | `var(--clet-text-size-base)` | Trigger/search/item font size |
+| `--clet-combobox-menu-max-height` | `320px` | Max height of the scrollable option list |
+
+## Notes
+
+- Single-select closes the popover on selection; multi-select keeps it open so several options can be toggled in one pass, matching the checkbox-row pattern.
+- Search matches against each option's `label` via cmdk's `keywords`, while `value` stays the stable identifier passed to `onValueChange` — labels don't need to be unique for selection to work correctly.
+- The multi-select checkbox visual reuses the same checked-state colors as `Checkbox` (`--clet-primary` background, white check); single-select shows a plain check mark instead of a checkbox box.
+- The internal search input already carries the ARIA `combobox` role (from `cmdk`); the trigger button intentionally uses `aria-haspopup="listbox"` instead, to avoid two conflicting `combobox` roles being present at once when open.

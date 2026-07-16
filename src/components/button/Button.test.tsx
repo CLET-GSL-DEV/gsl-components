@@ -11,7 +11,7 @@ describe("Button", () => {
     render(<Button onClick={onClick}>Save</Button>);
 
     const button = screen.getByRole("button", { name: "Save" });
-    expect(button).toHaveClass("gsl-button--secondary", "gsl-button--md");
+    expect(button).toHaveClass("clet-button--secondary", "clet-button--md");
     expect(button).toBeEnabled();
 
     await user.click(button);
@@ -26,7 +26,7 @@ describe("Button", () => {
     );
 
     const button = screen.getByRole("button", { name: "Submit" });
-    expect(button).toHaveClass("gsl-button--primary", "gsl-button--lg");
+    expect(button).toHaveClass("clet-button--primary", "clet-button--lg");
   });
 
   it("does not call onClick when disabled", async () => {
@@ -59,8 +59,8 @@ describe("Button", () => {
     const button = screen.getByRole("button", { name: "Saving" });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
-    expect(button).toHaveClass("gsl-button--loading");
-    expect(button.querySelector(".gsl-button__spinner")).toBeInTheDocument();
+    expect(button).toHaveClass("clet-button--loading");
+    expect(button.querySelector(".clet-button__spinner")).toBeInTheDocument();
 
     await user.click(button);
     expect(onClick).not.toHaveBeenCalled();
@@ -82,8 +82,8 @@ describe("Button", () => {
     );
 
     const button = screen.getByRole("button", { name: "Saving" });
-    expect(button).toHaveClass("gsl-button", "custom-root");
-    expect(button.querySelector(".gsl-button__label")).toHaveClass("custom-label");
-    expect(button.querySelector(".gsl-button__spinner")).toHaveClass("custom-spinner");
+    expect(button).toHaveClass("clet-button", "custom-root");
+    expect(button.querySelector(".clet-button__label")).toHaveClass("custom-label");
+    expect(button.querySelector(".clet-button__spinner")).toHaveClass("custom-spinner");
   });
 });

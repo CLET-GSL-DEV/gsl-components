@@ -21,7 +21,7 @@ import {
 import { Button } from "../button/Button";
 import { ProgressBar } from "../progress-bar/ProgressBar";
 import animationData from "../table/file_processing.json";
-import type { 
+import type {
   BulkImportModalProps,
   BulkImportResult,
   SourceColumnMapping,
@@ -51,7 +51,7 @@ const Lottie = lazy(() => import("lottie-react"));
 function CheckmarkIcon() {
   return (
     <svg
-      className="gsl-bulk-import__stepper-check"
+      className="clet-bulk-import__stepper-check gsl-bulk-import__stepper-check"
       width="14"
       height="14"
       viewBox="0 0 14 14"
@@ -91,17 +91,20 @@ export function BulkImportModal({
   const hasUnsavedProgress = flow.parsed !== null;
 
   const loadingVerb = useMemo(() => {
-    return flow.step === BulkImportStep.VALIDATE_DATA ? "records validated" : "rows parsed";
+    return flow.step === BulkImportStep.VALIDATE_DATA
+      ? "records validated"
+      : "rows parsed";
   }, [flow.step]);
 
   useConfirmBeforeUnload(hasUnsavedProgress);
 
-  // ── Draft state — local to BulkImportModal, committed to flow on Next ──
-
+  // Draft state stays local to BulkImportModal; committed to flow on Next.
   const dirtyCellsRef = useRef<Record<string, string>>({});
-  const stepResultRef = useRef<() => BulkImportResult>(
-    () => ({ rows: [], errors: [], warnings: [] }),
-  );
+  const stepResultRef = useRef<() => BulkImportResult>(() => ({
+    rows: [],
+    errors: [],
+    warnings: [],
+  }));
   const [canConfirm, setCanConfirm] = useState(false);
 
   const [headerRowDraft, setHeaderRowDraft] = useState<number | null>(
@@ -128,8 +131,6 @@ export function BulkImportModal({
     });
   }, [flow.sourceColumnMapping, flow.excludedColumns]);
 
-  // ── Derived data for steps ──
-
   const allSourceColumns = useMemo(() => {
     if (!flow.parsed || headerRowDraft === null) return [];
     return buildAllSourceColumns(flow.parsed.rows, headerRowDraft);
@@ -141,7 +142,10 @@ export function BulkImportModal({
   }, [flow.parsed, headerRowDraft]);
 
   const activeMatchColumns = useMemo(
-    () => allSourceColumns.filter((col) => !matchDraft.excluded.includes(col.index)),
+    () =>
+      allSourceColumns.filter(
+        (col) => !matchDraft.excluded.includes(col.index),
+      ),
     [allSourceColumns, matchDraft.excluded],
   );
 
@@ -154,14 +158,21 @@ export function BulkImportModal({
       case BulkImportStep.MATCH_COLUMNS:
         return (
           activeMatchColumns.length > 0 &&
-          activeMatchColumns.every((col) => matchDraft.mapping[col.index] !== null)
+          activeMatchColumns.every(
+            (col) => matchDraft.mapping[col.index] !== null,
+          )
         );
       default:
         return false;
     }
-  }, [flow.step, flow.parsed, flow.parseError, headerRowDraft, activeMatchColumns, matchDraft.mapping]);
-
-  // ── Handlers ──
+  }, [
+    flow.step,
+    flow.parsed,
+    flow.parseError,
+    headerRowDraft,
+    activeMatchColumns,
+    matchDraft.mapping,
+  ]);
 
   const handleConfirm = useCallback(() => {
     flowRef.current.applyEdits(dirtyCellsRef.current);
@@ -169,15 +180,15 @@ export function BulkImportModal({
     onOpenChange(false);
   }, [onComplete, onOpenChange]);
 
-  const handleFileSelected = useCallback(
-    (file: File) => {
-      void flowRef.current.handleFile(file);
-    },
-    [],
-  );
+  const handleFileSelected = useCallback((file: File) => {
+    void flowRef.current.handleFile(file);
+  }, []);
 
   const handleGoNext = useCallback(() => {
-    if (flowRef.current.step === BulkImportStep.SELECT_HEADER_ROW && headerRowDraft !== null) {
+    if (
+      flowRef.current.step === BulkImportStep.SELECT_HEADER_ROW &&
+      headerRowDraft !== null
+    ) {
       flowRef.current.goNext({ headerRowIndex: headerRowDraft });
     } else if (flowRef.current.step === BulkImportStep.MATCH_COLUMNS) {
       flowRef.current.goNext({
@@ -205,8 +216,6 @@ export function BulkImportModal({
     (event: Event) => event.preventDefault(),
     [],
   );
-
-  // ── MatchColumnsStep local handlers ──
 
   const handleMappingChange = useCallback(
     (sourceIndex: number, fieldKey: string | null) => {
@@ -243,24 +252,20 @@ export function BulkImportModal({
     setMatchDraft({ mapping, excluded: [] });
   }, [flow.parsed, headerRowDraft, fields]);
 
-  // ── Class names ──
-
   const dialogClass = useMemo(
-    () => ["gsl-bulk-import", className].filter(Boolean).join(" "),
+    () => ["clet-bulk-import gsl-bulk-import", className].filter(Boolean).join(" "),
     [className],
   );
 
   const bodyStepClass = useMemo(() => {
     const map: Record<number, string> = {
-      [BulkImportStep.UPLOAD]: "gsl-bulk-import__body--upload",
-      [BulkImportStep.SELECT_HEADER_ROW]: "gsl-bulk-import__body--header",
-      [BulkImportStep.MATCH_COLUMNS]: "gsl-bulk-import__body--match",
-      [BulkImportStep.VALIDATE_DATA]: "gsl-bulk-import__body--validate",
+      [BulkImportStep.UPLOAD]: "clet-bulk-import__body--upload gsl-bulk-import__body--upload",
+      [BulkImportStep.SELECT_HEADER_ROW]: "clet-bulk-import__body--header gsl-bulk-import__body--header",
+      [BulkImportStep.MATCH_COLUMNS]: "clet-bulk-import__body--match gsl-bulk-import__body--match",
+      [BulkImportStep.VALIDATE_DATA]: "clet-bulk-import__body--validate gsl-bulk-import__body--validate",
     };
     return map[flow.step] ?? "";
   }, [flow.step]);
-
-  // ── Render ──
 
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
@@ -275,9 +280,9 @@ export function BulkImportModal({
           onInteractOutside={preventOverlayClose}
           aria-describedby={undefined}
         >
-          <ModalTitle className="gsl-bulk-import__header">
-            <nav className="gsl-bulk-import__stepper" aria-label="Import steps">
-              <ol className="gsl-bulk-import__stepper-list">
+          <ModalTitle className="clet-bulk-import__header gsl-bulk-import__header">
+            <nav className="clet-bulk-import__stepper gsl-bulk-import__stepper" aria-label="Import steps">
+              <ol className="clet-bulk-import__stepper-list gsl-bulk-import__stepper-list">
                 {STEPS.map((stepItem, index) => {
                   const isActive = flow.step === stepItem.id;
                   const isComplete = flow.maxStep > stepItem.id;
@@ -287,13 +292,13 @@ export function BulkImportModal({
                     <li
                       key={stepItem.id}
                       className={[
-                        "gsl-bulk-import__stepper-item",
-                        isActive ? "gsl-bulk-import__stepper-item--active" : "",
+                        "clet-bulk-import__stepper-item gsl-bulk-import__stepper-item",
+                        isActive ? "clet-bulk-import__stepper-item--active gsl-bulk-import__stepper-item--active" : "",
                         isComplete
-                          ? "gsl-bulk-import__stepper-item--complete"
+                          ? "clet-bulk-import__stepper-item--complete gsl-bulk-import__stepper-item--complete"
                           : "",
                         canClick
-                          ? "gsl-bulk-import__stepper-item--clickable"
+                          ? "clet-bulk-import__stepper-item--clickable gsl-bulk-import__stepper-item--clickable"
                           : "",
                       ]
                         .filter(Boolean)
@@ -303,16 +308,16 @@ export function BulkImportModal({
                       {canClick ? (
                         <button
                           type="button"
-                          className="gsl-bulk-import__stepper-button"
+                          className="clet-bulk-import__stepper-button gsl-bulk-import__stepper-button"
                           onClick={() => handleGoToStep(stepItem.id)}
                           aria-label={`Go to step ${stepItem.id}: ${stepItem.label}`}
                         >
-                          <span className="gsl-bulk-import__stepper-marker">
+                          <span className="clet-bulk-import__stepper-marker gsl-bulk-import__stepper-marker">
                             <span
                               className={[
-                                "gsl-bulk-import__stepper-number",
+                                "clet-bulk-import__stepper-number gsl-bulk-import__stepper-number",
                                 isComplete
-                                  ? "gsl-bulk-import__stepper-number--hidden"
+                                  ? "clet-bulk-import__stepper-number--hidden gsl-bulk-import__stepper-number--hidden"
                                   : "",
                               ]
                                 .filter(Boolean)
@@ -323,18 +328,18 @@ export function BulkImportModal({
                             </span>
                             {isComplete && <CheckmarkIcon />}
                           </span>
-                          <span className="gsl-bulk-import__stepper-label">
+                          <span className="clet-bulk-import__stepper-label gsl-bulk-import__stepper-label">
                             {stepItem.label}
                           </span>
                         </button>
                       ) : (
                         <>
-                          <span className="gsl-bulk-import__stepper-marker">
+                          <span className="clet-bulk-import__stepper-marker gsl-bulk-import__stepper-marker">
                             <span
                               className={[
-                                "gsl-bulk-import__stepper-number",
+                                "clet-bulk-import__stepper-number gsl-bulk-import__stepper-number",
                                 isComplete
-                                  ? "gsl-bulk-import__stepper-number--hidden"
+                                  ? "clet-bulk-import__stepper-number--hidden gsl-bulk-import__stepper-number--hidden"
                                   : "",
                               ]
                                 .filter(Boolean)
@@ -345,25 +350,25 @@ export function BulkImportModal({
                             </span>
                             {isComplete && <CheckmarkIcon />}
                           </span>
-                          <span className="gsl-bulk-import__stepper-label">
+                          <span className="clet-bulk-import__stepper-label gsl-bulk-import__stepper-label">
                             {stepItem.label}
                           </span>
                         </>
                       )}
                       {!isLast && (
                         <span
-                          className="gsl-bulk-import__stepper-connector"
+                          className="clet-bulk-import__stepper-connector gsl-bulk-import__stepper-connector"
                           aria-hidden="true"
                         >
                           <span
-                            className="gsl-bulk-import__stepper-connector-track"
+                            className="clet-bulk-import__stepper-connector-track gsl-bulk-import__stepper-connector-track"
                             aria-hidden="true"
                           />
                           <span
                             className={[
-                              "gsl-bulk-import__stepper-connector-fill",
+                              "clet-bulk-import__stepper-connector-fill gsl-bulk-import__stepper-connector-fill",
                               isComplete
-                                ? "gsl-bulk-import__stepper-connector-fill--visible"
+                                ? "clet-bulk-import__stepper-connector-fill--visible gsl-bulk-import__stepper-connector-fill--visible"
                                 : "",
                             ]
                               .filter(Boolean)
@@ -380,7 +385,9 @@ export function BulkImportModal({
           </ModalTitle>
 
           <ModalBody
-            className={["gsl-bulk-import__body", bodyStepClass].filter(Boolean).join(" ")}
+            className={["clet-bulk-import__body gsl-bulk-import__body", bodyStepClass]
+              .filter(Boolean)
+              .join(" ")}
           >
             {flow.step === BulkImportStep.UPLOAD && (
               <UploadStep
@@ -431,48 +438,52 @@ export function BulkImportModal({
 
             <div
               className={[
-                "gsl-bulk-import__loading",
-                flow.isProcessingLarge ? "gsl-bulk-import__loading--visible" : "",
+                "clet-bulk-import__loading gsl-bulk-import__loading",
+                flow.isProcessingLarge
+                  ? "clet-bulk-import__loading--visible gsl-bulk-import__loading--visible"
+                  : "",
               ].join(" ")}
             >
-              <h3 className="gsl-bulk-import__step-title">Processing</h3>
-              <p className="gsl-bulk-import__step-note">
+              <h3 className="clet-bulk-import__step-title gsl-bulk-import__step-title">Processing</h3>
+              <p className="clet-bulk-import__step-note gsl-bulk-import__step-note">
                 {flow.step === BulkImportStep.VALIDATE_DATA
                   ? "Validating your records..."
                   : "Parsing your data..."}
               </p>
-              <div className="gsl-bulk-import__loading-center">
+              <div className="clet-bulk-import__loading-center gsl-bulk-import__loading-center">
                 <Suspense fallback={null}>
                   <Lottie
                     animationData={animationData}
                     loop
                     autoplay
-                    className="gsl-bulk-import__lottie"
+                    className="clet-bulk-import__lottie gsl-bulk-import__lottie"
                   />
                 </Suspense>
-                <div className="gsl-bulk-import__loading-bar">
+                <div className="clet-bulk-import__loading-bar gsl-bulk-import__loading-bar">
                   <ProgressBar value={flow.processingProgress} size="md" />
                 </div>
                 {flow.processingTotal > 0 && (
-                  <p className="gsl-bulk-import__loading-counter">
-                    {Math.round((flow.processingProgress / 100) * flow.processingTotal).toLocaleString()}
+                  <p className="clet-bulk-import__loading-counter gsl-bulk-import__loading-counter">
+                    {Math.round(
+                      (flow.processingProgress / 100) * flow.processingTotal,
+                    ).toLocaleString()}
                     {" / "}
-                    {flow.processingTotal.toLocaleString()}
-                    {" "}
-                    {loadingVerb}
+                    {flow.processingTotal.toLocaleString()} {loadingVerb}
                   </p>
                 )}
               </div>
             </div>
           </ModalBody>
 
-          {(flow.step > BulkImportStep.UPLOAD || flow.parsed !== null || flow.uploadedFile !== null) && (
-            <ModalFooter className="gsl-bulk-import__footer">
+          {(flow.step > BulkImportStep.UPLOAD ||
+            flow.parsed !== null ||
+            flow.uploadedFile !== null) && (
+            <ModalFooter className="clet-bulk-import__footer gsl-bulk-import__footer">
               {flow.step > BulkImportStep.UPLOAD && (
                 <Button
                   variant="outline"
                   size="md"
-                  className="gsl-bulk-import__footer-action"
+                  className="clet-bulk-import__footer-action gsl-bulk-import__footer-action"
                   disabled={flow.isProcessingLarge}
                   onClick={handleGoBack}
                 >
@@ -484,7 +495,7 @@ export function BulkImportModal({
                 <Button
                   variant="primary"
                   size="md"
-                  className="gsl-bulk-import__footer-action"
+                  className="clet-bulk-import__footer-action gsl-bulk-import__footer-action"
                   disabled={flow.isProcessingLarge || !canGoNext}
                   onClick={handleGoNext}
                 >
@@ -494,7 +505,7 @@ export function BulkImportModal({
                 <Button
                   variant="primary"
                   size="md"
-                  className="gsl-bulk-import__footer-action"
+                  className="clet-bulk-import__footer-action gsl-bulk-import__footer-action"
                   disabled={flow.isProcessingLarge || !canConfirm}
                   onClick={handleConfirm}
                 >

@@ -22,17 +22,17 @@ export function UploadStep({
   onRemoveFile,
 }: UploadStepProps) {
   return (
-    <div className="gsl-bulk-import__step gsl-bulk-import__step--upload">
-      <h3 className="gsl-bulk-import__step-title">Upload Document</h3>
+    <div className="clet-bulk-import__step gsl-bulk-import__step clet-bulk-import__step--upload gsl-bulk-import__step--upload">
+      <h3 className="clet-bulk-import__step-title gsl-bulk-import__step-title">Upload Document</h3>
 
-      <div className="gsl-bulk-import__expected">
-        <p className="gsl-bulk-import__expected-title">Data that we expect:</p>
-        <p className="gsl-bulk-import__expected-note">
+      <div className="clet-bulk-import__expected gsl-bulk-import__expected">
+        <p className="clet-bulk-import__expected-title gsl-bulk-import__expected-title">Data that we expect:</p>
+        <p className="clet-bulk-import__expected-note gsl-bulk-import__expected-note">
           (You will have a chance to rename or remove columns in next steps)
         </p>
 
-        <div className="gsl-bulk-import__expected-table-wrap">
-          <table className="gsl-bulk-import__expected-table">
+        <div className="clet-bulk-import__expected-table-wrap gsl-bulk-import__expected-table-wrap">
+          <table className="clet-bulk-import__expected-table gsl-bulk-import__expected-table">
             <thead>
               <tr>
                 {fields.map((field) => (
@@ -51,7 +51,7 @@ export function UploadStep({
         </div>
       </div>
 
-      <div className="gsl-bulk-import__upload-area">
+      <div className="clet-bulk-import__upload-area gsl-bulk-import__upload-area">
         <UploadField
           value={uploadedFile ?? undefined}
           accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
@@ -69,7 +69,7 @@ export function UploadStep({
       </div>
 
       {parseError && (
-        <p className="gsl-bulk-import__error" role="alert">
+        <p className="clet-bulk-import__error gsl-bulk-import__error" role="alert">
           {parseError}
         </p>
       )}

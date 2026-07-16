@@ -33,8 +33,8 @@ describe("ThemeProvider", () => {
 
     expect(screen.getByTestId("theme")).toHaveTextContent("light");
     expect(screen.getByTestId("resolved")).toHaveTextContent("light");
-    expect(document.querySelector(".gsl-theme")).toHaveAttribute(
-      "data-gsl-theme",
+    expect(document.querySelector(".clet-theme")).toHaveAttribute(
+      "data-clet-theme",
       "light",
     );
   });
@@ -58,7 +58,7 @@ describe("ThemeProvider", () => {
     );
 
     expect(screen.getByTestId("resolved")).toHaveTextContent("dark");
-    expect(document.documentElement).toHaveAttribute("data-gsl-theme", "dark");
+    expect(document.documentElement).toHaveAttribute("data-clet-theme", "dark");
   });
 
   it("updates theme in uncontrolled mode", async () => {

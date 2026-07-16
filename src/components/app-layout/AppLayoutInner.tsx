@@ -63,7 +63,7 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
 
     const sidebarNode = sidebarEl && (
       <div
-        className={cn("gsl-app-layout__sidebar", sidebar.className)}
+        className={cn("clet-app-layout__sidebar gsl-app-layout__sidebar", sidebar.className)}
         {...sidebar.rest}
       >
         {sidebar.children}
@@ -71,14 +71,14 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
     );
 
     const breadcrumbNode = items.length > 0 && (
-      <div className="gsl-app-layout__breadcrumb">
+      <div className="clet-app-layout__breadcrumb gsl-app-layout__breadcrumb">
         <Breadcrumb>
           <BreadcrumbList>
             {items.flatMap((item, i) => [
               i > 0 && <BreadcrumbSeparator key={`sep-${i}`} />,
               <BreadcrumbItem key={i}>
                 {item.href ? (
-                  <Link to={item.href} className="gsl-breadcrumb__link">
+                  <Link to={item.href} className="clet-breadcrumb__link gsl-breadcrumb__link">
                     {item.label}
                   </Link>
                 ) : (
@@ -93,7 +93,7 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
 
     const contentNode = bodyEl && (
       <div
-        className={cn("gsl-app-layout__content", body.className)}
+        className={cn("clet-app-layout__content gsl-app-layout__content", body.className)}
         {...body.rest}
       >
         {body.children}
@@ -105,12 +105,12 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
       return (
         <div
           ref={ref}
-          className={cn("gsl-app-layout", "gsl-app-layout--stacked", className)}
+          className={cn("clet-app-layout gsl-app-layout", "clet-app-layout--stacked gsl-app-layout--stacked", className)}
         >
           {headerEl}
-          <div className="gsl-app-layout__row">
+          <div className="clet-app-layout__row gsl-app-layout__row">
             {sidebarNode}
-            <div className="gsl-app-layout__main">
+            <div className="clet-app-layout__main gsl-app-layout__main">
               {breadcrumbNode}
               {contentNode}
             </div>
@@ -120,9 +120,9 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
     }
 
     return (
-      <div ref={ref} className={cn("gsl-app-layout", className)}>
+      <div ref={ref} className={cn("clet-app-layout gsl-app-layout", className)}>
         {sidebarNode}
-        <div className="gsl-app-layout__body">
+        <div className="clet-app-layout__body gsl-app-layout__body">
           {headerEl}
           {breadcrumbNode}
           {contentNode}

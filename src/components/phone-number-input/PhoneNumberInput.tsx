@@ -1,14 +1,29 @@
 import * as Popover from "@radix-ui/react-popover";
+import * as FlagIcons from "country-flag-icons/react/3x2";
 import { ChevronDown } from "lucide-react";
 import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
 import { AsYouType, parsePhoneNumber } from "libphonenumber-js";
 import type { CountryCode } from "libphonenumber-js";
 import type { PhoneNumberInputProps } from "../../types/phone-number-input";
 import { cn } from "../../utils/cn";
-import { countries, getFlagEmoji } from "../../utils/countries";
+import { countries } from "../../utils/countries";
 import "./styles/phone-number-input.css";
 
 type Country = (typeof countries)[number] & { code: CountryCode };
+
+function FlagIcon({
+  code,
+  label,
+  className,
+}: {
+  code: string;
+  label: string;
+  className?: string;
+}) {
+  const Flag = FlagIcons[code as keyof typeof FlagIcons];
+  if (!Flag) return null;
+  return <Flag role="img" aria-label={label} className={className} />;
+}
 
 function matchCountry(fullNumber: string): Country | null {
   if (!fullNumber) return null;
@@ -30,7 +45,7 @@ function formatLocal(local: string, countryCode: CountryCode): string {
 function formatNational(fullNumber: string): string {
   try {
     const pn = parsePhoneNumber(fullNumber);
-    if (pn) return pn.formatNational();
+    if (pn?.isValid()) return pn.formatNational();
   } catch { /* fall through */ }
   return "";
 }
@@ -154,9 +169,9 @@ export const PhoneNumberInput = forwardRef<
   return (
     <div
       className={cn(
-        "gsl-phone-number-input",
-        invalid && "gsl-phone-number-input--invalid",
-        disabled && "gsl-phone-number-input--disabled",
+        "clet-phone-number-input gsl-phone-number-input",
+        invalid && "clet-phone-number-input--invalid gsl-phone-number-input--invalid",
+        disabled && "clet-phone-number-input--disabled gsl-phone-number-input--disabled",
         classNames?.root,
         className,
       )}
@@ -169,24 +184,26 @@ export const PhoneNumberInput = forwardRef<
             type="button"
             disabled={disabled}
             className={cn(
-              "gsl-phone-number-input__prefix",
+              "clet-phone-number-input__prefix gsl-phone-number-input__prefix",
               classNames?.prefix,
             )}
             aria-haspopup="listbox"
             aria-expanded={open}
           >
-            <span className="gsl-phone-number-input__flag">
-              {getFlagEmoji(country.code)}
-            </span>
-            <span className="gsl-phone-number-input__dial">
+            <FlagIcon
+              code={country.code}
+              label={`${country.name} flag`}
+              className="clet-phone-number-input__flag gsl-phone-number-input__flag"
+            />
+            <span className="clet-phone-number-input__dial gsl-phone-number-input__dial">
               {country.dialCode}
             </span>
             <ChevronDown
               size={14}
               strokeWidth={2}
               className={cn(
-                "gsl-phone-number-input__chevron",
-                open && "gsl-phone-number-input__chevron--open",
+                "clet-phone-number-input__chevron gsl-phone-number-input__chevron",
+                open && "clet-phone-number-input__chevron--open gsl-phone-number-input__chevron--open",
               )}
             />
           </button>
@@ -195,7 +212,7 @@ export const PhoneNumberInput = forwardRef<
         <Popover.Portal>
           <Popover.Content
             className={cn(
-              "gsl-phone-number-input__dropdown",
+              "clet-phone-number-input__dropdown gsl-phone-number-input__dropdown",
               classNames?.dropdown,
             )}
             side="bottom"
@@ -204,17 +221,17 @@ export const PhoneNumberInput = forwardRef<
             role="listbox"
             onOpenAutoFocus={(e) => e.preventDefault()}
           >
-            <div className="gsl-phone-number-input__search">
+            <div className="clet-phone-number-input__search gsl-phone-number-input__search">
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search country..."
-                className="gsl-phone-number-input__search-input"
+                className="clet-phone-number-input__search-input gsl-phone-number-input__search-input"
                 autoFocus
               />
             </div>
-            <div className="gsl-phone-number-input__list">
+            <div className="clet-phone-number-input__list gsl-phone-number-input__list">
               {filtered.map((c) => (
                 <button
                   key={c.code}
@@ -222,19 +239,21 @@ export const PhoneNumberInput = forwardRef<
                   role="option"
                   aria-selected={country.code === c.code}
                   className={cn(
-                    "gsl-phone-number-input__option",
+                    "clet-phone-number-input__option gsl-phone-number-input__option",
                     country.code === c.code &&
-                      "gsl-phone-number-input__option--selected",
+                      "clet-phone-number-input__option--selected gsl-phone-number-input__option--selected",
                   )}
                   onClick={() => handleCountrySelect(c.code)}
                 >
-                  <span className="gsl-phone-number-input__option-flag">
-                    {getFlagEmoji(c.code)}
-                  </span>
-                  <span className="gsl-phone-number-input__option-name">
+                  <FlagIcon
+                    code={c.code}
+                    label={`${c.name} flag`}
+                    className="clet-phone-number-input__option-flag gsl-phone-number-input__option-flag"
+                  />
+                  <span className="clet-phone-number-input__option-name gsl-phone-number-input__option-name">
                     {c.name}
                   </span>
-                  <span className="gsl-phone-number-input__option-dial">
+                  <span className="clet-phone-number-input__option-dial gsl-phone-number-input__option-dial">
                     {c.dialCode}
                   </span>
                 </button>
@@ -252,7 +271,7 @@ export const PhoneNumberInput = forwardRef<
         value={displayLocal}
         onChange={handleNumberChange}
         placeholder="(555) 000-0000"
-        className={cn("gsl-phone-number-input__input", classNames?.input)}
+        className={cn("clet-phone-number-input__input gsl-phone-number-input__input", classNames?.input)}
       />
     </div>
   );

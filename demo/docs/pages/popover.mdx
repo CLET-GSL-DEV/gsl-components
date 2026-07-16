@@ -1,6 +1,12 @@
 export const meta = {
   title: "Popover",
   description: "Floating content panel",
+  category: "Components",
+  keywords: ["popover", "floating panel", "menu", "action menu", "tooltip panel"],
+  since: "1.4.0",
+  status: "stable",
+  related: ["dropdown", "tooltip", "dialog"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -9,7 +15,7 @@ import popoverSource from "../previews/examples/popover.example.tsx?raw";
 
 # Popover
 
-Compound popover primitives for floating panels anchored to a trigger. Wraps `@radix-ui/react-popover`; `PopoverContent` applies default GSL surface styles.
+Compound popover primitives for floating panels anchored to a trigger. Wraps `@radix-ui/react-popover`; `PopoverContent` applies default CLET surface styles.
 
 ## Example
 
@@ -31,7 +37,7 @@ Wraps the element that opens the popover. Use `asChild` to merge props onto a ch
 
 ### `PopoverContent`
 
-Styled floating panel. Accepts Radix content props (`side`, `align`, `sideOffset`, etc.) plus GSL `classNames`.
+Styled floating panel. Accepts Radix content props (`side`, `align`, `sideOffset`, etc.) plus CLET `classNames`.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -61,12 +67,18 @@ Extends Radix `PopoverContentProps` with optional `classNames`.
 
 | Key | Applied to |
 |-----|------------|
-| `content` | Content element (`.gsl-popover`) |
+| `content` | Content element (`.clet-popover`) |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-popover-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
-- Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
+- Portaled content inherits the active theme via `data-clet-theme` on `document.documentElement` when using `ThemeProvider`.
 - Use `PopoverTrigger asChild` so focus and keyboard behavior stay on your button or link.
 - Wrap menu actions in `PopoverClose asChild` so the panel dismisses after selection.
-- Use `gsl-popover--menu`, `gsl-popover__menu`, and `gsl-popover__menu-item` for compact action menus inside `PopoverContent`.
-- Base `gsl-popover` styles are always applied; `classNames.content` and `className` append consumer classes.
+- Use `clet-popover--menu`, `clet-popover__menu`, and `clet-popover__menu-item` for compact action menus inside `PopoverContent`.
+- Base `clet-popover` styles are always applied; `classNames.content` and `className` append consumer classes.

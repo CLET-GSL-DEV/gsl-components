@@ -1,0 +1,28 @@
+export {
+  Popup,
+  PopupAnchor,
+  PopupBody,
+  PopupClose,
+  PopupContent,
+  PopupDescription,
+  PopupFooter,
+  PopupHeader,
+  PopupPortal,
+  PopupTitle,
+  PopupTrigger,
+} from "./Popup";
+export type {
+  PopupBodyClassNames,
+  PopupBodyProps,
+  PopupContentClassNames,
+  PopupContentProps,
+  PopupDescriptionClassNames,
+  PopupDescriptionProps,
+  PopupFooterClassNames,
+  PopupFooterLayout,
+  PopupFooterProps,
+  PopupHeaderClassNames,
+  PopupHeaderProps,
+  PopupTitleClassNames,
+  PopupTitleProps,
+} from "../../types/popup";

@@ -4,23 +4,18 @@ import type {
   TableRowAction,
 } from "@rfdtech/components";
 import { gslMembers, type GslMember } from "demo/data/demoHomeMembers";
+import { useMockQuery } from "demo/hooks/useMockQuery";
 import { useCallback, useMemo, useState } from "react";
-import { UserCheck, Trash2, UserX, Eye, Edit } from "lucide-react";
+import { UserCheck, Trash2, UserX, Eye, Edit, UserPlus } from "lucide-react";
 import {
   Table,
   TableHeader,
   TableSearch,
   TableFilter,
   TableContent,
-  TableBulkActions,
   TableFooter,
   TablePagination,
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
   MetricCard,
-  Dropdown,
   Modal,
   ModalPortal,
   ModalOverlay,
@@ -30,9 +25,16 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Dropdown,
   useTableState,
   Badge,
+  SectionHeader,
+  SectionTitle,
+  SectionDescription,
+  SectionActions,
+  ExportButton,
 } from "@rfdtech/components";
+import type { ExportColumn } from "@rfdtech/components";
 
 function statusVariant(status: string) {
   switch (status) {
@@ -51,70 +53,30 @@ function statusVariant(status: string) {
   }
 }
 
-const columns: TableColumn<GslMember>[] = [
-  {
-    id: "name",
-    header: "Name",
-    accessorKey: "name",
-    sortable: true,
-    cell: ({ value }) => (
-      <span className="demo-home__cell-name">{String(value)}</span>
-    ),
-  },
-  { id: "email", header: "Email", accessorKey: "email", sortable: true },
-  { id: "role", header: "Role", accessorKey: "role", sortable: true },
-  {
-    id: "status",
-    header: "Status",
-    accessorKey: "status",
-    sortable: true,
-    cell: ({ value }) => (
-      <Badge variant={statusVariant(String(value))}>{String(value)}</Badge>
-    ),
-  },
-  {
-    id: "joined",
-    header: "Joined",
-    accessorKey: "joined",
-    sortable: true,
-    cell: ({ value }) => (
-      <span className="demo-home__cell-date">{String(value)}</span>
-    ),
-  },
-];
-
-const TABS: { value: string; label: string; status?: GslMember["status"] }[] = [
-  { value: "all", label: "All members" },
-  { value: "active", label: "Active", status: "Active" },
-  { value: "pending", label: "Pending", status: "Pending" },
-  { value: "inactive", label: "Inactive", status: "Inactive" },
-];
-
-interface MembersTableProps {
-  paramPrefix: string;
-  initialData: GslMember[];
-  onView: (member: GslMember) => void;
-}
-
-function MembersTable({ paramPrefix, initialData, onView }: MembersTableProps) {
+export function Dashboard2Page() {
   const { page, pageSize, pageSizeOptions, search, filters } = useTableState({
     defaultPageSize: 10,
-    paramPrefix,
+    paramPrefix: "dash2-members",
   });
   const [roleValue, setRoleValue] = useState(filters.role ?? "");
   const [statusValue, setStatusValue] = useState(filters.status ?? "");
-  const [members, setMembers] = useState(initialData);
+  const [members, setMembers] = useState(gslMembers);
   const [selected, setSelected] = useState<Set<string | number>>(new Set());
+  const [viewMember, setViewMember] = useState<GslMember | null>(null);
+  const { loading: metricsLoading } = useMockQuery(null, 1200);
 
-  const filtered = members.filter((m) => {
-    const matchSearch =
-      m.name.toLowerCase().includes(search.toLowerCase()) ||
-      m.email.toLowerCase().includes(search.toLowerCase());
-    const matchStatus =
-      !filters.status || m.status.toLowerCase() === filters.status;
-    const matchRole = !filters.role || m.role.toLowerCase() === filters.role;
-    return matchSearch && matchStatus && matchRole;
-  });
+  const filtered = useMemo(
+    () =>
+      members.filter((m) => {
+        const matchSearch =
+          m.name.toLowerCase().includes(search.toLowerCase()) ||
+          m.email.toLowerCase().includes(search.toLowerCase());
+        const matchStatus = !filters.status || m.status === filters.status;
+        const matchRole = !filters.role || m.role === filters.role;
+        return matchSearch && matchStatus && matchRole;
+      }),
+    [members, search, filters],
+  );
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
@@ -153,105 +115,109 @@ function MembersTable({ paramPrefix, initialData, onView }: MembersTableProps) {
     },
   ];
 
+  const handleView = useCallback((member: GslMember) => {
+    setViewMember(member);
+  }, []);
+
+  const handleDeleteOne = useCallback((id: GslMember["id"]) => {
+    setMembers((prev) => prev.filter((m) => m.id !== id));
+  }, []);
+
+  const columns = useMemo<TableColumn<GslMember>[]>(
+    () => [
+      {
+        id: "name",
+        header: "Name",
+        accessorKey: "name",
+        sortable: true,
+        cell: ({ value }) => (
+          <span className="demo-home__cell-name">{String(value)}</span>
+        ),
+      },
+      { id: "email", header: "Email", accessorKey: "email", sortable: true },
+      { id: "role", header: "Role", accessorKey: "role", sortable: true },
+      {
+        id: "status",
+        header: "Status",
+        accessorKey: "status",
+        sortable: true,
+        cell: ({ value }) => (
+          <Badge variant={statusVariant(String(value))}>{String(value)}</Badge>
+        ),
+      },
+      {
+        id: "joined",
+        header: "Joined",
+        accessorKey: "joined",
+        sortable: true,
+        cell: ({ value }) => (
+          <span className="demo-home__cell-date">{String(value)}</span>
+        ),
+      },
+    ],
+    [],
+  );
+
   const rowActions = useMemo<TableRowAction<GslMember>[]>(
     () => [
       {
         id: "view",
         label: "View",
         icon: <Eye size={14} strokeWidth={1.5} />,
-        onClick: onView,
+        onClick: handleView,
       },
       {
         id: "edit",
         label: "Edit",
         icon: <Edit size={14} strokeWidth={1.5} />,
-        onClick: onView,
+        onClick: handleView,
       },
       {
         id: "delete",
         label: "Delete",
         icon: <Trash2 size={14} strokeWidth={1.5} />,
-        onClick: onView,
+        onClick: (row) => handleDeleteOne(row.id),
         variant: "destructive",
       },
     ],
-    [onView],
+    [handleView, handleDeleteOne],
   );
 
-  return (
-    <Table paramPrefix={paramPrefix}>
-      <TableHeader>
-        <TableSearch placeholder="Search members..." />
-        <TableFilter>
-          <div className="demo-home__filter-field">
-            <label className="demo-home__filter-label">Status</label>
-            <input type="hidden" name="status" value={statusValue} />
-            <Dropdown
-              value={statusValue}
-              onValueChange={(v) => setStatusValue(v ?? "")}
-              options={[
-                { value: "active", label: "Active" },
-                { value: "inactive", label: "Inactive" },
-                { value: "pending", label: "Pending" },
-              ]}
-              placeholder="All statuses"
-            />
-          </div>
-          <div className="demo-home__filter-field">
-            <label className="demo-home__filter-label">Role</label>
-            <input type="hidden" name="role" value={roleValue} />
-            <Dropdown
-              value={roleValue}
-              onValueChange={(v) => setRoleValue(v ?? "")}
-              options={[
-                { value: "admin", label: "Admin" },
-                { value: "editor", label: "Editor" },
-                { value: "viewer", label: "Viewer" },
-              ]}
-              placeholder="All roles"
-            />
-          </div>
-        </TableFilter>
-      </TableHeader>
-      <TableContent
-        variant="panel"
-        selectable
-        selectedIds={selected}
-        onSelectionChange={setSelected}
-        rowActions={rowActions}
-        columns={columns}
-        data={paged}
-        rowKey={(m: GslMember) => m.id}
-      />
-      <TableBulkActions
-        selectedIds={selected}
-        onClear={() => setSelected(new Set())}
-        actions={bulkActions}
-      />
-      <TableFooter>
-        <TablePagination
-          totalPages={totalPages}
-          totalItems={filtered.length}
-          pageSizeOptions={pageSizeOptions}
-        />
-      </TableFooter>
-    </Table>
+  const exportColumns = useMemo<ExportColumn<GslMember>[]>(
+    () => [
+      { header: "Name", accessor: (m) => m.name },
+      { header: "Email", accessor: (m) => m.email },
+      { header: "Role", accessor: (m) => m.role },
+      { header: "Status", accessor: (m) => m.status },
+      { header: "Joined", accessor: (m) => m.joined },
+    ],
+    [],
   );
-}
-
-export function Dashboard2Page() {
-  const [members] = useState(gslMembers);
-  const [viewMember, setViewMember] = useState<GslMember | null>(null);
-
-  const handleView = useCallback((member: GslMember) => {
-    setViewMember(member);
-  }, []);
 
   return (
     <>
+      <SectionHeader>
+        <SectionTitle>Dashboard</SectionTitle>
+        <SectionDescription>
+          Overview of your organization&apos;s members and activity.
+        </SectionDescription>
+        <SectionActions>
+          <ExportButton
+            data={filtered}
+            columns={exportColumns}
+            title="Dashboard Members"
+          />
+          <Button variant="primary" size="md">
+            <UserPlus size={14} strokeWidth={1.5} />
+            Add Member
+          </Button>
+        </SectionActions>
+      </SectionHeader>
+
       <div className="demo-home__metrics">
         <MetricCard
           variant="outline"
+          loading={metricsLoading}
           label="Total Members"
           value={members.length}
           description="Across all departments"
@@ -260,6 +226,7 @@ export function Dashboard2Page() {
         />
         <MetricCard
           variant="outline"
+          loading={metricsLoading}
           label="Active Members"
           value={members.filter((m) => m.status === "Active").length}
           description="Currently active"
@@ -268,6 +235,7 @@ export function Dashboard2Page() {
         />
         <MetricCard
           variant="outline"
+          loading={metricsLoading}
           label="New This Month"
           value={members.filter((m) => m.joined >= "2025-01-01").length}
           description="Joined this year"
@@ -276,6 +244,7 @@ export function Dashboard2Page() {
         />
         <MetricCard
           variant="outline"
+          loading={metricsLoading}
           label="Engagement Rate"
           value="94.2%"
           description="Average daily activity"
@@ -284,34 +253,62 @@ export function Dashboard2Page() {
         />
       </div>
 
-      <Tabs variant="pill" defaultValue="all">
-        <TabsList>
-          {TABS.map((tab) => (
-            <TabsTrigger key={tab.value} value={tab.value}>
-              {tab.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        {TABS.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value}>
-            <MembersTable
-              paramPrefix={`members-${tab.value}`}
-              initialData={
-                tab.status
-                  ? members.filter((m) => m.status === tab.status)
-                  : members
-              }
-              onView={handleView}
+      <Table paramPrefix="dash2-members">
+        <TableHeader>
+          <TableSearch placeholder="Search members..." />
+          <TableFilter variant="spread">
+            <Dropdown
+              name="role"
+              value={roleValue || null}
+              onValueChange={(v) => setRoleValue(v ?? "")}
+              options={[
+                { value: "Admin", label: "Admin" },
+                { value: "Editor", label: "Editor" },
+                { value: "Viewer", label: "Viewer" },
+              ]}
+              placeholder="All roles"
+              aria-label="Filter by role"
             />
-          </TabsContent>
-        ))}
-      </Tabs>
+            <Dropdown
+              name="status"
+              value={statusValue || null}
+              onValueChange={(v) => setStatusValue(v ?? "")}
+              options={[
+                { value: "Active", label: "Active" },
+                { value: "Pending", label: "Pending" },
+                { value: "Inactive", label: "Inactive" },
+                { value: "Suspended", label: "Suspended" },
+                { value: "Terminated", label: "Terminated" },
+              ]}
+              placeholder="All statuses"
+              aria-label="Filter by status"
+            />
+          </TableFilter>
+        </TableHeader>
+        <TableContent
+          variant="panel"
+          selectable
+          selectedIds={selected}
+          onSelectionChange={setSelected}
+          columns={columns}
+          data={paged}
+          rowKey={(m: GslMember) => m.id}
+          rowActions={rowActions}
+          bulkActions={bulkActions}
+          bulkActionsFooter
+        />
+        <TableFooter noBorder>
+          <TablePagination
+            totalPages={totalPages}
+            totalItems={filtered.length}
+            pageSizeOptions={pageSizeOptions}
+          />
+        </TableFooter>
+      </Table>
 
       <Modal
-        open={viewMember !== null}
-        onOpenChange={(open) => {
-          if (!open) setViewMember(null);
-        }}
+        open={!!viewMember}
+        onOpenChange={(open) => !open && setViewMember(null)}
       >
         <ModalPortal>
           <ModalOverlay />

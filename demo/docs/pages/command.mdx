@@ -1,6 +1,12 @@
 export const meta = {
   title: "Command",
   description: "Command palette and inline search",
+  category: "Components",
+  keywords: ["command palette", "cmd k", "search menu", "combobox", "quick actions"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["dropdown", "dialog"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -13,7 +19,7 @@ import commandDialogSource from "../previews/examples/command-dialog.example.tsx
 
 # Command
 
-Compound command menu primitives for searchable, keyboard-navigable action lists. Built on [`cmdk`](https://github.com/pacocoursey/cmdk) with GSL styling. Use inline `Command` for combobox-style pickers or `CommandDialog` for a modal command palette.
+Compound command menu primitives for searchable, keyboard-navigable action lists. Built on [`cmdk`](https://github.com/pacocoursey/cmdk) with CLET styling. Use inline `Command` for combobox-style pickers or `CommandDialog` for a modal command palette.
 
 ## Inline example
 
@@ -114,7 +120,7 @@ Divider between groups. Hidden while searching unless `alwaysRender` is set.
 
 ### `CommandLoading`
 
-Optional loading slot for async result sets. Use `gsl-command__loading-bar` for an indeterminate line loader and set `label` for screen readers.
+Optional loading slot for async result sets. Use `clet-command__loading-bar` for an indeterminate line loader and set `label` for screen readers.
 
 ### `CommandShortcut`
 
@@ -184,6 +190,13 @@ Options for `useCommandShortcut` (`shortcut`, `enabled`).
 | `CommandLoadingClassNames` | `loading` | Loading slot |
 | `CommandShortcutClassNames` | `shortcut` | Shortcut chip |
 
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-command-font` | `var(--clet-font-body)` | Font family for the command root (inline and dialog wrapper) |
+| `--clet-command-dialog-font` | `var(--clet-font-body)` | Font family for the dialog panel content (`.clet-command-dialog__content`) |
+
 ## Notes
 
 - The `CommandDialog` example uses `useDialogSearchParam("command-menu")` for URL-driven open state (`?dialog=command-menu`). See [Dialog URL state](/docs/dialog#url-state).
@@ -196,4 +209,4 @@ Options for `useCommandShortcut` (`shortcut`, `enabled`).
 - Item rows use at least **40px** height for touch-friendly targets on small screens.
 - Dialog enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
 - Provide a stable `value` on `CommandItem` when children change between renders.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

@@ -20,8 +20,8 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
       <TabsPrimitive.Root
         ref={ref}
         className={cn(
-          "gsl-tabs",
-          `gsl-tabs--${variant}`,
+          "clet-tabs gsl-tabs",
+          `clet-tabs--${variant} gsl-tabs--${variant}`,
           classNames?.root,
           className,
         )}
@@ -56,8 +56,8 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
           }
         }}
         className={cn(
-          "gsl-tabs__list",
-          `gsl-tabs__list--${variant}`,
+          "clet-tabs__list gsl-tabs__list",
+          `clet-tabs__list--${variant} gsl-tabs__list--${variant}`,
           classNames?.list,
           className,
         )}
@@ -66,7 +66,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
         {children}
         {isLineVariant ? (
           <span
-            className={cn("gsl-tabs__indicator", classNames?.indicator)}
+            className={cn("clet-tabs__indicator gsl-tabs__indicator", classNames?.indicator)}
             aria-hidden
             hidden={!indicatorVisible}
             style={indicatorStyle}
@@ -82,7 +82,7 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
     return (
       <TabsPrimitive.Trigger
         ref={ref}
-        className={cn("gsl-tabs__trigger", classNames?.trigger, className)}
+        className={cn("clet-tabs__trigger gsl-tabs__trigger", classNames?.trigger, className)}
         {...props}
       />
     );
@@ -94,7 +94,7 @@ export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(
     return (
       <TabsPrimitive.Content
         ref={ref}
-        className={cn("gsl-tabs__content", classNames?.content, className)}
+        className={cn("clet-tabs__content gsl-tabs__content", classNames?.content, className)}
         {...props}
       />
     );

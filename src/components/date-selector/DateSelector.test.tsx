@@ -34,7 +34,7 @@ describe("DateSelector", () => {
     const { container } = render(<DateSelector className="custom" />);
     const root = container.firstElementChild;
     expect(root).toHaveClass("custom");
-    expect(root).toHaveClass("gsl-date-selector");
+    expect(root).toHaveClass("clet-date-selector");
   });
 
   it("shows placeholder when no date is selected", () => {

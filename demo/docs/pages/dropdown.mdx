@@ -1,15 +1,23 @@
 export const meta = {
   title: "Dropdown",
   description: "Select dropdown",
+  category: "Components",
+  keywords: ["dropdown", "select", "combobox", "option picker"],
+  since: "1.4.0",
+  status: "stable",
+  related: ["command", "form-field", "date-selector"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { DropdownPreview } from "../previews/code/DropdownPreview";
 import dropdownSource from "../previews/examples/dropdown.example.tsx?raw";
+import { DropdownVariantsPreview } from "../previews/code/DropdownVariantsPreview";
+import dropdownVariantsSource from "../previews/examples/dropdown-variants.example.tsx?raw";
 
 # Dropdown
 
-Select-style dropdown for choosing one option from a list. Built on `@radix-ui/react-select` with GSL styling, optional clearable reset, and part-level `classNames`.
+Select-style dropdown for choosing one option from a list. Built on `@radix-ui/react-select` with CLET styling, optional clearable reset, and part-level `classNames`.
 
 ## Example
 
@@ -17,6 +25,14 @@ Select-style dropdown for choosing one option from a list. Built on `@radix-ui/r
   title="Basic dropdown"
   preview={<DropdownPreview />}
   code={dropdownSource}
+/>
+
+## Disabled and custom rendering
+
+<ExampleTabs
+  title="Disabled state and formatOption custom rendering"
+  preview={<DropdownVariantsPreview />}
+  code={dropdownVariantsSource}
 />
 
 ## Props
@@ -50,52 +66,43 @@ Props for `Dropdown`. Controls value, options, placeholder, clearable behavior, 
 
 ### `DropdownClassNames`
 
-Part-level class names merged after base `gsl-dropdown*` styles:
+Part-level class names merged after base `clet-dropdown*` styles:
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Outer wrapper (`.gsl-dropdown`) |
-| `trigger` | Combobox trigger (`.gsl-dropdown__trigger`) |
-| `icon` | Chevron icon (`.gsl-dropdown__trigger-icon`) |
-| `menu` | Menu panel (`.gsl-dropdown__menu`) |
-| `option` | Menu items (`.gsl-dropdown__option`) |
+| `root` | Outer wrapper (`.clet-dropdown`) |
+| `trigger` | Combobox trigger (`.clet-dropdown__trigger`) |
+| `icon` | Chevron icon (`.clet-dropdown__trigger-icon`) |
+| `menu` | Menu panel (`.clet-dropdown__menu`) |
+| `option` | Menu items (`.clet-dropdown__option`) |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-dropdown-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
 - The trigger icon is Lucide `ChevronDown` (16px); it rotates when the menu is open.
 - Use `aria-label` (or an external `<label>` associated with the field) so the combobox has an accessible name.
 - When `clearable` is true, choosing the placeholder item calls `onValueChange(null)`.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 
 ### Custom rendering with `formatOption`
 
-`formatOption` lets you render custom content inside both the trigger and the menu for each option. The function receives the full option object and an `isSelected` flag.
-
-```tsx
-<Dropdown
-  value={value}
-  onValueChange={setValue}
-  options={[
-    { value: "1", label: "Option A" },
-    { value: "2", label: "Option B" },
-  ]}
-  formatOption={(option, state) => {
-    if (state === "empty") return <span>Pick one...</span>;
-    if (state === "selected") {
-      return (
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-          <Check size={14} />
-          <span>{option!.label}</span>
-        </span>
-      );
-    }
-    return <span>{option!.label}</span>;
-  }}
-/>
-```
+`formatOption` lets you render custom content inside both the trigger and the menu for each option — see the second field in the [example above](#disabled-and-custom-rendering). The function receives the full option object and a state flag:
 
 - `"selected"` — rendered as the trigger value (currently picked option)
 - `"idle"` — rendered as an unselected menu item
 - `"empty"` — rendered in the trigger when no value is set; `option` is `null`
 
 The BulkImportModal's Match Columns step uses this to show a green checkmark badge next to the selected field mapping.
+
+## Do
+
+- With react-hook-form, wire `value={field.value || null}` and `onValueChange={(v) => field.onChange(v ?? "")}`, passing `options` as `{value, label}[]` (`DropdownOption[]`).
+
+## Don't
+
+- Override borders with `classNames={{trigger: "!border-0 !shadow-none focus:!shadow-none"}}` — let the component keep its default border.

@@ -1,3 +1,10 @@
+@import url("@fontsource/lato/300.css");
+@import url("@fontsource/lato/400.css");
+@import url("@fontsource/lato/700.css");
+@import url("@fontsource/lato/900.css");
+@import url("@fontsource/roboto-serif/400.css");
+@import url("@fontsource/roboto-serif/600.css");
+@import url("@fontsource/roboto-serif/700.css");
 @import url("./theme/base.css");
 @import url("./theme/light.css");
 @import url("./theme/dark.css");

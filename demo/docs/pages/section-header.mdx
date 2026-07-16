@@ -1,0 +1,73 @@
+export const meta = {
+  title: "SectionHeader",
+  description: "Title, description, and actions row for a page section",
+  category: "Components",
+  keywords: ["section header", "page header", "title", "description", "actions"],
+  since: "2.0.0",
+  status: "stable",
+  related: ["card", "app-header"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { SectionHeaderPreview } from "../previews/code/SectionHeaderPreview";
+import sectionHeaderSource from "../previews/examples/section-header.example.tsx?raw";
+
+# SectionHeader
+
+Compound primitives for a page or panel section heading — a title and description stacked on the left, actions aligned to the right.
+
+## Example
+
+<ExampleTabs title="Section header" preview={<SectionHeaderPreview />} code={sectionHeaderSource} />
+
+## Components
+
+### `SectionHeader`
+
+Root layout. Lays `SectionTitle` and `SectionDescription` out in a column on the left, and `SectionActions` on the right, vertically centered against the full block.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classNames` | `SectionHeaderClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root element |
+
+### `SectionTitle`
+
+Renders an `<h2>` for the section's title.
+
+### `SectionDescription`
+
+Renders a `<p>` for supporting copy below the title.
+
+### `SectionActions`
+
+Right-aligned row for buttons or other controls. The primary (highest-emphasis) button in this row must always carry a leading icon — see the `components-section-header-actions-primary-icon` rule.
+
+## Types
+
+### `SectionHeaderProps`
+
+Extends `HTMLAttributes<HTMLDivElement>` with an optional `classNames` part-override.
+
+### `SectionTitleProps`, `SectionDescriptionProps`, `SectionActionsProps`
+
+Extend the matching native HTML element attributes with an optional `classNames` part-override.
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-section-header-font` | `var(--clet-font-body)` | Root font family |
+| `--clet-section-header-title-font` | `var(--clet-font-header)` | Title font family |
+| `--clet-section-header-title-size` | `40px` | Title font size |
+| `--clet-section-header-description-size` | `14px` | Description font size |
+| `--clet-section-header-margin-bottom` | `24px` | Space below the header, before the section's content |
+
+## Notes
+
+- `SectionTitle` and `SectionDescription` are optional siblings — `SectionHeader` works with just a title.
+- `SectionActions` is optional too; omit it when there's nothing to put on the right.
+- Below 640px, `SectionActions` drops to a new row below the title/description instead of sitting beside them.
+- `SectionHeader` carries its own bottom margin (`--clet-section-header-margin-bottom`) — don't add page-level spacing on top of it.
+- The primary-variant button in `SectionActions` must always include a leading icon (e.g. `<Plus size={14} strokeWidth={1.5} />`); other buttons in the row are icon-optional.

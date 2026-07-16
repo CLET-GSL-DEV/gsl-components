@@ -1,54 +1,56 @@
-.gsl-badge {
+.clet-badge {
+  --clet-badge-font: var(--gsl-font-body, var(--clet-font-body));
+
   display: inline-flex;
   align-items: center;
   max-width: 100%;
   overflow: hidden;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-family: var(--gsl-font);
+  font-family: var(--gsl-badge-font, var(--clet-badge-font));
   font-weight: 600;
   line-height: 1.4;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.gsl-badge--sm {
+.clet-badge--sm {
   padding: 2px 8px;
   font-size: 11px;
 }
 
-.gsl-badge--md {
+.clet-badge--md {
   padding: 2px 10px;
   font-size: 12px;
 }
 
-.gsl-badge--default {
-  background: var(--gsl-hover);
-  color: var(--gsl-text-secondary);
+.clet-badge--default {
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
-.gsl-badge--primary {
-  background: var(--gsl-primary);
-  color: var(--gsl-on-primary);
+.clet-badge--primary {
+  background: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
-.gsl-badge--success {
-  background: color-mix(in srgb, var(--gsl-success) 18%, transparent);
-  color: var(--gsl-success);
+.clet-badge--success {
+  background: color-mix(in srgb, var(--gsl-success, var(--clet-success)) 18%, transparent);
+  color: var(--gsl-success, var(--clet-success));
 }
 
-.gsl-badge--warning {
-  background: color-mix(in srgb, var(--gsl-warning) 18%, transparent);
-  color: var(--gsl-warning);
+.clet-badge--warning {
+  background: color-mix(in srgb, var(--gsl-warning, var(--clet-warning)) 18%, transparent);
+  color: var(--gsl-warning, var(--clet-warning));
 }
 
-.gsl-badge--error {
-  background: color-mix(in srgb, var(--gsl-error) 18%, transparent);
-  color: var(--gsl-error);
+.clet-badge--error {
+  background: color-mix(in srgb, var(--gsl-error, var(--clet-error)) 18%, transparent);
+  color: var(--gsl-error, var(--clet-error));
 }
 
-.gsl-badge--outline {
-  border-color: var(--gsl-border);
+.clet-badge--outline {
+  border-color: var(--gsl-border, var(--clet-border));
   background: transparent;
-  color: var(--gsl-text);
+  color: var(--gsl-text, var(--clet-text));
 }

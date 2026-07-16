@@ -89,7 +89,7 @@ describe("Dropdown", () => {
       />,
     );
 
-    const icon = document.querySelector(".gsl-dropdown__trigger-icon");
+    const icon = document.querySelector(".clet-dropdown__trigger-icon");
     expect(icon).toBeInTheDocument();
     expect(icon?.querySelector("svg")).toBeInTheDocument();
   });
@@ -110,7 +110,7 @@ describe("Dropdown", () => {
       />,
     );
 
-    expect(document.querySelector(".gsl-dropdown")).toHaveClass("custom-root");
+    expect(document.querySelector(".clet-dropdown")).toHaveClass("custom-root");
     expect(screen.getByRole("combobox", { name: "Field" })).toHaveClass(
       "custom-trigger",
     );

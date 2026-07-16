@@ -4,7 +4,7 @@ import {
   AppHeader,
   AppHeaderActions,
   AppHeaderSearch,
-  AppHeaderProfile,
+  ProfilePopover,
   AppSidebar,
   AppBody,
   Sidebar,
@@ -13,16 +13,23 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarLink,
+  RoleSelect,
 } from "@rfdtech/components";
-import { LayoutDashboard, Users, Settings } from "lucide-react";
+import { LayoutDashboard, Users, Settings, Shield, Eye, ScrollText } from "lucide-react";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
 
 const user = {
   name: "Kwame Asante",
   role: "Admin",
   initials: "KA",
-  email: "kwame@gsl.edu.gh",
+  email: "kwame@clet.edu.gh",
 };
+
+const roles = [
+  { id: "admin", name: "Admin", icon: <Shield size={16} strokeWidth={1.5} /> },
+  { id: "reviewer", name: "Reviewer", icon: <Eye size={16} strokeWidth={1.5} /> },
+  { id: "auditor", name: "Auditor", icon: <ScrollText size={16} strokeWidth={1.5} /> },
+];
 
 const links = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, active: true },
@@ -32,6 +39,7 @@ const links = [
 
 export function AppLayoutExample() {
   const [search, setSearch] = useState("");
+  const [selectedRole, setSelectedRole] = useState("admin");
 
   const searchGroups: AppHeaderSearchDataGroup[] = search
     ? [
@@ -54,9 +62,9 @@ export function AppLayoutExample() {
           heading: "Projects",
           items: [
             {
-              value: "gsl-platform",
-              label: "GSL Platform",
-              onSelect: () => console.log("Selected project:", "GSL Platform"),
+              value: "clet-platform",
+              label: "CLET Platform",
+              onSelect: () => console.log("Selected project:", "CLET Platform"),
             },
           ],
         },
@@ -64,7 +72,7 @@ export function AppLayoutExample() {
     : [];
 
   return (
-    <div style={{ height: 400, borderRadius: "var(--gsl-radius-2xl)", overflow: "hidden" }}>
+    <div style={{ height: 400, borderRadius: "var(--clet-radius-2xl)", overflow: "hidden" }}>
       <AppLayout>
         <AppHeader>
           <AppHeaderSearch
@@ -74,21 +82,17 @@ export function AppLayoutExample() {
             placeholder="Search members, projects…"
           />
           <AppHeaderActions>
-            <AppHeaderProfile user={user}>
-              <button
-                type="button"
-                className="gsl-profile-popover__action gsl-profile-popover__action--danger"
-              >
-                <span className="gsl-profile-popover__action-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" y1="12" x2="9" y2="12" />
-                  </svg>
-                </span>
-                <span className="gsl-profile-popover__action-label">Sign out</span>
-              </button>
-            </AppHeaderProfile>
+            <ProfilePopover
+              user={user}
+              onSignOut={() => console.log("Sign out")}
+            >
+              <RoleSelect
+                title="View as"
+                roles={roles}
+                selectedRole={selectedRole}
+                onClickRole={(role) => setSelectedRole(role.id)}
+              />
+            </ProfilePopover>
           </AppHeaderActions>
         </AppHeader>
         <AppSidebar>
@@ -114,7 +118,7 @@ export function AppLayoutExample() {
               alignItems: "center",
               justifyContent: "center",
               height: "100%",
-              color: "var(--gsl-text-muted)",
+              color: "var(--clet-text-muted)",
               fontSize: 14,
             }}
           >

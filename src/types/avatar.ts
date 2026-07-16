@@ -15,6 +15,15 @@ export interface AvatarProps extends Omit<HTMLAttributes<HTMLDivElement>, "child
   src?: string;
   /** Preset size or arbitrary pixel value (e.g. 48). */
   size?: AvatarSize | number;
+  /** CSS background override for the initials fallback (e.g. `var(--clet-primary)`). Defaults to a per-name gradient. */
+  background?: string;
+  /**
+   * Name of a CSS custom property (e.g. `--clet-profile-avatar-bg`) that can
+   * override the background when set by a consumer. Falls back to the
+   * per-name gradient when the property is unset. Ignored if `background`
+   * is also provided.
+   */
+  backgroundVar?: string;
   classNames?: AvatarClassNames;
   className?: string;
 }

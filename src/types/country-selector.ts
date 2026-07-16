@@ -10,6 +10,10 @@ export interface CountrySelectorClassNames {
   search?: string;
 }
 
+/**
+ * @deprecated `CountrySelector` is deprecated in favor of `Combobox` (country selection)
+ * or `PhoneNumberInput`'s own country picker (phone numbers) — see the migration guide.
+ */
 export interface CountrySelectorProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
   invalid?: boolean;
   disabled?: boolean;

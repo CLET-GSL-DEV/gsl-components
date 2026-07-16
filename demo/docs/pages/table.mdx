@@ -1,15 +1,27 @@
 export const meta = {
   title: "Table",
   description: "Data table",
+  category: "Components",
+  keywords: ["table", "data table", "data grid", "pagination", "bulk actions", "sortable columns", "row selection"],
+  since: "1.9.0",
+  status: "stable",
+  related: ["tabs", "dropdown", "form-field", "badge"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { TablePreview } from "../previews/code/TablePreview";
 import { TablePreviewEmpty } from "../previews/code/TablePreviewEmpty";
 import { TablePreviewPanel } from "../previews/code/TablePreviewPanel";
+import { TableCrudPreview } from "../previews/code/TableCrudPreview";
+import { TableActionsPreview } from "../previews/code/TableActionsPreview";
+import { TableFilterSpreadPreview } from "../previews/code/TableFilterSpreadPreview";
 import tableSource from "../previews/examples/table.example.tsx?raw";
 import tableEmptySource from "../previews/examples/table-empty.example.tsx?raw";
 import tablePanelSource from "../previews/examples/table-panel.example.tsx?raw";
+import tableCrudSource from "../previews/examples/table-crud.example.tsx?raw";
+import tableActionsSource from "../previews/examples/table-actions.example.tsx?raw";
+import tableFilterSpreadSource from "../previews/examples/table-filter-spread.example.tsx?raw";
 
 # Table
 
@@ -37,7 +49,7 @@ Pass `variant="panel"` to `<TableContent>` for a faint recessed surface with
 subtle row dividers and a border all around. It reads well when the table is
 embedded directly in a page — for example inside pill tabs — without a wrapping
 card. The look is a pure CSS override driven by the
-`--gsl-surface-panel` and `--gsl-border-subtle` tokens (both have light and dark
+`--clet-surface-panel` and `--clet-border-subtle` tokens (both have light and dark
 values).
 
 <ExampleTabs
@@ -46,21 +58,64 @@ values).
   code={tablePanelSource}
 />
 
+## CRUD with bulk delete and a row action menu
+
+Selectable rows drive `TableBulkActions`, which opens a confirm `Dialog` before the destructive
+action actually runs — nothing is deleted until the user confirms. Each row also has its own
+`Popover` action menu, built by hand for richer per-row content — prefer [`rowActions`](#row-actions)
+(kebab click + cursor-anchored right-click, no custom `Popover` wiring) unless you need content
+`rowActions` can't express.
+
+<ExampleTabs
+  title="Selectable table with bulk delete and row actions"
+  preview={<TableCrudPreview />}
+  code={tableCrudSource}
+/>
+
+## Toolbar filters with `TableActions`
+
+`TableActions` is a layout slot inside `TableHeader` for toolbar-level controls — like a filter
+`Dropdown` — that are distinct from per-row `rowActions` and bulk `TableBulkActions`. Wire it to
+`useTableState().filters` to drive client-side (or server) filtering.
+
+<ExampleTabs
+  title="Role filter via TableActions"
+  preview={<TableActionsPreview />}
+  code={tableActionsSource}
+/>
+
+## Spread filter variant
+
+Pass `variant="spread"` to `<TableFilter>` to drop the popover entirely — the
+fields render inline as a flex row (with a consistent gap) directly in the
+toolbar, with just a "clear" action — no Apply button. Fields auto-apply as
+soon as their value changes (no popover to dismiss, so there's nothing an
+explicit Apply click would gate). Same `onApply`/`onReset` and URL behavior
+as the default popover variant otherwise, just no trigger button or panel.
+
+<ExampleTabs
+  title="Spread variant — no popover, fields inline"
+  preview={<TableFilterSpreadPreview />}
+  code={tableFilterSpreadSource}
+/>
+
 ## Architecture
 
 Every child component reads and writes its own URL keys through `useSearchParams`. The root `<Table paramPrefix>` provides a shared namespace via React Context. No prop drilling — pass `totalPages` and `totalItems` to `<TablePagination>`; everything else is fully automatic.
 
 ```
 <Table paramPrefix="members">
-  <TableSearch />          → writes ?members.search=term
-  <TableFilter>            → writes ?members.f_role=admin
-    <select name="role">   → FormData captured on Apply
+  <TableSearch />              → writes ?members.search=term
+  <TableFilter>                → writes ?members.f_role=admin
+    <Dropdown name="role" value={roleValue} onValueChange={setRoleValue} ... />
   </TableFilter>
-  <TableContent />         → renders data + sort headers
-  <TableBulkActions />     → shows selection bar with inline actions
-  <TablePagination />      → reads/writes ?members.page=1&members.pageSize=10
+  <TableContent />             → renders data + sort headers
+  <TableBulkActions />         → shows selection bar with inline actions
+  <TablePagination />          → reads/writes ?members.page=1&members.pageSize=10
 </Table>
 ```
+
+Filter fields must be *named* form-associated elements for `FormData` to capture them — never a raw `<select>`/native `<button>`/native `<input>` as the visible control. `Dropdown` participates in native form submission on its own via its `name` prop (backed by Radix's hidden bubble `<select>`) — no separate hidden input needed. Other custom inputs without built-in form participation still need a hand-paired `<input type="hidden" name="...">`.
 
 Multiple tables on one page share the same URL without collision by using different prefixes:
 
@@ -98,7 +153,7 @@ Search input with debounce and a clear button. Writes the search term to `?searc
 
 Popover with filter fields and Apply / Reset buttons. Wraps children in a `<form>` element. On Apply, reads `FormData` from named fields and writes `f_{name}={value}` to the URL. On Reset, clears all `f_*` params.
 
-Filter fields must have a `name` attribute, e.g. `<select name="status">`. The name becomes the URL key.
+Filter fields must be *named* form-associated elements for `FormData` to read them — never a raw `<select>`/native `<button>`/native `<input>` as the visible control. Pass `name="status"` straight to `Dropdown` and it participates in native form submission on its own (backed by Radix's hidden bubble `<select>`) — the `name` becomes the URL key. Other custom inputs without built-in form participation still need a hand-paired `<input type="hidden" name="...">` driving the same value.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -107,6 +162,7 @@ Filter fields must have a `name` attribute, e.g. `<select name="status">`. The n
 | `onReset` | `() => void` | — | Optional callback when Reset is clicked (URL clear happens first) |
 | `applyLabel` | `string` | `"Apply Filter"` | Apply button text |
 | `resetLabel` | `string` | `"Reset"` | Reset button aria-label |
+| `variant` | `"popover" \| "spread"` | `"popover"` | `"spread"` removes the popover and lays fields out inline as a flex row — see [Spread filter variant](#spread-filter-variant) |
 | `classNames` | `TableFilterClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root div |
 
@@ -125,7 +181,10 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `selectable` | `boolean` | `false` | Show a checkbox selection column with select-all in the header |
 | `selectedIds` | `Set<string \| number>` | `new Set()` | Controlled set of selected row keys. Pass with `onSelectionChange`. Required for `TableBulkActions` sync. |
 | `onSelectionChange` | `(selectedIds: Set<string \| number>) => void` | — | Called with a new `Set` on any selection toggle |
-| `rowActions` | `TableRowAction<T>[]` | — | Row-level actions rendered as a kebab dropdown at the end of each row |
+| `rowActions` | `TableRowAction<T>[]` | — | Row-level actions rendered as a kebab dropdown at the end of each row. Opens from the kebab button on click, or at the cursor position on right-click anywhere in the row — see [Row actions](#row-actions) below. |
+| `bulkActions` | `TableBulkAction[]` | — | Surfaces bulk actions inside the row-actions menu (kebab click or right-click) as a "Bulk actions" section — always includes a Select all/Deselect all toggle, with the rest of the list appearing once one or more rows are selected. Requires `selectable`. See [Row actions](#row-actions) below. |
+| `bulkActionsFooter` | `boolean` | `false` | Also render the `TableBulkActions` bar at the bottom of the table automatically, wired to the same `bulkActions`/`selectedIds` — skip placing `<TableBulkActions>` yourself as a sibling. When `false`, `bulkActions` only surface inside the row-actions menu. |
+| `onRowClick` | `(row: T, event: MouseEvent<HTMLTableRowElement>) => void` | — | Called when a row is clicked. Fires in addition to selection toggling when `selectable` is set — use it to e.g. open a detail view on row click. |
 | `className` | `string` | — | Merged onto the wrapper div |
 | `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
 | `emptyIcon` | `ReactNode` | Inbox icon | JSX/ReactNode icon shown above the empty text when `data` is empty. Defaults to an Inbox icon from `lucide-react`. |
@@ -134,7 +193,65 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 
 When `selectable` is true, a checkbox column is always present, collapsed to 0 width when no rows are selected. The header checkbox selects or deselects all visible rows.
 
-Rows show hover state and cursor pointer when `selectable` is set.
+Rows show hover state and cursor pointer when `selectable` or `onRowClick` is set.
+
+### Row actions
+
+`rowActions` is the **preferred** way to add a per-row action menu — prefer it over hand-rolling a `Popover` per row (see the CRUD example below, kept only for cases needing fully custom menu content). It renders a single kebab-triggered dropdown that opens two ways:
+
+- **Kebab click** — opens anchored to the kebab button, right-aligned underneath it, same as any dropdown trigger.
+- **Right-click anywhere in the row** — opens at the exact cursor position (`clientX`/`clientY`), not snapped to the kebab column. This lets users right-click near the data they care about instead of hunting for the actions column. Right-clicking the same row again while its menu is already open closes it, instead of re-opening at the new cursor position.
+
+Both open the same menu and share the same `TableRowAction<T>[]` items — no extra wiring needed.
+
+```tsx
+<TableContent
+  columns={columns}
+  data={rows}
+  rowKey={(row) => row.id}
+  rowActions={[
+    { id: "view", label: "View", icon: <Eye size={14} />, onClick: (row) => openView(row) },
+    { id: "edit", label: "Edit", icon: <Edit size={14} />, onClick: (row) => openEdit(row) },
+    {
+      id: "delete",
+      label: "Delete",
+      icon: <Trash2 size={14} />,
+      variant: "destructive",
+      onClick: (row) => deleteRow(row.id),
+    },
+  ]}
+/>
+```
+
+**Bulk actions in the row-actions menu.** Pass `bulkActions` (requires `selectable`) to surface bulk actions inside that same kebab/right-click menu, under a "Bulk actions" section label. A Select all/Deselect all toggle always shows there; the rest of `bulkActions` only appears once one or more rows are selected. Add `bulkActionsFooter` to also render the `TableBulkActions` bar at the bottom automatically — otherwise `bulkActions` only ever surface inside the menu, and you place `<TableBulkActions>` yourself if you want the bottom bar:
+
+```tsx
+<TableContent
+  columns={columns}
+  data={rows}
+  rowKey={(row) => row.id}
+  selectable
+  selectedIds={selected}
+  onSelectionChange={setSelected}
+  rowActions={rowActions}
+  bulkActions={[
+    { id: "export", label: "Export", icon: <Download size={14} />, onClick: (ids) => exportRows(ids) },
+    { id: "delete", label: "Delete", icon: <Trash2 size={14} />, destructive: true, onClick: (ids) => deleteRows(ids) },
+  ]}
+  bulkActionsFooter
+/>
+```
+
+Need a plain row click instead (e.g. navigating to a detail page)? Use `onRowClick` — it fires independently of `rowActions` and of selection toggling:
+
+```tsx
+<TableContent
+  columns={columns}
+  data={rows}
+  rowKey={(row) => row.id}
+  onRowClick={(row) => navigate(`/members/${row.id}`)}
+/>
+```
 
 ### `TableColumn<T>`
 
@@ -240,11 +357,12 @@ Layout wrapper for the header bar. Typically contains `<TableSearch>` and `<Tabl
 
 ## `<TableFooter>`
 
-Layout wrapper for the footer bar with `border-top`. Typically contains `<TablePagination>`.
+Layout wrapper for the footer bar with `border-top`. Typically contains `<TablePagination>`. Pass `noBorder` to remove the top border — preferred inside `TableContent variant="panel"` layouts, where the panel itself already provides a boundary.
 
 | Prop | Type | Description |
 |------|------|-------------|
 | `children` | `ReactNode` | Footer content |
+| `noBorder` | `boolean` | Removes the footer's top border |
 | `classNames` | `TableFooterClassNames` | — | Part-level class overrides |
 | `className` | `string` | Merged onto the footer bar |
 
@@ -331,11 +449,11 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Root wrapper (`.gsl-table`) |
-| `header` | Header bar (`.gsl-table__header-bar`) |
-| `content` | Content wrapper (`.gsl-table__content`) |
-| `footer` | Footer bar (`.gsl-table__footer`) |
-| `selectionCell` | Selection checkbox cells (`.gsl-table__checkbox-cell`) |
+| `root` | Root wrapper (`.clet-table`) |
+| `header` | Header bar (`.clet-table__header-bar`) |
+| `content` | Content wrapper (`.clet-table__content`) |
+| `footer` | Footer bar (`.clet-table__footer`) |
+| `selectionCell` | Selection checkbox cells (`.clet-table__checkbox-cell`) |
 
 ### `TableBulkAction`
 
@@ -362,78 +480,79 @@ Root props including `paramPrefix`, `classNames`, and `className`.
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Bar wrapper (`.gsl-table__bulk-actions-bar`) |
+| `root` | Bar wrapper (`.clet-table__bulk-actions-bar`) |
 | `count` | "Selected N" label |
 
 ### `TableContentClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Content wrapper (`.gsl-table__content`) |
-| `empty` | Empty state container (`.gsl-table__empty`) |
-| `emptyIcon` | Empty state icon (`.gsl-table__empty-icon`) |
-| `emptyText` | Empty state text (`.gsl-table__empty-text`) |
+| `root` | Content wrapper (`.clet-table__content`) |
+| `empty` | Empty state container (`.clet-table__empty`) |
+| `emptyIcon` | Empty state icon (`.clet-table__empty-icon`) |
+| `emptyText` | Empty state text (`.clet-table__empty-text`) |
 | `th` | Column header cells |
-| `thLabel` | Header label text (`.gsl-table__th-label`) |
-| `sortIcon` | Sort indicator (`.gsl-table__sort-icon`) |
-| `checkboxCell` | Selection checkbox cells (`.gsl-table__checkbox-cell`) |
-| `actionsCell` | Actions column cell (`.gsl-table__actions-cell`) |
-| `actionsTrigger` | Kebab trigger button (`.gsl-table__actions-trigger`) |
-| `actionsMenu` | Actions popover content (`.gsl-table__actions-menu`) |
-| `actionsItem` | Individual action item (`.gsl-table__actions-item`) |
-| `skeleton` | Loading skeleton spans (`.gsl-table__skeleton--*`) |
-| `viewport` | Virtual scroll viewport (`.gsl-table__viewport`) |
+| `thLabel` | Header label text (`.clet-table__th-label`) |
+| `sortIcon` | Sort indicator (`.clet-table__sort-icon`) |
+| `checkboxCell` | Selection checkbox cells (`.clet-table__checkbox-cell`) |
+| `actionsCell` | Actions column cell (`.clet-table__actions-cell`) |
+| `actionsTrigger` | Kebab trigger button (`.clet-table__actions-trigger`) |
+| `actionsMenu` | Actions popover content (`.clet-table__actions-menu`) |
+| `actionsItem` | Individual action item (`.clet-table__actions-item`) |
+| `actionsSectionLabel` | "Bulk actions" section label inside the row-actions menu, shown when `bulkActions` is set (`.clet-table__actions-section-label`) |
+| `skeleton` | Loading skeleton spans (`.clet-table__skeleton--*`) |
+| `viewport` | Virtual scroll viewport (`.clet-table__viewport`) |
 
 ### `TableSearchClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Search wrapper (`.gsl-table__search`) |
-| `icon` | Search icon (`.gsl-table__search-icon`) |
-| `input` | Search input (`.gsl-table__search-input`) |
-| `clear` | Clear button (`.gsl-table__search-clear`) |
+| `root` | Search wrapper (`.clet-table__search`) |
+| `icon` | Search icon (`.clet-table__search-icon`) |
+| `input` | Search input (`.clet-table__search-input`) |
+| `clear` | Clear button (`.clet-table__search-clear`) |
 
 ### `TableFilterClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Filter wrapper (`.gsl-table__filter`) |
-| `trigger` | Filter trigger button (`.gsl-table__filter-trigger`) |
-| `badge` | Active filter count badge (`.gsl-table__filter-badge`) |
-| `content` | Popover content (`.gsl-table__filter-content`) |
-| `header` | Popover header bar (`.gsl-table__filter-header`) |
-| `resetButton` | Reset button (`.gsl-table__filter-btn--reset`) |
-| `fields` | Filter form fields container (`.gsl-table__filter-fields`) |
-| `actions` | Filter actions bar (`.gsl-table__filter-actions`) |
-| `applyButton` | Apply button (`.gsl-table__filter-btn--apply`) |
+| `root` | Filter wrapper (`.clet-table__filter`) |
+| `trigger` | Filter trigger button (`.clet-table__filter-trigger`) |
+| `badge` | Active filter count badge (`.clet-table__filter-badge`) |
+| `content` | Popover content (`.clet-table__filter-content`) |
+| `header` | Popover header bar (`.clet-table__filter-header`) |
+| `resetButton` | Reset button (`.clet-table__filter-btn--reset`) |
+| `fields` | Filter form fields container (`.clet-table__filter-fields`) |
+| `actions` | Filter actions bar (`.clet-table__filter-actions`) |
+| `applyButton` | Apply button (`.clet-table__filter-btn--apply`) |
 
 ### `TablePaginationClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Pagination wrapper (`.gsl-table__pagination`) |
-| `results` | Results summary (`.gsl-table__page-results`) |
-| `pageSize` | Page size dropdown (`.gsl-table__page-size`) |
-| `pages` | Page number buttons container (`.gsl-table__pagination-pages`) |
-| `ellipsis` | Ellipsis indicator (`.gsl-table__page-ellipsis`) |
+| `root` | Pagination wrapper (`.clet-table__pagination`) |
+| `results` | Results summary (`.clet-table__page-results`) |
+| `pageSize` | Page size dropdown (`.clet-table__page-size`) |
+| `pages` | Page number buttons container (`.clet-table__pagination-pages`) |
+| `ellipsis` | Ellipsis indicator (`.clet-table__page-ellipsis`) |
 
 ### `TableHeaderClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Header bar (`.gsl-table__header-bar`) |
+| `root` | Header bar (`.clet-table__header-bar`) |
 
 ### `TableFooterClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Footer bar (`.gsl-table__footer`) |
+| `root` | Footer bar (`.clet-table__footer`) |
 
 ### `TableActionsClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Actions wrapper (`.gsl-table__actions`) |
+| `root` | Actions wrapper (`.clet-table__actions`) |
 
 ### `PaginationControlsProps`
 
@@ -441,13 +560,17 @@ Props for `TablePagination` — see the props section above.
 
 ## Design tokens
 
-The table uses the standard `--gsl-*` palette. The tokens with the most visual impact:
+The table uses the standard `--clet-*` palette. The tokens with the most visual impact:
 
 | Token | Effect |
 |-------|--------|
-| `--gsl-radius-base` | All border radii |
-| `--gsl-surface-panel` | Background of the `panel` variant content surface |
-| `--gsl-border-subtle` | Row dividers and outer border of the `panel` variant |
+| `--clet-radius-base` | All border radii |
+| `--clet-surface-panel` | Background of the `panel` variant content surface |
+| `--clet-border-subtle` | Row dividers and outer border of the `panel` variant |
+| `--clet-table-font` | Font family for the table root, search input, and filter trigger — default `var(--clet-font-body)` |
+| `--clet-table-filter-font` | Font family for the filter popover's apply/reset buttons — default `var(--clet-font-body)` |
+| `--clet-table-actions-font` | Font family for row actions menu items — default `var(--clet-font-body)` |
+| `--clet-progress-modal-font` | Font family for the bulk-import progress modal's status text — default `var(--clet-font-body)` |
 
 ## Notes
 
@@ -459,3 +582,16 @@ The table uses the standard `--gsl-*` palette. The tokens with the most visual i
 - `paramPrefix` is required on `<Table>` — every table must have a unique namespace to avoid URL collisions.
 - The filter form captures all elements with a `name` attribute via `FormData`. For custom inputs (date pickers, multi-selects), ensure they set a `name` and participate in `FormData`.
 - Selection is page-local: "select all" only selects rows on the current page. Selection is fully controlled via `selectedIds` / `onSelectionChange` — pass the same `selectedIds` to `TableBulkActions` for sync.
+- At `768px` and below (matching the breakpoint `Sidebar` uses for its mobile drawer), `TableHeader`'s children stack full-width instead of squeezing into one row, both `TableFilter` variants stack their fields, `TablePagination` wraps and centers its two rows (results/page-size, then prev/pages/next), and the bulk-actions bar wraps instead of clipping.
+
+## Do
+
+- Use the `TableActions` slot inside `TableHeader` for toolbar-level filters or actions (e.g. a `Dropdown` filter) that are distinct from per-row `TableRowAction`s and bulk `TableBulkActions`.
+- Prefer `rowActions` over a hand-rolled per-row `Popover` for kebab menus — it gets cursor-anchored right-click for free, alongside the standard kebab-click trigger.
+- Prefer `bulkActions` + `bulkActionsFooter` on `TableContent` over manually pairing it with a standalone `<TableBulkActions>` sibling — one prop pair keeps the row-actions menu's "Bulk actions" section and the bottom bar in sync automatically. Reach for a standalone `<TableBulkActions>` only if you need it placed somewhere `TableContent` can't reach (e.g. outside `<Table>` context) or without the in-menu section.
+
+## Don't
+
+- Don't pull `TableSearch`, `TableFilter`, `TableActions`, or a view-mode toggle out of `<Table>` context into a plain `<div>` — these children require the ancestor `<Table paramPrefix>` to function.
+- When a page has a list/tile view toggle, don't rebuild `TableHeader` per mode — keep it (search, filters, toggle) identical for both, and only swap `TableContent` (list) for a grid (tiles) inside `<Table>`.
+- Don't hand-roll `onContextMenu` + a controlled `Popover` to get a cursor-anchored right-click menu — `rowActions` already does this.

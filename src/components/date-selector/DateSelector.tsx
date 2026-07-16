@@ -10,7 +10,15 @@ import type { DateSelectorProps } from "../../types/date-selector";
 import { cn } from "../../utils/cn";
 import "./styles/date-selector.css";
 
-const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
+const WEEKDAYS = [
+  { short: "M", full: "Monday" },
+  { short: "T", full: "Tuesday" },
+  { short: "W", full: "Wednesday" },
+  { short: "T", full: "Thursday" },
+  { short: "F", full: "Friday" },
+  { short: "S", full: "Saturday" },
+  { short: "S", full: "Sunday" },
+] as const;
 
 const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -178,9 +186,9 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
       <div
         ref={ref}
         className={cn(
-          "gsl-date-selector",
-          invalid && "gsl-date-selector--invalid",
-          disabled && "gsl-date-selector--disabled",
+          "clet-date-selector gsl-date-selector",
+          invalid && "clet-date-selector--invalid gsl-date-selector--invalid",
+          disabled && "clet-date-selector--disabled gsl-date-selector--disabled",
           classNames?.root,
           className,
         )}
@@ -191,8 +199,8 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
               type="button"
               disabled={disabled}
               className={cn(
-                "gsl-date-selector__trigger",
-                !selected && "gsl-date-selector__trigger--placeholder",
+                "clet-date-selector__trigger gsl-date-selector__trigger",
+                !selected && "clet-date-selector__trigger--placeholder gsl-date-selector__trigger--placeholder",
                 classNames?.trigger,
               )}
               aria-invalid={invalid || undefined}
@@ -203,10 +211,10 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
               <Calendar
                 size={16}
                 strokeWidth={1.75}
-                className="gsl-date-selector__trigger-icon"
+                className="clet-date-selector__trigger-icon gsl-date-selector__trigger-icon"
                 aria-hidden
               />
-              <span className="gsl-date-selector__trigger-text">
+              <span className="clet-date-selector__trigger-text gsl-date-selector__trigger-text">
                 {selected ? displayText : placeholder}
               </span>
             </button>
@@ -215,7 +223,7 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
           <Popover.Portal>
             <Popover.Content
               className={cn(
-                "gsl-date-selector__calendar",
+                "clet-date-selector__calendar gsl-date-selector__calendar",
                 classNames?.calendar,
               )}
               side="bottom"
@@ -226,14 +234,14 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
               {/* Month / Year header */}
               <div
                 className={cn(
-                  "gsl-date-selector__calendar-header",
+                  "clet-date-selector__calendar-header gsl-date-selector__calendar-header",
                   classNames?.calendarHeader,
                 )}
               >
                 <button
                   type="button"
                   className={cn(
-                    "gsl-date-selector__calendar-nav",
+                    "clet-date-selector__calendar-nav gsl-date-selector__calendar-nav",
                     classNames?.calendarNav,
                   )}
                   onClick={prevMonth}
@@ -244,7 +252,7 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
 
                 <span
                   className={cn(
-                    "gsl-date-selector__calendar-title",
+                    "clet-date-selector__calendar-title gsl-date-selector__calendar-title",
                     classNames?.calendarTitle,
                   )}
                 >
@@ -254,7 +262,7 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
                 <button
                   type="button"
                   className={cn(
-                    "gsl-date-selector__calendar-nav",
+                    "clet-date-selector__calendar-nav gsl-date-selector__calendar-nav",
                     classNames?.calendarNav,
                   )}
                   onClick={nextMonth}
@@ -267,22 +275,22 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
               {/* Weekday labels */}
               <div
                 className={cn(
-                  "gsl-date-selector__calendar-weekdays",
+                  "clet-date-selector__calendar-weekdays gsl-date-selector__calendar-weekdays",
                   classNames?.calendarWeekdays,
                 )}
                 role="row"
               >
                 {WEEKDAYS.map((day) => (
                   <div
-                    key={day}
+                    key={day.full}
                     className={cn(
-                      "gsl-date-selector__calendar-weekday",
+                      "clet-date-selector__calendar-weekday gsl-date-selector__calendar-weekday",
                       classNames?.calendarWeekday,
                     )}
                     role="columnheader"
-                    aria-label={day}
+                    aria-label={day.full}
                   >
-                    {day}
+                    {day.short}
                   </div>
                 ))}
               </div>
@@ -290,7 +298,7 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
               {/* Day grid */}
               <div
                 className={cn(
-                  "gsl-date-selector__calendar-grid",
+                  "clet-date-selector__calendar-grid gsl-date-selector__calendar-grid",
                   classNames?.calendarGrid,
                 )}
                 role="grid"
@@ -315,12 +323,12 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
                         year: "numeric",
                       })}
                       className={cn(
-                        "gsl-date-selector__calendar-day",
+                        "clet-date-selector__calendar-day gsl-date-selector__calendar-day",
                         !isCurrentMonth &&
-                          "gsl-date-selector__calendar-day--outside",
-                        isToday && "gsl-date-selector__calendar-day--today",
+                          "clet-date-selector__calendar-day--outside gsl-date-selector__calendar-day--outside",
+                        isToday && "clet-date-selector__calendar-day--today gsl-date-selector__calendar-day--today",
                         isSelected &&
-                          "gsl-date-selector__calendar-day--selected",
+                          "clet-date-selector__calendar-day--selected gsl-date-selector__calendar-day--selected",
                         classNames?.calendarDay,
                       )}
                       onClick={() => handleSelect(day)}

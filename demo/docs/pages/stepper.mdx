@@ -1,6 +1,12 @@
 export const meta = {
   title: "Stepper",
   description: "Horizontal step indicator for multi-step flows",
+  category: "Components",
+  keywords: ["stepper", "step indicator", "multi step flow", "wizard steps", "progress steps"],
+  since: "1.23.0",
+  status: "stable",
+  related: ["bulk-import-modal", "progress-bar"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -87,24 +93,24 @@ import { Stepper } from "@rfdtech/components";
 
 | Key | Applied to |
 |-----|------------|
-| `root` | `<ol>` element (`.gsl-stepper`) |
+| `root` | `<ol>` element (`.clet-stepper`) |
 
 ### `StepClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | `<li>` element (`.gsl-stepper__item`) |
-| `button` | Clickable wrapper (`.gsl-stepper__button`) |
-| `marker` | Numbered circle (`.gsl-stepper__marker`) |
-| `number` | Step number (`.gsl-stepper__number`) |
-| `check` | Check icon (`.gsl-stepper__check`) |
-| `connector` | Connector line (`.gsl-stepper__connector`) |
+| `root` | `<li>` element (`.clet-stepper__item`) |
+| `button` | Clickable wrapper (`.clet-stepper__button`) |
+| `marker` | Numbered circle (`.clet-stepper__marker`) |
+| `number` | Step number (`.clet-stepper__number`) |
+| `check` | Check icon (`.clet-stepper__check`) |
+| `connector` | Connector line (`.clet-stepper__connector`) |
 
 ### `StepLabelClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Label span (`.gsl-stepper__label`) |
+| `root` | Label span (`.clet-stepper__label`) |
 
 ### `StepState`
 
@@ -116,7 +122,7 @@ import { Stepper } from "@rfdtech/components";
 - The connector between two steps fills once the earlier step is complete.
 - The active step receives `aria-current="step"`.
 - When `clickable` is true, steps render as `<button>` and fire `onValueChange` with the clicked step's `value`; a `disabled` step is skipped.
-- All colors resolve from existing `--gsl-*` tokens through the overridable internal variables below — no new colors are introduced.
+- All colors resolve from existing `--clet-*` tokens through the overridable internal variables below — no new colors are introduced.
 - Check-draw, marker-pop, and connector-fill animations are disabled under `prefers-reduced-motion: reduce`.
 
 ## CSS Custom Properties
@@ -125,10 +131,12 @@ Override these at any level to retheme without touching the component.
 
 | Token | Default | Description |
 |-------|---------|-------------|
-| `--gsl-stepper-accent` | `var(--gsl-primary)` | Color of active/complete markers and filled connectors. Set to `var(--gsl-success)` for a green "done" look. |
-| `--gsl-stepper-marker-size` | `28px` | Diameter of the numbered circle |
-| `--gsl-stepper-marker-border` | `2px` | Marker border width |
-| `--gsl-stepper-track` | `var(--gsl-border)` | Unfilled connector color |
-| `--gsl-stepper-transition` | `250ms` | Marker color transition duration |
-| `--gsl-stepper-connector-min` | `24px` | Minimum connector length |
-| `--gsl-stepper-gap` | `10px` | Gap between marker, label, and connector |
+| `--clet-stepper-accent` | `var(--clet-primary)` | Color of active/complete markers and filled connectors. Set to `var(--clet-success)` for a green "done" look. |
+| `--clet-stepper-current` | `var(--clet-secondary)` | Background color of the active step's marker (falls back to `var(--clet-warning)` if unset) |
+| `--clet-stepper-marker-size` | `28px` | Diameter of the numbered circle |
+| `--clet-stepper-marker-border` | `2px` | Marker border width |
+| `--clet-stepper-track` | `var(--clet-border)` | Unfilled connector color |
+| `--clet-stepper-transition` | `250ms` | Marker color transition duration |
+| `--clet-stepper-connector-min` | `24px` | Minimum connector length |
+| `--clet-stepper-gap` | `10px` | Gap between marker, label, and connector |
+| `--clet-stepper-font` | `var(--clet-font-body)` | Font family for the stepper list and its steps |

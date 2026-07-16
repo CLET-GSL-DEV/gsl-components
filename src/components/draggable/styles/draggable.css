@@ -1,20 +1,20 @@
-.gsl-draggable {
+.clet-draggable {
   position: relative;
   width: fit-content;
   max-width: 100%;
 }
 
-.gsl-draggable--dragging {
+.clet-draggable--dragging {
   z-index: 1;
   touch-action: none;
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--gsl-text) 12%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--gsl-text, var(--clet-text)) 12%, transparent);
 }
 
-.gsl-draggable--disabled {
+.clet-draggable--disabled {
   opacity: 0.6;
 }
 
-.gsl-draggable__handle {
+.clet-draggable__handle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -22,34 +22,34 @@
   min-height: 40px;
   padding: 8px;
   border: 0;
-  border-radius: var(--gsl-radius-base);
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
   background: transparent;
-  color: var(--gsl-text-muted);
+  color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: grab;
   touch-action: none;
 }
 
-.gsl-draggable__handle:hover:not(:disabled) {
-  color: var(--gsl-text-secondary);
-  background: var(--gsl-hover);
+.clet-draggable__handle:hover:not(:disabled) {
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
-.gsl-draggable__handle:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-draggable__handle:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
-.gsl-draggable__handle--dragging,
-.gsl-draggable__handle:active:not(:disabled) {
+.clet-draggable__handle--dragging,
+.clet-draggable__handle:active:not(:disabled) {
   cursor: grabbing;
 }
 
-.gsl-draggable__handle:disabled {
+.clet-draggable__handle:disabled {
   cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-draggable {
+  .clet-draggable {
     transition: none;
   }
 }

@@ -1,8 +1,8 @@
 {
   "extends": ["stylelint-config-standard"],
   "rules": {
-    "selector-class-pattern": "^(gsl-[a-z][a-z0-9-]*)(__[a-z][a-z0-9-]*)?(--[a-z][a-z0-9-]*)?$|^[a-z]",
-    "keyframes-name-pattern": "^gsl-[a-z][a-z0-9-]*$",
+    "selector-class-pattern": "^(clet-[a-z][a-z0-9-]*)(__[a-z][a-z0-9-]*)?(--[a-z][a-z0-9-]*)?$|^[a-z]",
+    "keyframes-name-pattern": "^clet-[a-z][a-z0-9-]*$",
     "custom-property-pattern": null,
     "no-descending-specificity": null,
     "property-no-deprecated": null,

@@ -9,7 +9,11 @@ interface SpinnerProps {
 export function Spinner({ size = "md", className }: SpinnerProps) {
   return (
     <span
-      className={cn("gsl-button__spinner", `gsl-button__spinner--${size}`, className)}
+      className={cn(
+        "clet-button__spinner gsl-button__spinner",
+        `clet-button__spinner--${size} gsl-button__spinner--${size}`,
+        className,
+      )}
       aria-hidden="true"
     />
   );

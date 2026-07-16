@@ -1,13 +1,21 @@
 export const meta = {
   title: "RadioGroup",
   description: "Radio group component",
+  category: "Components",
+  keywords: ["radio group", "radio button", "choice cards", "single select", "option list"],
+  since: "1.5.0",
+  status: "stable",
+  related: ["form-field", "checkbox"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
 import { RadioGroupPreview } from "../previews/code/RadioGroupPreview";
 import { RadioGroupCardPreview } from "../previews/code/RadioGroupCardPreview";
+import { RadioDecisionFormPreview } from "../previews/code/RadioDecisionFormPreview";
 import radioGroupSource from "../previews/examples/radio-group.example.tsx?raw";
 import radioGroupCardSource from "../previews/examples/radio-group-card.example.tsx?raw";
+import radioDecisionFormSource from "../previews/examples/radio-decision-form.example.tsx?raw";
 
 # RadioGroup
 
@@ -29,6 +37,18 @@ Use `variant="card"` on `RadioGroup` to render each option as a bordered card wi
   title="Plan selection"
   preview={<RadioGroupCardPreview />}
   code={radioGroupCardSource}
+/>
+
+## Decision form with a conditional field
+
+`RadioGroup` driving a verdict choice, with a `Textarea` reason field that's only required (via
+zod `superRefine`) when the verdict isn't the "approve" path — shown conditionally via
+`form.watch("verdict")`.
+
+<ExampleTabs
+  title="Verdict form with conditional reason field"
+  preview={<RadioDecisionFormPreview />}
+  code={radioDecisionFormSource}
 />
 
 ## Components
@@ -84,18 +104,24 @@ Props for `Radio`. Requires `value`; supports optional `label`, `description`, a
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Group root (`.gsl-radio-group`) |
+| `root` | Group root (`.clet-radio-group`) |
 
 ### `RadioClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `root` | Outer wrapper (`.gsl-radio`) |
-| `control` | Radio control (`.gsl-radio__control`) |
-| `indicator` | Checked dot (`.gsl-radio__indicator`) |
-| `content` | Label and description stack (`.gsl-radio__content`) |
+| `root` | Outer wrapper (`.clet-radio`) |
+| `control` | Radio control (`.clet-radio__control`) |
+| `indicator` | Checked dot (`.clet-radio__indicator`) |
+| `content` | Label and description stack (`.clet-radio__content`) |
 | `label` | Visible label text |
 | `description` | Secondary description text |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-radio-group-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
@@ -103,4 +129,4 @@ Props for `Radio`. Requires `value`; supports optional `label`, `description`, a
 - When `description` is set, it is linked to the control via `aria-describedby`.
 - Checked state shows a primary-colored dot inside the circular control.
 - Card variant highlights the selected option with a primary border and light background.
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

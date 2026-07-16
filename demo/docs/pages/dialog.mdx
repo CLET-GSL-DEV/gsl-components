@@ -1,6 +1,12 @@
 export const meta = {
   title: "Dialog",
   description: "Modal dialog",
+  category: "Components",
+  keywords: ["dialog", "modal dialog", "popup", "confirm dialog", "overlay"],
+  since: "1.7.0",
+  status: "stable",
+  related: ["modal", "popover"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -9,7 +15,7 @@ import dialogSource from "../previews/examples/dialog.example.tsx?raw";
 
 # Dialog
 
-Compound dialog primitives for modal overlays such as forms, detail panels, and settings. Wraps `@radix-ui/react-dialog`; styled parts apply default GSL surface styles.
+Compound dialog primitives for modal overlays such as forms, detail panels, and settings. Wraps `@radix-ui/react-dialog`; styled parts apply default CLET surface styles.
 
 ## Example
 
@@ -113,32 +119,48 @@ Extend Radix title and description props with optional `classNames`.
 
 | Key | Applied to |
 |-----|------------|
-| `overlay` | Overlay element (`.gsl-dialog__overlay`) |
+| `overlay` | Overlay element (`.clet-dialog__overlay`) |
 
 ### `DialogContentClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `content` | Content element (`.gsl-dialog__content`) |
-| `close` | Built-in close button (`.gsl-dialog__close`) |
+| `content` | Content element (`.clet-dialog__content`) |
+| `close` | Built-in close button (`.clet-dialog__close`) |
 
 ### `DialogTitleClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `title` | Title element (`.gsl-dialog__title`) |
+| `title` | Title element (`.clet-dialog__title`) |
 
 ### `DialogDescriptionClassNames`
 
 | Key | Applied to |
 |-----|------------|
-| `description` | Description element (`.gsl-dialog__description`) |
+| `description` | Description element (`.clet-dialog__description`) |
+
+## Design tokens
+
+| Token | Default | Used for |
+|-------|---------|----------|
+| `--clet-dialog-font` | `var(--clet-font-body)` | Font family override |
 
 ## Notes
 
-- Portaled content inherits the active theme via `data-gsl-theme` on `document.documentElement` when using `ThemeProvider`.
+- Portaled content inherits the active theme via `data-clet-theme` on `document.documentElement` when using `ThemeProvider`.
 - **URL-driven open state** is the recommended pattern: use `useDialogSearchParam` with `open`, `onOpenChange`, and `openWith` (see [URL state](#url-state) above). For local-only dialogs, `DialogTrigger asChild` keeps focus and keyboard behavior on your button or link.
 - The panel is centered with `width: min(480px, calc(100vw - 32px))` and scrollable content capped at `min(85vh, calc(100dvh - 32px))` so it fits mobile viewports.
 - The built-in close control uses a 40×40px hit area for touch-friendly dismissal.
 - Enter/exit animations are disabled when `prefers-reduced-motion: reduce` is set.
-- Base `gsl-dialog*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+- Base `clet-dialog*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
+
+## Do
+
+- For a custom leading icon next to the title, wrap both in `<div className="flex items-center gap-2">` with the icon at `size-5 shrink-0`.
+
+## Don't
+
+- Override `DialogContent` padding via `classNames={{content: "p-0 overflow-hidden"}}` — it manages its own padding.
+- Wrap Title/Description/actions in extra padded/gapped wrapper divs — they sit directly inside `DialogContent`, causing doubled gaps.
+- Add a separate footer component — the actions row is just `<div className="flex justify-end gap-2">` directly inside `DialogContent`.

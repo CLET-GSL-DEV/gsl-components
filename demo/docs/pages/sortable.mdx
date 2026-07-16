@@ -1,6 +1,12 @@
 export const meta = {
   title: "Sortable",
   description: "Reorderable list",
+  category: "Components",
+  keywords: ["sortable", "reorder list", "drag to reorder", "drag and drop list"],
+  since: "1.8.0",
+  status: "stable",
+  related: ["draggable"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -84,10 +90,10 @@ Pure helper exported for advanced use. Returns a new array with the active item 
 
 | Key | Applied to |
 |-----|------------|
-| `root` | `.gsl-sortable` |
-| `list` | `.gsl-sortable__list` |
-| `item` | `.gsl-sortable__item` |
-| `handle` | `.gsl-sortable__handle` |
+| `root` | `.clet-sortable` |
+| `list` | `.clet-sortable__list` |
+| `item` | `.clet-sortable__item` |
+| `handle` | `.clet-sortable__handle` |
 
 ## Notes
 
@@ -96,4 +102,4 @@ Pure helper exported for advanced use. Returns a new array with the active item 
 - Keyboard reordering is enabled via the built-in `KeyboardSensor`.
 - For repositioning a panel within bounds (not list order), use [Draggable](/docs/draggable).
 - Respects `prefers-reduced-motion: reduce` (no transform transition).
-- Base `gsl-*` classes are always applied; `classNames` and `className` append consumer classes.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes.

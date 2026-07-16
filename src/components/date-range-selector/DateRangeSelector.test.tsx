@@ -35,7 +35,7 @@ describe("DateRangeSelector", () => {
     const { container } = render(<DateRangeSelector className="custom" />);
     const root = container.firstElementChild!;
     expect(root).toHaveClass("custom");
-    expect(root).toHaveClass("gsl-date-range-selector");
+    expect(root).toHaveClass("clet-date-range-selector");
   });
 
   it("shows placeholder when no dates are selected", () => {
@@ -382,5 +382,98 @@ describe("DateRangeSelector", () => {
 
     expect(screen.getByTestId("start")).not.toHaveTextContent("null");
     expect(screen.getByTestId("end")).not.toHaveTextContent("null");
+  });
+});
+
+describe("DateRangeSelector presets", () => {
+  const presets = [
+    {
+      label: "Today",
+      getRange: () => {
+        const today = new Date(2026, 5, 15);
+        return { start: today, end: today };
+      },
+    },
+    {
+      label: "Last 7 days",
+      getRange: () => ({
+        start: new Date(2026, 5, 9),
+        end: new Date(2026, 5, 15),
+      }),
+    },
+  ];
+
+  it("does not render a presets rail or range summary by default", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector />);
+
+    await user.click(screen.getByRole("button"));
+
+    expect(screen.queryByText("Today")).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Range:/)).not.toBeInTheDocument();
+  });
+
+  it("renders preset buttons but no range summary until something is selected", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector presets={presets} />);
+
+    await user.click(screen.getByRole("button"));
+
+    expect(screen.getByRole("button", { name: "Today" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Last 7 days" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/^Range:/)).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Last 7 days" }));
+
+    expect(screen.getByText(/^Range:/)).toBeInTheDocument();
+  });
+
+  it("sets the pending range and enables Apply when a preset is clicked", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<DateRangeSelector presets={presets} onChange={onChange} />);
+
+    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button", { name: "Last 7 days" }));
+
+    expect(screen.getByRole("button", { name: /apply/i })).toBeEnabled();
+
+    await user.click(screen.getByRole("button", { name: /apply/i }));
+
+    expect(onChange).toHaveBeenCalledWith({
+      start: new Date(2026, 5, 9),
+      end: new Date(2026, 5, 15),
+    });
+  });
+
+  it("marks the matching preset as active after selection", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector presets={presets} />);
+
+    await user.click(screen.getByRole("button"));
+    const preset = screen.getByRole("button", { name: "Last 7 days" });
+    await user.click(preset);
+
+    expect(preset).toHaveClass("clet-date-range-selector__preset-item--active");
+  });
+
+  it("clears the active preset when a day is clicked manually afterward", async () => {
+    const user = userEvent.setup();
+    render(<DateRangeSelector presets={presets} />);
+
+    await user.click(screen.getByRole("button"));
+    const preset = screen.getByRole("button", { name: "Last 7 days" });
+    await user.click(preset);
+    expect(preset).toHaveClass("clet-date-range-selector__preset-item--active");
+
+    const days = screen.getAllByRole("gridcell");
+    const enabled = days.filter((d) => !d.hasAttribute("disabled"));
+    await user.click(enabled[0]);
+
+    expect(preset).not.toHaveClass(
+      "clet-date-range-selector__preset-item--active",
+    );
   });
 });

@@ -1,22 +1,27 @@
-.gsl-sidebar {
+/* --clet-sidebar-bg is the single override point for every background
+   declaration in this file that paints the sidebar surface itself. */
+.clet-sidebar {
+  --clet-sidebar-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-sidebar-bg: var(--gsl-bg, var(--clet-bg));
   display: flex;
   flex-direction: column;
   width: 280px;
   max-width: min(100vw, 280px);
-  font-family: var(--gsl-font);
-  color: var(--gsl-sidebar-text, var(--gsl-text));
+  font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
+  color: var(--gsl-sidebar-text, var(--clet-sidebar-text, var(--clet-text)));
   box-sizing: border-box;
   height: 100%;
 }
 
-/* ── Plain variant: transparent background, right border, no radius ── */
-.gsl-sidebar.gsl-sidebar--plain {
-  background: transparent;
-  border-right: 1px solid var(--gsl-border);
+/* ── Plain variant: right border, no radius ── */
+.clet-sidebar.clet-sidebar--plain {
+  --clet-sidebar-bg: var(--gsl-bg, var(--clet-bg));
+  background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+  border-right: 1px solid var(--gsl-border, var(--clet-border));
   border-radius: 0;
 }
 
-.gsl-sidebar__header {
+.clet-sidebar__header {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -25,7 +30,7 @@
   margin-bottom: 20px;
 }
 
-.gsl-sidebar__header-brand {
+.clet-sidebar__header-brand {
   display: flex;
   min-width: 0;
   flex: 1;
@@ -33,7 +38,7 @@
   gap: 10px;
 }
 
-.gsl-sidebar__header-title {
+.clet-sidebar__header-title {
   overflow: hidden;
   font-size: 18px;
   font-weight: 700;
@@ -42,7 +47,7 @@
   white-space: nowrap;
 }
 
-.gsl-sidebar__collapse {
+.clet-sidebar__collapse {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -51,33 +56,33 @@
   height: 32px;
   padding: 0;
   border: none;
-  border-radius: calc(var(--gsl-radius-base) - 2px);
+  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
   background: transparent;
-  color: var(--gsl-sidebar-link-text, var(--gsl-text-secondary));
+  color: var(--gsl-sidebar-link-text, var(--clet-sidebar-link-text, var(--clet-text-secondary)));
   cursor: pointer;
   transition:
     background-color 150ms ease,
     color 150ms ease;
 }
 
-.gsl-sidebar__collapse:hover {
-  background: var(--gsl-hover);
-  color: var(--gsl-text);
+.clet-sidebar__collapse:hover {
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
 }
 
-.gsl-sidebar__collapse:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-sidebar__collapse:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 /* Registered so the mask edges can transition smoothly. */
-@property --gsl-sidebar-mask-top {
+@property --clet-sidebar-mask-top {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --gsl-sidebar-mask-bottom {
+@property --clet-sidebar-mask-bottom {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
@@ -86,10 +91,10 @@
 /* Real scroll mask: a linear-gradient mask fades the content to transparent at
    the top (once scrolled) and bottom (while more content is below). Being a
    mask, it is background-independent — works on the solid and plain sidebars. */
-.gsl-sidebar__content {
-  --gsl-sidebar-mask-size: 48px;
-  --gsl-sidebar-mask-top: 0px;
-  --gsl-sidebar-mask-bottom: 0px;
+.clet-sidebar__content {
+  --clet-sidebar-mask-size: 48px;
+  --clet-sidebar-mask-top: 0px;
+  --clet-sidebar-mask-bottom: 0px;
 
   flex: 1;
   min-height: 0;
@@ -100,28 +105,28 @@
   mask-image: linear-gradient(
     to bottom,
     transparent 0,
-    #000 var(--gsl-sidebar-mask-top),
-    #000 calc(100% - var(--gsl-sidebar-mask-bottom)),
+    #000 var(--gsl-sidebar-mask-top, var(--clet-sidebar-mask-top)),
+    #000 calc(100% - var(--gsl-sidebar-mask-bottom, var(--clet-sidebar-mask-bottom))),
     transparent 100%
   );
   transition:
-    --gsl-sidebar-mask-top 200ms ease,
-    --gsl-sidebar-mask-bottom 200ms ease;
+    --clet-sidebar-mask-top 200ms ease,
+    --clet-sidebar-mask-bottom 200ms ease;
 }
 
-.gsl-sidebar__content::-webkit-scrollbar {
+.clet-sidebar__content::-webkit-scrollbar {
   display: none;
 }
 
-.gsl-sidebar__content--scrolled {
-  --gsl-sidebar-mask-top: var(--gsl-sidebar-mask-size);
+.clet-sidebar__content--scrolled {
+  --clet-sidebar-mask-top: var(--gsl-sidebar-mask-size, var(--clet-sidebar-mask-size));
 }
 
-.gsl-sidebar__content--more-below {
-  --gsl-sidebar-mask-bottom: var(--gsl-sidebar-mask-size);
+.clet-sidebar__content--more-below {
+  --clet-sidebar-mask-bottom: var(--gsl-sidebar-mask-size, var(--clet-sidebar-mask-size));
 }
 
-.gsl-sidebar__scroll-hint {
+.clet-sidebar__scroll-hint {
   position: sticky;
   display: flex;
   align-items: center;
@@ -132,44 +137,44 @@
   margin-top: -5px;
   border: none;
   background: transparent;
-  color: var(--gsl-text);
+  color: var(--gsl-text, var(--clet-text));
   cursor: pointer;
   z-index: 2;
 }
 
-.gsl-sidebar__scroll-hint:hover {
-  color: var(--gsl-text-secondary);
+.clet-sidebar__scroll-hint:hover {
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
-.gsl-sidebar__footer {
+.clet-sidebar__footer {
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px solid var(--gsl-border);
+  border-top: 1px solid var(--gsl-border, var(--clet-border));
 }
 
-.gsl-sidebar__nav {
+.clet-sidebar__nav {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.gsl-sidebar__group {
+.clet-sidebar__group {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.gsl-sidebar__group-label,
-.gsl-sidebar__group-toggle {
+.clet-sidebar__group-label,
+.clet-sidebar__group-toggle {
   margin: 0;
   padding: 0 12px 4px;
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: var(--gsl-sidebar-label-text, , var(--gsl-text));
+  color: var(--gsl-sidebar-label-text, var(--clet-sidebar-label-text, , var(--clet-text)));
 }
 
-.gsl-sidebar__group-toggle {
+.clet-sidebar__group-toggle {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -182,25 +187,25 @@
   text-transform: inherit;
   cursor: pointer;
 }
-.gsl-sidebar__group-label-icon {
+.clet-sidebar__group-label-icon {
   flex-shrink: 0;
   transition: transform 200ms ease;
 }
 
 /* Chevron switches direction when the group is folded */
-.gsl-sidebar__group-toggle[aria-expanded="false"]
-  .gsl-sidebar__group-label-icon {
+.clet-sidebar__group-toggle[aria-expanded="false"]
+  .clet-sidebar__group-label-icon {
   transform: rotate(-90deg);
 }
 
-.gsl-sidebar__group-toggle:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-sidebar__group-toggle:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
 /* Fold animation via grid-template-rows (0fr -> 1fr) so the height
    transition is smooth. The inner wrapper clips overflow while collapsing. */
-.gsl-sidebar__group-content {
+.clet-sidebar__group-content {
   display: grid;
   grid-template-rows: 1fr;
   opacity: 1;
@@ -211,7 +216,7 @@
     visibility 0s linear 0s;
 }
 
-.gsl-sidebar__group-content-inner {
+.clet-sidebar__group-content-inner {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -219,7 +224,7 @@
   overflow: hidden;
 }
 
-.gsl-sidebar__group-content[data-state="collapsed"] {
+.clet-sidebar__group-content[data-state="collapsed"] {
   grid-template-rows: 0fr;
   opacity: 0;
   visibility: hidden;
@@ -229,11 +234,11 @@
     visibility 0s linear 220ms;
 }
 
-.gsl-sidebar__item {
+.clet-sidebar__item {
   display: block;
 }
 
-.gsl-sidebar__link {
+.clet-sidebar__link {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -244,8 +249,8 @@
   border: none;
   border-radius: 12px;
   background: transparent;
-  color: var(--gsl-sidebar-link-text, var(--gsl-text-secondary));
-  font-family: var(--gsl-font);
+  color: var(--gsl-sidebar-link-text, var(--clet-sidebar-link-text, var(--clet-text-secondary)));
+  font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
   font-size: 14px;
   font-weight: 400;
   line-height: 1.4;
@@ -257,7 +262,7 @@
     color 150ms ease;
 }
 
-.gsl-sidebar__link-icon {
+.clet-sidebar__link-icon {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -267,7 +272,7 @@
   color: inherit;
 }
 
-.gsl-sidebar__link-label {
+.clet-sidebar__link-label {
   min-width: 0;
   flex: 1;
   overflow: hidden;
@@ -275,15 +280,15 @@
   white-space: nowrap;
 }
 
-.gsl-sidebar__link-badge {
+.clet-sidebar__link-badge {
   flex-shrink: 0;
   max-width: 40%;
   margin-left: auto;
   padding: 2px 8px;
   overflow: hidden;
   border-radius: 999px;
-  background: var(--gsl-sidebar-badge-bg, var(--gsl-primary));
-  color: var(--gsl-sidebar-badge-color, var(--gsl-on-primary));
+  background: var(--gsl-sidebar-badge-bg, var(--clet-sidebar-badge-bg, var(--clet-primary)));
+  color: var(--gsl-sidebar-badge-color, var(--clet-sidebar-badge-color, var(--clet-on-primary)));
   font-size: 11px;
   font-weight: 600;
   line-height: 1.4;
@@ -291,28 +296,61 @@
   white-space: nowrap;
 }
 
-.gsl-sidebar__link--active .gsl-sidebar__link-badge {
-  --gsl-sidebar-badge-bg: var(--gsl-hover);
-  --gsl-sidebar-badge-color: var(--gsl-text-secondary);
+.clet-sidebar__link--active .clet-sidebar__link-badge {
+  --clet-sidebar-badge-bg: var(--gsl-hover, var(--clet-hover));
+  --clet-sidebar-badge-color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
-.gsl-sidebar__link:hover {
-  background: var(--gsl-sidebar-link-hover-bg, var(--gsl-surface-dark));
-  color: var(--gsl-sidebar-link-hover-text, var(--gsl-text));
+.clet-sidebar__link:hover {
+  background: var(--gsl-sidebar-link-hover-bg, var(--clet-sidebar-link-hover-bg, var(--clet-surface-dark)));
+  color: var(--gsl-sidebar-link-hover-text, var(--clet-sidebar-link-hover-text, var(--clet-text)));
 }
 
-.gsl-sidebar__link:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-sidebar__link:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
-.gsl-sidebar__link--active {
-  background: var(--gsl-sidebar-link-active-bg, var(--gsl-surface-dark));
-  color: var(--gsl-sidebar-link-active-text, var(--gsl-primary));
+.clet-sidebar__link--active {
+  background: var(--gsl-sidebar-link-active-bg, var(--clet-sidebar-link-active-bg, var(--clet-surface-dark)));
+  color: var(--gsl-sidebar-link-active-text, var(--clet-sidebar-link-active-text, var(--clet-secondary)));
   font-weight: 600;
 }
 
-.gsl-sidebar__trigger {
+/* ── Link loading shimmer ── */
+
+.clet-sidebar__link--loading {
+  cursor: default;
+  pointer-events: none;
+}
+
+.clet-sidebar__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.clet-sidebar__skeleton-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.clet-sidebar__skeleton-label {
+  flex: 1;
+  width: 60%;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.clet-sidebar__trigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -320,11 +358,11 @@
   min-height: 40px;
   margin-bottom: 16px;
   padding: 8px 14px;
-  border: 1px solid var(--gsl-border);
-  border-radius: var(--gsl-radius-base);
-  background: var(--gsl-bg);
-  color: var(--gsl-text);
-  font-family: var(--gsl-font);
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-text, var(--clet-text));
+  font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
   font-size: 14px;
   font-weight: 500;
   line-height: 1.4;
@@ -334,93 +372,91 @@
     border-color 150ms ease;
 }
 
-.gsl-sidebar__trigger:hover {
-  background: var(--gsl-hover);
+.clet-sidebar__trigger:hover {
+  background: var(--gsl-hover, var(--clet-hover));
 }
 
-.gsl-sidebar__trigger:focus-visible {
-  outline: 2px solid var(--gsl-focus);
+.clet-sidebar__trigger:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
-.gsl-sidebar__overlay {
+.clet-sidebar__overlay {
   position: fixed;
   inset: 0;
-  z-index: calc(var(--gsl-z-overlay) - 1);
+  z-index: calc(var(--gsl-z-overlay, var(--clet-z-overlay)) - 1);
   display: block;
   border: none;
-  background: var(--gsl-overlay);
+  background: var(--gsl-overlay, var(--clet-overlay));
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
   transition: opacity 200ms ease;
 }
 
-.gsl-sidebar__overlay--visible {
+.clet-sidebar__overlay--visible {
   opacity: 1;
   pointer-events: auto;
 }
 
-.gsl-sidebar--mobile {
+.clet-sidebar--mobile {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: var(--gsl-z-overlay);
+  z-index: var(--gsl-z-overlay, var(--clet-z-overlay));
   width: min(280px, 100vw);
   height: 100dvh;
   padding: 16px;
-  border-right: 1px solid var(--gsl-border);
-  background: var(--gsl-bg);
-  box-shadow: var(--gsl-shadow-lg);
+  border-right: 1px solid var(--gsl-border, var(--clet-border));
+  background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+  box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
   transform: translateX(-100%);
   transition: transform 200ms ease;
 }
 
-.gsl-sidebar--mobile.gsl-sidebar--mobile-open {
+.clet-sidebar--mobile.clet-sidebar--mobile-open {
   transform: translateX(0);
 }
 
-.gsl-sidebar--mobile .gsl-sidebar__link {
+.clet-sidebar--mobile .clet-sidebar__link {
   min-height: 40px;
 }
 
-.gsl-sidebar--collapsed {
+.clet-sidebar--collapsed {
   width: 72px;
   max-width: 72px;
   padding: 20px 12px;
 }
 
-.gsl-sidebar--collapsed .gsl-sidebar__header {
+.clet-sidebar--collapsed .clet-sidebar__header {
   justify-content: center;
 }
 
-.gsl-sidebar--collapsed .gsl-sidebar__header-brand {
+.clet-sidebar--collapsed .clet-sidebar__header-brand {
   display: none;
 }
 
-.gsl-sidebar--collapsed .gsl-sidebar__group-label,
-.gsl-sidebar--collapsed .gsl-sidebar__link-label,
-.gsl-sidebar--collapsed .gsl-sidebar__link-badge,
-.gsl-sidebar--collapsed .gsl-sidebar__footer {
+.clet-sidebar--collapsed .clet-sidebar__group-label,
+.clet-sidebar--collapsed .clet-sidebar__link-label,
+.clet-sidebar--collapsed .clet-sidebar__link-badge,
+.clet-sidebar--collapsed .clet-sidebar__skeleton-label,
+.clet-sidebar--collapsed .clet-sidebar__footer {
   display: none;
 }
 
-.gsl-sidebar--collapsed .gsl-sidebar__link {
+.clet-sidebar--collapsed .clet-sidebar__link {
   justify-content: center;
   padding-inline: 10px;
 }
 
 @media (width >= 769px) {
-  .gsl-sidebar:not(.gsl-sidebar--mobile) {
+  .clet-sidebar:not(.clet-sidebar--mobile) {
     position: sticky;
     top: 24px;
     align-self: start;
     padding: 20px 16px;
-    border-radius: var(--gsl-panel-radius, var(--gsl-radius-2xl));
-    background: var(
-      --gsl-sidebar-bg,
-      var(--gsl-panel-bg, var(--gsl-surface-subtle))
-    );
+    border-radius: var(--gsl-panel-radius, var(--clet-panel-radius, var(--clet-radius-2xl)));
+    background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
     transition:
       width 200ms ease,
       max-width 200ms ease,
@@ -429,41 +465,41 @@
 
   /* Plain override must live inside the media query to beat the base
      desktop background/border-radius above. */
-  .gsl-sidebar.gsl-sidebar--plain:not(.gsl-sidebar--mobile) {
+  .clet-sidebar.clet-sidebar--plain:not(.clet-sidebar--mobile) {
     background: transparent;
-    border-right: 1px solid var(--gsl-border);
+    border-right: 1px solid var(--gsl-border, var(--clet-border));
     border-radius: 0;
   }
 }
 
 @media (width <= 768px) {
-  .gsl-sidebar:not(.gsl-sidebar--mobile) {
+  .clet-sidebar:not(.clet-sidebar--mobile) {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: var(--gsl-z-overlay);
+    z-index: var(--gsl-z-overlay, var(--clet-z-overlay));
     width: min(280px, 100vw);
     height: 100dvh;
     padding: 16px;
-    border-right: 1px solid var(--gsl-border);
-    background: var(--gsl-bg);
-    box-shadow: var(--gsl-shadow-lg);
+    border-right: 1px solid var(--gsl-border, var(--clet-border));
+    background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+    box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
     transform: translateX(-100%);
     transition: transform 200ms ease;
   }
 
-  .gsl-sidebar:not(.gsl-sidebar--mobile).gsl-sidebar--mobile-open {
+  .clet-sidebar:not(.clet-sidebar--mobile).clet-sidebar--mobile-open {
     transform: translateX(0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gsl-sidebar,
-  .gsl-sidebar__overlay {
+  .clet-sidebar,
+  .clet-sidebar__overlay {
     transition: none;
   }
 
-  .gsl-sidebar__group-content {
+  .clet-sidebar__group-content {
     transition: none;
   }
 }

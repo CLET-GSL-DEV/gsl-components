@@ -1,0 +1,58 @@
+export const meta = {
+  title: "RoleSelect",
+  description: "Dropdown control for switching between roles",
+  category: "Components",
+  keywords: ["role select", "switch role", "role switcher", "portal switch"],
+  since: "1.23.0",
+  status: "stable",
+  related: ["profile-popover", "sidebar", "app-header"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { RoleSelectPreview } from "../previews/code/RoleSelectPreview";
+import roleSelectSource from "../previews/examples/role-select.example.tsx?raw";
+
+# RoleSelect
+
+A dropdown-style trigger (label + current role + chevron) that opens a small popover listing the available roles, each with a radio dot for the selected one. Designed to drop into a [`ProfilePopover`](/profile-popover)'s `children` slot, but usable standalone.
+
+## Example
+
+<ExampleTabs
+  title="Role list with a disabled role"
+  preview={<RoleSelectPreview />}
+  code={roleSelectSource}
+/>
+
+Selecting a role opens a "Confirm Role Switch" dialog (asking whether you want to switch to that role's portal) before calling `onClickRole` — pass `noConfirm` to call it immediately instead.
+
+Each `Role` can optionally carry an `icon` — it's shown before the name in the list, and next to the name on the trigger once selected.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | `"View as"` | Label shown on the dropdown trigger |
+| `roles` | `Role[]` | — | Roles to display in the popover |
+| `selectedRole` | `string` | — | Currently selected role id — shown on the trigger and with a filled radio dot |
+| `onClickRole` | `(role: Role) => void` | — | Called when a role is selected (after confirmation, unless `noConfirm`) |
+| `noConfirm` | `boolean` | `false` | Skip the confirm dialog and call `onClickRole` immediately |
+| `className` | `string` | — | Merged onto the root element |
+| `style` | `CSSProperties` | — | Inline styles for the root element |
+
+## Types
+
+### `Role`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `id` | `string` | Unique identifier |
+| `name` | `string` | Display name |
+| `icon` | `ReactNode` | Optional icon shown before the name in the list, and next to the name on the trigger once selected |
+| `disabled` | `boolean` | Disables selecting this role |
+
+## Notes
+
+- Disabled roles render inert — no click handler, no confirm dialog.
+- The trigger, popover, and confirm dialog reuse the same design tokens as the rest of the popover family (`--clet-border`, `--clet-bg`, `--clet-shadow-md`, `--clet-radius-base`).

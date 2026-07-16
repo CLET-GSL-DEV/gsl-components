@@ -84,7 +84,7 @@ describe("Dialog", () => {
     await user.click(screen.getByRole("button", { name: "Open dialog" }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    const overlay = document.querySelector(".gsl-dialog__overlay");
+    const overlay = document.querySelector(".clet-dialog__overlay");
     expect(overlay).toBeTruthy();
     await user.click(overlay!);
 
@@ -113,12 +113,12 @@ describe("Dialog", () => {
 
     await user.click(screen.getByRole("button", { name: "Open dialog" }));
 
-    expect(document.querySelector(".gsl-dialog__overlay")).toHaveClass(
-      "gsl-dialog__overlay",
+    expect(document.querySelector(".clet-dialog__overlay")).toHaveClass(
+      "clet-dialog__overlay",
       "custom-overlay",
     );
     expect(screen.getByRole("dialog")).toHaveClass(
-      "gsl-dialog__content",
+      "clet-dialog__content",
       "custom-content",
     );
   });

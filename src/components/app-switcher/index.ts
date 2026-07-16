@@ -1,3 +1,5 @@
+export { AppIconTile } from "./AppIconTile";
+export type { AppIconTileProps } from "./AppIconTile";
 export { AppSwitcher } from "./AppSwitcher";
 export { AppSwitcherItem } from "./AppSwitcherItem";
 export { GridIcon } from "./GridIcon";

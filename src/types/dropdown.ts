@@ -26,4 +26,12 @@ export interface DropdownProps {
   formatOption?: (option: DropdownOption | null, state: "selected" | "idle" | "empty") => ReactNode;
   classNames?: DropdownClassNames;
   className?: string;
+  /**
+   * Native form field name. When set, Dropdown participates in native
+   * `<form>`/`FormData` submission like a real input — no separate hidden
+   * input needed.
+   */
+  name?: string;
+  required?: boolean;
+  form?: string;
 }

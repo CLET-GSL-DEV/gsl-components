@@ -83,9 +83,9 @@ describe("Modal", () => {
 
     await user.click(screen.getByRole("button", { name: "Open modal" }));
 
-    expect(document.querySelector(".gsl-modal__header")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-modal__body")).toBeInTheDocument();
-    expect(document.querySelector(".gsl-modal__footer")).toBeInTheDocument();
+    expect(document.querySelector(".clet-modal__header")).toBeInTheDocument();
+    expect(document.querySelector(".clet-modal__body")).toBeInTheDocument();
+    expect(document.querySelector(".clet-modal__footer")).toBeInTheDocument();
   });
 
   it("closes when Escape is pressed", async () => {
@@ -106,7 +106,7 @@ describe("Modal", () => {
     await user.click(screen.getByRole("button", { name: "Open modal" }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    const overlay = document.querySelector(".gsl-modal__overlay");
+    const overlay = document.querySelector(".clet-modal__overlay");
     expect(overlay).toBeTruthy();
     await user.click(overlay!);
 
@@ -136,16 +136,16 @@ describe("Modal", () => {
 
     await user.click(screen.getByRole("button", { name: "Open modal" }));
 
-    expect(document.querySelector(".gsl-modal__overlay")).toHaveClass(
-      "gsl-modal__overlay",
+    expect(document.querySelector(".clet-modal__overlay")).toHaveClass(
+      "clet-modal__overlay",
       "custom-overlay",
     );
     expect(screen.getByRole("dialog")).toHaveClass(
-      "gsl-modal",
+      "clet-modal",
       "custom-content",
     );
-    expect(document.querySelector(".gsl-modal__header")).toHaveClass(
-      "gsl-modal__header",
+    expect(document.querySelector(".clet-modal__header")).toHaveClass(
+      "clet-modal__header",
       "custom-header",
     );
   });

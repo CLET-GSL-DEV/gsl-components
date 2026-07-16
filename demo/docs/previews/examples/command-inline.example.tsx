@@ -119,8 +119,8 @@ export function CommandInlineExample() {
           </CommandList>
         ) : null}
       </Command>
-      <p style={{ margin: 0, fontSize: 14, color: "var(--gsl-text-secondary)" }}>
-        Selected field: <strong style={{ color: "var(--gsl-text)" }}>{field}</strong>
+      <p style={{ margin: 0, fontSize: 14, color: "var(--clet-text-secondary)" }}>
+        Selected field: <strong style={{ color: "var(--clet-text)" }}>{field}</strong>
       </p>
     </div>
   );

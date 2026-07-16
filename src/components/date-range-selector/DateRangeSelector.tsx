@@ -7,18 +7,27 @@ import {
 import * as Popover from "@radix-ui/react-popover";
 import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import type {
+  DateRangePreset,
   DateRangeSelectorProps,
   DateRangeValue,
 } from "../../types/date-range-selector";
 
-export type { DateRangeValue };
+export type { DateRangePreset, DateRangeValue };
 import { Button } from "../button";
 import { Dropdown } from "../dropdown";
 import type { DropdownOption } from "../../types/dropdown";
 import { cn } from "../../utils/cn";
 import "./styles/date-range-selector.css";
 
-const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
+const WEEKDAYS = [
+  { short: "M", full: "Monday" },
+  { short: "T", full: "Tuesday" },
+  { short: "W", full: "Wednesday" },
+  { short: "T", full: "Thursday" },
+  { short: "F", full: "Friday" },
+  { short: "S", full: "Saturday" },
+  { short: "S", full: "Sunday" },
+] as const;
 
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",
@@ -61,6 +70,16 @@ function isInSelectedRange(
   const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
   const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
   return d > s && d < e;
+}
+
+function isRangeHighlighted(
+  day: Date,
+  start: Date | null,
+  end: Date | null,
+): boolean {
+  if (start && isSameDay(day, start)) return true;
+  if (end && isSameDay(day, end)) return true;
+  return isInSelectedRange(day, start, end);
 }
 
 function computeCalendarDays(year: number, month: number): Date[] {
@@ -127,10 +146,10 @@ function MonthPanel({
   }, [year, month]);
 
   return (
-    <div className="gsl-date-selector__month-panel">
+    <div className="clet-date-range-selector__month-panel gsl-date-range-selector__month-panel">
       <div
         className={cn(
-          "gsl-date-selector__calendar-title",
+          "clet-date-range-selector__calendar-title gsl-date-range-selector__calendar-title",
           classNames?.calendarTitle,
         )}
       >
@@ -139,29 +158,29 @@ function MonthPanel({
 
       <div
         className={cn(
-          "gsl-date-selector__calendar-weekdays",
+          "clet-date-range-selector__calendar-weekdays gsl-date-range-selector__calendar-weekdays",
           classNames?.calendarWeekdays,
         )}
         role="row"
       >
         {WEEKDAYS.map((day) => (
           <div
-            key={day}
+            key={day.full}
             className={cn(
-              "gsl-date-selector__calendar-weekday",
+              "clet-date-range-selector__calendar-weekday gsl-date-range-selector__calendar-weekday",
               classNames?.calendarWeekday,
             )}
             role="columnheader"
-            aria-label={day}
+            aria-label={day.full}
           >
-            {day}
+            {day.short}
           </div>
         ))}
       </div>
 
       <div
         className={cn(
-          "gsl-date-selector__calendar-grid",
+          "clet-date-range-selector__calendar-grid gsl-date-range-selector__calendar-grid",
           classNames?.calendarGrid,
         )}
         role="grid"
@@ -182,6 +201,26 @@ function MonthPanel({
           );
           const isDisabled = disabled || !isDateInRange(day, min, max);
 
+          const isMember = isStart || isEnd || inRange;
+          const rowStart = i % 7 === 0;
+          const rowEnd = i % 7 === 6;
+          const prevMember =
+            isMember && !rowStart && calendarDays[i - 1]
+              ? isRangeHighlighted(
+                  calendarDays[i - 1],
+                  pendingRange.start,
+                  pendingRange.end,
+                )
+              : false;
+          const nextMember =
+            isMember && !rowEnd && calendarDays[i + 1]
+              ? isRangeHighlighted(
+                  calendarDays[i + 1],
+                  pendingRange.start,
+                  pendingRange.end,
+                )
+              : false;
+
           return (
             <button
               key={i}
@@ -196,14 +235,16 @@ function MonthPanel({
                 year: "numeric",
               })}
               className={cn(
-                "gsl-date-selector__calendar-day",
+                "clet-date-range-selector__calendar-day gsl-date-range-selector__calendar-day",
                 !isCurrentMonth &&
-                  "gsl-date-selector__calendar-day--outside",
-                isToday && "gsl-date-selector__calendar-day--today",
-                isStart && "gsl-date-selector__calendar-day--selected",
-                isEnd && "gsl-date-selector__calendar-day--selected",
+                  "clet-date-range-selector__calendar-day--outside gsl-date-range-selector__calendar-day--outside",
+                isToday && "clet-date-range-selector__calendar-day--today gsl-date-range-selector__calendar-day--today",
+                isStart && "clet-date-range-selector__calendar-day--selected gsl-date-range-selector__calendar-day--selected",
+                isEnd && "clet-date-range-selector__calendar-day--selected gsl-date-range-selector__calendar-day--selected",
                 inRange &&
-                  "gsl-date-selector__calendar-day--in-range",
+                  "clet-date-range-selector__calendar-day--in-range gsl-date-range-selector__calendar-day--in-range",
+                prevMember && "clet-date-range-selector__calendar-day--flat-left gsl-date-range-selector__calendar-day--flat-left",
+                nextMember && "clet-date-range-selector__calendar-day--flat-right gsl-date-range-selector__calendar-day--flat-right",
                 classNames?.calendarDay,
               )}
               onClick={() => onSelect(day)}
@@ -236,6 +277,7 @@ export const DateRangeSelector = forwardRef<
     min,
     max,
     formatOptions,
+    presets,
     classNames,
     className,
   },
@@ -250,8 +292,11 @@ export const DateRangeSelector = forwardRef<
     [isControlled, controlledValue, internalValue],
   );
 
+  const hasPresets = !!presets && presets.length > 0;
+
   const [open, setOpen] = useState(false);
   const [pendingRange, setPendingRange] = useState<DateRangeValue>({ start: null, end: null });
+  const [activePresetLabel, setActivePresetLabel] = useState<string | null>(null);
 
   const today = useMemo(() => {
     const d = new Date();
@@ -287,7 +332,7 @@ export const DateRangeSelector = forwardRef<
     [isControlled, onChange],
   );
 
-  const hasSelection = pendingRange.start !== null;
+  const hasSelection = pendingRange.start !== null || activePresetLabel !== null;
 
   const handleSelect = useCallback(
     (day: Date) => {
@@ -298,6 +343,8 @@ export const DateRangeSelector = forwardRef<
         day.getMonth(),
         day.getDate(),
       );
+
+      setActivePresetLabel(null);
 
       if (!pendingRange.start) {
         setPendingRange({ start: normalized, end: null });
@@ -314,6 +361,36 @@ export const DateRangeSelector = forwardRef<
     [disabled, min, max, pendingRange],
   );
 
+  const handlePresetSelect = useCallback(
+    (preset: DateRangePreset) => {
+      if (disabled) return;
+      const next = preset.getRange();
+      setPendingRange(next);
+      setActivePresetLabel(preset.label);
+      const refDate = next.start ?? today;
+      setViewYear(refDate.getFullYear());
+      setLeftMonth(refDate.getMonth());
+    },
+    [disabled, today],
+  );
+
+  const isPresetActive = useCallback(
+    (preset: DateRangePreset) => {
+      if (activePresetLabel !== preset.label) return false;
+      const presetRange = preset.getRange();
+      if (!presetRange.start !== !pendingRange.start) return false;
+      if (!presetRange.end !== !pendingRange.end) return false;
+      if (presetRange.start && pendingRange.start && !isSameDay(presetRange.start, pendingRange.start)) {
+        return false;
+      }
+      if (presetRange.end && pendingRange.end && !isSameDay(presetRange.end, pendingRange.end)) {
+        return false;
+      }
+      return true;
+    },
+    [activePresetLabel, pendingRange],
+  );
+
   const handleApply = useCallback(() => {
     setRange(pendingRange);
     setOpen(false);
@@ -321,6 +398,7 @@ export const DateRangeSelector = forwardRef<
 
   const handleCancel = useCallback(() => {
     setPendingRange(range);
+    setActivePresetLabel(null);
     setOpen(false);
   }, [range]);
 
@@ -332,6 +410,7 @@ export const DateRangeSelector = forwardRef<
         setViewYear(refDate.getFullYear());
         setLeftMonth(refDate.getMonth());
         setPendingRange(range);
+        setActivePresetLabel(null);
       }
       setOpen(next);
     },
@@ -361,9 +440,9 @@ export const DateRangeSelector = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "gsl-date-range-selector",
-        invalid && "gsl-date-range-selector--invalid",
-        disabled && "gsl-date-range-selector--disabled",
+        "clet-date-range-selector gsl-date-range-selector",
+        invalid && "clet-date-range-selector--invalid gsl-date-range-selector--invalid",
+        disabled && "clet-date-range-selector--disabled gsl-date-range-selector--disabled",
         classNames?.root,
         className,
       )}
@@ -374,8 +453,8 @@ export const DateRangeSelector = forwardRef<
             type="button"
             disabled={disabled}
             className={cn(
-              "gsl-date-selector__trigger",
-              !range.start && !range.end && "gsl-date-selector__trigger--placeholder",
+              "clet-date-range-selector__trigger gsl-date-range-selector__trigger",
+              !range.start && !range.end && "clet-date-range-selector__trigger--placeholder gsl-date-range-selector__trigger--placeholder",
               classNames?.trigger,
             )}
             aria-invalid={invalid || undefined}
@@ -385,10 +464,10 @@ export const DateRangeSelector = forwardRef<
             <Calendar
               size={16}
               strokeWidth={1.75}
-              className="gsl-date-selector__trigger-icon"
+              className="clet-date-range-selector__trigger-icon gsl-date-range-selector__trigger-icon"
               aria-hidden
             />
-            <span className="gsl-date-selector__trigger-text">
+            <span className="clet-date-range-selector__trigger-text gsl-date-range-selector__trigger-text">
               {range.start || range.end ? displayText : placeholder}
             </span>
           </button>
@@ -397,8 +476,8 @@ export const DateRangeSelector = forwardRef<
         <Popover.Portal>
           <Popover.Content
             className={cn(
-              "gsl-date-selector__calendar",
-              "gsl-date-selector__calendar--double",
+              "clet-date-range-selector__calendar gsl-date-range-selector__calendar",
+              "clet-date-range-selector__calendar--double gsl-date-range-selector__calendar--double",
               classNames?.calendar,
             )}
             side="bottom"
@@ -408,7 +487,7 @@ export const DateRangeSelector = forwardRef<
           >
             <div
               className={cn(
-                "gsl-date-selector__calendar-header",
+                "clet-date-range-selector__calendar-header gsl-date-range-selector__calendar-header",
                 classNames?.calendarHeader,
               )}
             >
@@ -422,7 +501,7 @@ export const DateRangeSelector = forwardRef<
                 <ChevronLeft size={16} strokeWidth={2} aria-hidden />
               </Button>
 
-              <div className="gsl-date-selector__calendar-header-center">
+              <div className="clet-date-range-selector__calendar-header-center gsl-date-range-selector__calendar-header-center">
                 <Dropdown
                   value={String(leftMonth)}
                   onValueChange={(v: string | null) => {
@@ -452,54 +531,95 @@ export const DateRangeSelector = forwardRef<
               </Button>
             </div>
 
-            <div className="gsl-date-selector__calendar-months">
-              <MonthPanel
-                year={viewYear}
-                month={leftMonth}
-                pendingRange={pendingRange}
-                today={today}
-                min={min}
-                max={max}
-                disabled={disabled}
-                classNames={classNames}
-                onSelect={handleSelect}
-              />
-              <MonthPanel
-                year={rightYear}
-                month={rightMonth}
-                pendingRange={pendingRange}
-                today={today}
-                min={min}
-                max={max}
-                disabled={disabled}
-                classNames={classNames}
-                onSelect={handleSelect}
-              />
+            <div className="clet-date-range-selector__body gsl-date-range-selector__body">
+              {hasPresets ? (
+                <div
+                  className={cn(
+                    "clet-date-range-selector__presets gsl-date-range-selector__presets",
+                    classNames?.presets,
+                  )}
+                >
+                  {presets.map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      className={cn(
+                        "clet-date-range-selector__preset-item gsl-date-range-selector__preset-item",
+                        isPresetActive(preset) &&
+                          "clet-date-range-selector__preset-item--active gsl-date-range-selector__preset-item--active",
+                        classNames?.presetItem,
+                      )}
+                      onClick={() => handlePresetSelect(preset)}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
+              <div className="clet-date-range-selector__calendar-months gsl-date-range-selector__calendar-months">
+                <MonthPanel
+                  year={viewYear}
+                  month={leftMonth}
+                  pendingRange={pendingRange}
+                  today={today}
+                  min={min}
+                  max={max}
+                  disabled={disabled}
+                  classNames={classNames}
+                  onSelect={handleSelect}
+                />
+                <MonthPanel
+                  year={rightYear}
+                  month={rightMonth}
+                  pendingRange={pendingRange}
+                  today={today}
+                  min={min}
+                  max={max}
+                  disabled={disabled}
+                  classNames={classNames}
+                  onSelect={handleSelect}
+                />
+              </div>
             </div>
 
             <div
               className={cn(
-                "gsl-date-selector__calendar-footer",
+                "clet-date-range-selector__calendar-footer gsl-date-range-selector__calendar-footer",
                 classNames?.calendarFooter,
               )}
             >
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(classNames?.cancelButton)}
-                onClick={handleCancel}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                className={cn(classNames?.applyButton)}
-                onClick={handleApply}
-                disabled={!hasSelection}
-              >
-                Apply
-              </Button>
+              {hasPresets && pendingRange.start ? (
+                <span
+                  className={cn(
+                    "clet-date-range-selector__summary gsl-date-range-selector__summary",
+                    classNames?.rangeSummary,
+                  )}
+                >
+                  Range: {formatDate(pendingRange.start)}
+                  {" — "}
+                  {pendingRange.end ? formatDate(pendingRange.end) : "..."}
+                </span>
+              ) : null}
+              <div className="clet-date-range-selector__footer-actions gsl-date-range-selector__footer-actions">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={cn(classNames?.cancelButton)}
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className={cn(classNames?.applyButton)}
+                  onClick={handleApply}
+                  disabled={!hasSelection}
+                >
+                  Apply
+                </Button>
+              </div>
             </div>
           </Popover.Content>
         </Popover.Portal>

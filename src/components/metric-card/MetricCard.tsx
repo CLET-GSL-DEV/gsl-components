@@ -60,6 +60,8 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
       trendValue,
       animate = false,
       animationDuration = 1500,
+      loading = false,
+      loadingLabel = "Loading metric",
       className,
       classNames,
       ...props
@@ -129,59 +131,93 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
       <div
         ref={ref}
         className={cn(
-          "gsl-metric-card",
-          `gsl-metric-card--${variant}`,
+          "clet-metric-card gsl-metric-card",
+          `clet-metric-card--${variant} gsl-metric-card--${variant}`,
+          loading && "clet-metric-card--loading gsl-metric-card--loading",
           classNames?.root,
           className,
         )}
+        aria-busy={loading || undefined}
         {...props}
       >
-        <div className="gsl-metric-card__header">
-          {icon ? (
-            <span className={cn("gsl-metric-card__icon", classNames?.icon)}>
-              {icon}
-            </span>
-          ) : null}
-          <span className={cn("gsl-metric-card__label", classNames?.label)}>
-            {label}
+        {loading ? (
+          <span className="clet-metric-card__sr-only gsl-metric-card__sr-only" role="status">
+            {loadingLabel}
           </span>
+        ) : null}
+
+        <div className="clet-metric-card__header gsl-metric-card__header" aria-hidden={loading || undefined}>
+          {icon ? (
+            loading ? (
+              <span className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-icon gsl-metric-card__skeleton-icon" />
+            ) : (
+              <span className={cn("clet-metric-card__icon gsl-metric-card__icon", classNames?.icon)}>
+                {icon}
+              </span>
+            )
+          ) : null}
+          {loading ? (
+            <span className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-label gsl-metric-card__skeleton-label" />
+          ) : (
+            <span className={cn("clet-metric-card__label gsl-metric-card__label", classNames?.label)}>
+              {label}
+            </span>
+          )}
         </div>
 
-        <div className="gsl-metric-card__value-row">
-          <span className={cn("gsl-metric-card__value", classNames?.value)}>
-            {displayValue}
-          </span>
+        <div
+          className="clet-metric-card__value-row gsl-metric-card__value-row"
+          aria-hidden={loading || undefined}
+        >
+          {loading ? (
+            <span className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-value gsl-metric-card__skeleton-value" />
+          ) : (
+            <span className={cn("clet-metric-card__value gsl-metric-card__value", classNames?.value)}>
+              {displayValue}
+            </span>
+          )}
 
           {trend && trendValue ? (
-            <span
-              className={cn(
-                "gsl-metric-card__trend",
-                `gsl-metric-card__trend--${trend}`,
-                classNames?.trend,
-              )}
-            >
-              {TrendIcon ? (
-                <TrendIcon size={14} strokeWidth={2.5} aria-hidden />
-              ) : null}
-              {trendGlyph ? (
-                <span className="gsl-metric-card__trend-glyph" aria-hidden>
-                  {trendGlyph}
-                </span>
-              ) : null}
-              {displayTrendValue}
-            </span>
+            loading ? (
+              <span className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-trend gsl-metric-card__skeleton-trend" />
+            ) : (
+              <span
+                className={cn(
+                  "clet-metric-card__trend gsl-metric-card__trend",
+                  `clet-metric-card__trend--${trend} gsl-metric-card__trend--${trend}`,
+                  classNames?.trend,
+                )}
+              >
+                {TrendIcon ? (
+                  <TrendIcon size={14} strokeWidth={2.5} aria-hidden />
+                ) : null}
+                {trendGlyph ? (
+                  <span className="clet-metric-card__trend-glyph gsl-metric-card__trend-glyph" aria-hidden>
+                    {trendGlyph}
+                  </span>
+                ) : null}
+                {displayTrendValue}
+              </span>
+            )
           ) : null}
         </div>
 
         {description ? (
-          <span
-            className={cn(
-              "gsl-metric-card__description",
-              classNames?.description,
-            )}
-          >
-            {description}
-          </span>
+          loading ? (
+            <span
+              className="clet-skeleton gsl-skeleton clet-metric-card__skeleton-description gsl-metric-card__skeleton-description"
+              aria-hidden
+            />
+          ) : (
+            <span
+              className={cn(
+                "clet-metric-card__description gsl-metric-card__description",
+                classNames?.description,
+              )}
+            >
+              {description}
+            </span>
+          )
         ) : null}
       </div>
     );

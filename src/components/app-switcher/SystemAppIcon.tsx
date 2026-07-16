@@ -1,3 +1,5 @@
+import { AppIconTile } from "./AppIconTile";
+
 interface SystemAppIconProps {
   name: string;
 }
@@ -18,8 +20,8 @@ function getInitials(name: string) {
 
 export function SystemAppIcon({ name }: SystemAppIconProps) {
   return (
-    <span className="gsl-app-switcher__icon-initials" aria-hidden="true">
-      {getInitials(name)}
-    </span>
+    <AppIconTile name={name}>
+      <span aria-hidden="true">{getInitials(name)}</span>
+    </AppIconTile>
   );
 }

@@ -1,0 +1,103 @@
+export const meta = {
+  title: "ProfilePopover",
+  description: "Unified user profile menu popover",
+  category: "Components",
+  keywords: ["profile popover", "account menu", "user menu", "sign out", "profile menu"],
+  since: "1.23.0",
+  status: "stable",
+  related: ["app-header", "sidebar", "role-select", "app-switcher"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { ProfilePopoverPreview } from "../previews/code/ProfilePopoverPreview";
+import { ProfilePopoverUserTriggerPreview } from "../previews/code/ProfilePopoverUserTriggerPreview";
+import { ProfilePopoverLoadingPreview } from "../previews/code/ProfilePopoverLoadingPreview";
+import profilePopoverSource from "../previews/examples/profile-popover.example.tsx?raw";
+import profilePopoverUserTriggerSource from "../previews/examples/profile-popover-user-trigger.example.tsx?raw";
+import profilePopoverLoadingSource from "../previews/examples/profile-popover-loading.example.tsx?raw";
+
+# ProfilePopover
+
+The single, unified profile menu — used directly by both [`AppHeader`](/app-header) (top-right, via `user`/`variant`) and [`SidebarFooter`](/sidebar#sidebarfooter) (bottom of the sidebar, via `fullName`). There is no separate `AppHeaderProfile` wrapper component — `ProfilePopover` **is** the app header's profile trigger. Renders an avatar/name/email header (with a built-in light/dark theme toggle at the far right, whenever a `ThemeProvider` wraps the tree), a dynamic list of `items` rows, an optional composable section for `children` (only a `RoleSelect` element is accepted), and a **Sign Out** row. `items` defaults to "My Profile", "Account Settings", and "Help and Support" — pass your own `items` array to replace them entirely. `items` and `children` sit flush together in one content block with no divider between them — a divider only separates the header from that block, and that block from **Sign Out**. Clicking **Sign Out** opens a "Confirm Sign Out" dialog before calling `onSignOut`, unless `noConfirmSignOut` is set.
+
+## Example
+
+Click the trigger to open the popover.
+
+<ExampleTabs
+  title="Default trigger (fullName)"
+  preview={<ProfilePopoverPreview />}
+  code={profilePopoverSource}
+/>
+
+## Header-style trigger (`user`/`variant`)
+
+Pass `user` instead of `fullName`/`email`/`profilePhoto` to get the compact avatar + name/role + chevron trigger used in `AppHeader` (governed by `variant`), instead of the default avatar + name/email button row.
+
+<ExampleTabs
+  title='user + variant="full" | "avatar"'
+  preview={<ProfilePopoverUserTriggerPreview />}
+  code={profilePopoverUserTriggerSource}
+/>
+
+## Loading state
+
+Set `loading` to shimmer the default trigger and the header/menu rows inside the opened popover. "Sign Out" stays interactive since it isn't user-data dependent.
+
+<ExampleTabs
+  title="Loading state"
+  preview={<ProfilePopoverLoadingPreview />}
+  code={profilePopoverLoadingSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `fullName` | `string` | — | Shown next to the avatar and in the popover header. Omit when passing `user` instead. |
+| `email` | `string` | — | Shown under the name in the popover header. Omit when passing `user` instead. |
+| `profilePhoto` | `string` | — | Image URL; falls back to initials when omitted or failing to load. Omit when passing `user` instead. |
+| `user` | `AppUser` | — | Alternative to `fullName`/`email`/`profilePhoto` — also builds the compact `AppHeader`-style trigger (governed by `variant`) instead of the default avatar + name/email row |
+| `variant` | `"full" \| "avatar"` | `"full"` | Trigger layout when `user` is passed. `"full"` shows avatar + name/role + chevron; `"avatar"` shows only the avatar. Both open the same popover. |
+| `trigger` | `ReactNode` | built-in trigger | Custom trigger element — overrides the built-in trigger entirely (`user` or `fullName` based) |
+| `triggerClassName` | `string` | — | Merged onto the built-in trigger element (ignored when `trigger` is passed) |
+| `items` | `ProfilePopoverItem[]` | "My Profile" / "Account Settings" / "Help and Support" | Menu rows rendered below the header. Passing `items` replaces the three defaults entirely. |
+| `onMyProfile` | `() => void` | — | Called when the default "My Profile" row is clicked (ignored when `items` is passed) |
+| `onAccountSettings` | `() => void` | — | Called when the default "Account Settings" row is clicked (ignored when `items` is passed) |
+| `onHelpAndSupport` | `() => void` | — | Called when the default "Help and Support" row is clicked (ignored when `items` is passed) |
+| `onSignOut` | `() => void` | — | Called when "Sign Out" is confirmed (or clicked immediately, if `noConfirmSignOut` is set) |
+| `noConfirmSignOut` | `boolean` | `false` | Skip the "Confirm Sign Out" dialog and call `onSignOut` immediately |
+| `loading` | `boolean` | `false` | Shimmer the default trigger and the header/menu rows — see [Loading state](#loading-state) |
+| `loadingLabel` | `string` | `"Loading profile"` | Accessible label announced while loading |
+| `children` | `ReactElement<RoleSelectProps>` | — | Extra composable content rendered directly below `items`, no divider between them — only a `RoleSelect` element is accepted |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | Popover placement side |
+| `align` | `"start" \| "center" \| "end"` | `"start"` | Popover placement alignment |
+| `sideOffset` | `number` | `8` | Distance from the trigger |
+| `className` | `string` | — | Merged onto the popover content element |
+
+### `ProfilePopoverItem`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `icon` | `ReactNode` | Leading icon, e.g. a lucide-react icon element |
+| `label` | `ReactNode` | Row label |
+| `onClick` | `() => void` | Called when the row is clicked |
+| `danger` | `boolean` | Renders the row in the destructive/danger color |
+
+### `AppUser`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | `string` | User's full name |
+| `role` | `string` | Role label shown in the trigger |
+| `initials` | `string` | Shown in the avatar circle when no `avatar` image is set |
+| `email` | `string` | Shown in the popover header |
+| `avatar` | `string` | Image URL — renders as a round avatar |
+
+## Notes
+
+- The theme toggle in the popover header is **not** a configurable prop — there's nothing to pass to turn it off or replace it. It renders automatically whenever a `ThemeProvider` (`useTheme`) is present in the tree, and does nothing (renders no header action at all) when it isn't.
+- The trigger and popover header avatars use the shared `Avatar` component's `backgroundVar="--clet-profile-avatar-bg"` — `--clet-profile-avatar-bg` is unset by default, so avatars show their normal per-name gradient. Set that CSS custom property on an ancestor (e.g. `:root { --clet-profile-avatar-bg: var(--clet-primary); }`) to force a solid color for both the sidebar footer avatar and the app header profile avatar instead.
+- `children` renders flush, with no extra card/padding — the [`RoleSelect`](/role-select) dropdown reads as just another row in the same menu.
+- Styling (background, border, radius, shadow, z-index, font sizes) intentionally matches the rest of the popover-family components (`Popover`, `AppSwitcher`'s panel, `Dropdown`'s menu) — see [Popover](/popover) for the shared conventions.

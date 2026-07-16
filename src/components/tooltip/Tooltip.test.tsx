@@ -31,7 +31,7 @@ describe("Tooltip", () => {
     fireEvent.mouseEnter(screen.getByRole("button", { name: "Hover me" }));
     await waitFor(() => {
       const tooltip = document.querySelector('[role="tooltip"]')!;
-      expect(tooltip).toHaveClass("gsl-tooltip__content--open");
+      expect(tooltip).toHaveClass("clet-tooltip__content--open");
     });
   });
 
@@ -46,7 +46,7 @@ describe("Tooltip", () => {
     await waitFor(() => {
       expect(
         document.querySelector('[role="tooltip"]'),
-      ).toHaveClass("gsl-tooltip__content--right");
+      ).toHaveClass("clet-tooltip__content--right");
     });
   });
 
@@ -61,7 +61,7 @@ describe("Tooltip", () => {
     await waitFor(() => {
       expect(
         document.querySelector('[role="tooltip"]'),
-      ).toHaveClass("gsl-tooltip__content--top");
+      ).toHaveClass("clet-tooltip__content--top");
     });
   });
 
@@ -80,7 +80,7 @@ describe("Tooltip", () => {
       const tooltip = document.querySelector('[role="tooltip"]')!;
       expect(tooltip).toHaveClass("custom-content");
     });
-    expect(document.querySelector(".gsl-tooltip")).toHaveClass("custom-root");
+    expect(document.querySelector(".clet-tooltip")).toHaveClass("custom-root");
   });
 
   it("merges className onto root", () => {
@@ -90,7 +90,7 @@ describe("Tooltip", () => {
       </Tooltip>,
     );
 
-    expect(document.querySelector(".gsl-tooltip")).toHaveClass("extra-class");
+    expect(document.querySelector(".clet-tooltip")).toHaveClass("extra-class");
   });
 
   it("forwards ref to root element", () => {

@@ -1,6 +1,12 @@
 export const meta = {
   title: "FormField",
   description: "RHF form adapters",
+  category: "Components",
+  keywords: ["form field", "react hook form", "form validation", "zod", "controller"],
+  since: "1.8.0",
+  status: "stable",
+  related: ["form", "dropdown", "date-selector"],
+  import: "@rfdtech/components",
 };
 
 import { ExampleTabs } from "../components/ExampleTabs";
@@ -145,3 +151,11 @@ Typed wrapper around react-hook-form `ControllerProps`.
 - `react-hook-form`, `zod`, and `@hookform/resolvers` are **optional peer dependencies**.
 - Compose with [Form](/docs/form) primitives for labels, inputs, and error display.
 - For schema validation beyond Zod, use any resolver supported by `@hookform/resolvers`.
+
+## Do
+
+- Follow the composition `Form > FormField(control,name,render) > Field(invalid) > FieldLabel + FieldControl + FieldError`, wiring `<Field invalid={!!fieldState.error}>` and `<FieldError>{fieldState.error?.message}</FieldError>`.
+
+## Don't
+
+- Add `FieldDescription` unless the design explicitly calls for it.

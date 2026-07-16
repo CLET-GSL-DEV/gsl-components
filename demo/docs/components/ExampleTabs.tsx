@@ -8,6 +8,7 @@ interface ExampleTabsProps {
   preview: ReactNode;
   code: string;
   codeTitle?: string;
+  canvasClassName?: string;
 }
 
 export function ExampleTabs({
@@ -15,6 +16,7 @@ export function ExampleTabs({
   preview,
   code,
   codeTitle,
+  canvasClassName,
 }: ExampleTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>("preview");
   const baseId = useId();
@@ -67,7 +69,13 @@ export function ExampleTabs({
         hidden={activeTab !== "preview"}
         className="demo-docs__tab-panel"
       >
-        <div className="demo-docs__preview-canvas">{preview}</div>
+        <div
+          className={["demo-docs__preview-canvas", canvasClassName]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          {preview}
+        </div>
       </div>
 
       <div

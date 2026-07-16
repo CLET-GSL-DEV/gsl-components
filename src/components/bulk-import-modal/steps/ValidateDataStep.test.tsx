@@ -70,7 +70,7 @@ describe("ValidateDataStep", () => {
     expect(screen.getByDisplayValue("a@example.com")).toBeInTheDocument();
     expect(screen.getByDisplayValue("bad")).toBeInTheDocument();
     expect(
-      document.querySelector(".gsl-bulk-import__table-wrap--validate"),
+      document.querySelector(".clet-bulk-import__table-wrap--validate"),
     ).toBeInTheDocument();
   });
 
@@ -111,7 +111,7 @@ describe("ValidateDataStep", () => {
     const inputs = screen.getAllByRole("textbox");
     expect(inputs).toHaveLength(4);
     inputs.forEach((input) => {
-      expect(input).toHaveClass("gsl-bulk-import__cell-input");
+      expect(input).toHaveClass("clet-bulk-import__cell-input");
     });
   });
 
@@ -137,10 +137,10 @@ describe("ValidateDataStep", () => {
     render(<ValidateDataStep dirtyCellsRef={ref} {...defaultProps} />);
 
     const emailInput = screen.getByLabelText("Email, row 2");
-    const errorCell = emailInput.closest(".gsl-bulk-import__cell--error");
+    const errorCell = emailInput.closest(".clet-bulk-import__cell--error");
 
     expect(emailInput).toHaveAttribute("aria-invalid", "true");
-    expect(emailInput).toHaveClass("gsl-bulk-import__cell-input--error");
+    expect(emailInput).toHaveClass("clet-bulk-import__cell-input--error");
     expect(errorCell).not.toBeNull();
 
     fireEvent.mouseEnter(emailInput);

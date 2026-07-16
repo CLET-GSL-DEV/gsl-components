@@ -40,7 +40,7 @@ export function Field({
   return (
     <FieldContext.Provider value={contextValue}>
       <div
-        className={cn("gsl-field", invalid && "gsl-field--invalid", classNames?.root, className)}
+        className={cn("clet-field gsl-field", invalid && "clet-field--invalid gsl-field--invalid", classNames?.root, className)}
         {...props}
       >
         {children}
@@ -60,7 +60,7 @@ export function FieldLabel({
   return (
     <label
       htmlFor={id}
-      className={cn("gsl-field__label", classNames?.label, className)}
+      className={cn("clet-field__label gsl-field__label", classNames?.label, className)}
       {...props}
     >
       {children}
@@ -94,7 +94,7 @@ export function FieldDescription({
   return (
     <p
       id={descriptionId}
-      className={cn("gsl-field__description", classNames?.description, className)}
+      className={cn("clet-field__description gsl-field__description", classNames?.description, className)}
       {...props}
     >
       {children}
@@ -129,7 +129,7 @@ export function FieldError({
     <p
       id={errorId}
       role="alert"
-      className={cn("gsl-field__error", classNames?.error, className)}
+      className={cn("clet-field__error gsl-field__error", classNames?.error, className)}
       {...props}
     >
       {children}
