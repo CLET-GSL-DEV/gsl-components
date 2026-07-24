@@ -4,13 +4,17 @@ import { cn } from "../../utils/cn";
 import "./styles/card.css";
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
-  { className, children, ...props },
+  { className, bordered, children, ...props },
   ref,
 ) {
   return (
     <div
       ref={ref}
-      className={cn("clet-card gsl-card", className)}
+      className={cn(
+        "clet-card gsl-card",
+        bordered && "clet-card--bordered gsl-card--bordered",
+        className,
+      )}
       {...props}
     >
       {children}

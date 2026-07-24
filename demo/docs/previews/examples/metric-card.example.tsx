@@ -75,6 +75,35 @@ export function MetricCardExample() {
           />
         </div>
       </div>
+
+      <div
+        style={{ display: "flex", flexWrap: "wrap", gap: 16, marginTop: 16 }}
+      >
+        <div style={{ minWidth: 200, flex: 1 }}>
+          <MetricCard
+            variant="bordered"
+            label="Revenue"
+            value="$128.4k"
+            description="Total revenue this quarter"
+          />
+        </div>
+        <div style={{ minWidth: 200, flex: 1 }}>
+          <MetricCard
+            variant="bordered"
+            label="Active users"
+            value="2,847"
+            description="Current active users"
+          />
+        </div>
+        <div style={{ minWidth: 200, flex: 1 }}>
+          <MetricCard
+            variant="bordered"
+            label="Avg response"
+            value="1.2s"
+            description="Average API response time"
+          />
+        </div>
+      </div>
     </div>
   );
 }

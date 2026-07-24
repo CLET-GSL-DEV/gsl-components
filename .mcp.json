@@ -7,10 +7,9 @@
       ]
     },
     "rfdtech-ui": {
-      "command": "npx",
+      "command": "node",
       "args": [
-        "-y",
-        "@rfdtech/components-mcp"
+        "/Users/manuelashong/mm/gsl-components/dist/mcp/index.js"
       ]
     },
     "playwright": {

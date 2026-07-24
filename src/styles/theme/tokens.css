@@ -12,17 +12,24 @@
      --color-brand-gold so both remain reachable without changing --color-secondary's
      existing meaning for consumers already using bg-secondary/text-secondary. */
   --color-secondary: var(--gsl-surface-dark, var(--clet-surface-dark));
-  --color-secondary-foreground: var(--gsl-text-secondary, var(--clet-text-secondary));
+  --color-secondary-foreground: var(
+    --gsl-text-secondary,
+    var(--clet-text-secondary)
+  );
   --color-brand-gold: var(--gsl-secondary, var(--clet-secondary));
 
   --color-muted: var(--gsl-surface-subtle, var(--clet-surface-subtle));
-  --color-muted-foreground: var(--gsl-text-secondary, var(--clet-text-secondary));
+  --color-muted-foreground: var(
+    --gsl-text-secondary,
+    var(--clet-text-secondary)
+  );
   --color-text-muted: var(--gsl-text-muted, var(--clet-text-muted));
 
   --color-accent: var(--gsl-hover, var(--clet-hover));
   --color-accent-foreground: var(--gsl-text, var(--clet-text));
 
   --color-destructive: var(--gsl-error, var(--clet-error));
+  --color-error: var(--gsl-error, var(--clet-error));
   --color-destructive-foreground: var(--gsl-error-text, var(--clet-error-text));
   --color-destructive-bg: var(--gsl-error-bg, var(--clet-error-bg));
 
