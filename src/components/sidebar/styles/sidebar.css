@@ -1,439 +1,480 @@
 /* --clet-sidebar-bg is the single override point for every background
    declaration in this file that paints the sidebar surface itself. */
 .clet-sidebar {
-  --clet-sidebar-font: var(--gsl-font-body, var(--clet-font-body));
-  --clet-sidebar-bg: var(--gsl-bg, var(--clet-bg));
-  display: flex;
-  flex-direction: column;
-  width: 280px;
-  max-width: min(100vw, 280px);
-  font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
-  color: var(--gsl-sidebar-text, var(--clet-sidebar-text, var(--clet-text)));
-  box-sizing: border-box;
-  height: 100%;
+	--clet-sidebar-font: var(--gsl-font-body, var(--clet-font-body));
+	--clet-sidebar-bg: var(--gsl-bg, var(--clet-bg));
+	--clet-sidebar-z: 10000;
+	display: flex;
+	flex-direction: column;
+	width: 280px;
+	max-width: min(100vw, 280px);
+	font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
+	color: var(--gsl-sidebar-text, var(--clet-sidebar-text, var(--clet-text)));
+	box-sizing: border-box;
+	height: 100%;
 }
 
 /* ── Plain variant: right border, no radius ── */
 .clet-sidebar.clet-sidebar--plain {
-  --clet-sidebar-bg: var(--gsl-bg, var(--clet-bg));
-  background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
-  border-right: 1px solid var(--gsl-border, var(--clet-border));
-  border-radius: 0;
+	--clet-sidebar-bg: var(--gsl-surface-card, var(--clet-surface-card));
+	background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+	border-right: 1px solid var(--gsl-border, var(--clet-border));
+	border-radius: 0;
 }
 
 .clet-sidebar__header {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 20px;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 20px;
 }
 
 .clet-sidebar__header-brand {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  align-items: center;
-  gap: 10px;
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	align-items: center;
+	gap: 10px;
 }
 
 .clet-sidebar__header-title {
-  overflow: hidden;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	overflow: hidden;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.2;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .clet-sidebar__collapse {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
-  background: transparent;
-  color: var(--gsl-sidebar-link-text, var(--clet-sidebar-link-text, var(--clet-text-secondary)));
-  cursor: pointer;
-  transition:
-    background-color 150ms ease,
-    color 150ms ease;
+	display: inline-flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
+	background: transparent;
+	color: var(
+		--gsl-sidebar-link-text,
+		var(--clet-sidebar-link-text, var(--clet-text-secondary))
+	);
+	cursor: pointer;
+	transition:
+		background-color 150ms ease,
+		color 150ms ease;
 }
 
 .clet-sidebar__collapse:hover {
-  background: var(--gsl-hover, var(--clet-hover));
-  color: var(--gsl-text, var(--clet-text));
+	background: var(--gsl-hover, var(--clet-hover));
+	color: var(--gsl-text, var(--clet-text));
 }
 
 .clet-sidebar__collapse:focus-visible {
-  outline: 2px solid var(--gsl-focus, var(--clet-focus));
-  outline-offset: 2px;
+	outline: 2px solid var(--gsl-focus, var(--clet-focus));
+	outline-offset: 2px;
 }
 
 /* Registered so the mask edges can transition smoothly. */
 @property --clet-sidebar-mask-top {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
+	syntax: "<length>";
+	inherits: false;
+	initial-value: 0;
 }
 
 @property --clet-sidebar-mask-bottom {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
+	syntax: "<length>";
+	inherits: false;
+	initial-value: 0;
 }
 
 /* Real scroll mask: a linear-gradient mask fades the content to transparent at
    the top (once scrolled) and bottom (while more content is below). Being a
    mask, it is background-independent — works on the solid and plain sidebars. */
 .clet-sidebar__content {
-  --clet-sidebar-mask-size: 48px;
-  --clet-sidebar-mask-top: 0px;
-  --clet-sidebar-mask-bottom: 0px;
+	--clet-sidebar-mask-size: 48px;
+	--clet-sidebar-mask-top: 0px;
+	--clet-sidebar-mask-bottom: 0px;
 
-  flex: 1;
-  min-height: 0;
-  position: relative;
-  overflow-y: auto;
-  scrollbar-width: none;
+	flex: 1;
+	min-height: 0;
+	position: relative;
+	overflow-y: auto;
+	scrollbar-width: none;
 
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    #000 var(--gsl-sidebar-mask-top, var(--clet-sidebar-mask-top)),
-    #000 calc(100% - var(--gsl-sidebar-mask-bottom, var(--clet-sidebar-mask-bottom))),
-    transparent 100%
-  );
-  transition:
-    --clet-sidebar-mask-top 200ms ease,
-    --clet-sidebar-mask-bottom 200ms ease;
+	mask-image: linear-gradient(
+		to bottom,
+		transparent 0,
+		#000 var(--gsl-sidebar-mask-top, var(--clet-sidebar-mask-top)),
+		#000
+			calc(
+				100% -
+				var(--gsl-sidebar-mask-bottom, var(--clet-sidebar-mask-bottom))
+			),
+		transparent 100%
+	);
+	transition:
+		--clet-sidebar-mask-top 200ms ease,
+		--clet-sidebar-mask-bottom 200ms ease;
 }
 
 .clet-sidebar__content::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 
 .clet-sidebar__content--scrolled {
-  --clet-sidebar-mask-top: var(--gsl-sidebar-mask-size, var(--clet-sidebar-mask-size));
+	--clet-sidebar-mask-top: var(
+		--gsl-sidebar-mask-size,
+		var(--clet-sidebar-mask-size)
+	);
 }
 
 .clet-sidebar__content--more-below {
-  --clet-sidebar-mask-bottom: var(--gsl-sidebar-mask-size, var(--clet-sidebar-mask-size));
+	--clet-sidebar-mask-bottom: var(
+		--gsl-sidebar-mask-size,
+		var(--clet-sidebar-mask-size)
+	);
 }
 
 .clet-sidebar__scroll-hint {
-  position: sticky;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  bottom: 0;
-  height: 28px;
-  margin-top: -5px;
-  border: none;
-  background: transparent;
-  color: var(--gsl-text, var(--clet-text));
-  cursor: pointer;
-  z-index: 2;
+	position: sticky;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	bottom: 0;
+	height: 28px;
+	margin-top: -5px;
+	border: none;
+	background: transparent;
+	color: var(--gsl-text, var(--clet-text));
+	cursor: pointer;
+	z-index: 2;
 }
 
 .clet-sidebar__scroll-hint:hover {
-  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+	color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
 .clet-sidebar__footer {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--gsl-border, var(--clet-border));
+	margin-top: 24px;
+	padding-top: 16px;
+	border-top: 1px solid var(--gsl-border, var(--clet-border));
 }
 
 .clet-sidebar__nav {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }
 
 .clet-sidebar__group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
 }
 
 .clet-sidebar__group-label,
 .clet-sidebar__group-toggle {
-  margin: 0;
-  padding: 0 12px 4px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--gsl-sidebar-label-text, var(--clet-sidebar-label-text, , var(--clet-text)));
+	margin: 0;
+	padding: 0 12px 4px;
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	color: var(
+		--gsl-sidebar-label-text,
+		var(--clet-sidebar-label-text, var(--clet-text))
+	);
 }
 
 .clet-sidebar__group-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  border: none;
-  background: transparent;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	border: none;
+	background: transparent;
 
-  letter-spacing: inherit;
-  text-align: left;
-  text-transform: inherit;
-  cursor: pointer;
+	letter-spacing: inherit;
+	text-align: left;
+	text-transform: inherit;
+	cursor: pointer;
 }
 .clet-sidebar__group-label-icon {
-  flex-shrink: 0;
-  transition: transform 200ms ease;
+	flex-shrink: 0;
+	transition: transform 200ms ease;
 }
 
 /* Chevron switches direction when the group is folded */
 .clet-sidebar__group-toggle[aria-expanded="false"]
-  .clet-sidebar__group-label-icon {
-  transform: rotate(-90deg);
+.clet-sidebar__group-label-icon {
+	transform: rotate(-90deg);
 }
 
 .clet-sidebar__group-toggle:focus-visible {
-  outline: 2px solid var(--gsl-focus, var(--clet-focus));
-  outline-offset: 2px;
+	outline: 2px solid var(--gsl-focus, var(--clet-focus));
+	outline-offset: 2px;
 }
 
 /* Fold animation via grid-template-rows (0fr -> 1fr) so the height
    transition is smooth. The inner wrapper clips overflow while collapsing. */
 .clet-sidebar__group-content {
-  display: grid;
-  grid-template-rows: 1fr;
-  opacity: 1;
-  visibility: visible;
-  transition:
-    grid-template-rows 220ms ease,
-    opacity 200ms ease,
-    visibility 0s linear 0s;
+	display: grid;
+	grid-template-rows: 1fr;
+	opacity: 1;
+	visibility: visible;
+	transition:
+		grid-template-rows 220ms ease,
+		opacity 200ms ease,
+		visibility 0s linear 0s;
 }
 
 .clet-sidebar__group-content-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-height: 0;
-  overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-height: 0;
+	overflow: hidden;
 }
 
 .clet-sidebar__group-content[data-state="collapsed"] {
-  grid-template-rows: 0fr;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    grid-template-rows 220ms ease,
-    opacity 200ms ease,
-    visibility 0s linear 220ms;
+	grid-template-rows: 0fr;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		grid-template-rows 220ms ease,
+		opacity 200ms ease,
+		visibility 0s linear 220ms;
 }
 
 .clet-sidebar__item {
-  display: block;
+	display: block;
 }
 
 .clet-sidebar__link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 10px 12px;
-  border: none;
-  border-radius: 12px;
-  background: transparent;
-  color: var(--gsl-sidebar-link-text, var(--clet-sidebar-link-text, var(--clet-text-secondary)));
-  font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.4;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background-color 150ms ease,
-    color 150ms ease;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	padding: 10px 12px;
+	border: none;
+	border-radius: 12px;
+	background: transparent;
+	color: var(
+		--gsl-sidebar-link-text,
+		var(--clet-sidebar-link-text, var(--clet-text-secondary))
+	);
+	font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.4;
+	text-align: left;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		background-color 150ms ease,
+		color 150ms ease;
 }
 
 .clet-sidebar__link-icon {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  color: inherit;
+	display: inline-flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	color: inherit;
 }
 
 .clet-sidebar__link-label {
-  min-width: 0;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	min-width: 0;
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .clet-sidebar__link-badge {
-  flex-shrink: 0;
-  max-width: 40%;
-  margin-left: auto;
-  padding: 2px 8px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--gsl-sidebar-badge-bg, var(--clet-sidebar-badge-bg, var(--clet-primary)));
-  color: var(--gsl-sidebar-badge-color, var(--clet-sidebar-badge-color, var(--clet-on-primary)));
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.4;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	flex-shrink: 0;
+	max-width: 40%;
+	margin-left: auto;
+	padding: 2px 8px;
+	overflow: hidden;
+	border-radius: 999px;
+	background: var(
+		--gsl-sidebar-badge-bg,
+		var(--clet-sidebar-badge-bg, var(--clet-primary))
+	);
+	color: var(
+		--gsl-sidebar-badge-color,
+		var(--clet-sidebar-badge-color, var(--clet-on-primary))
+	);
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.4;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .clet-sidebar__link--active .clet-sidebar__link-badge {
-  --clet-sidebar-badge-bg: var(--gsl-hover, var(--clet-hover));
-  --clet-sidebar-badge-color: var(--gsl-text-secondary, var(--clet-text-secondary));
+	--clet-sidebar-badge-bg: var(--gsl-hover, var(--clet-hover));
+	--clet-sidebar-badge-color: var(
+		--gsl-text-secondary,
+		var(--clet-text-secondary)
+	);
 }
 
 .clet-sidebar__link:hover {
-  background: var(--gsl-sidebar-link-hover-bg, var(--clet-sidebar-link-hover-bg, var(--clet-surface-dark)));
-  color: var(--gsl-sidebar-link-hover-text, var(--clet-sidebar-link-hover-text, var(--clet-text)));
+	background: var(
+		--gsl-sidebar-link-hover-bg,
+		var(--clet-sidebar-link-hover-bg, var(--clet-surface-dark))
+	);
+	color: var(
+		--gsl-sidebar-link-hover-text,
+		var(--clet-sidebar-link-hover-text, var(--clet-text))
+	);
 }
 
 .clet-sidebar__link:focus-visible {
-  outline: 2px solid var(--gsl-focus, var(--clet-focus));
-  outline-offset: 2px;
+	outline: 2px solid var(--gsl-focus, var(--clet-focus));
+	outline-offset: 2px;
 }
 
 .clet-sidebar__link--active {
-  background: var(--gsl-sidebar-link-active-bg, var(--clet-sidebar-link-active-bg, var(--clet-surface-dark)));
-  color: var(--gsl-sidebar-link-active-text, var(--clet-sidebar-link-active-text, var(--clet-secondary)));
-  font-weight: 600;
+	background: var(
+		--gsl-sidebar-link-active-bg,
+		var(--clet-sidebar-link-active-bg, var(--clet-surface-dark))
+	);
+	color: var(
+		--gsl-sidebar-link-active-text,
+		var(--clet-sidebar-link-active-text, var(--clet-secondary))
+	);
+	font-weight: 600;
 }
 
 /* ── Link loading shimmer ── */
 
 .clet-sidebar__link--loading {
-  cursor: default;
-  pointer-events: none;
+	cursor: default;
+	pointer-events: none;
 }
 
 .clet-sidebar__sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }
 
 .clet-sidebar__skeleton-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  flex-shrink: 0;
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+	flex-shrink: 0;
 }
 
 .clet-sidebar__skeleton-label {
-  flex: 1;
-  width: 60%;
-  height: 12px;
-  border-radius: 4px;
+	flex: 1;
+	width: 60%;
+	height: 12px;
+	border-radius: 4px;
 }
 
 .clet-sidebar__trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  min-height: 40px;
-  margin-bottom: 16px;
-  padding: 8px 14px;
-  border: 1px solid var(--gsl-border, var(--clet-border));
-  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
-  background: var(--gsl-bg, var(--clet-bg));
-  color: var(--gsl-text, var(--clet-text));
-  font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.4;
-  cursor: pointer;
-  transition:
-    background-color 150ms ease,
-    border-color 150ms ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 40px;
+	min-height: 40px;
+	margin-bottom: 16px;
+	padding: 8px 14px;
+	border: 1px solid var(--gsl-border, var(--clet-border));
+	border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+	background: var(--gsl-bg, var(--clet-bg));
+	color: var(--gsl-text, var(--clet-text));
+	font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.4;
+	cursor: pointer;
+	transition:
+		background-color 150ms ease,
+		border-color 150ms ease;
 }
 
 .clet-sidebar__trigger:hover {
-  background: var(--gsl-hover, var(--clet-hover));
+	background: var(--gsl-hover, var(--clet-hover));
 }
 
 .clet-sidebar__trigger:focus-visible {
-  outline: 2px solid var(--gsl-focus, var(--clet-focus));
-  outline-offset: 2px;
+	outline: 2px solid var(--gsl-focus, var(--clet-focus));
+	outline-offset: 2px;
 }
 
 .clet-sidebar__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: calc(var(--gsl-z-overlay, var(--clet-z-overlay)) - 1);
-  display: block;
-  border: none;
-  background: var(--gsl-overlay, var(--clet-overlay));
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms ease;
+	position: fixed;
+	inset: 0;
+	z-index: calc(var(--gsl-sidebar-z, var(--clet-sidebar-z)) - 1);
+	display: block;
+	border: none;
+	background: var(--gsl-overlay, var(--clet-overlay));
+	cursor: pointer;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 200ms ease;
 }
 
 .clet-sidebar__overlay--visible {
-  opacity: 1;
-  pointer-events: auto;
+	opacity: 1;
+	pointer-events: auto;
 }
 
 .clet-sidebar--mobile {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: var(--gsl-z-overlay, var(--clet-z-overlay));
-  width: min(280px, 100vw);
-  height: 100dvh;
-  padding: 16px;
-  border-right: 1px solid var(--gsl-border, var(--clet-border));
-  background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
-  box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
-  transform: translateX(-100%);
-  transition: transform 200ms ease;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: var(--gsl-sidebar-z, var(--clet-sidebar-z));
+	width: min(280px, 100vw);
+	height: 100dvh;
+	padding: 16px;
+	border-right: 1px solid var(--gsl-border, var(--clet-border));
+	background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+	box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
+	transform: translateX(-100%);
+	transition: transform 200ms ease;
 }
 
 .clet-sidebar--mobile.clet-sidebar--mobile-open {
-  transform: translateX(0);
+	transform: translateX(0);
 }
 
 .clet-sidebar--mobile .clet-sidebar__link {
-  min-height: 40px;
+	min-height: 40px;
 }
 
 .clet-sidebar--collapsed {
-  width: 72px;
-  max-width: 72px;
-  padding: 20px 12px;
+	width: 72px;
+	max-width: 72px;
+	padding: 20px 12px;
 }
 
 .clet-sidebar--collapsed .clet-sidebar__header {
-  justify-content: center;
+	justify-content: center;
 }
 
 .clet-sidebar--collapsed .clet-sidebar__header-brand {
-  display: none;
+	display: none;
 }
 
 .clet-sidebar--collapsed .clet-sidebar__group-label,
@@ -441,65 +482,68 @@
 .clet-sidebar--collapsed .clet-sidebar__link-badge,
 .clet-sidebar--collapsed .clet-sidebar__skeleton-label,
 .clet-sidebar--collapsed .clet-sidebar__footer {
-  display: none;
+	display: none;
 }
 
 .clet-sidebar--collapsed .clet-sidebar__link {
-  justify-content: center;
-  padding-inline: 10px;
+	justify-content: center;
+	padding-inline: 10px;
 }
 
 @media (width >= 769px) {
-  .clet-sidebar:not(.clet-sidebar--mobile) {
-    position: sticky;
-    top: 24px;
-    align-self: start;
-    padding: 20px 16px;
-    border-radius: var(--gsl-panel-radius, var(--clet-panel-radius, var(--clet-radius-2xl)));
-    background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
-    transition:
-      width 200ms ease,
-      max-width 200ms ease,
-      padding 200ms ease;
-  }
+	.clet-sidebar:not(.clet-sidebar--mobile) {
+		position: sticky;
+		top: 24px;
+		align-self: start;
+		padding: 20px 16px;
+		border-radius: var(
+			--gsl-panel-radius,
+			var(--clet-panel-radius, var(--clet-radius-2xl))
+		);
+		background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+		transition:
+			width 200ms ease,
+			max-width 200ms ease,
+			padding 200ms ease;
+	}
 
-  /* Plain override must live inside the media query to beat the base
+	/* Plain override must live inside the media query to beat the base
      desktop background/border-radius above. */
-  .clet-sidebar.clet-sidebar--plain:not(.clet-sidebar--mobile) {
-    background: transparent;
-    border-right: 1px solid var(--gsl-border, var(--clet-border));
-    border-radius: 0;
-  }
+	.clet-sidebar.clet-sidebar--plain:not(.clet-sidebar--mobile) {
+		background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+		border-right: 1px solid var(--gsl-border, var(--clet-border));
+		border-radius: 0;
+	}
 }
 
 @media (width <= 768px) {
-  .clet-sidebar:not(.clet-sidebar--mobile) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: var(--gsl-z-overlay, var(--clet-z-overlay));
-    width: min(280px, 100vw);
-    height: 100dvh;
-    padding: 16px;
-    border-right: 1px solid var(--gsl-border, var(--clet-border));
-    background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
-    box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
-    transform: translateX(-100%);
-    transition: transform 200ms ease;
-  }
+	.clet-sidebar:not(.clet-sidebar--mobile) {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: var(--gsl-sidebar-z, var(--clet-sidebar-z));
+		width: min(280px, 100vw);
+		height: 100dvh;
+		padding: 16px;
+		border-right: 1px solid var(--gsl-border, var(--clet-border));
+		background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+		box-shadow: var(--gsl-shadow-lg, var(--clet-shadow-lg));
+		transform: translateX(-100%);
+		transition: transform 200ms ease;
+	}
 
-  .clet-sidebar:not(.clet-sidebar--mobile).clet-sidebar--mobile-open {
-    transform: translateX(0);
-  }
+	.clet-sidebar:not(.clet-sidebar--mobile).clet-sidebar--mobile-open {
+		transform: translateX(0);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .clet-sidebar,
-  .clet-sidebar__overlay {
-    transition: none;
-  }
+	.clet-sidebar,
+	.clet-sidebar__overlay {
+		transition: none;
+	}
 
-  .clet-sidebar__group-content {
-    transition: none;
-  }
+	.clet-sidebar__group-content {
+		transition: none;
+	}
 }

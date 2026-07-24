@@ -35,13 +35,13 @@
   margin-bottom: var(--clet-app-layout-body-gap);
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1200px) {
   .demo-home__metrics {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 640px) {
+@media (width <= 768px) {
   .demo-home__metrics {
     grid-template-columns: 1fr;
   }
@@ -300,6 +300,14 @@
   font-size: 13px;
   color: var(--clet-text);
   flex: 1;
+}
+
+/* ── Mobile-only sidebar header ── */
+
+@media (width > 768px) {
+  .clet-sidebar__header--mobile-only {
+    display: none;
+  }
 }
 
 /* ── Member table avatar ── */

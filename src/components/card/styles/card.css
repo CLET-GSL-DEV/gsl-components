@@ -10,11 +10,15 @@
   color: var(--gsl-text, var(--clet-text));
 }
 
+.clet-card--bordered {
+  border: 1px solid var(--gsl-border, var(--clet-border));
+}
+
 .clet-card__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .clet-card__title {

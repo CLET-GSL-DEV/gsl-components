@@ -13,9 +13,11 @@ import { ExampleTabs } from "../components/ExampleTabs";
 import { ComboboxPreview } from "../previews/code/ComboboxPreview";
 import { ComboboxMultiPreview } from "../previews/code/ComboboxMultiPreview";
 import { ComboboxIconsPreview } from "../previews/code/ComboboxIconsPreview";
+import { ComboboxLongPreview } from "../previews/code/ComboboxLongPreview";
 import comboboxSingleSource from "../previews/examples/combobox-single.example.tsx?raw";
 import comboboxMultiSource from "../previews/examples/combobox-multi.example.tsx?raw";
 import comboboxIconsSource from "../previews/examples/combobox-icons.example.tsx?raw";
+import comboboxLongSource from "../previews/examples/combobox-long.example.tsx?raw";
 
 # Combobox
 
@@ -39,6 +41,12 @@ Searchable option list built on `cmdk`, opened from a trigger button (unlike `Dr
   title="Per-option leading icon"
   preview={<ComboboxIconsPreview />}
   code={comboboxIconsSource}
+/>
+
+<ExampleTabs
+  title="Long list (scrolls past 320px)"
+  preview={<ComboboxLongPreview />}
+  code={comboboxLongSource}
 />
 
 ## Props

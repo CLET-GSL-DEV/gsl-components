@@ -67,6 +67,10 @@ const configs: Record<string, () => ReturnType<typeof defineConfig>> = {
 						id === "react" ||
 						id === "react-dom" ||
 						id === "react/jsx-runtime" ||
+						id === "lottie-react" ||
+						id.startsWith("lottie-react/") ||
+						id === "lottie-web" ||
+						id.startsWith("lottie-web/") ||
 						id === "next/navigation" ||
 						id === "next/link" ||
 						id.startsWith("next/") ||

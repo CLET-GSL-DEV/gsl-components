@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export interface InstallResult {
   name: string;
@@ -22,9 +23,22 @@ export async function writeJson(filePath: string, data: unknown): Promise<void> 
   await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
 }
 
+/** Absolute path to this package's own compiled server entry (dist/mcp/index.js,
+ * one level up from dist/mcp/installers/). Resolved from where THIS module is
+ * actually loaded from, so it's correct no matter how the host project's package
+ * manager lays out node_modules.
+ *
+ * `npx -y components-mcp` used to be used here, on the theory that npx would
+ * resolve the already-installed local bin. That's false in non-hoisted/strict
+ * node_modules layouts (e.g. a pnpm workspace where nothing at the repo root
+ * directly depends on @rfdtech/components) — npx finds no local bin and silently
+ * installs an unrelated same-named package from the npm registry instead. A
+ * direct `node <absolute path>` has no such ambiguity. */
+const SERVER_ENTRY_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "index.js");
+
 /** The MCP server identity every installer wires up, consistently named across tools. */
 export const MCP_SERVER_NAME = "rfdtech-ui";
-export const MCP_SERVER_COMMAND = { command: "npx", args: ["-y", "@rfdtech/components-mcp"] };
+export const MCP_SERVER_COMMAND = { command: "node", args: [SERVER_ENTRY_PATH] };
 
 /** Merge `{ mcpServers: { "rfdtech-ui": {...} } }` into an existing config object without touching anything else. */
 export function mergeMcpServers(existing: Record<string, unknown> | null): {

@@ -8,6 +8,7 @@ import { useMockQuery } from "demo/hooks/useMockQuery";
 import { useCallback, useMemo, useState } from "react";
 import { UserCheck, Trash2, UserX, Eye, Edit, UserPlus } from "lucide-react";
 import {
+  Card,
   Table,
   TableHeader,
   TableSearch,
@@ -253,58 +254,60 @@ export function Dashboard2Page() {
         />
       </div>
 
-      <Table paramPrefix="dash2-members">
-        <TableHeader>
-          <TableSearch placeholder="Search members..." />
-          <TableFilter variant="spread">
-            <Dropdown
-              name="role"
-              value={roleValue || null}
-              onValueChange={(v) => setRoleValue(v ?? "")}
-              options={[
-                { value: "Admin", label: "Admin" },
-                { value: "Editor", label: "Editor" },
-                { value: "Viewer", label: "Viewer" },
-              ]}
-              placeholder="All roles"
-              aria-label="Filter by role"
-            />
-            <Dropdown
-              name="status"
-              value={statusValue || null}
-              onValueChange={(v) => setStatusValue(v ?? "")}
-              options={[
-                { value: "Active", label: "Active" },
-                { value: "Pending", label: "Pending" },
-                { value: "Inactive", label: "Inactive" },
-                { value: "Suspended", label: "Suspended" },
-                { value: "Terminated", label: "Terminated" },
-              ]}
-              placeholder="All statuses"
-              aria-label="Filter by status"
-            />
-          </TableFilter>
-        </TableHeader>
-        <TableContent
-          variant="panel"
-          selectable
-          selectedIds={selected}
-          onSelectionChange={setSelected}
-          columns={columns}
-          data={paged}
-          rowKey={(m: GslMember) => m.id}
-          rowActions={rowActions}
-          bulkActions={bulkActions}
-          bulkActionsFooter
-        />
-        <TableFooter noBorder>
-          <TablePagination
-            totalPages={totalPages}
-            totalItems={filtered.length}
-            pageSizeOptions={pageSizeOptions}
+      <Card bordered>
+        <Table paramPrefix="dash2-members">
+          <TableHeader>
+            <TableSearch placeholder="Search members..." />
+            <TableFilter variant="spread">
+              <Dropdown
+                name="role"
+                value={roleValue || null}
+                onValueChange={(v) => setRoleValue(v ?? "")}
+                options={[
+                  { value: "Admin", label: "Admin" },
+                  { value: "Editor", label: "Editor" },
+                  { value: "Viewer", label: "Viewer" },
+                ]}
+                placeholder="All roles"
+                aria-label="Filter by role"
+              />
+              <Dropdown
+                name="status"
+                value={statusValue || null}
+                onValueChange={(v) => setStatusValue(v ?? "")}
+                options={[
+                  { value: "Active", label: "Active" },
+                  { value: "Pending", label: "Pending" },
+                  { value: "Inactive", label: "Inactive" },
+                  { value: "Suspended", label: "Suspended" },
+                  { value: "Terminated", label: "Terminated" },
+                ]}
+                placeholder="All statuses"
+                aria-label="Filter by status"
+              />
+            </TableFilter>
+          </TableHeader>
+          <TableContent
+            variant="panel"
+            selectable
+            selectedIds={selected}
+            onSelectionChange={setSelected}
+            columns={columns}
+            data={paged}
+            rowKey={(m: GslMember) => m.id}
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            bulkActionsFooter
           />
-        </TableFooter>
-      </Table>
+          <TableFooter noBorder>
+            <TablePagination
+              totalPages={totalPages}
+              totalItems={filtered.length}
+              pageSizeOptions={pageSizeOptions}
+            />
+          </TableFooter>
+        </Table>
+      </Card>
 
       <Modal
         open={!!viewMember}

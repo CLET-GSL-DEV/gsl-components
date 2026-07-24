@@ -16,7 +16,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .clet-table__actions {
@@ -342,7 +342,11 @@
 }
 
 .clet-table__content td {
-  padding: var(--gsl-table-cell-padding-y, var(--clet-table-cell-padding-y, 12px)) 16px;
+  padding: var(
+      --gsl-table-cell-padding-y,
+      var(--clet-table-cell-padding-y, 12px)
+    )
+    16px;
   font-size: 14px;
   color: var(--gsl-text, var(--clet-text));
   white-space: nowrap;

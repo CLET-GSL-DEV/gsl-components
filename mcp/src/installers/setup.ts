@@ -29,7 +29,7 @@ export async function runSetup(cwd: string = process.cwd()): Promise<void> {
     console.log(
       "No supported AI tool detected (looked for .claude/, .mcp.json, .cursor/, ~/.codex/, " +
         "opencode.json, ~/.config/opencode).\n" +
-        "The MCP server is still available directly: `npx @rfdtech/components-mcp` or `rfdui mcp`."
+        "The MCP server is still available directly: `npx components-mcp` or `rfdui mcp`."
     );
     return;
   }

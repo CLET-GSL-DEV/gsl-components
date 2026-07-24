@@ -61,6 +61,12 @@
   margin-bottom: 0;
 }
 
+/* ── Bordered variant: default layout, just adds a border ── */
+
+.clet-metric-card--bordered {
+  border: 1px solid var(--gsl-border, var(--clet-border));
+}
+
 .clet-metric-card__trend-glyph {
   display: inline-flex;
   align-items: center;
