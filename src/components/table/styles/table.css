@@ -264,6 +264,8 @@
 	white-space: nowrap;
 	color: var(--gsl-error-text, var(--clet-error-text));
 	border: none;
+	font-family: var(--gsl-table-filter-font, var(--clet-table-filter-font));
+	font-size: var(--gsl-text-size-sm, var(--clet-text-size-sm));
 }
 
 .clet-table__filter-btn--reset:hover {

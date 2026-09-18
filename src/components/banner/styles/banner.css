@@ -1,0 +1,146 @@
+/* Banner: full-width page-level notice with a 4px accent bar. The accent,
+   tint, and action link all carry the same status colour per variant. */
+.clet-banner {
+  --clet-banner-info-bg: #f6f8fa;
+  --clet-banner-info-accent: #0c4a6e;
+  --clet-banner-success-bg: #e6efea;
+  --clet-banner-success-accent: #006229;
+  --clet-banner-warning-bg: #fff9e9;
+  --clet-banner-warning-accent: #8a6914;
+  --clet-banner-danger-bg: #f2e6e6;
+  --clet-banner-danger-accent: #7a0608;
+  --clet-banner-heading-text: #151b24;
+  --clet-banner-subtext-text: #5f6165;
+  --clet-banner-close-text: #2e3b4d;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 20px;
+}
+
+.clet-banner--info {
+  background: var(--gsl-banner-info-bg, var(--clet-banner-info-bg));
+}
+
+.clet-banner--info .clet-banner__accent {
+  background: var(--gsl-banner-info-accent, var(--clet-banner-info-accent));
+}
+
+.clet-banner--info .clet-banner__action {
+  color: var(--gsl-banner-info-accent, var(--clet-banner-info-accent));
+}
+
+.clet-banner--success {
+  background: var(--gsl-banner-success-bg, var(--clet-banner-success-bg));
+}
+
+.clet-banner--success .clet-banner__accent {
+  background: var(--gsl-banner-success-accent, var(--clet-banner-success-accent));
+}
+
+.clet-banner--success .clet-banner__action {
+  color: var(--gsl-banner-success-accent, var(--clet-banner-success-accent));
+}
+
+.clet-banner--warning {
+  background: var(--gsl-banner-warning-bg, var(--clet-banner-warning-bg));
+}
+
+.clet-banner--warning .clet-banner__accent {
+  background: var(--gsl-banner-warning-accent, var(--clet-banner-warning-accent));
+}
+
+.clet-banner--warning .clet-banner__action {
+  color: var(--gsl-banner-warning-accent, var(--clet-banner-warning-accent));
+}
+
+.clet-banner--danger {
+  background: var(--gsl-banner-danger-bg, var(--clet-banner-danger-bg));
+}
+
+.clet-banner--danger .clet-banner__accent {
+  background: var(--gsl-banner-danger-accent, var(--clet-banner-danger-accent));
+}
+
+.clet-banner--danger .clet-banner__action {
+  color: var(--gsl-banner-danger-accent, var(--clet-banner-danger-accent));
+}
+
+.clet-banner__accent {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 4px;
+  min-height: 24px;
+  border-radius: 4px;
+}
+
+.clet-banner__content {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.clet-banner__heading {
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  line-height: 1.4;
+  color: var(--gsl-banner-heading-text, var(--clet-banner-heading-text));
+}
+
+.clet-banner__subtext {
+  font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
+  line-height: 1.4;
+  color: var(--gsl-banner-subtext-text, var(--clet-banner-subtext-text));
+}
+
+.clet-banner__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 16px;
+}
+
+.clet-banner__action {
+  font-size: var(--gsl-text-size-sm, var(--clet-text-size-sm));
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.clet-banner__action a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.clet-banner__action a:hover {
+  text-decoration: underline;
+}
+
+.clet-banner__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--gsl-banner-close-text, var(--clet-banner-close-text));
+  cursor: pointer;
+}
+
+.clet-banner__close:hover {
+  opacity: 0.7;
+}
+
+.clet-banner__close:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clet-banner {
+    transition: none;
+  }
+}

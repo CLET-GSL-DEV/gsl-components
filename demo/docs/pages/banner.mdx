@@ -1,0 +1,69 @@
+export const meta = {
+  title: "Banner",
+  description: "Page-level persistent notice with status variants",
+  category: "Components",
+  keywords: ["banner", "notice", "page notice", "dismissible", "alert"],
+  since: "2.4.0",
+  status: "stable",
+  related: ["notice", "toast"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { BannerPreview } from "../previews/code/BannerPreview";
+import bannerSource from "../previews/examples/banner.example.tsx?raw";
+
+# Banner
+
+Page-level notification that requires acknowledgement and persists until dismissed. Full width, sits at the top of a page or under a section heading. Carries no gradient and no decoration: the accent bar, the background tint, and the action link all say the same status, so colour meaning is never carried alone. Use for something the user did not trigger themselves (e.g. a licence status change); use Toast for something the user just did.
+
+Replaces `Notice`, which is deprecated.
+
+## Example
+
+<ExampleTabs
+  title="Dismissible info banner"
+  preview={<BannerPreview />}
+  code={bannerSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"info" \| "success" \| "warning" \| "danger"` | `"info"` | Colour meaning. |
+| `heading` | `ReactNode` | — | Heading line. |
+| `subtext` | `ReactNode` | — | Supporting line under the heading. |
+| `action` | `ReactNode` | — | Action slot on the right, e.g. a "View details" link. |
+| `onClose` | `() => void` | — | Dismiss handler. The ✕ button renders only when provided. |
+| `closeLabel` | `string` | `"Dismiss"` | Accessible label for the close button. |
+| `classNames` | `BannerClassNames` | — | `root`, `accent`, `content`, `heading`, `subtext`, `actions`, `action`, `close` overrides. |
+| `className` | `string` | — | Merged onto the root. |
+
+## Types
+
+### BannerProps
+
+Heading plus optional subtext, action slot, and dismiss handler. `danger` renders `role="alert"`, other variants `role="status"`. Forwards `ref` and spreads `...props` onto the root.
+
+### BannerVariant
+
+`"info" | "success" | "warning" | "danger"`.
+
+### BannerClassNames
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer banner |
+| `accent` | 4px status bar |
+| `content` | Heading + subtext stack |
+| `heading` | Heading line |
+| `subtext` | Supporting line |
+| `actions` | Right-side row |
+| `action` | Action slot |
+| `close` | ✕ button |
+
+## Notes
+
+- The ✕ is its own button with its own action (`onClose`) — typically dismissal. Omit `onClose` for a persistent banner with no close affordance.
+- Keep heading to one line and subtext short; the banner is a signal, not a paragraph.

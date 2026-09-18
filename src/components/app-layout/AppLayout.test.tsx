@@ -158,6 +158,29 @@ describe("AppLayout", () => {
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
+  it("stamps data-clet-version when pinned, omits it for latest", () => {
+    const { container, rerender } = render(
+      <RenderInRouter>
+        <AppLayout version="2.2">
+          <AppBody>Body</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
+    );
+    const pinned = container.querySelector(".clet-app-layout")!;
+    expect(pinned).toHaveAttribute("data-clet-version", "2.2");
+    expect(pinned).toHaveAttribute("data-gsl-version", "2.2");
+
+    rerender(
+      <RenderInRouter>
+        <AppLayout>
+          <AppBody>Body</AppBody>
+        </AppLayout>
+      </RenderInRouter>,
+    );
+    const latest = container.querySelector(".clet-app-layout")!;
+    expect(latest).not.toHaveAttribute("data-clet-version");
+  });
+
   it("merges className on root", () => {
     const { container } = render(
       <RenderInRouter>

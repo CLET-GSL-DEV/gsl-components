@@ -74,6 +74,22 @@ body {
   text-decoration: none;
 }
 
+/* 2.4 shell: system name shown in place of the search bar. */
+.demo-system-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--clet-text);
+  white-space: nowrap;
+}
+
+/* Dashboard4 docs toggle: fixed width so the label swap never reflows. */
+.demo-docs-toggle {
+  min-width: 210px;
+  max-width: 210px;
+  white-space: nowrap;
+}
+
 .demo-nav {
   display: flex;
   align-items: center;

@@ -15,7 +15,7 @@ import bulkImportSource from "../previews/examples/bulk-import.example.tsx?raw";
 
 # BulkImportModal
 
-Four-step modal wizard for importing spreadsheet data (`.xlsx`, `.xls`, `.csv`). Parsing and validation run in the browser. Datasets over 1000 rows are processed in chunks with a progress overlay to avoid main-thread freezes.
+Four-step modal wizard for importing spreadsheet data (`.xlsx`, `.csv`). Parsing and validation run in the browser. Datasets over 1000 rows are processed in chunks with a progress overlay to avoid main-thread freezes.
 
 ## Example
 
@@ -29,7 +29,7 @@ Click **Open bulk import** to launch the multi-step import modal with sample dat
 
 ## Steps
 
-1. **Upload Document** — preview expected columns, then upload `.xlsx`, `.xls`, or `.csv`
+1. **Upload Document** — preview expected columns, then upload `.xlsx` or `.csv`
 2. **Select header row** — choose the header row with radio buttons
 3. **Match Columns** — map each uploaded column to a target field
 4. **Validate data** — review editable rows with error checking, discard rows, or reset discarded rows, then **Confirm**
@@ -63,6 +63,7 @@ Click **Open bulk import** to launch the multi-step import modal with sample dat
 
 ## Notes
 
+- Parsing needs the optional peers `papaparse` (CSV) and `read-excel-file` (Excel): `npm install papaparse read-excel-file`. Legacy `.xls` files are refused with a re-save-as-`.xlsx` hint.
 - Also exported: `useBulkImportFlow`, step components, and spreadsheet utilities.
 - Discarded rows are excluded from `onComplete`. Use reset discarded rows button to restore them.
 - The validate data table is virtualized for performance with large spreadsheets.

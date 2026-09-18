@@ -12,6 +12,7 @@ export * from "./components/app-header";
 export * from "./components/app-layout";
 export * from "./components/avatar";
 export * from "./components/badge";
+export * from "./components/banner";
 export * from "./components/breadcrumb";
 export * from "./components/bulk-import-modal";
 export * from "./components/button";
@@ -24,6 +25,7 @@ export * from "./components/date-selector";
 export * from "./components/table";
 export * from "./components/field";
 export * from "./components/form";
+export * from "./components/hero-banner";
 export * from "./components/input";
 export * from "./components/otp-input";
 export * from "./components/page-section";
@@ -32,6 +34,7 @@ export * from "./components/date-range-selector";
 export * from "./components/dialog";
 export * from "./components/draggable";
 export * from "./components/dropdown";
+export * from "./components/empty-state";
 export * from "./components/export-button";
 export * from "./components/metric-card";
 export * from "./components/metric-cards";
@@ -54,6 +57,12 @@ export * from "./components/switch";
 export * from "./components/tabs";
 export * from "./components/time-selector";
 export * from "./components/timeline";
+export * from "./components/version-pin";
+export type {
+  CletVersion,
+  GslVersion,
+} from "./types/version";
+export { CLET_VERSIONS, LATEST_CLET_VERSION, LATEST_GSL_VERSION, isCletVersion } from "./types/version";
 export * from "./components/textarea";
 export * from "./components/toast";
 export * from "./components/tooltip";

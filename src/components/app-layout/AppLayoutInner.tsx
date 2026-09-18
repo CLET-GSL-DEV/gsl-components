@@ -8,6 +8,7 @@ import {
 import { cn } from "../../utils/cn";
 import { useBreadcrumbContext } from "../breadcrumb/breadcrumb-context";
 import { getRouterAdapter } from "../../adapters/registry";
+import type { CletVersion } from "../../types/version";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,11 +24,12 @@ export interface AppLayoutInnerProps {
   variant?: "default" | "panel" | "stacked";
   hideHeader?: boolean;
   hideSidebar?: boolean;
+  version?: CletVersion;
 }
 
 export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
   function AppLayoutInner(
-    { children, className, variant = "default", hideHeader, hideSidebar },
+    { children, className, variant = "default", hideHeader, hideSidebar, version },
     ref,
   ) {
     const { items } = useBreadcrumbContext();
@@ -115,6 +117,8 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
       return (
         <div
           ref={ref}
+          data-clet-version={version}
+          data-gsl-version={version}
           className={cn("clet-app-layout gsl-app-layout", "clet-app-layout--stacked gsl-app-layout--stacked", className)}
         >
           {headerEl}
@@ -132,6 +136,8 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
     return (
       <div
         ref={ref}
+        data-clet-version={version}
+        data-gsl-version={version}
         className={cn(
           "clet-app-layout gsl-app-layout",
           variant === "panel" && "clet-app-layout--panel gsl-app-layout--panel",

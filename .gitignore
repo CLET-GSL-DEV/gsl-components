@@ -14,6 +14,8 @@ llms.txt
 table-demo.png
 *.tgz
 *.tgz.bak
+# Local Figma frame exports (opencode sessions), never shared
+.figma-frames/
 bun.lock
 AGENTS.md
 git.md

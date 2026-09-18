@@ -275,7 +275,7 @@ describe("Table", () => {
     expect(screen.getByText("Virtual empty")).toBeInTheDocument();
   });
 
-  it("renders default empty icon when no emptyIcon is provided", () => {
+  it("renders the EmptyState illustration by default", () => {
     const { container } = render(
       <Table paramPrefix="test">
         <TableContent
@@ -285,10 +285,11 @@ describe("Table", () => {
       </Table>,
     );
 
-    const iconWrapper = container.querySelector(".clet-table__empty-icon");
-    expect(iconWrapper).toBeInTheDocument();
-    // An Inbox SVG icon should be rendered inside the wrapper
-    expect(iconWrapper?.querySelector("svg")).toBeInTheDocument();
+    expect(
+      container.querySelector(".clet-empty-state__illustration"),
+    ).toBeInTheDocument();
+    // No legacy icon wrapper in the new path
+    expect(container.querySelector(".clet-table__empty-icon")).toBeNull();
   });
 
   it("renders selection column when selectable", () => {

@@ -11,6 +11,7 @@ import {
   Shield,
   BarChart3,
   History,
+  TableIcon,
 } from "lucide-react";
 import type {
   TableColumn,
@@ -379,7 +380,7 @@ export function Dashboard2Page() {
             </TabsList>
 
             <TabsContent value="members">
-              <Table paramPrefix="dash2-members">
+              <Table paramPrefix="dash2-members" variant="default">
                 <TableHeader>
                   <TableSearch placeholder="Search members..." />
                   <TableFilter variant="spread">
@@ -417,6 +418,8 @@ export function Dashboard2Page() {
                   rowActions={rowActions}
                   bulkActions={bulkActions}
                   bulkActionsFooter
+                  emptyIcon={<TableIcon size={40} strokeWidth={1} />}
+                  emptyText="No results"
                 />
                 <TableFooter noBorder>
                   <TablePagination

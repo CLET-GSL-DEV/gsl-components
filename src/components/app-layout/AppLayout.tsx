@@ -5,6 +5,7 @@ import {
 import { BreadcrumbProvider } from "../breadcrumb/breadcrumb-context";
 import { SidebarProvider } from "../sidebar/SidebarContext";
 import { AppLayoutInner } from "./AppLayoutInner";
+import type { CletVersion } from "../../types/version";
 
 export interface AppLayoutProps {
   children?: ReactNode;
@@ -32,6 +33,12 @@ export interface AppLayoutProps {
    * its place and no space is held, so the content spans the full width.
    */
   hideSidebar?: boolean;
+  /**
+   * Additive version pin. Omit for latest (2.4). Set to a frozen pin
+   * (`"2.2"`, `"1.22"`) to render this shell under that version's CSS scope
+   * (`data-clet-version`) without forking markup.
+   */
+  version?: CletVersion;
 }
 
 /**
@@ -41,7 +48,7 @@ export interface AppLayoutProps {
  */
 export const AppLayout = forwardRef<HTMLDivElement, AppLayoutProps>(
   function AppLayout(
-    { children, className, variant = "default", hideHeader, hideSidebar },
+    { children, className, variant = "default", hideHeader, hideSidebar, version },
     ref,
   ) {
     return (
@@ -52,6 +59,7 @@ export const AppLayout = forwardRef<HTMLDivElement, AppLayoutProps>(
             variant={variant}
             hideHeader={hideHeader}
             hideSidebar={hideSidebar}
+            version={version}
             ref={ref}
           >
             {children}

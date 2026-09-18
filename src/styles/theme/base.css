@@ -23,11 +23,15 @@ body {
 .gsl-theme {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 2.4: one unified typeface. "Matimo" resolves when the consuming app
+     ships the webfont (see demo/public or app assets); the system stack
+     below is the fallback until then. The 2.3 stacks are frozen under the
+     [data-clet-version="2.3"] pin in src/styles/versions.css. */
   --clet-font:
-    -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue",
-    arial, sans-serif;
-  --clet-font-header: "Roboto Serif", var(--gsl-font, var(--clet-font));
-  --clet-font-body: "Lato", var(--gsl-font, var(--clet-font));
+    "Matimo", -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
+    "Helvetica Neue", arial, sans-serif;
+  --clet-font-header: "Matimo", var(--gsl-font, var(--clet-font));
+  --clet-font-body: "Matimo", var(--gsl-font, var(--clet-font));
   --clet-text-size-xs: calc(12px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
   --clet-text-size-sm: calc(13px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
   --clet-text-size-base: calc(

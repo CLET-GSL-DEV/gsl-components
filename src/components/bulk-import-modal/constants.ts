@@ -5,4 +5,4 @@ export const REMAP_CHUNK_SIZE = 1024;
 export const BACKGROUND_VALIDATION_CHUNK_SIZE = 256;
 
 export const DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024;
-export const ACCEPTED_EXTENSIONS = [".xlsx", ".xls", ".csv"] as const;
+export const ACCEPTED_EXTENSIONS = [".xlsx", ".csv"] as const;

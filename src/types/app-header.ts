@@ -61,6 +61,22 @@ export interface AppHeaderSearchProps {
   /** Accessible label for the search input. */
   label?: string;
   children?: ReactNode;
+  /**
+   * Collapse to an icon button that expands into the field on click.
+   * The button swaps itself for the field — siblings (e.g. a title) are
+   * untouched. Escape or the close button collapses and clears.
+   */
+  collapsible?: boolean;
+  /** Controlled collapsed state (only with `collapsible`). */
+  collapsed?: boolean;
+  /** Uncontrolled initial collapsed state (default true). */
+  defaultCollapsed?: boolean;
+  /** Called when the collapsed state changes. */
+  onCollapsedChange?: (collapsed: boolean) => void;
+  /** Accessible label for the expand button. Defaults to "Open search". */
+  expandLabel?: string;
+  /** Accessible label for the collapse button. Defaults to "Close search". */
+  collapseLabel?: string;
 }
 
 export interface AppHeaderNotificationsProps {

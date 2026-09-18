@@ -6,7 +6,7 @@
   flex-direction: column;
   font-family: var(--gsl-tabs-font, var(--clet-tabs-font));
   color: var(--gsl-text, var(--clet-text));
-  gap: 15px;
+  gap: var(--clet-app-layout-body-gap);
 }
 
 .clet-tabs[data-orientation="vertical"] {

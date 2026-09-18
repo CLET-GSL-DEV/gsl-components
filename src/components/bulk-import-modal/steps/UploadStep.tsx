@@ -61,7 +61,7 @@ export function UploadStep({
       <div className="clet-bulk-import__upload-area gsl-bulk-import__upload-area">
         <UploadField
           value={uploadedFile ?? undefined}
-          accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
+          accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
           /* "Spreadsheet files" reads better here than naming each format, and
              saying it locally keeps the special case out of UploadField. */
           subtitle={

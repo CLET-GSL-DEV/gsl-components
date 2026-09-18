@@ -286,6 +286,51 @@
   outline-offset: 2px;
 }
 
+/* ── Collapsible search: icon button swaps itself for the field ── */
+
+.clet-app-header-search__trigger,
+.clet-app-header-search__collapse {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-soft, var(--clet-shadow-soft));
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.clet-app-header-search__trigger:hover,
+.clet-app-header-search__collapse:hover {
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
+}
+
+.clet-app-header-search__trigger:focus-visible,
+.clet-app-header-search__collapse:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: 2px;
+}
+
+.clet-app-header-search__expanded {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  max-width: 400px;
+  align-self: center;
+}
+
 .clet-app-header__search-text {
   color: var(--gsl-text-muted, var(--clet-text-muted));
 }
@@ -315,7 +360,8 @@
   flex-shrink: 0;
   border: none;
   border-radius: 50%;
-  background: transparent;
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-soft, var(--clet-shadow-soft));
   color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   transition:

@@ -55,7 +55,7 @@
     "prepare": "npm run generate:tokens && node scripts/install-hooks.mjs",
     "postinstall": "node scripts/postinstall.mjs",
     "generate:tokens": "node scripts/generate-theme-tokens.mjs",
-    "build": "npm run generate:tokens && BUILD_TARGET=default npx vite build && BUILD_TARGET=next npx vite build && mv dist/next-index.css dist/next.css && node -e \"var fs=require('fs');['dist/next.js','dist/next.cjs'].forEach(f=>fs.writeFileSync(f,fs.readFileSync(f,'utf8').replace('./next-index.css','./next.css')))\" && tsc -p tsconfig.build.json && cp src/next.d.ts dist/next.d.ts && (cd mcp && npx tsc -p tsconfig.json) && node mcp/scripts/prepare-dist.mjs",
+    "build": "npm run generate:tokens && BUILD_TARGET=default npx vite build && BUILD_TARGET=next npx vite build && node -e \"var fs=require('fs');if(fs.existsSync('dist/next-index.css'))fs.renameSync('dist/next-index.css','dist/next.css')\" && node -e \"var fs=require('fs');['dist/next.js','dist/next.cjs'].forEach(f=>fs.writeFileSync(f,fs.readFileSync(f,'utf8').replace('./next-index.css','./next.css')))\" && tsc -p tsconfig.build.json && cp src/next.d.ts dist/next.d.ts && (cd mcp && npx tsc -p tsconfig.json) && node mcp/scripts/prepare-dist.mjs",
     "build:mcp": "(cd mcp && npx tsc -p tsconfig.json) && node mcp/scripts/prepare-dist.mjs",
     "dev": "vite -c vite.demo.config.ts",
     "demo": "vite build -c vite.demo.config.ts",
@@ -80,11 +80,13 @@
     "@radix-ui/react-tabs": "^1.1.0",
     "lucide-react": ">=1.0.0",
     "next": ">=14.0.0",
+    "papaparse": ">=5.5.0 <6",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
     "react-hook-form": ">=7.0.0",
     "react-router-dom": ">=7.0.0",
-    "xlsx": ">=0.18.5",
+    "read-excel-file": ">=9 <10",
+    "write-excel-file": ">=4 <5",
     "zod": ">=3.0.0"
   },
   "peerDependenciesMeta": {
@@ -100,7 +102,13 @@
     "@hookform/resolvers": {
       "optional": true
     },
-    "xlsx": {
+    "papaparse": {
+      "optional": true
+    },
+    "read-excel-file": {
+      "optional": true
+    },
+    "write-excel-file": {
       "optional": true
     }
   },
@@ -119,34 +127,39 @@
     "@radix-ui/react-select": "^2.3.7",
     "@radix-ui/react-switch": "^1.3.7",
     "@radix-ui/react-tabs": "^1.1.21",
-    "@testing-library/jest-dom": "^6.10.0",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.4",
     "@types/express": "^5.0.6",
+    "@types/mdx": "2.0.14",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^5.2.0",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^10.8.1",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "lucide-react": "^1.31.0",
+    "next": "^16.3.5",
+    "papaparse": "^5.7.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.85.0",
     "react-router-dom": "^7.18.2",
+    "read-excel-file": "^9.3.10",
     "rehype-pretty-code": "^0.14.5",
     "remark-gfm": "^4.0.1",
     "shiki": "^4.4.3",
-    "stylelint": "^17.14.1",
+    "stylelint": "^17.15.0",
     "stylelint-config-standard": "^40.0.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0",
-    "vite": "^6.4.3",
-    "vite-plugin-dts": "^4.5.4",
+    "vite": "^8.2.1",
+    "vite-plugin-dts": "^5.0.3",
     "vite-plugin-lib-inject-css": "^2.2.2",
-    "vitest": "^4.1.10",
-    "xlsx": "^0.18.5",
+    "vitest": "^4.1.11",
+    "write-excel-file": "^4.1.1",
     "zod": "^4.4.3"
   },
   "keywords": [

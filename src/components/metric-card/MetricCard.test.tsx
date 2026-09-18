@@ -16,6 +16,23 @@ describe("MetricCard", () => {
     expect(screen.getByText("vs last month")).toBeInTheDocument();
   });
 
+  it("renders a description adornment to the left of the description", () => {
+    const { container } = render(
+      <MetricCard
+        label="Total Customers"
+        value="2,420"
+        description="Total customers"
+        descriptionAdornment={<span data-testid="trend-arrow" />}
+      />,
+    );
+    expect(screen.getByTestId("trend-arrow")).toBeInTheDocument();
+    const row = container.querySelector(
+      ".clet-metric-card__description--with-adornment",
+    )!;
+    expect(row).toBeInTheDocument();
+    expect(row).toHaveTextContent("Total customers");
+  });
+
   it("renders trend indicator with icon", () => {
     const { container } = render(
       <MetricCard label="Users" value="1,024" trend="up" trendValue="+8.3%" />,

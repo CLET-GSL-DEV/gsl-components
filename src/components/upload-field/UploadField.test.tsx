@@ -49,7 +49,7 @@ describe("UploadField", () => {
     // The exact string UploadStep passes. It supplies its own "Spreadsheet
     // files" wording via `subtitle`, so the derived text stays generic here.
     render(
-      <UploadField accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" />,
+      <UploadField accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" />,
     );
     expect(screen.getByText("Only Excel and CSV files are supported.")).toBeInTheDocument();
   });

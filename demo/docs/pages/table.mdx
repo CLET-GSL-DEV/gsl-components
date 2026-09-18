@@ -263,6 +263,7 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
 | `emptyIcon` | `ReactNode` | Inbox icon | JSX/ReactNode icon shown above the empty text when `data` is empty. Defaults to an Inbox icon from `lucide-react`. |
 | `emptyText` | `string` | `"No results"` | Message shown when `data` is empty |
+| `emptyContent` | `ReactNode` | — | Rich empty state rendered in place of the icon + text when `data` is empty (e.g. `<EmptyState illustration={...} title={...} />`). Headers still render above it. |
 | `classNames` | `TableContentClassNames` | — | Part-level class overrides |
 
 When `selectable` is true, a checkbox column is always present, collapsed to 0 width when no rows are selected. The header checkbox selects or deselects all visible rows.

@@ -45,43 +45,47 @@ References: [`.cursor/rules/clet-component-authoring.mdc`](.cursor/rules/clet-co
 - **Other deps**: `lucide-react`, `cmdk`, `sonner`, `@dnd-kit/*`
 - **CSS-in-JS**: None. Plain CSS files imported in components via Vite.
 
-## Design system versioning — prefer "new design system"
+## Design system versioning: prefer the 2.3 shell
 
-The library has a current, preferred set of component variants ("new design
-system"), demonstrated live in the demo app at `/` (current — `Dashboard2Page`)
-vs. `/legacy` (a frozen snapshot of the old v1 look — `DemoPage`, reachable
-via the version dropdown in that sidebar). The old look uses the pre-rebrand
-red color tokens, scoped via the `.legacy-theme` class in `demo/demo.css` —
-it does not affect the library's actual defaults. See the
-[v2 migration guide](demo/docs/pages/migration-v2.mdx) for the full breaking
-change list.
+Three shells are live in the demo app. `/` is the current 2.3 set
+(`Dashboard3Page`, `UserDetailPage3`, `UserCreatePage3`). `/v2` is 2.2, frozen
+(`Dashboard2Page`, `UserDetailPage`, `UserCreatePage`). `/legacy` is the
+pre-rebrand v1 look (`DemoPage`), scoped via `.legacy-theme` in `demo/demo.css`
+so it never touches the library's defaults. All three are reachable from the
+version dropdown. See the [v2 migration guide](demo/docs/pages/migration-v2.mdx)
+for the full breaking change list.
 
-**New design system variants** (prefer these by default in new work):
+**2.4 variants** (prefer these by default in new work):
 
 | Component | Prefer | Over |
 |-----------|--------|------|
+| `AppLayout` | no `variant` | `variant="panel"`, `variant="stacked"` |
+| `Sidebar` | `variant="brand"` | `variant="primary"` (frozen 2.3 look), `variant="plain"`, no variant |
 | `AppHeader` | `variant="plain"` | `variant="default"` |
-| `MetricCard` | `variant="outline"` | `variant="default"` |
+| `MetricCard` | `variant="soft"` | `variant="outline"`, `variant="default"` |
+| `Table` / `TableContent` | `variant="soft"` + `emptyContent={<EmptyState …/>}` for empty data | `variant="panel"`, `variant="default"`, bare `emptyText` |
 | `PageSection` | wrap every content section | bare `<div>`s with margin |
 | `QuickActions` | action grids with customize dialog | hand-rolled action button rows |
 | `SidebarGroup` | `collapsible` (accordion groups) | flat, non-collapsible groups |
-| `TableContent` | `variant="panel"` | `variant="default"` |
 | `TableFilter` | `variant="spread"` (≤2 actions) / `variant="popover"` (3+ actions) | `variant="popover"` (default) |
 
-Brand tokens: `--clet-primary` (navy) and `--clet-secondary` (gold) in
-`src/styles/theme/light.css` / `dark.css` are the current defaults — not
-something to "convert," they already apply everywhere by default.
+`variant="outline"` on `MetricCard` and `variant="panel"` on `TableContent` are
+the superseded 2.2 set. Do not reach for them in new work, and expect the
+codemod to convert them.
 
-**If a user asks to "convert this app to use the new design system"**: scan
-the codebase for usages of the components above and swap them to the
-preferred variant. Then **ask** whether to also update colors — don't touch
-the consuming app's existing `--clet-*` token overrides unprompted. If the
-user says yes, override the consuming app's color token overrides with the
-library's current defaults (the navy/gold values above).
+Brand tokens: `--clet-primary` (navy) and `--clet-secondary` (gold) in
+`src/styles/theme/light.css` / `dark.css` are the current defaults. They are
+not something to "convert," they already apply everywhere.
+
+**If a user asks to "convert this app to the new design system"**: do not
+hand-edit the call sites. Run the codemod (`rfdui migrate --path . --write`, or
+the `migrate` MCP tool), which moves all of the above together and reports what
+it changed. Then **ask** before overriding any of the consuming app's own
+`--clet-*` token overrides.
 
 If this file or the MCP docs data (`mcp/generated/*.json`) don't yet reflect
-a "new design system" status for a component/variant you're working with,
-this table is the source of truth until they're updated.
+a 2.3 status for a component/variant you're working with, this table is the
+source of truth until they're updated.
 
 ## No new dependencies
 

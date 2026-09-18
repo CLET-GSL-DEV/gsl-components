@@ -390,6 +390,24 @@ import { Badge } from "@rfdtech/components";
 
 Props: `variant`, `size`, `classNames`, `className`, and standard `span` attributes. Exported types: `BadgeProps`, `BadgeClassNames`, `BadgeVariant`, `BadgeSize`.
 
+## Banner
+
+Page-level persistent notice with info/success/warning/danger variants, heading and subtext, action slot, and dismiss button. Replaces `Notice`, which is deprecated. See the [Banner](/docs/banner) docs page for props and exported types.
+
+```tsx
+import { Banner } from "@rfdtech/components";
+
+<Banner
+  variant="info"
+  heading="A new checklist version is available."
+  subtext="Review the changes before submitting."
+  action={<a href="/details">View details</a>}
+  onClose={() => setDismissed(true)}
+/>
+```
+
+Props: `variant`, `heading`, `subtext`, `action`, `onClose`, `closeLabel`, `classNames`, `className`. Exported types: `BannerProps`, `BannerVariant`, `BannerClassNames`.
+
 ## Breadcrumb
 
 Compound breadcrumb primitives for hierarchical page trails. See the [Breadcrumb](/docs/breadcrumb) docs page for props and exported types.
@@ -421,7 +439,7 @@ Exported parts: `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLin
 
 ## BulkImportModal
 
-Four-step modal wizard for importing spreadsheet data (.xlsx, .xls, .csv). Parsing and validation run entirely in the browser.
+Four-step modal wizard for importing spreadsheet data (.xlsx, .csv). Parsing and validation run entirely in the browser. Parsing needs the optional peers `papaparse` (CSV) and `read-excel-file` (Excel); legacy `.xls` files are refused with a re-save hint.
 
 ### Usage
 
@@ -452,7 +470,7 @@ const { open, onOpenChange, openWith } = useModalSearchParam("bulk-import");
 
 ### Steps
 
-1. **Upload Document** — preview expected columns, then upload `.xlsx`, `.xls`, or `.csv`
+1. **Upload Document** — preview expected columns, then upload `.xlsx` or `.csv`
 2. **Select header row** — choose the header row with radio buttons
 3. **Match Columns** — map each uploaded column to a target field (`Your table` → `Will become`)
 4. **Validate data** — review editable rows with error checking, discard rows, or reset discarded rows, then **Confirm**
@@ -790,6 +808,27 @@ import { Dropdown } from "@rfdtech/components";
 
 Props: `value`, `onValueChange`, `options`, `placeholder`, `clearable`, `disabled`, `aria-label`, `classNames`, `className`. Exported types: `DropdownProps`, `DropdownOption`, `DropdownClassNames`.
 
+## EmptyState
+
+Illustrated empty state for tables and lists: artwork, configurable title and description, optional action slot. See the [EmptyState](/docs/empty-state) docs page for props and exported types.
+
+```tsx
+import { EmptyState, Table } from "@rfdtech/components";
+
+<Table
+  columns={columns}
+  data={[]}
+  emptyContent={
+    <EmptyState
+      title="No certificates yet"
+      description="Add certificates, policies and staff records."
+    />
+  }
+/>
+```
+
+Props: `illustration`, `title`, `description`, `action`, `classNames`, `className`. Exported types: `EmptyStateProps`, `EmptyStateClassNames`.
+
 ## Form
 
 Field, Input, and Textarea primitives for accessible form layouts. See the [Form](/docs/form) docs page for props and exported types.
@@ -814,6 +853,18 @@ import {
 ```
 
 Exports: `Field`, `FieldLabel`, `FieldDescription`, `FieldError`, `FieldControl`, `Input`, `Textarea`. Types: `FieldProps`, `FieldClassNames`, `InputProps`, `TextareaProps`.
+
+## HeroBanner
+
+Edge-to-edge dashboard hero: greeting, name, role, current date, avatar, and preset artwork with variant dots. See the [HeroBanner](/docs/hero-banner) docs page for props and exported types.
+
+```tsx
+import { HeroBanner } from "@rfdtech/components";
+
+<HeroBanner name="Joseph Ekow Acquah" role="Director General" />
+```
+
+Props: `greeting`, `name`, `role`, `date`, `images`, `imageVariant`, `defaultImageVariant`, `classNames`, `className`. Exported types: `HeroBannerProps`, `HeroBannerImage`, `HeroBannerClassNames`.
 
 ## FormField
 

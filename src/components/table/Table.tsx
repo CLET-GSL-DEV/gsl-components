@@ -17,9 +17,9 @@ import {
   ArrowUp,
   ArrowDown,
   MoreHorizontal,
-  TableIcon,
 } from "lucide-react";
 import { Checkbox } from "../checkbox/Checkbox";
+import { EmptyState } from "../empty-state/EmptyState";
 import {
   Popover,
   PopoverAnchor,
@@ -37,8 +37,6 @@ import type { TableProps, SortDirection } from "../../types/table";
 import { cn } from "../../utils/cn";
 import "./styles/table.css";
 import { TableContext } from "./TableContext";
-
-const DEFAULT_TABLE_EMPTY_ICON = <TableIcon size={40} strokeWidth={1} />;
 
 function getCellValue<T>(row: T, col: TableColumn<T>): ReactNode {
   if (col.accessorFn) return col.accessorFn(row);
@@ -67,7 +65,7 @@ export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
     classNames,
     paramPrefix,
     height,
-    variant = "default",
+    variant = "soft",
     children,
     ...props
   },
@@ -136,7 +134,7 @@ function TableContentRender<T>(
   const {
     className,
     children,
-    variant = "default",
+    variant = "soft",
     columns: rawColumns,
     data: rawData,
     rowKey,
@@ -153,6 +151,7 @@ function TableContentRender<T>(
     virtualRowHeight,
     emptyIcon,
     emptyText,
+    emptyContent,
     classNames,
 
     ...rest
@@ -824,22 +823,29 @@ function TableContentRender<T>(
                       classNames?.empty,
                     )}
                   >
-                    <div
-                      className={cn(
-                        "clet-table__empty-icon gsl-table__empty-icon",
-                        classNames?.emptyIcon,
-                      )}
-                    >
-                      {emptyIcon ?? DEFAULT_TABLE_EMPTY_ICON}
-                    </div>
-                    <div
-                      className={cn(
-                        "clet-table__empty-text gsl-table__empty-text",
-                        classNames?.emptyText,
-                      )}
-                    >
-                      {emptyText ?? "No results"}
-                    </div>
+                    {emptyContent ??
+                      (emptyIcon !== undefined ? (
+                        <>
+                          <div
+                            className={cn(
+                              "clet-table__empty-icon gsl-table__empty-icon",
+                              classNames?.emptyIcon,
+                            )}
+                          >
+                            {emptyIcon}
+                          </div>
+                          <div
+                            className={cn(
+                              "clet-table__empty-text gsl-table__empty-text",
+                              classNames?.emptyText,
+                            )}
+                          >
+                            {emptyText ?? "No results"}
+                          </div>
+                        </>
+                      ) : (
+                        <EmptyState title={emptyText ?? "No results"} />
+                      ))}
                   </div>
                 </td>
               </tr>

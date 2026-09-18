@@ -7,6 +7,9 @@
 :root {
   --clet-profile-popover-trigger-email-text-size: calc(11px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
   --clet-profile-popover-user-role-text-size: calc(11px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
+  /* 2.4: profile avatars drop the generated gradient for solid navy. The
+     2.3 pin resets this to `initial` so the gradient fallback returns. */
+  --clet-profile-avatar-bg: #0c4a6e;
 }
 
 .clet-profile-menu__trigger {
@@ -32,6 +35,13 @@
 .clet-profile-menu__trigger:focus-visible {
   outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
+}
+
+/* 2.4: gold border around the profile avatar. Lives on the avatar root:
+   the initials span fills it edge to edge, so a ring there would clip. */
+.clet-profile-menu__trigger .clet-avatar,
+.clet-app-header__profile .clet-avatar {
+  border: 2px solid var(--gsl-secondary, var(--clet-secondary));
 }
 
 .clet-profile-menu__trigger-info {

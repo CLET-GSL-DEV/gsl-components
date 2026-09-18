@@ -4,9 +4,11 @@ import { ThemeProvider } from "./components/ThemeToggle";
 import { DemoLayout } from "./components/DemoLayout";
 import { DemoLayout2 } from "./components/DemoLayout2";
 import { DemoLayout3 } from "./components/DemoLayout3";
+import { DemoLayout4 } from "./components/DemoLayout4";
 import { DemoPage } from "./pages/DemoPage";
 import { Dashboard2Page } from "./pages/Dashboard2Page";
 import { Dashboard3Page } from "./pages/Dashboard3Page";
+import { Dashboard4Page } from "./pages/Dashboard4Page";
 import { UserCreatePage } from "./pages/UserCreatePage";
 import { UserDetailPage } from "./pages/UserDetailPage";
 import { UserCreatePage3 } from "./pages/UserCreatePage3";
@@ -24,8 +26,21 @@ export const routes: RouteObject[] = [
     ),
     children: [
       {
-        // 2.3, the current shell: primary Sidebar rail, plain AppHeader
-        element: <DemoLayout3 />,
+        // 2.4, the current shell: Dashboard4 holds the new components.
+        // Dashboard3 stays frozen at 2.3 content on /v2.3.
+        element: <DemoLayout4 />,
+        children: [
+          { index: true, element: <Dashboard4Page /> },
+          { path: "showcase", element: <ShowcasePage /> },
+          { path: "users/new", element: <UserCreatePage3 /> },
+          { path: "users/:userId", element: <UserDetailPage3 /> },
+        ],
+      },
+      {
+        // 2.3, frozen additively: identical markup, pinned via
+        // data-clet-version so versions.css can hold it still while 2.4 moves.
+        path: "v2.3",
+        element: <DemoLayout3 version="2.3" />,
         children: [
           { index: true, element: <Dashboard3Page /> },
           { path: "showcase", element: <ShowcasePage /> },

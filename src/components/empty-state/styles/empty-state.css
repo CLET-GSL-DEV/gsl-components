@@ -1,0 +1,57 @@
+/* EmptyState: illustration + title + description + optional action.
+   Spacing straight from the Figma empty state: 460px column, 16px below the
+   illustration, 8px between title/description/action. Title size is a
+   component token so cletTheme() can reach it. */
+.clet-empty-state {
+  --clet-empty-state-title-size: calc(
+    18px * var(--gsl-text-scale, var(--clet-text-scale, 1))
+  );
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 460px;
+  margin-inline: auto;
+  padding-block: 40px;
+  text-align: center;
+}
+
+.clet-empty-state__illustration {
+  width: 100%;
+  max-width: 363px;
+  margin-bottom: 8px;
+}
+
+.clet-empty-state__illustration img,
+.clet-empty-state__illustration svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.clet-empty-state__title {
+  font-size: var(--gsl-empty-state-title-size, var(--clet-empty-state-title-size));
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--gsl-text, var(--clet-text));
+}
+
+.clet-empty-state__description {
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  line-height: 1.5;
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+}
+
+.clet-empty-state__action {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clet-empty-state {
+    transition: none;
+  }
+}

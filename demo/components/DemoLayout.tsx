@@ -406,7 +406,7 @@ export function DemoLayout() {
   return (
     <SidebarProvider>
       <BreadcrumbProvider>
-        <AppLayout variant="panel">
+        <AppLayout variant="panel" version="1.22">
           <AppHeader>
             <AppHeaderSearch
               data={searchGroups}
@@ -937,7 +937,7 @@ export function DemoLayout() {
                 <span className="demo-components-grid__preview">
                   <UploadField
                     multiple
-                    accept=".xlsx,.xls,.csv"
+                    accept=".xlsx,.csv"
                     style={{ width: "100%" }}
                   />
                 </span>

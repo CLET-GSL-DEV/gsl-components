@@ -18,6 +18,8 @@ import { Menu, PanelLeftClose, PanelLeftOpen, ChevronDown, X } from "lucide-reac
 import { getRouterAdapter } from "../../adapters/registry";
 import { useHasMounted } from "../../hooks/useHasMounted";
 import { Tooltip } from "../tooltip/Tooltip";
+import sidebarBrandImage from "./assets/sidebar-image.png";
+import sidebarBrandLogo from "./assets/clet-logo-vertical.png";
 import type {
   SidebarBadgeProps,
   SidebarBrandProps,
@@ -41,6 +43,13 @@ import "./styles/sidebar.css";
 export { SidebarProvider, useSidebar, useSidebarOptional } from "./SidebarContext";
 
 const SidebarLinkContext = createContext(false);
+
+/**
+ * Carries the rail variant to descendants (e.g. so `SidebarBrand` can
+ * render the baked-in brand mark without the consumer passing a logo).
+ * Defaults to `"default"` when brand renders outside a `Sidebar`.
+ */
+const SidebarVariantContext = createContext<SidebarProps["variant"]>("default");
 
 function useSidebarLinkContext() {
   return useContext(SidebarLinkContext);
@@ -98,6 +107,8 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
   const autoFooter =
     variant === "primary" && !hasExistingFooter ? <SidebarFooter /> : null;
 
+  // The brand rail paints its mosaic through a CSS var so the static
+  // background styling stays in CSS; only the asset URL is dynamic.
   return (
     <>
       <aside
@@ -107,6 +118,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
           "clet-sidebar gsl-sidebar",
           variant === "plain" && "clet-sidebar--plain gsl-sidebar--plain",
           variant === "primary" && "clet-sidebar--primary gsl-sidebar--primary",
+          variant === "brand" && "clet-sidebar--brand gsl-sidebar--brand",
           isMobile && "clet-sidebar--mobile gsl-sidebar--mobile",
           isMobile && open && "clet-sidebar--mobile-open gsl-sidebar--mobile-open",
           !isMobile && collapsed && "clet-sidebar--collapsed gsl-sidebar--collapsed",
@@ -115,9 +127,20 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
         )}
         aria-modal={isMobile && open ? true : undefined}
       >
-        {autoHeader}
-        {children}
-        {autoFooter}
+        <SidebarVariantContext.Provider value={variant}>
+          {variant === "brand" ? (
+            <img
+              className="clet-sidebar__brand-image gsl-sidebar__brand-image"
+              src={sidebarBrandImage}
+              alt=""
+              aria-hidden
+              draggable={false}
+            />
+          ) : null}
+          {autoHeader}
+          {children}
+          {autoFooter}
+        </SidebarVariantContext.Provider>
       </aside>
       {isMobile && <SidebarOverlay />}
     </>
@@ -255,16 +278,27 @@ export const SidebarBrand = forwardRef<HTMLDivElement, SidebarBrandProps>(
     { classNames, className, logo, title, subtitle, children },
     ref,
   ) {
+    const variant = useContext(SidebarVariantContext);
+    // The brand rail carries its mark baked in: an empty brand needs no
+    // logo prop. Explicit logo/title/subtitle/children always win.
+    const resolvedLogo =
+      logo ??
+      (variant === "brand" &&
+      title == null &&
+      subtitle == null &&
+      children == null ? (
+        <img src={sidebarBrandLogo} alt="CLET" />
+      ) : null);
     return (
       <div
         ref={ref}
         className={cn("clet-sidebar__header-brand gsl-sidebar__header-brand", classNames?.root, className)}
       >
-        {logo ? (
+        {resolvedLogo ? (
           <span
             className={cn("clet-sidebar__header-logo gsl-sidebar__header-logo", classNames?.logo)}
           >
-            {logo}
+            {resolvedLogo}
           </span>
         ) : null}
         {children ?? (

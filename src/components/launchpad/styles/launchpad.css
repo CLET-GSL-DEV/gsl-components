@@ -60,7 +60,8 @@
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: transparent;
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-soft, var(--clet-shadow-soft));
   color: var(--gsl-text-secondary, var(--clet-text-secondary));
   cursor: pointer;
   transition: background-color 0.15s ease;

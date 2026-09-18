@@ -1,0 +1,6 @@
+/* VersionPin is a scoping wrapper only: it stamps
+   data-clet-version / data-gsl-version so src/styles/versions.css can freeze
+   older versions additively. No visual styles of its own. */
+.clet-version-pin {
+  display: contents;
+}

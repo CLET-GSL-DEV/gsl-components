@@ -124,6 +124,12 @@ Type to search — the component fires `onSearch` with a debounced value (300ms)
 | `label` | `string` | `"Search"` | Accessible label for the input |
 | `children` | `ReactNode` | — | Rendered inside `CommandList` after groups |
 | `className` | `string` | — | Merged onto the root element |
+| `collapsible` | `boolean` | `false` | Collapse to an icon button that swaps itself for the field on click and autofocuses it. Siblings (e.g. a title) are untouched. Moving focus out of the field collapses it back; Escape or the close button collapses and clears. |
+| `collapsed` | `boolean` | — | Controlled collapsed state (only with `collapsible`) |
+| `defaultCollapsed` | `boolean` | `true` | Uncontrolled initial collapsed state |
+| `onCollapsedChange` | `(collapsed: boolean) => void` | — | Called when the collapsed state changes |
+| `expandLabel` | `string` | `"Open search"` | Accessible label for the expand button |
+| `collapseLabel` | `string` | `"Close search"` | Accessible label for the collapse button |
 
 The input has a pill shape (`--clet-radius-xl`) and caps at `max-width: 400px`.
 
