@@ -1,8 +1,21 @@
+packages:
+  - 'mcp'
+
 allowBuilds:
   esbuild: true
   sharp: true
 
-# ajv 8.18 (deep under vite-plugin-dts) pins a fast-uri with CVE-2026-18446.
-# The patch is semver-compatible, so every copy is lifted to it.
+# Security overrides: every entry below lifts a transitive dependency to its
+# patched line (see Dependabot alerts). All are semver-compatible with the
+# ranges their parents declare, so this only narrows version selection.
 overrides:
-  fast-uri: '^3.1.5'
+  # ajv 8.18 (deep under vite-plugin-dts) pins a fast-uri with SSRF/host-confusion CVEs.
+  fast-uri: '^3.1.6'
+  # @babel/helper-compilation-targets chain (vite plugin, eslint, next).
+  browserslist: '^4.28.7'
+  # @modelcontextprotocol/sdk chain (ships in dist/mcp): hono parseBody/toSSG/query-parser fixes.
+  hono: '^4.13.5'
+  # express/body-parser chain under the same SDK: qs array-limit bypass + isBuffer DoS fixes.
+  qs: '^6.16.0'
+  # cosmiconfig chain under stylelint: js-yaml merge-key CPU fix.
+  js-yaml: '^4.3.2'

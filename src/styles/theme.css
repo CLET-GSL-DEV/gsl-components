@@ -5,7 +5,9 @@
 @import url("@fontsource/roboto-serif/400.css");
 @import url("@fontsource/roboto-serif/600.css");
 @import url("@fontsource/roboto-serif/700.css");
+@import url("./fonts/matimo.css");
 @import url("./theme/base.css");
 @import url("./theme/light.css");
 @import url("./theme/dark.css");
 @import url("./theme/tokens.css");
+@import url("./versions.css");

@@ -10,6 +10,11 @@ export interface NoticeClassNames {
   body?: string;
 }
 
+/**
+ * @deprecated `Notice` is deprecated in favor of `Banner` — the page-level
+ * persistent notice with info/success/warning/danger variants, heading +
+ * subtext, action slot, and dismiss button.
+ */
 export interface NoticeProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   variant?: NoticeVariant;

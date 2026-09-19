@@ -14,10 +14,12 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-import { Menu, PanelLeftClose, PanelLeftOpen, ChevronDown } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen, ChevronDown, X } from "lucide-react";
 import { getRouterAdapter } from "../../adapters/registry";
 import { useHasMounted } from "../../hooks/useHasMounted";
 import { Tooltip } from "../tooltip/Tooltip";
+import sidebarBrandImage from "./assets/sidebar-image.png";
+import sidebarBrandLogo from "./assets/clet-logo-vertical.png";
 import type {
   SidebarBadgeProps,
   SidebarBrandProps,
@@ -41,6 +43,31 @@ import "./styles/sidebar.css";
 export { SidebarProvider, useSidebar, useSidebarOptional } from "./SidebarContext";
 
 const SidebarLinkContext = createContext(false);
+
+/**
+ * Carries the rail variant to descendants (e.g. so `SidebarBrand` can
+ * render the baked-in brand mark without the consumer passing a logo).
+ * Defaults to `"default"` when brand renders outside a `Sidebar`.
+ */
+const SidebarVariantContext = createContext<SidebarProps["variant"]>("default");
+
+// Bundlers replace `process.env.NODE_ENV`, so a production build drops the
+// guard below. Unknown (a dev server leaves `process` undefined) means dev.
+const DEV =
+  typeof process === "undefined" || process.env?.NODE_ENV !== "production";
+
+/** One warning per session, however many rails a page renders. */
+const brandWarnings = new Set<string>();
+
+function warnFixedBrandMark(kind: "logo" | "children" | "subtitle" | "title"): void {
+  if (!DEV || brandWarnings.has(kind)) return;
+  brandWarnings.add(kind);
+  console.warn(
+    `[clet] SidebarBrand: the brand rail's mark is fixed and cannot be replaced ` +
+      `(received \`${kind}\`). Only a string \`title\` is allowed on this rail, and the ` +
+      "2.4 shell normally shows it in the header's AppHeaderTitle instead.",
+  );
+}
 
 function useSidebarLinkContext() {
   return useContext(SidebarLinkContext);
@@ -98,6 +125,8 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
   const autoFooter =
     variant === "primary" && !hasExistingFooter ? <SidebarFooter /> : null;
 
+  // The brand rail paints its mosaic through a CSS var so the static
+  // background styling stays in CSS; only the asset URL is dynamic.
   return (
     <>
       <aside
@@ -107,6 +136,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
           "clet-sidebar gsl-sidebar",
           variant === "plain" && "clet-sidebar--plain gsl-sidebar--plain",
           variant === "primary" && "clet-sidebar--primary gsl-sidebar--primary",
+          variant === "brand" && "clet-sidebar--brand gsl-sidebar--brand",
           isMobile && "clet-sidebar--mobile gsl-sidebar--mobile",
           isMobile && open && "clet-sidebar--mobile-open gsl-sidebar--mobile-open",
           !isMobile && collapsed && "clet-sidebar--collapsed gsl-sidebar--collapsed",
@@ -115,9 +145,20 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
         )}
         aria-modal={isMobile && open ? true : undefined}
       >
-        {autoHeader}
-        {children}
-        {autoFooter}
+        <SidebarVariantContext.Provider value={variant}>
+          {variant === "brand" ? (
+            <img
+              className="clet-sidebar__brand-image gsl-sidebar__brand-image"
+              src={sidebarBrandImage}
+              alt=""
+              aria-hidden
+              draggable={false}
+            />
+          ) : null}
+          {autoHeader}
+          {children}
+          {autoFooter}
+        </SidebarVariantContext.Provider>
       </aside>
       {isMobile && <SidebarOverlay />}
     </>
@@ -129,9 +170,8 @@ export const SidebarOverlay = forwardRef<
   SidebarOverlayProps
 >(function SidebarOverlay({ classNames, className, ...props }, ref) {
   const { open, setOpen, isMobile } = useSidebar();
-  // Null-vs-button is a structural branch, so it must wait a render past
-  // mount to match SSR/static-prerendered (always-desktop) markup — see
-  // useHasMounted.
+  // Structural branch: waits a render past mount to match SSR markup.
+  // See useHasMounted.
   const hasMounted = useHasMounted();
 
   if (!hasMounted || !isMobile) {
@@ -203,27 +243,31 @@ export const SidebarCollapse = forwardRef<
   HTMLButtonElement,
   SidebarCollapseProps
 >(function SidebarCollapse({ classNames, className, onClick, ...props }, ref) {
-  const { collapsed, toggleCollapsed, isMobile, sidebarId } = useSidebar();
+  const { collapsed, toggleCollapsed, open, setOpen, isMobile, sidebarId } =
+    useSidebar();
   // Structural branch: SSR renders desktop, so this waits a render past mount.
   const hasMounted = useHasMounted();
+  // On mobile the rail is a drawer with no collapse to offer, so this slot
+  // carries its close control instead. Without it the only way out is the
+  // backdrop.
+  const isDrawer = hasMounted && isMobile;
 
-  if (hasMounted && isMobile) {
-    return null;
-  }
-
-  const CollapseIcon = collapsed ? PanelLeftOpen : PanelLeftClose;
+  const CollapseIcon = isDrawer ? X : collapsed ? PanelLeftOpen : PanelLeftClose;
 
   return (
     <button
       ref={ref}
       type="button"
       className={cn("clet-sidebar__collapse gsl-sidebar__collapse", classNames?.collapse, className)}
-      aria-expanded={!collapsed}
+      aria-expanded={isDrawer ? open : !collapsed}
       aria-controls={sidebarId}
-      aria-label="Toggle sidebar"
+      aria-label={isDrawer ? "Close menu" : "Toggle sidebar"}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented) {
+        if (event.defaultPrevented) return;
+        if (isDrawer) {
+          setOpen(false);
+        } else {
           toggleCollapsed();
         }
       }}
@@ -252,19 +296,49 @@ export const SidebarBrand = forwardRef<HTMLDivElement, SidebarBrandProps>(
     { classNames, className, logo, title, subtitle, children },
     ref,
   ) {
+    const variant = useContext(SidebarVariantContext);
+    const isBrand = variant === "brand";
+    if (isBrand) {
+      if (logo != null) warnFixedBrandMark("logo");
+      if (children != null) warnFixedBrandMark("children");
+      if (subtitle != null) warnFixedBrandMark("subtitle");
+      if (title != null && typeof title !== "string") warnFixedBrandMark("title");
+    }
+    // The brand rail's mark is FIXED: never swapped for a consumer's logo node
+    // or markup. Only the string title may change here, and it normally lives
+    // in the header's AppHeaderTitle once the 2.4 shell is in place.
+    const resolvedLogo = isBrand ? (
+      <img src={sidebarBrandLogo} alt="CLET" />
+    ) : (
+      logo
+    );
+    const brandTitle = isBrand && typeof title === "string" ? title : null;
     return (
       <div
         ref={ref}
         className={cn("clet-sidebar__header-brand gsl-sidebar__header-brand", classNames?.root, className)}
       >
-        {logo ? (
+        {resolvedLogo ? (
           <span
             className={cn("clet-sidebar__header-logo gsl-sidebar__header-logo", classNames?.logo)}
           >
-            {logo}
+            {resolvedLogo}
           </span>
         ) : null}
-        {children ?? (
+        {isBrand ? (
+          brandTitle ? (
+            <span className="clet-sidebar__header-text gsl-sidebar__header-text">
+              <span
+                className={cn(
+                  "clet-sidebar__header-title gsl-sidebar__header-title",
+                  classNames?.title,
+                )}
+              >
+                {brandTitle}
+              </span>
+            </span>
+          ) : null
+        ) : children ?? (
           <span className="clet-sidebar__header-text gsl-sidebar__header-text">
             {title ? (
               <span
@@ -600,12 +674,24 @@ export const SidebarLink = forwardRef<
     classNames,
     className,
     children,
+    onClick,
     ...props
   },
   ref,
 ) {
-  const { collapsed } = useSidebar();
+  const { collapsed, isMobile, setOpen } = useSidebar();
   const { Link } = getRouterAdapter();
+
+  // Navigating from the mobile drawer has to dismiss it, or the destination
+  // renders behind it and the next tap hits the backdrop. Typed on HTMLElement
+  // to serve the button, the router Link and an asChild anchor alike.
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    onClick?.(event as React.MouseEvent<HTMLButtonElement>);
+    if (!event.defaultPrevented && isMobile) {
+      setOpen(false);
+    }
+  };
+
   const linkClassName = cn(
     "clet-sidebar__link gsl-sidebar__link",
     active && "clet-sidebar__link--active gsl-sidebar__link--active",
@@ -641,10 +727,17 @@ export const SidebarLink = forwardRef<
       [key: string]: unknown;
     }>;
     const tooltipText = extractLabelText(children).trim();
+    const childOnClick = child.props.onClick as
+      | React.MouseEventHandler<HTMLElement>
+      | undefined;
     const linkElement = cloneElement(child, {
       ...props,
       role: child.props.role ?? "link",
       className: cn(linkClassName, child.props.className),
+      onClick: (event: React.MouseEvent<HTMLElement>) => {
+        childOnClick?.(event);
+        handleClick(event);
+      },
     });
 
     if (collapsed && tooltipText) {
@@ -676,6 +769,7 @@ export const SidebarLink = forwardRef<
       to={to}
       className={linkClassName}
       {...(props as Record<string, unknown>)}
+      onClick={handleClick}
     >
       {linkContent}
     </Link>
@@ -686,6 +780,7 @@ export const SidebarLink = forwardRef<
       role="link"
       className={linkClassName}
       {...props}
+      onClick={handleClick}
     >
       {linkContent}
     </button>

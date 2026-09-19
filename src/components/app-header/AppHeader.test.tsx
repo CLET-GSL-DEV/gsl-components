@@ -176,6 +176,67 @@ describe("AppHeaderSearch", () => {
     expect(screen.getByTestId("custom")).toBeInTheDocument();
   });
 
+  it("collapsible starts as an icon button and expands on click", async () => {
+    const user = userEvent.setup();
+    render(<AppHeaderSearch collapsible />);
+    expect(screen.queryByRole("combobox")).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Open search" }));
+    const input = screen.getByRole("combobox");
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveFocus();
+  });
+
+  it("collapsible closes via the close button and clears the query", async () => {
+    const user = userEvent.setup();
+    render(<AppHeaderSearch collapsible defaultCollapsed={false} />);
+    await user.type(screen.getByRole("combobox"), "test");
+    expect(screen.getByRole("combobox")).toHaveValue("test");
+
+    await user.click(screen.getByRole("button", { name: "Close search" }));
+    expect(screen.queryByRole("combobox")).toBeNull();
+    expect(
+      screen.getByRole("button", { name: "Open search" }),
+    ).toBeInTheDocument();
+  });
+
+  it("collapsible closes on Escape", async () => {
+    const user = userEvent.setup();
+    render(<AppHeaderSearch collapsible defaultCollapsed={false} />);
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("combobox")).toBeNull();
+  });
+
+  it("collapsible collapses back to the icon when focus leaves the field", async () => {
+    render(<AppHeaderSearch collapsible defaultCollapsed={false} />);
+    const input = screen.getByRole("combobox");
+    expect(input).toBeInTheDocument();
+
+    input.blur();
+    expect(await screen.findByRole("button", { name: "Open search" })).toBeInTheDocument();
+    expect(screen.queryByRole("combobox")).toBeNull();
+  });
+
+  it("collapsible respects controlled collapsed state", async () => {
+    const user = userEvent.setup();
+    const onCollapsedChange = vi.fn();
+    render(
+      <AppHeaderSearch
+        collapsible
+        collapsed={false}
+        onCollapsedChange={onCollapsedChange}
+      />,
+    );
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Close search" }));
+    expect(onCollapsedChange).toHaveBeenCalledWith(true);
+    // Controlled: stays open until the parent flips the prop.
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+  });
+
   // RHF integration
   it("works with react-hook-form via onSearch callback", async () => {
     const user = userEvent.setup();

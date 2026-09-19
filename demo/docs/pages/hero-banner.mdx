@@ -1,0 +1,71 @@
+export const meta = {
+  title: "HeroBanner",
+  description: "Edge-to-edge dashboard hero with greeting and artwork variants",
+  category: "Components",
+  keywords: ["hero banner", "dashboard hero", "greeting", "welcome header"],
+  since: "2.4.0",
+  status: "stable",
+  related: ["app-layout", "sidebar"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { HeroBannerPreview } from "../previews/code/HeroBannerPreview";
+import heroBannerSource from "../previews/examples/hero-banner.example.tsx?raw";
+
+# HeroBanner
+
+Edge-to-edge dashboard hero: greeting line, name, optional role, the current date, and preset artwork selected by variant index. Sits at the top of the home page, full width of the content area.
+
+## Example
+
+<ExampleTabs
+  title="Dashboard hero"
+  preview={<HeroBannerPreview />}
+  code={heroBannerSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `greeting` | `ReactNode` | `"Good morning,"` | Greeting line above the name. |
+| `name` | `ReactNode` | — | Person's name. Always a prop, never hardcoded. |
+| `role` | `ReactNode` | — | Role line under the name. |
+| `date` | `string` | today | Date line. Defaults to the current day (e.g. "Sunday, 30 August 2026"). |
+| `images` | `HeroBannerImage[]` | 8 presets | Artwork variants. |
+| `imageVariant` | `number` | — | Active image index. |
+| `defaultImageVariant` | `number` | random | Initial image index. Omit it and the banner picks a random image from `images` on each visit. |
+| `classNames` | `HeroBannerClassNames` | — | `root`, `image`, `content`, `text`, `greeting`, `name`, `role`, `date` overrides. |
+| `className` | `string` | — | Merged onto the root. |
+
+## Types
+
+### HeroBannerProps
+
+All text is props; only the date defaults (to today) and only the images are presets. Forwards `ref` and spreads `...props` onto the root.
+
+### HeroBannerImage
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `src` | `string` | Image URL |
+| `alt` | `string` | Alt text (empty hides it from assistive tech) |
+
+### HeroBannerClassNames
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer section |
+| `image` | Artwork image |
+| `content` | Text row |
+| `text` | Text stack |
+| `greeting` | Greeting line |
+| `name` | Name line |
+| `role` | Role line |
+| `date` | Date line |
+
+## Notes
+
+- The artwork is decorative context; keep the meaning in `name`/`role`.
+- Pass custom `images` with `imageVariant` to select the artwork.

@@ -1,0 +1,70 @@
+export const meta = {
+  title: "EmptyState",
+  description: "Illustrated empty state for tables and lists",
+  category: "Components",
+  keywords: ["empty state", "no results", "table empty", "placeholder"],
+  since: "2.4.0",
+  status: "stable",
+  related: ["table"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { EmptyStatePreview } from "../previews/code/EmptyStatePreview";
+import emptyStateSource from "../previews/examples/empty-state.example.tsx?raw";
+
+# EmptyState
+
+Illustrated empty state for when a table or list has nothing to show. The parent keeps rendering its headers — this fills the body with the artwork, a configurable title and description, and an optional action slot. Pass the action button you want (or nothing); it is never hardcoded.
+
+## Example
+
+<ExampleTabs
+  title="Table empty state"
+  preview={<EmptyStatePreview />}
+  code={emptyStateSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `illustration` | `ReactNode` | — | Artwork above the text at the Figma proportions (363×271). Omit for text-only. |
+| `title` | `ReactNode` | — | Heading, e.g. "No certificates yet". |
+| `description` | `ReactNode` | — | Supporting copy under the heading. |
+| `action` | `ReactNode` | — | Optional action slot, e.g. a `Button`. |
+| `classNames` | `EmptyStateClassNames` | — | `root`, `illustration`, `title`, `description`, `action` overrides. |
+| `className` | `string` | — | Merged onto the root. |
+
+## Types
+
+### EmptyStateProps
+
+Title plus optional illustration, description, and action. Forwards `ref` and spreads `...props` (e.g. `aria-*`, `id`, `data-*`) onto the root.
+
+### EmptyStateClassNames
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer column |
+| `illustration` | Artwork wrapper |
+| `title` | Heading |
+| `description` | Supporting copy |
+| `action` | Action slot wrapper |
+
+## Notes
+
+- Pair with `Table`'s `emptyContent` prop to render this under the table headers when data is empty:
+  ```tsx
+  <Table
+    columns={columns}
+    data={[]}
+    emptyContent={
+      <EmptyState
+        title="No certificates yet"
+        description="Add certificates, policies and staff records."
+      />
+    }
+  />
+  ```
+- The illustration is decorative (`aria-hidden`); keep the meaning in `title`.

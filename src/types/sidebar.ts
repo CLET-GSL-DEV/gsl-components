@@ -83,9 +83,12 @@ export interface SidebarProps {
    * - `"default"`: keeps the panel surface.
    * - `"plain"`: makes the background transparent and adds a right border.
    * - `"primary"`: paints the brand surface (`--clet-primary`) with on-primary
-   *   text: the full-height rail of the default `AppLayout`.
+   *   text: the full-height rail of the default `AppLayout`. Frozen at the 2.3
+   *   look — prefer `"brand"` for new work.
+   * - `"brand"`: the 2.4 rail — deep-navy surface with the Adinkra mosaic
+   *   image, image-only header, uppercase group labels, white active item.
    */
-  variant?: "default" | "plain" | "primary";
+  variant?: "default" | "plain" | "primary" | "brand";
   /**
    * Content rendered into a mobile-only `SidebarHeader` at the top of the
    * sidebar when `variant` is `"plain"` or `"primary"`. Typically forwarded automatically
@@ -131,6 +134,10 @@ export interface SidebarBrandClassNames {
 }
 
 export interface SidebarBrandProps {
+  /**
+   * Logo node for the non-brand variants. IGNORED on `variant="brand"`, whose
+   * mark is fixed: passing it logs a dev warning and the bundled mark renders.
+   */
   classNames?: SidebarBrandClassNames;
   className?: string;
   /** Inline logo node (e.g. an `<img>` or icon). */

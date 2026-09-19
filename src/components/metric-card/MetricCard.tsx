@@ -56,6 +56,7 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
       value,
       icon,
       description,
+      descriptionAdornment,
       variant = "default",
       mark,
       trend,
@@ -224,9 +225,22 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
             <span
               className={cn(
                 "clet-metric-card__description gsl-metric-card__description",
+                descriptionAdornment != null &&
+                  "clet-metric-card__description--with-adornment gsl-metric-card__description--with-adornment",
                 classNames?.description,
               )}
             >
+              {descriptionAdornment ? (
+                <span
+                  className={cn(
+                    "clet-metric-card__description-adornment gsl-metric-card__description-adornment",
+                    classNames?.descriptionAdornment,
+                  )}
+                  aria-hidden
+                >
+                  {descriptionAdornment}
+                </span>
+              ) : null}
               {description}
             </span>
           )

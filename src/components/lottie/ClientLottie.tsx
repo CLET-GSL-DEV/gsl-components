@@ -17,8 +17,18 @@ export function ClientLottie(props: ClientLottieProps) {
 		let mounted = true;
 
 		void import("lottie-react").then((module) => {
-			if (mounted) {
-				setLottie(() => module.default);
+			if (!mounted) {
+				return;
+			}
+			// lottie-react's ESM build exposes the player as a named export;
+			// its `default` is a namespace object, not a component.
+			const candidates = module as unknown as {
+				LottiePlayer?: ComponentType<ClientLottieProps>;
+				default?: ComponentType<ClientLottieProps>;
+			};
+			const Player = candidates.LottiePlayer ?? candidates.default;
+			if (typeof Player === "function") {
+				setLottie(() => Player);
 			}
 		});
 

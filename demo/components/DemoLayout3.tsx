@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { launchpadApps } from "demo/data/launchpadApps";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
-import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
+import type { AppHeaderSearchDataGroup, CletVersion } from "@rfdtech/components";
 import { VersionSwitcher } from "./VersionSwitcher";
 
 import {
@@ -19,6 +19,7 @@ import {
   BookOpen,
   MessageSquare,
   Eye,
+  LayoutGrid,
 } from "lucide-react";
 import {
   Sidebar,
@@ -36,6 +37,7 @@ import {
   RoleSelect,
   AppHeader,
   AppHeaderActions,
+  AppHeaderFontSize,
   AppHeaderNotifications,
   AppHeaderNotificationItem,
   AppHeaderSearch,
@@ -68,7 +70,7 @@ const demoUser = {
   email: "kwame@gsl.edu.gh",
 };
 
-export function DemoLayout3() {
+export function DemoLayout3({ version }: { version?: CletVersion }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -108,6 +110,12 @@ export function DemoLayout3() {
             label: "Create User",
             href: "/users/new",
             icon: User,
+          },
+          {
+            id: "showcase",
+            label: "Showcase",
+            href: "/showcase",
+            icon: LayoutGrid,
           },
           {
             id: "docs",
@@ -184,7 +192,7 @@ export function DemoLayout3() {
   return (
     <SidebarProvider>
       <BreadcrumbProvider>
-        <AppLayout>
+        <AppLayout version={version}>
           <AppHeader variant="plain">
             <AppHeaderSearch
               placeholder="Search"
@@ -194,7 +202,7 @@ export function DemoLayout3() {
               emptyLabel="No matching pages"
             />
             <AppHeaderActions>
-              <VersionSwitcher active="v2_3" />
+              <VersionSwitcher active={version === "2.3" ? "v2_3" : "v2_4"} />
               <button
                 type="button"
                 className="clet-app-header__notif-btn"
@@ -215,6 +223,7 @@ export function DemoLayout3() {
                   onClickRole={(role) => setSelectedRole(role.id)}
                 />
               </Launchpad>
+              <AppHeaderFontSize />
               <AppHeaderNotifications loading={notifLoading}>
                 {notifData?.map((n: (typeof notifData)[number]) => (
                   <AppHeaderNotificationItem

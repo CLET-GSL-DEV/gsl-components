@@ -1,0 +1,34 @@
+/* Matimo — the unified 2.4 typeface. woff2 generated from the licensed
+   OTF family (Regular/Medium/SemiBold/Bold). font-display: swap so text
+   never blocks on the download. */
+@font-face {
+  font-family: Matimo;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./matimo-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Matimo;
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./matimo-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Matimo;
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./matimo-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Matimo;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./matimo-700.woff2") format("woff2");
+}

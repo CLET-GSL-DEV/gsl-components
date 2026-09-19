@@ -13,10 +13,12 @@ import { ExampleTabs } from "../components/ExampleTabs";
 import { SidebarPreview } from "../previews/code/SidebarPreview";
 import { SidebarPlainPreview } from "../previews/code/SidebarPlainPreview";
 import { SidebarPrimaryPreview } from "../previews/code/SidebarPrimaryPreview";
+import { SidebarBrandPreview } from "../previews/code/SidebarBrandPreview";
 import { SidebarLoadingPreview } from "../previews/code/SidebarLoadingPreview";
 import sidebarSource from "../previews/examples/sidebar.example.tsx?raw";
 import sidebarPlainSource from "../previews/examples/sidebar-plain.example.tsx?raw";
 import sidebarPrimarySource from "../previews/examples/sidebar-primary.example.tsx?raw";
+import sidebarBrandSource from "../previews/examples/sidebar-brand.example.tsx?raw";
 import sidebarLoadingSource from "../previews/examples/sidebar-loading.example.tsx?raw";
 
 # Sidebar
@@ -37,7 +39,14 @@ Compound sidebar primitives for app shells and section navigation. Desktop shows
 
 - **`"default"`** (default) — card panel surface (`--clet-surface-subtle` background, rounded corners).
 - **`"plain"`**: transparent background with a right border instead of the card panel, and no border radius. Used where the sidebar should sit flush against the layout edge but stay on the page surface.
-- **`"primary"`**: the brand rail: `--clet-primary-surface` background, `--clet-on-primary` text, no radius and no border. The sidebar of the [layout shell](/docs/app-layout#variants), paired with `AppHeader variant="plain"`. Branding goes in a `SidebarHeader` at the top of the rail, and the group labels set in uppercase with the fold chevron pointing up while a group is open.
+- **`"primary"`**: the 2.3 brand rail: `--clet-primary-surface` background, `--clet-on-primary` text, no radius and no border. Frozen at the 2.3 look — prefer `"brand"` for new work. Branding goes in a `SidebarHeader` at the top of the rail, and the group labels set in uppercase with the fold chevron pointing up while a group is open.
+- **`"brand"`** (2.4): the navy rail — `#051b2c` surface with a single artwork image docked right and vertically centered at 30% opacity, image-only header (no title text), 12px uppercase `#76808d` group labels, 36px items, and a white active item with navy text. The rail of the 2.4 layout shell, paired with `AppHeader variant="plain"`.
+
+<ExampleTabs
+  title='variant="brand": the 2.4 navy rail with mosaic image and image-only header'
+  preview={<SidebarBrandPreview />}
+  code={sidebarBrandSource}
+/>
 
 <ExampleTabs
   title='variant="primary": the brand rail, with branding and a collapse toggle in its header'
@@ -98,8 +107,8 @@ Root `<aside>`. Sticky card panel on desktop; fixed offcanvas panel on mobile wh
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `"default" \| "plain" \| "primary"` | `"default"` | Visual style: see [Variants](#variants) |
-| `mobileHeader` | `ReactNode` | — | Content rendered into a mobile-only `SidebarHeader` (hidden on desktop via the built-in `clet-sidebar__header--mobile-only` class) when `variant` is `"plain"` or `"primary"`. Typically a `SidebarBrand` with the same logo/title as the sibling `AppHeader`'s `AppHeaderBranding`, so the brand is visible when the mobile drawer opens. Not auto-extracted by `AppLayout`: pass it explicitly. Skipped if you also supply your own `<SidebarHeader>` child, which is the usual composition on the `"primary"` rail. |
+| `variant` | `"default" \| "plain" \| "primary" \| "brand"` | `"default"` | Visual style: see [Variants](#variants) |
+| `mobileHeader` | `ReactNode` | — | Content rendered into a mobile-only `SidebarHeader` (hidden on desktop via the built-in `clet-sidebar__header--mobile-only` class) when `variant` is `"plain"`, `"primary"`, or `"brand"`. Typically a `SidebarBrand` with the same logo/title as the sibling `AppHeader`'s `AppHeaderBranding`, so the brand is visible when the mobile drawer opens. Not auto-extracted by `AppLayout`: pass it explicitly. Skipped if you also supply your own `<SidebarHeader>` child, which is the usual composition on the `"primary"` and `"brand"` rails. |
 | `classNames` | `SidebarClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the aside |
 | `children` | `ReactNode` | — | Header, content, footer |
@@ -259,7 +268,7 @@ Props for `SidebarProvider`.
 
 ### `SidebarProps`
 
-Props for `Sidebar`. Includes `variant?: "default" | "plain" | "primary"` and `mobileHeader?: ReactNode`, see [Variants](#variants) and the `Sidebar` prop table above.
+Props for `Sidebar`. Includes `variant?: "default" | "plain" | "primary" | "brand"` and `mobileHeader?: ReactNode`, see [Variants](#variants) and the `Sidebar` prop table above.
 
 ### `SidebarTriggerProps`
 

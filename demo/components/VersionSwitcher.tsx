@@ -2,7 +2,8 @@ import { Dropdown } from "@rfdtech/components";
 import { useNavigate } from "react-router-dom";
 
 const VERSIONS = [
-  { value: "v2_3", label: "v2.3.0", path: "/" },
+  { value: "v2_4", label: "v2.4.0", path: "/" },
+  { value: "v2_3", label: "v2.3.0", path: "/v2.3" },
   { value: "v2_2", label: "v2.2.0", path: "/v2" },
   // Last v1 release before the 2.0.0 rebrand
   { value: "v1_22", label: "v1.22.0", path: "/legacy" },

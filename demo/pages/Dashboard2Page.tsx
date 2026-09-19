@@ -11,6 +11,7 @@ import {
   Shield,
   BarChart3,
   History,
+  TableIcon,
 } from "lucide-react";
 import type {
   TableColumn,
@@ -108,7 +109,6 @@ export function Dashboard2Page() {
     minutes: 30,
   });
   const { loading: metricsLoading } = useMockQuery(null, 1200);
-  const { loading: tableLoading } = useMockQuery(null, 1000);
 
   const filtered = useMemo(
     () =>
@@ -371,12 +371,7 @@ export function Dashboard2Page() {
       </PageSection>
 
       <PageSection>
-        <Card
-          bordered
-          loading={tableLoading}
-          loadingLabel="Loading members…"
-          loadingMinHeight={420}
-        >
+        <Card bordered>
           <Tabs variant="pill" defaultValue="members">
             <TabsList>
               <TabsTrigger value="members">Members</TabsTrigger>
@@ -385,7 +380,7 @@ export function Dashboard2Page() {
             </TabsList>
 
             <TabsContent value="members">
-              <Table paramPrefix="dash2-members">
+              <Table paramPrefix="dash2-members" variant="default">
                 <TableHeader>
                   <TableSearch placeholder="Search members..." />
                   <TableFilter variant="spread">
@@ -402,6 +397,7 @@ export function Dashboard2Page() {
                       aria-label="Filter by role"
                     />
                     <Combobox
+                      name="status"
                       value={statusValue || null}
                       onValueChange={(v) => setStatusValue(v ?? "")}
                       options={gslStatuses}
@@ -422,6 +418,8 @@ export function Dashboard2Page() {
                   rowActions={rowActions}
                   bulkActions={bulkActions}
                   bulkActionsFooter
+                  emptyIcon={<TableIcon size={40} strokeWidth={1} />}
+                  emptyText="No results"
                 />
                 <TableFooter noBorder>
                   <TablePagination
