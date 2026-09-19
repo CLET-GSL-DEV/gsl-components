@@ -39,6 +39,7 @@ import {
   AppHeaderNotifications,
   AppHeaderNotificationItem,
   AppHeaderSearch,
+  AppHeaderTitle,
   Launchpad,
   AppLayout,
   AppSidebar,
@@ -192,7 +193,7 @@ export function DemoLayout4() {
       <BreadcrumbProvider>
         <AppLayout>
           <AppHeader variant="plain">
-            <span className="demo-system-title">AQAIS</span>
+            <AppHeaderTitle>AQAIS</AppHeaderTitle>
             <AppHeaderActions>
               <AppHeaderSearch
                 collapsible

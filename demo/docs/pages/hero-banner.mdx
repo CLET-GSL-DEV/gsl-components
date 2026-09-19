@@ -35,7 +35,7 @@ Edge-to-edge dashboard hero: greeting line, name, optional role, the current dat
 | `date` | `string` | today | Date line. Defaults to the current day (e.g. "Sunday, 30 August 2026"). |
 | `images` | `HeroBannerImage[]` | 8 presets | Artwork variants. |
 | `imageVariant` | `number` | — | Active image index. |
-| `defaultImageVariant` | `number` | `0` | Initial image index. |
+| `defaultImageVariant` | `number` | random | Initial image index. Omit it and the banner picks a random image from `images` on each visit. |
 | `classNames` | `HeroBannerClassNames` | — | `root`, `image`, `content`, `text`, `greeting`, `name`, `role`, `date` overrides. |
 | `className` | `string` | — | Merged onto the root. |
 

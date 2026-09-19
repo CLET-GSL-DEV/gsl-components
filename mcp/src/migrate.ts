@@ -76,6 +76,7 @@ interface TsJsxElement extends TsNode {
 
 interface TsJsxElementWithChildren extends TsNode {
   openingElement: TsJsxElement;
+  children: readonly TsNode[];
 }
 
 interface TsImportSpecifier extends TsNode {
@@ -117,6 +118,7 @@ interface TsApi {
   isNamespaceImport(node: TsNode): boolean;
   isStringLiteral(node: TsNode): node is TsStringLiteral;
   isJsxElement(node: TsNode): node is TsJsxElementWithChildren;
+  isJsxText(node: TsNode): node is TsNode;
   isJsxExpression(node: TsNode): node is TsJsxExpression;
   isBindingElement(node: TsNode): node is TsBindingElement;
   isObjectBindingPattern(node: TsNode): node is TsObjectBindingPattern;
@@ -203,6 +205,17 @@ const EXPORT_RENAMES: Record<string, ExportRename> = {
       "ProfilePopover confirms before signing out. Pass noConfirmSignOut to keep the old " +
       "fire-immediately behaviour.",
   },
+  // 2.4: the page-level notice becomes the Banner. heading/subtext carry the
+  // copy, the accent bar carries the colour, the close button is its own action.
+  Notice: {
+    to: "Banner",
+    props: { title: "heading" },
+    dropProps: ["leftBorder", "dashed", "icon", "color"],
+    note:
+      "Banner renders variant colours through its accent bar and background. leftBorder/dashed/" +
+      "icon/color have no equivalent - pick the closest variant instead. Children moved to " +
+      "subtext; the dismiss button renders only when onClose is passed.",
+  },
   // Migration guide section 9, the JS half of the gsl -> clet rename. The CSS
   // half is a permanent alias and is deliberately left alone.
   gslTheme: { to: "cletTheme" },
@@ -228,6 +241,15 @@ const EXPORT_RENAMES: Record<string, ExportRename> = {
  */
 /** Branding props captured from the header, to re-emit on the rail. */
 let capturedBranding: string | null = null;
+
+/**
+ * The rail's title text, captured from a 2.3 `SidebarBrand`'s title span and
+ * re-emitted as the 2.4 header's system title (the title left the rail).
+ */
+let capturedSidebarTitle: string | null = null;
+
+/** Pages spotted with multiple MetricCards, hero-banner candidates for the AI to triage. */
+let heroCandidates: string[] = [];
 
 /**
  * Props retired with the header branding, as component name -> prop names.
@@ -337,8 +359,11 @@ function adoptTarget(component: string, current: string | null): VariantTarget {
   }
 
   if (component === "Sidebar") {
-    // An unset sidebar is the panel surface, which is reported instead.
-    if (current === "plain") return { kind: "set", value: "primary" };
+    // 2.4: every brand-coloured rail becomes the brand variant. An unset
+    // sidebar is the panel surface, which is reported instead.
+    if (current === "primary" || current === "plain") {
+      return { kind: "set", value: "brand" };
+    }
     return null;
   }
 
@@ -541,6 +566,58 @@ function findVariantAttribute(
   return null;
 }
 
+function jsxAttributes(ts: TsApi, attributes: TsJsxAttributes): TsJsxAttribute[] {
+  return attributes.properties.filter((property) =>
+    ts.isJsxAttribute(property),
+  ) as TsJsxAttribute[];
+}
+
+function hasAttribute(attributes: TsJsxAttribute[], name: string): boolean {
+  return attributes.some((attribute) => attribute.name.getText() === name);
+}
+
+/**
+ * The display title inside a 2.3 SidebarBrand: the text of the child span
+ * carrying the `clet-sidebar__header-title` class, else the first direct
+ * non-whitespace text.
+ */
+function extractBrandTitle(
+  ts: TsApi,
+  source: TsSourceFile,
+  element: TsJsxElementWithChildren,
+): string | null {
+  for (const child of element.children) {
+    if (!ts.isJsxElement(child)) continue;
+    const className = jsxAttributes(ts, child.openingElement.attributes).find(
+      (attribute) => attribute.name.getText() === "className",
+    );
+    const value = className?.initializer?.getText(source) ?? "";
+    if (value.includes("header-title")) {
+      const text = child.children
+        .map((grandChild) => grandChild.getText(source))
+        .join("")
+        .trim();
+      if (text) return text;
+    }
+  }
+  for (const child of element.children) {
+    if (ts.isJsxText(child)) {
+      const trimmed = child.getText(source).trim();
+      if (trimmed) return trimmed;
+    }
+  }
+  return null;
+}
+
+/** Notice variants and their Banner equivalents. */
+const NOTICE_VARIANTS: Record<string, string> = {
+  default: "info",
+  info: "info",
+  success: "success",
+  warning: "warning",
+  error: "danger",
+};
+
 /**
  * A node's start, reaching back over a comment written on its own line above,
  * then to the start of the line when nothing else shares it. Deliberately
@@ -649,6 +726,7 @@ function retireCallSites(
   );
   const changes: MigrateChange[] = [];
   const edits: Edit[] = [];
+  const stripped: Array<[number, number]> = [];
 
   const visit = (node: TsNode): void => {
     if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
@@ -666,6 +744,7 @@ function retireCallSites(
               end: endOfLine(text, attribute.getEnd()),
               text: "",
             });
+            stripped.push([attribute.getStart(source), attribute.getEnd()]);
             changes.push({
               file: filePath,
               line: source.getLineAndCharacterOfPosition(
@@ -682,11 +761,80 @@ function retireCallSites(
   };
   visit(source);
 
+
   if (edits.length === 0) return { text, changes: [] };
   let next = text;
   for (const edit of mergeOverlaps(edits).sort((a, b) => b.start - a.start)) {
     next = next.slice(0, edit.start) + edit.text + next.slice(edit.end);
   }
+
+  if (stripped.length > 0) {
+    const insideStripped = (position: number) =>
+      stripped.some(([start, end]) => position >= start && position < end);
+
+    for (const statement of source.statements) {
+      if (!ts.isImportDeclaration(statement)) continue;
+      if (
+        ts.isStringLiteral(statement.moduleSpecifier) &&
+        statement.moduleSpecifier.text === LIBRARY
+      ) {
+        continue;
+      }
+      const named = statement.importClause?.namedBindings;
+      if (!named || !ts.isNamedImports(named)) continue;
+
+      const importStart = statement.getStart(source);
+      const importEnd = statement.getEnd();
+      const live = new Set<string>();
+      const countReferences = (node: TsNode): void => {
+        if (ts.isIdentifier(node)) {
+          const position = node.getStart(source);
+          if (
+            !(position >= importStart && position < importEnd) &&
+            !insideStripped(position)
+          ) {
+            live.add(node.text);
+          }
+        }
+        ts.forEachChild(node, countReferences);
+      };
+      countReferences(source);
+
+      const dead = named.elements.filter(
+        (element) => !live.has(element.name.text),
+      );
+      if (dead.length === 0) continue;
+
+      if (dead.length === named.elements.length && !statement.importClause?.name) {
+        edits.push({
+          start: startWithComments(ts, text, source, statement),
+          end: endOfLine(text, importEnd),
+          text: "",
+        });
+      } else {
+        for (const element of dead) {
+          edits.push(spanWithSeparators(ts, text, source, element, named.elements));
+        }
+      }
+
+      for (const element of dead) {
+        changes.push({
+          file: filePath,
+          line: source.getLineAndCharacterOfPosition(
+            element.getStart(source),
+          ).line + 1,
+          component: element.name.text,
+          description: `${element.name.text} import removed (no longer used)`,
+        });
+      }
+    }
+
+    next = text;
+    for (const edit of mergeOverlaps(edits).sort((a, b) => b.start - a.start)) {
+      next = next.slice(0, edit.start) + edit.text + next.slice(edit.end);
+    }
+  }
+
   return { text: next, changes };
 }
 
@@ -880,6 +1028,449 @@ function migrateSource(
       }
     }
 
+    // ── 2.4 whole-element surgeries (adopt mode) ──
+    if (
+      !options.preserve &&
+      ts.isJsxElement(node) &&
+      ts.isIdentifier(node.openingElement.tagName)
+    ) {
+      const tagName = node.openingElement.tagName;
+      const exported = localToExported.get(tagName.text);
+
+      // SidebarBrand: the brand rail carries its mark baked in, so the app's
+      // hand-written logo/title children collapse to a bare element. The
+      // title text is captured and re-emitted as the header's system title.
+      if (exported === "SidebarBrand" && node.children.length > 0) {
+        const title = extractBrandTitle(ts, source, node);
+        if (title && capturedSidebarTitle == null) {
+          capturedSidebarTitle = title;
+        }
+        edits.push({
+          start: node.getStart(source),
+          end: node.getEnd(),
+          text: "<SidebarBrand />",
+        });
+        bump(jsxUsage, tagName.text);
+        changes.push({
+          file: filePath,
+          line: lineOf(node.getStart(source)),
+          component: "SidebarBrand",
+          description:
+            "SidebarBrand collapsed to the baked-in brand mark (logo/title children removed)",
+        });
+        notes.push({
+          file: filePath,
+          line: lineOf(node.getStart(source)),
+          message:
+            "The brand rail renders its own logo. Explicit logo/title props still override it.",
+        });
+        return;
+      }
+
+      // AppHeader: the rail no longer carries the title, it becomes the
+      // header's system title, and the search field moves into the actions
+      // row as a collapsible trigger.
+      if (exported === "AppHeader") {
+        const children = (node as TsJsxElementWithChildren).children;
+        const directChild = (name: string) =>
+          children.find((child) => {
+            if (!ts.isJsxElement(child) && !ts.isJsxSelfClosingElement(child))
+              return false;
+            const tag = ts.isJsxElement(child)
+              ? child.openingElement.tagName
+              : child.tagName;
+            return ts.isIdentifier(tag) && tag.text === name;
+          });
+
+        const searchEl = directChild("AppHeaderSearch");
+        const actionsEl = directChild("AppHeaderActions");
+        if (searchEl && actionsEl && !text.includes("clet-app-header__system-title")) {
+          const rawSearch = searchEl.getText(source);
+          const movedSearch = rawSearch.replace(
+            "<AppHeaderSearch",
+            "<AppHeaderSearch collapsible",
+          );
+
+          const actionsTag = (actionsEl as TsJsxElementWithChildren)
+            .openingElement;
+          const actionsTagStart = actionsTag.getStart(source);
+          const actionsLineStart = text.lastIndexOf("\n", actionsTagStart) + 1;
+          const actionsIndent = text.slice(actionsLineStart, actionsTagStart);
+
+          // 1. The search element leaves its own line.
+          let searchStart = searchEl.getStart(source);
+          let searchEnd = searchEl.getEnd();
+          const searchLineStart = text.lastIndexOf("\n", searchStart) + 1;
+          if (text.slice(searchLineStart, searchStart).trim() === "") {
+            searchStart = searchLineStart;
+            searchEnd = endOfLine(text, searchEnd);
+            if (text[searchEnd] === "\n") searchEnd += 1;
+          }
+          edits.push({ start: searchStart, end: searchEnd, text: "" });
+
+          // 2. It re-enters as the first action, collapsible.
+          edits.push({
+            start: actionsTag.getEnd(),
+            end: actionsTag.getEnd(),
+            text: `\n${actionsIndent}  ${movedSearch}`,
+          });
+          bump(jsxUsage, "AppHeaderSearch");
+
+          // 3. The captured rail title becomes the header's system title.
+          if (capturedSidebarTitle) {
+            const headerTagStart = node.openingElement.getStart(source);
+            const headerLineStart =
+              text.lastIndexOf("\n", headerTagStart) + 1;
+            const headerIndent = text.slice(headerLineStart, headerTagStart);
+            edits.push({
+              start: actionsLineStart,
+              end: actionsLineStart,
+              text: `${headerIndent}  <AppHeaderTitle>${capturedSidebarTitle}</AppHeaderTitle>\n`,
+            });
+            neededImports.add("AppHeaderTitle");
+            changes.push({
+              file: filePath,
+              line: lineOf(actionsTagStart),
+              component: "AppHeader",
+              description: `System title "${capturedSidebarTitle}" added to the header (moved off the rail)`,
+            });
+          } else {
+            notes.push({
+              file: filePath,
+              line: lineOf(actionsTagStart),
+              message:
+                "2.4 shows the system title in the header (the rail is image-only). Add an " +
+                "<AppHeaderTitle> element with the app's name before AppHeaderActions.",
+            });
+          }
+
+          changes.push({
+            file: filePath,
+            line: lineOf(searchEl.getStart(source)),
+            component: "AppHeaderSearch",
+            description:
+              "AppHeaderSearch moved into AppHeaderActions as a collapsible trigger",
+          });
+          notes.push({
+            file: filePath,
+            line: lineOf(searchEl.getStart(source)),
+            message:
+              "collapsible: the round icon swaps itself for the field on click; Escape or the " +
+              "close button collapses and clears. data/onSearch wiring is unchanged.",
+          });
+        }
+      }
+    }
+    // ── 2.4 component-specific transforms (adopt mode) ──
+    if (
+      !options.preserve &&
+      (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) &&
+      ts.isIdentifier(node.tagName)
+    ) {
+      const tagName = node.tagName;
+      const exported = localToExported.get(tagName.text);
+      const attributes = jsxAttributes(ts, node.attributes);
+      const line = lineOf(node.getStart(source));
+
+      // Notice → Banner: variant value map, children become subtext.
+      if (exported === "Notice") {
+        const variantAttr = findVariantAttribute(ts, node.attributes);
+        const variantInit = variantAttr?.initializer;
+        if (variantAttr && variantInit && ts.isStringLiteral(variantInit)) {
+          const mapped = NOTICE_VARIANTS[variantInit.text];
+          if (mapped && mapped !== variantInit.text) {
+            edits.push({
+              start: variantInit.getStart(source),
+              end: variantInit.getEnd(),
+              text: `"${mapped}"`,
+            });
+            changes.push({
+              file: filePath,
+              line,
+              component: "Banner",
+              description: `variant "${variantInit.text}" -> "${mapped}"`,
+            });
+          }
+        } else if (!variantAttr) {
+          edits.push({
+            start: tagName.getEnd(),
+            end: tagName.getEnd(),
+            text: ` variant="info"`,
+          });
+          changes.push({
+            file: filePath,
+            line,
+            component: "Banner",
+            description:
+              'variant "info" added (Banner requires an explicit status)',
+          });
+        }
+
+        const titleAttr = attributes.find(
+          (attribute) =>
+            attribute.name.getText() === "title" ||
+            attribute.name.getText() === "heading",
+        );
+
+        // No title prop: a single expression child is the whole message ,
+        // it becomes the heading (Banner's one-liner shape).
+        if (
+          !titleAttr &&
+          ts.isJsxOpeningElement(node) &&
+          node.parent &&
+          ts.isJsxElement(node.parent) &&
+          node.parent.children.length === 1 &&
+          ts.isJsxExpression(node.parent.children[0]) &&
+          node.parent.children[0].expression
+        ) {
+          const expr = node.parent.children[0].expression!.getText(source);
+          edits.push({
+            start: node.getEnd() - 1,
+            end: node.parent.getEnd(),
+            text: ` heading={${expr}} />`,
+          });
+          changes.push({
+            file: filePath,
+            line,
+            component: "Banner",
+            description: "expression child promoted to the heading prop",
+          });
+        }
+        // No title prop: mixed text/expression children (no elements) join
+        // into a heading fragment, the "Could not load: {error}" shape.
+        else if (
+          !titleAttr &&
+          ts.isJsxOpeningElement(node) &&
+          node.parent &&
+          ts.isJsxElement(node.parent) &&
+          node.parent.children.length > 0 &&
+          node.parent.children.every(
+            (child) => ts.isJsxText(child) || ts.isJsxExpression(child),
+          ) &&
+          node.parent.children.some(
+            (child) => child.getText(source).trim() !== "",
+          )
+        ) {
+          const joined = node.parent.children
+            .map((child) => child.getText(source))
+            .join("")
+            .trim();
+          edits.push({
+            start: node.getEnd() - 1,
+            end: node.parent.getEnd(),
+            text: ` heading={<>${joined}</>} />`,
+          });
+          changes.push({
+            file: filePath,
+            line,
+            component: "Banner",
+            description: "text/expression children promoted to the heading prop",
+          });
+        }
+        // No title prop: plain-text children become the heading.
+        else if (
+          !titleAttr &&
+          ts.isJsxOpeningElement(node) &&
+          node.parent &&
+          ts.isJsxElement(node.parent) &&
+          node.parent.children.length > 0 &&
+          node.parent.children.every((child) => ts.isJsxText(child)) &&
+          node.parent.children.some((child) => child.getText(source).trim() !== "")
+        ) {
+          const joined = node.parent.children
+            .map((child) => child.getText(source))
+            .join("")
+            .trim()
+            .replace(/"/g, '\\"');
+          // Replace everything between the opening tag's `>` and the closing
+          // tag, and self-close the element in the same span.
+          edits.push({
+            start: node.getEnd() - 1,
+            end: node.parent.getEnd(),
+            text: ` heading="${joined}" />`,
+          });
+          changes.push({
+            file: filePath,
+            line,
+            component: "Banner",
+            description: "plain-text children promoted to the heading prop",
+          });
+        } else if (
+          ts.isJsxOpeningElement(node) &&
+          node.parent &&
+          ts.isJsxElement(node.parent) &&
+          node.parent.children.length > 0
+        ) {
+          // Remaining children (with or without a heading) move to subtext ,
+          // Banner renders nothing from JSX children.
+          const childrenText = node.parent.children
+            .map((child) => child.getText(source))
+            .join("");
+          edits.push({
+            start: node.getEnd() - 1,
+            end: node.parent.getEnd(),
+            text: ` subtext={<>${childrenText}</>} />`,
+          });
+          changes.push({
+            file: filePath,
+            line,
+            component: "Banner",
+            description: "children moved to the subtext prop",
+          });
+        }
+
+        if (tagName.text !== "Notice") {
+          notes.push({
+            file: filePath,
+            line,
+            message:
+              "Notice is imported under an alias, so the tags were not renamed. Point them " +
+              "at Banner by hand (props and variant above are already migrated).",
+          });
+        }
+      }
+
+      // MetricCard: the footer gains an adornment icon, seeded from the
+      // card's own icon so the AI step only picks a colour.
+      if (exported === "MetricCard") {
+        if (
+          hasAttribute(attributes, "description") &&
+          hasAttribute(attributes, "icon") &&
+          !hasAttribute(attributes, "descriptionAdornment")
+        ) {
+          const iconAttr = attributes.find(
+            (attribute) => attribute.name.getText() === "icon",
+          )!;
+          const initializer = iconAttr.initializer;
+          let iconName: string | null = null;
+          if (
+            initializer &&
+            ts.isJsxExpression(initializer) &&
+            initializer.expression &&
+            (ts.isJsxSelfClosingElement(initializer.expression) ||
+              ts.isJsxElement(initializer.expression))
+          ) {
+            const tag = ts.isJsxSelfClosingElement(initializer.expression)
+              ? initializer.expression.tagName
+              : (initializer.expression as TsJsxElementWithChildren)
+                  .openingElement.tagName;
+            if (ts.isIdentifier(tag)) iconName = tag.text;
+          }
+          if (iconName) {
+            // MOVE, not copy: 2.4 cards carry the icon at the footer only,
+            // so the top-level icon prop goes away with the adornment added.
+            let iconStart = iconAttr.getStart(source);
+            while (iconStart > 0 && isWhitespace(text[iconStart - 1]))
+              iconStart -= 1;
+            edits.push({
+              start: iconStart,
+              end: iconAttr.getEnd(),
+              text: ` descriptionAdornment={<${iconName} size={16} strokeWidth={2} aria-hidden />}`,
+            });
+            changes.push({
+              file: filePath,
+              line,
+              component: "MetricCard",
+              description: `icon moved to descriptionAdornment (${iconName})`,
+            });
+            notes.push({
+              file: filePath,
+              line,
+              message: `Pick a colour for the ${iconName} adornment. The dashboard set uses navy #0c4a6e, green #006229, gold #b8960c, ochre #8a6914.`,
+            });
+          } else {
+            notes.push({
+              file: filePath,
+              line,
+              message:
+                "MetricCard has a description and an icon the codemod could not read - " +
+                "add a descriptionAdornment by hand.",
+            });
+          }
+        } else if (
+          hasAttribute(attributes, "description") &&
+          !hasAttribute(attributes, "icon") &&
+          !hasAttribute(attributes, "descriptionAdornment")
+        ) {
+          notes.push({
+            file: filePath,
+            line,
+            message:
+              "MetricCard shows a footer description with no adornment - 2.4 cards carry a " +
+              "small icon there. Pick one and add descriptionAdornment.",
+          });
+        }
+      }
+
+      // TableContent: custom empty icons are retired, the 2.4 empty state
+      // renders the default illustration, emptyText feeds the title.
+      if (exported === "TableContent") {
+        const emptyIconAttr = attributes.find(
+          (attribute) => attribute.name.getText() === "emptyIcon",
+        );
+        if (emptyIconAttr) {
+          const initializer = emptyIconAttr.initializer;
+          if (
+            initializer &&
+            ts.isJsxExpression(initializer) &&
+            initializer.expression &&
+            ts.isIdentifier(initializer.expression)
+          ) {
+            // A prop flowing down (RegisterPage pattern): retire it through
+            // the branding machinery, so the owner's destructure, interface
+            // member and the callers' attributes all go too.
+            brandingRefs.add(initializer.expression.text);
+          }
+          // Register the span so the file's own import pruner retires
+          // icons that only this attribute used.
+          removedRanges.push([
+            emptyIconAttr.getStart(source),
+            emptyIconAttr.getEnd(),
+          ]);
+          let start = emptyIconAttr.getStart(source);
+          while (start > 0 && isWhitespace(text[start - 1])) start -= 1;
+          edits.push({ start, end: emptyIconAttr.getEnd(), text: "" });
+          changes.push({
+            file: filePath,
+            line,
+            component: "TableContent",
+            description:
+              "emptyIcon removed (2.4 empty states render the default illustration)",
+          });
+          notes.push({
+            file: filePath,
+            line,
+            message:
+              "Custom empty icons are retired. emptyText feeds the EmptyState title; pass " +
+              "emptyContent for a fully custom state.",
+          });
+        }
+      }
+
+      // AppHeaderSearch already inside the actions row just gains the
+      // collapsible trigger (the AppHeader surgery handles the move).
+      if (
+        exported === "AppHeaderSearch" &&
+        !hasAttribute(attributes, "collapsible") &&
+        node.parent &&
+        ts.isJsxOpeningElement(node.parent) &&
+        ts.isIdentifier(node.parent.tagName) &&
+        node.parent.tagName.text === "AppHeaderActions"
+      ) {
+        edits.push({
+          start: tagName.getEnd(),
+          end: tagName.getEnd(),
+          text: ` collapsible`,
+        });
+        changes.push({
+          file: filePath,
+          line,
+          component: "AppHeaderSearch",
+          description: "collapsible added (icon swaps itself for the field)",
+        });
+      }
+    }
+
     if (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) {
       const tagName = node.tagName;
       if (ts.isIdentifier(tagName) && localToExported.has(tagName.text)) {
@@ -1002,6 +1593,7 @@ function migrateSource(
               let start = property.getStart(source);
               while (start > 0 && isWhitespace(text[start - 1])) start -= 1;
               edits.push({ start, end: property.getEnd(), text: "" });
+              removedRanges.push([property.getStart(source), property.getEnd()]);
               changes.push({
                 file: filePath,
                 line: lineOf(property.getStart(source)),
@@ -1047,7 +1639,7 @@ function migrateSource(
                 line,
                 message:
                   "Sidebar has no variant (the panel surface). It only becomes the brand rail " +
-                  'if this layout is flush. Set variant="primary" if it is.',
+                  'if this layout is flush. Set variant="brand" if it is.',
               });
             }
 
@@ -1108,6 +1700,17 @@ function migrateSource(
   };
 
   visit(source);
+
+  // Dashboard-style pages are hero candidates: collected here, reported once
+  // per run, only the app's MAIN dashboard gets the hero, and that choice
+  // needs the route map, not a per-file guess.
+  if (
+    !options.preserve &&
+    (jsxUsage.get("MetricCard") ?? 0) >= 2 &&
+    !text.includes("HeroBanner")
+  ) {
+    heroCandidates.push(filePath);
+  }
 
   // Props the deleted branding was the only reader of: an unused destructured
   // parameter fails a noUnusedLocals build. The binding and its interface
@@ -1342,6 +1945,8 @@ export async function runMigrate(options: MigrateOptions): Promise<MigrateResult
   let filesChanged = 0;
 
   capturedBranding = null;
+  capturedSidebarTitle = null;
+  heroCandidates = [];
   retiredProps.clear();
 
   // Scan pass. Discarded except for the branding it captures and the props it
@@ -1376,6 +1981,20 @@ export async function runMigrate(options: MigrateOptions): Promise<MigrateResult
       filesChanged += 1;
       if (options.write) await writeFile(file, next, "utf8");
     }
+  }
+
+  if (heroCandidates.length > 0) {
+    notes.push({
+      file: heroCandidates[0],
+      line: 1,
+      message:
+        "2.4 adds a HeroBanner - but ONLY on the app's main dashboard page (the home route), " +
+        "never on module or sub-dashboard pages. Identify the main dashboard from these " +
+        "MetricCard-heavy candidates: " +
+        heroCandidates.map((candidate) => candidate.replace(root + "/", "")).join(", ") +
+        ". Insert it UNDER the page/section title (after the SectionHeader when one exists), " +
+        "before the content; Notices render under it. Wire the signed-in user's name.",
+    });
   }
 
   return { filesScanned: files.length, filesChanged, changes, notes };

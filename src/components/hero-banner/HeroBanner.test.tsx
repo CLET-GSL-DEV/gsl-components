@@ -40,6 +40,8 @@ describe("HeroBanner", () => {
     const { rerender } = render(
       <HeroBanner
         name="Ama"
+        // Pinned: omitting defaultImageVariant randomizes the initial image.
+        defaultImageVariant={0}
         images={[
           { src: "one.jpg", alt: "One" },
           { src: "two.jpg", alt: "Two" },

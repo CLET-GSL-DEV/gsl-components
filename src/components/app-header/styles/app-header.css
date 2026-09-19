@@ -6,6 +6,7 @@
 
 :root {
   --clet-app-header-search-kbd-text-size: calc(11px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
+  --clet-app-header-title-text-size: calc(20px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
   --clet-app-header-notif-time-text-size: calc(11px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
 }
 
@@ -329,6 +330,20 @@
   min-width: 0;
   max-width: 400px;
   align-self: center;
+}
+
+/* ── System title ──
+   2.4: the rail is image-only, so the app's name renders here via
+   AppHeaderTitle. One style, applied automatically by the component. */
+.clet-app-header__title {
+  margin: 0;
+  font-family: var(--gsl-app-header-font, var(--clet-app-header-font));
+  font-size: var(--gsl-app-header-title-text-size, var(--clet-app-header-title-text-size));
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--gsl-text, var(--clet-text));
+  white-space: nowrap;
 }
 
 .clet-app-header__search-text {

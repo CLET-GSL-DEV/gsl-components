@@ -39,7 +39,10 @@ export interface HeroBannerProps extends Omit<
   images?: HeroBannerImage[];
   /** Active image index. */
   imageVariant?: number;
-  /** Initial image index when uncontrolled (default 0). */
+  /**
+   * Initial image index when uncontrolled. Omit to pick a random image
+   * from `images` on each visit.
+   */
   defaultImageVariant?: number;
   classNames?: HeroBannerClassNames;
   className?: string;

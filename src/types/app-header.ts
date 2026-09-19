@@ -166,3 +166,15 @@ export interface AppHeaderProfileProps {
   /** Called when "Sign Out" is clicked */
   onSignOut?: () => void;
 }
+
+export interface AppHeaderTitleClassNames {
+  title?: string;
+}
+
+export interface AppHeaderTitleProps
+  extends Omit<HTMLAttributes<HTMLHeadingElement>, "color"> {
+  /** The system name shown in the header (e.g. "GRC"). */
+  children: ReactNode;
+  classNames?: AppHeaderTitleClassNames;
+  className?: string;
+}

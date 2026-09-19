@@ -46,15 +46,20 @@ export const HeroBanner = forwardRef<HTMLElement, HeroBannerProps>(
       date,
       images = DEFAULT_IMAGES,
       imageVariant: controlledVariant,
-      defaultImageVariant = 0,
+      defaultImageVariant,
       classNames,
       className,
       ...props
     },
     ref,
   ) {
-    const [uncontrolledVariant] = useState(defaultImageVariant);
-    const activeIndex = controlledVariant ?? uncontrolledVariant;
+    // Uncontrolled banners pick a random artwork once per mount, so the same
+    // user lands on a fresh image each visit; defaultImageVariant pins it.
+    const [randomVariant] = useState(() =>
+      Math.floor(Math.random() * Math.max(images.length, 1)),
+    );
+    const activeIndex =
+      controlledVariant ?? defaultImageVariant ?? randomVariant;
 
     const safeIndex = useMemo(() => {
       if (images.length === 0) return 0;

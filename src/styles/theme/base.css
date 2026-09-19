@@ -1,10 +1,27 @@
 .clet-theme,
 .gsl-theme {
   color-scheme: light dark;
+  /* 2.4: the unified typeface is APPLIED at the wrapper, not only declared.
+     Components still declare (and can override) per part; this guarantees
+     every text node inside the wrapper inherits Matimo rather than the host
+     app's body font. */
+  font-family: var(--gsl-font-body, var(--clet-font-body));
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Form controls never inherit font-family from the cascade (the UA
+   stylesheet wins), so any clet class on a bare button/input/select/textarea
+   without its own declaration rendered the browser default (the Launchpad
+   tile names bug). Reset to inheritance at ZERO specificity (:where) so any
+   component class that declares a family still wins. Unscoped on purpose:
+   Radix portals mount to document.body, OUTSIDE every .clet-theme wrapper,
+   and their roots already declare the family this reset lets controls
+   inherit. */
+:where(button, input, select, textarea) {
+  font-family: inherit;
 }
 
 body {
@@ -16,6 +33,28 @@ body {
    wrapper reset the scale to 1 for the whole app. */
 :root {
   --clet-text-scale: 1;
+
+  /* The typeface tokens live here on :root ALONE, never on the theme wrappers.
+     Declaring them on .clet-theme would let that wrapper's own declaration
+     beat anything INHERITED from an ancestor, which is exactly what a
+     VersionPin wrapper is ([data-clet-version="2.3"] re-stating the frozen
+     2.3 stacks). The same trap as --clet-text-scale above: direct declaration
+     beats inheritance, so the default belongs at :root only and every themed
+     subtree inherits it. cletTheme() and app-level overrides set the token on
+     their own element, which still wins over inheritance.
+
+     2.4: one unified typeface. The Matimo webfont is BUNDLED:
+     src/styles/fonts/matimo.css declares the faces and the lib build inlines
+     the woff2 files as data URIs into the published css (dist/index.css,
+     dist/next.css), so a consuming app needs no font setup at all. The
+     system stack behind it is the pre-hydration and failure fallback. The
+     2.3 stacks are frozen under the [data-clet-version="2.3"] pin in
+     src/styles/versions.css. */
+  --clet-font:
+    "Matimo", -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
+    "Helvetica Neue", arial, sans-serif;
+  --clet-font-header: "Matimo", var(--gsl-font, var(--clet-font));
+  --clet-font-body: "Matimo", var(--gsl-font, var(--clet-font));
 }
 
 :root,
@@ -23,15 +62,6 @@ body {
 .gsl-theme {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* 2.4: one unified typeface. "Matimo" resolves when the consuming app
-     ships the webfont (see demo/public or app assets); the system stack
-     below is the fallback until then. The 2.3 stacks are frozen under the
-     [data-clet-version="2.3"] pin in src/styles/versions.css. */
-  --clet-font:
-    "Matimo", -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
-    "Helvetica Neue", arial, sans-serif;
-  --clet-font-header: "Matimo", var(--gsl-font, var(--clet-font));
-  --clet-font-body: "Matimo", var(--gsl-font, var(--clet-font));
   --clet-text-size-xs: calc(12px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
   --clet-text-size-sm: calc(13px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
   --clet-text-size-base: calc(
