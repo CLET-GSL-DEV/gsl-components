@@ -8,7 +8,7 @@ import { pathToFileURL } from "node:url";
 // The slice of the compiler API this codemod calls, declared locally so the
 // published CLI takes no build-time dependency on TypeScript's types.
 
-interface TsNode {
+export interface TsNode {
   getStart(source?: TsSourceFile): number;
   getEnd(): number;
   getFullStart(): number;
@@ -43,7 +43,7 @@ interface TsTypeReference extends TsNode {
   typeName: TsNode;
 }
 
-interface TsJsxExpression extends TsNode {
+export interface TsJsxExpression extends TsNode {
   expression?: TsNode;
 }
 
@@ -52,29 +52,29 @@ interface TsCommentRange {
   end: number;
 }
 
-interface TsIdentifier extends TsNode {
+export interface TsIdentifier extends TsNode {
   text: string;
 }
 
-interface TsStringLiteral extends TsNode {
+export interface TsStringLiteral extends TsNode {
   text: string;
 }
 
-interface TsJsxAttribute extends TsNode {
+export interface TsJsxAttribute extends TsNode {
   name: TsNode;
   initializer?: TsNode;
 }
 
-interface TsJsxAttributes extends TsNode {
+export interface TsJsxAttributes extends TsNode {
   properties: readonly TsNode[];
 }
 
-interface TsJsxElement extends TsNode {
+export interface TsJsxElement extends TsNode {
   tagName: TsNode;
   attributes: TsJsxAttributes;
 }
 
-interface TsJsxElementWithChildren extends TsNode {
+export interface TsJsxElementWithChildren extends TsNode {
   openingElement: TsJsxElement;
   children: readonly TsNode[];
 }
@@ -84,21 +84,21 @@ interface TsImportSpecifier extends TsNode {
   propertyName?: TsIdentifier;
 }
 
-interface TsNamedImports extends TsNode {
+export interface TsNamedImports extends TsNode {
   elements: readonly TsImportSpecifier[];
 }
 
-interface TsImportDeclaration extends TsNode {
+export interface TsImportDeclaration extends TsNode {
   moduleSpecifier: TsNode;
   importClause?: { name?: TsIdentifier; namedBindings?: TsNode };
 }
 
-interface TsSourceFile extends TsNode {
+export interface TsSourceFile extends TsNode {
   statements: readonly TsNode[];
   getLineAndCharacterOfPosition(position: number): { line: number };
 }
 
-interface TsApi {
+export interface TsApi {
   createSourceFile(
     fileName: string,
     text: string,
@@ -132,7 +132,7 @@ interface TsApi {
   ): TsCommentRange[] | undefined;
 }
 
-const LIBRARY = "@rfdtech/components";
+export const LIBRARY = "@rfdtech/components";
 const SOURCE_EXTENSIONS = new Set([".tsx", ".jsx"]);
 const SKIP_DIRECTORIES = new Set([
   ".cache",
@@ -432,7 +432,7 @@ function describe(
  * `lib/typescript.js` by absolute path: TypeScript 7's export map points `.` at
  * a version stub, while `lib/typescript.js` is the classic API in both 5.x and 7.x.
  */
-async function loadTypeScript(root: string): Promise<TsApi> {
+export async function loadTypeScript(root: string): Promise<TsApi> {
   const requireFrom = createRequire(path.join(root, "package.json"));
   let packageJsonPath: string;
 
@@ -469,7 +469,7 @@ async function loadTypeScript(root: string): Promise<TsApi> {
   return api;
 }
 
-async function collectSourceFiles(root: string): Promise<string[]> {
+export async function collectSourceFiles(root: string): Promise<string[]> {
   const found: string[] = [];
 
   async function walk(dir: string): Promise<void> {
@@ -1993,7 +1993,8 @@ export async function runMigrate(options: MigrateOptions): Promise<MigrateResult
         "MetricCard-heavy candidates: " +
         heroCandidates.map((candidate) => candidate.replace(root + "/", "")).join(", ") +
         ". Insert it UNDER the page/section title (after the SectionHeader when one exists), " +
-        "before the content; Notices render under it. Wire the signed-in user's name.",
+        "before the content; Notices render under it. Run `rfdui add-hero` with the " +
+        "dashboard files to actually write them.",
     });
   }
 
