@@ -3,10 +3,9 @@
 // only reports candidates; this command is what actually writes them, because
 // the choice of pages and of the signed-in user's name source is a decision,
 // not a pattern.
-import { readFile, writeFile } from "node:fs/promises";
+import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
-  collectSourceFiles,
   LIBRARY,
   loadTypeScript,
   type MigrateChange,
@@ -14,7 +13,6 @@ import {
   type TsApi,
   type TsIdentifier,
   type TsImportDeclaration,
-  type TsJsxAttribute,
   type TsJsxElement,
   type TsJsxElementWithChildren,
   type TsNamedImports,
@@ -27,6 +25,14 @@ export interface AddHeroOptions {
   root: string;
   /** Dashboard files to update. Empty lists the candidates instead. */
   files: string[];
+  /**
+   * How to choose which dashboards get a hero:
+   * `"files"` (default) uses `files` verbatim; `"auto"` picks the app's main
+   * landing dashboard when that is unambiguous and reports the rest;
+   * `"all"` writes every candidate. `auto`/`all` only ever touch route-level
+   * dashboard pages.
+   */
+  mode?: "files" | "auto" | "all";
   /** Apply the edits. When false the run only reports what it would do. */
   write: boolean;
   /** Expression for the name, e.g. `useSessionStore((s) => s.user?.displayName)`. */
@@ -53,12 +59,6 @@ interface Edit {
   end: number;
   text: string;
 }
-
-const isWhitespace = (character: string): boolean =>
-  character === " " ||
-  character === "\t" ||
-  character === "\n" ||
-  character === "\r";
 
 /** Leading whitespace of the line the position sits on. */
 function lineIndentAt(text: string, position: number): string {
@@ -137,7 +137,10 @@ function findPageJsx(ts: TsApi, source: TsSourceFile): TsNode | null {
   for (const candidate of returns) {
     const tags = new Set<string>();
     collectTags(ts, candidate, tags);
-    if (tags.has("SectionHeader")) return candidate;
+    const hasTitle = [...tags].some(
+      (tag) => tag === "SectionHeader" || /Header$/.test(tag),
+    );
+    if (hasTitle) return candidate;
   }
   return returns.reduce((largest, candidate) =>
     countDescendants(ts, candidate) > countDescendants(ts, largest)
@@ -168,6 +171,154 @@ function usesIdentifier(text: string, name: string): boolean {
 
 function quoteFor(text: string): string {
   return text.includes("from '") ? "'" : '"';
+}
+
+/** `ROUTE_PATHS = { overview: '/overview', … }` -> name -> path. */
+async function readRouteConstants(
+  root: string,
+  all: string[],
+): Promise<Map<string, string>> {
+  const constants = new Map<string, string>();
+  for (const file of all) {
+    if (!/constants\/routes?\.(ts|tsx)$/.test(file)) continue;
+    const text = await readFile(file, "utf8");
+    for (const match of text.matchAll(/(\w+):\s*['"](\/[^'"]*)['"]/g)) {
+      constants.set(match[1], match[2]);
+    }
+  }
+  return constants;
+}
+
+/** Resolve a relative import specifier against the files we know about. */
+function resolveRelative(
+  fromFile: string,
+  specifier: string,
+  all: string[],
+): string | null {
+  if (!specifier.startsWith(".")) return null;
+  const base = path.resolve(path.dirname(fromFile), specifier);
+  for (const suffix of ["", ".tsx", ".ts", "/index.tsx", "/index.ts"]) {
+    const candidate = `${base}${suffix}`;
+    if (all.includes(candidate)) return candidate;
+  }
+  return null;
+}
+
+/** MetricCard mentions in a file and in the local modules it imports. */
+async function metricMentions(
+  file: string,
+  all: string[],
+  depth = 1,
+): Promise<number> {
+  const text = await readFile(file, "utf8");
+  let count = (text.match(/MetricCard/g) ?? []).length;
+  if (depth <= 0) return count;
+  for (const match of text.matchAll(/from\s+['"]([^'"]+)['"]/g)) {
+    const imported = resolveRelative(file, match[1], all);
+    if (imported) count += await metricMentions(imported, all, depth - 1);
+  }
+  return count;
+}
+
+/**
+ * Every route entry across the app's route modules: route path -> page file.
+ * Handles both `import('./pages/X')` lazy entries and `element: <X/>` static
+ * ones, and resolves `ROUTE_PATHS.<name>` against the constants file.
+ */
+async function collectRouteEntries(
+  root: string,
+  all: string[],
+): Promise<Map<string, string>> {
+  const constants = await readRouteConstants(root, all);
+  const entries = new Map<string, string>();
+  for (const file of all) {
+    if (!/routes?\.(ts|tsx)$/.test(file) && !/routes?\//.test(file)) continue;
+    const text = await readFile(file, "utf8");
+    const pathMatches = [
+      ...text.matchAll(
+        /path:\s*(?:ROUTE_PATHS\.(\w+)|['"]([^'"]+)['"])/g,
+      ),
+    ];
+    for (const match of pathMatches) {
+      const routePath = match[1] ? constants.get(match[1]) : match[2];
+      if (!routePath) continue;
+      const tail = text.slice(match.index ?? 0, (match.index ?? 0) + 260);
+      const lazy = tail.match(/import\(\s*['"]([^'"]+)['"]\s*\)/);
+      if (lazy) {
+        const target = resolveRelative(file, lazy[1], all);
+        if (target) entries.set(routePath.replace(/^\//, ""), target);
+      }
+    }
+  }
+  return entries;
+}
+
+/**
+ * The app's dashboards, and which of them is the landing one the hero belongs
+ * on. Landing paths come from what the app returns for a role (`'/overview'`
+ * and friends, or `ROUTE_PATHS.x`), and the route table maps those paths back
+ * to their page files.
+ */
+export async function detectDashboards(
+  root: string,
+  all: string[],
+): Promise<{ main: string[]; candidates: Array<{ file: string; metricCards: number }> }> {
+  const routeEntries = await collectRouteEntries(root, all);
+  const routeFiles = new Set([...routeEntries.values()]);
+  const scope =
+    routeFiles.size > 0
+      ? all.filter((file) => routeFiles.has(file))
+      : await routePageFiles(root, all);
+
+  const candidates: Array<{ file: string; metricCards: number }> = [];
+  for (const file of scope) {
+    const text = await readFile(file, "utf8");
+    if (text.includes("<HeroBanner")) continue;
+    // MetricCards often live one import away (a `<XMetrics/>` child), so count
+    // the page and its local modules. The page itself need not import the
+    // library for that to be true.
+    const metricCards = await metricMentions(file, all);
+    // A route page that renders metric cards is a dashboard. The title block
+    // is not required to be the library's SectionHeader: apps bring their own
+    // (`<OverviewHeader/>`), so requiring one would miss real dashboards.
+    if (metricCards > 0) {
+      candidates.push({ file: file.replace(`${root}/`, ""), metricCards });
+    }
+  }
+
+  // Landing/redirect paths the app itself names.
+  const constants = await readRouteConstants(root, all);
+  const landingPaths = new Set<string>();
+  for (const file of all) {
+    if (!/\.(ts|tsx)$/.test(file)) continue;
+    const text = await readFile(file, "utf8");
+    for (const match of text.matchAll(/return\s+['"](\/[a-z0-9\-/]*)['"]/g)) {
+      landingPaths.add(match[1]);
+    }
+    if (/landing|role/i.test(file)) {
+      for (const match of text.matchAll(/return\s+ROUTE_PATHS\.(\w+)/g)) {
+        const resolved = constants.get(match[1]);
+        if (resolved) landingPaths.add(resolved);
+      }
+    }
+    for (const match of text.matchAll(/<Navigate[^>]*to=\{?['"](\/[a-z0-9\-/]*)['"]/g)) {
+      landingPaths.add(match[1]);
+    }
+  }
+
+  const main: string[] = [];
+  for (const routePath of landingPaths) {
+    const file = routeEntries.get(routePath.replace(/^\//, ""));
+    if (file) {
+      const relative = file.replace(`${root}/`, "");
+      if (candidates.some((candidate) => candidate.file === relative)) {
+        main.push(relative);
+      }
+    }
+  }
+
+  candidates.sort((a, b) => b.metricCards - a.metricCards);
+  return { main: [...new Set(main)], candidates };
 }
 
 /**
@@ -205,6 +356,40 @@ async function routePageFiles(
   return [...pages];
 }
 
+/**
+ * Detection reads more than it rewrites: `constants/routes.ts` and the role
+ * landing map are plain `.ts` files, and the migration's own source walk
+ * deliberately stops at `.tsx` (it parses as JSX). This walk exists only so the
+ * route table and landing paths are visible.
+ */
+async function collectDetectionFiles(root: string): Promise<string[]> {
+  const found: string[] = [];
+  const skip = new Set(["node_modules", "dist", "build", "coverage", ".git"]);
+
+  async function walk(dir: string): Promise<void> {
+    let entries;
+    try {
+      entries = await readdir(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (skip.has(entry.name)) continue;
+        await walk(full);
+      } else if (entry.isFile() && /\.(ts|tsx)$/.test(entry.name)) {
+        found.push(full);
+      }
+    }
+  }
+
+  const rootStat = await stat(root);
+  if (rootStat.isFile()) return [root];
+  await walk(root);
+  return found.sort();
+}
+
 export async function runAddHero(
   options: AddHeroOptions,
 ): Promise<AddHeroResult> {
@@ -215,24 +400,27 @@ export async function runAddHero(
   let filesChanged = 0;
   let filesScanned = 0;
 
-  const files = options.files.map((file) =>
+  let files = options.files.map((file) =>
     path.isAbsolute(file) ? file : path.join(root, file),
   );
 
-  // No explicit files: list the candidates and the questions to answer.
-  if (files.length === 0) {
-    const all = await collectSourceFiles(root);
+  const mode = options.mode ?? "files";
+
+  // Hero targets: the route-level dashboard pages, split into the app's main
+  // landing dashboard (where the hero belongs) and the rest.
+  if (files.length === 0 && mode === "files") {
+    const all = await collectDetectionFiles(root);
     const routePages = await routePageFiles(root, all);
     const scope = routePages.length > 0 ? routePages : all;
     const candidates: Array<{ file: string; metricCards: number }> = [];
     for (const file of scope) {
       const text = await readFile(file, "utf8");
-      if (!text.includes(LIBRARY) || text.includes("<HeroBanner")) continue;
-      // MetricCard can be used directly or through a local wrapper (a StatLink
-      // that renders one), so count mentions, not just JSX tags. A page title
-      // is still required: that is what tells a dashboard from a detail page.
-      const metricCards = (text.match(/MetricCard/g) ?? []).length;
-      if (metricCards > 0 && text.includes("<SectionHeader")) {
+      if (text.includes("<HeroBanner")) continue;
+      // MetricCard can sit in the page or one import away (a `<XMetrics/>`
+      // child, a local StatLink), so follow one hop rather than requiring the
+      // tag in the page file.
+      const metricCards = await metricMentions(file, all);
+      if (metricCards > 0) {
         candidates.push({ file: file.replace(`${root}/`, ""), metricCards });
       }
     }
@@ -249,19 +437,40 @@ export async function runAddHero(
     return { filesScanned: all.length, filesChanged: 0, changes, notes, candidates };
   }
 
+  if (files.length === 0 && (mode === "auto" || mode === "all")) {
+    const all = await collectDetectionFiles(root);
+    const detected = await detectDashboards(root, all);
+    const listed = detected.candidates.map((candidate) => candidate.file);
+    const chosen =
+      mode === "all"
+        ? listed
+        : detected.main.length === 1
+          ? detected.main
+          : [];
+
+    if (chosen.length === 0) {
+      notes.push({
+        file: root,
+        line: 1,
+        message:
+          detected.main.length === 0
+            ? "No landing dashboard could be identified from the router, so no hero was " +
+              "written. Name the pages with --file, or re-run with --hero all if every " +
+              "candidate should get one. Candidates: " +
+              listed.join(", ")
+            : "More than one landing dashboard matches, so this is a decision: " +
+              detected.main.join(", ") +
+              ". Re-run with --file for the ones that should get a hero, or --hero all.",
+      });
+    }
+    files = chosen.map((file) => path.join(root, file));
+  }
+
   for (const file of files) {
     filesScanned += 1;
     const text = await readFile(file, "utf8");
     const relative = file.replace(`${root}/`, "");
 
-    if (!text.includes(LIBRARY)) {
-      notes.push({
-        file: relative,
-        line: 1,
-        message: "Does not import the component library, so no hero was added.",
-      });
-      continue;
-    }
     if (text.includes("<HeroBanner")) {
       notes.push({
         file: relative,
@@ -304,9 +513,13 @@ export async function runAddHero(
     const children = elementChildren(ts, page);
     const firstTag = children.length > 0 ? elementTagName(ts, children[0]) : null;
 
-    if (children.length > 0 && firstTag === "SectionHeader") {
+    if (
+      children.length > 0 &&
+      firstTag !== null &&
+      (firstTag === "SectionHeader" || /Header$/.test(firstTag))
+    ) {
       insertAt = children[0].getEnd();
-      placement = "under the SectionHeader";
+      placement = `under the ${firstTag}`;
       sibling = true;
     } else if (children.length > 0 && firstTag === "PageSection") {
       const inner = elementChildren(ts, children[0]);
@@ -359,6 +572,7 @@ export async function runAddHero(
 
     // Imports: HeroBanner into the library statement, plus anything the name
     // expression needs.
+    let missingLibImport = false;
     const libImport = findImport(ts, source, LIBRARY);
     if (libImport) {
       const named = libImport.importClause?.namedBindings;
@@ -381,14 +595,20 @@ export async function runAddHero(
         });
       }
     } else {
+      // The page may not import the library at all (its metrics live in a
+      // child component). Add the statement rather than refusing.
       notes.push({
         file: relative,
         line: 1,
-        message: `No ${LIBRARY} import to extend. Add HeroBanner to the imports by hand.`,
+        message: `Added a new ${LIBRARY} import for HeroBanner.`,
       });
+      missingLibImport = true;
     }
 
     const extraLines: string[] = [];
+    if (missingLibImport) {
+      extraLines.push(`import { HeroBanner } from ${quote}${LIBRARY}${quote};`);
+    }
     for (const entry of options.imports) {
       const separator = entry.indexOf(":");
       if (separator < 1) continue;

@@ -134,6 +134,10 @@ export interface SidebarBrandClassNames {
 }
 
 export interface SidebarBrandProps {
+  /**
+   * Logo node for the non-brand variants. IGNORED on `variant="brand"`, whose
+   * mark is fixed: passing it logs a dev warning and the bundled mark renders.
+   */
   classNames?: SidebarBrandClassNames;
   className?: string;
   /** Inline logo node (e.g. an `<img>` or icon). */

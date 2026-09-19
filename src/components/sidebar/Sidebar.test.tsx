@@ -8,6 +8,7 @@ import { ProfilePopover } from "../profile-popover/ProfilePopover";
 import {
   Sidebar,
   SidebarBadge,
+  SidebarBrand,
   SidebarCollapse,
   SidebarContent,
   SidebarFooter,
@@ -1026,5 +1027,50 @@ describe("SidebarFooter", () => {
       "footer-class",
       "extra-class",
     );
+  });
+});
+
+describe("SidebarBrand on the brand rail", () => {
+  it("ignores a logo prop and warns in dev", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { container } = render(
+      <SidebarProvider>
+        <Sidebar variant="brand">
+          <SidebarHeader>
+            <SidebarBrand
+              logo={<img src="/custom-logo.png" alt="custom" />}
+              title="Records & Archive"
+            />
+          </SidebarHeader>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const images = container.querySelectorAll(".clet-sidebar__header-logo img");
+    expect(images).toHaveLength(1);
+    expect(images[0]).toHaveAttribute("alt", "CLET");
+    expect(images[0]).not.toHaveAttribute("src", "/custom-logo.png");
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("brand rail's mark is fixed"),
+    );
+    warn.mockRestore();
+  });
+
+  it("ignores children markup on the brand rail", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { container } = render(
+      <SidebarProvider>
+        <Sidebar variant="brand">
+          <SidebarHeader>
+            <SidebarBrand>
+              <span data-testid="custom-brand">Custom</span>
+            </SidebarBrand>
+          </SidebarHeader>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    expect(container.querySelector('[data-testid="custom-brand"]')).toBeNull();
+    warn.mockRestore();
   });
 });

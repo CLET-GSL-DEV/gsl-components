@@ -167,12 +167,6 @@ const TRACKED = new Set([
  */
 const HEADER_INSERTS = [
   {
-    parent: "AppHeader",
-    child: "AppHeaderSearch",
-    markup: '<AppHeaderSearch placeholder="Search" />',
-    note: "AppHeaderSearch added where the branding used to sit. Wire its `data`/`onSearch` to your own search.",
-  },
-  {
     parent: "AppHeaderActions",
     child: "AppHeaderNotifications",
     markup: "<AppHeaderNotifications />",
@@ -262,7 +256,9 @@ const retiredProps = new Map<string, Set<string>>();
 
 const REMOVED_ELEMENTS: Record<string, string> = {
   SidebarFooter:
-    "SidebarFooter removed: the primary rail renders its own wordmark, so the app no longer declares one.",
+    "SidebarFooter removed: the 2.4 brand rail has no footer slot and renders no wordmark. " +
+    "Anything the app put in that footer (a user card, a version line) has no 2.4 home there: " +
+    "move it to the header's ProfilePopover, or drop it deliberately.",
   AppHeaderBranding:
     "AppHeaderBranding removed: branding belongs at the top of the rail now. Add a SidebarHeader " +
     "with your logo and title if the rail does not have one.",
@@ -564,6 +560,14 @@ function findVariantAttribute(
     if (property.name.getText() === "variant") return property;
   }
   return null;
+}
+
+function elementTagName(ts: TsApi, node: TsNode): string | null {
+  if (!ts.isJsxElement(node) && !ts.isJsxSelfClosingElement(node)) return null;
+  const tag = ts.isJsxElement(node)
+    ? (node as TsJsxElementWithChildren).openingElement.tagName
+    : (node as TsJsxElement).tagName;
+  return ts.isIdentifier(tag) ? (tag as TsIdentifier).text : null;
 }
 
 function jsxAttributes(ts: TsApi, attributes: TsJsxAttributes): TsJsxAttribute[] {
@@ -1002,6 +1006,32 @@ function migrateSource(
               }
             }
           }
+          // App content parked inside a removed shell element (a footer's own
+          // user card, an image, a version line) would vanish silently, so
+          // name it in the report.
+          if (ts.isJsxElement(node)) {
+            const keptChildren = (node as TsJsxElementWithChildren).children.filter(
+              (child) =>
+                ts.isJsxElement(child) ||
+                ts.isJsxSelfClosingElement(child) ||
+                (ts.isJsxExpression(child) &&
+                  (child as TsJsxExpression).expression != null),
+            );
+            const foreign: string[] = [];
+            for (const child of keptChildren) {
+              const tag = elementTagName(ts, child);
+              if (tag && !localToExported.has(tag)) foreign.push(`<${tag}>`);
+            }
+            if (foreign.length > 0) {
+              notes.push({
+                file: filePath,
+                line: lineOf(node.getStart(source)),
+                message:
+                  `${exported} carried app content (${[...new Set(foreign)].join(", ")}). ` +
+                  "It was removed with the element: re-home it or confirm the loss.",
+              });
+            }
+          }
           removedRanges.push([node.getStart(source), node.getEnd()]);
           let start = node.getStart(source);
           while (start > 0 && isWhitespace(text[start - 1]) && text[start - 1] !== "\n") {
@@ -1041,6 +1071,17 @@ function migrateSource(
       // hand-written logo/title children collapse to a bare element. The
       // title text is captured and re-emitted as the header's system title.
       if (exported === "SidebarBrand" && node.children.length > 0) {
+        const propTitle = jsxAttributes(ts, node.openingElement.attributes).find(
+          (attribute) => attribute.name.getText() === "title",
+        );
+        const propInit = propTitle?.initializer;
+        if (
+          propInit &&
+          ts.isStringLiteral(propInit) &&
+          capturedSidebarTitle == null
+        ) {
+          capturedSidebarTitle = propInit.text;
+        }
         const title = extractBrandTitle(ts, source, node);
         if (title && capturedSidebarTitle == null) {
           capturedSidebarTitle = title;
@@ -1062,7 +1103,7 @@ function migrateSource(
           file: filePath,
           line: lineOf(node.getStart(source)),
           message:
-            "The brand rail renders its own logo. Explicit logo/title props still override it.",
+            "The brand rail's mark is fixed: a logo node, children or a subtitle is refused with a dev warning. Only a string title is allowed, and the 2.4 shell shows it in AppHeaderTitle.",
         });
         return;
       }
@@ -1071,6 +1112,7 @@ function migrateSource(
       // header's system title, and the search field moves into the actions
       // row as a collapsible trigger.
       if (exported === "AppHeader") {
+        if (process.env.HERO_DEBUG) console.error("[dbg] AppHeader branch reached");
         const children = (node as TsJsxElementWithChildren).children;
         const directChild = (name: string) =>
           children.find((child) => {
@@ -1084,36 +1126,91 @@ function migrateSource(
 
         const searchEl = directChild("AppHeaderSearch");
         const actionsEl = directChild("AppHeaderActions");
-        if (searchEl && actionsEl && !text.includes("clet-app-header__system-title")) {
-          const rawSearch = searchEl.getText(source);
-          const movedSearch = rawSearch.replace(
-            "<AppHeaderSearch",
-            "<AppHeaderSearch collapsible",
-          );
+        // The search may sit deeper inside an app wrapper, in which case it is
+        // improved in place rather than restructured.
+        let nestedSearch: TsNode | null = null;
+        const findSearch = (parent: TsNode): void => {
+          for (const child of (parent as TsJsxElementWithChildren).children ??
+            []) {
+            if (elementTagName(ts, child) === "AppHeaderSearch") {
+              nestedSearch = child;
+              return;
+            }
+            if (ts.isJsxElement(child)) findSearch(child);
+            if (nestedSearch) return;
+          }
+        };
+        if (!searchEl) findSearch(node);
 
+        if (actionsEl && !text.includes("<AppHeaderTitle")) {
           const actionsTag = (actionsEl as TsJsxElementWithChildren)
             .openingElement;
           const actionsTagStart = actionsTag.getStart(source);
           const actionsLineStart = text.lastIndexOf("\n", actionsTagStart) + 1;
           const actionsIndent = text.slice(actionsLineStart, actionsTagStart);
 
-          // 1. The search element leaves its own line.
-          let searchStart = searchEl.getStart(source);
-          let searchEnd = searchEl.getEnd();
-          const searchLineStart = text.lastIndexOf("\n", searchStart) + 1;
-          if (text.slice(searchLineStart, searchStart).trim() === "") {
-            searchStart = searchLineStart;
-            searchEnd = endOfLine(text, searchEnd);
-            if (text[searchEnd] === "\n") searchEnd += 1;
-          }
-          edits.push({ start: searchStart, end: searchEnd, text: "" });
+          if (searchEl) {
+            // 1. The search element leaves its own line.
+            const rawSearch = searchEl.getText(source);
+            const movedSearch = rawSearch.replace(
+              "<AppHeaderSearch",
+              "<AppHeaderSearch collapsible",
+            );
+            let searchStart = searchEl.getStart(source);
+            let searchEnd = searchEl.getEnd();
+            const searchLineStart = text.lastIndexOf("\n", searchStart) + 1;
+            if (text.slice(searchLineStart, searchStart).trim() === "") {
+              searchStart = searchLineStart;
+              searchEnd = endOfLine(text, searchEnd);
+              if (text[searchEnd] === "\n") searchEnd += 1;
+            }
+            edits.push({ start: searchStart, end: searchEnd, text: "" });
 
-          // 2. It re-enters as the first action, collapsible.
-          edits.push({
-            start: actionsTag.getEnd(),
-            end: actionsTag.getEnd(),
-            text: `\n${actionsIndent}  ${movedSearch}`,
-          });
+            // 2. It re-enters as the first action, collapsible.
+            edits.push({
+              start: actionsTag.getEnd(),
+              end: actionsTag.getEnd(),
+              text: `\n${actionsIndent}  ${movedSearch}`,
+            });
+            notes.push({
+              file: filePath,
+              line: lineOf(searchEl.getStart(source)),
+              message:
+                "collapsible: the round icon swaps itself for the field on click; Escape or " +
+                "the close button collapses and clears. data/onSearch wiring is unchanged.",
+            });
+          } else if (nestedSearch) {
+            // Deeper in the tree: leave the app's wrapper alone and make the
+            // search collapsible where it stands.
+            const tag = (nestedSearch as TsJsxElement).tagName;
+            edits.push({
+              start: tag.getEnd(),
+              end: tag.getEnd(),
+              text: " collapsible",
+            });
+            notes.push({
+              file: filePath,
+              line: lineOf((nestedSearch as TsNode).getStart(source)),
+              message:
+                "AppHeaderSearch is nested inside the app's own header wrapper, so it was made " +
+                "collapsible in place rather than moved into AppHeaderActions.",
+            });
+          } else {
+            // No search at all: write the 2.4 one, as the first action.
+            edits.push({
+              start: actionsTag.getEnd(),
+              end: actionsTag.getEnd(),
+              text: `\n${actionsIndent}  <AppHeaderSearch collapsible placeholder="Search" />`,
+            });
+            neededImports.add("AppHeaderSearch");
+            notes.push({
+              file: filePath,
+              line: lineOf(actionsTagStart),
+              message:
+                "AppHeaderSearch added as a collapsible trigger. Wire its data/onSearch to your " +
+                "own search; the collapsible icon swaps itself for the field on click.",
+            });
+          }
           bump(jsxUsage, "AppHeaderSearch");
 
           // 3. The captured rail title becomes the header's system title.
@@ -1146,17 +1243,9 @@ function migrateSource(
 
           changes.push({
             file: filePath,
-            line: lineOf(searchEl.getStart(source)),
+            line: lineOf(actionsTagStart),
             component: "AppHeaderSearch",
-            description:
-              "AppHeaderSearch moved into AppHeaderActions as a collapsible trigger",
-          });
-          notes.push({
-            file: filePath,
-            line: lineOf(searchEl.getStart(source)),
-            message:
-              "collapsible: the round icon swaps itself for the field on click; Escape or the " +
-              "close button collapses and clears. data/onSearch wiring is unchanged.",
+            description: "AppHeader rendered as a 2.4 header (title + collapsible search)",
           });
         }
       }
@@ -1176,6 +1265,17 @@ function migrateSource(
       if (exported === "Notice") {
         const variantAttr = findVariantAttribute(ts, node.attributes);
         const variantInit = variantAttr?.initializer;
+        if (variantAttr && (!variantInit || !ts.isStringLiteral(variantInit))) {
+          // A computed variant cannot be mapped mechanically: `error` must
+          // become `danger`, and only the app knows the runtime value.
+          notes.push({
+            file: filePath,
+            line,
+            message:
+              "Banner variant is computed. Map it by hand: Notice's default/info -> info, " +
+              "success -> success, warning -> warning, error -> danger.",
+          });
+        }
         if (variantAttr && variantInit && ts.isStringLiteral(variantInit)) {
           const mapped = NOTICE_VARIANTS[variantInit.text];
           if (mapped && mapped !== variantInit.text) {
@@ -1445,6 +1545,46 @@ function migrateSource(
               "emptyContent for a fully custom state.",
           });
         }
+      }
+
+      // SidebarBrand passed as props (logo/title) rather than children: the
+      // 2.4 rail carries its own mark, so the props go and the title travels
+      // to the header, the same as the children form.
+      if (
+        exported === "SidebarBrand" &&
+        (hasAttribute(attributes, "logo") ||
+          hasAttribute(attributes, "title") ||
+          hasAttribute(attributes, "subtitle"))
+      ) {
+        const titleAttr = attributes.find(
+          (attribute) => attribute.name.getText() === "title",
+        );
+        const titleInit = titleAttr?.initializer;
+        if (
+          titleInit &&
+          ts.isStringLiteral(titleInit) &&
+          capturedSidebarTitle == null
+        ) {
+          capturedSidebarTitle = titleInit.text;
+        }
+        edits.push({
+          start: node.getStart(source),
+          end: node.getEnd(),
+          text: "<SidebarBrand />",
+        });
+        changes.push({
+          file: filePath,
+          line,
+          component: "SidebarBrand",
+          description:
+            "SidebarBrand collapsed to the baked-in brand mark (logo/title props removed)",
+        });
+        notes.push({
+          file: filePath,
+          line,
+          message:
+            "The brand rail's mark is fixed: a logo node, children or a subtitle is refused with a dev warning. Only a string title is allowed, and the 2.4 shell shows it in AppHeaderTitle.",
+        });
       }
 
       // AppHeaderSearch already inside the actions row just gains the

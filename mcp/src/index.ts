@@ -374,18 +374,61 @@ async function main() {
           .describe(
             "Pin the pre-2.3 appearance instead of adopting the shell: AppLayout to \"panel\", the brand header to \"primary\"."
           ),
+        hero: z
+          .enum(["auto", "all", "none"])
+          .optional()
+          .describe(
+            "HeroBanner pass, run in the same command. `auto` (default) writes one on the " +
+              "landing dashboard when the router makes that unambiguous and reports the rest; " +
+              "`all` writes one on every route-level dashboard page; `none` skips. Never runs " +
+              "in preserve mode."
+          ),
+        heroNameExpr: z
+          .string()
+          .optional()
+          .describe(
+            "Expression for the hero's name, e.g. the auth store's display name. Omit and the " +
+              "hero is written with a placeholder name plus a note to fill it in."
+          ),
       },
     },
-    async ({ path: root, write, preserve }) => {
+    async ({ path: root, write, preserve, hero, heroNameExpr }) => {
       const { runMigrate } = await import("./migrate.js");
+      const { runAddHero } = await import("./add-hero.js");
       const result = await runMigrate({
         root,
         write: write ?? false,
         preserve: preserve ?? false,
       });
+
+      const heroMode = hero ?? "auto";
+      let heroResult: Awaited<ReturnType<typeof runAddHero>> | null = null;
+      if (!preserve && heroMode !== "none") {
+        heroResult = await runAddHero({
+          root,
+          files: [],
+          mode: heroMode,
+          write: write ?? false,
+          nameExpr: heroNameExpr,
+          images: [],
+          imports: [],
+        });
+      }
       const lines = [
         `${result.changes.length} change(s) across ${result.filesChanged} file(s), ${result.filesScanned} scanned (${preserve ? "preserve" : "adopt"} mode).`,
       ];
+      if (heroResult) {
+        lines.push(
+          "",
+          `## Hero banner (${hero ?? "auto"})`,
+          heroResult.changes.length > 0
+            ? heroResult.changes
+                .map((c) => `- ${c.file}:${c.line} ${c.description}`)
+                .join("\n")
+            : "- none written",
+          ...heroResult.notes.map((n) => `- NOTE ${n.file}:${n.line} ${n.message}`)
+        );
+      }
       if (result.changes.length) {
         lines.push(
           "",

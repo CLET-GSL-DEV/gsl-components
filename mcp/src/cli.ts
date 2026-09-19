@@ -17,7 +17,8 @@ Usage:
   rfdui mcp              Run the MCP server directly over stdio.
   rfdui search <query>   Lexical search over components from the terminal.
   rfdui update           Rebuild the index (if possible) and re-run setup.
-  rfdui migrate          Move AppLayout/AppHeader/Sidebar onto the 2.4 layout shell.
+  rfdui migrate          Move AppLayout/AppHeader/Sidebar onto the 2.4 layout shell,
+                         and (by default) put the HeroBanner on the landing dashboard.
   rfdui add-hero         Insert HeroBanner into the dashboard files you name.
 
 Migrate options:
@@ -31,6 +32,12 @@ function parseMigrateArgs(rest: string[]): {
   root: string;
   write: boolean;
   preserve: boolean;
+  hero: "auto" | "all" | "none";
+  heroFiles: string[];
+  heroNameExpr?: string;
+  heroGreeting?: string;
+  heroImages: string[];
+  heroImports: string[];
 } {
   let root = process.cwd();
 
@@ -43,10 +50,55 @@ function parseMigrateArgs(rest: string[]): {
     }
   }
 
+  let hero: "auto" | "all" | "none" = "auto";
+  const heroFiles: string[] = [];
+  const heroImages: string[] = [];
+  const heroImports: string[] = [];
+  let heroNameExpr: string | undefined;
+  let heroGreeting: string | undefined;
+
+  for (let i = 0; i < rest.length; i += 1) {
+    const flag = rest[i];
+    const value = rest[i + 1];
+    if (flag === "--hero") {
+      if (!value || !["auto", "all", "none"].includes(value)) {
+        throw new Error("--hero needs auto, all or none.");
+      }
+      hero = value as "auto" | "all" | "none";
+      i += 1;
+    } else if (flag === "--hero-file") {
+      if (!value) throw new Error("--hero-file needs a path.");
+      heroFiles.push(value);
+      i += 1;
+    } else if (flag === "--hero-name-expr") {
+      if (!value) throw new Error("--hero-name-expr needs an expression.");
+      heroNameExpr = value;
+      i += 1;
+    } else if (flag === "--hero-greeting") {
+      if (!value) throw new Error("--hero-greeting needs a string.");
+      heroGreeting = value;
+      i += 1;
+    } else if (flag === "--hero-images") {
+      if (!value) throw new Error("--hero-images needs a comma-separated list.");
+      heroImages.push(...value.split(",").map((entry) => entry.trim()).filter(Boolean));
+      i += 1;
+    } else if (flag === "--hero-import") {
+      if (!value) throw new Error("--hero-import needs Name:module.");
+      heroImports.push(value);
+      i += 1;
+    }
+  }
+
   return {
     root,
     write: rest.includes("--write"),
     preserve: rest.includes("--preserve"),
+    hero,
+    heroFiles,
+    heroNameExpr,
+    heroGreeting,
+    heroImages,
+    heroImports,
   };
 }
 
@@ -172,6 +224,34 @@ async function main() {
         `${result.changes.length} change(s) across ${result.filesChanged} file(s), ` +
           `${result.filesScanned} scanned (${mode} mode).`,
       );
+
+      // The hero pass rides along: same command, so a migration cannot finish
+      // silently missing the one thing the mechanical pass never writes.
+      if (!options.preserve && options.hero !== "none") {
+        const heroResult = await runAddHero({
+          root: options.root,
+          files: options.heroFiles,
+          mode: options.heroFiles.length > 0 ? "files" : options.hero,
+          write: options.write,
+          nameExpr: options.heroNameExpr,
+          greeting: options.heroGreeting,
+          images: options.heroImages,
+          imports: options.heroImports,
+        });
+
+        console.log("");
+        console.log("Hero banner:");
+        for (const change of heroResult.changes) {
+          console.log(`${change.file}:${change.line}  ${change.description}`);
+        }
+        for (const note of heroResult.notes) {
+          console.log(`${note.file}:${note.line}  ${note.message}`);
+        }
+        console.log(
+          `${heroResult.changes.length} hero(s) across ${heroResult.filesChanged} file(s).`,
+        );
+      }
+
       if (!options.write && result.filesChanged > 0) {
         console.log("Nothing was written. Re-run with --write to apply.");
       }

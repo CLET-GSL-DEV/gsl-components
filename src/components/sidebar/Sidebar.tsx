@@ -51,6 +51,24 @@ const SidebarLinkContext = createContext(false);
  */
 const SidebarVariantContext = createContext<SidebarProps["variant"]>("default");
 
+// Bundlers replace `process.env.NODE_ENV`, so a production build drops the
+// guard below. Unknown (a dev server leaves `process` undefined) means dev.
+const DEV =
+  typeof process === "undefined" || process.env?.NODE_ENV !== "production";
+
+/** One warning per session, however many rails a page renders. */
+const brandWarnings = new Set<string>();
+
+function warnFixedBrandMark(kind: "logo" | "children" | "subtitle" | "title"): void {
+  if (!DEV || brandWarnings.has(kind)) return;
+  brandWarnings.add(kind);
+  console.warn(
+    `[clet] SidebarBrand: the brand rail's mark is fixed and cannot be replaced ` +
+      `(received \`${kind}\`). Only a string \`title\` is allowed on this rail, and the ` +
+      "2.4 shell normally shows it in the header's AppHeaderTitle instead.",
+  );
+}
+
 function useSidebarLinkContext() {
   return useContext(SidebarLinkContext);
 }
@@ -279,16 +297,22 @@ export const SidebarBrand = forwardRef<HTMLDivElement, SidebarBrandProps>(
     ref,
   ) {
     const variant = useContext(SidebarVariantContext);
-    // The brand rail carries its mark baked in: an empty brand needs no
-    // logo prop. Explicit logo/title/subtitle/children always win.
-    const resolvedLogo =
-      logo ??
-      (variant === "brand" &&
-      title == null &&
-      subtitle == null &&
-      children == null ? (
-        <img src={sidebarBrandLogo} alt="CLET" />
-      ) : null);
+    const isBrand = variant === "brand";
+    if (isBrand) {
+      if (logo != null) warnFixedBrandMark("logo");
+      if (children != null) warnFixedBrandMark("children");
+      if (subtitle != null) warnFixedBrandMark("subtitle");
+      if (title != null && typeof title !== "string") warnFixedBrandMark("title");
+    }
+    // The brand rail's mark is FIXED: never swapped for a consumer's logo node
+    // or markup. Only the string title may change here, and it normally lives
+    // in the header's AppHeaderTitle once the 2.4 shell is in place.
+    const resolvedLogo = isBrand ? (
+      <img src={sidebarBrandLogo} alt="CLET" />
+    ) : (
+      logo
+    );
+    const brandTitle = isBrand && typeof title === "string" ? title : null;
     return (
       <div
         ref={ref}
@@ -301,7 +325,20 @@ export const SidebarBrand = forwardRef<HTMLDivElement, SidebarBrandProps>(
             {resolvedLogo}
           </span>
         ) : null}
-        {children ?? (
+        {isBrand ? (
+          brandTitle ? (
+            <span className="clet-sidebar__header-text gsl-sidebar__header-text">
+              <span
+                className={cn(
+                  "clet-sidebar__header-title gsl-sidebar__header-title",
+                  classNames?.title,
+                )}
+              >
+                {brandTitle}
+              </span>
+            </span>
+          ) : null
+        ) : children ?? (
           <span className="clet-sidebar__header-text gsl-sidebar__header-text">
             {title ? (
               <span
