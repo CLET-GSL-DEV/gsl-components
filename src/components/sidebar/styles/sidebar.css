@@ -737,6 +737,19 @@
 	padding: 20px 12px;
 }
 
+.clet-sidebar--brand.clet-sidebar--collapsed {
+	width: 72px;
+	max-width: 72px;
+}
+
+.clet-sidebar--brand.clet-sidebar--collapsed .clet-sidebar__brand-image {
+	display: none;
+}
+
+.clet-sidebar--brand.clet-sidebar--collapsed .clet-sidebar__header {
+	justify-content: center;
+}
+
 .clet-sidebar--collapsed .clet-sidebar__header {
 	justify-content: center;
 }
@@ -797,6 +810,17 @@
 		background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
 		border-right: none;
 		border-radius: 0;
+	}
+
+	/* Collapsed wins over the brand width. */
+	.clet-sidebar.clet-sidebar--brand.clet-sidebar--collapsed:not(.clet-sidebar--mobile) {
+		width: 72px;
+		max-width: 72px;
+	}
+
+	/* No room for artwork on the icon rail. */
+	.clet-sidebar.clet-sidebar--brand.clet-sidebar--collapsed .clet-sidebar__brand-image {
+		display: none;
 	}
 
 	/* Hide the auto-injected brand row on desktop. The plain `Sidebar`
