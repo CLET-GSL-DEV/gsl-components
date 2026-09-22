@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { RouterAdapterContext } from "../contexts/router-adapter-context";
 import type { RouterAdapterValue } from "../types/router-adapter";
 
 let inject: (() => RouterAdapterValue) | null = null;
@@ -22,6 +24,13 @@ export function setRouterAdapter(fn: () => RouterAdapterValue): void {
  * calls hooks.
  */
 export function getRouterAdapter(): RouterAdapterValue {
+	// A custom provider wins when present, keeping the default entry compatible.
+	// Must stay unconditional: getRouterAdapter is called as a hook.
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const ctx = useContext(RouterAdapterContext);
+	if (ctx) {
+		return ctx;
+	}
 	if (!inject) {
 		throw new Error(
 			"RouterAdapter not configured. " +

@@ -68,6 +68,8 @@ export * from "./components/toast";
 export * from "./components/tooltip";
 export * from "./components/upload-field";
 export * from "./contexts/router-adapter-context";
+export { getRouterAdapter, setRouterAdapter } from "./adapters/registry";
+export { useReactRouterAdapter } from "./adapters/react-router-adapter";
 export * from "./hooks";
 export {
   stringToHue,
