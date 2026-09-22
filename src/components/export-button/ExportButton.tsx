@@ -61,14 +61,14 @@ export function ExportButton<T>({
   }, [filename, title, filtersDescription]);
 
   const handleExport = useCallback(
-    (format: ExportFormat) => {
+    async (format: ExportFormat) => {
       setOpen(false);
       switch (format) {
         case "csv":
           exportToCsv(data, columns, `${baseFilename}.csv`);
           break;
         case "xlsx":
-          exportToXlsx(data, columns, `${baseFilename}.xlsx`);
+          await exportToXlsx(data, columns, `${baseFilename}.xlsx`);
           break;
         case "pdf":
           exportToPdf(data, columns, `${baseFilename}.pdf`, {

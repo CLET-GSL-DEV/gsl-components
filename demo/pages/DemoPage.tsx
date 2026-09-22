@@ -12,6 +12,7 @@ import {
   Eye,
   Edit,
   UserPlus,
+  TableIcon,
 } from "lucide-react";
 import {
   Table,
@@ -159,7 +160,7 @@ export function DemoPage() {
       </div>
 
       <Card>
-        <Table paramPrefix="members">
+        <Table paramPrefix="members" variant="default">
           <TableHeader>
             <TableSearch placeholder="Search members..." />
             <TableFilter>
@@ -194,6 +195,7 @@ export function DemoPage() {
             </TableFilter>
           </TableHeader>
           <TableContent
+            variant="default"
             selectable
             selectedIds={selected}
             onSelectionChange={setSelected}
@@ -201,6 +203,8 @@ export function DemoPage() {
             columns={columns}
             data={paged}
             rowKey={(m: GslMember) => m.id}
+            emptyIcon={<TableIcon size={40} strokeWidth={1} />}
+            emptyText="No results"
           />
           <TableBulkActions
             selectedIds={selected}

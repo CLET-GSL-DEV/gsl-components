@@ -1,9 +1,13 @@
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
+  type FocusEvent,
 } from "react";
+import { Search, X } from "lucide-react";
 import {
   Command,
   CommandInput,
@@ -30,6 +34,12 @@ export const AppHeaderSearch = forwardRef<
     emptyLabel = "No results",
     label = "Search",
     children,
+    collapsible = false,
+    collapsed: collapsedProp,
+    defaultCollapsed = true,
+    onCollapsedChange,
+    expandLabel = "Open search",
+    collapseLabel = "Close search",
   },
   ref,
 ) {
@@ -40,6 +50,82 @@ export const AppHeaderSearch = forwardRef<
   useEffect(() => {
     onSearch?.(debouncedSearch);
   }, [debouncedSearch, onSearch]);
+
+  const [uncontrolledCollapsed, setUncontrolledCollapsed] =
+    useState(defaultCollapsed);
+  const collapsed = collapsible
+    ? (collapsedProp ?? uncontrolledCollapsed)
+    : false;
+
+  const setCollapsed = useCallback(
+    (next: boolean) => {
+      if (collapsedProp === undefined) {
+        setUncontrolledCollapsed(next);
+      }
+      onCollapsedChange?.(next);
+    },
+    [collapsedProp, onCollapsedChange],
+  );
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const setRefs = useCallback(
+    (node: HTMLInputElement | null) => {
+      (inputRef as React.MutableRefObject<HTMLInputElement | null>).current =
+        node;
+      if (typeof ref === "function") ref(node);
+      else if (ref)
+        (ref as React.MutableRefObject<HTMLInputElement | null>).current =
+          node;
+    },
+    [ref],
+  );
+
+  useEffect(() => {
+    if (collapsible && !collapsed) {
+      inputRef.current?.focus();
+    }
+  }, [collapsible, collapsed]);
+
+  const collapse = useCallback(() => {
+    setSearch("");
+    setCollapsed(true);
+  }, [setCollapsed]);
+
+  const expandedRef = useRef<HTMLDivElement | null>(null);
+  const blurTimer = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (blurTimer.current !== null) {
+        window.clearTimeout(blurTimer.current);
+      }
+    },
+    [],
+  );
+
+  // Collapse back to the icon button when focus leaves the expanded field.
+  // Deferred by a tick so a result click (mousedown blurs before click)
+  // still lands on its item instead of an unmounted list.
+  const handleExpandedBlur = useCallback(
+    (event: FocusEvent<HTMLDivElement>) => {
+      if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
+        return;
+      }
+      if (blurTimer.current !== null) {
+        window.clearTimeout(blurTimer.current);
+      }
+      blurTimer.current = window.setTimeout(() => {
+        blurTimer.current = null;
+        if (
+          expandedRef.current &&
+          !expandedRef.current.contains(document.activeElement)
+        ) {
+          collapse();
+        }
+      }, 0);
+    },
+    [collapse],
+  );
 
   const groupElements = useMemo(() => {
     if (!data) return null;
@@ -68,14 +154,17 @@ export const AppHeaderSearch = forwardRef<
   const shouldShowEmpty =
     showEmpty && hasSearch && data && !hasAnyItems && !hasAnyLoading;
 
-  return (
+  const field = (
     <Command
       label={label}
       shouldFilter={false}
-      className={cn("clet-app-header-search gsl-app-header-search", className)}
+      className={cn(
+        "clet-app-header-search gsl-app-header-search",
+        !collapsible && className,
+      )}
     >
       <CommandInput
-        ref={ref}
+        ref={setRefs}
         value={search}
         onValueChange={setSearch}
         placeholder={placeholder}
@@ -89,6 +178,54 @@ export const AppHeaderSearch = forwardRef<
         </CommandList>
       ) : null}
     </Command>
+  );
+
+  if (!collapsible) {
+    return field;
+  }
+
+  if (collapsed) {
+    return (
+      <button
+        type="button"
+        className={cn(
+          "clet-app-header-search__trigger gsl-app-header-search__trigger",
+          className,
+        )}
+        aria-label={expandLabel}
+        aria-expanded={false}
+        onClick={() => setCollapsed(false)}
+      >
+        <Search size={18} strokeWidth={1.5} aria-hidden />
+      </button>
+    );
+  }
+
+  return (
+    <div
+      ref={expandedRef}
+      className={cn(
+        "clet-app-header-search__expanded gsl-app-header-search__expanded",
+        className,
+      )}
+      onBlur={handleExpandedBlur}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.stopPropagation();
+          collapse();
+        }
+      }}
+    >
+      {field}
+      <button
+        type="button"
+        className="clet-app-header-search__collapse gsl-app-header-search__collapse"
+        aria-label={collapseLabel}
+        onClick={collapse}
+      >
+        <X size={16} strokeWidth={2} aria-hidden />
+      </button>
+    </div>
   );
 });
 

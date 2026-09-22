@@ -1,0 +1,75 @@
+/**
+ * Additive version pins — the CSS half of `src/types/version.ts`.
+ *
+ * RULES
+ * 1. No `data-clet-version` attribute = latest version. All base component
+ *    CSS targets the latest; this file only *overrides* for older pins.
+ * 2. One block per frozen version, newest at the bottom. New versions ADD a
+ *    block. Never edit or remove an older block to make a newer version work.
+ * 3. Scope every rule under `[data-clet-version="<pin>"]` so pins compose
+ *    with light/dark (`[data-clet-theme]`) and never leak to latest.
+ * 4. Prefer token overrides (`--clet-*`) over selector overrides — a token
+ *    override freezes the look with one line; selector overrides are for
+ *    structural differences only.
+ * 5. Keep `gsl-` aliases in sync: every `[data-clet-version]` rule needs its
+ *    `[data-gsl-version]` twin (same as the theme attributes).
+ */
+
+/* ── Pin: 1.22 (pre-rebrand panels) ───────────────────────────────
+   Frozen look for the legacy shell. The legacy shell renders inside
+   `<VersionPin version="1.22">`, so these tokens only apply there. */
+[data-clet-version="1.22"],
+[data-gsl-version="1.22"] {
+  /* Panel-era surfaces sat on the page background, not the card bg. */
+  --clet-version-note: "1.22";
+}
+
+/* ── Pin: 2.2 (stacked shell, plain sidebar, outline MetricCard) ──
+   Frozen look for the /v2 demo shell. Additive: if 2.4 changes a token,
+   the 2.2 value is re-stated here so /v2 never drifts. */
+[data-clet-version="2.2"],
+[data-gsl-version="2.2"] {
+  --clet-version-note: "2.2";
+}
+
+/* ── Pin: 2.3 (primary Sidebar rail, plain AppHeader, soft cards) ──
+   2.3 is the previous latest. Its block exists so that when 2.4 changes a
+   default, 2.3 can restate the old value here instead of forking markup. */
+[data-clet-version="2.3"],
+[data-gsl-version="2.3"] {
+  --clet-version-note: "2.3";
+
+  /* Frozen pre-unification type stacks (2.4 defaults to Matimo first). */
+  --clet-font:
+    -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue",
+    arial, sans-serif;
+  --clet-font-header: "Roboto Serif", var(--gsl-font, var(--clet-font));
+  --clet-font-body: "Lato", var(--gsl-font, var(--clet-font));
+
+  /* Frozen header chrome (2.4: solid header icon buttons, navy profile
+     avatars with a gold ring). `initial` on the avatar bg re-arms the
+     generated-gradient fallback in Avatar. */
+  --clet-profile-avatar-bg: initial;
+}
+
+[data-clet-version="2.3"] .clet-app-header__notif-btn,
+[data-gsl-version="2.3"] .clet-app-header__notif-btn,
+[data-clet-version="2.3"] .clet-launchpad__trigger,
+[data-gsl-version="2.3"] .clet-launchpad__trigger {
+  background: transparent;
+  box-shadow: none;
+}
+
+[data-clet-version="2.3"] .clet-profile-menu__trigger .clet-avatar,
+[data-clet-version="2.3"] .clet-app-header__profile .clet-avatar,
+[data-gsl-version="2.3"] .clet-profile-menu__trigger .clet-avatar,
+[data-gsl-version="2.3"] .clet-app-header__profile .clet-avatar {
+  border: none;
+}
+
+/* ── Pin: 2.4 (current latest) ────────────────────────────────────
+   Latest needs NO rules — defaults in component CSS *are* 2.4. New 2.4-only
+   component CSS lives in the component's own stylesheet, not here. When 2.5
+   ships: (1) add its component CSS as the new default, (2) freeze 2.4's old
+   values in a `[data-clet-version="2.4"]` block below, (3) bump
+   LATEST_CLET_VERSION. */

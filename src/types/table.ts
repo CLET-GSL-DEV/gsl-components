@@ -83,6 +83,8 @@ export interface TableProps extends HTMLAttributes<HTMLDivElement> {
   height?: number;
   /**
    * Visual style for the whole table, applied from the root down.
+   * Defaults to `"soft"`: pill controls on a faint shadow and the tinted
+   * header band. `"default"` is the legacy look, kept for 2.3 pins.
    * `"soft"` rounds the header's filter and search controls into pills on a
    * faint shadow, and turns the pagination into a solid `--clet-info` disc for
    * the current page. It restyles the `Dropdown`, `Input` and `Button` the
@@ -137,21 +139,35 @@ export interface TableContentProps<
   className?: string;
   classNames?: TableContentClassNames;
   /**
-   * Visual style of the table content wrapper.
+   * Visual style of the table content wrapper. Defaults to `"soft"`.
    * `"panel"` gives a faint recessed surface, subtle row dividers, and a
    * border all around — suited for embedding inside tabs or cards.
    * `"soft"` drops the outer border for a tinted header band and hairline row
    * dividers, so the rows read as a list rather than a boxed grid. Pairs with
    * `Table variant="soft"`.
+   * `"default"` is the legacy look, kept for 2.3 pins.
    */
   variant?: "default" | "panel" | "soft";
   columns?: TableColumn<T>[];
   data?: T[];
   rowKey?: (row: T) => string | number;
-  /** Icon (JSX/ReactNode) shown above the empty text when data is empty */
+  /**
+   * Legacy icon slot. Passing it renders the old icon + text empty state
+   * instead of the default `EmptyState`. There is no icon customization
+   * in the new path — the illustration is fixed.
+   */
   emptyIcon?: ReactNode;
-  /** Message shown when data is empty (defaults to "No results") */
+  /**
+   * Message shown when data is empty (defaults to "No results"). Feeds the
+   * default `EmptyState` title unless `emptyIcon` takes the legacy path.
+   */
   emptyText?: string;
+  /**
+   * Rich empty state rendered in place of the icon + text when data is
+   * empty (e.g. `<EmptyState illustration={...} title={...} />`).
+   * Table headers still render above it.
+   */
+  emptyContent?: ReactNode;
   /** Show skeleton loading rows instead of data (default false) */
   loading?: boolean;
   /** Number of skeleton rows to show while loading (default 5) */
@@ -223,6 +239,8 @@ export interface TableSearchProps extends Omit<
 export interface TableFilterClassNames {
   root?: string;
   trigger?: string;
+  /** The trigger's chevron, which rotates while the panel is open. */
+  triggerIcon?: string;
   badge?: string;
   content?: string;
   header?: string;
@@ -240,7 +258,15 @@ export interface TableFilterProps {
   onReset?: () => void;
   applyLabel?: string;
   resetLabel?: string;
-  /** "popover" (default) opens the fields in a popover panel. "spread" removes the popover and lays the fields out inline as a flex row. */
+  /**
+   * "popover" (default) opens the fields in a popover panel. "spread" removes
+   * the popover and lays the fields out inline as a flex row.
+   *
+   * "spread" is honoured for up to two fields. A third turns the row into a
+   * wall of controls competing with the search field, so the filter groups
+   * itself back into the popover: same fields, same names, same URL keys, only
+   * the presentation moves.
+   */
   variant?: TableFilterVariant;
   classNames?: TableFilterClassNames;
   className?: string;

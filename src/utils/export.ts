@@ -1,7 +1,7 @@
-// xlsx is an optional peer, so the consuming app picks the version. The npm
-// release is frozen at 0.18.5 and carries CVE-2023-30533 with no patch;
-// maintained builds live at cdn.sheetjs.com. Parse only files a user chose.
-import * as XLSX from "xlsx";
+// Spreadsheet peers are optional and picked by the consuming app:
+// - papaparse parses .csv on import, read-excel-file reads .xlsx
+// - write-excel-file below writes .xlsx (all actively published to npm)
+import writeXlsxFile from "write-excel-file/browser";
 
 export interface ExportColumn<T> {
   header: string;
@@ -70,7 +70,7 @@ export function exportToCsv<T>(
   downloadBlob(filename.endsWith(".csv") ? filename : `${filename}.csv`, blob);
 }
 
-export function exportToXlsx<T>(
+export async function exportToXlsx<T>(
   data: T[],
   columns: ExportColumn<T>[],
   filename: string,
@@ -82,19 +82,13 @@ export function exportToXlsx<T>(
       return val == null ? "" : String(val);
     }),
   );
-  const ws = XLSX.utils.aoa_to_sheet([headerRow, ...dataRows]);
 
-  const colWidths = columns.map((c) => ({
-    wch: Math.max(c.header.length, 12),
-  }));
-  ws["!cols"] = colWidths;
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-  XLSX.writeFile(
-    wb,
-    filename.endsWith(".xlsx") ? filename : `${filename}.xlsx`,
-  );
+  await writeXlsxFile([headerRow, ...dataRows], {
+    sheet: "Sheet1",
+    columns: columns.map((c) => ({
+      width: Math.max(c.header.length, 12),
+    })),
+  }).toFile(filename.endsWith(".xlsx") ? filename : `${filename}.xlsx`);
 }
 
 function buildReportHtml<T>(

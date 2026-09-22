@@ -99,7 +99,7 @@ import type { ExportColumn, ExportMeta } from "@rfdtech/components";
 | Function | Signature | Behavior |
 |----------|-----------|----------|
 | `exportToCsv` | `<T>(data: T[], columns: ExportColumn<T>[], filename: string) => void` | Triggers a `.csv` file download |
-| `exportToXlsx` | `<T>(data: T[], columns: ExportColumn<T>[], filename: string) => void` | Triggers a `.xlsx` file download |
+| `exportToXlsx` | `<T>(data: T[], columns: ExportColumn<T>[], filename: string) => Promise<void>` | Triggers a `.xlsx` file download |
 | `exportToPdf` | `<T>(data: T[], columns: ExportColumn<T>[], filename: string, meta: ExportMeta) => void` | Opens a new tab with a print-ready report and calls `window.print()` |
 | `formatFilenameTimestamp` | `(date: Date) => string` | The same `YYYY-MM-DD_HHmm` suffix `ExportButton` appends to every filename — kept filesystem-safe and locale-independent on purpose (unlike the human-facing PDF timestamp above, this one is never meant to be pretty) |
 
@@ -128,7 +128,7 @@ function handleExport(members: Member[]) {
 ## Notes
 
 - **CSV**: comma-separated, UTF-8 with a BOM (so Excel opens accented/non-Latin characters correctly), values containing a comma/quote/newline are quoted per the CSV spec.
-- **Excel**: a single-sheet `.xlsx` workbook (via the `xlsx` package) with column widths sized to each header's length (minimum 12 characters).
+- **Excel**: a single-sheet `.xlsx` workbook (via the `write-excel-file` optional peer: `npm install write-excel-file`) with column widths sized to each header's length (minimum 12 characters). `exportToXlsx` is async, so `await` it.
 - **PDF**: not a real PDF generator — opens a new browser tab with a styled, print-ready HTML report (title, record count, filters, and the data table) and calls `window.print()` on load, closing the tab once the print dialog is dismissed. If the browser blocks the popup, nothing opens — there's no fallback or error surfaced to the caller, so make sure `ExportButton` is triggered from a real user click (it always is, since it's the dropdown menu's own `onClick`).
 - Every format shares the same generated filename: `<filename-or-slugified-title>[-<slugified-filtersDescription>]-<YYYY-MM-DD_HHmm>.<ext>`.
 - `data`/`columns` are read at click time — `ExportButton` doesn't cache or transform them, so exports always reflect whatever `data` the component currently has (e.g. the same filtered/sorted rows the consumer is showing in a `Table`).

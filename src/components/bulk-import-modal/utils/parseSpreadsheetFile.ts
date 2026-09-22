@@ -1,6 +1,8 @@
-// Optional peer, pinned by the consuming app. See the note in utils/export.ts:
-// the npm release is frozen at 0.18.5 with CVE-2023-30533 unpatched.
-import * as XLSX from "xlsx";
+// Spreadsheet parsing peers, picked by the consuming app:
+// - papaparse for .csv (no runtime dependencies, RFC 4180 compliant)
+// - read-excel-file for .xlsx (browser entry point, actively published)
+import Papa from "papaparse";
+import { readSheet } from "read-excel-file/browser";
 import type { ParsedSpreadsheet } from "../../../types/bulk-import-modal";
 import { ACCEPTED_EXTENSIONS } from "../constants";
 
@@ -11,6 +13,12 @@ export class BulkImportParseError extends Error {
   }
 }
 
+export const UNSUPPORTED_FILE_TYPE_MESSAGE =
+  "Unsupported file type. Upload a .xlsx or .csv file.";
+
+export const LEGACY_XLS_MESSAGE =
+  "Legacy .xls files are not supported. Re-save the file as .xlsx and upload it again.";
+
 function getExtension(fileName: string) {
   const dotIndex = fileName.lastIndexOf(".");
   return dotIndex === -1 ? "" : fileName.slice(dotIndex).toLowerCase();
@@ -20,9 +28,17 @@ function isCsvFile(fileName: string) {
   return getExtension(fileName) === ".csv";
 }
 
+function isLegacyXlsFile(fileName: string) {
+  return getExtension(fileName) === ".xls";
+}
+
 function normalizeCellValue(value: unknown): string {
   if (value === null || value === undefined) {
     return "";
+  }
+
+  if (value instanceof Date) {
+    return value.toLocaleDateString();
   }
 
   return String(value).trim();
@@ -49,62 +65,53 @@ export function isCsv(fileName: string) {
 }
 
 export function parseCsvText(text: string): string[][] {
-  const rows: string[][] = [];
-  let current = "";
-  let inQuotes = false;
-  let row: string[] = [];
-
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-
-    if (inQuotes) {
-      if (ch === '"') {
-        if (text[i + 1] === '"') {
-          current += '"';
-          i++;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        current += ch;
-      }
-    } else {
-      if (ch === '"') {
-        inQuotes = true;
-      } else if (ch === ",") {
-        row.push(current);
-        current = "";
-      } else if (ch === "\n") {
-        row.push(current);
-        current = "";
-        if (row.some((c) => c.length > 0)) {
-          rows.push(row);
-        }
-        row = [];
-      } else if (ch === "\r") {
-        // skip
-      } else {
-        current += ch;
-      }
-    }
+  if (text.trim().length === 0) {
+    return [];
   }
 
-  row.push(current);
-  if (row.some((c) => c.length > 0)) {
-    rows.push(row);
+  const result = Papa.parse<string[]>(text, {
+    skipEmptyLines: true,
+  });
+
+  // "UndetectableDelimiter" is Papa guessing "," on delimiter-free input
+  // (single-column files, blank files). It is not a parse failure.
+  const fatal = result.errors.filter(
+    (error) => error.code !== "UndetectableDelimiter",
+  );
+
+  if (fatal.length > 0) {
+    throw new BulkImportParseError(fatal[0].message);
   }
 
-  return rows;
+  return result.data;
+}
+
+function isLegacyXlsError(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const code = (error as { code?: unknown }).code;
+  const name = (error as { name?: unknown }).name;
+  const message = error instanceof Error ? error.message : "";
+
+  return (
+    code === "XLS_FILE_NOT_SUPPORTED" ||
+    name === "XLS_FILE_NOT_SUPPORTED" ||
+    message.includes("XLS_FILE_NOT_SUPPORTED")
+  );
 }
 
 export async function parseSpreadsheetFile(
   file: File,
   maxFileSizeBytes = 5 * 1024 * 1024,
 ): Promise<ParsedSpreadsheet> {
+  if (isLegacyXlsFile(file.name)) {
+    throw new BulkImportParseError(LEGACY_XLS_MESSAGE);
+  }
+
   if (!isAcceptedSpreadsheetFile(file.name)) {
-    throw new BulkImportParseError(
-      "Unsupported file type. Upload a .xlsx, .xls, or .csv file.",
-    );
+    throw new BulkImportParseError(UNSUPPORTED_FILE_TYPE_MESSAGE);
   }
 
   if (file.size > maxFileSizeBytes) {
@@ -115,7 +122,7 @@ export async function parseSpreadsheetFile(
 
   if (isCsvFile(file.name)) {
     const text = await file.text();
-    const rows = parseCsvText(text);
+    const rows = filterEmptyRows(normalizeRows(parseCsvText(text)));
 
     if (rows.length === 0) {
       throw new BulkImportParseError("The uploaded file is empty.");
@@ -127,24 +134,32 @@ export async function parseSpreadsheetFile(
     };
   }
 
-  const buffer = await file.arrayBuffer();
-  const workbook = XLSX.read(buffer, { type: "array" });
-  const firstSheetName = workbook.SheetNames[0];
+  let rawRows: unknown[][];
+  try {
+    rawRows = await readSheet(file);
+  } catch (error) {
+    if (error instanceof BulkImportParseError) {
+      throw error;
+    }
 
-  if (!firstSheetName) {
-    throw new BulkImportParseError("The uploaded file has no worksheets.");
+    if (isLegacyXlsError(error)) {
+      throw new BulkImportParseError(LEGACY_XLS_MESSAGE);
+    }
+
+    if (!file.name.toLowerCase().endsWith(".xlsx")) {
+      throw new BulkImportParseError(UNSUPPORTED_FILE_TYPE_MESSAGE);
+    }
+
+    throw new BulkImportParseError(
+      "Failed to parse the uploaded file. Make sure it is a valid .xlsx file.",
+    );
   }
 
-  const worksheet = workbook.Sheets[firstSheetName];
-  const rawRows = XLSX.utils.sheet_to_json<unknown[]>(worksheet, {
-    header: 1,
-    defval: "",
-    raw: false,
-  });
+  if (rawRows.length === 0) {
+    throw new BulkImportParseError("The uploaded file is empty.");
+  }
 
-  const rows = normalizeRows(rawRows).filter((row) =>
-    row.some((cell) => cell.length > 0),
-  );
+  const rows = filterEmptyRows(normalizeRows(rawRows));
 
   if (rows.length === 0) {
     throw new BulkImportParseError("The uploaded file is empty.");

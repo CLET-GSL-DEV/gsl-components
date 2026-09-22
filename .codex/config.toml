@@ -1,0 +1,14 @@
+[mcp_servers.gsl-components-docs]
+command = "mcp/node_modules/.bin/tsx"
+args = ["mcp/src/index.ts"]
+
+[mcp_servers.playwright]
+command = "npx"
+args = [
+    "-y",
+    "@playwright/mcp@latest",
+]
+
+[mcp_servers.rfdtech-ui]
+command = "node"
+args = ["dist/mcp/index.js"]

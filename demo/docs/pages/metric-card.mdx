@@ -45,6 +45,7 @@ Set `loading` to show shimmering skeleton placeholders instead of the label/valu
 | `value` | `string \| number` | — | The primary metric value |
 | `icon` | `ReactNode` | — | Optional icon rendered next to the label (always muted tint) |
 | `description` | `string` | — | Subtitle shown below the value row |
+| `descriptionAdornment` | `ReactNode` | — | Arbitrary node (icon, JSX, anything) rendered to the left of the description text. Only renders with `description`. |
 | `trend` | `"up" \| "down" \| "neutral"` | — | Trend direction; renders an arrow icon |
 | `trendValue` | `string` | — | Formatted trend text (e.g. `"+12.5%"`) |
 | `variant` | `"default" \| "outline" \| "bordered" \| "soft"` | `"default"` | Card style: `"soft"` is a borderless card on a shadow with a brand watermark; `"outline"` is a bordered, no-fill card with chevron trend icons; `"bordered"` is the default layout with a 1px border added |
@@ -142,6 +143,7 @@ See the props table above.
 | `label` | Label text (`.clet-metric-card__label`) |
 | `value` | Value text (`.clet-metric-card__value`) |
 | `description` | Description text (`.clet-metric-card__description`) |
+| `descriptionAdornment` | Node left of the description (`.clet-metric-card__description-adornment`) |
 | `trend` | Trend indicator (`.clet-metric-card__trend`) |
 
 Also exported: `MetricCardVariant`, `MetricTrend`.

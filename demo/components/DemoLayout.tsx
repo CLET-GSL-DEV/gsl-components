@@ -63,6 +63,7 @@ import {
   AppHeader,
   AppHeaderActions,
   AppHeaderSearch,
+  AppHeaderFontSize,
   AppHeaderNotifications,
   AppHeaderNotificationItem,
   AppSwitcher,
@@ -405,7 +406,7 @@ export function DemoLayout() {
   return (
     <SidebarProvider>
       <BreadcrumbProvider>
-        <AppLayout variant="panel">
+        <AppLayout variant="panel" version="1.22">
           <AppHeader>
             <AppHeaderSearch
               data={searchGroups}
@@ -430,6 +431,7 @@ export function DemoLayout() {
                 maxItems={9}
                 onAppSelect={(app) => console.log("Selected:", app.name)}
               />
+              <AppHeaderFontSize />
               <AppHeaderNotifications loading={notifLoading}>
                 {notifData?.map((n: (typeof notifData)[number]) => (
                   <AppHeaderNotificationItem
@@ -935,7 +937,7 @@ export function DemoLayout() {
                 <span className="demo-components-grid__preview">
                   <UploadField
                     multiple
-                    accept=".xlsx,.xls,.csv"
+                    accept=".xlsx,.csv"
                     style={{ width: "100%" }}
                   />
                 </span>

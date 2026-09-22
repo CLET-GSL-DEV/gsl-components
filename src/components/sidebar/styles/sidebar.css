@@ -1,9 +1,20 @@
+
+
+/*  Scale-aware text sizes for this component. Declared on :root so a
+   cletTheme() override at the component selector still wins, and so
+   portaled parts inherit them.  */
+:root {
+	--clet-sidebar-header-title-text-size: calc(18px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
+	--clet-sidebar-link-badge-text-size: calc(11px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
+}
 /* --clet-sidebar-bg is the single override point for every background
    declaration in this file that paints the sidebar surface itself. */
 .clet-sidebar {
 	--clet-sidebar-font: var(--gsl-font-body, var(--clet-font-body));
 	--clet-sidebar-bg: var(--gsl-bg, var(--clet-bg));
-	--clet-sidebar-wordmark-size: 24px;
+	--clet-sidebar-wordmark-size: calc(
+		24px * var(--gsl-text-scale, var(--clet-text-scale, 1))
+	);
 	--clet-sidebar-logo-size: 28px;
 	/* The mobile drawer stacks one level below the popover level (1000) on
 	   the shared stack scale in styles/theme/base.css. Portaled overlays
@@ -111,6 +122,129 @@
 	background: var(--gsl-sidebar-link-hover-bg, var(--clet-sidebar-link-hover-bg));
 }
 
+/* ── Brand variant: 2.4 rail ──
+   Deep-navy surface with a single artwork image (right, full height),
+   image-only header, uppercase group labels, 36px items, white active item. */
+.clet-sidebar.clet-sidebar--brand {
+	--clet-sidebar-brand-bg: #051b2c;
+	--clet-sidebar-brand-label-text: #76808d;
+	--clet-sidebar-brand-link-text: #e7edf1;
+	--clet-sidebar-brand-link-active-bg: #fff;
+	--clet-sidebar-brand-link-active-text: #242e3c;
+	--clet-sidebar-brand-link-hover-bg: color-mix(in srgb, #fff 10%, transparent);
+	--clet-sidebar-bg: var(--gsl-sidebar-brand-bg, var(--clet-sidebar-brand-bg));
+	--clet-sidebar-text: var(--gsl-sidebar-brand-link-text, var(--clet-sidebar-brand-link-text));
+	--clet-sidebar-label-text: var(--gsl-sidebar-brand-label-text, var(--clet-sidebar-brand-label-text));
+	--clet-sidebar-link-text: var(--gsl-sidebar-brand-link-text, var(--clet-sidebar-brand-link-text));
+	--clet-sidebar-link-hover-bg: var(--gsl-sidebar-brand-link-hover-bg, var(--clet-sidebar-brand-link-hover-bg));
+	--clet-sidebar-link-hover-text: var(--gsl-sidebar-brand-link-text, var(--clet-sidebar-brand-link-text));
+	--clet-sidebar-link-active-bg: var(--gsl-sidebar-brand-link-active-bg, var(--clet-sidebar-brand-link-active-bg));
+	--clet-sidebar-link-active-text: var(--gsl-sidebar-brand-link-active-text, var(--clet-sidebar-brand-link-active-text));
+	--clet-sidebar-badge-bg: var(--gsl-sidebar-brand-link-hover-bg, var(--clet-sidebar-brand-link-hover-bg));
+	--clet-sidebar-badge-color: var(--gsl-sidebar-brand-link-text, var(--clet-sidebar-brand-link-text));
+	width: 259px;
+	max-width: min(100vw, 259px);
+	background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+	border-right: none;
+	border-radius: 0;
+}
+
+/* Decorative artwork: absolute, full height, natural width, behind
+   everything, non-interactive and non-selectable. */
+.clet-sidebar--brand .clet-sidebar__brand-image {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 0;
+	height: 100%;
+	width: auto;
+	pointer-events: none;
+	user-select: none;
+}
+
+.clet-sidebar--brand > * {
+	position: relative;
+	z-index: 1;
+}
+
+/* 227px items on the 259px rail: 16px gutters, 36px rows, 8px icon gap. */
+.clet-sidebar--brand .clet-sidebar__nav {
+	gap: 16px;
+}
+
+.clet-sidebar--brand .clet-sidebar__group {
+	gap: 8px;
+}
+
+.clet-sidebar--brand .clet-sidebar__group-label,
+.clet-sidebar--brand .clet-sidebar__group-toggle {
+	padding: 0;
+	letter-spacing: 0;
+	line-height: 2;
+	text-transform: uppercase;
+}
+
+.clet-sidebar--brand .clet-sidebar__group-label-icon {
+	width: 16px;
+	height: 16px;
+}
+
+.clet-sidebar--brand .clet-sidebar__link {
+	gap: 8px;
+	min-height: 36px;
+	padding: 8px 16px;
+}
+
+/* Image-only header: the brand mark carries the identity, no title text.
+   Renders at the Figma size (130px wide). */
+.clet-sidebar--brand .clet-sidebar__header-logo img,
+.clet-sidebar--brand .clet-sidebar__header-logo svg {
+	width: 130px;
+	max-width: 100%;
+	height: auto;
+}
+
+/* Chevron points up while open, matching the primary rail. */
+.clet-sidebar--brand .clet-sidebar__group-toggle .clet-sidebar__group-label-icon {
+	transform: rotate(180deg);
+}
+
+.clet-sidebar--brand
+.clet-sidebar__group-toggle[aria-expanded="false"]
+.clet-sidebar__group-label-icon {
+	transform: rotate(0deg);
+}
+
+.clet-sidebar--brand .clet-sidebar__link--active .clet-sidebar__link-badge {
+	--clet-sidebar-badge-bg: var(--gsl-sidebar-brand-bg, var(--clet-sidebar-brand-bg));
+	--clet-sidebar-badge-color: var(--gsl-sidebar-brand-link-text, var(--clet-sidebar-brand-link-text));
+}
+
+.clet-sidebar--brand .clet-sidebar__collapse:hover {
+	background: var(--gsl-sidebar-link-hover-bg, var(--clet-sidebar-link-hover-bg));
+	color: var(--gsl-sidebar-link-hover-text, var(--clet-sidebar-link-hover-text));
+}
+
+.clet-sidebar--brand .clet-sidebar__scroll-hint {
+	color: var(--gsl-sidebar-link-text, var(--clet-sidebar-link-text));
+}
+
+.clet-sidebar--brand .clet-sidebar__scroll-hint:hover {
+	color: var(--gsl-sidebar-link-hover-text, var(--clet-sidebar-link-hover-text));
+}
+
+/* --clet-focus is --clet-primary, the rail's own background, so it is invisible here. */
+.clet-sidebar--brand .clet-sidebar__link:focus-visible,
+.clet-sidebar--brand .clet-sidebar__group-toggle:focus-visible,
+.clet-sidebar--brand .clet-sidebar__collapse:focus-visible,
+.clet-sidebar--brand .clet-sidebar__scroll-hint:focus-visible {
+	outline-color: var(--gsl-sidebar-link-text, var(--clet-sidebar-link-text));
+}
+
+.clet-sidebar--brand .clet-skeleton {
+	background: var(--gsl-sidebar-link-hover-bg, var(--clet-sidebar-link-hover-bg));
+}
+
 .clet-sidebar__header {
 	display: flex;
 	flex-wrap: nowrap;
@@ -160,7 +294,7 @@
 .clet-sidebar__header-title {
 	overflow: hidden;
 	font-family: var(--gsl-font-header, var(--clet-font-header));
-	font-size: 18px;
+	font-size: var(--gsl-sidebar-header-title-text-size, var(--clet-sidebar-header-title-text-size));
 	font-weight: 700;
 	line-height: 1.2;
 	text-overflow: ellipsis;
@@ -314,7 +448,7 @@
 .clet-sidebar__group-toggle {
 	margin: 0;
 	padding: 0 12px 4px;
-	font-size: 12px;
+	font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
 	font-weight: 500;
 	letter-spacing: 0.06em;
 	color: var(
@@ -330,7 +464,7 @@
 	width: 100%;
 	border: none;
 	background: transparent;
-
+	font-family: inherit;
 	letter-spacing: inherit;
 	text-align: left;
 	text-transform: inherit;
@@ -403,7 +537,7 @@
 		var(--clet-sidebar-link-text, var(--clet-text-secondary))
 	);
 	font-family: var(--gsl-sidebar-font, var(--clet-sidebar-font));
-	font-size: 14px;
+	font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
 	font-weight: 400;
 	line-height: 1.4;
 	text-align: left;
@@ -447,7 +581,7 @@
 		--gsl-sidebar-badge-color,
 		var(--clet-sidebar-badge-color, var(--clet-on-primary))
 	);
-	font-size: 11px;
+	font-size: var(--gsl-sidebar-link-badge-text-size, var(--clet-sidebar-link-badge-text-size));
 	font-weight: 600;
 	line-height: 1.4;
 	text-overflow: ellipsis;
@@ -528,7 +662,7 @@
 	align-items: center;
 	justify-content: center;
 	width: 40px;
-	height: 40px;
+	min-height: 40px;
 	flex-shrink: 0;
 	margin-bottom: 16px;
 	padding: 0;
@@ -536,6 +670,7 @@
 	border-radius: var(--gsl-radius-base, var(--clet-radius-base));
 	background: var(--gsl-bg, var(--clet-bg));
 	color: var(--gsl-text, var(--clet-text));
+	font-family: inherit;
 	cursor: pointer;
 	transition:
 		background-color 150ms ease,
@@ -602,6 +737,19 @@
 	padding: 20px 12px;
 }
 
+.clet-sidebar--brand.clet-sidebar--collapsed {
+	width: 72px;
+	max-width: 72px;
+}
+
+.clet-sidebar--brand.clet-sidebar--collapsed .clet-sidebar__brand-image {
+	display: none;
+}
+
+.clet-sidebar--brand.clet-sidebar--collapsed .clet-sidebar__header {
+	justify-content: center;
+}
+
 .clet-sidebar--collapsed .clet-sidebar__header {
 	justify-content: center;
 }
@@ -655,6 +803,26 @@
 		border-radius: 0;
 	}
 
+	/* Brand rail is full-bleed like primary. */
+	.clet-sidebar.clet-sidebar--brand:not(.clet-sidebar--mobile) {
+		width: 259px;
+		max-width: min(100vw, 259px);
+		background: var(--gsl-sidebar-bg, var(--clet-sidebar-bg));
+		border-right: none;
+		border-radius: 0;
+	}
+
+	/* Collapsed wins over the brand width. */
+	.clet-sidebar.clet-sidebar--brand.clet-sidebar--collapsed:not(.clet-sidebar--mobile) {
+		width: 72px;
+		max-width: 72px;
+	}
+
+	/* No room for artwork on the icon rail. */
+	.clet-sidebar.clet-sidebar--brand.clet-sidebar--collapsed .clet-sidebar__brand-image {
+		display: none;
+	}
+
 	/* Hide the auto-injected brand row on desktop. The plain `Sidebar`
      mirrors the sibling `AppHeader`'s `AppHeaderBranding` into this row on
      mobile (where the sidebar becomes a drawer); on desktop the brand is
@@ -681,6 +849,11 @@
 	}
 
 	.clet-sidebar--primary:not(.clet-sidebar--mobile) {
+		border-right: none;
+	}
+
+	.clet-sidebar--brand:not(.clet-sidebar--mobile) {
+		width: min(259px, 100vw);
 		border-right: none;
 	}
 

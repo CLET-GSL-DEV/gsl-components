@@ -61,6 +61,22 @@ export interface AppHeaderSearchProps {
   /** Accessible label for the search input. */
   label?: string;
   children?: ReactNode;
+  /**
+   * Collapse to an icon button that expands into the field on click.
+   * The button swaps itself for the field — siblings (e.g. a title) are
+   * untouched. Escape or the close button collapses and clears.
+   */
+  collapsible?: boolean;
+  /** Controlled collapsed state (only with `collapsible`). */
+  collapsed?: boolean;
+  /** Uncontrolled initial collapsed state (default true). */
+  defaultCollapsed?: boolean;
+  /** Called when the collapsed state changes. */
+  onCollapsedChange?: (collapsed: boolean) => void;
+  /** Accessible label for the expand button. Defaults to "Open search". */
+  expandLabel?: string;
+  /** Accessible label for the collapse button. Defaults to "Close search". */
+  collapseLabel?: string;
 }
 
 export interface AppHeaderNotificationsProps {
@@ -70,6 +86,22 @@ export interface AppHeaderNotificationsProps {
   loading?: boolean;
   /** Accessible label for the loading state */
   loadingLabel?: string;
+}
+
+export interface AppHeaderFontSizeClassNames {
+  root?: string;
+  content?: string;
+  title?: string;
+  option?: string;
+}
+
+export interface AppHeaderFontSizeProps {
+  className?: string;
+  classNames?: AppHeaderFontSizeClassNames;
+  /** Accessible label for the trigger (default: "Text size") */
+  label?: string;
+  /** Heading shown above the options (default: "Text size") */
+  title?: string;
 }
 
 export interface AppHeaderNotificationItemClassNames {
@@ -133,4 +165,16 @@ export interface AppHeaderProfileProps {
   onHelpClick?: () => void;
   /** Called when "Sign Out" is clicked */
   onSignOut?: () => void;
+}
+
+export interface AppHeaderTitleClassNames {
+  title?: string;
+}
+
+export interface AppHeaderTitleProps
+  extends Omit<HTMLAttributes<HTMLHeadingElement>, "color"> {
+  /** The system name shown in the header (e.g. "GRC"). */
+  children: ReactNode;
+  classNames?: AppHeaderTitleClassNames;
+  className?: string;
 }

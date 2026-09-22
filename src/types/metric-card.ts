@@ -32,6 +32,7 @@ export interface MetricCardClassNames {
   label?: string;
   value?: string;
   description?: string;
+  descriptionAdornment?: string;
   trend?: string;
   mark?: string;
 }
@@ -45,6 +46,11 @@ export interface MetricCardProps extends HTMLAttributes<HTMLDivElement> {
   icon?: ReactNode;
   /** Subtitle or description below the value */
   description?: string;
+  /**
+   * Arbitrary node (icon, JSX, anything) rendered to the left of the
+   * description text, e.g. a trend arrow. Only renders with `description`.
+   */
+  descriptionAdornment?: ReactNode;
   /**
    * Visual variant.
    * "outline" renders a no-fill, bordered card with chevron trend icons and no +/- prefix.

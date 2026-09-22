@@ -17,12 +17,14 @@ import {
 } from "../utils/mapRowsToRecords";
 import {
   BulkImportParseError,
+  LEGACY_XLS_MESSAGE,
+  UNSUPPORTED_FILE_TYPE_MESSAGE,
   normalizeRows,
   filterEmptyRows,
   isCsv,
   parseCsvText,
 } from "../utils/parseSpreadsheetFile";
-import * as XLSX from "xlsx";
+import { readSheet } from "read-excel-file/browser";
 import { validateRowsChunked } from "../utils/validateRowsChunked";
 import {
   PARSE_CHUNK_SIZE,
@@ -232,8 +234,12 @@ export function useBulkImportFlow(
       setFlow((prev) => ({ ...prev, uploadedFile: file, parseError: null }));
 
       const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+      if (ext === ".xls") {
+        setFlow((prev) => ({ ...prev, parseError: LEGACY_XLS_MESSAGE }));
+        return;
+      }
       if (!ACCEPTED_EXTENSIONS.includes(ext as typeof ACCEPTED_EXTENSIONS[number])) {
-        setFlow((prev) => ({ ...prev, parseError: "Unsupported file type. Upload a .xlsx, .xls, or .csv file." }));
+        setFlow((prev) => ({ ...prev, parseError: UNSUPPORTED_FILE_TYPE_MESSAGE }));
         return;
       }
       if (file.size > maxFileSizeBytes) {
@@ -250,16 +256,24 @@ export function useBulkImportFlow(
           const text = await file.text();
           if (signal.aborted) return;
 
-          const lines = text.split("\n");
-          setProcessingTotal(lines.length);
+          let rawRows: string[][];
+          try {
+            rawRows = parseCsvText(text);
+          } catch (error) {
+            setFlow((prev) => ({ ...prev, parsed: null, parseError: error instanceof BulkImportParseError ? error.message : "Failed to parse the uploaded file." }));
+            return;
+          }
+          if (signal.aborted) return;
+
+          setProcessingTotal(rawRows.length);
           let rows: string[][];
 
-          if (lines.length <= PARSE_CHUNK_SIZE) {
-            rows = filterEmptyRows(normalizeRows(parseCsvText(text)));
+          if (rawRows.length <= PARSE_CHUNK_SIZE) {
+            rows = filterEmptyRows(normalizeRows(rawRows));
           } else {
             rows = await processInChunks(
-              lines,
-              (batch) => filterEmptyRows(normalizeRows(parseCsvText(batch.join("\n")))),
+              rawRows,
+              (batch) => filterEmptyRows(normalizeRows(batch)),
               (pct) => setProcessingProgress(pct),
               signal,
             );
@@ -275,23 +289,19 @@ export function useBulkImportFlow(
           return;
         }
 
-        const buffer = await file.arrayBuffer();
-        if (signal.aborted) return;
-
-        const workbook = XLSX.read(buffer, { type: "array" });
-        const firstSheetName = workbook.SheetNames[0];
-        if (!firstSheetName) {
-          setFlow((prev) => ({ ...prev, parseError: "The uploaded file has no worksheets." }));
+        let rawRows: unknown[][];
+        try {
+          rawRows = await readSheet(file);
+        } catch {
+          setFlow((prev) => ({ ...prev, parseError: "Failed to parse the uploaded file. Make sure it is a valid .xlsx file." }));
           return;
         }
-
-        const sheet = workbook.Sheets[firstSheetName];
-        const rawRows = XLSX.utils.sheet_to_json<string[]>(sheet, {
-          header: 1,
-          defval: "",
-          raw: false,
-        });
         if (signal.aborted) return;
+
+        if (rawRows.length === 0) {
+          setFlow((prev) => ({ ...prev, parseError: "The uploaded file is empty." }));
+          return;
+        }
 
         if (rawRows.length > PARSE_CHUNK_SIZE) {
           setIsProcessingLarge(true);

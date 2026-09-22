@@ -8,6 +8,7 @@ import {
 import { cn } from "../../utils/cn";
 import { useBreadcrumbContext } from "../breadcrumb/breadcrumb-context";
 import { getRouterAdapter } from "../../adapters/registry";
+import type { CletVersion } from "../../types/version";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,10 +22,16 @@ export interface AppLayoutInnerProps {
   children?: ReactNode;
   className?: string;
   variant?: "default" | "panel" | "stacked";
+  hideHeader?: boolean;
+  hideSidebar?: boolean;
+  version?: CletVersion;
 }
 
 export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
-  function AppLayoutInner({ children, className, variant = "default" }, ref) {
+  function AppLayoutInner(
+    { children, className, variant = "default", hideHeader, hideSidebar, version },
+    ref,
+  ) {
     const { items } = useBreadcrumbContext();
     const { Link } = getRouterAdapter();
 
@@ -43,6 +50,11 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
         bodyEl = child;
       }
     });
+
+    // Hidden means not rendered at all: no wrapper, no reserved track, so the
+    // body takes the width and the content starts at the top.
+    if (hideHeader) headerEl = null;
+    if (hideSidebar) sidebarEl = null;
 
     const extractProps = (el: ReactElement | null) => {
       if (!el) return { className: undefined, children: null, rest: {} };
@@ -105,6 +117,8 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
       return (
         <div
           ref={ref}
+          data-clet-version={version}
+          data-gsl-version={version}
           className={cn("clet-app-layout gsl-app-layout", "clet-app-layout--stacked gsl-app-layout--stacked", className)}
         >
           {headerEl}
@@ -122,6 +136,8 @@ export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
     return (
       <div
         ref={ref}
+        data-clet-version={version}
+        data-gsl-version={version}
         className={cn(
           "clet-app-layout gsl-app-layout",
           variant === "panel" && "clet-app-layout--panel gsl-app-layout--panel",

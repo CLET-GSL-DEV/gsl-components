@@ -35,6 +35,7 @@ import {
   AppHeader,
   AppHeaderActions,
   AppHeaderBranding,
+  AppHeaderFontSize,
   AppHeaderNotifications,
   AppHeaderNotificationItem,
   Launchpad,
@@ -74,7 +75,6 @@ interface DemoLayout2Props {
    */
   basePath?: string;
 }
-
 export function DemoLayout2({ basePath = "" }: DemoLayout2Props) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -168,7 +168,7 @@ export function DemoLayout2({ basePath = "" }: DemoLayout2Props) {
   return (
     <SidebarProvider>
       <BreadcrumbProvider>
-        <AppLayout variant="stacked">
+        <AppLayout variant="stacked" version="2.2">
           <AppHeader variant="primary">
             <AppHeaderBranding
               logo={
@@ -205,6 +205,7 @@ export function DemoLayout2({ basePath = "" }: DemoLayout2Props) {
                   onClickRole={(role) => setSelectedRole(role.id)}
                 />
               </Launchpad>
+              <AppHeaderFontSize />
               <AppHeaderNotifications loading={notifLoading}>
                 {notifData?.map((n: (typeof notifData)[number]) => (
                   <AppHeaderNotificationItem

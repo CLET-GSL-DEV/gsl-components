@@ -35,8 +35,12 @@ const configs: Record<string, () => ReturnType<typeof defineConfig>> = {
 						id.startsWith("react-router-dom/") ||
 						id === "react-router" ||
 						id.startsWith("react-router/") ||
-						id === "xlsx" ||
-						id.startsWith("xlsx/"),
+						id === "papaparse" ||
+						id.startsWith("papaparse/") ||
+						id === "read-excel-file" ||
+						id.startsWith("read-excel-file/") ||
+						id === "write-excel-file" ||
+						id.startsWith("write-excel-file/"),
 					output: {
 						globals: {
 							react: "React",
@@ -74,8 +78,12 @@ const configs: Record<string, () => ReturnType<typeof defineConfig>> = {
 						id === "next/navigation" ||
 						id === "next/link" ||
 						id.startsWith("next/") ||
-						id === "xlsx" ||
-						id.startsWith("xlsx/"),
+						id === "papaparse" ||
+						id.startsWith("papaparse/") ||
+						id === "read-excel-file" ||
+						id.startsWith("read-excel-file/") ||
+						id === "write-excel-file" ||
+						id.startsWith("write-excel-file/"),
 					output: {
 						globals: {
 							react: "React",
