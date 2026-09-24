@@ -33,7 +33,7 @@
 }
 
 .clet-breadcrumb__link:hover {
-  color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary-text, var(--clet-primary-text));
 }
 
 .clet-breadcrumb__link:focus-visible {

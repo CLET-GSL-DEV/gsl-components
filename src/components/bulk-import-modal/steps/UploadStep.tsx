@@ -60,6 +60,7 @@ export function UploadStep({
 
       <div className="clet-bulk-import__upload-area gsl-bulk-import__upload-area">
         <UploadField
+          aria-label="Upload a spreadsheet to import"
           value={uploadedFile ?? undefined}
           accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
           /* "Spreadsheet files" reads better here than naming each format, and

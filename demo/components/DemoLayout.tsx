@@ -905,6 +905,7 @@ export function DemoLayout() {
               >
                 <span className="demo-components-grid__preview">
                   <Dropdown
+                    aria-label="Example dropdown"
                     value={previewDropdownValue}
                     onValueChange={setPreviewDropdownValue}
                     options={[
@@ -936,6 +937,7 @@ export function DemoLayout() {
               >
                 <span className="demo-components-grid__preview">
                   <UploadField
+                    aria-label="Attach files"
                     multiple
                     accept=".xlsx,.csv"
                     style={{ width: "100%" }}

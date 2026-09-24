@@ -248,6 +248,13 @@
   pointer-events: none;
 }
 
+/* The list stays mounted even with nothing to show, so the input's
+   aria-controls always resolves (DS-05). [hidden] must therefore beat the
+   display rules that follow. */
+.clet-command__list[hidden] {
+  display: none;
+}
+
 .clet-command__list {
   max-height: min(320px, 50dvh);
   overflow: hidden auto;

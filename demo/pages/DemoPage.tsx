@@ -165,8 +165,11 @@ export function DemoPage() {
             <TableSearch placeholder="Search members..." />
             <TableFilter>
               <div className="demo-home__filter-field">
-                <label className="demo-home__filter-label">Status</label>
+                <label className="demo-home__filter-label" id="demo-filter-status-label">
+                  Status
+                </label>
                 <Dropdown
+                  aria-labelledby="demo-filter-status-label"
                   name="status"
                   value={statusValue}
                   onValueChange={(v) => setStatusValue(v ?? "")}
@@ -179,8 +182,11 @@ export function DemoPage() {
                 />
               </div>
               <div className="demo-home__filter-field">
-                <label className="demo-home__filter-label">Role</label>
+                <label className="demo-home__filter-label" id="demo-filter-role-label">
+                  Role
+                </label>
                 <Dropdown
+                  aria-labelledby="demo-filter-role-label"
                   name="role"
                   value={roleValue}
                   onValueChange={(v) => setRoleValue(v ?? "")}

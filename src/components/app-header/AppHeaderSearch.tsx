@@ -152,6 +152,7 @@ export const AppHeaderSearch = forwardRef<
   const hasAnyLoading = data?.some((g) => g.loading) ?? false;
   const shouldShowEmpty =
     showEmpty && hasSearch && data && !hasAnyItems && !hasAnyLoading;
+  const hasResultsToShow = Boolean(hasSearch && data);
 
   const field = (
     <Command
@@ -169,13 +170,21 @@ export const AppHeaderSearch = forwardRef<
         placeholder={placeholder}
         aria-label={label}
       />
-      {hasSearch && data ? (
-        <CommandList>
-          {groupElements}
-          {shouldShowEmpty && <CommandEmpty>{emptyLabel}</CommandEmpty>}
-          {children}
-        </CommandList>
-      ) : null}
+      {/*
+        DS-05: cmdk's input hardcodes aria-controls={listId} AFTER its props
+        spread, so no prop can point it elsewhere - the list it names has to
+        exist. Unmounting the list while the field is empty left that reference
+        dangling on every page load. It stays mounted and is hidden instead.
+      */}
+      <CommandList hidden={!hasResultsToShow}>
+        {hasResultsToShow ? (
+          <>
+            {groupElements}
+            {shouldShowEmpty && <CommandEmpty>{emptyLabel}</CommandEmpty>}
+            {children}
+          </>
+        ) : null}
+      </CommandList>
     </Command>
   );
 

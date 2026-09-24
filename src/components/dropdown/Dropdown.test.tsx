@@ -10,7 +10,7 @@ const options = [
 ];
 
 function ControlledDropdown(
-  props: Partial<React.ComponentProps<typeof Dropdown>> & {
+  props: Partial<Omit<React.ComponentProps<typeof Dropdown>, "aria-labelledby">> & {
     initialValue?: string | null;
   },
 ) {

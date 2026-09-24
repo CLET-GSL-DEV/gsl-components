@@ -11,9 +11,14 @@ import type {
   DialogTitleProps,
 } from "../../types/dialog";
 import { cn } from "../../utils/cn";
+import {
+  buildCloseAutoFocusHandler,
+  createModalityAwareRoot,
+  useDialogModality,
+} from "../../utils/dialog-modality";
 import "./styles/dialog.css";
 
-export const Dialog = DialogPrimitive.Root;
+export const Dialog = createModalityAwareRoot("Dialog");
 export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogPortal = DialogPrimitive.Portal;
 export const DialogClose = DialogPrimitive.Close;
@@ -32,14 +37,30 @@ export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
 
 export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   function DialogContent(
-    { className, classNames, children, showCloseButton = false, ...props },
+    {
+      className,
+      classNames,
+      children,
+      showCloseButton = false,
+      returnFocusTo,
+      onCloseAutoFocus,
+      ...props
+    },
     ref,
   ) {
+    const isModal = useDialogModality();
     return (
       <DialogPrimitive.Content
         ref={ref}
         className={cn("clet-dialog__content gsl-dialog__content", classNames?.content, className)}
+        onCloseAutoFocus={buildCloseAutoFocusHandler(
+          returnFocusTo,
+          onCloseAutoFocus,
+        )}
         {...props}
+        // After the spread on purpose: Radix ships no aria-modal, and a caller
+        // must not be able to drop it. False modality omits it rather than lying.
+        aria-modal={isModal ? true : undefined}
       >
         {children}
         {showCloseButton ? (

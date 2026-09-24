@@ -227,7 +227,9 @@ describe("ProfilePopover — user/variant header trigger", () => {
   it("forwards ref to the trigger", () => {
     const ref = createRef<HTMLDivElement>();
     render(<ProfilePopover user={user} ref={ref} />);
-    expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    // The header trigger is a <button>: Radix spreads type/aria-haspopup/
+    // aria-expanded onto it, and those are only valid on a real control.
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
 
   it("opens the unified profile popover with email", async () => {

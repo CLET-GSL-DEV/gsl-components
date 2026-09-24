@@ -224,11 +224,11 @@
 }
 
 .clet-metric-card__trend--up {
-  color: var(--gsl-success, var(--clet-success));
+  color: var(--gsl-success-text, var(--clet-success-text));
 }
 
 .clet-metric-card__trend--down {
-  color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-metric-card__trend--neutral {

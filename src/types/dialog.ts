@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, RefObject } from "react";
 import type * as DialogPrimitive from "@radix-ui/react-dialog";
 
 export interface DialogOverlayClassNames {
@@ -19,6 +19,13 @@ export interface DialogContentProps
   extends DialogPrimitive.DialogContentProps {
   classNames?: DialogContentClassNames;
   showCloseButton?: boolean;
+  /**
+   * Where keyboard focus should land when the dialog closes, for the case where
+   * the element that opened it has since unmounted. Leave unset and Radix
+   * returns focus to the trigger, which is correct whenever the trigger is
+   * still on the page.
+   */
+  returnFocusTo?: RefObject<HTMLElement | null>;
 }
 
 export interface DialogTitleClassNames {

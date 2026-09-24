@@ -136,19 +136,25 @@ export function MatchColumnsStep({
                 className="clet-bulk-import__match-column gsl-bulk-import__match-column clet-bulk-import__source-column gsl-bulk-import__source-column"
                 data-column-index={column.index}
                 onClick={() => openLinkedDropdown(column.index)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    openLinkedDropdown(column.index);
-                  }
-                }}
               >
+                {/*
+                  The card was role="button" + tabIndex wrapping the real
+                  Exclude button, which nests one control inside another. The
+                  label is the control now, so the card is a plain container and
+                  its onClick is a mouse convenience on top of a real button.
+                */}
                 <div className="clet-bulk-import__source-column-header gsl-bulk-import__source-column-header">
-                  <span className="clet-bulk-import__source-column-label gsl-bulk-import__source-column-label">
+                  <button
+                    type="button"
+                    className="clet-bulk-import__source-column-label gsl-bulk-import__source-column-label"
+                    aria-label={`Match column ${column.label}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openLinkedDropdown(column.index);
+                    }}
+                  >
                     {column.label}
-                  </span>
+                  </button>
                   <button
                     type="button"
                     className="clet-bulk-import__exclude-column gsl-bulk-import__exclude-column"

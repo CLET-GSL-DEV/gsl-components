@@ -589,7 +589,7 @@
 	padding: 0;
 	border-radius: 50%;
 	font-size: 0;
-	color: var(--gsl-primary, var(--clet-primary));
+	color: var(--gsl-primary-text, var(--clet-primary-text));
 }
 
 /* The collapsed label is still a flex item, so the button's 8px gap survives it
@@ -835,7 +835,7 @@ table tbody tr.clet-table__row--clickable:hover {
 }
 
 .clet-table__actions-item--destructive {
-	color: var(--gsl-error, var(--clet-error));
+	color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-table__actions-item--destructive:hover {
@@ -930,7 +930,7 @@ table tbody tr.clet-table__row--clickable:hover {
 
 .clet-table__bulk-actions-clear:hover {
 	opacity: 1;
-	color: var(--gsl-error, var(--clet-error));
+	color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-table__bulk-actions-group {
@@ -941,7 +941,7 @@ table tbody tr.clet-table__row--clickable:hover {
 }
 
 .clet-table__bulk-actions-action--destructive {
-	color: var(--gsl-error, var(--clet-error));
+	color: var(--gsl-error-text, var(--clet-error-text));
 	border-color: var(--gsl-error, var(--clet-error));
 }
 

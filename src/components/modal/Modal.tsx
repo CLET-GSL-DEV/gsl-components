@@ -12,11 +12,16 @@ import type {
   ModalTitleProps,
 } from "../../types/modal";
 import { cn } from "../../utils/cn";
+import {
+  buildCloseAutoFocusHandler,
+  createModalityAwareRoot,
+  useDialogModality,
+} from "../../utils/dialog-modality";
 import { Button } from "../button/Button";
 import "./styles/modal.css";
 import { useComposedRefs } from "../../hooks";
 
-export const Modal = DialogPrimitive.Root;
+export const Modal = createModalityAwareRoot("Modal");
 export const ModalTrigger = DialogPrimitive.Trigger;
 export const ModalPortal = DialogPrimitive.Portal;
 export const ModalClose = DialogPrimitive.Close;
@@ -47,6 +52,8 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
       onInteractOutside: consumerOnInteractOutside,
       onEscapeKeyDown: consumerOnEscapeKeyDown,
       onFocusOutside: consumerOnFocusOutside,
+      onCloseAutoFocus,
+      returnFocusTo,
       ...props
     },
     ref,
@@ -169,6 +176,8 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
       ],
     );
 
+    const isModal = useDialogModality();
+
     return (
       <DialogPrimitive.Content
         ref={composedRef}
@@ -183,7 +192,14 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
         onEscapeKeyDown={
           preventClose ? handleEscapeKeyDown : consumerOnEscapeKeyDown
         }
+        onCloseAutoFocus={buildCloseAutoFocusHandler(
+          returnFocusTo,
+          onCloseAutoFocus,
+        )}
         {...props}
+        // After the spread on purpose: Radix ships no aria-modal, and a caller
+        // must not be able to drop it. False modality omits it rather than lying.
+        aria-modal={isModal ? true : undefined}
       >
         {children}
 

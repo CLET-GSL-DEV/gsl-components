@@ -117,7 +117,9 @@ export interface AppHeaderNotificationItemClassNames {
 }
 
 export interface AppHeaderNotificationItemProps extends Omit<
-  HTMLAttributes<HTMLDivElement>,
+  // HTMLElement, not HTMLDivElement: a clickable row renders as a <button> and a
+  // read-only one as a <div>, so the props have to fit both.
+  HTMLAttributes<HTMLElement>,
   "onClick"
 > {
   /** Notification message content */
@@ -126,7 +128,7 @@ export interface AppHeaderNotificationItemProps extends Omit<
   time?: ReactNode;
   /** Shows a leading unread dot. Read items get a subtle background instead (default false) */
   unread?: boolean;
-  /** Called when the row is clicked (also fires on Enter/Space when set, since the row becomes keyboard-focusable) */
+  /** Called when the row is clicked. Setting it renders the row as a real <button>, so Enter and Space work natively. */
   onClick?: () => void;
   classNames?: AppHeaderNotificationItemClassNames;
   className?: string;

@@ -11,19 +11,21 @@ export function UploadFieldInlineExample() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 640 }}>
       <UploadField
+        aria-label="Upload your CV"
         variant="inline"
         accept=".pdf"
         maxSize={5 * 1024 * 1024}
         onChange={(f) => console.log(f)}
       />
       <UploadField
+        aria-label="Replace your CV"
         variant="inline"
         accept=".pdf"
         maxSize={5 * 1024 * 1024}
         value={file}
         onChange={setFile}
       />
-      <UploadField variant="inline" disabled />
+      <UploadField aria-label="Upload a file" variant="inline" disabled />
     </div>
   );
 }

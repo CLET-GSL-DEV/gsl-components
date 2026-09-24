@@ -63,10 +63,12 @@
     "test:watch": "vitest",
     "test:types": "vitest --typecheck run",
     "lint": "eslint .",
+    "rules:check": "node tools/repo-rules/index.mjs",
+    "rules:staged": "node tools/repo-rules/index.mjs --staged",
     "lint:css": "stylelint 'src/**/*.css' --max-warnings 0",
     "lint:css:fix": "stylelint 'src/**/*.css' --fix",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run generate:tokens && npm run lint:css && npm run lint && npm run typecheck && npm run test && npm run test:types && npm run build"
+    "prepublishOnly": "npm run generate:tokens && npm run lint:css && npm run lint && npm run typecheck && npm run rules:check && npm run test && npm run test:types && npm run build"
   },
   "peerDependencies": {
     "@hookform/resolvers": ">=3.0.0",

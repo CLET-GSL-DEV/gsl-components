@@ -1,1 +1,6 @@
 node scripts/check-staged.mjs
+# The accessibility rules, on staged files only. They catch the shapes the
+# September 2026 audit found: a control nested in a control, a div wearing
+# role="button", an unnamed picker, a dangling aria-controls, aria-current
+# parked on a wrapper nobody focuses.
+node tools/repo-rules/index.mjs --staged

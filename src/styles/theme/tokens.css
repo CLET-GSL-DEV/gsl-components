@@ -19,7 +19,9 @@
     --gsl-text-secondary,
     var(--clet-text-secondary)
   );
+  --color-primary-text: var(--gsl-primary-text, var(--clet-primary-text));
   --color-brand-gold: var(--gsl-secondary, var(--clet-secondary));
+  --color-brand-gold-text: var(--gsl-secondary-text, var(--clet-secondary-text));
 
   --color-muted: var(--gsl-surface-subtle, var(--clet-surface-subtle));
   --color-muted-foreground: var(
@@ -36,15 +38,25 @@
   --color-destructive-foreground: var(--gsl-error-text, var(--clet-error-text));
   --color-destructive-bg: var(--gsl-error-bg, var(--clet-error-bg));
 
+  /* -text is the ON-TINT reading colour: the status hue darkened (light) or
+     lightened (dark) until it clears 4.5:1 against its own color-mix tint on
+     every surface. The bare hue is for fills, borders and icons, never for
+     text on a tint. Enforced by contrast-tokens.test.ts. */
+  --color-error-text: var(--gsl-error-text, var(--clet-error-text));
+  --color-error-foreground: var(--gsl-on-error, var(--clet-on-error));
+
   --color-success: var(--gsl-success, var(--clet-success));
-  --color-success-foreground: var(--gsl-on-primary, var(--clet-on-primary));
+  --color-success-foreground: var(--gsl-on-success, var(--clet-on-success));
+  --color-success-text: var(--gsl-success-text, var(--clet-success-text));
 
   /* The "you are here" blue. Deliberately not --clet-primary. */
   --color-info: var(--gsl-info, var(--clet-info));
   --color-info-foreground: var(--gsl-on-info, var(--clet-on-info));
+  --color-info-text: var(--gsl-info-text, var(--clet-info-text));
 
   --color-warning: var(--gsl-warning, var(--clet-warning));
-  --color-warning-foreground: var(--gsl-text, var(--clet-text));
+  --color-warning-foreground: var(--gsl-on-warning, var(--clet-on-warning));
+  --color-warning-text: var(--gsl-warning-text, var(--clet-warning-text));
 
   --color-card: var(--gsl-bg, var(--clet-bg));
   --color-card-foreground: var(--gsl-text, var(--clet-text));
@@ -100,6 +112,8 @@
      into every --clet-text-size-* above, so the --text-* utilities scale with it
      and a separate utility would be meaningless)
    No --clet-success-bg or --clet-warning-bg tokens exist yet (unlike error, which
-   has -bg/-text companions) — new variants needing a tinted success/warning
+   has a -bg companion) - new variants needing a tinted success/warning
    background should use color-mix(in srgb, var(--gsl-success, var(--clet-success)) N%, transparent)
-   (see Badge/Notice) rather than inventing new global tokens for a single use. */
+   (see Badge/Notice) rather than inventing new global tokens for a single use.
+   Every status hue DOES have a -text companion; use it for any glyph drawn on
+   one of those tints. */

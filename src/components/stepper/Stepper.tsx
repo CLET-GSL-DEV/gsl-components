@@ -113,7 +113,10 @@ export const Step = forwardRef<HTMLLIElement, StepProps>(function Step(
   return (
     <li
       ref={ref}
-      aria-current={isActive ? "step" : undefined}
+      // When the step is clickable the button carries aria-current instead, so
+      // the state is announced on the element that actually takes focus. A
+      // static step has no such element, so it stays on the <li>.
+      aria-current={isActive && !canClick ? "step" : undefined}
       className={cn(
         "clet-stepper__item gsl-stepper__item",
         `clet-stepper__item--${state} gsl-stepper__item--${state}`,
@@ -130,6 +133,9 @@ export const Step = forwardRef<HTMLLIElement, StepProps>(function Step(
           className={cn("clet-stepper__button gsl-stepper__button", classNames?.button)}
           onClick={() => onValueChange?.(value)}
           aria-label={`Go to step ${value}`}
+          // On the button, not the <li>: tab focus lands here, and a current
+          // step announced on a wrapper the user never reaches is not announced.
+          aria-current={isActive ? "step" : undefined}
         >
           {marker}
           {children}

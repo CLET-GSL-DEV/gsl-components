@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { AccessibleName } from "./accessible-name";
 
 export interface ComboboxOption {
   value: string;
@@ -31,19 +32,18 @@ interface ComboboxBaseProps {
   loading?: boolean;
   loadingLabel?: string;
   emptyMessage?: ReactNode;
-  "aria-label"?: string;
   classNames?: ComboboxClassNames;
   className?: string;
   name?: string;
 }
 
 export type ComboboxProps =
-  | (ComboboxBaseProps & {
+  | (ComboboxBaseProps & AccessibleName & {
       multiple?: false;
       value: string | null;
       onValueChange: (value: string | null) => void;
     })
-  | (ComboboxBaseProps & {
+  | (ComboboxBaseProps & AccessibleName & {
       multiple: true;
       value: string[];
       onValueChange: (value: string[]) => void;

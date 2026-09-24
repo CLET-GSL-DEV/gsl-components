@@ -64,7 +64,7 @@
   letter-spacing: 0;
   vertical-align: middle;
   text-transform: capitalize;
-  color: var(--gsl-secondary, var(--clet-secondary));
+  color: var(--gsl-secondary-text, var(--clet-secondary-text));
 }
 
 /* ── 2.4 shell: no chevron on the profile trigger ── */
@@ -619,13 +619,30 @@
   color: var(--gsl-text, var(--clet-text));
 }
 
+/* A clickable row renders as a <button>, so it needs the native chrome reset
+   and a full-width block layout the default button box does not give it. */
 .clet-notif-popover__item {
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  width: 100%;
   padding: 12px 16px;
-  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: default;
   transition: background-color 150ms ease;
+}
+
+.clet-notif-popover__item--clickable {
+  cursor: pointer;
+}
+
+.clet-notif-popover__item--clickable:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: -2px;
 }
 
 .clet-notif-popover__item:hover {

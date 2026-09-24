@@ -126,8 +126,13 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
     );
 
     const headerStyleTrigger = user ? (
-      <div
-        ref={ref as React.Ref<HTMLDivElement>}
+      // A real <button>, not a <div>. Radix's Trigger asChild spreads
+      // type="button", aria-haspopup and aria-expanded onto whatever it wraps,
+      // and those attributes are invalid on a div - axe reports
+      // aria-allowed-attr, and a keyboard user cannot reach it at all.
+      <button
+        type="button"
+        ref={ref as React.Ref<HTMLButtonElement>}
         className={cn(
           "clet-app-header__profile gsl-app-header__profile",
           isAvatarOnly && "clet-app-header__profile--avatar gsl-app-header__profile--avatar",
@@ -159,10 +164,11 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
             </span>
           ) : (
             <>
-              <div className="clet-app-header__user-info gsl-app-header__user-info">
+              {/* <span>, not <div>: a button's content model is phrasing content. */}
+              <span className="clet-app-header__user-info gsl-app-header__user-info">
                 <span className="clet-app-header__user-name gsl-app-header__user-name">{user.name}</span>
                 <span className="clet-app-header__user-role gsl-app-header__user-role">{user.role}</span>
-              </div>
+              </span>
               <ChevronDown
                 className="clet-app-header__profile-chevron gsl-app-header__profile-chevron"
                 size={16}
@@ -176,7 +182,7 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
             {loadingLabel}
           </span>
         ) : null}
-      </div>
+      </button>
     ) : (
       <button
         ref={ref as React.Ref<HTMLButtonElement>}

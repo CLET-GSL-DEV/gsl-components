@@ -99,7 +99,7 @@
   border-color: var(--gsl-border, var(--clet-border));
   border-bottom-color: var(--gsl-bg, var(--clet-bg));
   background: var(--gsl-bg, var(--clet-bg));
-  color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary-text, var(--clet-primary-text));
 }
 
 .clet-tabs--line .clet-tabs__trigger {
@@ -110,7 +110,7 @@
 }
 
 .clet-tabs--line .clet-tabs__trigger[data-state="active"] {
-  color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary-text, var(--clet-primary-text));
   background: transparent;
 }
 

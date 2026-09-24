@@ -6,6 +6,7 @@ export function UploadFieldMultipleExample() {
 
   return (
     <UploadField
+      aria-label="Attach images or PDFs"
       multiple
       accept="image/*,.pdf"
       value={files}

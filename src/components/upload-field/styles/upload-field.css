@@ -19,6 +19,12 @@
   outline: none;
 }
 
+/* The focus ring belongs to the dropzone even though the input owns focus. */
+.clet-upload-field:focus-within {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: 2px;
+}
+
 .clet-upload-field:focus-visible {
   border-color: var(--gsl-primary, var(--clet-primary));
   box-shadow: 0 0 0 2px var(--gsl-primary-light, var(--clet-primary-light));
@@ -37,8 +43,18 @@
   background: var(--gsl-primary-light, var(--clet-primary-light));
 }
 
+/* Visually hidden but still focusable and still clickable. display:none would
+   take the control out of the tab order, which is what forced the old
+   role="button" wrapper that DS-07 flagged. */
 .clet-upload-field__input {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* ── Invalid ── */
@@ -225,7 +241,7 @@
   font-weight: 400;
   font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
   line-height: 1.43;
-  color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary-text, var(--clet-primary-text));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -243,7 +259,7 @@
 }
 
 .clet-upload-field__file-card-completed-icon {
-  color: var(--gsl-success, var(--clet-success));
+  color: var(--gsl-success-text, var(--clet-success-text));
   flex-shrink: 0;
 }
 
@@ -258,7 +274,7 @@
   font-family: var(--gsl-upload-field-font, var(--clet-upload-field-font));
   font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
   line-height: 1.33;
-  color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-upload-field__file-card-status-dot {
@@ -273,7 +289,7 @@
   border: none;
   padding: 0;
   background: transparent;
-  color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
   font: inherit;
   font-weight: 600;
   text-decoration: underline;
@@ -317,7 +333,7 @@
 
 .clet-upload-field__file-card-remove:hover {
   background: color-mix(in srgb, var(--gsl-error, var(--clet-error)) 10%, transparent);
-  color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 /* ── Action button ── */
@@ -356,7 +372,10 @@
 }
 
 .clet-upload-field--invalid .clet-upload-field__action {
+  /* The button keeps its primary variant but swaps the fill, so it must swap
+     the ink too: on-primary is white, and the dark theme's error hue is light. */
   background: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-on-error, var(--clet-on-error));
 }
 
 /* ── Error card ── */
