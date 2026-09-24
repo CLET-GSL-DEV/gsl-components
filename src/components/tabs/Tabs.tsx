@@ -37,7 +37,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
   function TabsList({ classNames, className, children, ...props }, ref) {
     const { variant } = useTabsContext();
     const listRef = useRef<HTMLDivElement | null>(null);
-    const isLineVariant = variant === "line" || variant === "pill";
+    const isLineVariant = variant === "line" || variant === "pill" || variant === "flat";
     const { style: indicatorStyle, visible: indicatorVisible } =
       useTabsLineIndicator(listRef, isLineVariant);
 

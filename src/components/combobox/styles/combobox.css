@@ -182,6 +182,7 @@
 .clet-combobox__list {
   max-height: var(--gsl-combobox-menu-max-height, var(--clet-combobox-menu-max-height));
   overflow: hidden auto;
+  overscroll-behavior: contain;
   padding: 6px;
 }
 

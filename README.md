@@ -285,7 +285,7 @@ Exports: `useSearchParamOverlay`, `useDialogSearchParam`, `useModalSearchParam`,
 
 ## AppHeader
 
-Compound header bar with `AppHeader`, `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderFontSize`, and `AppHeaderNotifications`. Nest search on the left and group switcher, notifications, and profile inside `AppHeaderActions` on the right. The profile trigger is [`ProfilePopover`](/docs/profile-popover) itself (pass `user`/`variant` for the compact header-style trigger): there's no separate `AppHeaderProfile` component. `variant` picks the surface: `"default"` is a rounded panel, `"plain"` is the page surface with a hairline underneath (the layout shell's top bar), `"primary"` is the brand-coloured bar.
+Compound header bar with `AppHeader`, `AppHeaderSearch`, `AppHeaderActions`, `AppHeaderFontSize`, and `AppHeaderNotifications`. Nest search on the left and group switcher, notifications, and profile inside `AppHeaderActions` on the right. The profile trigger is [`ProfilePopover`](/docs/profile-popover) itself (pass `user`/`variant` for the compact header-style trigger): there's no separate `AppHeaderProfile` component. `variant` picks the surface: `"default"` is a rounded panel, `"plain"` is the page surface with a hairline underneath (the layout shell's top bar), `"primary"` is the brand-coloured bar. The plain header rests tall and shrinks on scroll, and `AppHeaderTitle` can carry `page`/`breadcrumbs` that fade in once scrolled deep.
 
 `AppHeaderFontSize` is the accessibility text-size picker: an "Aa" trigger offering Small, Normal, Large and Largest, conventionally placed just before `AppHeaderNotifications`. It reads the size held by `ThemeProvider`, so there is no extra provider to mount.
 
@@ -827,7 +827,21 @@ import { EmptyState, Table } from "@rfdtech/components";
 />
 ```
 
-Props: `illustration`, `title`, `description`, `action`, `classNames`, `className`. Exported types: `EmptyStateProps`, `EmptyStateClassNames`.
+Props: `illustration`, `icon`, `title`, `description`, `action`, `classNames`, `className`. Exported types: `EmptyStateProps`, `EmptyStateClassNames`.
+
+## ExpandableItem
+
+Bordered card for lists where each row folds open: header row (chevron toggle, title, status slot) expanding a panel that holds anything. See the [ExpandableItem](/docs/expandable-item) docs page for props and exported types.
+
+```tsx
+import { ExpandableItem } from "@rfdtech/components";
+
+<ExpandableItem title="LEAT/2026/LIC/007" status="closed" defaultExpanded>
+  <p>Sitting minutes, attendance, and tendered documents.</p>
+</ExpandableItem>
+```
+
+Props: `title`, `status`, `children`, `expanded`, `defaultExpanded`, `onExpandedChange`, `classNames`, `className`. Exported types: `ExpandableItemProps`, `ExpandableItemClassNames`.
 
 ## Form
 
@@ -1443,7 +1457,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rfdtech/components";
 </Tabs>
 ```
 
-Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Props: `Tabs` — `value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`, `variant` (`"default"`, `"line"`, `"pill"`), `classNames`, `className`, `children`. `TabsTrigger` — `value`, `disabled`, `classNames`, `className`. Exported types: `TabsProps`, `TabsListProps`, `TabsTriggerProps`, `TabsContentProps`, `TabsVariant`, `TabsClassNames`, `TabsListClassNames`, `TabsTriggerClassNames`, `TabsContentClassNames`.
+Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Props: `Tabs` — `value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`, `variant` (`"default"`, `"line"`, `"pill"`, `"flat"`), `classNames`, `className`, `children`. `TabsTrigger` — `value`, `disabled`, `classNames`, `className`. Exported types: `TabsProps`, `TabsListProps`, `TabsTriggerProps`, `TabsContentProps`, `TabsVariant`, `TabsClassNames`, `TabsListClassNames`, `TabsTriggerClassNames`, `TabsContentClassNames`.
 
 ## Timeline
 
@@ -1547,7 +1561,7 @@ import { UploadField } from "@rfdtech/components";
 <UploadField accept="image/*" maxSize={5 * 1024 * 1024} />
 ```
 
-Props: `accept`, `multiple`, `maxSize`, `value`, `onChange`, `invalid`, `disabled`, `name`, `fileStatuses`, `onCancel`, `onRetry`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`, `UploadFieldFileStatus`, `UploadFieldFileStatusKind`. Also exports `FileFormatIcon` for rendering the same file-type icon standalone.
+Props: `variant`, `accept`, `multiple`, `maxSize`, `subtitle`, `value`, `onChange`, `invalid`, `disabled`, `name`, `fileStatuses`, `onCancel`, `onRetry`, `classNames`, `className`. Exported types: `UploadFieldProps`, `UploadFieldClassNames`, `UploadFieldFileStatus`, `UploadFieldFileStatusKind`. Also exports `FileFormatIcon` for rendering the same file-type icon standalone.
 
 ## Development
 

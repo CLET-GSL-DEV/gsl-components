@@ -56,7 +56,7 @@ export interface LaunchpadProps {
    */
   children?: ReactElement<RoleSelectProps, typeof RoleSelect>;
   /**
-   * Custom trigger element — replaces the default square 9-dot icon.
+   * Custom trigger element: replaces the default 2x2 box-grid icon.
    * Whatever you pass is still wrapped with the "Open Launchpad" tooltip
    * and accessible name.
    */

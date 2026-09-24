@@ -64,6 +64,8 @@
 /* ── Nested role popover ── */
 
 .clet-role-select__popover {
+  --clet-role-select-menu-max-height: 320px;
+
   width: var(--radix-popover-trigger-width, 220px);
   padding: 4px;
   background: var(--gsl-bg, var(--clet-bg));
@@ -80,6 +82,9 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: var(--gsl-role-select-menu-max-height, var(--clet-role-select-menu-max-height));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .clet-role-select__item {

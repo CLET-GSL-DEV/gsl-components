@@ -196,12 +196,13 @@
 }
 
 /* Image-only header: the brand mark carries the identity, no title text.
-   Renders at the Figma size (130px wide). */
+   Figma size: 130px wide, 66px tall. */
 .clet-sidebar--brand .clet-sidebar__header-logo img,
 .clet-sidebar--brand .clet-sidebar__header-logo svg {
 	width: 130px;
 	max-width: 100%;
-	height: auto;
+	height: 66px;
+	object-fit: contain;
 }
 
 /* Chevron points up while open, matching the primary rail. */

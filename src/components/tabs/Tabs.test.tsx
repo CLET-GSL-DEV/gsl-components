@@ -189,4 +189,30 @@ describe("Tabs", () => {
     expect(list).toHaveAttribute("data-orientation", "vertical");
     expect(list?.querySelector(".clet-tabs__indicator")).toBeInTheDocument();
   });
+
+  it("applies flat variant class on root with a sliding pill indicator", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <Tabs defaultValue="all" variant="flat">
+        <TabsList>
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="pending">Pending</TabsTrigger>
+        </TabsList>
+        <TabsContent value="all">All cases</TabsContent>
+        <TabsContent value="pending">Pending cases</TabsContent>
+      </Tabs>,
+    );
+
+    expect(document.querySelector(".clet-tabs")).toHaveClass("clet-tabs--flat");
+    expect(
+      document.querySelector(".clet-tabs__list"),
+    ).toHaveClass("clet-tabs__list--flat");
+    expect(
+      document.querySelector(".clet-tabs__indicator"),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "Pending" }));
+    expect(screen.getByRole("tabpanel")).toHaveTextContent("Pending cases");
+  });
 });

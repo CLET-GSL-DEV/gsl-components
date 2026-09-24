@@ -22,6 +22,7 @@ export interface UploadFieldClassNames {
   icon?: string;
   title?: string;
   subtitle?: string;
+  text?: string;
   files?: string;
   fileCard?: string;
   fileName?: string;
@@ -39,6 +40,12 @@ export interface UploadFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   invalid?: boolean;
   disabled?: boolean;
   classNames?: UploadFieldClassNames;
+  /**
+   * Visual style. `"default"` is the large centered dropzone; `"inline"` is a
+   * compact horizontal row (icon, text, browse action) for tight placements
+   * such as form rows and modal bodies. All behaviour is identical.
+   */
+  variant?: "default" | "inline";
   accept?: string;
   multiple?: boolean;
   maxSize?: number;

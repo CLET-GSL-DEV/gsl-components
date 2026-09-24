@@ -2,7 +2,7 @@
   --clet-section-header-font: var(--gsl-font-body, var(--clet-font-body));
   --clet-section-header-title-font: var(--gsl-font-header, var(--clet-font-header));
   --clet-section-header-title-size: calc(
-    40px * var(--gsl-text-scale, var(--clet-text-scale, 1))
+    28px * var(--gsl-text-scale, var(--clet-text-scale, 1))
   );
   --clet-section-header-description-size: calc(
     14px * var(--gsl-text-scale, var(--clet-text-scale, 1))
@@ -22,9 +22,11 @@
   grid-column: 1;
   grid-row: 1;
   margin: 0;
-  font-family: var(--gsl-section-header-title-font, var(--clet-section-header-title-font));
+  font-family: Matimo, var(--gsl-section-header-title-font, var(--clet-section-header-title-font));
   font-size: var(--gsl-section-header-title-size, var(--clet-section-header-title-size));
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0;
   color: var(--gsl-text, var(--clet-text));
 }
 

@@ -177,6 +177,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       disabled = false,
       classNames,
       className,
+      variant = "default",
       accept,
       multiple = false,
       maxSize,
@@ -323,6 +324,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           id={id}
           className={cn(
             "clet-upload-field gsl-upload-field",
+            variant === "inline" && "clet-upload-field--inline gsl-upload-field--inline",
             dragOver && "clet-upload-field--drag-over gsl-upload-field--drag-over",
             hasFiles && "clet-upload-field--has-files gsl-upload-field--has-files",
             invalidBool && "clet-upload-field--invalid gsl-upload-field--invalid",
@@ -363,15 +365,29 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           >
             <CloudUpload size={20} strokeWidth={1.75} aria-hidden />
           </div>
-          <p className={cn("clet-upload-field__title gsl-upload-field__title", classNames?.title)}>
-            Click to upload or drag and drop
-          </p>
-          {resolvedSubtitle ? (
-            <p className={cn("clet-upload-field__subtitle gsl-upload-field__subtitle", classNames?.subtitle)}>
-              {resolvedSubtitle}
-            </p>
-          ) : null}
-
+          {variant === "inline" ? (
+            <div className={cn("clet-upload-field__text gsl-upload-field__text", classNames?.text)}>
+              <p className={cn("clet-upload-field__title gsl-upload-field__title", classNames?.title)}>
+                Click to upload or drag and drop
+              </p>
+              {resolvedSubtitle ? (
+                <p className={cn("clet-upload-field__subtitle gsl-upload-field__subtitle", classNames?.subtitle)}>
+                  {resolvedSubtitle}
+                </p>
+              ) : null}
+            </div>
+          ) : (
+            <>
+              <p className={cn("clet-upload-field__title gsl-upload-field__title", classNames?.title)}>
+                Click to upload or drag and drop
+              </p>
+              {resolvedSubtitle ? (
+                <p className={cn("clet-upload-field__subtitle gsl-upload-field__subtitle", classNames?.subtitle)}>
+                  {resolvedSubtitle}
+                </p>
+              ) : null}
+            </>
+          )}
           {hasFiles && (
             <div className={cn("clet-upload-field__files gsl-upload-field__files", classNames?.files)}>
               {files.map((file, i) => {

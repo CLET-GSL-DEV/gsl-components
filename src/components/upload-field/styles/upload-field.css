@@ -102,6 +102,82 @@
   margin-bottom: 16px;
 }
 
+/* ── Inline variant: compact horizontal row ── */
+
+.clet-upload-field--inline {
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.clet-upload-field--inline .clet-upload-field__icon {
+  width: 32px;
+  height: 32px;
+}
+
+.clet-upload-field__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 120px;
+  gap: 2px;
+}
+
+.clet-upload-field--inline .clet-upload-field__title,
+.clet-upload-field--inline .clet-upload-field__subtitle {
+  text-align: left;
+  margin: 0;
+}
+
+.clet-upload-field--inline .clet-upload-field__files {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.clet-upload-field--inline .clet-upload-field__action {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* With files the row stays a row: the file card carries the name, so the
+   prompt text steps aside instead of stacking the card below it. */
+.clet-upload-field--inline.clet-upload-field--has-files .clet-upload-field__text {
+  display: none;
+}
+
+.clet-upload-field--inline .clet-upload-field__file-card {
+  padding: 4px 8px;
+  min-height: 36px;
+  align-items: center;
+}
+
+/* Inline cards read as one line (name truncated by CSS, size beside it) so the
+   card matches the action button height. */
+.clet-upload-field--inline .clet-upload-field__file-card-info {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.clet-upload-field--inline .clet-upload-field__file-card-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.clet-upload-field--inline .clet-upload-field__file-card-size,
+.clet-upload-field--inline .clet-upload-field__file-card-status {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.clet-upload-field--inline .clet-upload-field__file-card-progress {
+  flex: 1;
+  min-width: 60px;
+}
+
 /* ── File cards ── */
 
 .clet-upload-field__files {

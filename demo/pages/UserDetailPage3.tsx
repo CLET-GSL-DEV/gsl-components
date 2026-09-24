@@ -28,6 +28,7 @@ import {
   TimelineFooter,
   TimelineItem,
   TimelineTitle,
+  useBreadcrumbs,
 } from "@rfdtech/components";
 import { auditTrail } from "demo/data/auditTrail";
 import { demoUsers } from "demo/data/demoUsers";
@@ -52,6 +53,11 @@ export function UserDetailPage3() {
   const navigate = useNavigate();
   const params = useParams<{ userId: string }>();
   const user = demoUsers.find((u) => u.id === params.userId) ?? demoUsers[0];
+  useBreadcrumbs([
+    { label: "Home", href: "/" },
+    { label: "Users", href: "/users/user-1" },
+    { label: user.name },
+  ]);
   const { loading: profileLoading } = useMockQuery(null, 800);
 
   const actions = useMemo(

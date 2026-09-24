@@ -7,7 +7,7 @@ import {
   useState,
   type FocusEvent,
 } from "react";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 import {
   Command,
   CommandInput,
@@ -39,7 +39,6 @@ export const AppHeaderSearch = forwardRef<
     defaultCollapsed = true,
     onCollapsedChange,
     expandLabel = "Open search",
-    collapseLabel = "Close search",
   },
   ref,
 ) {
@@ -217,14 +216,6 @@ export const AppHeaderSearch = forwardRef<
       }}
     >
       {field}
-      <button
-        type="button"
-        className="clet-app-header-search__collapse gsl-app-header-search__collapse"
-        aria-label={collapseLabel}
-        onClick={collapse}
-      >
-        <X size={16} strokeWidth={2} aria-hidden />
-      </button>
     </div>
   );
 });

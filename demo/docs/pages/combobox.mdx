@@ -14,10 +14,12 @@ import { ComboboxPreview } from "../previews/code/ComboboxPreview";
 import { ComboboxMultiPreview } from "../previews/code/ComboboxMultiPreview";
 import { ComboboxIconsPreview } from "../previews/code/ComboboxIconsPreview";
 import { ComboboxLongPreview } from "../previews/code/ComboboxLongPreview";
+import { ComboboxInModalPreview } from "../previews/code/ComboboxInModalPreview";
 import comboboxSingleSource from "../previews/examples/combobox-single.example.tsx?raw";
 import comboboxMultiSource from "../previews/examples/combobox-multi.example.tsx?raw";
 import comboboxIconsSource from "../previews/examples/combobox-icons.example.tsx?raw";
 import comboboxLongSource from "../previews/examples/combobox-long.example.tsx?raw";
+import comboboxInModalSource from "../previews/examples/combobox-in-modal.example.tsx?raw";
 
 # Combobox
 
@@ -47,6 +49,12 @@ Searchable option list built on `cmdk`, opened from a trigger button (unlike `Dr
   title="Long list (scrolls past 320px)"
   preview={<ComboboxLongPreview />}
   code={comboboxLongSource}
+/>
+
+<ExampleTabs
+  title="Inside a modal (scroll, pick, Escape order)"
+  preview={<ComboboxInModalPreview />}
+  code={comboboxInModalSource}
 />
 
 ## Props

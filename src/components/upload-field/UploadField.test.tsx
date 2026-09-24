@@ -91,6 +91,24 @@ describe("UploadField", () => {
     expect(document.querySelector(".clet-upload-field__action")).toHaveTextContent("Upload file");
   });
 
+  it("renders inline variant as a compact row", () => {
+    render(<UploadField variant="inline" accept=".pdf" />);
+    const root = document.querySelector(".clet-upload-field")!;
+    expect(root).toHaveClass("clet-upload-field--inline");
+    expect(root.querySelector(".clet-upload-field__text")).toBeInTheDocument();
+    expect(screen.getByText("Click to upload or drag and drop")).toBeInTheDocument();
+  });
+
+  it("inline variant keeps the file card in the row", () => {
+    const file = createFile("cv.pdf", "application/pdf");
+    render(<UploadField variant="inline" value={file} onChange={() => {}} />);
+    const root = document.querySelector(".clet-upload-field")!;
+    expect(root).toHaveClass("clet-upload-field--inline");
+    expect(root).toHaveClass("clet-upload-field--has-files");
+    expect(root.querySelector(".clet-upload-field__files")).toBeInTheDocument();
+    expect(screen.getByText("cv.pdf")).toBeInTheDocument();
+  });
+
   it("renders cloud upload icon", () => {
     render(<UploadField />);
     expect(document.querySelector(".clet-upload-field__icon .lucide-cloud-upload")).toBeInTheDocument();

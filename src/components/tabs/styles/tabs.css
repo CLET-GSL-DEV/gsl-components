@@ -159,6 +159,63 @@
     var(--clet-tabs-pill-radius, 9999px)
   );
 }
+/* ── Flat variant: soft bar with a white active pill ──
+   Subtle container, no dividers; the active trigger is a white pill on a
+   shadow. Opt-in only; the other variants are untouched. No sliding
+   indicator (TabsList renders none for this variant). */
+.clet-tabs--flat .clet-tabs__list {
+  gap: 4px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px;
+  border: none;
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
+  position: relative;
+}
+
+.clet-tabs--flat .clet-tabs__trigger {
+  margin-bottom: 0;
+  border: none;
+  border-radius: calc(var(--gsl-radius-xl, var(--clet-radius-xl)) - 4px);
+  background: transparent;
+  color: var(--gsl-text, var(--clet-text));
+}
+
+.clet-tabs--flat .clet-tabs__trigger:hover:not(:disabled) {
+  background: transparent;
+  color: var(--gsl-text, var(--clet-text));
+}
+
+.clet-tabs--flat .clet-tabs__trigger[data-state="active"] {
+  color: var(--gsl-text, var(--clet-text));
+  z-index: 1;
+}
+
+/* Hover never tints the active pill: triggers stay transparent, the sliding
+   indicator behind them carries the white. */
+.clet-tabs--flat .clet-tabs__trigger[data-state="active"]:hover:not(:disabled) {
+  background: transparent;
+  color: var(--gsl-text, var(--clet-text));
+}
+
+/* Sliding white pill: follows the active trigger's size and position, with
+   the same soft shadow as the header icon buttons. */
+.clet-tabs--flat .clet-tabs__indicator {
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-soft, var(--clet-shadow-soft));
+  top: var(
+    --gsl-tabs-indicator-cross-offset,
+    var(--clet-tabs-indicator-cross-offset, 0)
+  );
+  left: var(--gsl-tabs-indicator-offset, var(--clet-tabs-indicator-offset, 0));
+  width: var(--gsl-tabs-indicator-size, var(--clet-tabs-indicator-size, 0));
+  height: var(
+    --gsl-tabs-indicator-cross-size,
+    var(--clet-tabs-indicator-cross-size, 0)
+  );
+  border-radius: calc(var(--gsl-radius-xl, var(--clet-radius-xl)) - 4px);
+}
 .clet-tabs__list--line[data-orientation="horizontal"] .clet-tabs__indicator {
   bottom: 0;
   left: 0;

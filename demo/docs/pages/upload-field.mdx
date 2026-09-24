@@ -18,6 +18,8 @@ import { UploadFieldMultiplePreview } from "../previews/code/UploadFieldMultiple
 import uploadFieldMultipleSource from "../previews/examples/upload-field-multiple.example.tsx?raw";
 import { UploadFieldStatusCardsPreview } from "../previews/code/UploadFieldStatusCardsPreview";
 import uploadFieldStatusCardsSource from "../previews/examples/upload-field-status-cards.example.tsx?raw";
+import { UploadFieldInlinePreview } from "../previews/code/UploadFieldInlinePreview";
+import uploadFieldInlineSource from "../previews/examples/upload-field-inline.example.tsx?raw";
 
 # UploadField
 
@@ -39,6 +41,16 @@ Selecting or dropping several files at once with `multiple`.
   title="Multiple file selection"
   preview={<UploadFieldMultiplePreview />}
   code={uploadFieldMultipleSource}
+/>
+
+## Inline variant
+
+A compact horizontal row (icon, text, browse action) for tight placements such as form rows and modal bodies. All behaviour (drag and drop, file cards, statuses, the error dialog) is identical.
+
+<ExampleTabs
+  title="Inline upload row"
+  preview={<UploadFieldInlinePreview />}
+  code={uploadFieldInlineSource}
 />
 
 ## Per-file upload status
@@ -194,6 +206,7 @@ const uploadSchema = z.object({
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `variant` | `"default" \| "inline"` | `"default"` | Visual style (`default` dropzone or compact `inline` row) |
 | `accept` | `string` | — | Accepted MIME types (also drives the subtitle text) |
 | `multiple` | `boolean` | `false` | Allow multiple file selection |
 | `maxSize` | `number` | — | Maximum file size in bytes (drives the subtitle text; files exceeding this are silently filtered) |
@@ -246,6 +259,7 @@ One entry in the `fileStatuses` array:
 |-----|------------|
 | `root` | Root element / dropzone (`.clet-upload-field`) |
 | `icon` | Cloud upload icon wrapper (`.clet-upload-field__icon`) |
+| `text` | Inline-variant text group (`.clet-upload-field__text`) |
 | `title` | "Click to upload or drag and drop" text (`.clet-upload-field__title`) |
 | `subtitle` | File type/size hint text (`.clet-upload-field__subtitle`) |
 | `files` | File cards container (`.clet-upload-field__files`) |

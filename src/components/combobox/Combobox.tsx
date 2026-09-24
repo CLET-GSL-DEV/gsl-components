@@ -87,6 +87,9 @@ export function Combobox(props: ComboboxProps) {
   const rootRef = useRef<HTMLSpanElement>(null);
   useTableFilterReset(rootRef, clearValue, Boolean(name));
 
+  // cmdk lists do not scroll natively under the wheel in all hosts, so the
+  // list drives its own scrollTop and only lets the event chain past the
+  // list at its edges (e.g. into the modal body behind it).
   const handleWheel = useCallback((e: React.WheelEvent) => {
     const el = e.currentTarget as HTMLElement;
     const { scrollTop, scrollHeight, clientHeight } = el;

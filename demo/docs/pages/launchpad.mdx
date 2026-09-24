@@ -2,7 +2,7 @@ export const meta = {
   title: "Launchpad",
   description: "Constrained 9-app launcher with a top-right expand button + a See more line under the grid + optional role switcher",
   category: "Components",
-  keywords: ["launchpad", "app switcher", "9-dot menu", "app launcher", "product switcher", "grid menu"],
+  keywords: ["launchpad", "app switcher", "box-grid menu", "app launcher", "product switcher", "grid menu"],
   since: "2.1.0",
   status: "stable",
   related: ["app-switcher", "app-header", "role-select"],
@@ -47,7 +47,7 @@ Prefer `Launchpad` for all new work — `AppSwitcher` is deprecated and no longe
 | `children` | `ReactElement<RoleSelectProps>` | — | An optional [`RoleSelect`](/docs/role-select) rendered below the grid, outside the scrollable/masked grid area and separated by a divider — only a `RoleSelect` element is accepted. Omit it and the footer and its divider are not rendered |
 | `open` | `boolean` | — | Controlled open state (the popover; the expand modal manages its own state internally) |
 | `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
-| `trigger` | `ReactNode` | round 9-dot icon | Custom trigger element — still wrapped with the "Open Launchpad" tooltip/accessible name |
+| `trigger` | `ReactNode` | 2x2 box-grid icon | Custom trigger element — still wrapped with the "Open Launchpad" tooltip/accessible name |
 | `className` | `string` | — | Root CSS class |
 | `style` | `CSSProperties` | — | Root inline styles |
 | `showBrandStrip` | `boolean` | `true` | Shows the decorative brand strip along the bottom of the expanded "See all" modal |

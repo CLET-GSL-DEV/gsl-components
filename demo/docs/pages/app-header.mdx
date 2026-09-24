@@ -20,6 +20,8 @@ import appHeaderPrimarySource from "../previews/examples/app-header-primary.exam
 import appHeaderBrandingDeclarativeSource from "../previews/examples/app-header-branding-declarative.example.tsx?raw";
 import { AppHeaderFontSizePreview } from "../previews/code/AppHeaderFontSizePreview";
 import appHeaderFontSizeSource from "../previews/examples/app-header-font-size.example.tsx?raw";
+import { AppHeaderPageContextPreview } from "../previews/code/AppHeaderPageContextPreview";
+import appHeaderPageContextSource from "../previews/examples/app-header-page-context.example.tsx?raw";
 
 # AppHeader
 
@@ -40,7 +42,7 @@ Click the profile avatar to open the profile popover with variant toggle (cycles
 `AppHeader` accepts a `variant` prop that controls its surface style.
 
 - **`"default"`** (default) — subtle rounded panel surface, matching the rest of the `AppLayout` content area.
-- **`"plain"`**: square edges, the page surface, ordinary text, and a single hairline along the bottom. The top bar of the [layout shell](/docs/app-layout#variants), where the brand colour lives on the `Sidebar` rail instead. Carries no branding: the mark belongs at the top of the rail, and showing it in both places puts the same logo on screen twice.
+- **`"plain"`**: square edges, the page surface, ordinary text, and a single hairline along the bottom. The top bar of the [layout shell](/docs/app-layout#variants), where the brand colour lives on the `Sidebar` rail instead. Carries no branding: the mark belongs at the top of the rail, and showing it in both places puts the same logo on screen twice. Rests at 100px (`--clet-app-header-min-height`) and shrinks to 68.5px (`--clet-app-header-compact-min-height`), 72px while showing breadcrumbs, with a height transition once the page scrolls past the top; other variants never shrink.
 - **`"primary"`**: square edges, `--clet-primary-surface` background, and `--clet-on-primary` text. A continuous brand top bar, for systems that want the colour along the top rather than down the side.
 
 <ExampleTabs
@@ -108,11 +110,51 @@ For anything beyond a single title/subtitle pair — a badge next to the title, 
 
 Reuse `.clet-app-header__branding-text` / `.clet-app-header__branding-title` on your own markup (as above) to inherit the same font/size/color tokens, or write fully custom styles.
 
+### `AppHeaderTitle`
+
+The system title for the 2.4 header (the rail is image-only, so the app's name lives here). Carries its own size, weight, and spacing. Drop it in, no styling needed.
+
+Pass `page` and `breadcrumbs` to fade the page context into the header on scroll: once a `variant="plain"` header has scrolled deep enough to cover the page title, `AQAIS · Page Title` plus the trail crossfade over the plain system name. Scroll back up and it fades back out. Without them this is just the title, and other header variants never show the context.
+
+```tsx
+<AppHeaderTitle
+  page="Case list"
+  breadcrumbs={
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <BreadcrumbPage>Cases</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  }
+>
+  AQAIS
+</AppHeaderTitle>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | — | System name (e.g. `"AQAIS"`) |
+| `page` | `ReactNode` | — | Page name faded in beside the system name on deep scroll |
+| `breadcrumbs` | `ReactNode` | — | Trail shown under the title on deep scroll |
+| `classNames` | `AppHeaderTitleClassNames` | — | `title`, `page`, `dot`, `breadcrumbs` overrides |
+| `className` | `string` | — | Merged onto the title |
+
+<ExampleTabs
+  title="Page title fades in on deep scroll"
+  preview={<AppHeaderPageContextPreview />}
+  code={appHeaderPageContextSource}
+/>
+
 ### `AppHeaderSearch`
 
 Data-driven search input that renders results in a `Command` popover list. Pass `data` as groups of items; the component maps them to `CommandGroup` → `CommandItem` elements.
 
-Type to search — the component fires `onSearch` with a debounced value (300ms). Drive your data fetch from this callback and pass the result back as `data`.
+Type to search — the component fires `onSearch` with a debounced value (300ms). Drive your data fetch from this callback and pass the result back as `data`. Filtering is entirely yours (`shouldFilter` is off): the list shows exactly what you pass, so a memoized `data` array plus a stable `onSearch` keeps parent re-renders to one per settled term instead of one per keystroke. Keystrokes only update the component's own local input state.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -124,12 +166,12 @@ Type to search — the component fires `onSearch` with a debounced value (300ms)
 | `label` | `string` | `"Search"` | Accessible label for the input |
 | `children` | `ReactNode` | — | Rendered inside `CommandList` after groups |
 | `className` | `string` | — | Merged onto the root element |
-| `collapsible` | `boolean` | `false` | Collapse to an icon button that swaps itself for the field on click and autofocuses it. Siblings (e.g. a title) are untouched. Moving focus out of the field collapses it back; Escape or the close button collapses and clears. |
+| `collapsible` | `boolean` | `false` | Collapse to an icon button that swaps itself for the field on click and autofocuses it. Siblings (e.g. a title) are untouched. Moving focus out of the field collapses it back; Escape collapses and clears. No close button is rendered. |
 | `collapsed` | `boolean` | — | Controlled collapsed state (only with `collapsible`) |
 | `defaultCollapsed` | `boolean` | `true` | Uncontrolled initial collapsed state |
 | `onCollapsedChange` | `(collapsed: boolean) => void` | — | Called when the collapsed state changes |
 | `expandLabel` | `string` | `"Open search"` | Accessible label for the expand button |
-| `collapseLabel` | `string` | `"Close search"` | Accessible label for the collapse button |
+| `collapseLabel` | `string` | `"Close search"` | Deprecated and no longer rendered; kept for compatibility |
 
 The input has a pill shape (`--clet-radius-xl`) and caps at `max-width: 400px`.
 
@@ -256,6 +298,25 @@ The profile trigger in the example above is [`ProfilePopover`](/profile-popover)
 | `subtitle` | `ReactNode` | Secondary text |
 | `children` | `ReactNode` | Custom content, overrides `title`/`subtitle` |
 | `className` | `string` | Merged onto the root element |
+
+### `AppHeaderTitleProps`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `children` | `ReactNode` | System name (e.g. `"AQAIS"`) |
+| `page` | `ReactNode` | Page name faded in beside the system name on deep scroll |
+| `breadcrumbs` | `ReactNode` | Trail shown under the title on deep scroll |
+| `classNames` | `AppHeaderTitleClassNames` | Part-level class overrides |
+| `className` | `string` | Merged onto the title |
+
+### `AppHeaderTitleClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `title` | System title (`.clet-app-header__title`) |
+| `page` | Page name wrapper (`.clet-app-header__title-page`) |
+| `dot` | Separator dot (`.clet-app-header__title-dot`) |
+| `breadcrumbs` | Trail wrapper (`.clet-app-header__breadcrumbs`) |
 
 ### `AppHeaderSearchProps`
 

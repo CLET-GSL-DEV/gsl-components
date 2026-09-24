@@ -43,6 +43,7 @@ export const docNavSections: DocNavSection[] = [
 			{ slug: "draggable", title: "Draggable" },
 			{ slug: "dropdown", title: "Dropdown" },
 			{ slug: "empty-state", title: "EmptyState" },
+			{ slug: "expandable-item", title: "ExpandableItem" },
 			{ slug: "export-button", title: "ExportButton" },
 			{ slug: "form", title: "Form" },
 			{ slug: "form-field", title: "FormField" },

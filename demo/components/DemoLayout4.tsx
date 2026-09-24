@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState, Fragment } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { launchpadApps } from "demo/data/launchpadApps";
+import { demoUsers } from "demo/data/demoUsers";
 import { demoNotifications } from "demo/data/demoNotifications";
 import { useMockQuery } from "demo/hooks/useMockQuery";
 import type { AppHeaderSearchDataGroup } from "@rfdtech/components";
@@ -40,12 +41,19 @@ import {
   AppHeaderNotificationItem,
   AppHeaderSearch,
   AppHeaderTitle,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
   Launchpad,
   AppLayout,
   AppSidebar,
   AppBody,
   SidebarProvider,
   BreadcrumbProvider,
+  useBreadcrumbContext,
 } from "@rfdtech/components";
 
 const demoRoles = [
@@ -68,6 +76,51 @@ const demoUser = {
   initials: "KA",
   email: "kwame@gsl.edu.gh",
 };
+
+/** Header title fed by whatever page is showing via useBreadcrumbs. */
+function LayoutHeaderTitle() {
+  const { items } = useBreadcrumbContext();
+  const { pathname } = useLocation();
+  const page = useMemo(() => {
+    if (pathname === "/users/new") return "New user";
+    const userMatch = pathname.match(/^\/users\/([^/]+)$/);
+    if (userMatch) {
+      const user = demoUsers.find((u) => u.id === userMatch[1]);
+      return user ? user.name : "User details";
+    }
+    if (pathname === "/showcase") return "Showcase";
+    return "Supporting Documents";
+  }, [pathname]);
+  return (
+    <AppHeaderTitle
+      page={page}
+      breadcrumbs={
+        items.length > 0 ? (
+          <Breadcrumb>
+            <BreadcrumbList>
+              {items.map((item, index) => (
+                <Fragment key={item.label}>
+                  <BreadcrumbItem>
+                    {index < items.length - 1 && item.href ? (
+                      <BreadcrumbLink asChild>
+                        <Link to={item.href}>{item.label}</Link>
+                      </BreadcrumbLink>
+                    ) : (
+                      <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                    )}
+                  </BreadcrumbItem>
+                  {index < items.length - 1 ? <BreadcrumbSeparator /> : null}
+                </Fragment>
+              ))}
+            </BreadcrumbList>
+          </Breadcrumb>
+        ) : undefined
+      }
+    >
+      Component Library
+    </AppHeaderTitle>
+  );
+}
 
 export function DemoLayout4() {
   const location = useLocation();
@@ -193,7 +246,7 @@ export function DemoLayout4() {
       <BreadcrumbProvider>
         <AppLayout>
           <AppHeader variant="plain">
-            <AppHeaderTitle>AQAIS</AppHeaderTitle>
+            <LayoutHeaderTitle />
             <AppHeaderActions>
               <AppHeaderSearch
                 collapsible

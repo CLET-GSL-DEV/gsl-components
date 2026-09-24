@@ -46,6 +46,7 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
       preventCloseDescription = "You have unsaved changes. Are you sure you want to close?",
       onInteractOutside: consumerOnInteractOutside,
       onEscapeKeyDown: consumerOnEscapeKeyDown,
+      onFocusOutside: consumerOnFocusOutside,
       ...props
     },
     ref,
@@ -83,6 +84,20 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
         const typedEvent = event as CustomEvent<{
           originalEvent: PointerEvent;
         }>;
+        // Floating panels portal to document.body, outside the dialog.
+        // They are still inside the modal interaction: keep it open.
+        const eventTarget = typedEvent.target as HTMLElement | null;
+        if (
+          eventTarget?.closest?.(
+            "[data-radix-portal], [data-radix-popper-content-wrapper]",
+          )
+        ) {
+          event.preventDefault();
+          (
+            consumerOnInteractOutside as ((e: Event) => void) | undefined
+          )?.(event);
+          return;
+        }
         try {
           const targetElement = document.elementFromPoint(
             typedEvent.detail.originalEvent.clientX,
@@ -105,6 +120,24 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
         );
       },
       [consumerOnInteractOutside, preventClose, requestClose],
+    );
+
+    const handleFocusOutsideDefault = useCallback(
+      (event: Event) => {
+        // Same portal rule as pointer interaction: moving focus into a
+        // floating panel (e.g. the Combobox search input) is still inside
+        // the modal's interaction, so don't pull focus back.
+        const eventTarget = (event as FocusEvent).target as HTMLElement | null;
+        if (
+          eventTarget?.closest?.(
+            "[data-radix-portal], [data-radix-popper-content-wrapper]",
+          )
+        ) {
+          event.preventDefault();
+        }
+        (consumerOnFocusOutside as ((e: Event) => void) | undefined)?.(event);
+      },
+      [consumerOnFocusOutside],
     );
 
     const confirmNode = useMemo(
@@ -146,6 +179,7 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
           className,
         )}
         onInteractOutside={handleInteractOutsideDefault}
+        onFocusOutside={handleFocusOutsideDefault}
         onEscapeKeyDown={
           preventClose ? handleEscapeKeyDown : consumerOnEscapeKeyDown
         }

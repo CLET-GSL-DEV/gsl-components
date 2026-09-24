@@ -86,7 +86,7 @@ export interface TableProps extends HTMLAttributes<HTMLDivElement> {
    * Defaults to `"soft"`: pill controls on a faint shadow and the tinted
    * header band. `"default"` is the legacy look, kept for 2.3 pins.
    * `"soft"` rounds the header's filter and search controls into pills on a
-   * faint shadow, and turns the pagination into a solid `--clet-info` disc for
+   * faint shadow, and turns the pagination into a solid `--clet-primary` disc for
    * the current page. It restyles the `Dropdown`, `Input` and `Button` the
    * table already composes rather than swapping in different components, so
    * every control keeps its own API and behaviour.

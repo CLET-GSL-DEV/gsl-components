@@ -1,0 +1,62 @@
+export const meta = {
+  title: "ExpandableItem",
+  description: "Expandable list item",
+  category: "Components",
+  keywords: ["expandable", "accordion", "collapsible", "list item", "disclosure"],
+  since: "2.4.0",
+  status: "stable",
+  related: ["section-header"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { ExpandableItemPreview } from "../previews/code/ExpandableItemPreview";
+import expandableItemSource from "../previews/examples/expandable-item.example.tsx?raw";
+
+# ExpandableItem
+
+Bordered card for lists where each row folds open: a header row (chevron toggle, title, right-aligned status slot) expands a panel that holds anything. The status is composed by the consumer (a dot plus label, a `Badge`, or plain text).
+
+## Example
+
+<ExampleTabs
+  title="Expandable case list"
+  preview={<ExpandableItemPreview />}
+  code={expandableItemSource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `ReactNode` | — | Heading in the header row |
+| `status` | `ReactNode` | — | Right-aligned status slot |
+| `children` | `ReactNode` | — | Panel content revealed when expanded |
+| `expanded` | `boolean` | — | Controlled expanded state |
+| `defaultExpanded` | `boolean` | `false` | Initial expanded state (uncontrolled) |
+| `onExpandedChange` | `(expanded: boolean) => void` | — | Called when the expanded state changes |
+| `classNames` | `ExpandableItemClassNames` | — | Part-level class overrides |
+| `className` | `string` | — | Merged onto the root |
+
+## Types
+
+### `ExpandableItemProps`
+
+Title, status slot, and panel children with controlled/uncontrolled expansion. Forwards `ref` and spreads `...props` onto the root.
+
+### `ExpandableItemClassNames`
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer card (`.clet-expandable-item`) |
+| `header` | Header row (`.clet-expandable-item__header`) |
+| `toggle` | Chevron button (`.clet-expandable-item__toggle`) |
+| `title` | Heading (`.clet-expandable-item__title`) |
+| `status` | Status slot (`.clet-expandable-item__status`) |
+| `content` | Folding panel (`.clet-expandable-item__content`) |
+
+## Notes
+
+- The toggle carries `aria-expanded` and `aria-controls`; the panel is a `region` labelled by the toggle.
+- The fold animates via grid rows and is disabled when `prefers-reduced-motion: reduce` is set.
+- Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
