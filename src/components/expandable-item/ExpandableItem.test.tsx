@@ -5,9 +5,9 @@ import { describe, expect, it, vi } from "vitest";
 import { ExpandableItem } from "./ExpandableItem";
 
 describe("ExpandableItem", () => {
-  it("renders title and status, collapsed by default", () => {
+  it("renders title and trailing slot, collapsed by default", () => {
     render(
-      <ExpandableItem title="LEAT/2026/LIC/007" status="closed">
+      <ExpandableItem title="LEAT/2026/LIC/007" trailing="closed">
         <p>Panel content</p>
       </ExpandableItem>,
     );
@@ -19,7 +19,18 @@ describe("ExpandableItem", () => {
     );
   });
 
-  it("expands and collapses on toggle click", async () => {
+  it("renders with no title", () => {
+    const { container } = render(
+      <ExpandableItem trailing="closed">
+        <p>Panel content</p>
+      </ExpandableItem>,
+    );
+    expect(
+      container.querySelector(".clet-expandable-item__title"),
+    ).toBeNull();
+  });
+
+  it("opens on header click and folds only via the toggle", async () => {
     const user = userEvent.setup();
     render(
       <ExpandableItem title="Item">
@@ -27,14 +38,45 @@ describe("ExpandableItem", () => {
       </ExpandableItem>,
     );
 
-    const toggle = screen.getByRole("button", { name: "Expand" });
-    await user.click(toggle);
+    // Clicking the title text opens the item.
+    await user.click(screen.getByText("Item"));
+    expect(screen.getByRole("button", { name: "Collapse" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+
+    // Clicking the header while open does nothing; only the button folds.
+    await user.click(screen.getByText("Item"));
     expect(screen.getByRole("button", { name: "Collapse" })).toHaveAttribute(
       "aria-expanded",
       "true",
     );
 
     await user.click(screen.getByRole("button", { name: "Collapse" }));
+    expect(screen.getByRole("button", { name: "Expand" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  });
+
+  it("ignores header clicks on interactive children", async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+    render(
+      <ExpandableItem
+        title="Item"
+        trailing={
+          <button type="button" onClick={onAction}>
+            Act
+          </button>
+        }
+      >
+        <p>Panel content</p>
+      </ExpandableItem>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Act" }));
+    expect(onAction).toHaveBeenCalled();
     expect(screen.getByRole("button", { name: "Expand" })).toHaveAttribute(
       "aria-expanded",
       "false",

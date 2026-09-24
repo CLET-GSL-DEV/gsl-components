@@ -28,6 +28,7 @@ import {
   PopoverPortal,
 } from "../popover/Popover";
 import { TableBulkActions } from "./TableBulkActions";
+import { getRouterAdapter } from "../../adapters/registry";
 import type {
   TableColumn,
   TableContentProps,
@@ -36,7 +37,47 @@ import type {
 import type { TableProps, SortDirection } from "../../types/table";
 import { cn } from "../../utils/cn";
 import "./styles/table.css";
-import { TableContext } from "./TableContext";
+import { TableContext, useTableContext } from "./TableContext";
+
+/**
+ * True when the URL carries an active search term or any filter value for
+ * this table's param namespace, so an empty result means "nothing matched",
+ * not "nothing exists". Page/sort params never count.
+ *
+ * Reads through the router adapter when one is mounted (reactive: back,
+ * forward, and shared links update the copy) and falls back to a one-shot
+ * window.location read where no router exists, where TableContent previously
+ * rendered with no adapter at all. The fallback path is deterministic per
+ * environment, so hook order stays stable across renders.
+ */
+function useActiveSearchOrFilters(paramPrefix: string | undefined): boolean {
+  let searchParams: URLSearchParams;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    searchParams = getRouterAdapter().searchParams;
+  } catch {
+    searchParams = new URLSearchParams(
+      typeof window === "undefined" ? "" : window.location.search,
+    );
+  }
+  return hasActiveSearchOrFilters(searchParams, paramPrefix);
+}
+
+function hasActiveSearchOrFilters(
+  searchParams: URLSearchParams,
+  paramPrefix: string | undefined,
+): boolean {
+  const namespaced = (key: string) =>
+    paramPrefix ? `${paramPrefix}.${key}` : key;
+  if ((searchParams.get(namespaced("search")) ?? "").trim() !== "") {
+    return true;
+  }
+  const filterPrefix = namespaced("f_");
+  for (const [key, value] of searchParams) {
+    if (key.startsWith(filterPrefix) && value.trim() !== "") return true;
+  }
+  return false;
+}
 
 function getCellValue<T>(row: T, col: TableColumn<T>): ReactNode {
   if (col.accessorFn) return col.accessorFn(row);
@@ -152,6 +193,8 @@ function TableContentRender<T>(
     emptyIcon,
     emptyText,
     emptyContent,
+    filteredEmptyText,
+    filteredEmptyDescription,
     classNames,
 
     ...rest
@@ -164,6 +207,9 @@ function TableContentRender<T>(
     },
     [rowKey],
   );
+
+  const { paramPrefix } = useTableContext();
+  const isFilteredEmpty = useActiveSearchOrFilters(paramPrefix);
 
   const [sort, setSort] = useState<{
     column: string;
@@ -843,6 +889,15 @@ function TableContentRender<T>(
                             {emptyText ?? "No results"}
                           </div>
                         </>
+                      ) : isFilteredEmpty ? (
+                        <EmptyState
+                          icon="?"
+                          title={filteredEmptyText ?? "No matching results"}
+                          description={
+                            filteredEmptyDescription ??
+                            "Try removing a filter or adjusting your search terms."
+                          }
+                        />
                       ) : (
                         <EmptyState title={emptyText ?? "No results"} />
                       ))}

@@ -1,11 +1,12 @@
-/* ExpandableItem: bordered card with a toggle header row and a panel that
-   holds anything. The fold animation reuses the grid-rows technique. */
+/* ExpandableItem: bordered card with a toggle header row and a plain
+   content region holding anything. The fold animation reuses the
+   grid-rows technique. */
 .clet-expandable-item {
   --clet-expandable-item-font: var(--gsl-font-body, var(--clet-font-body));
 
   width: 100%;
   border: 1px solid var(--gsl-border, var(--clet-border));
-  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
   background: var(--gsl-bg, var(--clet-bg));
   font-family: var(--gsl-expandable-item-font, var(--clet-expandable-item-font));
   color: var(--gsl-text, var(--clet-text));
@@ -16,7 +17,12 @@
   align-items: center;
   gap: 12px;
   min-height: 56px;
-  padding: 12px 16px;
+  padding: 16px 20px;
+}
+
+/* A collapsed header invites the click that opens it. */
+.clet-expandable-item__header--collapsed {
+  cursor: pointer;
 }
 
 .clet-expandable-item__toggle {
@@ -65,11 +71,12 @@
   white-space: nowrap;
 }
 
-.clet-expandable-item__status {
+.clet-expandable-item__trailing {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
   gap: 6px;
+  margin-left: auto;
   font-size: var(--gsl-text-size-sm, var(--clet-text-size-sm));
   color: var(--gsl-text-secondary, var(--clet-text-secondary));
   white-space: nowrap;
@@ -91,10 +98,7 @@
 .clet-expandable-item__content-inner {
   min-height: 0;
   overflow: hidden;
-  margin: 0 16px 16px;
-  padding: 16px;
-  border-radius: calc(var(--gsl-radius-base, var(--clet-radius-base)) - 2px);
-  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
+  padding: 4px 20px 20px;
 }
 
 .clet-expandable-item__content[data-state="collapsed"] {
@@ -109,8 +113,6 @@
 
 .clet-expandable-item__content[data-state="collapsed"]
   .clet-expandable-item__content-inner {
-  margin-top: 0;
-  margin-bottom: 0;
   padding-top: 0;
   padding-bottom: 0;
 }

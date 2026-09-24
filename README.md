@@ -831,17 +831,17 @@ Props: `illustration`, `icon`, `title`, `description`, `action`, `classNames`, `
 
 ## ExpandableItem
 
-Bordered card for lists where each row folds open: header row (chevron toggle, title, status slot) expanding a panel that holds anything. See the [ExpandableItem](/docs/expandable-item) docs page for props and exported types.
+Bordered card for lists where each row folds open: header row (chevron toggle, optional title, trailing slot) expanding a panel that holds anything. Clicking anywhere on a collapsed row opens it; only the chevron folds it back. See the [ExpandableItem](/docs/expandable-item) docs page for props and exported types.
 
 ```tsx
 import { ExpandableItem } from "@rfdtech/components";
 
-<ExpandableItem title="LEAT/2026/LIC/007" status="closed" defaultExpanded>
+<ExpandableItem title="LEAT/2026/LIC/007" trailing="closed" defaultExpanded>
   <p>Sitting minutes, attendance, and tendered documents.</p>
 </ExpandableItem>
 ```
 
-Props: `title`, `status`, `children`, `expanded`, `defaultExpanded`, `onExpandedChange`, `classNames`, `className`. Exported types: `ExpandableItemProps`, `ExpandableItemClassNames`.
+Props: `title`, `trailing`, `children`, `expanded`, `defaultExpanded`, `onExpandedChange`, `classNames`, `className`. Exported types: `ExpandableItemProps`, `ExpandableItemClassNames`.
 
 ## Form
 

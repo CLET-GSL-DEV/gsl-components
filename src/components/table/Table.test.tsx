@@ -219,6 +219,72 @@ describe("Table", () => {
     expect(screen.getByText("No results")).toBeInTheDocument();
   });
 
+  it("renders the filtered-empty state when a search term is active", () => {
+    render(
+      <MemoryRouter initialEntries={["/?test.search=kwame"]}>
+        <Table paramPrefix="test">
+          <TableContent
+            columns={[{ id: "name", header: "Name" }]}
+            data={[]}
+          />
+        </Table>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No matching results")).toBeInTheDocument();
+    expect(
+      screen.getByText("Try removing a filter or adjusting your search terms."),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("No results")).not.toBeInTheDocument();
+  });
+
+  it("renders the filtered-empty state when a filter value is active", () => {
+    render(
+      <MemoryRouter initialEntries={["/?test.f_role=admin"]}>
+        <Table paramPrefix="test">
+          <TableContent
+            columns={[{ id: "name", header: "Name" }]}
+            data={[]}
+          />
+        </Table>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No matching results")).toBeInTheDocument();
+  });
+
+  it("ignores page params when choosing the empty state", () => {
+    render(
+      <MemoryRouter initialEntries={["/?test.page=3"]}>
+        <Table paramPrefix="test">
+          <TableContent
+            columns={[{ id: "name", header: "Name" }]}
+            data={[]}
+          />
+        </Table>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("No results")).toBeInTheDocument();
+    expect(screen.queryByText("No matching results")).not.toBeInTheDocument();
+  });
+
+  it("lets filteredEmptyText override the filtered title", () => {
+    render(
+      <MemoryRouter initialEntries={["/?test.search=kwame"]}>
+        <Table paramPrefix="test">
+          <TableContent
+            columns={[{ id: "name", header: "Name" }]}
+            data={[]}
+            filteredEmptyText="Nothing matches that search"
+          />
+        </Table>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Nothing matches that search")).toBeInTheDocument();
+  });
+
   it("renders custom emptyText when provided", () => {
     render(
       <Table paramPrefix="test">

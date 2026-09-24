@@ -5,19 +5,23 @@ export interface ExpandableItemClassNames {
   header?: string;
   toggle?: string;
   title?: string;
-  status?: string;
+  trailing?: string;
   content?: string;
 }
 
 export interface ExpandableItemProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
-  /** Heading shown in the header row. */
-  title: ReactNode;
   /**
-   * Right-aligned status slot (e.g. a dot plus "In progress"). The consumer
-   * composes and colours it; the component only positions it.
+   * Left side of the header row: a title string, a full component, anything.
+   * Optional; the row also works with only a toggle and a trailing slot.
    */
-  status?: ReactNode;
+  title?: ReactNode;
+  /**
+   * Right side of the header row. Not status-only: status text, a button, a
+   * badge row, whatever the row needs. Interactive children keep working;
+   * clicking them does not toggle the item.
+   */
+  trailing?: ReactNode;
   /** Content revealed when expanded. Anything may go here. */
   children?: ReactNode;
   /** Controlled expanded state. */

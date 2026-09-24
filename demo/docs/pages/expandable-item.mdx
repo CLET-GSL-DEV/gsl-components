@@ -15,7 +15,9 @@ import expandableItemSource from "../previews/examples/expandable-item.example.t
 
 # ExpandableItem
 
-Bordered card for lists where each row folds open: a header row (chevron toggle, title, right-aligned status slot) expands a panel that holds anything. The status is composed by the consumer (a dot plus label, a `Badge`, or plain text).
+Bordered card for lists where each row folds open. Every slot is generic: the left side takes a title string or a full component (or nothing), the right side takes status text, a button, a badge row, or anything else, and the panel holds anything. Subtext, badges, and stats all live in the consumer's panel markup, as below.
+
+Opening is generous and closing is deliberate: clicking anywhere on a collapsed header row expands it, but only the chevron button folds it back up. Clicking a link, button, or field inside the row never toggles.
 
 ## Example
 
@@ -29,8 +31,8 @@ Bordered card for lists where each row folds open: a header row (chevron toggle,
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `title` | `ReactNode` | — | Heading in the header row |
-| `status` | `ReactNode` | — | Right-aligned status slot |
+| `title` | `ReactNode` | — | Left side of the header row (optional) |
+| `trailing` | `ReactNode` | — | Right side of the header row: status, button, badges, anything |
 | `children` | `ReactNode` | — | Panel content revealed when expanded |
 | `expanded` | `boolean` | — | Controlled expanded state |
 | `defaultExpanded` | `boolean` | `false` | Initial expanded state (uncontrolled) |
@@ -42,7 +44,7 @@ Bordered card for lists where each row folds open: a header row (chevron toggle,
 
 ### `ExpandableItemProps`
 
-Title, status slot, and panel children with controlled/uncontrolled expansion. Forwards `ref` and spreads `...props` onto the root.
+Optional title, trailing slot, and panel children with controlled/uncontrolled expansion. Forwards `ref` and spreads `...props` onto the root.
 
 ### `ExpandableItemClassNames`
 
@@ -51,12 +53,12 @@ Title, status slot, and panel children with controlled/uncontrolled expansion. F
 | `root` | Outer card (`.clet-expandable-item`) |
 | `header` | Header row (`.clet-expandable-item__header`) |
 | `toggle` | Chevron button (`.clet-expandable-item__toggle`) |
-| `title` | Heading (`.clet-expandable-item__title`) |
-| `status` | Status slot (`.clet-expandable-item__status`) |
+| `title` | Left slot (`.clet-expandable-item__title`) |
+| `trailing` | Right slot (`.clet-expandable-item__trailing`) |
 | `content` | Folding panel (`.clet-expandable-item__content`) |
 
 ## Notes
 
-- The toggle carries `aria-expanded` and `aria-controls`; the panel is a `region` labelled by the toggle.
+- The toggle carries `aria-expanded` and `aria-controls`; the panel is a `region` labelled by the toggle. Keyboard users operate the toggle button.
 - The fold animates via grid rows and is disabled when `prefers-reduced-motion: reduce` is set.
 - Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.

@@ -163,6 +163,17 @@ export interface TableContentProps<
    */
   emptyText?: string;
   /**
+   * Title for the filtered-empty state, shown instead of `emptyText` when
+   * the URL carries a search term or filter values (defaults to
+   * "No matching results").
+   */
+  filteredEmptyText?: ReactNode;
+  /**
+   * Supporting copy for the filtered-empty state (defaults to
+   * "Try removing a filter or adjusting your search terms.").
+   */
+  filteredEmptyDescription?: ReactNode;
+  /**
    * Rich empty state rendered in place of the icon + text when data is
    * empty (e.g. `<EmptyState illustration={...} title={...} />`).
    * Table headers still render above it.

@@ -13,7 +13,9 @@ Upgrading from any earlier version? See [`demo/docs/pages/migration-v2.mdx`](dem
 
 - **Tabs**: new `variant="flat"`, a soft bar with a sliding white pill and no dividers. Opt-in; `default`, `line`, and `pill` are unchanged.
 - **UploadField**: new `variant="inline"`, a compact horizontal row (icon, text, browse action) for form rows and modal bodies. Drag and drop, file cards, statuses, and the error dialog behave identically; with files the row stays a row (CSS-truncated name, inline size, button-height card); `variant="default"` is unchanged.
-- **ExpandableItem**: new expandable list-item card with a chevron toggle, title, and right-aligned status slot in the header row, plus a panel holding anything. Controlled (`expanded`/`onExpandedChange`) or uncontrolled (`defaultExpanded`), with `aria-expanded`/`aria-controls` and a `region` panel.
+- **ExpandableItem**: new expandable list-item card with a chevron toggle, optional title, and generic trailing slot (status text, button, badges, anything), plus a panel holding anything. Clicking anywhere on a collapsed header opens it; only the chevron folds it back; interactive children never toggle. Controlled (`expanded`/`onExpandedChange`) or uncontrolled (`defaultExpanded`), with `aria-expanded`/`aria-controls` and a `region` panel.
+- **Table**: `TableContent` picks its empty state from the URL by default. With a search term or filter values present it renders the filtered-empty state (`No matching results` with the `?` medallion and adjustment hint, overridable via `filteredEmptyText`/`filteredEmptyDescription`); otherwise the plain `emptyText` state. `emptyContent` and the legacy `emptyIcon` path win over both.
+- **Tabs**: new `useTabsState(paramKey, defaultValue)` hook returning URL-backed `[value, onValueChange]` shaped like `useState`, so the active tab survives reloads, restores from shared links, and follows back/forward. Wire straight into `Tabs value`/`onValueChange`; `Tabs` itself is untouched. The `migrate` codemod reports (never rewrites) `Tabs` elements whose value/onValueChange are local-state identifiers, naming the `useTabsState` switch per site.
 - **EmptyState**: new `icon` prop rendering a small muted glyph in a circle instead of the default artwork (a text glyph or icon node). An explicit `illustration` (including `null`) always wins over `icon`.
 ### Changed
 
@@ -29,6 +31,12 @@ Upgrading from any earlier version? See [`demo/docs/pages/migration-v2.mdx`](dem
 - **RoleSelect**: the role list caps at 320px (`--clet-role-select-menu-max-height`) and scrolls internally instead of growing unbounded.
 - **Modal**: pointer and focus interaction inside floating panels (Combobox/Dropdown/Select/Popover content portaled to `document.body`) no longer counts as outside the modal, so the dialog stays open and no `preventClose` confirm fires. Genuine outside clicks behave as before.
 - **Combobox**: the option list keeps its manual wheel handling (cmdk lists do not scroll natively under the wheel in all hosts) with `overscroll-behavior: contain` added, so scrolling a long list inside a modal moves the list, not the modal body behind it. New "Inside a modal" docs example covers the pattern.
+
+### Notes for agents
+
+- **Header shell pattern**: the 2.4 shell pairs `AppHeader variant="plain"` with `Sidebar variant="brand"`. The header title is `AppHeaderTitle` with `page`/`breadcrumbs` (see `demo/components/DemoLayout4.tsx` `LayoutHeaderTitle`): pages publish their trail with `useBreadcrumbs([{ label, href }])` and the layout renders it into the header, which crossfades the page context in on deep scroll. Replicate this wiring rather than hand-rolling header titles.
+- **Notice is deprecated, not removed**: still exported and rendered, but frozen. New work uses `Banner`; `rfdui migrate` reports `Notice` sites with the variant mapping.
+- **The codemod never runs itself**: `rfdui migrate` only acts when invoked. The Tabs URL-state scan reports candidate sites with file and line; it performs no rewrites.
 
 ## [2.4.0] - 2026-09-18
 

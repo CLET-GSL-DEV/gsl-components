@@ -263,6 +263,8 @@ Renders a `<table>` with columns, data, optional sort, row selection, and loadin
 | `virtualRowHeight` | `number` | — | Row height in px. Set this to enable virtual scrolling. The parent `<Table>` must have a `height` set. |
 | `emptyIcon` | `ReactNode` | Inbox icon | JSX/ReactNode icon shown above the empty text when `data` is empty. Defaults to an Inbox icon from `lucide-react`. |
 | `emptyText` | `string` | `"No results"` | Message shown when `data` is empty |
+| `filteredEmptyText` | `ReactNode` | `"No matching results"` | Title shown instead of `emptyText` when a search term or filter values are active |
+| `filteredEmptyDescription` | `ReactNode` | `"Try removing a filter..."` | Supporting copy for the filtered-empty state |
 | `emptyContent` | `ReactNode` | — | Rich empty state rendered in place of the icon + text when `data` is empty (e.g. `<EmptyState illustration={...} title={...} />`). Headers still render above it. |
 | `classNames` | `TableContentClassNames` | — | Part-level class overrides |
 
