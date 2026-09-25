@@ -34,7 +34,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  color: var(--gsl-avatar-color, var(--clet-avatar-color, var(--clet-main-bg)));
+  color: var(--gsl-avatar-color, var(--clet-avatar-color, var(--clet-on-avatar)));
   font-weight: 700;
   line-height: 1;
   text-transform: uppercase;

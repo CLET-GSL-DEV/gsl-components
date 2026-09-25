@@ -278,7 +278,7 @@
 .clet-time-selector__field--active {
   border-color: var(--gsl-primary, var(--clet-primary));
   background: var(--gsl-primary-light, var(--clet-primary-light));
-  color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary-text, var(--clet-primary-text));
 }
 
 .clet-time-selector__field:focus-visible {
@@ -308,7 +308,7 @@
 }
 
 .clet-time-selector__meridiem-option--selected {
-  color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary-text, var(--clet-primary-text));
   font-weight: 600;
 }
 

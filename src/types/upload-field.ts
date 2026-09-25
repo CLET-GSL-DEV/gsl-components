@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import type { AccessibleName } from "./accessible-name";
 
 export type UploadFieldFileStatusKind = "uploading" | "completed" | "failed";
 
@@ -22,6 +23,7 @@ export interface UploadFieldClassNames {
   icon?: string;
   title?: string;
   subtitle?: string;
+  text?: string;
   files?: string;
   fileCard?: string;
   fileName?: string;
@@ -35,10 +37,20 @@ export interface UploadFieldClassNames {
   actionButton?: string;
 }
 
-export interface UploadFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "value" | "defaultValue"> {
+interface UploadFieldBaseProps
+  extends Omit<
+    HTMLAttributes<HTMLDivElement>,
+    "onChange" | "value" | "defaultValue" | "aria-label" | "aria-labelledby"
+  > {
   invalid?: boolean;
   disabled?: boolean;
   classNames?: UploadFieldClassNames;
+  /**
+   * Visual style. `"default"` is the large centered dropzone; `"inline"` is a
+   * compact horizontal row (icon, text, browse action) for tight placements
+   * such as form rows and modal bodies. All behaviour is identical.
+   */
+  variant?: "default" | "inline";
   accept?: string;
   multiple?: boolean;
   maxSize?: number;
@@ -62,3 +74,11 @@ export interface UploadFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   /** Called when "Try Again" is clicked on a file with status `"failed"`. */
   onRetry?: (file: File, index: number) => void;
 }
+
+/**
+ * The name goes on the file input, which is the control a keyboard user
+ * actually reaches. An unnamed file input announces only "Choose file", so the
+ * name is required rather than defaulted: a generic default would satisfy the
+ * type and still tell the user nothing.
+ */
+export type UploadFieldProps = UploadFieldBaseProps & AccessibleName;

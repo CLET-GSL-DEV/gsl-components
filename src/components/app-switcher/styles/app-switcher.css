@@ -206,7 +206,7 @@
 }
 
 .clet-app-switcher__status--error {
-  color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-app-switcher__loading {

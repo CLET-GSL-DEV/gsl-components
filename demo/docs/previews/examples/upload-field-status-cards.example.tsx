@@ -20,6 +20,7 @@ const statuses: UploadFieldFileStatus[] = [
 export function UploadFieldStatusCardsExample() {
   return (
     <UploadField
+      aria-label="Attach supporting documents"
       multiple
       value={files}
       fileStatuses={statuses}

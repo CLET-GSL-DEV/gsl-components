@@ -35,6 +35,7 @@ export * from "./components/dialog";
 export * from "./components/draggable";
 export * from "./components/dropdown";
 export * from "./components/empty-state";
+export * from "./components/expandable-item";
 export * from "./components/export-button";
 export * from "./components/metric-card";
 export * from "./components/metric-cards";

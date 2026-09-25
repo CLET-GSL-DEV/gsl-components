@@ -33,6 +33,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  useBreadcrumbs,
   useTableState,
 } from "@rfdtech/components";
 import type { TableColumn, TableRowAction } from "@rfdtech/components";
@@ -107,6 +108,10 @@ const documentColumns: TableColumn<SupportingDocument>[] = [
  * New components live here — Dashboard3 stays frozen at 2.3.
  */
 export function Dashboard4Page() {
+  useBreadcrumbs([
+    { label: "Home", href: "/" },
+    { label: "Users", href: "/users/user-1" },
+  ]);
   const { data: membersData, loading: metricsLoading } = useMockQuery(
     gslMembers,
     900,

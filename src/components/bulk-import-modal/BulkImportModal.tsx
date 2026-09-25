@@ -304,7 +304,10 @@ export function BulkImportModal({
 											]
 												.filter(Boolean)
 												.join(" ")}
-											aria-current={isActive ? "step" : undefined}
+											// On the <li> only while the step has no control inside it.
+											// A clickable step announces its state on the button,
+											// which is the element tab focus actually lands on.
+											aria-current={isActive && !canClick ? "step" : undefined}
 										>
 											{canClick ? (
 												<button
@@ -312,6 +315,7 @@ export function BulkImportModal({
 													className="clet-bulk-import__stepper-button gsl-bulk-import__stepper-button"
 													onClick={() => handleGoToStep(stepItem.id)}
 													aria-label={`Go to step ${stepItem.id}: ${stepItem.label}`}
+													aria-current={isActive ? "step" : undefined}
 												>
 													<span className="clet-bulk-import__stepper-marker gsl-bulk-import__stepper-marker">
 														<span

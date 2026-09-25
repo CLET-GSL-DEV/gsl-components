@@ -1,6 +1,6 @@
 import { createRef } from "react";
 import { useForm } from "react-hook-form";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { AppHeader } from "./AppHeader";
@@ -9,6 +9,7 @@ import { AppHeaderBranding } from "./AppHeader";
 import { AppHeaderSearch } from "./AppHeaderSearch";
 import { AppHeaderNotifications } from "./AppHeaderNotifications";
 import { AppHeaderNotificationItem } from "./AppHeaderNotificationItem";
+import { AppHeaderTitle } from "./AppHeaderTitle";
 import { AppSwitcher } from "../app-switcher/AppSwitcher";
 import { SystemAppIcon } from "../app-switcher/SystemAppIcon";
 import { ProfilePopover } from "../profile-popover/ProfilePopover";
@@ -176,6 +177,77 @@ describe("AppHeaderSearch", () => {
     expect(screen.getByTestId("custom")).toBeInTheDocument();
   });
 
+  it("plain header compacts past the page top and restores at the top", () => {
+    Object.defineProperty(window, "scrollY", {
+      value: 0,
+      writable: true,
+      configurable: true,
+    });
+    render(<AppHeader variant="plain">Header</AppHeader>);
+    const header = document.querySelector(".clet-app-header--plain")!;
+    expect(header).not.toHaveClass("clet-app-header--compact");
+
+    Object.defineProperty(window, "scrollY", { value: 120, configurable: true });
+    fireEvent.scroll(window);
+    expect(header).toHaveClass("clet-app-header--compact");
+
+    Object.defineProperty(window, "scrollY", { value: 0, configurable: true });
+    fireEvent.scroll(window);
+    expect(header).not.toHaveClass("clet-app-header--compact");
+  });
+
+  it("non-plain headers never compact on scroll", () => {
+    Object.defineProperty(window, "scrollY", { value: 120, configurable: true });
+    render(<AppHeader>Header</AppHeader>);
+    expect(document.querySelector(".clet-app-header")).not.toHaveClass(
+      "clet-app-header--compact",
+    );
+    Object.defineProperty(window, "scrollY", { value: 0, configurable: true });
+  });
+
+  it("plain header reveals the page context only on deep scroll", () => {
+    Object.defineProperty(window, "scrollY", { value: 0, configurable: true });
+    render(
+      <AppHeader variant="plain">
+        <AppHeaderTitle page="Page Title" breadcrumbs="home / somewhere">
+          AQAIS
+        </AppHeaderTitle>
+      </AppHeader>,
+    );
+    const header = document.querySelector(".clet-app-header--plain")!;
+    expect(header).not.toHaveClass("clet-app-header--context-visible");
+    expect(
+      document.querySelector(".clet-app-header__page-compact"),
+    ).toBeInTheDocument();
+
+    // Shallow scroll compacts the header but keeps the context hidden.
+    Object.defineProperty(window, "scrollY", { value: 40, configurable: true });
+    fireEvent.scroll(window);
+    expect(header).toHaveClass("clet-app-header--compact");
+    expect(header).not.toHaveClass("clet-app-header--context-visible");
+
+    // Deep scroll fades the page context in.
+    Object.defineProperty(window, "scrollY", { value: 200, configurable: true });
+    fireEvent.scroll(window);
+    expect(header).toHaveClass("clet-app-header--context-visible");
+
+    Object.defineProperty(window, "scrollY", { value: 0, configurable: true });
+  });
+
+  it("title without page context renders no overlay", () => {
+    render(
+      <AppHeader variant="plain">
+        <AppHeaderTitle>AQAIS</AppHeaderTitle>
+      </AppHeader>,
+    );
+    expect(
+      document.querySelector(".clet-app-header__page-context"),
+    ).toBeNull();
+    expect(
+      document.querySelector(".clet-app-header__page-compact"),
+    ).toBeNull();
+  });
+
   it("collapsible starts as an icon button and expands on click", async () => {
     const user = userEvent.setup();
     render(<AppHeaderSearch collapsible />);
@@ -187,13 +259,13 @@ describe("AppHeaderSearch", () => {
     expect(input).toHaveFocus();
   });
 
-  it("collapsible closes via the close button and clears the query", async () => {
+  it("collapsible clears the query when it collapses on Escape", async () => {
     const user = userEvent.setup();
     render(<AppHeaderSearch collapsible defaultCollapsed={false} />);
     await user.type(screen.getByRole("combobox"), "test");
     expect(screen.getByRole("combobox")).toHaveValue("test");
 
-    await user.click(screen.getByRole("button", { name: "Close search" }));
+    await user.keyboard("{Escape}");
     expect(screen.queryByRole("combobox")).toBeNull();
     expect(
       screen.getByRole("button", { name: "Open search" }),
@@ -231,7 +303,7 @@ describe("AppHeaderSearch", () => {
     );
     expect(screen.getByRole("combobox")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Close search" }));
+    await user.keyboard("{Escape}");
     expect(onCollapsedChange).toHaveBeenCalledWith(true);
     // Controlled: stays open until the parent flips the prop.
     expect(screen.getByRole("combobox")).toBeInTheDocument();

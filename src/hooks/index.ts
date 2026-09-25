@@ -33,6 +33,8 @@ export type {
   UseTableStateOptions,
   UseTableStateReturn,
 } from "./useTableState";
+export { useTabsState } from "./useTabsState";
+export type { UseTabsStateReturn } from "./useTabsState";
 export type {
   SearchParamAdapter,
   SearchParamOverlayData,

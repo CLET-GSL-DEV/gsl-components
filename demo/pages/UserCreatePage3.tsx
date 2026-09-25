@@ -22,6 +22,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  useBreadcrumbs,
 } from "@rfdtech/components";
 import { demoUserRoles } from "demo/data/demoUsers";
 
@@ -66,6 +67,11 @@ function getStepSchemas(step: number) {
 }
 
 export function UserCreatePage3() {
+  useBreadcrumbs([
+    { label: "Home", href: "/" },
+    { label: "Users", href: "/users/user-1" },
+    { label: "New user" },
+  ]);
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
 

@@ -131,19 +131,19 @@
 .clet-timeline__dot--success {
   background: var(--gsl-success, var(--clet-success));
   border-color: var(--gsl-success, var(--clet-success));
-  color: var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-on-success, var(--clet-on-success));
 }
 
 .clet-timeline__dot--warning {
   background: var(--gsl-warning, var(--clet-warning));
   border-color: var(--gsl-warning, var(--clet-warning));
-  color: var(--gsl-text, var(--clet-text));
+  color: var(--gsl-on-warning, var(--clet-on-warning));
 }
 
 .clet-timeline__dot--error {
   background: var(--gsl-error, var(--clet-error));
   border-color: var(--gsl-error, var(--clet-error));
-  color: var(--gsl-error-text, var(--clet-error-text));
+  color: var(--gsl-on-error, var(--clet-on-error));
 }
 
 .clet-timeline__dot--muted {

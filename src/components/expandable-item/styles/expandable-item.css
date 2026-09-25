@@ -1,0 +1,126 @@
+/* ExpandableItem: bordered card with a toggle header row and a plain
+   content region holding anything. The fold animation reuses the
+   grid-rows technique. */
+.clet-expandable-item {
+  --clet-expandable-item-font: var(--gsl-font-body, var(--clet-font-body));
+
+  width: 100%;
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  background: var(--gsl-bg, var(--clet-bg));
+  font-family: var(--gsl-expandable-item-font, var(--clet-expandable-item-font));
+  color: var(--gsl-text, var(--clet-text));
+}
+
+.clet-expandable-item__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 16px 20px;
+}
+
+/* A collapsed header invites the click that opens it. */
+.clet-expandable-item__header--collapsed {
+  cursor: pointer;
+}
+
+.clet-expandable-item__toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-base, var(--clet-radius-base));
+  background: transparent;
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.clet-expandable-item__toggle:hover {
+  background: var(--gsl-hover, var(--clet-hover));
+  color: var(--gsl-text, var(--clet-text));
+}
+
+.clet-expandable-item__toggle:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: 2px;
+}
+
+.clet-expandable-item__toggle svg {
+  transition: transform 200ms ease;
+}
+
+.clet-expandable-item--expanded .clet-expandable-item__toggle svg {
+  transform: rotate(180deg);
+}
+
+.clet-expandable-item__title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clet-expandable-item__trailing {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-size: var(--gsl-text-size-sm, var(--clet-text-size-sm));
+  color: var(--gsl-text-secondary, var(--clet-text-secondary));
+  white-space: nowrap;
+}
+
+/* Fold animation via grid-template-rows (0fr -> 1fr) so the height
+   transition is smooth. The inner wrapper clips overflow while collapsing. */
+.clet-expandable-item__content {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    grid-template-rows 220ms ease,
+    opacity 200ms ease,
+    visibility 0s linear 0s;
+}
+
+.clet-expandable-item__content-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding: 4px 20px 20px;
+}
+
+.clet-expandable-item__content[data-state="collapsed"] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows 220ms ease,
+    opacity 200ms ease,
+    visibility 0s linear 220ms;
+}
+
+.clet-expandable-item__content[data-state="collapsed"]
+  .clet-expandable-item__content-inner {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clet-expandable-item__toggle,
+  .clet-expandable-item__toggle svg,
+  .clet-expandable-item__content {
+    transition: none;
+  }
+}

@@ -83,10 +83,11 @@ export function UploadFieldFormExample() {
             name="file"
             render={({ field, fieldState }) => (
               <Field invalid={!!fieldState.error} style={{ minWidth: "100%", flex: 1 }}>
-                <FieldLabel>Upload file</FieldLabel>
+                <FieldLabel id="upload-field-form-label">Upload file</FieldLabel>
                 <FieldControl>
                   <div style={{ width: "100%" }}>
                     <UploadField
+                    aria-labelledby="upload-field-form-label"
                     accept=".png,.jpg,.jpeg,.pdf"
                     maxSize={MAX_SIZE}
                     value={field.value ?? null}

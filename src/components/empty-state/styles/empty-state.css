@@ -31,6 +31,35 @@
   height: auto;
 }
 
+/* Icon medallion: small muted glyph in a subtle circle, used instead of the
+   default artwork when the `icon` prop is set. */
+.clet-empty-state__medallion {
+  --clet-empty-state-medallion-size: 64px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(
+    --gsl-empty-state-medallion-size,
+    var(--clet-empty-state-medallion-size)
+  );
+  height: var(
+    --gsl-empty-state-medallion-size,
+    var(--clet-empty-state-medallion-size)
+  );
+  margin-bottom: 8px;
+  border-radius: 50%;
+  background: var(--gsl-surface-subtle, var(--clet-surface-subtle));
+  color: var(--gsl-text-muted, var(--clet-text-muted));
+  font-size: var(--gsl-text-size-xl, var(--clet-text-size-xl));
+  line-height: 1;
+}
+
+.clet-empty-state__medallion svg {
+  width: 24px;
+  height: 24px;
+}
+
 .clet-empty-state__title {
   font-size: var(--gsl-empty-state-title-size, var(--clet-empty-state-title-size));
   font-weight: 600;

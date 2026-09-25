@@ -1,9 +1,20 @@
-import { createRef } from "react";
+import { createRef, forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { FileFormatIcon, UploadField } from "./UploadField";
+import { FileFormatIcon, UploadField as UploadFieldImpl } from "./UploadField";
+import type { UploadFieldProps } from "../../types/upload-field";
+
+// UploadField now requires an accessible name (the file input is the control a
+// keyboard user reaches, and an unnamed one announces only "Choose file").
+// These cases are not about the name, so they get a default one here.
+const UploadField = forwardRef<
+  HTMLDivElement,
+  Partial<Omit<UploadFieldProps, "aria-labelledby">>
+>(function UploadField(props, ref) {
+  return <UploadFieldImpl ref={ref} aria-label="Attach a file" {...props} />;
+});
 
 function createFile(name: string, type: string, size = 1024) {
   return new File([new ArrayBuffer(size)], name, { type });
@@ -91,6 +102,24 @@ describe("UploadField", () => {
     expect(document.querySelector(".clet-upload-field__action")).toHaveTextContent("Upload file");
   });
 
+  it("renders inline variant as a compact row", () => {
+    render(<UploadField variant="inline" accept=".pdf" />);
+    const root = document.querySelector(".clet-upload-field")!;
+    expect(root).toHaveClass("clet-upload-field--inline");
+    expect(root.querySelector(".clet-upload-field__text")).toBeInTheDocument();
+    expect(screen.getByText("Click to upload or drag and drop")).toBeInTheDocument();
+  });
+
+  it("inline variant keeps the file card in the row", () => {
+    const file = createFile("cv.pdf", "application/pdf");
+    render(<UploadField variant="inline" value={file} onChange={() => {}} />);
+    const root = document.querySelector(".clet-upload-field")!;
+    expect(root).toHaveClass("clet-upload-field--inline");
+    expect(root).toHaveClass("clet-upload-field--has-files");
+    expect(root.querySelector(".clet-upload-field__files")).toBeInTheDocument();
+    expect(screen.getByText("cv.pdf")).toBeInTheDocument();
+  });
+
   it("renders cloud upload icon", () => {
     render(<UploadField />);
     expect(document.querySelector(".clet-upload-field__icon .lucide-cloud-upload")).toBeInTheDocument();
@@ -105,7 +134,9 @@ describe("UploadField", () => {
   it("applies invalid styling and aria-invalid", () => {
     render(<UploadField invalid />);
     expect(document.querySelector(".clet-upload-field--invalid")).toBeInTheDocument();
-    expect(document.querySelector(".clet-upload-field")).toHaveAttribute("aria-invalid", "true");
+    // On the input, not the container: the input is the control now (DS-07), and
+    // aria-invalid on a plain <div> is not announced to anyone.
+    expect(screen.getByLabelText("Attach a file")).toHaveAttribute("aria-invalid", "true");
   });
 
   it("respects aria-invalid over invalid prop", () => {
@@ -118,9 +149,9 @@ describe("UploadField", () => {
     expect(document.querySelector(".clet-upload-field--disabled")).toBeInTheDocument();
   });
 
-  it("forwards aria-describedby", () => {
+  it("forwards aria-describedby to the control", () => {
     render(<UploadField aria-describedby="desc-id" />);
-    expect(document.querySelector(".clet-upload-field")).toHaveAttribute("aria-describedby", "desc-id");
+    expect(screen.getByLabelText("Attach a file")).toHaveAttribute("aria-describedby", "desc-id");
   });
 
   it("merges classNames onto parts", () => {

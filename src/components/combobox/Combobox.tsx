@@ -22,6 +22,7 @@ export function Combobox(props: ComboboxProps) {
     loadingLabel = "Loading options",
     emptyMessage = "No results",
     "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledby,
     classNames,
     className,
     name,
@@ -87,6 +88,9 @@ export function Combobox(props: ComboboxProps) {
   const rootRef = useRef<HTMLSpanElement>(null);
   useTableFilterReset(rootRef, clearValue, Boolean(name));
 
+  // cmdk lists do not scroll natively under the wheel in all hosts, so the
+  // list drives its own scrollTop and only lets the event chain past the
+  // list at its edges (e.g. into the modal body behind it).
   const handleWheel = useCallback((e: React.WheelEvent) => {
     const el = e.currentTarget as HTMLElement;
     const { scrollTop, scrollHeight, clientHeight } = el;
@@ -110,9 +114,13 @@ export function Combobox(props: ComboboxProps) {
             aria-expanded={open}
             aria-invalid={invalid || undefined}
             aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledby}
             disabled={disabled}
             className={cn(
               "clet-combobox__trigger gsl-combobox__trigger",
+              clearable &&
+                hasValue &&
+                "clet-combobox__trigger--clearable gsl-combobox__trigger--clearable",
               invalid && "clet-combobox__trigger--invalid gsl-combobox__trigger--invalid",
               classNames?.trigger,
             )}
@@ -125,16 +133,6 @@ export function Combobox(props: ComboboxProps) {
             >
               {triggerLabel}
             </span>
-            {clearable && hasValue ? (
-              <XCircle
-                className="clet-combobox__clear gsl-combobox__clear"
-                size={16}
-                aria-label="Clear selection"
-                role="button"
-                tabIndex={0}
-                onClick={handleClear}
-              />
-            ) : null}
             <ChevronDown
               className="clet-combobox__chevron gsl-combobox__chevron"
               size={16}
@@ -143,6 +141,22 @@ export function Combobox(props: ComboboxProps) {
             />
           </button>
         </PopoverPrimitive.Trigger>
+        {/*
+          A sibling of the trigger, never a child of it. As a role="button" SVG
+          inside the trigger <button> it was a focusable control nested in
+          another control: the same defect DS-07 raised against the dropzone.
+        */}
+        {clearable && hasValue ? (
+          <button
+            type="button"
+            className="clet-combobox__clear gsl-combobox__clear"
+            aria-label="Clear selection"
+            disabled={disabled}
+            onClick={handleClear}
+          >
+            <XCircle size={16} aria-hidden />
+          </button>
+        ) : null}
         <PopoverPrimitive.Portal>
           <PopoverPrimitive.Content
             className={cn("clet-combobox__content gsl-combobox__content", classNames?.content)}

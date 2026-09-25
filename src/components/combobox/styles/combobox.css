@@ -50,6 +50,12 @@
   box-shadow: 0 0 0 1px var(--gsl-primary, var(--clet-primary));
 }
 
+/* Room for the clear control, which now overlays the trigger instead of
+   sitting inside it. */
+.clet-combobox__trigger--clearable {
+  padding-right: 56px;
+}
+
 .clet-combobox__trigger--invalid {
   border-color: var(--gsl-error, var(--clet-error));
 }
@@ -80,14 +86,36 @@
   color: var(--gsl-text-secondary, var(--clet-text-secondary));
 }
 
+/* Sits over the trigger rather than inside it, so the two controls are
+   siblings in the accessibility tree. Right of the chevron's 12px inset. */
 .clet-combobox__clear {
-  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  right: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
   color: var(--gsl-text-muted, var(--clet-text-muted));
   cursor: pointer;
+  transform: translateY(-50%);
 }
 
-.clet-combobox__clear:hover {
+.clet-combobox__clear:hover:not(:disabled) {
   color: var(--gsl-text, var(--clet-text));
+}
+
+.clet-combobox__clear:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clet-combobox__clear:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .clet-combobox__chevron {
@@ -182,6 +210,7 @@
 .clet-combobox__list {
   max-height: var(--gsl-combobox-menu-max-height, var(--clet-combobox-menu-max-height));
   overflow: hidden auto;
+  overscroll-behavior: contain;
   padding: 6px;
 }
 
@@ -239,7 +268,7 @@
 
 .clet-combobox__item-check-single {
   flex-shrink: 0;
-  color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary-text, var(--clet-primary-text));
 }
 
 /* Multi-select checkbox (mirrors Checkbox's visual) */

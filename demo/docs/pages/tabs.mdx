@@ -13,11 +13,13 @@ import { ExampleTabs } from "../components/ExampleTabs";
 import { TabsPreview } from "../previews/code/TabsPreview";
 import { TabsLinePreview } from "../previews/code/TabsLinePreview";
 import { TabsPillExample } from "../previews/examples/tabs-pill.example";
+import { TabsFlatPreview } from "../previews/code/TabsFlatPreview";
 import { TableTabsFilterPreview } from "../previews/code/TableTabsFilterPreview";
 
 import tabsSource from "../previews/examples/tabs.example.tsx?raw";
 import tabsLineSource from "../previews/examples/tabs-line.example.tsx?raw";
 import tabsPillSource from "../previews/examples/tabs-pill.example.tsx?raw";
+import tabsFlatSource from "../previews/examples/tabs-flat.example.tsx?raw";
 import tableTabsFilterSource from "../previews/examples/table-tabs-filter.example.tsx?raw";
 
 # Tabs
@@ -54,6 +56,17 @@ Use `variant="pill"` on `Tabs` for a pill-style indicator instead of the enclose
 />
 
 
+## Flat variant
+
+Use `variant="flat"` on `Tabs` for a soft bar with a sliding white pill and no dividers. Counts beside labels are consumer content (a plain span, as below).
+
+<ExampleTabs
+  title="Flat tabs"
+  preview={<TabsFlatPreview />}
+  code={tabsFlatSource}
+/>
+
+
 ## Tabs as a table filter
 
 A common pattern: status tabs ("All" / "Active" / "Pending") act as a segment filter over a
@@ -80,7 +93,7 @@ Root wrapper. Supports controlled and uncontrolled selection.
 | `onValueChange` | `(value: string) => void` | — | Called when the active tab changes |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
 | `activationMode` | `"automatic" \| "manual"` | `"automatic"` | Whether focus activates a tab |
-| `variant` | `TabsVariant` | `"default"` | Visual style (`default`, `line`, or `pill`) |
+| `variant` | `TabsVariant` | `"default"` | Visual style (`default`, `line`, `pill`, or `flat`) |
 | `classNames` | `TabsClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root |
 | `children` | `ReactNode` | — | `TabsList` and `TabsContent` items |
@@ -141,7 +154,7 @@ Props for `TabsContent`. Extends Radix content props with `classNames` and `clas
 
 ### `TabsVariant`
 
-`"default" | "line" | "pill"` — visual style for the tab bar and triggers.
+`"default" | "line" | "pill" | "flat"` — visual style for the tab bar and triggers.
 
 ### `TabsClassNames`
 
@@ -174,6 +187,7 @@ Props for `TabsContent`. Extends Radix content props with `classNames` and `clas
 - Radix handles keyboard navigation (arrow keys, Home, End) and ARIA roles (`tablist`, `tab`, `tabpanel`).
 - `variant="line"` uses a sliding indicator that moves between active triggers (bottom underline horizontally, right-edge bar vertically); indicator motion is disabled when `prefers-reduced-motion: reduce` is set.
 - `variant="pill"` uses a pill-style indicator that slides between active triggers with a shared pill-shaped container; indicator motion is disabled when `prefers-reduced-motion: reduce` is set.
+- `variant="flat"` renders a soft bar with a sliding white pill and no dividers.
 - Active panels fade and slide in briefly when switching tabs; animation is disabled when `prefers-reduced-motion: reduce` is set.
 - Base `clet-*` classes are always applied; `classNames` and `className` append consumer classes for Tailwind utilities.
 

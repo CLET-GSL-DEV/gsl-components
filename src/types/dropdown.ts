@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { AccessibleName } from "./accessible-name";
 
 export interface DropdownOption {
   value: string;
@@ -14,7 +15,7 @@ export interface DropdownClassNames {
   option?: string;
 }
 
-export interface DropdownProps {
+interface DropdownBaseProps {
   value: string | null;
   onValueChange: (value: string | null) => void;
   options: DropdownOption[];
@@ -22,7 +23,6 @@ export interface DropdownProps {
   clearable?: boolean;
   disabled?: boolean;
   invalid?: boolean;
-  "aria-label"?: string;
   formatOption?: (option: DropdownOption | null, state: "selected" | "idle" | "empty") => ReactNode;
   classNames?: DropdownClassNames;
   className?: string;
@@ -35,3 +35,9 @@ export interface DropdownProps {
   required?: boolean;
   form?: string;
 }
+
+/**
+ * A Dropdown shows its selected value, never its purpose, so it must be named.
+ * Pass `aria-label`, or `aria-labelledby` pointing at a visible label.
+ */
+export type DropdownProps = DropdownBaseProps & AccessibleName;

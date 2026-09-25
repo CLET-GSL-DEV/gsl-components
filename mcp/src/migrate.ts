@@ -1617,6 +1617,46 @@ function migrateSource(
         bump(jsxUsage, tagName.text);
       }
 
+      // Tabs driven by local state: report, never rewrite. value/onValueChange
+      // arriving as bare identifiers is the useState wiring; only the app
+      // knows a good param key, so the site is named instead of edited.
+      if (
+        ts.isIdentifier(tagName) &&
+        localToExported.get(tagName.text) === "Tabs" &&
+        !imported.has("useTabsState")
+      ) {
+        const attrs = jsxAttributes(ts, node.attributes);
+        const identifierProp = (name: string): string | null => {
+          const attr = attrs.find(
+            (attribute) => attribute.name.getText() === name,
+          );
+          const initializer = attr?.initializer;
+          if (
+            !initializer ||
+            ts.isStringLiteral(initializer) ||
+            !ts.isJsxExpression(initializer)
+          ) {
+            return null;
+          }
+          const expression = initializer.expression;
+          return expression && ts.isIdentifier(expression)
+            ? expression.text
+            : null;
+        };
+        const valueName = identifierProp("value");
+        const changeName = identifierProp("onValueChange");
+        if (valueName && changeName) {
+          notes.push({
+            file: filePath,
+            line: lineOf(node.getStart(source)),
+            message:
+              `Tabs value/onValueChange are driven by local state (${valueName}/${changeName}). ` +
+              `Switch to useTabsState("tab", default) so the active tab persists in the URL: ` +
+              `replace the useState call and keep value={${valueName}} onValueChange={${changeName}} as is.`,
+          });
+        }
+      }
+
       if (!options.preserve && ts.isIdentifier(tagName) && ts.isJsxOpeningElement(node)) {
         const exported = localToExported.get(tagName.text);
         const insert = HEADER_INSERTS.find((entry) => entry.parent === exported);

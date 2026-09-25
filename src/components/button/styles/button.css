@@ -79,7 +79,7 @@
 
 .clet-button--outline {
   border-color: var(--gsl-primary, var(--clet-primary));
-  color: var(--gsl-primary, var(--clet-primary));
+  color: var(--gsl-primary-text, var(--clet-primary-text));
 }
 
 .clet-button--outline:hover:not(:disabled) {
@@ -109,7 +109,7 @@
 .clet-button--primary-destructive {
   border-color: var(--gsl-error, var(--clet-error));
   background: var(--gsl-error, var(--clet-error));
-  color: var(--gsl-on-primary, var(--clet-on-primary));
+  color: var(--gsl-on-error, var(--clet-on-error));
 }
 
 .clet-button--primary-destructive:hover:not(:disabled) {
@@ -119,7 +119,7 @@
 .clet-button--success {
   border-color: var(--gsl-success, var(--clet-success));
   background: var(--gsl-success, var(--clet-success));
-  color: var(--gsl-on-primary, var(--clet-on-primary));
+  color: var(--gsl-on-success, var(--clet-on-success));
 }
 
 .clet-button--success:hover:not(:disabled) {

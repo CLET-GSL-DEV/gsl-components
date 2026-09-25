@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef, RefObject } from "react";
 import type * as DialogPrimitive from "@radix-ui/react-dialog";
 
 // ⬇️ ADDED
@@ -27,6 +27,13 @@ export interface ModalContentProps
   preventClose?: boolean;
   preventCloseTitle?: string;
   preventCloseDescription?: string;
+  /**
+   * Where keyboard focus should land when the modal closes, for the case where
+   * the element that opened it has since unmounted. Leave unset and Radix
+   * returns focus to the trigger, which is correct whenever the trigger is
+   * still on the page.
+   */
+  returnFocusTo?: RefObject<HTMLElement | null>;
 }
 
 export interface ModalHeaderClassNames {

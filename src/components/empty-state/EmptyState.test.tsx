@@ -42,6 +42,30 @@ describe("EmptyState", () => {
     ).toBeNull();
   });
 
+  it("renders the icon medallion instead of the default artwork", () => {
+    const { container } = render(<EmptyState title="Empty" icon="?" />);
+    expect(
+      container.querySelector(".clet-empty-state__medallion"),
+    ).toHaveTextContent("?");
+    expect(
+      container.querySelector(".clet-empty-state__illustration"),
+    ).toBeNull();
+  });
+
+  it("explicit illustration wins over icon", () => {
+    const { container } = render(
+      <EmptyState
+        title="Empty"
+        icon="?"
+        illustration={<span data-testid="art" />}
+      />,
+    );
+    expect(screen.getByTestId("art")).toBeInTheDocument();
+    expect(
+      container.querySelector(".clet-empty-state__medallion"),
+    ).toBeNull();
+  });
+
   it("merges className and classNames.root", () => {
     const { container } = render(
       <EmptyState title="Empty" className="custom" classNames={{ root: "inner" }} />,

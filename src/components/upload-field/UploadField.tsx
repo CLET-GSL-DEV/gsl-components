@@ -177,6 +177,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       disabled = false,
       classNames,
       className,
+      variant = "default",
       accept,
       multiple = false,
       maxSize,
@@ -190,6 +191,8 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       id,
       "aria-invalid": ariaInvalid,
       "aria-describedby": ariaDescribedby,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledby,
       ...props
     },
     ref,
@@ -280,6 +283,17 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
       if (!disabled) inputRef.current?.click();
     }, [disabled]);
 
+    // Clicking anywhere in the dropzone still opens the picker, but a click that
+    // already landed on the input (or on the Upload button, which calls
+    // handleClick itself) must not open it a second time.
+    const handleContainerClick = useCallback(
+      (event: React.MouseEvent<HTMLDivElement>) => {
+        if (event.target === inputRef.current) return;
+        handleClick();
+      },
+      [handleClick],
+    );
+
     const handleDialogRetry = useCallback(() => {
       setFileErrorDialog(null);
       if (!disabled) inputRef.current?.click();
@@ -323,6 +337,7 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           id={id}
           className={cn(
             "clet-upload-field gsl-upload-field",
+            variant === "inline" && "clet-upload-field--inline gsl-upload-field--inline",
             dragOver && "clet-upload-field--drag-over gsl-upload-field--drag-over",
             hasFiles && "clet-upload-field--has-files gsl-upload-field--has-files",
             invalidBool && "clet-upload-field--invalid gsl-upload-field--invalid",
@@ -330,20 +345,19 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
             classNames?.root,
             className,
           )}
-          aria-invalid={invalidBool || undefined}
-          aria-describedby={ariaDescribedby}
-          onClick={handleClick}
+          onClick={handleContainerClick}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          role="button"
-          tabIndex={disabled ? -1 : 0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") handleClick();
-          }}
-          aria-label="Drop files here"
           {...props}
         >
+          {/*
+            DS-07: this container used to be role="button" + tabIndex wrapping a
+            display:none file input, which puts a fake button and a real control
+            in the same subtree and announces neither properly. The input is the
+            control now - visually hidden but focusable, so Tab reaches it and
+            Enter opens the picker natively, with no key handling of our own.
+          */}
           <input
             ref={inputRef}
             type="file"
@@ -352,6 +366,10 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
             disabled={disabled}
             name={name}
             onChange={handleChange}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledby}
+            aria-invalid={invalidBool || undefined}
+            aria-describedby={ariaDescribedby}
             className="clet-upload-field__input gsl-upload-field__input"
           />
 
@@ -363,15 +381,29 @@ export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
           >
             <CloudUpload size={20} strokeWidth={1.75} aria-hidden />
           </div>
-          <p className={cn("clet-upload-field__title gsl-upload-field__title", classNames?.title)}>
-            Click to upload or drag and drop
-          </p>
-          {resolvedSubtitle ? (
-            <p className={cn("clet-upload-field__subtitle gsl-upload-field__subtitle", classNames?.subtitle)}>
-              {resolvedSubtitle}
-            </p>
-          ) : null}
-
+          {variant === "inline" ? (
+            <div className={cn("clet-upload-field__text gsl-upload-field__text", classNames?.text)}>
+              <p className={cn("clet-upload-field__title gsl-upload-field__title", classNames?.title)}>
+                Click to upload or drag and drop
+              </p>
+              {resolvedSubtitle ? (
+                <p className={cn("clet-upload-field__subtitle gsl-upload-field__subtitle", classNames?.subtitle)}>
+                  {resolvedSubtitle}
+                </p>
+              ) : null}
+            </div>
+          ) : (
+            <>
+              <p className={cn("clet-upload-field__title gsl-upload-field__title", classNames?.title)}>
+                Click to upload or drag and drop
+              </p>
+              {resolvedSubtitle ? (
+                <p className={cn("clet-upload-field__subtitle gsl-upload-field__subtitle", classNames?.subtitle)}>
+                  {resolvedSubtitle}
+                </p>
+              ) : null}
+            </>
+          )}
           {hasFiles && (
             <div className={cn("clet-upload-field__files gsl-upload-field__files", classNames?.files)}>
               {files.map((file, i) => {

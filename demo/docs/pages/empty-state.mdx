@@ -12,6 +12,8 @@ export const meta = {
 import { ExampleTabs } from "../components/ExampleTabs";
 import { EmptyStatePreview } from "../previews/code/EmptyStatePreview";
 import emptyStateSource from "../previews/examples/empty-state.example.tsx?raw";
+import { EmptyStateIconPreview } from "../previews/code/EmptyStateIconPreview";
+import emptyStateIconSource from "../previews/examples/empty-state-icon.example.tsx?raw";
 
 # EmptyState
 
@@ -25,15 +27,26 @@ Illustrated empty state for when a table or list has nothing to show. The parent
   code={emptyStateSource}
 />
 
+## Icon medallion
+
+Pass `icon` for a small muted glyph in a circle instead of the default artwork: a text glyph (`"+"`, `"?"`, `"!"`) or an icon node. An explicit `illustration` (including `null`) always wins over `icon`.
+
+<ExampleTabs
+  title="Medallion empty states"
+  preview={<EmptyStateIconPreview />}
+  code={emptyStateIconSource}
+/>
+
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `illustration` | `ReactNode` | — | Artwork above the text at the Figma proportions (363×271). Omit for text-only. |
+| `icon` | `ReactNode` | — | Glyph in a muted medallion instead of the artwork. Ignored when `illustration` is set. |
 | `title` | `ReactNode` | — | Heading, e.g. "No certificates yet". |
 | `description` | `ReactNode` | — | Supporting copy under the heading. |
 | `action` | `ReactNode` | — | Optional action slot, e.g. a `Button`. |
-| `classNames` | `EmptyStateClassNames` | — | `root`, `illustration`, `title`, `description`, `action` overrides. |
+| `classNames` | `EmptyStateClassNames` | — | `root`, `illustration`, `icon`, `title`, `description`, `action` overrides. |
 | `className` | `string` | — | Merged onto the root. |
 
 ## Types
@@ -48,6 +61,7 @@ Title plus optional illustration, description, and action. Forwards `ref` and sp
 |-----|------------|
 | `root` | Outer column |
 | `illustration` | Artwork wrapper |
+| `icon` | Icon medallion (`.clet-empty-state__medallion`) |
 | `title` | Heading |
 | `description` | Supporting copy |
 | `action` | Action slot wrapper |

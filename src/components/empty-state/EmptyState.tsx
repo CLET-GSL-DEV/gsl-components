@@ -12,7 +12,8 @@ import "./styles/empty-state.css";
 export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
   function EmptyState(
     {
-      illustration = <img src={defaultIllustration} alt="" />,
+      illustration,
+      icon,
       title,
       description,
       action,
@@ -32,14 +33,30 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         )}
         {...props}
       >
-        {illustration ? (
+        {illustration !== undefined ? (
+          illustration ? (
+            <div
+              className={cn("clet-empty-state__illustration", classNames?.illustration)}
+              aria-hidden
+            >
+              {illustration}
+            </div>
+          ) : null
+        ) : icon ? (
+          <div
+            className={cn("clet-empty-state__medallion", classNames?.icon)}
+            aria-hidden
+          >
+            {icon}
+          </div>
+        ) : (
           <div
             className={cn("clet-empty-state__illustration", classNames?.illustration)}
             aria-hidden
           >
-            {illustration}
+            <img src={defaultIllustration} alt="" />
           </div>
-        ) : null}
+        )}
         <div className={cn("clet-empty-state__title", classNames?.title)}>
           {title}
         </div>

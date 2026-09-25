@@ -81,15 +81,15 @@
 }
 
 .clet-toast--success .clet-toast__icon {
-  color: var(--gsl-success, var(--clet-success));
+  color: var(--gsl-success-text, var(--clet-success-text));
 }
 
 .clet-toast--warning .clet-toast__icon {
-  color: var(--gsl-warning, var(--clet-warning));
+  color: var(--gsl-warning-text, var(--clet-warning-text));
 }
 
 .clet-toast--error .clet-toast__icon {
-  color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-toast__title {
@@ -100,15 +100,15 @@
 }
 
 .clet-toast--success .clet-toast__title {
-  color: var(--gsl-success, var(--clet-success));
+  color: var(--gsl-success-text, var(--clet-success-text));
 }
 
 .clet-toast--warning .clet-toast__title {
-  color: var(--gsl-warning, var(--clet-warning));
+  color: var(--gsl-warning-text, var(--clet-warning-text));
 }
 
 .clet-toast--error .clet-toast__title {
-  color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-toast__description {

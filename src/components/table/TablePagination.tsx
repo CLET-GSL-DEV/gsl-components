@@ -148,6 +148,9 @@ export const TablePagination = forwardRef<
         <div className={cn("clet-table__page-results gsl-table__page-results", classNames?.results)}>
           Showing {start}&ndash;{end} of {totalItems}
           <Dropdown
+            // DS-03: the trigger's only text is the selected value ("10 per
+            // page"), which tells a screen reader the state and not the purpose.
+            aria-label="Rows per page"
             className={cn("clet-table__page-size gsl-table__page-size", classNames?.pageSize)}
             value={String(pageSize)}
             onValueChange={(v) => v && setPageSize(Number(v))}

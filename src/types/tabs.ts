@@ -1,7 +1,7 @@
 import type * as TabsPrimitive from "@radix-ui/react-tabs";
 import type { ReactNode } from "react";
 
-export type TabsVariant = "default" | "pill" | "line";
+export type TabsVariant = "default" | "pill" | "line" | "flat";
 
 export interface TabsClassNames {
   root?: string;

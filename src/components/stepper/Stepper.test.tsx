@@ -96,7 +96,21 @@ describe("Step state", () => {
 
     const items = screen.getAllByRole("listitem");
     expect(items[1]).toHaveClass("clet-stepper__item--active");
+    // A static step has no focusable child, so the <li> carries the state.
     expect(items[1]).toHaveAttribute("aria-current", "step");
+  });
+
+  it("puts aria-current on the button, not the <li>, when the step is clickable", () => {
+    renderStepper({ value: 2, clickable: true, onValueChange: vi.fn() });
+
+    const items = screen.getAllByRole("listitem");
+    expect(items[1]).not.toHaveAttribute("aria-current");
+    // DS-04: tab focus lands on the button, so that is where the screen reader
+    // must hear "current step".
+    expect(screen.getByRole("button", { name: "Go to step 2" })).toHaveAttribute(
+      "aria-current",
+      "step",
+    );
   });
 
   it("marks steps after value as upcoming", () => {

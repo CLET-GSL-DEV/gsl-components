@@ -75,7 +75,11 @@ export interface AppHeaderSearchProps {
   onCollapsedChange?: (collapsed: boolean) => void;
   /** Accessible label for the expand button. Defaults to "Open search". */
   expandLabel?: string;
-  /** Accessible label for the collapse button. Defaults to "Close search". */
+  /**
+   * @deprecated No longer rendered. The expanded field collapses on blur or
+   * Escape instead of a close button; this prop is accepted for backward
+   * compatibility but has no effect.
+   */
   collapseLabel?: string;
 }
 
@@ -113,7 +117,9 @@ export interface AppHeaderNotificationItemClassNames {
 }
 
 export interface AppHeaderNotificationItemProps extends Omit<
-  HTMLAttributes<HTMLDivElement>,
+  // HTMLElement, not HTMLDivElement: a clickable row renders as a <button> and a
+  // read-only one as a <div>, so the props have to fit both.
+  HTMLAttributes<HTMLElement>,
   "onClick"
 > {
   /** Notification message content */
@@ -122,7 +128,7 @@ export interface AppHeaderNotificationItemProps extends Omit<
   time?: ReactNode;
   /** Shows a leading unread dot. Read items get a subtle background instead (default false) */
   unread?: boolean;
-  /** Called when the row is clicked (also fires on Enter/Space when set, since the row becomes keyboard-focusable) */
+  /** Called when the row is clicked. Setting it renders the row as a real <button>, so Enter and Space work natively. */
   onClick?: () => void;
   classNames?: AppHeaderNotificationItemClassNames;
   className?: string;
@@ -169,12 +175,24 @@ export interface AppHeaderProfileProps {
 
 export interface AppHeaderTitleClassNames {
   title?: string;
+  page?: string;
+  dot?: string;
+  breadcrumbs?: string;
 }
 
 export interface AppHeaderTitleProps
   extends Omit<HTMLAttributes<HTMLHeadingElement>, "color"> {
   /** The system name shown in the header (e.g. "GRC"). */
   children: ReactNode;
+  /**
+   * Page name faded in beside the system name once scrolled deep enough
+   * (`AQAIS · Page`), with `breadcrumbs` below it. Omit both to keep the
+   * plain system title. Only rendered inside a `variant="plain"` header
+   * that has scrolled; elsewhere the system name shows alone.
+   */
+  page?: ReactNode;
+  /** Breadcrumb trail shown under the title once scrolled deep enough. */
+  breadcrumbs?: ReactNode;
   classNames?: AppHeaderTitleClassNames;
   className?: string;
 }

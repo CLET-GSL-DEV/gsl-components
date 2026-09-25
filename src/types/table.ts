@@ -86,7 +86,7 @@ export interface TableProps extends HTMLAttributes<HTMLDivElement> {
    * Defaults to `"soft"`: pill controls on a faint shadow and the tinted
    * header band. `"default"` is the legacy look, kept for 2.3 pins.
    * `"soft"` rounds the header's filter and search controls into pills on a
-   * faint shadow, and turns the pagination into a solid `--clet-info` disc for
+   * faint shadow, and turns the pagination into a solid `--clet-primary` disc for
    * the current page. It restyles the `Dropdown`, `Input` and `Button` the
    * table already composes rather than swapping in different components, so
    * every control keeps its own API and behaviour.
@@ -162,6 +162,17 @@ export interface TableContentProps<
    * default `EmptyState` title unless `emptyIcon` takes the legacy path.
    */
   emptyText?: string;
+  /**
+   * Title for the filtered-empty state, shown instead of `emptyText` when
+   * the URL carries a search term or filter values (defaults to
+   * "No matching results").
+   */
+  filteredEmptyText?: ReactNode;
+  /**
+   * Supporting copy for the filtered-empty state (defaults to
+   * "Try removing a filter or adjusting your search terms.").
+   */
+  filteredEmptyDescription?: ReactNode;
   /**
    * Rich empty state rendered in place of the icon + text when data is
    * empty (e.g. `<EmptyState illustration={...} title={...} />`).

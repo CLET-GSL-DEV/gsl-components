@@ -70,14 +70,25 @@
 
 /* ── Header-style trigger (used when `user` is passed, e.g. in AppHeader) ── */
 
+/* Now a <button>, so it needs the native chrome reset. */
 .clet-app-header__profile {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 8px;
+  border: none;
   border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   cursor: pointer;
   min-width: max-content;
+}
+
+.clet-app-header__profile:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: 2px;
 }
 
 .clet-app-header__profile:hover {
@@ -308,7 +319,7 @@
 }
 
 .clet-profile-menu__item--danger {
-  color: var(--gsl-error, var(--clet-error));
+  color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-profile-menu__item--danger:hover {

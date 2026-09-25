@@ -3,36 +3,22 @@ import type { AppHeaderNotificationItemProps } from "../../types/app-header";
 import { cn } from "../../utils/cn";
 
 export const AppHeaderNotificationItem = forwardRef<
-  HTMLDivElement,
+  HTMLDivElement | HTMLButtonElement,
   AppHeaderNotificationItemProps
 >(function AppHeaderNotificationItem(
   { text, time, unread = false, onClick, classNames, className, ...props },
   ref,
 ) {
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "clet-notif-popover__item gsl-notif-popover__item",
-        !unread && "clet-notif-popover__item--read gsl-notif-popover__item--read",
-        classNames?.root,
-        className,
-      )}
-      role={onClick ? "button" : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onClick={onClick}
-      onKeyDown={
-        onClick
-          ? (e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                onClick();
-              }
-            }
-          : undefined
-      }
-      {...props}
-    >
+  const rootClassName = cn(
+    "clet-notif-popover__item gsl-notif-popover__item",
+    !unread && "clet-notif-popover__item--read gsl-notif-popover__item--read",
+    onClick && "clet-notif-popover__item--clickable gsl-notif-popover__item--clickable",
+    classNames?.root,
+    className,
+  );
+
+  const body = (
+    <>
       {unread ? (
         <div className={cn("clet-notif-popover__dot gsl-notif-popover__dot", classNames?.dot)} aria-hidden />
       ) : null}
@@ -46,6 +32,29 @@ export const AppHeaderNotificationItem = forwardRef<
           </div>
         ) : null}
       </div>
+    </>
+  );
+
+  // A clickable row is a real <button>, not a div wearing role="button" and a
+  // hand-rolled Enter/Space handler. The native element brings the role, the
+  // focus order and both keys, and it cannot drift out of step with them.
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        ref={ref as React.Ref<HTMLButtonElement>}
+        className={rootClassName}
+        onClick={onClick}
+        {...props}
+      >
+        {body}
+      </button>
+    );
+  }
+
+  return (
+    <div ref={ref as React.Ref<HTMLDivElement>} className={rootClassName} {...props}>
+      {body}
     </div>
   );
 });

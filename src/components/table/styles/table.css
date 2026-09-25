@@ -481,7 +481,7 @@
 .clet-table--soft {
 	--clet-table-control-radius: 999px;
 	--clet-table-control-shadow: var(--gsl-shadow-soft, var(--clet-shadow-soft));
-	--clet-table-page-size: 32px;
+	--clet-table-page-size: 40px;
 }
 
 /* Filters left, inputs right. The base bar already spaces its children apart. */
@@ -560,15 +560,15 @@
 	padding: 0;
 	border: none;
 	border-radius: 50%;
-	background: var(--gsl-info, var(--clet-info));
-	color: var(--gsl-on-info, var(--clet-on-info));
+	background: var(--gsl-primary, var(--clet-primary));
+	color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
 .clet-table--soft
 	.clet-table__pagination-pages
 	.clet-button[aria-current="page"]:hover {
-	background: var(--gsl-info, var(--clet-info));
-	color: var(--gsl-on-info, var(--clet-on-info));
+	background: var(--gsl-primary, var(--clet-primary));
+	color: var(--gsl-on-primary, var(--clet-on-primary));
 }
 
 .clet-table--soft
@@ -589,7 +589,7 @@
 	padding: 0;
 	border-radius: 50%;
 	font-size: 0;
-	color: var(--gsl-info, var(--clet-info));
+	color: var(--gsl-primary-text, var(--clet-primary-text));
 }
 
 /* The collapsed label is still a flex item, so the button's 8px gap survives it
@@ -603,6 +603,18 @@
 	.clet-button[aria-label="Next page"]
 	.clet-button__label {
 	gap: 0;
+}
+
+/* Chevron glyphs render large against the small page numbers. Scoped to the
+   soft variant: the default variant pairs the same buttons with text. */
+.clet-table--soft
+	.clet-table__pagination-pages
+	.clet-button[aria-label="Previous page"] svg,
+.clet-table--soft
+	.clet-table__pagination-pages
+	.clet-button[aria-label="Next page"] svg {
+	width: 24px;
+	height: 24px;
 }
 
 .clet-table--soft
@@ -823,7 +835,7 @@ table tbody tr.clet-table__row--clickable:hover {
 }
 
 .clet-table__actions-item--destructive {
-	color: var(--gsl-error, var(--clet-error));
+	color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-table__actions-item--destructive:hover {
@@ -918,7 +930,7 @@ table tbody tr.clet-table__row--clickable:hover {
 
 .clet-table__bulk-actions-clear:hover {
 	opacity: 1;
-	color: var(--gsl-error, var(--clet-error));
+	color: var(--gsl-error-text, var(--clet-error-text));
 }
 
 .clet-table__bulk-actions-group {
@@ -929,7 +941,7 @@ table tbody tr.clet-table__row--clickable:hover {
 }
 
 .clet-table__bulk-actions-action--destructive {
-	color: var(--gsl-error, var(--clet-error));
+	color: var(--gsl-error-text, var(--clet-error-text));
 	border-color: var(--gsl-error, var(--clet-error));
 }
 

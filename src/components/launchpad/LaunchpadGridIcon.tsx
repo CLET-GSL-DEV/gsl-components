@@ -1,21 +1,20 @@
 export function LaunchpadGridIcon() {
   return (
     <svg
-      width="24"
-      height="24"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
-      fill="currentColor"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       aria-hidden="true"
     >
-      <circle cx="5" cy="5" r="2" />
-      <circle cx="12" cy="5" r="2" />
-      <circle cx="19" cy="5" r="2" />
-      <circle cx="5" cy="12" r="2" />
-      <circle cx="12" cy="12" r="2" />
-      <circle cx="19" cy="12" r="2" />
-      <circle cx="5" cy="19" r="2" />
-      <circle cx="12" cy="19" r="2" />
-      <circle cx="19" cy="19" r="2" />
+      <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" />
     </svg>
   );
 }

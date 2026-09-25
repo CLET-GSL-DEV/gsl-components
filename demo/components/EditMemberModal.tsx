@@ -215,6 +215,7 @@ export function EditMemberModal({
                           <FieldLabel>Primary Role</FieldLabel>
                           <FieldControl>
                             <Dropdown
+                              aria-label="Primary Role"
                               value={field.value || null}
                               onValueChange={(v) => field.onChange(v ?? "")}
                               options={ROLE_OPTIONS}

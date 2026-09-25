@@ -30,12 +30,15 @@ export function patternIndexFromString(str: string, count: number): number {
 export function gradientFromString(str: string, theme?: string): string {
   const hue = stringToHue(str);
   const isDark = theme === "dark";
+  // Both themes stay dark enough to carry white initials: the light theme used
+  // to sit at 72-78% lightness, which reads about 1.8:1 against the white ink
+  // the avatar paints on it.
   const top = isDark
-    ? `hsl(${hue}, 42%, 32%)`
-    : `hsl(${hue}, 42%, 72%)`;
+    ? `hsl(${hue}, 42%, 28%)`
+    : `hsl(${hue}, 45%, 28%)`;
   const bottom = isDark
-    ? `hsl(${(hue + 30) % 360}, 48%, 40%)`
-    : `hsl(${(hue + 30) % 360}, 45%, 78%)`;
+    ? `hsl(${(hue + 30) % 360}, 48%, 32%)`
+    : `hsl(${(hue + 30) % 360}, 48%, 32%)`;
   return `linear-gradient(135deg, ${top}, ${bottom})`;
 }
 

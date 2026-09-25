@@ -7,7 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Upgrading from any earlier version? See [`demo/docs/pages/migration-v2.mdx`](demo/docs/pages/migration-v2.mdx) for the one upgrade path: run the codemod, then the few things it cannot decide.
 
-## [Unreleased]
+## [2.4.1] - 2026-09-24
+
+### Added
+
+- **Tabs**: new `variant="flat"`, a soft bar with a sliding white pill and no dividers. Opt-in; `default`, `line`, and `pill` are unchanged.
+- **UploadField**: new `variant="inline"`, a compact horizontal row (icon, text, browse action) for form rows and modal bodies. Drag and drop, file cards, statuses, and the error dialog behave identically; with files the row stays a row (CSS-truncated name, inline size, button-height card); `variant="default"` is unchanged.
+- **ExpandableItem**: new expandable list-item card with a chevron toggle, optional title, and generic trailing slot (status text, button, badges, anything), plus a panel holding anything. Clicking anywhere on a collapsed header opens it; only the chevron folds it back; interactive children never toggle. Controlled (`expanded`/`onExpandedChange`) or uncontrolled (`defaultExpanded`), with `aria-expanded`/`aria-controls` and a `region` panel.
+- **Table**: `TableContent` picks its empty state from the URL by default. With a search term or filter values present it renders the filtered-empty state (`No matching results` with the `?` medallion and adjustment hint, overridable via `filteredEmptyText`/`filteredEmptyDescription`); otherwise the plain `emptyText` state. `emptyContent` and the legacy `emptyIcon` path win over both.
+- **Tabs**: new `useTabsState(paramKey, defaultValue)` hook returning URL-backed `[value, onValueChange]` shaped like `useState`, so the active tab survives reloads, restores from shared links, and follows back/forward. Wire straight into `Tabs value`/`onValueChange`; `Tabs` itself is untouched. The `migrate` codemod reports (never rewrites) `Tabs` elements whose value/onValueChange are local-state identifiers, naming the `useTabsState` switch per site.
+- **EmptyState**: new `icon` prop rendering a small muted glyph in a circle instead of the default artwork (a text glyph or icon node). An explicit `illustration` (including `null`) always wins over `icon`.
+- **AccessibleName**: new `src/types/accessible-name.ts` union (`Dropdown`, `Combobox`, `Dialog`, `Modal`, `UploadField`, `AppHeaderSearch` must carry exactly one of `aria-label`/`aria-labelledby`, and carrying neither is a type error). A control with a visible `<label>` points at it with `aria-labelledby` instead of growing a second invisible name. The `migrate` codemod reports unnamed pickers with file and line.
+- **A11y tests**: new `dialog-a11y`, `app-header-search-a11y` and `contrast-tokens` suites covering the audit shapes (modality, search collapse focus, token contrast).
+### Changed
+
+- **Table**: the soft pagination now uses `--clet-primary` for the current-page disc and the enabled Previous/Next chevrons instead of `--clet-info`. All soft page controls grow from 32px to 40px via `--clet-table-page-size`.
+- **SectionHeader**: the title now renders Matimo Medium at 28px with 100% line height (`--clet-section-header-title-size`).
+- **Sidebar**: the brand-rail mark renders at the Figma size, 130px by 66px with `object-fit: contain`.
+- **Launchpad**: the default trigger icon is now a 2x2 box grid (outline style, matching the header icon treatment) instead of the 9-dot glyph.
+- **AppHeader**: the 2.4 (`variant="plain"`) header styles `AppHeaderTitle` in Matimo Bold 24px secondary with capitalization, paints header icon-button SVGs at 20px as outlines (primary stroke, transparent fill), and hides the profile-trigger chevron.
+- **AppHeader**: the 2.4 (`variant="plain"`) header rests at 100px and shrinks to 68.5px (72px while showing breadcrumbs) with a height transition once scrolled past the top (other variants never shrink). `AppHeaderTitle` takes `page`/`breadcrumbs`: the page context crossfades in with a slow rise once scrolled deep enough to cover the page title, and back out on scroll up. The collapsible `AppHeaderSearch` no longer renders its X close button: the field collapses on blur or Escape, and `collapseLabel` is deprecated.
+- **Dialog/Modal**: set `aria-modal` themselves, truthful to the Root's modality (a `modal={false}` Root never claims it), since Radix emits none and screen readers otherwise keep announcing the page behind the dialog.
+- **Toolchain**: the pre-commit hook also runs the repo rules on staged files (nested controls, `role="button"`, unnamed pickers, dangling `aria-controls`, misplaced `aria-current`); `rules:check`/`rules:staged` scripts added and the prepublish gate includes `rules:check`.
+
+### Fixed
+
+- **RoleSelect**: the role list caps at 320px (`--clet-role-select-menu-max-height`) and scrolls internally instead of growing unbounded.
+- **Modal**: pointer and focus interaction inside floating panels (Combobox/Dropdown/Select/Popover content portaled to `document.body`) no longer counts as outside the modal, so the dialog stays open and no `preventClose` confirm fires. Genuine outside clicks behave as before.
+- **Combobox**: the option list keeps its manual wheel handling (cmdk lists do not scroll natively under the wheel in all hosts) with `overscroll-behavior: contain` added, so scrolling a long list inside a modal moves the list, not the modal body behind it. New "Inside a modal" docs example covers the pattern.
+- **Badge**: `success`/`warning`/`error` text now reads the `--*-text` tokens instead of the fill tokens, so tinted badges meet contrast.
+
+### Notes for agents
+
+- **Header shell pattern**: the 2.4 shell pairs `AppHeader variant="plain"` with `Sidebar variant="brand"`. The header title is `AppHeaderTitle` with `page`/`breadcrumbs` (see `demo/components/DemoLayout4.tsx` `LayoutHeaderTitle`): pages publish their trail with `useBreadcrumbs([{ label, href }])` and the layout renders it into the header, which crossfades the page context in on deep scroll. Replicate this wiring rather than hand-rolling header titles.
+- **Notice is deprecated, not removed**: still exported and rendered, but frozen. New work uses `Banner`; `rfdui migrate` reports `Notice` sites with the variant mapping.
+- **The codemod never runs itself**: `rfdui migrate` only acts when invoked. The Tabs URL-state scan reports candidate sites with file and line; it performs no rewrites.
 
 ## [2.4.0] - 2026-09-18
 
