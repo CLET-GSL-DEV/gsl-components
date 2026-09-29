@@ -41,6 +41,10 @@ export interface DateRangeSelectorProps extends Omit<HTMLAttributes<HTMLDivEleme
   disabled?: boolean;
   min?: Date;
   max?: Date;
+  /** Earliest year offered in the year dropdowns. Defaults to 1980. */
+  minYear?: number;
+  /** Latest year offered in the year dropdowns. Defaults to the current year plus 10. */
+  maxYear?: number;
   /** Optional left-rail quick-select presets (Today, Last 7 days, ...). Also shows a "Range: ..." summary in the footer when set. */
   presets?: DateRangePreset[];
   classNames?: DateRangeSelectorClassNames;

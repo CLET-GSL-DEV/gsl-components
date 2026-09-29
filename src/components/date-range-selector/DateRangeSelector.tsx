@@ -34,6 +34,9 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ] as const;
 
+const DEFAULT_MIN_YEAR = 1980;
+const DEFAULT_MAX_YEAR_AHEAD = 10;
+
 const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
   year: "numeric",
   month: "short",
@@ -109,51 +112,132 @@ function computeCalendarDays(year: number, month: number): Date[] {
   return days;
 }
 
-interface MonthPanelProps {
+const monthOptions: DropdownOption[] = MONTHS.map((name, idx) => ({
+  value: String(idx),
+  label: name,
+}));
+
+interface MonthView {
   year: number;
   month: number;
+}
+
+function toView(date: Date): MonthView {
+  return { year: date.getFullYear(), month: date.getMonth() };
+}
+
+function shiftMonth(view: MonthView, delta: number): MonthView {
+  return toView(new Date(view.year, view.month + delta, 1));
+}
+
+// Start panel shows the start month; end panel shows the end month, or the next one.
+function viewsFor(
+  start: Date | null,
+  end: Date | null,
+  fallback: Date,
+): [MonthView, MonthView] {
+  const first = toView(start ?? fallback);
+  const last = end ? toView(end) : null;
+  const sameMonth = last?.year === first.year && last?.month === first.month;
+  return [first, last && !sameMonth ? last : shiftMonth(first, 1)];
+}
+
+interface MonthPanelProps {
+  view: MonthView;
+  label: string;
+  yearOptions: DropdownOption[];
+  minYear: number;
+  maxYear: number;
   pendingRange: DateRangeValue;
   today: Date;
   min?: Date;
   max?: Date;
   disabled: boolean;
   classNames?: DateRangeSelectorProps["classNames"];
+  onViewChange: (view: MonthView) => void;
   onSelect: (day: Date) => void;
 }
 
 function MonthPanel({
-  year,
-  month,
+  view,
+  label,
+  yearOptions,
+  minYear,
+  maxYear,
   pendingRange,
   today,
   min,
   max,
   disabled,
   classNames,
+  onViewChange,
   onSelect,
 }: MonthPanelProps) {
+  const { year, month } = view;
+  const canGoPrev = shiftMonth(view, -1).year >= minYear;
+  const canGoNext = shiftMonth(view, 1).year <= maxYear;
   const calendarDays = useMemo(
     () => computeCalendarDays(year, month),
     [year, month],
   );
 
-  const monthLabel = useMemo(() => {
-    const d = new Date(year, month, 1);
-    return d.toLocaleDateString("en-US", {
-      month: "long",
-      year: "numeric",
-    });
-  }, [year, month]);
-
   return (
-    <div className="clet-date-range-selector__month-panel gsl-date-range-selector__month-panel">
+    <div
+      className="clet-date-range-selector__month-panel gsl-date-range-selector__month-panel"
+      role="group"
+      aria-label={label}
+    >
       <div
         className={cn(
-          "clet-date-range-selector__calendar-title gsl-date-range-selector__calendar-title",
-          classNames?.calendarTitle,
+          "clet-date-range-selector__calendar-header gsl-date-range-selector__calendar-header",
+          classNames?.calendarHeader,
         )}
       >
-        {monthLabel}
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(classNames?.calendarNav)}
+          onClick={() => onViewChange(shiftMonth(view, -1))}
+          disabled={!canGoPrev}
+          aria-label="Previous month"
+        >
+          <ChevronLeft size={16} strokeWidth={2} aria-hidden />
+        </Button>
+
+        <div
+          className={cn(
+            "clet-date-range-selector__calendar-header-center gsl-date-range-selector__calendar-header-center",
+            classNames?.calendarTitle,
+          )}
+        >
+          <Dropdown
+            value={String(month)}
+            onValueChange={(v: string | null) => {
+              if (v !== null) onViewChange({ year, month: Number(v) });
+            }}
+            options={monthOptions}
+            aria-label="Select month"
+          />
+          <Dropdown
+            value={String(year)}
+            onValueChange={(v: string | null) => {
+              if (v !== null) onViewChange({ year: Number(v), month });
+            }}
+            options={yearOptions}
+            aria-label="Select year"
+          />
+        </div>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(classNames?.calendarNav)}
+          onClick={() => onViewChange(shiftMonth(view, 1))}
+          disabled={!canGoNext}
+          aria-label="Next month"
+        >
+          <ChevronRight size={16} strokeWidth={2} aria-hidden />
+        </Button>
       </div>
 
       <div
@@ -258,11 +342,6 @@ function MonthPanel({
   );
 }
 
-const monthOptions: DropdownOption[] = MONTHS.map((name, idx) => ({
-  value: String(idx),
-  label: name,
-}));
-
 export const DateRangeSelector = forwardRef<
   HTMLDivElement,
   DateRangeSelectorProps
@@ -276,6 +355,8 @@ export const DateRangeSelector = forwardRef<
     disabled = false,
     min,
     max,
+    minYear: minYearProp,
+    maxYear: maxYearProp,
     formatOptions,
     presets,
     classNames,
@@ -303,11 +384,19 @@ export const DateRangeSelector = forwardRef<
     return new Date(d.getFullYear(), d.getMonth(), d.getDate());
   }, []);
 
-  const [viewYear, setViewYear] = useState(today.getFullYear());
-  const [leftMonth, setLeftMonth] = useState(today.getMonth());
+  const [startView, setStartView] = useState<MonthView>(() => toView(today));
+  const [endView, setEndView] = useState<MonthView>(() =>
+    shiftMonth(toView(today), 1),
+  );
 
-  const rightMonth = leftMonth === 11 ? 0 : leftMonth + 1;
-  const rightYear = leftMonth === 11 ? viewYear + 1 : viewYear;
+  const showRange = useCallback(
+    (start: Date | null, end: Date | null) => {
+      const [first, last] = viewsFor(start, end, today);
+      setStartView(first);
+      setEndView(last);
+    },
+    [today],
+  );
 
   const formatDate = useCallback(
     (date: Date | null) =>
@@ -367,11 +456,9 @@ export const DateRangeSelector = forwardRef<
       const next = preset.getRange();
       setPendingRange(next);
       setActivePresetLabel(preset.label);
-      const refDate = next.start ?? today;
-      setViewYear(refDate.getFullYear());
-      setLeftMonth(refDate.getMonth());
+      showRange(next.start, next.end);
     },
-    [disabled, today],
+    [disabled, showRange],
   );
 
   const isPresetActive = useCallback(
@@ -406,35 +493,31 @@ export const DateRangeSelector = forwardRef<
     (next: boolean) => {
       if (disabled) return;
       if (next) {
-        const refDate = range.start ?? today;
-        setViewYear(refDate.getFullYear());
-        setLeftMonth(refDate.getMonth());
+        showRange(range.start, range.end);
         setPendingRange(range);
         setActivePresetLabel(null);
       }
       setOpen(next);
     },
-    [disabled, range, today],
+    [disabled, range, showRange],
   );
 
-  const prevMonth = useCallback(() => {
-    setLeftMonth((m) => (m === 0 ? 11 : m - 1));
-    if (leftMonth === 0) setViewYear((y) => y - 1);
-  }, [leftMonth]);
-
-  const nextMonth = useCallback(() => {
-    setLeftMonth((m) => (m === 11 ? 0 : m + 1));
-    if (leftMonth === 11) setViewYear((y) => y + 1);
-  }, [leftMonth]);
+  const minYear = Math.min(
+    minYearProp ?? DEFAULT_MIN_YEAR,
+    maxYearProp ?? today.getFullYear() + DEFAULT_MAX_YEAR_AHEAD,
+  );
+  const maxYear = Math.max(
+    minYearProp ?? DEFAULT_MIN_YEAR,
+    maxYearProp ?? today.getFullYear() + DEFAULT_MAX_YEAR_AHEAD,
+  );
 
   const yearDropdownOptions: DropdownOption[] = useMemo(() => {
-    const current = today.getFullYear();
     const years: DropdownOption[] = [];
-    for (let y = current - 10; y <= current + 10; y++) {
+    for (let y = minYear; y <= maxYear; y++) {
       years.push({ value: String(y), label: String(y) });
     }
     return years;
-  }, [today]);
+  }, [minYear, maxYear]);
 
   return (
     <div
@@ -485,52 +568,6 @@ export const DateRangeSelector = forwardRef<
             sideOffset={4}
             aria-label="Date range picker"
           >
-            <div
-              className={cn(
-                "clet-date-range-selector__calendar-header gsl-date-range-selector__calendar-header",
-                classNames?.calendarHeader,
-              )}
-            >
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(classNames?.calendarNav)}
-                onClick={prevMonth}
-                aria-label="Previous month"
-              >
-                <ChevronLeft size={16} strokeWidth={2} aria-hidden />
-              </Button>
-
-              <div className="clet-date-range-selector__calendar-header-center gsl-date-range-selector__calendar-header-center">
-                <Dropdown
-                  value={String(leftMonth)}
-                  onValueChange={(v: string | null) => {
-                    if (v !== null) setLeftMonth(Number(v));
-                  }}
-                  options={monthOptions}
-                  aria-label="Select month"
-                />
-                <Dropdown
-                  value={String(viewYear)}
-                  onValueChange={(v: string | null) => {
-                    if (v !== null) setViewYear(Number(v));
-                  }}
-                  options={yearDropdownOptions}
-                  aria-label="Select year"
-                />
-              </div>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(classNames?.calendarNav)}
-                onClick={nextMonth}
-                aria-label="Next month"
-              >
-                <ChevronRight size={16} strokeWidth={2} aria-hidden />
-              </Button>
-            </div>
-
             <div className="clet-date-range-selector__body gsl-date-range-selector__body">
               {hasPresets ? (
                 <div
@@ -559,25 +596,33 @@ export const DateRangeSelector = forwardRef<
 
               <div className="clet-date-range-selector__calendar-months gsl-date-range-selector__calendar-months">
                 <MonthPanel
-                  year={viewYear}
-                  month={leftMonth}
+                  view={startView}
+                  label="Start calendar"
+                  yearOptions={yearDropdownOptions}
+                  minYear={minYear}
+                  maxYear={maxYear}
                   pendingRange={pendingRange}
                   today={today}
                   min={min}
                   max={max}
                   disabled={disabled}
                   classNames={classNames}
+                  onViewChange={setStartView}
                   onSelect={handleSelect}
                 />
                 <MonthPanel
-                  year={rightYear}
-                  month={rightMonth}
+                  view={endView}
+                  label="End calendar"
+                  yearOptions={yearDropdownOptions}
+                  minYear={minYear}
+                  maxYear={maxYear}
                   pendingRange={pendingRange}
                   today={today}
                   min={min}
                   max={max}
                   disabled={disabled}
                   classNames={classNames}
+                  onViewChange={setEndView}
                   onSelect={handleSelect}
                 />
               </div>
