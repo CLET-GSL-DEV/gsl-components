@@ -42,11 +42,40 @@ function downloadBlob(filename: string, blob: Blob) {
   URL.revokeObjectURL(url);
 }
 
+const HTML_ESCAPES: Record<string, string> = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+};
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (ch) => HTML_ESCAPES[ch]);
+}
+
+// A CSV cell starting with one of these is evaluated as a formula on open.
+const FORMULA_TRIGGER = /^[=+\-@\t\r]/;
+
+function neutralizeFormula(value: string): string {
+  return FORMULA_TRIGGER.test(value) ? `'${value}` : value;
+}
+
 function escapeCsv(val: string): string {
-  if (val.includes(",") || val.includes('"') || val.includes("\n")) {
+  if (
+    val.includes(",") ||
+    val.includes('"') ||
+    val.includes("\n") ||
+    val.includes("\r")
+  ) {
     return `"${val.replace(/"/g, '""')}"`;
   }
   return val;
+}
+
+function csvCell(val: string | number | null | undefined): string {
+  if (val == null) return "";
+  return escapeCsv(typeof val === "string" ? neutralizeFormula(val) : String(val));
 }
 
 export function exportToCsv<T>(
@@ -54,14 +83,9 @@ export function exportToCsv<T>(
   columns: ExportColumn<T>[],
   filename: string,
 ) {
-  const headerRow = columns.map((c) => escapeCsv(c.header)).join(",");
+  const headerRow = columns.map((c) => csvCell(c.header)).join(",");
   const dataRows = data.map((row) =>
-    columns
-      .map((c) => {
-        const val = c.accessor(row);
-        return escapeCsv(val == null ? "" : String(val));
-      })
-      .join(","),
+    columns.map((c) => csvCell(c.accessor(row))).join(","),
   );
   const csv = [headerRow, ...dataRows].join("\r\n");
   const blob = new Blob(["﻿" + csv], {
@@ -107,7 +131,7 @@ function buildReportHtml<T>(
   metadataLines.push(`Generated: ${now}`);
 
   const headerCells = columns
-    .map((c) => `            <th>${c.header}</th>`)
+    .map((c) => `            <th>${escapeHtml(c.header)}</th>`)
     .join("\n");
 
   const bodyRows = data
@@ -116,7 +140,7 @@ function buildReportHtml<T>(
 ${columns
   .map((c) => {
     const val = c.accessor(row);
-    return `            <td>${val == null ? "—" : String(val)}</td>`;
+    return `            <td>${val == null ? "&mdash;" : escapeHtml(String(val))}</td>`;
   })
   .join("\n")}
           </tr>`,
@@ -127,7 +151,7 @@ ${columns
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>${meta.title} — Export</title>
+  <title>${escapeHtml(meta.title)} &mdash; Export</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; color: #1f2937; background: #fff; }
@@ -149,13 +173,13 @@ ${columns
 <body>
   <div class="header">
     <div class="header-right">
-      <div class="meta"><strong>${meta.title}</strong></div>
-      ${metadataLines.map((line) => `<div class="meta">${line}</div>`).join("\n      ")}
+      <div class="meta"><strong>${escapeHtml(meta.title)}</strong></div>
+      ${metadataLines.map((line) => `<div class="meta">${escapeHtml(line)}</div>`).join("\n      ")}
     </div>
   </div>
 
   <div class="title-row">
-    <h2>${meta.title}</h2>
+    <h2>${escapeHtml(meta.title)}</h2>
   </div>
 
   <table>
@@ -170,7 +194,7 @@ ${bodyRows}
   </table>
 
   <div class="footer">
-    Generated ${now}
+    Generated ${escapeHtml(now)}
   </div>
 </body>
 </html>`;
