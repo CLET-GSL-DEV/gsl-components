@@ -1,34 +1,29 @@
 import {
 	useEffect,
 	useState,
-	type ComponentProps,
-	type ComponentType,
+	type CSSProperties,
 } from "react";
-import type LottieModule from "lottie-react";
+import type { Lottie as LottieComponent } from "lottie-react";
 
-type ClientLottieProps = ComponentProps<typeof LottieModule>;
+export interface ClientLottieProps {
+	/** Parsed Lottie JSON. Passed to lottie-react 3 as `src`. */
+	animationData: object;
+	loop?: boolean | number;
+	autoplay?: boolean;
+	className?: string;
+	style?: CSSProperties;
+}
 
-export function ClientLottie(props: ClientLottieProps) {
-	const [Lottie, setLottie] = useState<ComponentType<ClientLottieProps> | null>(
-		null,
-	);
+export function ClientLottie({ animationData, ...rest }: ClientLottieProps) {
+	const [Lottie, setLottie] = useState<typeof LottieComponent | null>(null);
 
 	useEffect(() => {
 		let mounted = true;
 
+		// Loaded on the client only: lottie-web touches canvas at import time.
 		void import("lottie-react").then((module) => {
-			if (!mounted) {
-				return;
-			}
-			// lottie-react's ESM build exposes the player as a named export;
-			// its `default` is a namespace object, not a component.
-			const candidates = module as unknown as {
-				LottiePlayer?: ComponentType<ClientLottieProps>;
-				default?: ComponentType<ClientLottieProps>;
-			};
-			const Player = candidates.LottiePlayer ?? candidates.default;
-			if (typeof Player === "function") {
-				setLottie(() => Player);
+			if (mounted) {
+				setLottie(() => module.Lottie);
 			}
 		});
 
@@ -41,5 +36,5 @@ export function ClientLottie(props: ClientLottieProps) {
 		return null;
 	}
 
-	return <Lottie {...props} />;
+	return <Lottie src={animationData} {...rest} />;
 }
