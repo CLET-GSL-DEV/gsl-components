@@ -1,6 +1,6 @@
-import { createRef } from "react";
+import { createRef, type ReactElement } from "react";
 import { useForm } from "react-hook-form";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { DateRangeSelector } from "./DateRangeSelector";
@@ -207,59 +207,190 @@ describe("DateRangeSelector", () => {
     expect(enabledCount).toBeLessThanOrEqual(6);
   });
 
-  it("navigates months with prev/next buttons", async () => {
-    const user = userEvent.setup();
-    render(<DateRangeSelector />);
+  describe("per-panel headers", () => {
+    const panel = (name: "Start calendar" | "End calendar") =>
+      screen.getByRole("group", { name });
+    const shownMonth = (name: "Start calendar" | "End calendar") =>
+      within(panel(name)).getByRole("combobox", { name: /select month/i }).textContent;
+    const shownYear = (name: "Start calendar" | "End calendar") =>
+      within(panel(name)).getByRole("combobox", { name: /select year/i }).textContent;
 
-    await user.click(screen.getByRole("button"));
+    const openWith = async (start: Date, end: Date | null) => {
+      const user = userEvent.setup();
+      render(<DateRangeSelector defaultValue={{ start, end }} />);
+      await user.click(screen.getByRole("button"));
+      return user;
+    };
 
-    const nextBtn = screen.getByRole("button", { name: /next month/i });
-    await user.click(nextBtn);
+    it("gives each panel its own arrows, month select and year select", async () => {
+      await openWith(new Date(2026, 5, 1), new Date(2026, 7, 18));
 
-    const prevBtn = screen.getByRole("button", { name: /previous month/i });
-    await user.click(prevBtn);
+      for (const name of ["Start calendar", "End calendar"] as const) {
+        const scope = within(panel(name));
+        expect(scope.getByRole("button", { name: /previous month/i })).toBeInTheDocument();
+        expect(scope.getByRole("button", { name: /next month/i })).toBeInTheDocument();
+        expect(scope.getByRole("combobox", { name: /select month/i })).toBeInTheDocument();
+        expect(scope.getByRole("combobox", { name: /select year/i })).toBeInTheDocument();
+      }
+    });
+
+    it("shows the start month and the end month in their own panels", async () => {
+      await openWith(new Date(2026, 5, 1), new Date(2026, 7, 18));
+
+      expect(shownMonth("Start calendar")).toContain("June");
+      expect(shownMonth("End calendar")).toContain("August");
+    });
+
+    it("shows the following month in the end panel until an end date exists", async () => {
+      await openWith(new Date(2026, 5, 1), null);
+
+      expect(shownMonth("Start calendar")).toContain("June");
+      expect(shownMonth("End calendar")).toContain("July");
+    });
+
+    it("shows the following month when start and end share a month", async () => {
+      await openWith(new Date(2026, 5, 1), new Date(2026, 5, 18));
+
+      expect(shownMonth("End calendar")).toContain("July");
+    });
+
+    it("moves only the start panel when its arrows are used", async () => {
+      const user = await openWith(new Date(2026, 5, 1), new Date(2026, 7, 18));
+
+      await user.click(
+        within(panel("Start calendar")).getByRole("button", { name: /next month/i }),
+      );
+
+      expect(shownMonth("Start calendar")).toContain("July");
+      expect(shownMonth("End calendar")).toContain("August");
+    });
+
+    it("moves only the end panel when its arrows are used", async () => {
+      const user = await openWith(new Date(2026, 5, 1), new Date(2026, 7, 18));
+
+      await user.click(
+        within(panel("End calendar")).getByRole("button", { name: /previous month/i }),
+      );
+
+      expect(shownMonth("Start calendar")).toContain("June");
+      expect(shownMonth("End calendar")).toContain("July");
+    });
+
+    it("rolls the year over when stepping past January", async () => {
+      const user = await openWith(new Date(2026, 0, 10), new Date(2026, 2, 5));
+
+      await user.click(
+        within(panel("Start calendar")).getByRole("button", { name: /previous month/i }),
+      );
+
+      expect(shownMonth("Start calendar")).toContain("December");
+      expect(shownYear("Start calendar")).toContain("2025");
+      expect(shownYear("End calendar")).toContain("2026");
+    });
+
+    it("changes only its own panel via the month select", async () => {
+      const user = await openWith(new Date(2026, 5, 1), new Date(2026, 7, 18));
+
+      await user.click(
+        within(panel("End calendar")).getByRole("combobox", { name: /select month/i }),
+      );
+      await user.click(await screen.findByRole("option", { name: "December" }));
+
+      expect(shownMonth("End calendar")).toContain("December");
+      expect(shownMonth("Start calendar")).toContain("June");
+    });
+
+    it("changes only its own panel via the year select", async () => {
+      const user = await openWith(new Date(2026, 5, 1), new Date(2026, 7, 18));
+
+      await user.click(
+        within(panel("Start calendar")).getByRole("combobox", { name: /select year/i }),
+      );
+      await user.click(await screen.findByRole("option", { name: "2025" }));
+
+      expect(shownYear("Start calendar")).toContain("2025");
+      expect(shownYear("End calendar")).toContain("2026");
+    });
+
+    it("selects a range that starts in one calendar and ends in the other", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <DateRangeSelector
+          defaultValue={{ start: new Date(2026, 5, 1), end: null }}
+          onChange={onChange}
+        />,
+      );
+      await user.click(screen.getByRole("button"));
+
+      await user.click(
+        within(panel("End calendar")).getByRole("gridcell", {
+          name: "Wednesday, July 15, 2026",
+        }),
+      );
+      await user.click(screen.getByRole("button", { name: "Apply" }));
+
+      const value = onChange.mock.calls[0][0] as DateRangeValue;
+      expect(value.start).toEqual(new Date(2026, 5, 1));
+      expect(value.end).toEqual(new Date(2026, 6, 15));
+    });
   });
 
-  it("has month and year selectors", async () => {
-    const user = userEvent.setup();
-    render(<DateRangeSelector />);
+  describe("year range", () => {
+    const openYears = async (ui: ReactElement) => {
+      const user = userEvent.setup();
+      render(ui);
+      await user.click(screen.getByRole("button"));
+      const start = screen.getByRole("group", { name: "Start calendar" });
+      await user.click(within(start).getByRole("combobox", { name: /select year/i }));
+      return user;
+    };
 
-    await user.click(screen.getByRole("button"));
+    it("offers years back to 1980 by default", async () => {
+      await openYears(<DateRangeSelector />);
 
-    expect(screen.getByRole("combobox", { name: /select month/i })).toBeInTheDocument();
-    expect(screen.getByRole("combobox", { name: /select year/i })).toBeInTheDocument();
-  });
+      expect(await screen.findByRole("option", { name: "1980" })).toBeInTheDocument();
+      expect(screen.queryByRole("option", { name: "1979" })).not.toBeInTheDocument();
+    });
 
-  it("changes month via month selector", async () => {
-    const user = userEvent.setup();
-    render(<DateRangeSelector />);
+    it("limits the year dropdowns to minYear and maxYear", async () => {
+      await openYears(<DateRangeSelector minYear={2000} maxYear={2030} />);
 
-    await user.click(screen.getByRole("button"));
+      expect(await screen.findByRole("option", { name: "2000" })).toBeInTheDocument();
+      expect(screen.getByRole("option", { name: "2030" })).toBeInTheDocument();
+      expect(screen.queryByRole("option", { name: "1999" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("option", { name: "2031" })).not.toBeInTheDocument();
+    });
 
-    const monthTrigger = screen.getByRole("combobox", { name: /select month/i });
-    await user.click(monthTrigger);
+    it("stops the previous arrow at January of minYear", async () => {
+      const user = userEvent.setup();
+      render(
+        <DateRangeSelector
+          minYear={2000}
+          defaultValue={{ start: new Date(2000, 0, 10), end: new Date(2000, 2, 5) }}
+        />,
+      );
+      await user.click(screen.getByRole("button"));
 
-    const option = await screen.findByRole("option", { name: "January" });
-    await user.click(option);
+      const start = screen.getByRole("group", { name: "Start calendar" });
+      expect(within(start).getByRole("button", { name: /previous month/i })).toBeDisabled();
+      expect(within(start).getByRole("button", { name: /next month/i })).toBeEnabled();
+    });
 
-    const allGrids = screen.getAllByRole("grid");
-    expect(allGrids.length).toBe(2);
-  });
+    it("stops the next arrow at December of maxYear", async () => {
+      const user = userEvent.setup();
+      render(
+        <DateRangeSelector
+          maxYear={2030}
+          defaultValue={{ start: new Date(2030, 10, 3), end: new Date(2030, 11, 9) }}
+        />,
+      );
+      await user.click(screen.getByRole("button"));
 
-  it("changes year via year selector", async () => {
-    const user = userEvent.setup();
-    render(<DateRangeSelector />);
-
-    await user.click(screen.getByRole("button"));
-
-    const yearTrigger = screen.getByRole("combobox", { name: /select year/i });
-    await user.click(yearTrigger);
-
-    const option = await screen.findByRole("option", { name: "2027" });
-    await user.click(option);
-
-    const grids = screen.getAllByRole("grid");
-    expect(grids.length).toBe(2);
+      const end = screen.getByRole("group", { name: "End calendar" });
+      expect(within(end).getByRole("button", { name: /next month/i })).toBeDisabled();
+      expect(within(end).getByRole("button", { name: /previous month/i })).toBeEnabled();
+    });
   });
 
   it("resets and starts new selection when range is already set", async () => {

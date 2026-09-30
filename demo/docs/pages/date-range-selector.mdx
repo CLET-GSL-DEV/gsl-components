@@ -19,7 +19,7 @@ import dateRangePresetsSource from "../previews/examples/date-range-presets.exam
 
 # DateRangeSelector
 
-Date range picker for choosing a start and end date from a two-month calendar popover. Built on `@radix-ui/react-popover` with CLET styling, auto-swap to keep start before end, year/month dropdown selectors for quick navigation, Apply/Cancel buttons for explicit confirmation, and part-level `classNames`.
+Date range picker for choosing a start and end date from two side-by-side calendars. Built on `@radix-ui/react-popover` with CLET styling, auto-swap to keep start before end, a month/year header on each calendar for independent navigation, Apply/Cancel buttons for explicit confirmation, and part-level `classNames`.
 
 ## Example
 
@@ -64,6 +64,8 @@ don't let it silently render an empty table).
 | `disabled` | `boolean` | `false` | Disable interaction |
 | `min` | `Date` | — | Earliest selectable date |
 | `max` | `Date` | — | Latest selectable date |
+| `minYear` | `number` | `1980` | Earliest year in the year dropdowns; the previous-month arrow stops at January of this year |
+| `maxYear` | `number` | current year + 10 | Latest year in the year dropdowns; the next-month arrow stops at December of this year |
 | `presets` | `DateRangePreset[]` | — | Left-rail quick-select presets; also enables the "Range: ..." footer summary |
 | `classNames` | `DateRangeSelectorClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root wrapper |
@@ -137,9 +139,9 @@ Part-level class names merged after base `clet-date-selector*` styles:
 | `root` | Outer wrapper (`.clet-date-range-selector`) |
 | `trigger` | Trigger button (`.clet-date-selector__trigger`) |
 | `calendar` | Calendar panel (`.clet-date-selector__calendar`) |
-| `calendarHeader` | Month/year navigation row (`.clet-date-selector__calendar-header`) |
+| `calendarHeader` | Month/year navigation row above each month panel (`.clet-date-range-selector__calendar-header`) |
 | `calendarNav` | Previous/next month arrows |
-| `calendarTitle` | Month label above each month panel (`.clet-date-selector__calendar-title`) |
+| `calendarTitle` | Month and year dropdown group inside each panel header |
 | `calendarWeekdays` | Weekday labels container (`.clet-date-selector__calendar-weekdays`) |
 | `calendarWeekday` | Individual weekday label (`.clet-date-selector__calendar-weekday`) |
 | `calendarGrid` | Calendar day grid (`.clet-date-selector__calendar-grid`) |
@@ -167,7 +169,7 @@ Part-level class names merged after base `clet-date-selector*` styles:
 
 ## Notes
 
-- Click the trigger to open a two-month calendar popover. Year and month dropdowns at the top allow quick navigation; previous/next arrows shift by one month.
+- Click the trigger to open a two-calendar popover. Each calendar has its own header with month and year dropdowns and previous/next arrows, so the start and end months move independently.
 - First click picks the start date; a second click picks the end date. **No dates are committed until Apply is clicked.**
 - Click Cancel or press Escape to discard the pending selection and restore the previous range.
 - **Start is always the earlier date**—if the second pick is before the first, they swap automatically so `start < end`.
