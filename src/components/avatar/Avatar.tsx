@@ -32,7 +32,7 @@ const sizeMap: Record<AvatarSize, number> = {
   lg: 48,
 };
 
-export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
+export const Avatar = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
   { name, src, size = "md", background, backgroundVar, className, classNames, ...props },
   ref,
 ) {

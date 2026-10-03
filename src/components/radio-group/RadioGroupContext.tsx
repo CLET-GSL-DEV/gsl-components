@@ -5,7 +5,7 @@ interface RadioGroupContextValue {
   variant: RadioGroupVariant;
 }
 
-const RadioGroupContext = createContext<RadioGroupContextValue>({
+const RadioGroupContext = /* @__PURE__ */ createContext<RadioGroupContextValue>({
   variant: "default",
 });
 

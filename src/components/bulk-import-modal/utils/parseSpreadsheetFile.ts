@@ -1,8 +1,7 @@
 // Spreadsheet parsing peers, picked by the consuming app:
 // - papaparse for .csv (no runtime dependencies, RFC 4180 compliant)
 // - read-excel-file for .xlsx (browser entry point, actively published)
-import Papa from "papaparse";
-import { readSheet } from "read-excel-file/browser";
+// Both load on demand, so an app that never parses a file never bundles them.
 import type { ParsedSpreadsheet } from "../../../types/bulk-import-modal";
 import { ACCEPTED_EXTENSIONS } from "../constants";
 
@@ -64,11 +63,12 @@ export function isCsv(fileName: string) {
   return isCsvFile(fileName);
 }
 
-export function parseCsvText(text: string): string[][] {
+export async function parseCsvText(text: string): Promise<string[][]> {
   if (text.trim().length === 0) {
     return [];
   }
 
+  const { default: Papa } = await import("papaparse");
   const result = Papa.parse<string[]>(text, {
     skipEmptyLines: true,
   });
@@ -122,7 +122,7 @@ export async function parseSpreadsheetFile(
 
   if (isCsvFile(file.name)) {
     const text = await file.text();
-    const rows = filterEmptyRows(normalizeRows(parseCsvText(text)));
+    const rows = filterEmptyRows(normalizeRows(await parseCsvText(text)));
 
     if (rows.length === 0) {
       throw new BulkImportParseError("The uploaded file is empty.");
@@ -134,6 +134,7 @@ export async function parseSpreadsheetFile(
     };
   }
 
+  const { readSheet } = await import("read-excel-file/browser");
   let rawRows: unknown[][];
   try {
     rawRows = await readSheet(file);

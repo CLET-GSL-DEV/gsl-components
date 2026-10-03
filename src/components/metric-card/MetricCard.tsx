@@ -49,7 +49,7 @@ function parseValueForAnimation(value: string | number): ParsedValue | null {
   };
 }
 
-export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
+export const MetricCard = /* @__PURE__ */ forwardRef<HTMLDivElement, MetricCardProps>(
   function MetricCard(
     {
       label,

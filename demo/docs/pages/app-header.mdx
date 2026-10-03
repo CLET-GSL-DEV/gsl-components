@@ -197,6 +197,9 @@ Bell button that opens a Radix popover. Pass notification items as `children`. U
 | `loadingLabel` | `string` | `"Loading notifications..."` | Accessible label for loading state |
 | `children` | `ReactNode` | — | Rendered inside the popover body |
 | `className` | `string` | — | Merged onto the trigger button |
+| `title` | `string` | `"Notifications"` | Heading at the top of the panel |
+| `width` | `number \| string` | `340px` | Panel width; a number is pixels |
+| `align` | `"start" \| "center" \| "end"` | `"end"` | Panel alignment against the bell |
 
 Render each notification as an [`AppHeaderNotificationItem`](#appheadernotificationitem) — don't hand-write `.clet-notif-popover__*` divs:
 

@@ -161,7 +161,7 @@ function reportUnseededFilters(
   }
 }
 
-export const TableActions = forwardRef<HTMLDivElement, TableActionsProps>(
+export const TableActions = /* @__PURE__ */ forwardRef<HTMLDivElement, TableActionsProps>(
   function TableActions({ classNames, className, children, ...props }, ref) {
     return (
       <div
@@ -175,7 +175,7 @@ export const TableActions = forwardRef<HTMLDivElement, TableActionsProps>(
   },
 );
 
-export const TableHeader = forwardRef<HTMLDivElement, TableHeaderProps>(
+export const TableHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, TableHeaderProps>(
   function TableHeader({ className, classNames, children, ...props }, ref) {
     return (
       <div
@@ -189,7 +189,7 @@ export const TableHeader = forwardRef<HTMLDivElement, TableHeaderProps>(
   },
 );
 
-export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
+export const TableSearch = /* @__PURE__ */ forwardRef<HTMLInputElement, TableSearchProps>(
   function TableSearch(
     {
       placeholder = "Search...",
@@ -289,7 +289,7 @@ export const TableSearch = forwardRef<HTMLInputElement, TableSearchProps>(
   },
 );
 
-export const TableFilter = forwardRef<HTMLDivElement, TableFilterProps>(
+export const TableFilter = /* @__PURE__ */ forwardRef<HTMLDivElement, TableFilterProps>(
   function TableFilter(
     {
       children,

@@ -14,7 +14,7 @@ import "./styles/expandable-item.css";
  * Expandable list item: header click opens, only the chevron folds back.
  * Interactive header children never toggle.
  */
-export const ExpandableItem = forwardRef<HTMLDivElement, ExpandableItemProps>(
+export const ExpandableItem = /* @__PURE__ */ forwardRef<HTMLDivElement, ExpandableItemProps>(
   function ExpandableItem(
     {
       title,

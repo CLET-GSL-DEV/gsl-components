@@ -104,6 +104,61 @@ describe("Sidebar", () => {
     );
   });
 
+  it("makes the closed mobile drawer inert", () => {
+    renderSidebar();
+    expect(document.querySelector("aside.clet-sidebar")).toHaveAttribute("inert");
+  });
+
+  it("moves focus into the drawer on open, closes on Escape and returns focus", async () => {
+    const user = userEvent.setup();
+    // jsdom has no layout, so give every element a client rect for the filter.
+    const rects = vi
+      .spyOn(HTMLElement.prototype, "getClientRects")
+      .mockReturnValue([{}] as unknown as DOMRectList);
+    renderSidebar();
+
+    const trigger = screen.getByRole("button", { name: "Open menu" });
+    await user.click(trigger);
+
+    const drawer = document.querySelector("aside.clet-sidebar") as HTMLElement;
+    expect(drawer).not.toHaveAttribute("inert");
+    expect(drawer.contains(document.activeElement)).toBe(true);
+
+    await user.keyboard("{Escape}");
+
+    expect(drawer).not.toHaveClass("clet-sidebar--mobile-open");
+    expect(drawer).toHaveAttribute("inert");
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: "Open menu" }),
+    );
+    rects.mockRestore();
+  });
+
+  it("wraps Tab and Shift+Tab inside the open drawer", async () => {
+    const user = userEvent.setup();
+    // jsdom has no layout, so give every element a client rect for the filter.
+    const rects = vi
+      .spyOn(HTMLElement.prototype, "getClientRects")
+      .mockReturnValue([{}] as unknown as DOMRectList);
+    renderSidebar();
+    await user.click(screen.getByRole("button", { name: "Open menu" }));
+
+    const drawer = document.querySelector("aside.clet-sidebar") as HTMLElement;
+    const tabbables = Array.from(
+      drawer.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
+    ).filter((el) => !el.closest("[inert], [hidden]"));
+    const first = tabbables[0];
+    const last = tabbables[tabbables.length - 1];
+
+    last.focus();
+    await user.keyboard("{Tab}");
+    expect(document.activeElement).toBe(first);
+
+    await user.keyboard("{Shift>}{Tab}{/Shift}");
+    expect(document.activeElement).toBe(last);
+    rects.mockRestore();
+  });
+
   it("calls onOpenChange when toggled", async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();

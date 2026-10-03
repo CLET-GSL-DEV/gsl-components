@@ -1,14 +1,14 @@
 import { forwardRef, useMemo, useState } from "react";
 import type { HeroBannerProps } from "../../types/hero-banner";
 import { cn } from "../../utils/cn";
-import hero1 from "./assets/hero-1.jpg";
-import hero2 from "./assets/hero-2.jpg";
-import hero3 from "./assets/hero-3.jpg";
-import hero4 from "./assets/hero-4.jpg";
-import hero5 from "./assets/hero-5.jpg";
-import hero6 from "./assets/hero-6.jpg";
-import hero7 from "./assets/hero-7.jpg";
-import hero8 from "./assets/hero-8.jpg";
+import hero1 from "./assets/hero-1.jpg?no-inline";
+import hero2 from "./assets/hero-2.jpg?no-inline";
+import hero3 from "./assets/hero-3.jpg?no-inline";
+import hero4 from "./assets/hero-4.jpg?no-inline";
+import hero5 from "./assets/hero-5.jpg?no-inline";
+import hero6 from "./assets/hero-6.jpg?no-inline";
+import hero7 from "./assets/hero-7.jpg?no-inline";
+import hero8 from "./assets/hero-8.jpg?no-inline";
 import "./styles/hero-banner.css";
 import { CalendarIcon } from "lucide-react";
 
@@ -37,7 +37,7 @@ function todayLabel(): string {
  * date, and preset artwork selected by variant index.
  * All text is props; the date defaults to today; images are presets.
  */
-export const HeroBanner = forwardRef<HTMLElement, HeroBannerProps>(
+export const HeroBanner = /* @__PURE__ */ forwardRef<HTMLElement, HeroBannerProps>(
   function HeroBanner(
     {
       greeting = "Good morning,",

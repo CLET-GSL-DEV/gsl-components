@@ -284,7 +284,7 @@ function ClockDial({ numbers, activeValue, onSelect, label, classNames }: ClockD
 
 /* ─────────────────────────── TimeSelector ─────────────────────────── */
 
-export const TimeSelector = forwardRef<HTMLDivElement, TimeSelectorProps>(
+export const TimeSelector = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeSelectorProps>(
   function TimeSelector(
     {
       variant = "wheel",

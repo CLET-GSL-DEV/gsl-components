@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { AppHeaderNotificationItem } from "./AppHeaderNotificationItem";
 import { AppHeaderNotifications } from "./AppHeaderNotifications";
@@ -47,5 +48,21 @@ describe("AppHeaderNotifications badge", () => {
     expect(badgeOf(container)).toBeNull();
     rerender(<AppHeaderNotifications count={3} showBadge={false} />);
     expect(badgeOf(container)).toBeNull();
+  });
+
+  it("takes a title, width and alignment for the panel", async () => {
+    const user = userEvent.setup();
+    render(
+      <AppHeaderNotifications title="Alerts" width={420} align="start">
+        <AppHeaderNotificationItem text="One" unread />
+      </AppHeaderNotifications>,
+    );
+    await user.click(screen.getByRole("button", { name: "Notifications" }));
+
+    const panel = document.querySelector(".clet-notif-popover") as HTMLElement;
+    expect(panel).not.toBeNull();
+    expect(panel.querySelector(".clet-notif-popover__title")).toHaveTextContent("Alerts");
+    expect(panel.style.getPropertyValue("--clet-notif-popover-width")).toBe("420px");
+    expect(panel).toHaveAttribute("data-align", "start");
   });
 });

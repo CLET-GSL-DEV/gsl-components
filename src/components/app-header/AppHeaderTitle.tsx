@@ -7,7 +7,7 @@ import { cn } from "../../utils/cn";
  * app's name lives here). With page/breadcrumbs, the compact context
  * crossfades in on deep scroll in a plain header.
  */
-export const AppHeaderTitle = forwardRef<
+export const AppHeaderTitle = /* @__PURE__ */ forwardRef<
   HTMLHeadingElement,
   AppHeaderTitleProps
 >(function AppHeaderTitle(

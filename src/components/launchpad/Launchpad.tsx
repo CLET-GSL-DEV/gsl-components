@@ -14,7 +14,8 @@ import { LaunchpadGridIcon } from "./LaunchpadGridIcon";
 import { LaunchpadItem } from "./LaunchpadItem";
 import type { LaunchpadApp, LaunchpadProps } from "../../types/launchpad";
 import { cn } from "../../utils/cn";
-import adinkraSymbolStrip from "./assets/adinkra-symbol.png";
+import { withComponentId } from "../../utils/componentId";
+import adinkraSymbolStrip from "./assets/adinkra-symbol.png?no-inline";
 import "./styles/launchpad.css";
 
 /**
@@ -32,7 +33,7 @@ const EXPAND_TITLE = "Launchpad";
 const TRIGGER_LABEL = "Open Launchpad";
 const SEE_MORE_LABEL = "See more";
 
-export function Launchpad({
+function LaunchpadBase({
 	apps,
 	loading = false,
 	open: controlledOpen,
@@ -219,4 +220,4 @@ export function Launchpad({
 	);
 }
 
-(Launchpad as unknown as { componentId: string }).componentId = "Launchpad";
+export const Launchpad = /* @__PURE__ */ withComponentId(LaunchpadBase, "Launchpad");

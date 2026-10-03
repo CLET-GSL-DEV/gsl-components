@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import type { AppHeaderProfileProps } from "../../types/app-header";
 import type { ProfilePopoverItem } from "../../types/profile-popover";
 import { cn } from "../../utils/cn";
+import { withComponentId } from "../../utils/componentId";
 import {
   CaretDownIcon,
   GearIcon,
@@ -16,7 +17,7 @@ import { ProfilePopover } from "../profile-popover/ProfilePopover";
  * the [migration guide](/docs/migration-v2). Kept as a thin wrapper for backward compatibility;
  * `headerAction` no longer has any effect since `ProfilePopover`'s theme toggle is automatic now.
  */
-export const AppHeaderProfile = forwardRef<
+const AppHeaderProfileBase = /* @__PURE__ */ forwardRef<
   HTMLDivElement,
   AppHeaderProfileProps
 >(function AppHeaderProfile(
@@ -122,4 +123,7 @@ export const AppHeaderProfile = forwardRef<
   );
 });
 
-(AppHeaderProfile as unknown as { componentId: string }).componentId = "AppHeaderProfile";
+export const AppHeaderProfile = /* @__PURE__ */ withComponentId(
+  AppHeaderProfileBase,
+  "AppHeaderProfile",
+);

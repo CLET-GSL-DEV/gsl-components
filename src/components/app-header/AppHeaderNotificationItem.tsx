@@ -1,8 +1,9 @@
 import { forwardRef } from "react";
 import type { AppHeaderNotificationItemProps } from "../../types/app-header";
 import { cn } from "../../utils/cn";
+import { withComponentId } from "../../utils/componentId";
 
-export const AppHeaderNotificationItem = forwardRef<
+const AppHeaderNotificationItemBase = /* @__PURE__ */ forwardRef<
   HTMLDivElement | HTMLButtonElement,
   AppHeaderNotificationItemProps
 >(function AppHeaderNotificationItem(
@@ -59,6 +60,7 @@ export const AppHeaderNotificationItem = forwardRef<
   );
 });
 
-(
-  AppHeaderNotificationItem as unknown as { componentId: string }
-).componentId = "AppHeaderNotificationItem";
+export const AppHeaderNotificationItem = /* @__PURE__ */ withComponentId(
+  AppHeaderNotificationItemBase,
+  "AppHeaderNotificationItem",
+);

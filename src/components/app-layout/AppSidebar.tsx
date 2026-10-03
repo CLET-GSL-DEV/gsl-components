@@ -1,12 +1,13 @@
 import type { ReactNode } from "react";
+import { withComponentId } from "../../utils/componentId";
 
 export interface AppSidebarProps {
   children?: ReactNode;
   className?: string;
 }
 
-export const AppSidebar = ({ children }: AppSidebarProps) => {
+const AppSidebarBase = ({ children }: AppSidebarProps) => {
   return <>{children}</>;
 };
 
-(AppSidebar as unknown as { componentId: string }).componentId = "AppSidebar";
+export const AppSidebar = /* @__PURE__ */ withComponentId(AppSidebarBase, "AppSidebar");

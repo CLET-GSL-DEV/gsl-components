@@ -19,7 +19,7 @@ function canAnimate(el: HTMLElement): boolean {
  * Page-level banner that persists until dismissed. Full width, sits at the
  * top of a page or under a section heading. Replaces `Notice`.
  */
-export const Banner = forwardRef<HTMLDivElement, BannerProps>(
+export const Banner = /* @__PURE__ */ forwardRef<HTMLDivElement, BannerProps>(
   function Banner(
     {
       variant = "info",

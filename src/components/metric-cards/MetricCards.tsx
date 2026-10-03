@@ -3,7 +3,7 @@ import type { MetricCardsProps } from "../../types/metric-cards";
 import { cn } from "../../utils/cn";
 import "./styles/metric-cards.css";
 
-export const MetricCards = forwardRef<HTMLDivElement, MetricCardsProps>(
+export const MetricCards = /* @__PURE__ */ forwardRef<HTMLDivElement, MetricCardsProps>(
   function MetricCards(
     { classNames, className, children, ...props },
     ref,

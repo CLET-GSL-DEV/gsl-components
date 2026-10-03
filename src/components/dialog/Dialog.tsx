@@ -23,7 +23,7 @@ export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogPortal = DialogPrimitive.Portal;
 export const DialogClose = DialogPrimitive.Close;
 
-export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
+export const DialogOverlay = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogOverlayProps>(
   function DialogOverlay({ className, classNames, ...props }, ref) {
     return (
       <DialogPrimitive.Overlay
@@ -35,7 +35,7 @@ export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
   },
 );
 
-export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
+export const DialogContent = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogContentProps>(
   function DialogContent(
     {
       className,
@@ -77,7 +77,7 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   },
 );
 
-export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(
+export const DialogTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, DialogTitleProps>(
   function DialogTitle({ className, classNames, ...props }, ref) {
     return (
       <DialogPrimitive.Title
@@ -89,7 +89,7 @@ export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(
   },
 );
 
-export const DialogDescription = forwardRef<
+export const DialogDescription = /* @__PURE__ */ forwardRef<
   HTMLParagraphElement,
   DialogDescriptionProps
 >(function DialogDescription({ className, classNames, ...props }, ref) {
@@ -106,7 +106,7 @@ export const DialogDescription = forwardRef<
   );
 });
 
-export const DialogHeader = forwardRef<HTMLDivElement, DialogHeaderProps>(
+export const DialogHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogHeaderProps>(
   function DialogHeader({ className, classNames, children, ...props }, ref) {
     return (
       <div
@@ -120,7 +120,7 @@ export const DialogHeader = forwardRef<HTMLDivElement, DialogHeaderProps>(
   },
 );
 
-export const DialogBody = forwardRef<HTMLDivElement, DialogBodyProps>(
+export const DialogBody = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogBodyProps>(
   function DialogBody({ className, classNames, children, ...props }, ref) {
     return (
       <div
@@ -134,7 +134,7 @@ export const DialogBody = forwardRef<HTMLDivElement, DialogBodyProps>(
   },
 );
 
-export const DialogFooter = forwardRef<HTMLDivElement, DialogFooterProps>(
+export const DialogFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogFooterProps>(
   function DialogFooter({ className, classNames, children, ...props }, ref) {
     return (
       <div

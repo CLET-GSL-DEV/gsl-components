@@ -7,6 +7,16 @@ import { DateRangeSelector } from "./DateRangeSelector";
 import type { DateRangeValue } from "./DateRangeSelector";
 
 describe("DateRangeSelector", () => {
+  it("formats the field label in the given locale", () => {
+    render(
+      <DateRangeSelector
+        locale="en-GB"
+        value={{ start: new Date(2026, 2, 2), end: new Date(2026, 2, 9) }}
+      />,
+    );
+    expect(screen.getByRole("button")).toHaveTextContent("2 Mar 2026");
+  });
+
   it("renders a trigger button", () => {
     render(<DateRangeSelector />);
     const trigger = screen.getByRole("button");

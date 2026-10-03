@@ -36,7 +36,7 @@ function StepCheck({ className }: { className?: string }) {
   );
 }
 
-const StepperRoot = forwardRef<HTMLOListElement, StepperProps>(function Stepper(
+const StepperRoot = /* @__PURE__ */ forwardRef<HTMLOListElement, StepperProps>(function Stepper(
   {
     value,
     clickable = false,
@@ -73,7 +73,7 @@ const StepperRoot = forwardRef<HTMLOListElement, StepperProps>(function Stepper(
   );
 });
 
-export const Step = forwardRef<HTMLLIElement, StepProps>(function Step(
+export const Step = /* @__PURE__ */ forwardRef<HTMLLIElement, StepProps>(function Step(
   {
     value,
     disabled = false,
@@ -165,7 +165,7 @@ export const Step = forwardRef<HTMLLIElement, StepProps>(function Step(
   );
 });
 
-export const StepLabel = forwardRef<HTMLSpanElement, StepLabelProps>(
+export const StepLabel = /* @__PURE__ */ forwardRef<HTMLSpanElement, StepLabelProps>(
   function StepLabel({ classNames, className, children, ...props }, ref) {
     return (
       <span
@@ -184,6 +184,7 @@ type StepperComponent = typeof StepperRoot & {
   StepLabel: typeof StepLabel;
 };
 
-export const Stepper = StepperRoot as StepperComponent;
-Stepper.Step = Step;
-Stepper.StepLabel = StepLabel;
+export const Stepper = /* @__PURE__ */ Object.assign(StepperRoot, {
+  Step,
+  StepLabel,
+}) as StepperComponent;

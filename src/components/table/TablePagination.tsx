@@ -76,7 +76,7 @@ function getPageNumbers(
   return pages;
 }
 
-export const TablePagination = forwardRef<
+export const TablePagination = /* @__PURE__ */ forwardRef<
   HTMLDivElement,
   PaginationControlsProps
 >(function TablePagination(

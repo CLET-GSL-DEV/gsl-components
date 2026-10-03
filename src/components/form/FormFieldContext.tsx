@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import type { FieldPath, FieldValues } from "react-hook-form";
 import type { FormFieldContextValue } from "../../types/form";
 
-export const FormFieldContext = createContext<FormFieldContextValue | null>(null);
+export const FormFieldContext = /* @__PURE__ */ createContext<FormFieldContextValue | null>(null);
 
 export function useFormFieldContext<
   TFieldValues extends FieldValues = FieldValues,

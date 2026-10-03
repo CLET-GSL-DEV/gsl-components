@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import type { EmptyStateProps } from "../../types/empty-state";
 import { cn } from "../../utils/cn";
-import defaultIllustration from "./assets/empty-state-illustration.svg";
+import defaultIllustration from "./assets/empty-state-illustration.svg?no-inline";
 import "./styles/empty-state.css";
 
 /**
@@ -9,7 +9,7 @@ import "./styles/empty-state.css";
  * the parent, this fills the empty body with the illustration, a
  * configurable title/description, and an optional action slot.
  */
-export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
+export const EmptyState = /* @__PURE__ */ forwardRef<HTMLDivElement, EmptyStateProps>(
   function EmptyState(
     {
       illustration,

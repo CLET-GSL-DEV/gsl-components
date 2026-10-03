@@ -153,6 +153,7 @@ interface MonthPanelProps {
   min?: Date;
   max?: Date;
   disabled: boolean;
+  locale: string;
   classNames?: DateRangeSelectorProps["classNames"];
   onViewChange: (view: MonthView) => void;
   onSelect: (day: Date) => void;
@@ -161,6 +162,7 @@ interface MonthPanelProps {
 function MonthPanel({
   view,
   label,
+  locale,
   yearOptions,
   minYear,
   maxYear,
@@ -312,7 +314,7 @@ function MonthPanel({
               role="gridcell"
               disabled={isDisabled || !isCurrentMonth}
               aria-selected={isStart || isEnd}
-              aria-label={day.toLocaleDateString("en-US", {
+              aria-label={day.toLocaleDateString(locale, {
                 weekday: "long",
                 month: "long",
                 day: "numeric",
@@ -342,7 +344,7 @@ function MonthPanel({
   );
 }
 
-export const DateRangeSelector = forwardRef<
+export const DateRangeSelector = /* @__PURE__ */ forwardRef<
   HTMLDivElement,
   DateRangeSelectorProps
 >(function DateRangeSelector(
@@ -358,6 +360,7 @@ export const DateRangeSelector = forwardRef<
     minYear: minYearProp,
     maxYear: maxYearProp,
     formatOptions,
+    locale = "en-US",
     presets,
     classNames,
     className,
@@ -401,9 +404,9 @@ export const DateRangeSelector = forwardRef<
   const formatDate = useCallback(
     (date: Date | null) =>
       date
-        ? date.toLocaleDateString("en-US", formatOptions ?? DEFAULT_FORMAT)
+        ? date.toLocaleDateString(locale, formatOptions ?? DEFAULT_FORMAT)
         : "",
-    [formatOptions],
+    [formatOptions, locale],
   );
 
   const displayText = useMemo(() => {
@@ -598,6 +601,7 @@ export const DateRangeSelector = forwardRef<
                 <MonthPanel
                   view={startView}
                   label="Start calendar"
+                  locale={locale}
                   yearOptions={yearDropdownOptions}
                   minYear={minYear}
                   maxYear={maxYear}
@@ -613,6 +617,7 @@ export const DateRangeSelector = forwardRef<
                 <MonthPanel
                   view={endView}
                   label="End calendar"
+                  locale={locale}
                   yearOptions={yearDropdownOptions}
                   minYear={minYear}
                   maxYear={maxYear}

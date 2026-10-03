@@ -1,7 +1,7 @@
 // Spreadsheet peers are optional and picked by the consuming app:
 // - papaparse parses .csv on import, read-excel-file reads .xlsx
 // - write-excel-file below writes .xlsx (all actively published to npm)
-import writeXlsxFile from "write-excel-file/browser";
+// Each loads on demand, so an app that never exports never bundles them.
 
 export interface ExportColumn<T> {
   header: string;
@@ -107,6 +107,7 @@ export async function exportToXlsx<T>(
     }),
   );
 
+  const { default: writeXlsxFile } = await import("write-excel-file/browser");
   await writeXlsxFile([headerRow, ...dataRows], {
     sheet: "Sheet1",
     columns: columns.map((c) => ({

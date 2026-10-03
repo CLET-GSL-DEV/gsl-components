@@ -3,7 +3,7 @@ import type { TextareaProps } from "../../types/textarea";
 import { cn } from "../../utils/cn";
 import "./styles/textarea.css";
 
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
+export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
   { invalid = false, classNames, className, disabled, ...props },
   ref,
 ) {

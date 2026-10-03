@@ -4,6 +4,7 @@ import type { CletFontSize } from "../../types/theme";
 import { TextAaIcon } from "@phosphor-icons/react/ssr";
 import * as Popover from "@radix-ui/react-popover";
 import { cn } from "../../utils/cn";
+import { withComponentId } from "../../utils/componentId";
 import { ThemeContext } from "../theme/ThemeContext";
 import "./styles/app-header.css";
 
@@ -46,7 +47,7 @@ function AppHeaderFontSizeOption({ value, label, active, className, onSelect }: 
   );
 }
 
-export const AppHeaderFontSize = forwardRef<HTMLButtonElement, AppHeaderFontSizeProps>(
+const AppHeaderFontSizeBase = /* @__PURE__ */ forwardRef<HTMLButtonElement, AppHeaderFontSizeProps>(
   function AppHeaderFontSize(
     { className, classNames, label = "Text size", title = "Text size" },
     ref,
@@ -115,5 +116,7 @@ export const AppHeaderFontSize = forwardRef<HTMLButtonElement, AppHeaderFontSize
   },
 );
 
-(AppHeaderFontSize as unknown as { componentId: string }).componentId =
-  "AppHeaderFontSize";
+export const AppHeaderFontSize = /* @__PURE__ */ withComponentId(
+  AppHeaderFontSizeBase,
+  "AppHeaderFontSize",
+);

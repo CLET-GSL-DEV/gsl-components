@@ -29,6 +29,24 @@ function ControlledDropdown(
 }
 
 describe("Dropdown", () => {
+  it("forwards aria-labelledby to the trigger", () => {
+    render(
+      <>
+        <span id="status-label">Status</span>
+        <Dropdown
+          aria-labelledby="status-label"
+          value={null}
+          onValueChange={() => {}}
+          options={[{ value: "a", label: "A" }]}
+        />
+      </>,
+    );
+
+    const trigger = screen.getByRole("combobox");
+    expect(trigger).toHaveAttribute("aria-labelledby", "status-label");
+    expect(trigger).toHaveAccessibleName("Status");
+  });
+
   it("renders options and selects a value", async () => {
     const user = userEvent.setup();
     const onValueChange = vi.fn();

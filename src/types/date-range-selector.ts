@@ -37,6 +37,8 @@ export interface DateRangeSelectorProps extends Omit<HTMLAttributes<HTMLDivEleme
   onChange?: (range: DateRangeValue) => void;
   placeholder?: string;
   formatOptions?: Intl.DateTimeFormatOptions;
+  /** BCP 47 locale used to format the field label and day names. Default: "en-US". */
+  locale?: string;
   invalid?: boolean;
   disabled?: boolean;
   min?: Date;

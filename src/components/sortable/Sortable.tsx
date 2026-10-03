@@ -34,7 +34,7 @@ import {
 } from "./SortableContext";
 import "./styles/sortable.css";
 
-export const Sortable = forwardRef<HTMLDivElement, SortableProps>(
+export const Sortable = /* @__PURE__ */ forwardRef<HTMLDivElement, SortableProps>(
   function Sortable(
     {
       items,
@@ -94,7 +94,7 @@ export const Sortable = forwardRef<HTMLDivElement, SortableProps>(
   },
 );
 
-export const SortableList = forwardRef<HTMLDivElement, SortableListProps>(
+export const SortableList = /* @__PURE__ */ forwardRef<HTMLDivElement, SortableListProps>(
   function SortableList(
     { strategy = "vertical", classNames, className, children },
     ref,
@@ -127,7 +127,7 @@ export const SortableList = forwardRef<HTMLDivElement, SortableListProps>(
   },
 );
 
-export const SortableItem = forwardRef<HTMLDivElement, SortableItemProps>(
+export const SortableItem = /* @__PURE__ */ forwardRef<HTMLDivElement, SortableItemProps>(
   function SortableItem(
     { id, disabled: disabledProp = false, classNames, className, children },
     ref,
@@ -209,7 +209,7 @@ export const SortableItem = forwardRef<HTMLDivElement, SortableItemProps>(
   },
 );
 
-const SortableItemRoot = forwardRef<
+const SortableItemRoot = /* @__PURE__ */ forwardRef<
   HTMLDivElement,
   Pick<SortableItemProps, "classNames" | "className" | "children">
 >(function SortableItemRoot({ classNames, className, children }, ref) {
@@ -254,7 +254,7 @@ const SortableItemRoot = forwardRef<
   );
 });
 
-export const SortableHandle = forwardRef<HTMLButtonElement, SortableHandleProps>(
+export const SortableHandle = /* @__PURE__ */ forwardRef<HTMLButtonElement, SortableHandleProps>(
   function SortableHandle(
     { classNames, className, children, disabled: disabledProp, ...props },
     ref,

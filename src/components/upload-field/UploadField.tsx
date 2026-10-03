@@ -170,7 +170,7 @@ function maxSizeLabel(bytes?: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(0)}MB`;
 }
 
-export const UploadField = forwardRef<HTMLDivElement, UploadFieldProps>(
+export const UploadField = /* @__PURE__ */ forwardRef<HTMLDivElement, UploadFieldProps>(
   function UploadField(
     {
       invalid = false,

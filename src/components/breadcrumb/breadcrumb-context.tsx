@@ -10,7 +10,7 @@ interface BreadcrumbContextValue {
   setItems: (items: BreadcrumbEntry[]) => void;
 }
 
-const BreadcrumbContext = createContext<BreadcrumbContextValue>({
+const BreadcrumbContext = /* @__PURE__ */ createContext<BreadcrumbContextValue>({
   items: [],
   setItems: () => {},
 });

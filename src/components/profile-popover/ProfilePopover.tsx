@@ -26,10 +26,11 @@ import type {
   ProfilePopoverProps,
 } from "../../types/profile-popover";
 import { cn } from "../../utils/cn";
+import { withComponentId } from "../../utils/componentId";
 import { ThemeContext } from "../theme/ThemeContext";
 import "./styles/profile-popover.css";
 
-export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
+const ProfilePopoverBase = /* @__PURE__ */ forwardRef<HTMLElement, ProfilePopoverProps>(
   function ProfilePopover(
     {
       fullName,
@@ -382,5 +383,7 @@ export const ProfilePopover = forwardRef<HTMLElement, ProfilePopoverProps>(
   },
 );
 
-(ProfilePopover as unknown as { componentId: string }).componentId =
-  "ProfilePopover";
+export const ProfilePopover = /* @__PURE__ */ withComponentId(
+  ProfilePopoverBase,
+  "ProfilePopover",
+);

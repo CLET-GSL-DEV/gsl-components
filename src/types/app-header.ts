@@ -100,6 +100,12 @@ export interface AppHeaderNotificationsProps {
   count?: number;
   /** Show the unread badge on the bell (default true). Hidden while loading or at 0. */
   showBadge?: boolean;
+  /** Heading at the top of the panel. Default: "Notifications". */
+  title?: string;
+  /** Panel width. A number is pixels. Default: 340px. */
+  width?: number | string;
+  /** Panel alignment against the bell. Default: "end". */
+  align?: "start" | "center" | "end";
 }
 
 export interface AppHeaderFontSizeClassNames {

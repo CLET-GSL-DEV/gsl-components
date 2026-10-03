@@ -11,7 +11,7 @@ import { useTabsLineIndicator } from "./hooks/useTabsLineIndicator";
 import { TabsProvider, useTabsContext } from "./TabsContext";
 import "./styles/tabs.css";
 
-export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
+export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(function Tabs(
   { variant = "default", classNames, className, children, ...props },
   ref,
 ) {
@@ -33,7 +33,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
   );
 });
 
-export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
+export const TabsList = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsListProps>(
   function TabsList({ classNames, className, children, ...props }, ref) {
     const { variant } = useTabsContext();
     const listRef = useRef<HTMLDivElement | null>(null);
@@ -77,7 +77,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
   },
 );
 
-export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
+export const TabsTrigger = /* @__PURE__ */ forwardRef<HTMLButtonElement, TabsTriggerProps>(
   function TabsTrigger({ classNames, className, ...props }, ref) {
     return (
       <TabsPrimitive.Trigger
@@ -89,7 +89,7 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
   },
 );
 
-export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(
+export const TabsContent = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsContentProps>(
   function TabsContent({ classNames, className, ...props }, ref) {
     return (
       <TabsPrimitive.Content

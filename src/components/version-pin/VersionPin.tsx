@@ -15,7 +15,7 @@ function versionClass(version: string): string {
  * consumer pinning an old look) — CSS in `src/styles/versions.css` scopes
  * overrides under `[data-clet-version="<pin>"]` so they never leak.
  */
-export const VersionPin = forwardRef<HTMLDivElement, VersionPinProps>(
+export const VersionPin = /* @__PURE__ */ forwardRef<HTMLDivElement, VersionPinProps>(
   function VersionPin({ version, classNames, className, children, ...props }, ref) {
     return (
       <div

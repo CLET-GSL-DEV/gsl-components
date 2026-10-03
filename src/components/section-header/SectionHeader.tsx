@@ -8,7 +8,7 @@ import type {
 import { cn } from "../../utils/cn";
 import "./styles/section-header.css";
 
-export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
+export const SectionHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, SectionHeaderProps>(
   function SectionHeader({ className, classNames, children, ...props }, ref) {
     return (
       <div
@@ -22,7 +22,7 @@ export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
   },
 );
 
-export const SectionTitle = forwardRef<HTMLHeadingElement, SectionTitleProps>(
+export const SectionTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, SectionTitleProps>(
   function SectionTitle({ className, classNames, ...props }, ref) {
     return (
       <h2
@@ -34,7 +34,7 @@ export const SectionTitle = forwardRef<HTMLHeadingElement, SectionTitleProps>(
   },
 );
 
-export const SectionDescription = forwardRef<
+export const SectionDescription = /* @__PURE__ */ forwardRef<
   HTMLParagraphElement,
   SectionDescriptionProps
 >(function SectionDescription({ className, classNames, ...props }, ref) {
@@ -51,7 +51,7 @@ export const SectionDescription = forwardRef<
   );
 });
 
-export const SectionActions = forwardRef<HTMLDivElement, SectionActionsProps>(
+export const SectionActions = /* @__PURE__ */ forwardRef<HTMLDivElement, SectionActionsProps>(
   function SectionActions({ className, classNames, children, ...props }, ref) {
     return (
       <div

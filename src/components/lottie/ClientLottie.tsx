@@ -1,12 +1,8 @@
-import {
-	useEffect,
-	useState,
-	type CSSProperties,
-} from "react";
-import type { Lottie as LottieComponent } from "lottie-react";
+import { useEffect, useRef, type CSSProperties } from "react";
+import type { AnimationItem } from "lottie-web";
 
 export interface ClientLottieProps {
-	/** Parsed Lottie JSON. Passed to lottie-react 3 as `src`. */
+	/** Parsed Lottie JSON. */
 	animationData: object;
 	loop?: boolean | number;
 	autoplay?: boolean;
@@ -14,27 +10,39 @@ export interface ClientLottieProps {
 	style?: CSSProperties;
 }
 
-export function ClientLottie({ animationData, ...rest }: ClientLottieProps) {
-	const [Lottie, setLottie] = useState<typeof LottieComponent | null>(null);
+export function ClientLottie({
+	animationData,
+	loop,
+	autoplay,
+	className,
+	style,
+}: ClientLottieProps) {
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		let mounted = true;
+		let cancelled = false;
+		let animation: AnimationItem | undefined;
 
 		// Loaded on the client only: lottie-web touches canvas at import time.
-		void import("lottie-react").then((module) => {
-			if (mounted) {
-				setLottie(() => module.Lottie);
-			}
+		// The light build has no expression engine, so it never calls eval and
+		// passes a CSP without 'unsafe-eval'.
+		void import("lottie-web/build/player/lottie_light").then((module) => {
+			const container = containerRef.current;
+			if (cancelled || !container) return;
+			animation = module.default.loadAnimation({
+				container,
+				renderer: "svg",
+				loop: loop ?? true,
+				autoplay: autoplay ?? true,
+				animationData,
+			});
 		});
 
 		return () => {
-			mounted = false;
+			cancelled = true;
+			animation?.destroy();
 		};
-	}, []);
+	}, [animationData, loop, autoplay]);
 
-	if (!Lottie) {
-		return null;
-	}
-
-	return <Lottie src={animationData} {...rest} />;
+	return <div ref={containerRef} className={className} style={style} aria-hidden />;
 }

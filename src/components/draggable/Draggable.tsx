@@ -10,7 +10,7 @@ import {
 import { useDraggable } from "./hooks/useDraggable";
 import "./styles/draggable.css";
 
-export const Draggable = forwardRef<HTMLDivElement, DraggableProps>(
+export const Draggable = /* @__PURE__ */ forwardRef<HTMLDivElement, DraggableProps>(
   function Draggable(
     {
       axis = "both",
@@ -44,7 +44,7 @@ export const Draggable = forwardRef<HTMLDivElement, DraggableProps>(
   },
 );
 
-const DraggableRoot = forwardRef<
+const DraggableRoot = /* @__PURE__ */ forwardRef<
   HTMLDivElement,
   Pick<DraggableProps, "classNames" | "className" | "children">
 >(function DraggableRoot({ classNames, className, children }, ref) {
@@ -86,7 +86,7 @@ const DraggableRoot = forwardRef<
   );
 });
 
-export const DraggableHandle = forwardRef<HTMLButtonElement, DraggableHandleProps>(
+export const DraggableHandle = /* @__PURE__ */ forwardRef<HTMLButtonElement, DraggableHandleProps>(
   function DraggableHandle(
     { classNames, className, children, disabled: disabledProp, ...props },
     ref,

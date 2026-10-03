@@ -2,8 +2,8 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
-vi.mock("lottie-react", () => ({
-	Lottie: () => null,
+vi.mock("lottie-web/build/player/lottie_light", () => ({
+	default: { loadAnimation: () => ({ destroy: () => {} }) },
 }));
 
 vi.mock("lottie-web", () => ({

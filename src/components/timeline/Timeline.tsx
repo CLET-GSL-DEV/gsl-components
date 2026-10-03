@@ -15,7 +15,7 @@ import type {
 import { cn } from "../../utils/cn";
 import "./styles/timeline.css";
 
-export const Timeline = forwardRef<HTMLOListElement, TimelineProps>(
+export const Timeline = /* @__PURE__ */ forwardRef<HTMLOListElement, TimelineProps>(
   function Timeline({ classNames, className, children, ...props }, ref) {
     const items = Children.toArray(children).filter(
       (child): child is ReactElement<TimelineItemProps> =>
@@ -39,7 +39,7 @@ export const Timeline = forwardRef<HTMLOListElement, TimelineProps>(
   },
 );
 
-export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(
+export const TimelineItem = /* @__PURE__ */ forwardRef<HTMLLIElement, TimelineItemProps>(
   function TimelineItem(
     { mode, color, icon, classNames, className, children, isLast, ...props },
     ref,
@@ -85,7 +85,7 @@ export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(
   },
 );
 
-export const TimelineTitle = forwardRef<HTMLHeadingElement, TimelineTitleProps>(
+export const TimelineTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, TimelineTitleProps>(
   function TimelineTitle(
     { as: Tag = "h3", classNames, className, children, ...props },
     ref,
@@ -102,7 +102,7 @@ export const TimelineTitle = forwardRef<HTMLHeadingElement, TimelineTitleProps>(
   },
 );
 
-export const TimelineData = forwardRef<HTMLParagraphElement, TimelineDataProps>(
+export const TimelineData = /* @__PURE__ */ forwardRef<HTMLParagraphElement, TimelineDataProps>(
   function TimelineData({ classNames, className, children, ...props }, ref) {
     return (
       <p
@@ -116,7 +116,7 @@ export const TimelineData = forwardRef<HTMLParagraphElement, TimelineDataProps>(
   },
 );
 
-export const TimelineFooter = forwardRef<HTMLDivElement, TimelineFooterProps>(
+export const TimelineFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, TimelineFooterProps>(
   function TimelineFooter({ classNames, className, children, ...props }, ref) {
     return (
       <div

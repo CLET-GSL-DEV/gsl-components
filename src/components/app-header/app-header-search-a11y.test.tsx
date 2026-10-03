@@ -47,4 +47,19 @@ describe("AppHeaderSearch accessibility", () => {
 		expect(resolveControlledElement(input)).not.toHaveAttribute("hidden");
 		expect(screen.getByText("Ada Lovelace")).toBeInTheDocument();
 	});
+
+	it("mounts no focus guards or dialog while closed", () => {
+		render(<AppHeaderSearch data={data} />);
+		expect(document.querySelectorAll("[data-radix-focus-guard]")).toHaveLength(0);
+		expect(document.querySelector('[role="dialog"]')).toBeNull();
+	});
+
+	it("names the results dialog once it opens", async () => {
+		const user = userEvent.setup();
+		render(<AppHeaderSearch data={data} />);
+		await user.type(screen.getByRole("combobox"), "ada");
+		const dialog = document.querySelector('[role="dialog"]');
+		expect(dialog).not.toBeNull();
+		expect(dialog?.getAttribute("aria-label")).toBeTruthy();
+	});
 });

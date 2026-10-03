@@ -10,7 +10,7 @@ export const PopoverPortal = PopoverPrimitive.Portal;
 export const PopoverAnchor = PopoverPrimitive.Anchor;
 export const PopoverClose = PopoverPrimitive.Close;
 
-export const PopoverContent = forwardRef<
+export const PopoverContent = /* @__PURE__ */ forwardRef<
   HTMLDivElement,
   PopoverContentProps
 >(function PopoverContent(

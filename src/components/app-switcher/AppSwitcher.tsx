@@ -5,6 +5,7 @@ import { useAppSwitcher } from "./hooks/useAppSwitcher";
 import type { AppItem, AppSwitcherProps } from "../../types/app-switcher";
 import { AppSwitcherItem } from "./AppSwitcherItem";
 import { SquaresFourIcon } from "@phosphor-icons/react/ssr";
+import { withComponentId } from "../../utils/componentId";
 import "./styles/app-switcher.css";
 
 function getPopoverPlacement(placement: AppSwitcherProps["placement"]) {
@@ -19,7 +20,7 @@ function getPopoverPlacement(placement: AppSwitcherProps["placement"]) {
   }
 }
 
-export function AppSwitcher({
+function AppSwitcherBase({
   apps,
   loading = false,
   loadingLabel = "Loading systems...",
@@ -145,4 +146,4 @@ export function AppSwitcher({
   );
 }
 
-(AppSwitcher as unknown as { componentId: string }).componentId = "AppSwitcher";
+export const AppSwitcher = /* @__PURE__ */ withComponentId(AppSwitcherBase, "AppSwitcher");
