@@ -37,11 +37,18 @@
   outline-offset: 2px;
 }
 
-/* 2.4: gold border around the profile avatar. Lives on the avatar root:
-   the initials span fills it edge to edge, so a ring there would clip. */
+/* 2.4: gold ring around the profile avatar, set off from the disc by a gap
+   in the surface colour (padding over the root's background), so the ring
+   reads as a halo rather than a border. Lives on the avatar root: the
+   initials span fills its content box, so the gap stays visible. Same
+   treatment on the trigger and inside the popover header. */
 .clet-profile-menu__trigger .clet-avatar,
-.clet-app-header__profile .clet-avatar {
+.clet-app-header__profile .clet-avatar,
+.clet-profile-menu__header .clet-avatar {
+  box-sizing: border-box;
+  padding: 2px;
   border: 2px solid var(--gsl-secondary, var(--clet-secondary));
+  background: var(--gsl-bg, var(--clet-bg));
 }
 
 .clet-profile-menu__trigger-info {
@@ -74,8 +81,13 @@
 .clet-app-header__profile {
   display: flex;
   align-items: center;
+  /* 2.4: no padding around the trigger; the avatar is bigger instead
+     (40px, the 2.3 pin keeps 32px and its 8px padding). */
+  --clet-avatar-size: 40px;
+  --clet-avatar-initials-size: calc(15px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
+
   gap: 10px;
-  padding: 8px;
+  padding: 0;
   border: none;
   border-radius: 999px;
   background: transparent;
@@ -83,7 +95,9 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-  min-width: max-content;
+  /* Bounded so a long name or role ellipsises instead of pushing the header. */
+  min-width: 0;
+  max-width: 240px;
 }
 
 .clet-app-header__profile:focus-visible {
@@ -99,7 +113,7 @@
 /* Avatar-only variant: just the avatar, popover opens on click */
 .clet-app-header__profile--avatar {
   gap: 0;
-  padding: 4px;
+  padding: 0;
 }
 
 /* Below the sidebar breakpoint variant="full" folds to the avatar shape rather
@@ -108,7 +122,7 @@
 @media (width <= 768px) {
   .clet-app-header__profile {
     gap: 0;
-    padding: 4px;
+    padding: 0;
   }
 
   .clet-app-header__profile .clet-app-header__user-info,
@@ -121,18 +135,29 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-width: 0;
   line-height: 1.3;
 }
 
+.clet-app-header__profile-chevron {
+  flex-shrink: 0;
+}
+
 .clet-app-header__user-name {
+  overflow: hidden;
   font-size: var(--gsl-text-size-sm, var(--clet-text-size-sm));
   font-weight: 600;
   color: var(--gsl-text, var(--clet-text));
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .clet-app-header__user-role {
+  overflow: hidden;
   font-size: var(--gsl-profile-popover-user-role-text-size, var(--clet-profile-popover-user-role-text-size));
   color: var(--gsl-text-muted, var(--clet-text-muted));
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .clet-app-header__sr-only {
@@ -148,8 +173,8 @@
 }
 
 .clet-app-header__skeleton-avatar {
-  width: 32px;
-  height: 32px;
+  width: var(--clet-avatar-size, 32px);
+  height: var(--clet-avatar-size, 32px);
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -221,23 +246,28 @@
 
 .clet-profile-menu__header-info {
   display: flex;
+  flex: 1;
   flex-direction: column;
   min-width: 0;
   gap: 2px;
 }
 
 .clet-profile-menu__name {
+  overflow: hidden;
   font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
   font-weight: 600;
   color: var(--gsl-text, var(--clet-text));
   line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .clet-profile-menu__email {
+  overflow: hidden;
   font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
   color: var(--gsl-text-secondary, var(--clet-text-secondary));
   line-height: 1.4;
-
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -307,6 +337,17 @@
   text-align: left;
   cursor: pointer;
   transition: background-color 0.15s ease;
+}
+
+.clet-profile-menu__item > svg {
+  flex-shrink: 0;
+}
+
+.clet-profile-menu__item > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .clet-profile-menu__item:hover {

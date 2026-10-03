@@ -9,6 +9,7 @@ import { AppHeaderBranding } from "./AppHeader";
 import { AppHeaderSearch } from "./AppHeaderSearch";
 import { AppHeaderNotifications } from "./AppHeaderNotifications";
 import { AppHeaderNotificationItem } from "./AppHeaderNotificationItem";
+import { AppHeaderFontSize } from "./AppHeaderFontSize";
 import { AppHeaderTitle } from "./AppHeaderTitle";
 import { AppSwitcher } from "../app-switcher/AppSwitcher";
 import { SystemAppIcon } from "../app-switcher/SystemAppIcon";
@@ -72,21 +73,89 @@ describe("AppHeader", () => {
     expect(screen.queryByRole("button", { name: "Open menu" })).not.toBeInTheDocument();
   });
 
-  it("collapses to menu + app switcher + profile on mobile", () => {
+  it("collapses to menu + More actions + profile on mobile", () => {
     mockMatchMedia(true);
     renderFullHeader();
 
     expect(screen.getByRole("button", { name: "Open menu" })).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Open app switcher" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "More actions" })).toBeInTheDocument();
     expect(screen.getByText("KA")).toBeInTheDocument();
 
-    // Dropped on mobile
+    // Folded into the overflow menu until it opens
     expect(screen.queryByText("CLET PORTAL")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Open app switcher" }),
+    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: "Notifications" }),
     ).not.toBeInTheDocument();
+  });
+
+  describe("mobile overflow menu", () => {
+    function renderMobileHeader(
+      actions: React.ReactNode,
+      props: { overflowLabel?: string } = {},
+    ) {
+      mockMatchMedia(true);
+      return render(
+        <SidebarProvider>
+          <AppHeader variant="plain" {...props}>
+            <AppHeaderBranding title="CLET PORTAL" />
+            <AppHeaderActions>
+              {actions}
+              <ProfilePopover
+                user={{ name: "Kwame Asante", role: "Admin", initials: "KA" }}
+                variant="avatar"
+              />
+            </AppHeaderActions>
+          </AppHeader>
+        </SidebarProvider>,
+      );
+    }
+
+    const allActions = (
+      <>
+        <AppHeaderSearch />
+        <AppSwitcher apps={[{ id: "a", name: "App A", icon: <SystemAppIcon name="App A" /> }]} />
+        <AppHeaderNotifications />
+        <AppHeaderFontSize />
+      </>
+    );
+
+    it("renders exactly one More actions trigger next to a visible profile", () => {
+      renderMobileHeader(allActions);
+
+      expect(screen.getAllByRole("button", { name: "More actions" })).toHaveLength(1);
+      expect(screen.getByText("KA")).toBeInTheDocument();
+    });
+
+    it("lists Search, Apps, Notifications and Text size when opened", async () => {
+      const user = userEvent.setup();
+      renderMobileHeader(allActions);
+
+      await user.click(screen.getByRole("button", { name: "More actions" }));
+
+      await screen.findByRole("dialog", { name: "More actions" });
+      const labels = Array.from(
+        document.querySelectorAll(".gsl-app-header__overflow-label"),
+      ).map((node) => node.textContent);
+      expect(labels).toEqual(["Search", "Apps", "Notifications", "Text size"]);
+      expect(screen.getByRole("button", { name: "Open app switcher" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Notifications" })).toBeInTheDocument();
+    });
+
+    it("renders no More actions trigger when there is only a profile", () => {
+      renderMobileHeader(null);
+
+      expect(screen.queryByRole("button", { name: "More actions" })).not.toBeInTheDocument();
+      expect(screen.getByText("KA")).toBeInTheDocument();
+    });
+
+    it("names the trigger from overflowLabel", () => {
+      renderMobileHeader(allActions, { overflowLabel: "Plus" });
+
+      expect(screen.getByRole("button", { name: "Plus" })).toBeInTheDocument();
+    });
   });
 });
 

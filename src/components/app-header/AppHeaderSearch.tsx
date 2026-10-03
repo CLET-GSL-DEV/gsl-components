@@ -7,7 +7,7 @@ import {
   useState,
   type FocusEvent,
 } from "react";
-import { Search } from "lucide-react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
 import {
   Command,
   CommandInput,
@@ -204,7 +204,7 @@ export const AppHeaderSearch = forwardRef<
         aria-expanded={false}
         onClick={() => setCollapsed(false)}
       >
-        <Search size={18} strokeWidth={1.5} aria-hidden />
+        <MagnifyingGlassIcon size={18} weight="duotone" aria-hidden />
       </button>
     );
   }

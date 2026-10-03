@@ -644,6 +644,22 @@
 	border: 0;
 }
 
+/* ── Link description tooltip (portaled, so not scoped under the rail) ── */
+
+.clet-tooltip__content.clet-sidebar__link-tooltip {
+	text-align: start;
+}
+
+.clet-sidebar__link-tooltip-label {
+	display: block;
+	margin-bottom: 2px;
+	font-weight: 600;
+}
+
+.clet-sidebar__link-tooltip-description {
+	display: block;
+}
+
 .clet-sidebar__skeleton-icon {
 	width: 20px;
 	height: 20px;

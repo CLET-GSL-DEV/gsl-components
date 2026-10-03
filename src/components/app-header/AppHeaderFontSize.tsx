@@ -1,7 +1,7 @@
 import { forwardRef, useCallback, useContext } from "react";
 import type { AppHeaderFontSizeProps } from "../../types/app-header";
 import type { CletFontSize } from "../../types/theme";
-import { ALargeSmall } from "lucide-react";
+import { TextAaIcon } from "@phosphor-icons/react/ssr";
 import * as Popover from "@radix-ui/react-popover";
 import { cn } from "../../utils/cn";
 import { ThemeContext } from "../theme/ThemeContext";
@@ -73,7 +73,7 @@ export const AppHeaderFontSize = forwardRef<HTMLButtonElement, AppHeaderFontSize
             )}
             aria-label={label}
           >
-            <ALargeSmall size={20} strokeWidth={1.75} aria-hidden />
+            <TextAaIcon size={20} weight="duotone" aria-hidden />
           </button>
         </Popover.Trigger>
         <Popover.Portal>

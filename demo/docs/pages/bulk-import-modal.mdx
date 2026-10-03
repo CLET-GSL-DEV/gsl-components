@@ -66,6 +66,7 @@ Click **Open bulk import** to launch the multi-step import modal with sample dat
 - Parsing needs the optional peers `papaparse` (CSV) and `read-excel-file` (Excel): `npm install papaparse read-excel-file`. Legacy `.xls` files are refused with a re-save-as-`.xlsx` hint.
 - Also exported: `useBulkImportFlow`, step components, and spreadsheet utilities.
 - Discarded rows are excluded from `onComplete`. Use reset discarded rows button to restore them.
+- A field with `type: "file"` has no spreadsheet column and is never offered in Match columns. Each row attaches its own file in the Validate step (`accept` and `maxFileSizeBytes` go to the row's `UploadField`), a `required` file field blocks Confirm until every row has one, and the files arrive on `result.files`, keyed by index into `result.rows`, then by field key.
 - The validate data table is virtualized for performance with large spreadsheets.
 - The modal uses `useConfirmBeforeUnload` to warn on page refresh/close when a file has been uploaded but not confirmed.
 - The example uses `useModalSearchParam("bulk-import")` for URL-driven open state (`?modal=bulk-import`). See [Modal URL state](/docs/modal#url-state).

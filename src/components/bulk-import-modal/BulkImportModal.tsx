@@ -95,6 +95,7 @@ export function BulkImportModal({
 		rows: [],
 		errors: [],
 		warnings: [],
+		files: {},
 	}));
 	const [canConfirm, setCanConfirm] = useState(false);
 
@@ -441,6 +442,8 @@ export function BulkImportModal({
 								onDiscardSelectedRows={flow.discardSelectedRows}
 								onResetDiscardedRows={flow.resetDiscardedRows}
 								onCanConfirmChange={setCanConfirm}
+								rowFiles={flow.rowFiles}
+								onRowFileChange={flow.setRowFile}
 							/>
 						)}
 

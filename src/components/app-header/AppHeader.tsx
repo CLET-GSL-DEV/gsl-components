@@ -1,6 +1,6 @@
 import { Children, isValidElement, type ReactElement, type ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { Menu } from "lucide-react";
+import { ListIcon } from "@phosphor-icons/react/ssr";
 import type {
   AppHeaderProps,
   AppHeaderActionsProps,
@@ -9,13 +9,14 @@ import type {
 import { cn } from "../../utils/cn";
 import { useHasMounted } from "../../hooks/useHasMounted";
 import { useSidebarOptional } from "../sidebar/SidebarContext";
+import { AppHeaderOverflow } from "./AppHeaderOverflow";
 import "./styles/app-header.css";
 
 /**
  * Recursively walks a children tree (descending into each element's own
  * props.children) and returns the first element whose component type carries
- * the given componentId. Used to pluck AppSwitcher/ProfilePopover out of
- * AppHeader's children for the collapsed mobile layout, wherever they're
+ * the given componentId. Used to pluck the header actions and the profile out
+ * of AppHeader's children for the collapsed mobile layout, wherever they're
  * nested (e.g. inside AppHeaderActions).
  */
 function findByComponentId(
@@ -46,6 +47,7 @@ export const AppHeader = ({
   className,
   children,
   variant = "default",
+  overflowLabel = "More actions",
   ...props
 }: AppHeaderProps) => {
   const sidebar = useSidebarOptional();
@@ -67,8 +69,15 @@ export const AppHeader = ({
   );
 
   if (hasMounted && sidebar?.isMobile) {
-    const appSwitcher = findByComponentId(children, "AppSwitcher");
-    const profile = findByComponentId(children, "ProfilePopover");
+    const search = findByComponentId(children, "AppHeaderSearch");
+    const appSwitcher =
+      findByComponentId(children, "AppSwitcher") ??
+      findByComponentId(children, "Launchpad");
+    const notifications = findByComponentId(children, "AppHeaderNotifications");
+    const fontSize = findByComponentId(children, "AppHeaderFontSize");
+    const profile =
+      findByComponentId(children, "ProfilePopover") ??
+      findByComponentId(children, "AppHeaderProfile");
 
     return (
       <div
@@ -88,10 +97,16 @@ export const AppHeader = ({
           aria-controls={sidebar.sidebarId}
           onClick={sidebar.toggle}
         >
-          <Menu size={20} strokeWidth={1.75} aria-hidden />
+          <ListIcon size={22} weight="duotone" aria-hidden />
         </button>
         <div className="clet-app-header__right gsl-app-header__right">
-          {appSwitcher}
+          <AppHeaderOverflow
+            label={overflowLabel}
+            search={search}
+            apps={appSwitcher}
+            notifications={notifications}
+            fontSize={fontSize}
+          />
           {profile}
         </div>
       </div>

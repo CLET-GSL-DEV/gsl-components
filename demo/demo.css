@@ -182,10 +182,12 @@ body {
   color: var(--clet-primary-text);
 }
 
+/* Centred, but wide enough that previews, tables and code get room on a
+   large screen. Uncapped, rows stretch until they stop reading as rows. */
 .demo-docs {
-  max-width: 1120px;
-  margin: 0px auto;
-  padding: 0 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 32px;
   text-align: left;
 }
 
@@ -364,6 +366,41 @@ body {
 
 .demo-docs__content > .demo-docs__subsection-title {
   margin-top: var(--docs-space-1);
+}
+
+/* Wide screens: prose on the left, every example, preview and code block in
+   its own pane on the right, level with the text that introduces it. Grid
+   auto-placement does the pairing: a right-hand pane lands in the row of the
+   prose block just before it, and the next prose block starts below both.
+   Tables span both columns. The page stays centred at a wider cap. */
+@media (width >= 1536px) {
+  .demo-docs {
+    max-width: 1840px;
+  }
+
+  .demo-docs__content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: var(--docs-space-block) 48px;
+    align-items: start;
+  }
+
+  .demo-docs__content > * {
+    grid-column: 1;
+  }
+
+  .demo-docs__content
+    > :where(
+      .demo-docs__example-tabs,
+      .demo-docs__code-block,
+      figure[data-rehype-pretty-code-figure]
+    ) {
+    grid-column: 2;
+  }
+
+  .demo-docs__content > .demo-docs__table-wrap {
+    grid-column: 1 / -1;
+  }
 }
 
 .demo-docs__header {

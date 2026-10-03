@@ -60,11 +60,42 @@
   box-shadow: none;
 }
 
+/* 2.3 had no ring at all: no border, no gap, no ring on the popover's own
+   avatar either. */
 [data-clet-version="2.3"] .clet-profile-menu__trigger .clet-avatar,
 [data-clet-version="2.3"] .clet-app-header__profile .clet-avatar,
+[data-clet-version="2.3"] .clet-profile-menu__header .clet-avatar,
 [data-gsl-version="2.3"] .clet-profile-menu__trigger .clet-avatar,
-[data-gsl-version="2.3"] .clet-app-header__profile .clet-avatar {
+[data-gsl-version="2.3"] .clet-app-header__profile .clet-avatar,
+[data-gsl-version="2.3"] .clet-profile-menu__header .clet-avatar {
+  padding: 0;
   border: none;
+  background: none;
+}
+
+/* 2.3's header trigger: 8px of padding (4px when folded to the avatar) around
+   a 32px avatar. 2.4 drops the padding and grows the avatar to 40px. */
+[data-clet-version="2.3"] .clet-app-header__profile,
+[data-gsl-version="2.3"] .clet-app-header__profile {
+  --clet-avatar-size: 32px;
+  --clet-avatar-initials-size: calc(12px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
+
+  /* 2.3 never truncated: the trigger always took its full content width. */
+  min-width: max-content;
+  max-width: none;
+  padding: 8px;
+}
+
+[data-clet-version="2.3"] .clet-app-header__profile--avatar,
+[data-gsl-version="2.3"] .clet-app-header__profile--avatar {
+  padding: 4px;
+}
+
+@media (width <= 768px) {
+  [data-clet-version="2.3"] .clet-app-header__profile,
+  [data-gsl-version="2.3"] .clet-app-header__profile {
+    padding: 4px;
+  }
 }
 
 /* ── Pin: 2.4 (current latest) ────────────────────────────────────

@@ -416,6 +416,101 @@ describe("Sidebar", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("shows the description tooltip on an expanded SidebarLink", async () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider defaultCollapsed={false}>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarItem>
+                <SidebarLink
+                  icon={<span data-testid="leave-icon" />}
+                  description="Approve leave raised by your team"
+                >
+                  Leave
+                </SidebarLink>
+              </SidebarItem>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const link = screen.getByRole("link", { name: "Leave" });
+    expect(link).toHaveAccessibleDescription("Approve leave raised by your team");
+
+    fireEvent.mouseEnter(screen.getByTestId("leave-icon"));
+    await waitFor(() => {
+      const tooltip = document.querySelector('[role="tooltip"]');
+      expect(tooltip).toBeInTheDocument();
+      expect(tooltip).toHaveTextContent("Approve leave raised by your team");
+      expect(tooltip).not.toHaveTextContent("Leave Approve");
+    });
+  });
+
+  it("shows label and description in the tooltip when collapsed", async () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider defaultCollapsed>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarItem>
+                <SidebarLink
+                  icon={<span data-testid="leave-icon" />}
+                  description="Approve leave raised by your team"
+                >
+                  Leave
+                </SidebarLink>
+              </SidebarItem>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    fireEvent.mouseEnter(screen.getByTestId("leave-icon"));
+    await waitFor(() => {
+      const tooltip = document.querySelector('[role="tooltip"]');
+      expect(tooltip).toHaveTextContent("Leave");
+      expect(tooltip).toHaveTextContent("Approve leave raised by your team");
+    });
+  });
+
+  it("describes an asChild SidebarLink and keeps its own aria-describedby", () => {
+    mockMatchMedia(false);
+
+    renderWithRouter(
+      <SidebarProvider defaultCollapsed={false}>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarNav aria-label="Main">
+              <SidebarItem>
+                <span id="extra-hint" hidden>
+                  New
+                </span>
+                <SidebarLink
+                  asChild
+                  description="Every case you own"
+                  aria-describedby="extra-hint"
+                >
+                  <a href="/cases">Cases</a>
+                </SidebarLink>
+              </SidebarItem>
+            </SidebarNav>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    const link = screen.getByRole("link", { name: "Cases" });
+    expect(link.getAttribute("aria-describedby")).toMatch(/^extra-hint \S+$/);
+    expect(link).toHaveAccessibleDescription("New Every case you own");
+  });
+
   it("extracts label text from nested children for tooltip", async () => {
     mockMatchMedia(false);
 

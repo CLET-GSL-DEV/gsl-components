@@ -43,7 +43,8 @@ export function autoMatchSourceColumns(
   for (const column of sourceColumns) {
     const normalizedLabel = column.label.trim().toLowerCase();
     const match = fields.find((field) => {
-      if (usedFields.has(field.key)) {
+      // File fields are filled per row in the Validate step, never from a column.
+      if (field.type === "file" || usedFields.has(field.key)) {
         return false;
       }
 
@@ -77,7 +78,7 @@ export function isRequiredMappingComplete(
   );
 
   return fields
-    .filter((field) => field.required)
+    .filter((field) => field.required && field.type !== "file")
     .every((field) => mappedFields.has(field.key));
 }
 
