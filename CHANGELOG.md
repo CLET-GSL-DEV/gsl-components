@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Upgrading from any earlier version? See [`demo/docs/pages/migration-v2.mdx`](demo/docs/pages/migration-v2.mdx) for the one upgrade path: run the codemod, then the few things it cannot decide.
 
+## [Unreleased]
+
+## [2.4.3] - 2026-10-03
+
+### Added
+
+- **DocumentViewer**: read-only preview for PDF and images (`src` or `File`/`Blob`) via native browser embeds, plus an A4 page stack for React `children`. Export `DocumentViewerPage` for each sheet (multi-page invoices, etc.). Unsupported types show a clear fallback; toolbar download is enabled by default for URL/`file` sources and A4 React documents (A4 rasterizes sheets to a multi-page `.pdf`; `download={false}` hides it); no new dependencies.
+- **DocumentViewer**: multi-document gallery via `documents` (`DocumentViewerItem[]`) with toolbar prev/next, `"N of M"` status, and `index` / `defaultIndex` / `onIndexChange`. Arrow Left/Right when the preview region is focused. Single `src`/`file` and A4 APIs unchanged.
+
 ## [2.4.1] - 2026-09-24
 
 ### Added

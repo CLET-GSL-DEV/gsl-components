@@ -32,6 +32,7 @@ export * from "./components/page-section";
 export * from "./components/phone-number-input";
 export * from "./components/date-range-selector";
 export * from "./components/dialog";
+export * from "./components/document-viewer";
 export * from "./components/draggable";
 export * from "./components/dropdown";
 export * from "./components/empty-state";
