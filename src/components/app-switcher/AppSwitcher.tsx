@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { useAppSwitcher } from "./hooks/useAppSwitcher";
 import type { AppItem, AppSwitcherProps } from "../../types/app-switcher";
 import { AppSwitcherItem } from "./AppSwitcherItem";
-import { GridIcon } from "./GridIcon";
+import { SquaresFourIcon } from "@phosphor-icons/react/ssr";
 import "./styles/app-switcher.css";
 
 function getPopoverPlacement(placement: AppSwitcherProps["placement"]) {
@@ -74,7 +74,7 @@ export function AppSwitcher({
             className="clet-app-switcher__trigger gsl-app-switcher__trigger"
             aria-label={triggerLabel}
           >
-            {trigger ?? <GridIcon />}
+            {trigger ?? <SquaresFourIcon size={20} weight="duotone" aria-hidden />}
           </button>
         </Popover.Trigger>
 

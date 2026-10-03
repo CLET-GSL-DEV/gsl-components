@@ -1,5 +1,10 @@
 /* Banner: full-width page-level notice with a 4px accent bar. The accent,
-   tint, and action link all carry the same status colour per variant. */
+   the border or tint, and the action all carry the same status colour per
+   variant (`--clet-banner-tone`).
+   - outlined (default): transparent surface, toned border, neutral shadow.
+   - filled: toned tint, no border, no shadow.
+   Entry: the banner grows from the accent out to full width, and its
+   content fades in once there is room for it. Off under reduced motion. */
 .clet-banner {
   --clet-banner-info-bg: #f6f8fa;
   --clet-banner-info-accent: #0c4a6e;
@@ -12,68 +17,65 @@
   --clet-banner-heading-text: #151b24;
   --clet-banner-subtext-text: #5f6165;
   --clet-banner-close-text: #2e3b4d;
+  --clet-banner-shadow: 0 8px 24px 0 #0b254533;
+  --clet-banner-subtext-lines: 2;
 
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
-  padding: 14px 20px;
+  overflow: hidden;
+  animation: clet-banner-grow 600ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .clet-banner--info {
-  background: var(--gsl-banner-info-bg, var(--clet-banner-info-bg));
-}
-
-.clet-banner--info .clet-banner__accent {
-  background: var(--gsl-banner-info-accent, var(--clet-banner-info-accent));
-}
-
-.clet-banner--info .clet-banner__action {
-  color: var(--gsl-banner-info-accent, var(--clet-banner-info-accent));
+  --clet-banner-tone: var(--gsl-banner-info-accent, var(--clet-banner-info-accent));
+  --clet-banner-tint: var(--gsl-banner-info-bg, var(--clet-banner-info-bg));
 }
 
 .clet-banner--success {
-  background: var(--gsl-banner-success-bg, var(--clet-banner-success-bg));
-}
-
-.clet-banner--success .clet-banner__accent {
-  background: var(--gsl-banner-success-accent, var(--clet-banner-success-accent));
-}
-
-.clet-banner--success .clet-banner__action {
-  color: var(--gsl-banner-success-accent, var(--clet-banner-success-accent));
+  --clet-banner-tone: var(--gsl-banner-success-accent, var(--clet-banner-success-accent));
+  --clet-banner-tint: var(--gsl-banner-success-bg, var(--clet-banner-success-bg));
 }
 
 .clet-banner--warning {
-  background: var(--gsl-banner-warning-bg, var(--clet-banner-warning-bg));
-}
-
-.clet-banner--warning .clet-banner__accent {
-  background: var(--gsl-banner-warning-accent, var(--clet-banner-warning-accent));
-}
-
-.clet-banner--warning .clet-banner__action {
-  color: var(--gsl-banner-warning-accent, var(--clet-banner-warning-accent));
+  --clet-banner-tone: var(--gsl-banner-warning-accent, var(--clet-banner-warning-accent));
+  --clet-banner-tint: var(--gsl-banner-warning-bg, var(--clet-banner-warning-bg));
 }
 
 .clet-banner--danger {
-  background: var(--gsl-banner-danger-bg, var(--clet-banner-danger-bg));
+  --clet-banner-tone: var(--gsl-banner-danger-accent, var(--clet-banner-danger-accent));
+  --clet-banner-tint: var(--gsl-banner-danger-bg, var(--clet-banner-danger-bg));
 }
 
-.clet-banner--danger .clet-banner__accent {
-  background: var(--gsl-banner-danger-accent, var(--clet-banner-danger-accent));
+.clet-banner--outlined {
+  padding: 16px 20px;
+  border: 1px solid color-mix(in srgb, var(--clet-banner-tone) 80%, transparent);
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: var(--gsl-banner-shadow, var(--clet-banner-shadow));
 }
 
-.clet-banner--danger .clet-banner__action {
-  color: var(--gsl-banner-danger-accent, var(--clet-banner-danger-accent));
+.clet-banner--filled {
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--clet-banner-tint);
 }
 
 .clet-banner__accent {
   flex-shrink: 0;
-  align-self: stretch;
   width: 4px;
-  min-height: 24px;
   border-radius: 4px;
+  background: var(--clet-banner-tone);
+}
+
+.clet-banner--outlined .clet-banner__accent {
+  height: 24px;
+}
+
+.clet-banner--filled .clet-banner__accent {
+  align-self: stretch;
+  min-height: 24px;
 }
 
 .clet-banner__content {
@@ -81,19 +83,71 @@
   min-width: 0;
   flex: 1;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .clet-banner__heading {
   font-size: var(--gsl-text-size-base, var(--clet-text-size-base));
+  font-weight: 500;
   line-height: 1.4;
   color: var(--gsl-banner-heading-text, var(--clet-banner-heading-text));
 }
 
+/* The row is a flex container so the clamped subtext gets a definite
+   height, which the float trick below measures against. */
+.clet-banner__subtext-row {
+  display: flex;
+}
+
 .clet-banner__subtext {
   font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
-  line-height: 1.4;
+  line-height: 1.5;
   color: var(--gsl-banner-subtext-text, var(--clet-banner-subtext-text));
+}
+
+.clet-banner__subtext--clamped {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--clet-banner-subtext-lines);
+}
+
+/* A spacer floated right, one line short of the full height, pushes the
+   toggle (floated right after it) down onto the last visible line, so it
+   sits at the end of the clamped text with the ellipsis before it. */
+.clet-banner__subtext--clamped::before {
+  content: "";
+  float: right;
+  height: calc(100% - 1lh);
+}
+
+.clet-banner__subtext--clamped .clet-banner__more {
+  float: right;
+  clear: both;
+}
+
+.clet-banner__more {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  background: none;
+  color: var(--clet-banner-tone);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clet-banner__more:hover {
+  text-decoration: underline;
+}
+
+/* Inset: the clamped subtext clips anything drawn outside the toggle. */
+.clet-banner__more:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: -2px;
 }
 
 .clet-banner__actions {
@@ -107,15 +161,32 @@
   font-size: var(--gsl-text-size-sm, var(--clet-text-size-sm));
   font-weight: 600;
   line-height: 1.25;
+  color: var(--clet-banner-tone);
 }
 
-.clet-banner__action a {
+/* The action reads as plain text in the tone colour, never a boxed button:
+   a button placed here loses its chrome and keeps only its label. */
+.clet-banner__action a,
+.clet-banner__action button {
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  background: none;
   color: inherit;
+  font: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.clet-banner__action a:hover {
+.clet-banner__action a:hover,
+.clet-banner__action button:hover {
   text-decoration: underline;
+}
+
+.clet-banner__action a:focus-visible,
+.clet-banner__action button:focus-visible {
+  outline: 2px solid var(--gsl-focus, var(--clet-focus));
+  outline-offset: 2px;
 }
 
 .clet-banner__close {
@@ -139,8 +210,34 @@
   outline-offset: 2px;
 }
 
+/* Content waits for the width: text reflowing through a narrow box is
+   never shown. */
+.clet-banner__content,
+.clet-banner__actions {
+  animation: clet-banner-content-in 600ms ease backwards;
+}
+
+@keyframes clet-banner-grow {
+  from {
+    width: 56px;
+  }
+}
+
+@keyframes clet-banner-content-in {
+  0%,
+  55% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .clet-banner {
-    transition: none;
+  .clet-banner,
+  .clet-banner__content,
+  .clet-banner__actions {
+    animation: none;
   }
 }

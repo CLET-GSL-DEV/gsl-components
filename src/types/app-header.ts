@@ -15,6 +15,8 @@ export interface AppHeaderProps extends HTMLAttributes<HTMLDivElement> {
    * - `"primary"`: square edges, primary background, on-primary text.
    */
   variant?: "default" | "plain" | "primary";
+  /** Accessible name of the mobile "More actions" trigger (default: "More actions"). */
+  overflowLabel?: string;
 }
 
 export interface AppHeaderActionsProps {
@@ -90,6 +92,14 @@ export interface AppHeaderNotificationsProps {
   loading?: boolean;
   /** Accessible label for the loading state */
   loadingLabel?: string;
+  /**
+   * Unread count shown on the bell's badge. Defaults to the number of
+   * `AppHeaderNotificationItem` children marked `unread`; pass it when the
+   * server knows a total larger than the items rendered.
+   */
+  count?: number;
+  /** Show the unread badge on the bell (default true). Hidden while loading or at 0. */
+  showBadge?: boolean;
 }
 
 export interface AppHeaderFontSizeClassNames {

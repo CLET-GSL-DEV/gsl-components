@@ -14,6 +14,7 @@
   --clet-header-py: var(--gsl-app-layout-body-gap, var(--clet-app-layout-body-gap, 1rem));
   --clet-header-px: var(--gsl-app-layout-body-gap, var(--clet-app-layout-body-gap, 1rem));
   --clet-app-header-font: var(--gsl-font-body, var(--clet-font-body));
+  --clet-app-header-mobile-target: 44px;
 
   position: sticky;
   top: 0;
@@ -64,7 +65,7 @@
   letter-spacing: 0;
   vertical-align: middle;
   text-transform: capitalize;
-  color: var(--gsl-secondary-text, var(--clet-secondary-text));
+  color: var(--gsl-secondary, var(--clet-secondary));
 }
 
 /* ── 2.4 shell: no chevron on the profile trigger ── */
@@ -72,16 +73,23 @@
   display: none;
 }
 
-/* ── 2.4 shell: header icon buttons paint child SVGs as outlines ──
-   primary stroke, transparent fill. No !important: CSS declarations already
-   beat lucide's presentation attributes. */
+/* ── 2.4 shell: header icon buttons paint child SVGs in the primary colour ──
+   Phosphor duotone icons draw with fill="currentColor", so they take `color`.
+   Stroke-drawn icons (lucide, the launchpad grid) keep the outline treatment:
+   primary stroke, transparent fill. */
 .clet-app-header--plain .clet-app-header__notif-btn svg,
 .clet-app-header--plain .clet-app-header-search__trigger svg,
 .clet-app-header--plain .clet-app-header__menu-btn svg,
+.clet-app-header--plain .clet-app-header__overflow-trigger svg,
 .clet-app-header--plain .clet-launchpad__trigger svg,
 .clet-app-header--plain .clet-app-switcher__trigger svg {
   width: 20px;
   height: 20px;
+  color: var(--gsl-primary, var(--clet-primary));
+}
+
+.clet-app-header--plain .clet-launchpad__trigger svg,
+.clet-app-header--plain .clet-app-header__right svg.lucide {
   stroke: var(--gsl-primary, var(--clet-primary));
   fill: none;
 }
@@ -295,12 +303,13 @@
    Shown in place of branding + full actions when AppHeader collapses on
    mobile (inside a SidebarProvider, below the sidebar's mobile breakpoint). */
 
-.clet-app-header__menu-btn {
+.clet-app-header__menu-btn,
+.clet-app-header__overflow-trigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: var(--gsl-app-header-mobile-target, var(--clet-app-header-mobile-target));
+  height: var(--gsl-app-header-mobile-target, var(--clet-app-header-mobile-target));
   flex-shrink: 0;
   border: none;
   border-radius: 50%;
@@ -312,21 +321,26 @@
     color 150ms ease;
 }
 
-.clet-app-header__menu-btn:hover {
+.clet-app-header__menu-btn:hover,
+.clet-app-header__overflow-trigger:hover,
+.clet-app-header__overflow-trigger[data-state="open"] {
   background: var(--gsl-surface-dark, var(--clet-surface-dark));
   color: var(--gsl-text, var(--clet-text));
 }
 
-.clet-app-header__menu-btn:focus-visible {
+.clet-app-header__menu-btn:focus-visible,
+.clet-app-header__overflow-trigger:focus-visible {
   outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
 }
 
-.clet-app-header--primary .clet-app-header__menu-btn {
+.clet-app-header--primary .clet-app-header__menu-btn,
+.clet-app-header--primary .clet-app-header__overflow-trigger {
   color: var(--gsl-app-header-color, var(--clet-app-header-color));
 }
 
-.clet-app-header--primary .clet-app-header__menu-btn:hover {
+.clet-app-header--primary .clet-app-header__menu-btn:hover,
+.clet-app-header--primary .clet-app-header__overflow-trigger:hover {
   background: var(--gsl-app-header-hover-bg, var(--clet-app-header-hover-bg));
   color: var(--gsl-app-header-color, var(--clet-app-header-color));
 }
@@ -338,6 +352,64 @@
   align-items: center;
   gap: 4px;
   margin-left: auto;
+}
+
+/* ── Mobile overflow panel ──
+   Holds the header actions AppHeader collapses on mobile, one labelled row
+   each. Search stacks its label above a full-width field. */
+
+.clet-app-header__overflow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: min(320px, calc(100vw - 32px));
+  padding: 8px;
+  border: 1px solid var(--gsl-border, var(--clet-border));
+  border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));
+  background: var(--gsl-bg, var(--clet-bg));
+  box-shadow: var(--gsl-shadow-md, var(--clet-shadow-md));
+  z-index: var(--gsl-z-popover, var(--clet-z-popover));
+}
+
+.clet-app-header__overflow-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: var(--gsl-app-header-mobile-target, var(--clet-app-header-mobile-target, 44px));
+  padding: 0 8px;
+}
+
+.clet-app-header__overflow-row--stacked {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 8px;
+}
+
+.clet-app-header__overflow-row--stacked .clet-app-header-search {
+  width: 100%;
+  max-width: none;
+}
+
+.clet-app-header__overflow-label {
+  font-size: var(--gsl-text-size-sm, var(--clet-text-size-sm));
+  color: var(--gsl-text, var(--clet-text));
+}
+
+.clet-app-header__overflow-row > :not(.clet-app-header__overflow-label),
+.clet-app-header__overflow-row:not(.clet-app-header__overflow-row--stacked) button {
+  min-width: var(--gsl-app-header-mobile-target, var(--clet-app-header-mobile-target, 44px));
+  min-height: var(--gsl-app-header-mobile-target, var(--clet-app-header-mobile-target, 44px));
+}
+
+.clet-app-header__overflow-row--stacked > :not(.clet-app-header__overflow-label) {
+  min-width: 0;
+}
+
+/* Mobile: every direct control on the right is a 44px tap target (WCAG 2.5.5). */
+.clet-app-header--mobile .clet-app-header__right > * {
+  min-width: var(--gsl-app-header-mobile-target, var(--clet-app-header-mobile-target));
+  min-height: var(--gsl-app-header-mobile-target, var(--clet-app-header-mobile-target));
 }
 
 /* ── Search trigger ── */
@@ -496,6 +568,7 @@
 /* ── Notification button ── */
 
 .clet-app-header__notif-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -521,6 +594,29 @@
 .clet-app-header__notif-btn:focus-visible {
   outline: 2px solid var(--gsl-focus, var(--clet-focus));
   outline-offset: 2px;
+}
+
+/* Unread count, pinned to the bell's top-right. The ring in the header's own
+   surface colour separates it from the button's shadow. */
+.clet-app-header__notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--gsl-error, var(--clet-error));
+  box-shadow: 0 0 0 2px var(--gsl-bg, var(--clet-bg));
+  color: var(--gsl-on-error, var(--clet-on-error));
+  font-size: calc(10px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
 }
 
 /* ── Profile ──

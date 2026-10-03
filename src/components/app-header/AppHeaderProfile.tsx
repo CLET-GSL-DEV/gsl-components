@@ -2,7 +2,12 @@ import { forwardRef } from "react";
 import type { AppHeaderProfileProps } from "../../types/app-header";
 import type { ProfilePopoverItem } from "../../types/profile-popover";
 import { cn } from "../../utils/cn";
-import { ChevronDown, User, Settings, HelpCircle } from "lucide-react";
+import {
+  CaretDownIcon,
+  GearIcon,
+  QuestionIcon,
+  UserIcon,
+} from "@phosphor-icons/react/ssr";
 import { Avatar } from "../avatar/Avatar";
 import { ProfilePopover } from "../profile-popover/ProfilePopover";
 
@@ -69,7 +74,7 @@ export const AppHeaderProfile = forwardRef<
               <span className="clet-app-header__user-name gsl-app-header__user-name">{user.name}</span>
               <span className="clet-app-header__user-role gsl-app-header__user-role">{user.role}</span>
             </div>
-            <ChevronDown size={16} strokeWidth={1.5} aria-hidden />
+            <CaretDownIcon size={16} weight="duotone" aria-hidden />
           </>
         ))}
       {loading ? (
@@ -82,17 +87,17 @@ export const AppHeaderProfile = forwardRef<
 
   const items: ProfilePopoverItem[] = [
     {
-      icon: <User size={20} strokeWidth={1.5} aria-hidden />,
+      icon: <UserIcon size={20} weight="duotone" aria-hidden />,
       label: "My Profile",
       onClick: onProfileClick,
     },
     {
-      icon: <Settings size={20} strokeWidth={1.5} aria-hidden />,
+      icon: <GearIcon size={20} weight="duotone" aria-hidden />,
       label: "Account Settings",
       onClick: onSettingsClick,
     },
     {
-      icon: <HelpCircle size={20} strokeWidth={1.5} aria-hidden />,
+      icon: <QuestionIcon size={20} weight="duotone" aria-hidden />,
       label: "Help & Support",
       onClick: onHelpClick,
     },

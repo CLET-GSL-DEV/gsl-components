@@ -660,6 +660,34 @@ function extractLabelText(node: ReactNode): string {
   return "";
 }
 
+/**
+ * The hover/focus tooltip for a link. Folded, the rail hides the label, so the
+ * tooltip names the link and adds the description under it. Expanded, the
+ * label is already on screen, so the tooltip carries the description alone.
+ */
+function linkTooltipContent(
+  label: string,
+  description: ReactNode,
+  collapsed: boolean,
+): ReactNode {
+  const hasDescription =
+    description !== undefined && description !== null && description !== false;
+
+  if (!hasDescription) return collapsed && label ? label : null;
+  if (!collapsed || !label) return description;
+
+  return (
+    <>
+      <span className="clet-sidebar__link-tooltip-label gsl-sidebar__link-tooltip-label">
+        {label}
+      </span>
+      <span className="clet-sidebar__link-tooltip-description gsl-sidebar__link-tooltip-description">
+        {description}
+      </span>
+    </>
+  );
+}
+
 export const SidebarLink = forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   SidebarLinkProps
@@ -668,6 +696,7 @@ export const SidebarLink = forwardRef<
     active = false,
     asChild = false,
     icon,
+    description,
     to,
     loading = false,
     loadingLabel = "Loading",
@@ -681,6 +710,22 @@ export const SidebarLink = forwardRef<
 ) {
   const { collapsed, isMobile, setOpen } = useSidebar();
   const { Link } = getRouterAdapter();
+  const descriptionId = useId();
+  const hasDescription =
+    description !== undefined && description !== null && description !== false;
+  // The tooltip only exists while open, so a screen reader gets the
+  // description from this hidden copy, wired to the link by aria-describedby.
+  const describedBy = hasDescription
+    ? [props["aria-describedby"], descriptionId].filter(Boolean).join(" ")
+    : props["aria-describedby"];
+  const descriptionNode = hasDescription ? (
+    <span id={descriptionId} className="clet-sidebar__sr-only gsl-sidebar__sr-only">
+      {description}
+    </span>
+  ) : null;
+  const tooltipClassNames = hasDescription
+    ? { content: "clet-sidebar__link-tooltip gsl-sidebar__link-tooltip" }
+    : undefined;
 
   // Navigating from the mobile drawer has to dismiss it, or the destination
   // renders behind it and the next tap hits the backdrop. Typed on HTMLElement
@@ -726,12 +771,17 @@ export const SidebarLink = forwardRef<
       role?: string;
       [key: string]: unknown;
     }>;
-    const tooltipText = extractLabelText(children).trim();
+    const tooltip = linkTooltipContent(
+      extractLabelText(children).trim(),
+      description,
+      collapsed,
+    );
     const childOnClick = child.props.onClick as
       | React.MouseEventHandler<HTMLElement>
       | undefined;
     const linkElement = cloneElement(child, {
       ...props,
+      "aria-describedby": describedBy,
       role: child.props.role ?? "link",
       className: cn(linkClassName, child.props.className),
       onClick: (event: React.MouseEvent<HTMLElement>) => {
@@ -739,22 +789,34 @@ export const SidebarLink = forwardRef<
         handleClick(event);
       },
     });
+    const described = descriptionNode ? (
+      <span className="clet-sidebar__link-wrapper gsl-sidebar__link-wrapper">
+        {linkElement}
+        {descriptionNode}
+      </span>
+    ) : (
+      linkElement
+    );
 
-    if (collapsed && tooltipText) {
+    if (tooltip) {
       return (
-        <Tooltip content={tooltipText} side="right">
-          {linkElement}
+        <Tooltip content={tooltip} side="right" classNames={tooltipClassNames}>
+          {described}
         </Tooltip>
       );
     }
 
-    return linkElement;
+    return described;
   }
 
   const childItems = Children.toArray(children);
   const badgeElement = childItems.find(isSidebarBadgeElement);
   const labelItems = childItems.filter((child) => child !== badgeElement);
-  const tooltipText = extractLabelText(labelItems).trim();
+  const tooltip = linkTooltipContent(
+    extractLabelText(labelItems).trim(),
+    description,
+    collapsed,
+  );
 
   const linkContent = (
     <>
@@ -769,6 +831,7 @@ export const SidebarLink = forwardRef<
       to={to}
       className={linkClassName}
       {...(props as Record<string, unknown>)}
+      aria-describedby={describedBy}
       onClick={handleClick}
     >
       {linkContent}
@@ -780,6 +843,7 @@ export const SidebarLink = forwardRef<
       role="link"
       className={linkClassName}
       {...props}
+      aria-describedby={describedBy}
       onClick={handleClick}
     >
       {linkContent}
@@ -793,12 +857,15 @@ export const SidebarLink = forwardRef<
   );
 
   const linkWrapper = (
-    <span className="clet-sidebar__link-wrapper gsl-sidebar__link-wrapper">{wrappedInner}</span>
+    <span className="clet-sidebar__link-wrapper gsl-sidebar__link-wrapper">
+      {wrappedInner}
+      {descriptionNode}
+    </span>
   );
 
-  if (collapsed && tooltipText) {
+  if (tooltip) {
     return (
-      <Tooltip content={tooltipText} side="right">
+      <Tooltip content={tooltip} side="right" classNames={tooltipClassNames}>
         {linkWrapper}
       </Tooltip>
     );

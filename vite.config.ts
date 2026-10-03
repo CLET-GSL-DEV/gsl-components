@@ -27,6 +27,8 @@ const configs: Record<string, () => ReturnType<typeof defineConfig>> = {
 						id.startsWith("@radix-ui/") ||
 						id === "lucide-react" ||
 						id.startsWith("lucide-react/") ||
+						id === "@phosphor-icons/react" ||
+						id.startsWith("@phosphor-icons/react/") ||
 						id === "lottie-react" ||
 						id.startsWith("lottie-react/") ||
 						id === "lottie-web" ||
@@ -71,6 +73,8 @@ const configs: Record<string, () => ReturnType<typeof defineConfig>> = {
 						id === "react" ||
 						id === "react-dom" ||
 						id === "react/jsx-runtime" ||
+						id === "@phosphor-icons/react" ||
+						id.startsWith("@phosphor-icons/react/") ||
 						id === "lottie-react" ||
 						id.startsWith("lottie-react/") ||
 						id === "lottie-web" ||

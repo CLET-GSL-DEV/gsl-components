@@ -252,6 +252,7 @@ Styled navigation link.
 | `active` | `boolean` | `false` | Applies active link styling |
 | `asChild` | `boolean` | `false` | Merge props onto the child element |
 | `icon` | `ReactNode` | — | Optional leading icon; label wraps in `.clet-sidebar__link-label` for collapse |
+| `description` | `ReactNode` | - | Optional. What this destination does for the signed-in user. Shown in a tooltip on hover and focus whether the rail is expanded or folded (folded, the tooltip shows the label above it), and announced to screen readers as the link's description |
 | `loading` | `boolean` | `false` | Render a shimmering skeleton placeholder instead of the icon/label — see [Loading state](#loading-state) |
 | `loadingLabel` | `string` | `"Loading"` | Accessible label announced while loading |
 | `classNames` | `SidebarLinkClassNames` | — | Part-level class overrides |

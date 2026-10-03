@@ -206,6 +206,14 @@ export interface SidebarLinkProps
   active?: boolean;
   asChild?: boolean;
   icon?: ReactNode;
+  /**
+   * What this destination does for the signed-in user, e.g. "Approve leave
+   * requests raised by your team". Shown in a tooltip on hover and focus,
+   * whether the rail is expanded or folded, and announced to screen readers
+   * as the link's description. Omit it and the link only shows its label
+   * tooltip when folded.
+   */
+  description?: ReactNode;
   /** If provided, renders as a react-router `<Link>` with this path */
   to?: string;
   /** Render a shimmering skeleton placeholder instead of the icon/label, e.g. while nav items are still loading */

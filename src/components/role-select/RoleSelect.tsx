@@ -67,7 +67,9 @@ export function RoleSelect({
                   {selected.icon}
                 </span>
               )}
-              {selected?.name ?? "Select role"}
+              <span className="clet-role-select__trigger-text gsl-role-select__trigger-text">
+                {selected?.name ?? "Select role"}
+              </span>
               <ChevronDown size={16} strokeWidth={1.5} aria-hidden />
             </span>
           </button>

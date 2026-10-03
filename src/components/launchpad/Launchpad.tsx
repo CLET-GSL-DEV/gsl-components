@@ -218,3 +218,5 @@ export function Launchpad({
 		</>
 	);
 }
+
+(Launchpad as unknown as { componentId: string }).componentId = "Launchpad";

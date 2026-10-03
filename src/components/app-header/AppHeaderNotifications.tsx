@@ -1,6 +1,6 @@
 import { Children, forwardRef, isValidElement, useMemo, type ReactNode } from "react";
 import type { AppHeaderNotificationsProps } from "../../types/app-header";
-import { Bell } from "lucide-react";
+import { BellIcon } from "@phosphor-icons/react/ssr";
 import * as Popover from "@radix-ui/react-popover";
 import { cn } from "../../utils/cn";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs/Tabs";
@@ -11,17 +11,20 @@ const HISTORY_TAB = "history";
 /** Splits children by `unread`. Null when none are AppHeaderNotificationItems. */
 function partitionByUnread(
   children: ReactNode,
-): { unread: ReactNode[]; read: ReactNode[] } | null {
+): { unread: ReactNode[]; read: ReactNode[]; unreadCount: number } | null {
   const items = Children.toArray(children);
   const unread: ReactNode[] = [];
   const read: ReactNode[] = [];
   let recognised = false;
+  // Only real unread items count toward the badge; a stray child is shown, not counted.
+  let unreadCount = 0;
 
   for (const child of items) {
     if (isValidElement<{ unread?: boolean }>(child)) {
       const componentId = (child.type as { componentId?: string })?.componentId;
       if (componentId === "AppHeaderNotificationItem") {
         recognised = true;
+        if (child.props.unread) unreadCount += 1;
         (child.props.unread ? unread : read).push(child);
         continue;
       }
@@ -31,12 +34,19 @@ function partitionByUnread(
     unread.push(child);
   }
 
-  return recognised ? { unread, read } : null;
+  return recognised ? { unread, read, unreadCount } : null;
 }
 
+const BADGE_MAX = 99;
+
 export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNotificationsProps>(
-  function AppHeaderNotifications({ className, children, loading, loadingLabel = "Loading notifications..." }, ref) {
+  function AppHeaderNotifications(
+    { className, children, loading, loadingLabel = "Loading notifications...", count, showBadge = true },
+    ref,
+  ) {
     const partitioned = useMemo(() => partitionByUnread(children), [children]);
+    const badgeCount = count ?? partitioned?.unreadCount ?? 0;
+    const badgeVisible = showBadge && !loading && badgeCount > 0;
 
     const skeleton = (
       <div className="clet-notif-popover__loading gsl-notif-popover__loading" aria-label={loadingLabel}>
@@ -64,8 +74,14 @@ export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNot
             type="button"
             className={cn("clet-app-header__notif-btn gsl-app-header__notif-btn", className)}
             aria-label="Notifications"
+            aria-description={badgeVisible ? `${badgeCount} unread` : undefined}
           >
-            <Bell size={18} strokeWidth={1.5} aria-hidden />
+            <BellIcon size={20} weight="duotone" aria-hidden />
+            {badgeVisible ? (
+              <span className="clet-app-header__notif-badge gsl-app-header__notif-badge" aria-hidden>
+                {badgeCount > BADGE_MAX ? `${BADGE_MAX}+` : badgeCount}
+              </span>
+            ) : null}
           </button>
         </Popover.Trigger>
         <Popover.Portal>

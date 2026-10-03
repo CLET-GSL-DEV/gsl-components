@@ -44,15 +44,29 @@
 }
 
 .clet-role-select__trigger-label {
+  flex-shrink: 0;
   font-weight: 500;
   color: var(--gsl-text, var(--clet-text));
 }
 
+/* The value side gives way first, and the role name ellipsises. */
 .clet-role-select__trigger-value {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
   color: var(--gsl-text-secondary, var(--clet-text-secondary));
+}
+
+.clet-role-select__trigger-value > svg {
+  flex-shrink: 0;
+}
+
+.clet-role-select__trigger-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .clet-role-select__trigger-icon {

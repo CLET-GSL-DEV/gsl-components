@@ -27,17 +27,48 @@ import {
 } from "@rfdtech/components";
 
 const mainLinks = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutGrid, badge: undefined },
-  { id: "users", label: "Users", icon: Users, badge: undefined },
-  { id: "roles", label: "Roles & Permissions", icon: Shield, badge: undefined },
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    icon: LayoutGrid,
+    badge: undefined,
+    description: "Live exam figures for the centres you manage",
+  },
+  {
+    id: "users",
+    label: "Users",
+    icon: Users,
+    badge: undefined,
+    description: "Invite staff and suspend accounts",
+  },
+  {
+    id: "roles",
+    label: "Roles & Permissions",
+    icon: Shield,
+    badge: undefined,
+    description: "Decide what each role can see and approve",
+  },
   {
     id: "notifications",
     label: "Notification Templates",
     icon: Bell,
     badge: "New",
+    description: "Edit the emails and SMS candidates receive",
   },
-  { id: "workflow", label: "Workflow Parameters", icon: GitBranch, badge: undefined },
-  { id: "integrations", label: "Integrations", icon: Plug, badge: undefined },
+  {
+    id: "workflow",
+    label: "Workflow Parameters",
+    icon: GitBranch,
+    badge: undefined,
+    description: "Set approval steps and deadlines",
+  },
+  {
+    id: "integrations",
+    label: "Integrations",
+    icon: Plug,
+    badge: undefined,
+    description: "Connect payment and SMS providers",
+  },
 ] as const;
 
 const cbtLinks = [
@@ -95,10 +126,11 @@ export function SidebarExample() {
             <SidebarContent>
               <SidebarNav aria-label="Main navigation">
                 <SidebarGroup>
-                  {mainLinks.map(({ id, label, icon: Icon, badge }) => (
+                  {mainLinks.map(({ id, label, icon: Icon, badge, description }) => (
                     <SidebarItem key={id}>
                       <SidebarLink
                         icon={<Icon size={20} strokeWidth={1.75} />}
+                        description={description}
                         active={active === id}
                         onClick={() => setActive(id)}
                       >

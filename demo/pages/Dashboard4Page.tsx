@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Activity,
   Download,
@@ -10,6 +11,7 @@ import {
 } from "lucide-react";
 import {
   Badge,
+  Banner,
   Button,
   Card,
   Dropdown,
@@ -108,6 +110,7 @@ const documentColumns: TableColumn<SupportingDocument>[] = [
  * New components live here — Dashboard3 stays frozen at 2.3.
  */
 export function Dashboard4Page() {
+  const navigate = useNavigate();
   useBreadcrumbs([
     { label: "Home", href: "/" },
     { label: "Users", href: "/users/user-1" },
@@ -194,6 +197,17 @@ export function Dashboard4Page() {
           </SectionActions>
         </SectionHeader>
       </PageSection>
+
+      <Banner
+        heading="New members can now be onboarded directly"
+        subtext="Create an account for each member joining this cycle. They receive a sign-in link by email."
+        action={
+          <button type="button" onClick={() => navigate("/users/new")}>
+            Create user
+          </button>
+        }
+        style={{ marginBottom: "var(--clet-app-layout-body-gap)" }}
+      />
 
       <HeroBanner
         name="Kwame Asante"
