@@ -39,7 +39,9 @@ jobs:
       # Newline "<CVE-/GHSA-/PYSEC- id> <YYYY-MM-DD expiry> <reason>" entries, for an advisory with no fix
       # or a version pinned on purpose. Not counted while active; counted again once expired; a
       # malformed line fails the scan. Accepted ids are listed in the run summary.
-      ACCEPTED_VULNERABILITIES: ""
+      # braces <=3.0.3 DoS (GHSA-vfj7-8cjw-p6xm): no patched release on npm yet (latest is 3.0.3).
+      ACCEPTED_VULNERABILITIES: |
+        GHSA-vfj7-8cjw-p6xm 2026-12-31 no patched braces release on npm (latest 3.0.3); revisit when 3.0.4+ ships
       HUSKY: "0"
       # The package's postinstall wires AI tooling into a consumer project; nothing to do in CI.
       RFDUI_SKIP_SETUP: "1"

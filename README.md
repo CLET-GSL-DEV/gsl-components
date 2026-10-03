@@ -975,6 +975,37 @@ const { open, data, onOpenChange, openWith } = useDialogSearchParam<{
 
 Props: `Dialog` — `open`, `defaultOpen`, `onOpenChange`. `DialogContent` — `showCloseButton`, `classNames`, `className`. Styled parts also support part-level `classNames`. Exported types: `DialogOverlayProps`, `DialogContentProps`, `DialogTitleProps`, `DialogDescriptionProps`, and related `*ClassNames` interfaces.
 
+## DocumentViewer
+
+Read-only document preview for PDF and images (`src` or `file`), a multi-document `documents` gallery with prev/next, or React children stacked as A4 sheets via `DocumentViewerPage`. Compose inside `Modal` / `Sheet` as needed. See the [DocumentViewer](/docs/document-viewer) docs page for props and exported types.
+
+```tsx
+import { DocumentViewer, DocumentViewerPage } from "@rfdtech/components";
+
+<DocumentViewer src="/files/report.pdf" name="report.pdf" />
+
+<DocumentViewer src="/files/photo.png" name="photo.png" type="image" download={false} />
+
+<DocumentViewer
+  documents={[
+    { src: "/files/report.pdf", name: "report.pdf", type: "pdf" },
+    { src: "/files/photo.png", name: "photo.png", type: "image" },
+  ]}
+/>
+
+<DocumentViewer name="INV-2026-0142">
+  <DocumentViewerPage>
+    <h1>Tax invoice</h1>
+    {/* page 1 content */}
+  </DocumentViewerPage>
+  <DocumentViewerPage>
+    {/* page 2 content */}
+  </DocumentViewerPage>
+</DocumentViewer>
+```
+
+Props: `src`, `file`, `documents`, `index`, `defaultIndex`, `onIndexChange`, `type`, `name`, `children`, `showToolbar`, `download` (default `true`; A4 mode exports `.pdf`), `loading`, `classNames`, `className`. Exports: `DocumentViewer`, `DocumentViewerPage`. Types: `DocumentViewerProps`, `DocumentViewerItem`, `DocumentViewerClassNames`, `DocumentViewerKind`, `DocumentViewerPageProps`, `DocumentViewerPageClassNames`.
+
 ## Draggable
 
 Repositionable panel primitive with optional handle and bounded pointer dragging. See the [Draggable](/docs/draggable) docs page for props and exported types.

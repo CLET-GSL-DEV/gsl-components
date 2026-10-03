@@ -40,6 +40,7 @@ export const docNavSections: DocNavSection[] = [
 			{ slug: "date-selector", title: "DateSelector" },
 			{ slug: "date-range-selector", title: "DateRangeSelector" },
 			{ slug: "dialog", title: "Dialog" },
+			{ slug: "document-viewer", title: "DocumentViewer" },
 			{ slug: "draggable", title: "Draggable" },
 			{ slug: "dropdown", title: "Dropdown" },
 			{ slug: "empty-state", title: "EmptyState" },
