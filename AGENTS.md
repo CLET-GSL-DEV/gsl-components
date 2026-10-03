@@ -288,13 +288,9 @@ grep -c "useSearchParams\|RouterProvider" dist/index.js
 
 This is NOT testable within the library's own test suite — the dual-context crash only manifests when the library is installed as a separate package in a consuming app. The grep check above is the closest we can get to an automated verification.
 
-## Git — NEVER TOUCH
+## Git
 
-- **Never run any git command. Ever.** No commit, stage, push, pull, branch, revert, reset, rebase, merge, tag, stash — nothing. Not even if the user asks. Not even `git status`. Not even `git diff`.
-- You may suggest a command as text for the user to run themselves.
-- All git operations are the user's sole responsibility.
-
-### Commit message style (for when user asks for a draft)
+### Commit message style
 
 ```
 feat: add {ComponentName} component with {key features}; update CHANGELOG and navigation
@@ -303,9 +299,9 @@ refactor: {what changed} — {why}
 fix: {what was broken} — {how it was fixed}
 ```
 
-### PR style (for when user asks for a draft)
+### PR style
 
-**Never create a PR on GitHub.** Draft the description in this format and show the compare link. The user creates the PR manually.
+Use this description format when opening or updating a PR:
 
 ```
 ## New

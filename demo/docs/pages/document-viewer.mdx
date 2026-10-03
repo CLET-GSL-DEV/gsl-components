@@ -1,0 +1,149 @@
+export const meta = {
+  title: "DocumentViewer",
+  description: "Read-only PDF, image, and A4 React document preview",
+  category: "Components",
+  keywords: [
+    "document",
+    "viewer",
+    "preview",
+    "pdf",
+    "image",
+    "a4",
+    "readonly",
+    "gallery",
+    "multi",
+  ],
+  since: "2.4.3",
+  status: "stable",
+  related: ["modal", "sheet", "upload-field", "empty-state"],
+  import: "@rfdtech/components",
+};
+
+import { ExampleTabs } from "../components/ExampleTabs";
+import { DocumentViewerA4Preview } from "../previews/code/DocumentViewerA4Preview";
+import documentViewerA4Source from "../previews/examples/document-viewer-a4.example.tsx?raw";
+import { DocumentViewerPdfPreview } from "../previews/code/DocumentViewerPdfPreview";
+import documentViewerPdfSource from "../previews/examples/document-viewer-pdf.example.tsx?raw";
+import { DocumentViewerImagePreview } from "../previews/code/DocumentViewerImagePreview";
+import documentViewerImageSource from "../previews/examples/document-viewer-image.example.tsx?raw";
+import { DocumentViewerUnsupportedPreview } from "../previews/code/DocumentViewerUnsupportedPreview";
+import documentViewerUnsupportedSource from "../previews/examples/document-viewer-unsupported.example.tsx?raw";
+import { DocumentViewerGalleryPreview } from "../previews/code/DocumentViewerGalleryPreview";
+import documentViewerGallerySource from "../previews/examples/document-viewer-gallery.example.tsx?raw";
+
+# DocumentViewer
+
+Read-only preview for documents. Pass a `src` URL or `file` (`File` / `Blob`) for PDF and images, a `documents` list for multi-document prev/next navigation, or React `children` (with no file source) stacked as A4 sheets via `DocumentViewerPage`. Compose inside `Modal` or `Sheet` when you need an overlay — this component is the preview body only.
+
+## A4 invoice
+
+When there is no `src` or `file`, wrap each sheet in `DocumentViewerPage` (210mm x 297mm). Stack as many pages as you need; there is no automatic page-break measuring in v1. The example below is a two-page tax invoice with line-item and payment-schedule tables. Download is on by default and saves a multi-page `.pdf` of the sheets.
+
+<ExampleTabs
+  title="Two-page A4 invoice"
+  preview={<DocumentViewerA4Preview />}
+  code={documentViewerA4Source}
+/>
+
+## PDF
+
+PDF previews use a native browser `<iframe>`. Behaviour depends on the browser's built-in PDF viewer.
+
+<ExampleTabs
+  title="PDF from URL"
+  preview={<DocumentViewerPdfPreview />}
+  code={documentViewerPdfSource}
+/>
+
+## Image
+
+Supported image kinds: png, jpg/jpeg, webp, gif.
+
+<ExampleTabs
+  title="Image from URL"
+  preview={<DocumentViewerImagePreview />}
+  code={documentViewerImageSource}
+/>
+
+## Unsupported type
+
+Other file types show a clear fallback. Download is on by default when a URL/`file` is available; pass `download={false}` to hide it.
+
+<ExampleTabs
+  title="Unsupported fallback"
+  preview={<DocumentViewerUnsupportedPreview />}
+  code={documentViewerUnsupportedSource}
+/>
+
+## Multi-document gallery
+
+Pass a non-empty `documents` array to browse several files with toolbar prev/next and a `"N of M"` status. Use `index` / `defaultIndex` / `onIndexChange` for controlled or uncontrolled index. Arrow keys work when the preview region is focused (ignored inside inputs).
+
+<ExampleTabs
+  title="PDF, image, and unsupported"
+  preview={<DocumentViewerGalleryPreview />}
+  code={documentViewerGallerySource}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `src` | `string` | — | Remote or blob URL. Mutually exclusive with A4 `children` mode when present. |
+| `file` | `File \| Blob` | — | Local file/blob; creates and revokes an object URL internally. |
+| `documents` | `DocumentViewerItem[]` | — | Multi-document list. When non-empty, wins over `src` / `file` / A4 `children`. |
+| `index` | `number` | — | Controlled index into `documents`. |
+| `defaultIndex` | `number` | `0` | Uncontrolled initial index into `documents`. |
+| `onIndexChange` | `(index: number) => void` | — | Called when the active document index changes. |
+| `type` | `"pdf" \| "image" \| "unsupported" \| "auto"` | `"auto"` | Override MIME / extension inference (single-doc mode). |
+| `name` | `string` | — | Toolbar title; also iframe `title` / img `alt` (single-doc mode). |
+| `children` | `ReactNode` | — | A4 page stack when `src`/`file`/`documents` are omitted. Prefer `DocumentViewerPage` per sheet. Ignored when a file source or gallery is set. |
+| `showToolbar` | `boolean` | auto | Defaults to true when `name`, `src`, `file`, or `documents` is present. |
+| `download` | `boolean` | `true` | Show a download control for URL/`file` sources, or a PDF export for A4 React sheets. Pass `false` to disable. |
+| `loading` | `boolean` | `false` | Show a loading placeholder instead of the frame. |
+| `classNames` | `DocumentViewerClassNames` | — | Part-level class overrides. |
+| `className` | `string` | — | Merged onto the root. |
+| `aria-label` | `string` | derived | Accessible name for the preview region. |
+
+## Types
+
+### DocumentViewerProps
+
+Self-contained props for file preview, multi-document gallery, or A4 children mode. Forwards `ref` and remaining `div` attributes onto the root.
+
+### DocumentViewerItem
+
+One entry in `documents`: optional `src`, `file`, `name`, and `type`.
+
+### DocumentViewerPage / DocumentViewerPageProps
+
+One A4 sheet. Place one or more as children of `DocumentViewer` in A4 mode. Supports `classNames.root` / `className`.
+
+### DocumentViewerKind
+
+`"pdf" | "image" | "unsupported"`
+
+### DocumentViewerClassNames
+
+| Key | Applied to |
+|-----|------------|
+| `root` | Outer region |
+| `toolbar` | Top chrome |
+| `title` | Document name |
+| `nav` | Prev/next + status group |
+| `navButton` | Prev / next buttons |
+| `navStatus` | `"N of M"` status text |
+| `canvas` | Scrollable preview area |
+| `frame` | iframe / img wrapper |
+| `pages` | A4 page stack |
+| `page` | Legacy page part key (prefer `DocumentViewerPage`) |
+| `fallback` | Empty / unsupported / loading state |
+
+## Notes
+
+- No new PDF libraries: preview relies on the browser. Some environments block cross-origin PDF iframes.
+- Multi-page A4 documents are authored by stacking `DocumentViewerPage` sheets — the library does not auto-paginate React content. Gallery mode navigates whole documents, not A4 pages within a stack.
+- When `documents` is non-empty, gallery mode wins over `src` / `file` / `children`.
+- When both `children` and `src`/`file` are provided (without `documents`), file preview wins and `children` are ignored.
+- Object URLs from `file` (or the active gallery item’s `file`) are revoked on unmount and when the active file changes.
+- Responsive: at `width <= 768px` each A4 page uses full width and relaxed padding; toolbar controls keep a 40px touch target.

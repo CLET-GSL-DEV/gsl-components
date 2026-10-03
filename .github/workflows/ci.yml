@@ -1,0 +1,71 @@
+# The checks prepublishOnly runs before a release, on every pull request into main and every push to it,
+# so a problem is caught at review rather than at `npm publish`. Publishing stays manual: this workflow
+# holds no registry token and publishes nothing.
+#
+# Self-contained, with public actions pinned by commit SHA (the same pins as the organisation's shared
+# workflows, CLET-GSL-DEV/.github v2.3.0): this repository is public and cannot call those private
+# reusable workflows.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint · Typecheck · Test · Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # The package's postinstall wires AI tooling into a consumer project; nothing to do in CI.
+      RFDUI_SKIP_SETUP: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # pnpm version from package.json's packageManager field.
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          package_json_file: package.json
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint CSS
+        run: pnpm lint:css
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Repository rules
+        run: pnpm rules:check
+
+      - name: Test
+        run: pnpm test
+
+      - name: Type tests
+        run: pnpm test:types
+
+      # `build` also builds the MCP server (build:mcp), so there is no separate step for it.
+      - name: Build
+        run: pnpm build

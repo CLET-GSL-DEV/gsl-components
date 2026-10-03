@@ -19,3 +19,5 @@ overrides:
   qs: '^6.16.0'
   # cosmiconfig chain under stylelint: js-yaml merge-key CPU fix.
   js-yaml: '^4.3.2'
+  # minimatch / glob chains (eslint, vitest, next tooling): ReDoS / prototype pollution fixes.
+  brace-expansion: '^5.0.11'
