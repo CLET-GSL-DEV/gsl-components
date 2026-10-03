@@ -100,7 +100,7 @@ function colStyle(col: {
   return style;
 }
 
-export const Table = forwardRef<HTMLDivElement, TableProps>(function Table(
+export const Table = /* @__PURE__ */ forwardRef<HTMLDivElement, TableProps>(function Table(
   {
     className,
     classNames,
@@ -603,6 +603,7 @@ function TableContentRender<T>(
           classNames?.checkboxCell,
         )}
       >
+        <span className="clet-table__sr-only gsl-table__sr-only">Select</span>
         <Checkbox
           checked={allSelected}
           onCheckedChange={handleSelectAll}
@@ -665,7 +666,9 @@ function TableContentRender<T>(
             "clet-table__actions-cell gsl-table__actions-cell",
             classNames?.actionsCell,
           )}
-        />
+        >
+          <span className="clet-table__sr-only gsl-table__sr-only">Actions</span>
+        </th>
       )}
     </tr>
   );
@@ -699,6 +702,7 @@ function TableContentRender<T>(
                       classNames?.checkboxCell,
                     )}
                   >
+                    <span className="clet-table__sr-only gsl-table__sr-only">Select</span>
                     <span
                       className={cn(
                         "clet-table__skeleton gsl-table__skeleton clet-table__skeleton--cb gsl-table__skeleton--cb",
@@ -736,7 +740,9 @@ function TableContentRender<T>(
                       "clet-table__actions-cell gsl-table__actions-cell",
                       classNames?.actionsCell,
                     )}
-                  />
+                  >
+                    <span className="clet-table__sr-only gsl-table__sr-only">Actions</span>
+                  </th>
                 )}
               </tr>
             </thead>
@@ -919,11 +925,11 @@ function TableContentRender<T>(
   );
 }
 
-export const TableContent = forwardRef(TableContentRender) as <T>(
+export const TableContent = /* @__PURE__ */ forwardRef(TableContentRender) as <T>(
   props: TableContentProps<T> & { ref?: Ref<HTMLDivElement> },
 ) => React.ReactElement;
 
-export const TableFooter = forwardRef<HTMLDivElement, TableFooterProps>(
+export const TableFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, TableFooterProps>(
   function TableFooter(
     { classNames, className, noBorder, children, ...props },
     ref,

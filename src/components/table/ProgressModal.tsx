@@ -16,7 +16,7 @@ interface ProgressModalProps extends HTMLAttributes<HTMLDivElement> {
 	classNames?: ProgressModalClassNames;
 }
 
-export const ProgressModal = forwardRef<HTMLDivElement, ProgressModalProps>(
+export const ProgressModal = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressModalProps>(
 	function ProgressModal(
 		{ open, progress = 0, className, classNames, ...props },
 		ref,

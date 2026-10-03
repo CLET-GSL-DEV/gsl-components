@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import type { FieldContextValue } from "../../types/field";
 
-export const FieldContext = createContext<FieldContextValue | null>(null);
+export const FieldContext = /* @__PURE__ */ createContext<FieldContextValue | null>(null);
 
 export function useFieldContext() {
   const context = useContext(FieldContext);

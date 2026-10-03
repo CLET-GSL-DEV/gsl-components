@@ -9,7 +9,7 @@ import type { OtpInputProps } from "../../types/otp-input";
 import { cn } from "../../utils/cn";
 import "./styles/otp-input.css";
 
-export const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
+export const OtpInput = /* @__PURE__ */ forwardRef<HTMLInputElement, OtpInputProps>(
   function OtpInput(
     {
       invalid = false,

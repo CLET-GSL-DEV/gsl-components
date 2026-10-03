@@ -63,7 +63,7 @@ function resolveInputShortcut(
   return contextShortcut;
 }
 
-export const Command = forwardRef<HTMLDivElement, CommandProps>(
+export const Command = /* @__PURE__ */ forwardRef<HTMLDivElement, CommandProps>(
   function Command({ classNames, className, children, ...props }, ref) {
     const [open, setOpen] = useState(false);
     const inputWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -78,10 +78,20 @@ export const Command = forwardRef<HTMLDivElement, CommandProps>(
       return () => clearTimeout(timeout);
     }, []);
 
+    const popoverLabel = props["aria-label"] ?? props.label ?? "Results";
+
     return (
       <PopoverPrimitive.Root open={open} onOpenChange={setOpen} modal={false}>
         <CommandPopoverProvider
-          value={{ isInline: true, open, setOpen, inputWrapperRef, blurTimeoutRef, cancelPendingClose }}
+          value={{
+            isInline: true,
+            open,
+            setOpen,
+            inputWrapperRef,
+            blurTimeoutRef,
+            cancelPendingClose,
+            label: popoverLabel,
+          }}
         >
           <CommandPrimitive
             ref={ref}
@@ -96,7 +106,7 @@ export const Command = forwardRef<HTMLDivElement, CommandProps>(
   },
 );
 
-export const CommandDialog = forwardRef<HTMLDivElement, CommandDialogProps>(
+export const CommandDialog = /* @__PURE__ */ forwardRef<HTMLDivElement, CommandDialogProps>(
   function CommandDialog(
     {
       classNames,
@@ -181,7 +191,7 @@ export const CommandDialog = forwardRef<HTMLDivElement, CommandDialogProps>(
   },
 );
 
-export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
+export const CommandInput = /* @__PURE__ */ forwardRef<HTMLInputElement, CommandInputProps>(
   function CommandInput({ classNames, className, shortcut, ...props }, ref) {
     const popover = useCommandPopover();
     const dialogContext = useCommandDialog();
@@ -289,9 +299,29 @@ export const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
   },
 );
 
-export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
+export const CommandList = /* @__PURE__ */ forwardRef<HTMLDivElement, CommandListProps>(
   function CommandList({ classNames, className, children, ...props }, ref) {
     const popover = useCommandPopover();
+
+    if (popover?.isInline && !popover.open) {
+      // Closed: only the list renders, so the input's aria-controls still
+      // resolves (DS-05) without Radix mounting its focus guards and an
+      // unnamed dialog. Hidden, as the closed popover was.
+      return (
+        <CommandPrimitive.List
+          ref={ref}
+          className={cn(
+            "clet-command__list gsl-command__list",
+            classNames?.list,
+            className,
+          )}
+          {...props}
+          hidden
+        >
+          {children}
+        </CommandPrimitive.List>
+      );
+    }
 
     if (popover?.isInline) {
       return (
@@ -299,7 +329,7 @@ export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
             className="clet-command__popover gsl-command__popover"
             sideOffset={4}
             align="start"
-            forceMount
+            aria-label={popover.label}
             data-testid="command-popover"
             onOpenAutoFocus={(e) => e.preventDefault()}
             onPointerDown={() => popover.cancelPendingClose()}
@@ -334,7 +364,7 @@ export const CommandList = forwardRef<HTMLDivElement, CommandListProps>(
   },
 );
 
-export const CommandEmpty = forwardRef<HTMLDivElement, CommandEmptyProps>(
+export const CommandEmpty = /* @__PURE__ */ forwardRef<HTMLDivElement, CommandEmptyProps>(
   function CommandEmpty({ classNames, className, children, ...props }, ref) {
     return (
       <CommandPrimitive.Empty
@@ -348,7 +378,7 @@ export const CommandEmpty = forwardRef<HTMLDivElement, CommandEmptyProps>(
   },
 );
 
-export const CommandGroup = forwardRef<HTMLDivElement, CommandGroupProps>(
+export const CommandGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, CommandGroupProps>(
   function CommandGroup(
     {
       classNames,
@@ -389,7 +419,7 @@ export const CommandGroup = forwardRef<HTMLDivElement, CommandGroupProps>(
   },
 );
 
-export const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
+export const CommandItem = /* @__PURE__ */ forwardRef<HTMLDivElement, CommandItemProps>(
   function CommandItem({ classNames, className, children, ...props }, ref) {
     return (
       <CommandPrimitive.Item
@@ -403,7 +433,7 @@ export const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
   },
 );
 
-export const CommandShortcut = forwardRef<HTMLElement, CommandShortcutProps>(
+export const CommandShortcut = /* @__PURE__ */ forwardRef<HTMLElement, CommandShortcutProps>(
   function CommandShortcut({ classNames, className, children }, ref) {
     return (
       <kbd
@@ -416,7 +446,7 @@ export const CommandShortcut = forwardRef<HTMLElement, CommandShortcutProps>(
   },
 );
 
-export const CommandSeparator = forwardRef<
+export const CommandSeparator = /* @__PURE__ */ forwardRef<
   HTMLDivElement,
   CommandSeparatorProps
 >(function CommandSeparator({ classNames, className, ...props }, ref) {
@@ -429,7 +459,7 @@ export const CommandSeparator = forwardRef<
   );
 });
 
-export const CommandLoading = forwardRef<HTMLDivElement, CommandLoadingProps>(
+export const CommandLoading = /* @__PURE__ */ forwardRef<HTMLDivElement, CommandLoadingProps>(
   function CommandLoading({ classNames, className, children, ...props }, ref) {
     return (
       <CommandPrimitive.Loading

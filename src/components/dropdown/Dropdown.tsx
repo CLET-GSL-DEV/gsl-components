@@ -17,6 +17,7 @@ export function Dropdown({
   disabled = false,
   invalid = false,
   "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledby,
   formatOption,
   classNames,
   className,
@@ -77,6 +78,7 @@ export function Dropdown({
             classNames?.trigger,
           )}
           aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledby}
           aria-invalid={invalid || undefined}
         >
           <Select.Value placeholder={placeholder}>{valueDisplay}</Select.Value>

@@ -3,7 +3,7 @@ import type { PageSectionProps } from "../../types/page-section";
 import { cn } from "../../utils/cn";
 import "./styles/page-section.css";
 
-export const PageSection = forwardRef<HTMLDivElement, PageSectionProps>(
+export const PageSection = /* @__PURE__ */ forwardRef<HTMLDivElement, PageSectionProps>(
   function PageSection(
     { classNames, className, children, ...props },
     ref,

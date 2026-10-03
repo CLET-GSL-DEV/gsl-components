@@ -1,7 +1,7 @@
 import { createContext, useMemo } from "react";
 import type { ToastDefaults, ToastProviderProps } from "../../types/toast";
 
-export const ToastDefaultsContext = createContext<ToastDefaults | null>(null);
+export const ToastDefaultsContext = /* @__PURE__ */ createContext<ToastDefaults | null>(null);
 
 export function ToastProvider({
   duration = 5000,

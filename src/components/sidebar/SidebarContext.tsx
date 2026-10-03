@@ -22,7 +22,7 @@ interface SidebarContextValue {
   sidebarId: string;
 }
 
-const SidebarContext = createContext<SidebarContextValue | null>(null);
+const SidebarContext = /* @__PURE__ */ createContext<SidebarContextValue | null>(null);
 
 export function SidebarProvider({
   open: openProp,

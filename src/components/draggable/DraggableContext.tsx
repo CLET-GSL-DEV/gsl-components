@@ -14,7 +14,7 @@ interface DraggableContextValue extends UseDraggableReturn {
   registerHandle: () => () => void;
 }
 
-const DraggableContext = createContext<DraggableContextValue | null>(null);
+const DraggableContext = /* @__PURE__ */ createContext<DraggableContextValue | null>(null);
 
 export function DraggableProvider({
   disabled,

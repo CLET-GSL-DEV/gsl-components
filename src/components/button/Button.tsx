@@ -4,7 +4,7 @@ import { cn } from "../../utils/cn";
 import { Spinner } from "./Spinner";
 import "./styles/button.css";
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
       variant = "secondary",

@@ -24,7 +24,6 @@ import {
   isCsv,
   parseCsvText,
 } from "../utils/parseSpreadsheetFile";
-import { readSheet } from "read-excel-file/browser";
 import { validateRowsChunked } from "../utils/validateRowsChunked";
 import { validateRowFiles } from "../utils/validateMappedRows";
 import {
@@ -276,7 +275,7 @@ export function useBulkImportFlow(
 
           let rawRows: string[][];
           try {
-            rawRows = parseCsvText(text);
+            rawRows = await parseCsvText(text);
           } catch (error) {
             setFlow((prev) => ({ ...prev, parsed: null, parseError: error instanceof BulkImportParseError ? error.message : "Failed to parse the uploaded file." }));
             return;
@@ -307,6 +306,7 @@ export function useBulkImportFlow(
           return;
         }
 
+        const { readSheet } = await import("read-excel-file/browser");
         let rawRows: unknown[][];
         try {
           rawRows = await readSheet(file);

@@ -4,7 +4,7 @@ import type { NoticeProps } from "../../types/notice";
 import { cn } from "../../utils/cn";
 import "./styles/notice.css";
 
-export const Notice = forwardRef<HTMLDivElement, NoticeProps>(function Notice(
+export const Notice = /* @__PURE__ */ forwardRef<HTMLDivElement, NoticeProps>(function Notice(
   {
     variant = "default",
     color,

@@ -7,6 +7,7 @@ import type {
   AppHeaderBrandingProps,
 } from "../../types/app-header";
 import { cn } from "../../utils/cn";
+import { withComponentId } from "../../utils/componentId";
 import { useHasMounted } from "../../hooks/useHasMounted";
 import { useSidebarOptional } from "../sidebar/SidebarContext";
 import { AppHeaderOverflow } from "./AppHeaderOverflow";
@@ -43,7 +44,7 @@ function findByComponentId(
   return found;
 }
 
-export const AppHeader = ({
+const AppHeaderBase = ({
   className,
   children,
   variant = "default",
@@ -124,7 +125,7 @@ export const AppHeader = ({
   );
 };
 
-export const AppHeaderActions = ({ className, children, ...props }: AppHeaderActionsProps) => {
+const AppHeaderActionsBase = ({ className, children, ...props }: AppHeaderActionsProps) => {
   return (
     <div className={cn("clet-app-header__right gsl-app-header__right", className)} {...props}>
       {children}
@@ -132,7 +133,7 @@ export const AppHeaderActions = ({ className, children, ...props }: AppHeaderAct
   );
 };
 
-export const AppHeaderBranding = ({
+const AppHeaderBrandingBase = ({
   className,
   logo,
   title,
@@ -161,9 +162,15 @@ export const AppHeaderBranding = ({
   );
 };
 
-(AppHeader as unknown as { componentId: string }).componentId = "AppHeader";
-(AppHeaderActions as unknown as { componentId: string }).componentId = "AppHeaderActions";
-(AppHeaderBranding as unknown as { componentId: string }).componentId = "AppHeaderBranding";
+export const AppHeader = /* @__PURE__ */ withComponentId(AppHeaderBase, "AppHeader");
+export const AppHeaderActions = /* @__PURE__ */ withComponentId(
+  AppHeaderActionsBase,
+  "AppHeaderActions",
+);
+export const AppHeaderBranding = /* @__PURE__ */ withComponentId(
+  AppHeaderBrandingBase,
+  "AppHeaderBranding",
+);
 
 /**
  * Scroll state for the 2.4 shell. `compact` shrinks the plain header from

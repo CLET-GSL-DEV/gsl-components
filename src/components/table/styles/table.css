@@ -774,6 +774,20 @@ table tbody tr.clet-table__row--clickable:hover {
 	transition: opacity 150ms ease 100ms;
 }
 
+/* ── Visually hidden header text (select and actions columns) ── */
+
+.clet-table__sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
 /* ── Row actions cell ── */
 
 .clet-table__actions-cell {

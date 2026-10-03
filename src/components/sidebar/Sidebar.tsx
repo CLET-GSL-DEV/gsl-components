@@ -18,8 +18,8 @@ import { Menu, PanelLeftClose, PanelLeftOpen, ChevronDown, X } from "lucide-reac
 import { getRouterAdapter } from "../../adapters/registry";
 import { useHasMounted } from "../../hooks/useHasMounted";
 import { Tooltip } from "../tooltip/Tooltip";
-import sidebarBrandImage from "./assets/sidebar-image.png";
-import sidebarBrandLogo from "./assets/clet-logo-vertical.png";
+import sidebarBrandImage from "./assets/sidebar-image.png?no-inline";
+import sidebarBrandLogo from "./assets/clet-logo-vertical.png?no-inline";
 import type {
   SidebarBadgeProps,
   SidebarBrandProps,
@@ -42,14 +42,18 @@ import "./styles/sidebar.css";
 
 export { SidebarProvider, useSidebar, useSidebarOptional } from "./SidebarContext";
 
-const SidebarLinkContext = createContext(false);
+const SidebarLinkContext = /* @__PURE__ */ createContext(false);
 
 /**
  * Carries the rail variant to descendants (e.g. so `SidebarBrand` can
  * render the baked-in brand mark without the consumer passing a logo).
  * Defaults to `"default"` when brand renders outside a `Sidebar`.
  */
-const SidebarVariantContext = createContext<SidebarProps["variant"]>("default");
+const SidebarVariantContext = /* @__PURE__ */ createContext<SidebarProps["variant"]>("default");
+
+/** What can take focus inside the mobile drawer, before the inert/hidden filter. */
+const DRAWER_TABBABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 // Bundlers replace `process.env.NODE_ENV`, so a production build drops the
 // guard below. Unknown (a dev server leaves `process` undefined) means dev.
@@ -82,16 +86,73 @@ interface SidebarGroupContextValue {
   groupToggleClassName?: string;
 }
 
-const SidebarGroupContext = createContext<SidebarGroupContextValue | null>(
+const SidebarGroupContext = /* @__PURE__ */ createContext<SidebarGroupContextValue | null>(
   null,
 );
 
-export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
+export const Sidebar = /* @__PURE__ */ forwardRef<HTMLElement, SidebarProps>(function Sidebar(
   { classNames, className, variant = "default", mobileHeader, children },
   ref,
 ) {
-  const { open, collapsed, isMobile, sidebarId } = useSidebar();
+  const { open, setOpen, collapsed, isMobile, sidebarId } = useSidebar();
   const sidebarRef = useRef<HTMLElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+
+  // The mobile drawer behaves as a modal: focus moves in on open, Tab and
+  // Shift+Tab wrap inside it, Escape closes it, and focus goes back to
+  // whatever opened it (SidebarTrigger or the AppHeader menu button), so
+  // neither trigger needs a ref here. The trap is hand-rolled rather than a
+  // Radix FocusScope: FocusScope pauses every scope but the last mounted one,
+  // and it counts links inside a collapsed (inert) group as tabbable.
+  useEffect(() => {
+    if (!isMobile) return;
+
+    if (!open) {
+      const returnTo = returnFocusRef.current;
+      returnFocusRef.current = null;
+      if (returnTo?.isConnected) returnTo.focus();
+      return;
+    }
+
+    const tabbables = () =>
+      Array.from(
+        sidebarRef.current?.querySelectorAll<HTMLElement>(DRAWER_TABBABLE) ?? [],
+      ).filter(
+        (element) =>
+          !element.closest("[inert], [hidden]") &&
+          element.getClientRects().length > 0,
+      );
+
+    if (document.activeElement instanceof HTMLElement) {
+      returnFocusRef.current = document.activeElement;
+    }
+    tabbables()[0]?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const items = tabbables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
+      const inside = sidebarRef.current?.contains(active) ?? false;
+
+      if (event.shiftKey && (active === first || !inside)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !inside)) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isMobile, open, setOpen]);
 
   const setRefs = useCallback(
     (node: HTMLElement | null) => {
@@ -144,6 +205,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
           className,
         )}
         aria-modal={isMobile && open ? true : undefined}
+        inert={isMobile && !open ? true : undefined}
       >
         <SidebarVariantContext.Provider value={variant}>
           {variant === "brand" ? (
@@ -165,7 +227,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
   );
 });
 
-export const SidebarOverlay = forwardRef<
+export const SidebarOverlay = /* @__PURE__ */ forwardRef<
   HTMLButtonElement,
   SidebarOverlayProps
 >(function SidebarOverlay({ classNames, className, ...props }, ref) {
@@ -197,7 +259,7 @@ export const SidebarOverlay = forwardRef<
   );
 });
 
-export const SidebarTrigger = forwardRef<
+export const SidebarTrigger = /* @__PURE__ */ forwardRef<
   HTMLButtonElement,
   SidebarTriggerProps
 >(function SidebarTrigger(
@@ -239,7 +301,7 @@ export const SidebarTrigger = forwardRef<
   );
 });
 
-export const SidebarCollapse = forwardRef<
+export const SidebarCollapse = /* @__PURE__ */ forwardRef<
   HTMLButtonElement,
   SidebarCollapseProps
 >(function SidebarCollapse({ classNames, className, onClick, ...props }, ref) {
@@ -278,7 +340,7 @@ export const SidebarCollapse = forwardRef<
   );
 });
 
-export const SidebarHeader = forwardRef<HTMLDivElement, SidebarHeaderProps>(
+export const SidebarHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, SidebarHeaderProps>(
   function SidebarHeader({ classNames, className, children }, ref) {
     return (
       <div
@@ -291,7 +353,7 @@ export const SidebarHeader = forwardRef<HTMLDivElement, SidebarHeaderProps>(
   },
 );
 
-export const SidebarBrand = forwardRef<HTMLDivElement, SidebarBrandProps>(
+export const SidebarBrand = /* @__PURE__ */ forwardRef<HTMLDivElement, SidebarBrandProps>(
   function SidebarBrand(
     { classNames, className, logo, title, subtitle, children },
     ref,
@@ -364,7 +426,7 @@ export const SidebarBrand = forwardRef<HTMLDivElement, SidebarBrandProps>(
   },
 );
 
-export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
+export const SidebarContent = /* @__PURE__ */ forwardRef<HTMLDivElement, SidebarContentProps>(
   function SidebarContent({ classNames, className, children }, ref) {
     const internalRef = useRef<HTMLDivElement>(null);
     const [scrolledDown, setScrolledDown] = useState(false);
@@ -424,7 +486,7 @@ export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
   },
 );
 
-export const SidebarFooter = forwardRef<HTMLDivElement, SidebarFooterProps>(
+export const SidebarFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, SidebarFooterProps>(
   function SidebarFooter({ classNames, className, children }, ref) {
     return (
       <div
@@ -439,7 +501,7 @@ export const SidebarFooter = forwardRef<HTMLDivElement, SidebarFooterProps>(
   },
 );
 
-export const SidebarNav = forwardRef<HTMLElement, SidebarNavProps>(
+export const SidebarNav = /* @__PURE__ */ forwardRef<HTMLElement, SidebarNavProps>(
   function SidebarNav(
     {
       classNames,
@@ -463,7 +525,7 @@ export const SidebarNav = forwardRef<HTMLElement, SidebarNavProps>(
   },
 );
 
-export const SidebarGroup = forwardRef<HTMLDivElement, SidebarGroupProps>(
+export const SidebarGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, SidebarGroupProps>(
   function SidebarGroup(
     {
       collapsible = false,
@@ -564,7 +626,7 @@ export const SidebarGroup = forwardRef<HTMLDivElement, SidebarGroupProps>(
   },
 );
 
-export const SidebarGroupLabel = forwardRef<
+export const SidebarGroupLabel = /* @__PURE__ */ forwardRef<
   HTMLParagraphElement | HTMLButtonElement,
   SidebarGroupLabelProps
 >(function SidebarGroupLabel({ classNames, className, children }, ref) {
@@ -612,7 +674,7 @@ export const SidebarGroupLabel = forwardRef<
   );
 });
 
-export const SidebarItem = forwardRef<HTMLDivElement, SidebarItemProps>(
+export const SidebarItem = /* @__PURE__ */ forwardRef<HTMLDivElement, SidebarItemProps>(
   function SidebarItem({ classNames, className, children }, ref) {
     return (
       <div
@@ -625,7 +687,7 @@ export const SidebarItem = forwardRef<HTMLDivElement, SidebarItemProps>(
   },
 );
 
-export const SidebarBadge = forwardRef<HTMLSpanElement, SidebarBadgeProps>(
+export const SidebarBadge = /* @__PURE__ */ forwardRef<HTMLSpanElement, SidebarBadgeProps>(
   function SidebarBadge({ classNames, className, children }, ref) {
     const inLink = useSidebarLinkContext();
 
@@ -688,7 +750,7 @@ function linkTooltipContent(
   );
 }
 
-export const SidebarLink = forwardRef<
+export const SidebarLink = /* @__PURE__ */ forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   SidebarLinkProps
 >(function SidebarLink(

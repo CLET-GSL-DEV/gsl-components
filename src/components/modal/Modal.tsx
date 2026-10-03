@@ -26,7 +26,7 @@ export const ModalTrigger = DialogPrimitive.Trigger;
 export const ModalPortal = DialogPrimitive.Portal;
 export const ModalClose = DialogPrimitive.Close;
 
-export const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(
+export const ModalOverlay = /* @__PURE__ */ forwardRef<HTMLDivElement, ModalOverlayProps>(
   function ModalOverlay({ className, classNames, ...props }, ref) {
     return (
       <DialogPrimitive.Overlay
@@ -38,7 +38,7 @@ export const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(
   },
 );
 
-export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
+export const ModalContent = /* @__PURE__ */ forwardRef<HTMLDivElement, ModalContentProps>(
   function ModalContent(
     {
       className,
@@ -229,7 +229,7 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
   },
 );
 
-export const ModalHeader = forwardRef<HTMLElement, ModalHeaderProps>(
+export const ModalHeader = /* @__PURE__ */ forwardRef<HTMLElement, ModalHeaderProps>(
   function ModalHeader({ className, classNames, ...props }, ref) {
     return (
       <header
@@ -241,7 +241,7 @@ export const ModalHeader = forwardRef<HTMLElement, ModalHeaderProps>(
   },
 );
 
-export const ModalTitle = forwardRef<HTMLHeadingElement, ModalTitleProps>(
+export const ModalTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, ModalTitleProps>(
   function ModalTitle({ className, classNames, ...props }, ref) {
     return (
       <DialogPrimitive.Title
@@ -253,7 +253,7 @@ export const ModalTitle = forwardRef<HTMLHeadingElement, ModalTitleProps>(
   },
 );
 
-export const ModalDescription = forwardRef<
+export const ModalDescription = /* @__PURE__ */ forwardRef<
   HTMLParagraphElement,
   ModalDescriptionProps
 >(function ModalDescription({ className, classNames, ...props }, ref) {
@@ -270,7 +270,7 @@ export const ModalDescription = forwardRef<
   );
 });
 
-export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
+export const ModalBody = /* @__PURE__ */ forwardRef<HTMLDivElement, ModalBodyProps>(
   function ModalBody({ className, classNames, ...props }, ref) {
     return (
       <div
@@ -282,7 +282,7 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
   },
 );
 
-export const ModalFooter = forwardRef<HTMLElement, ModalFooterProps>(
+export const ModalFooter = /* @__PURE__ */ forwardRef<HTMLElement, ModalFooterProps>(
   function ModalFooter({ className, classNames, ...props }, ref) {
     return (
       <footer

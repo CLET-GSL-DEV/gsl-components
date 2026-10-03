@@ -11,7 +11,7 @@ import { createContext, useContext } from "react";
  * trap focus and must NOT claim aria-modal. This context carries the Root's
  * modality down to the Content so the attribute always matches reality.
  */
-const DialogModalityContext = createContext(true);
+const DialogModalityContext = /* @__PURE__ */ createContext(true);
 
 export function useDialogModality(): boolean {
 	return useContext(DialogModalityContext);

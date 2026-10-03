@@ -7,9 +7,11 @@ export interface CommandPopoverContextValue {
   inputWrapperRef: RefObject<HTMLDivElement | null>;
   blurTimeoutRef: RefObject<ReturnType<typeof setTimeout> | undefined>;
   cancelPendingClose: () => void;
+  /** Accessible name of the results popover. */
+  label: string;
 }
 
-const CommandPopoverContext = createContext<CommandPopoverContextValue | null>(null);
+const CommandPopoverContext = /* @__PURE__ */ createContext<CommandPopoverContextValue | null>(null);
 
 export function CommandPopoverProvider({
   children,

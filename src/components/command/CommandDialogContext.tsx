@@ -4,7 +4,7 @@ export interface CommandDialogContextValue {
   inputShortcut?: string;
 }
 
-const CommandDialogContext = createContext<CommandDialogContextValue | null>(
+const CommandDialogContext = /* @__PURE__ */ createContext<CommandDialogContextValue | null>(
   null,
 );
 

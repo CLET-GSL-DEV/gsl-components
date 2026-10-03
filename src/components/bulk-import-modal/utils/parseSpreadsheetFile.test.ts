@@ -21,16 +21,16 @@ describe("isAcceptedSpreadsheetFile", () => {
 });
 
 describe("parseCsvText", () => {
-  it("parses single-column files without a delimiter", () => {
-    expect(parseCsvText("Email\na@example.com\n")).toEqual([
+  it("parses single-column files without a delimiter", async () => {
+    expect(await parseCsvText("Email\na@example.com\n")).toEqual([
       ["Email"],
       ["a@example.com"],
     ]);
   });
 
-  it("handles quoted commas, escaped quotes, and multiline fields", () => {
+  it("handles quoted commas, escaped quotes, and multiline fields", async () => {
     expect(
-      parseCsvText(
+      await parseCsvText(
         'Name,Note\n"Doe, Jane","She said ""hi"""\n"Multi","line one\nline two"\n',
       ),
     ).toEqual([

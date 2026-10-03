@@ -1,8 +1,16 @@
-import { Children, forwardRef, isValidElement, useMemo, type ReactNode } from "react";
+import {
+  Children,
+  forwardRef,
+  isValidElement,
+  useMemo,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import type { AppHeaderNotificationsProps } from "../../types/app-header";
 import { BellIcon } from "@phosphor-icons/react/ssr";
 import * as Popover from "@radix-ui/react-popover";
 import { cn } from "../../utils/cn";
+import { withComponentId } from "../../utils/componentId";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs/Tabs";
 
 const NEW_TAB = "new";
@@ -39,9 +47,19 @@ function partitionByUnread(
 
 const BADGE_MAX = 99;
 
-export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNotificationsProps>(
+const AppHeaderNotificationsBase = /* @__PURE__ */ forwardRef<HTMLButtonElement, AppHeaderNotificationsProps>(
   function AppHeaderNotifications(
-    { className, children, loading, loadingLabel = "Loading notifications...", count, showBadge = true },
+    {
+      className,
+      children,
+      loading,
+      loadingLabel = "Loading notifications...",
+      count,
+      showBadge = true,
+      title = "Notifications",
+      width,
+      align = "end",
+    },
     ref,
   ) {
     const partitioned = useMemo(() => partitionByUnread(children), [children]);
@@ -88,13 +106,21 @@ export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNot
           <Popover.Content
             className="clet-notif-popover gsl-notif-popover"
             side="bottom"
-            align="end"
+            align={align}
             sideOffset={8}
+            style={
+              width === undefined
+                ? undefined
+                : ({
+                    "--clet-notif-popover-width":
+                      typeof width === "number" ? `${width}px` : width,
+                  } as CSSProperties)
+            }
           >
             {loading || !partitioned ? (
               <>
                 <div className="clet-notif-popover__header gsl-notif-popover__header">
-                  <span className="clet-notif-popover__title gsl-notif-popover__title">Notifications</span>
+                  <span className="clet-notif-popover__title gsl-notif-popover__title">{title}</span>
                 </div>
                 <div className="clet-notif-popover__body gsl-notif-popover__body">
                   {loading ? skeleton : children}
@@ -107,7 +133,7 @@ export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNot
                 className="clet-notif-popover__tabs gsl-notif-popover__tabs"
               >
                 <div className="clet-notif-popover__header gsl-notif-popover__header">
-                  <span className="clet-notif-popover__title gsl-notif-popover__title">Notifications</span>
+                  <span className="clet-notif-popover__title gsl-notif-popover__title">{title}</span>
                   <TabsList
                     className="clet-notif-popover__tabs-list gsl-notif-popover__tabs-list"
                     aria-label="Notification filter"
@@ -141,4 +167,7 @@ export const AppHeaderNotifications = forwardRef<HTMLButtonElement, AppHeaderNot
   },
 );
 
-(AppHeaderNotifications as unknown as { componentId: string }).componentId = "AppHeaderNotifications";
+export const AppHeaderNotifications = /* @__PURE__ */ withComponentId(
+  AppHeaderNotificationsBase,
+  "AppHeaderNotifications",
+);

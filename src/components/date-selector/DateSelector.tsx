@@ -105,7 +105,7 @@ function computeCalendarDays(year: number, month: number): Date[] {
   return days;
 }
 
-export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
+export const DateSelector = /* @__PURE__ */ forwardRef<HTMLDivElement, DateSelectorProps>(
   function DateSelector(
     {
       value: controlledValue,

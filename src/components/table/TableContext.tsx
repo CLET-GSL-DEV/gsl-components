@@ -4,7 +4,7 @@ export interface TableContextValue {
   paramPrefix: string | undefined;
 }
 
-export const TableContext = createContext<TableContextValue>({
+export const TableContext = /* @__PURE__ */ createContext<TableContextValue>({
   paramPrefix: undefined,
 });
 

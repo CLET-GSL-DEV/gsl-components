@@ -5,7 +5,7 @@ interface TabsContextValue {
   variant: TabsVariant;
 }
 
-const TabsContext = createContext<TabsContextValue>({
+const TabsContext = /* @__PURE__ */ createContext<TabsContextValue>({
   variant: "default",
 });
 

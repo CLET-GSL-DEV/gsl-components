@@ -13,7 +13,7 @@ import "./styles/country-selector.css";
  * see the [migration guide](/docs/migration-v2). Kept exported and fully working;
  * it receives no further features or design updates.
  */
-export const CountrySelector = forwardRef<HTMLDivElement, CountrySelectorProps>(
+export const CountrySelector = /* @__PURE__ */ forwardRef<HTMLDivElement, CountrySelectorProps>(
   function CountrySelector(
     {
       invalid = false,

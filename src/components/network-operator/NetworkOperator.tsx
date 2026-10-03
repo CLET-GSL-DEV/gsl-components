@@ -32,7 +32,7 @@ const DEFAULT_OPERATORS: NetworkOperatorOption[] = [
  * @deprecated Standalone network-operator picker, superseded by the searchable
  * `Combobox` (build an operator list with `options`) — see the migration guide.
  */
-export const NetworkOperator = forwardRef<HTMLDivElement, NetworkOperatorProps>(
+export const NetworkOperator = /* @__PURE__ */ forwardRef<HTMLDivElement, NetworkOperatorProps>(
   function NetworkOperator(
     {
       invalid = false,

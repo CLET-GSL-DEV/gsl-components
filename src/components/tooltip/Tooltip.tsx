@@ -4,7 +4,7 @@ import type { TooltipProps } from "../../types/tooltip";
 import { cn } from "../../utils/cn";
 import "./styles/tooltip.css";
 
-export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
+export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(
 	function Tooltip(
 		{ content, side = "top", classNames, className, children },
 		ref,

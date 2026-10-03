@@ -3,7 +3,7 @@ import type { CardProps, CardHeaderProps, CardTitleProps, CardActionsProps } fro
 import { cn } from "../../utils/cn";
 import "./styles/card.css";
 
-export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
+export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card(
   { className, bordered, children, style, ...props },
   ref,
 ) {
@@ -23,7 +23,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   );
 });
 
-export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(function CardHeader(
+export const CardHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, CardHeaderProps>(function CardHeader(
   { className, children, ...props },
   ref,
 ) {
@@ -38,7 +38,7 @@ export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(function C
   );
 });
 
-export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(function CardTitle(
+export const CardTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, CardTitleProps>(function CardTitle(
   { className, children, ...props },
   ref,
 ) {
@@ -53,7 +53,7 @@ export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(function
   );
 });
 
-export const CardActions = forwardRef<HTMLDivElement, CardActionsProps>(function CardActions(
+export const CardActions = /* @__PURE__ */ forwardRef<HTMLDivElement, CardActionsProps>(function CardActions(
   { className, children, ...props },
   ref,
 ) {

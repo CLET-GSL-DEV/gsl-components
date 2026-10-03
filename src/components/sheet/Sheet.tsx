@@ -23,7 +23,7 @@ function getSideClassName(side: SheetSide) {
   return `clet-sheet--${side}`;
 }
 
-export const SheetOverlay = forwardRef<HTMLDivElement, SheetOverlayProps>(
+export const SheetOverlay = /* @__PURE__ */ forwardRef<HTMLDivElement, SheetOverlayProps>(
   function SheetOverlay({ className, classNames, ...props }, ref) {
     return (
       <DialogPrimitive.Overlay
@@ -35,7 +35,7 @@ export const SheetOverlay = forwardRef<HTMLDivElement, SheetOverlayProps>(
   },
 );
 
-export const SheetContent = forwardRef<HTMLDivElement, SheetContentProps>(
+export const SheetContent = /* @__PURE__ */ forwardRef<HTMLDivElement, SheetContentProps>(
   function SheetContent(
     {
       className,
@@ -74,7 +74,7 @@ export const SheetContent = forwardRef<HTMLDivElement, SheetContentProps>(
   },
 );
 
-export const SheetHeader = forwardRef<HTMLElement, SheetHeaderProps>(
+export const SheetHeader = /* @__PURE__ */ forwardRef<HTMLElement, SheetHeaderProps>(
   function SheetHeader({ className, classNames, ...props }, ref) {
     return (
       <header
@@ -86,7 +86,7 @@ export const SheetHeader = forwardRef<HTMLElement, SheetHeaderProps>(
   },
 );
 
-export const SheetTitle = forwardRef<HTMLHeadingElement, SheetTitleProps>(
+export const SheetTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, SheetTitleProps>(
   function SheetTitle({ className, classNames, ...props }, ref) {
     return (
       <DialogPrimitive.Title
@@ -98,7 +98,7 @@ export const SheetTitle = forwardRef<HTMLHeadingElement, SheetTitleProps>(
   },
 );
 
-export const SheetDescription = forwardRef<
+export const SheetDescription = /* @__PURE__ */ forwardRef<
   HTMLParagraphElement,
   SheetDescriptionProps
 >(function SheetDescription({ className, classNames, ...props }, ref) {
@@ -115,7 +115,7 @@ export const SheetDescription = forwardRef<
   );
 });
 
-export const SheetBody = forwardRef<HTMLDivElement, SheetBodyProps>(
+export const SheetBody = /* @__PURE__ */ forwardRef<HTMLDivElement, SheetBodyProps>(
   function SheetBody({ className, classNames, ...props }, ref) {
     return (
       <div
@@ -127,7 +127,7 @@ export const SheetBody = forwardRef<HTMLDivElement, SheetBodyProps>(
   },
 );
 
-export const SheetFooter = forwardRef<HTMLElement, SheetFooterProps>(
+export const SheetFooter = /* @__PURE__ */ forwardRef<HTMLElement, SheetFooterProps>(
   function SheetFooter({ className, classNames, ...props }, ref) {
     return (
       <footer

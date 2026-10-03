@@ -45,7 +45,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 /**
  * One A4 sheet inside `DocumentViewer` A4 mode. Stack multiple pages as siblings.
  */
-export const DocumentViewerPage = forwardRef<HTMLDivElement, DocumentViewerPageProps>(
+export const DocumentViewerPage = /* @__PURE__ */ forwardRef<HTMLDivElement, DocumentViewerPageProps>(
   function DocumentViewerPage(
     { classNames, className, children, ...props },
     ref,
@@ -71,7 +71,7 @@ export const DocumentViewerPage = forwardRef<HTMLDivElement, DocumentViewerPageP
  * multi-document galleries with prev/next, or React children in an A4 page
  * stack (`DocumentViewerPage`). Compose inside Modal/Sheet as needed.
  */
-export const DocumentViewer = forwardRef<HTMLDivElement, DocumentViewerProps>(
+export const DocumentViewer = /* @__PURE__ */ forwardRef<HTMLDivElement, DocumentViewerProps>(
   function DocumentViewer(
     {
       src,

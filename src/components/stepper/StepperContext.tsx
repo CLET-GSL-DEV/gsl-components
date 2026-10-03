@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import type { StepperContextValue } from "../../types/stepper";
 
-export const StepperContext = createContext<StepperContextValue | null>(null);
+export const StepperContext = /* @__PURE__ */ createContext<StepperContextValue | null>(null);
 
 export function useStepperContext(): StepperContextValue {
   const context = useContext(StepperContext);

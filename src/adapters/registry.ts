@@ -37,7 +37,8 @@ export function getRouterAdapter(): RouterAdapterValue {
 				"Ensure you import from the correct entry point and have " +
 				"the required peer dependency installed.\n" +
 				"  react-router-dom: import from '@rfdtech/components'\n" +
-				"  Next.js:         import from '@rfdtech/components/next'",
+				"  Next.js:         import from '@rfdtech/components/next'" +
+				"\n  per-component imports: import '@rfdtech/components/react-router' once",
 		);
 	}
 	return inject();

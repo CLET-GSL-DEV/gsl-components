@@ -631,6 +631,27 @@ describe("Table", () => {
     expect(newSet.has("Bob")).toBe(true);
   });
 
+  it("gives every header cell text, including select and actions", () => {
+    render(
+      <Table paramPrefix="test">
+        <TableContent
+          columns={[
+            { id: "name", header: "Name", accessorKey: "name" },
+          ]}
+          data={[{ id: "1", name: "Alpha" }]}
+          rowKey={(row: { id: string }) => row.id}
+          rowActions={[{ id: "edit", label: "Edit", onClick: vi.fn() }]}
+        />
+      </Table>,
+    );
+
+    const headerCells = document.querySelectorAll("thead tr th");
+    expect(headerCells.length).toBeGreaterThan(2);
+    headerCells.forEach((cell) => {
+      expect(cell.textContent?.trim()).not.toBe("");
+    });
+  });
+
   it("opens popover on kebab click and shows row actions", async () => {
     const user = userEvent.setup();
     render(

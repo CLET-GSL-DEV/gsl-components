@@ -15,7 +15,7 @@ interface SortableContextValue {
   disabled: boolean;
 }
 
-const SortableContext = createContext<SortableContextValue | null>(null);
+const SortableContext = /* @__PURE__ */ createContext<SortableContextValue | null>(null);
 
 export function SortableProvider({
   items,
@@ -61,7 +61,7 @@ interface SortableItemContextValue {
   isDragging: boolean;
 }
 
-const SortableItemContext = createContext<SortableItemContextValue | null>(null);
+const SortableItemContext = /* @__PURE__ */ createContext<SortableItemContextValue | null>(null);
 
 export function SortableItemProvider({
   value,

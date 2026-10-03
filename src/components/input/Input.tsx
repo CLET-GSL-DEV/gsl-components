@@ -3,7 +3,7 @@ import type { InputProps } from "../../types/input";
 import { cn } from "../../utils/cn";
 import "./styles/input.css";
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(function Input(
   { invalid = false, classNames, className, disabled, ...props },
   ref,
 ) {

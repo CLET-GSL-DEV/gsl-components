@@ -60,7 +60,7 @@ function toE164(local: string, countryCode: CountryCode): string {
   return country ? country.dialCode + local : local;
 }
 
-export const PhoneNumberInput = forwardRef<
+export const PhoneNumberInput = /* @__PURE__ */ forwardRef<
   HTMLInputElement,
   PhoneNumberInputProps
 >(function PhoneNumberInput(

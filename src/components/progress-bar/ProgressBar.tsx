@@ -7,7 +7,7 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
+export const ProgressBar = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressBarProps>(
   function ProgressBar(
     {
       value = 0,

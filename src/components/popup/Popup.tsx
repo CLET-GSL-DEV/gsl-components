@@ -18,7 +18,7 @@ export const PopupPortal = PopoverPrimitive.Portal;
 export const PopupAnchor = PopoverPrimitive.Anchor;
 export const PopupClose = PopoverPrimitive.Close;
 
-export const PopupContent = forwardRef<HTMLDivElement, PopupContentProps>(
+export const PopupContent = /* @__PURE__ */ forwardRef<HTMLDivElement, PopupContentProps>(
   function PopupContent(
     {
       className,
@@ -52,7 +52,7 @@ export const PopupContent = forwardRef<HTMLDivElement, PopupContentProps>(
   },
 );
 
-export const PopupHeader = forwardRef<HTMLDivElement, PopupHeaderProps>(
+export const PopupHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, PopupHeaderProps>(
   function PopupHeader({ className, classNames, children, ...props }, ref) {
     return (
       <div
@@ -66,7 +66,7 @@ export const PopupHeader = forwardRef<HTMLDivElement, PopupHeaderProps>(
   },
 );
 
-export const PopupTitle = forwardRef<HTMLHeadingElement, PopupTitleProps>(
+export const PopupTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, PopupTitleProps>(
   function PopupTitle({ className, classNames, ...props }, ref) {
     return (
       <h3
@@ -78,7 +78,7 @@ export const PopupTitle = forwardRef<HTMLHeadingElement, PopupTitleProps>(
   },
 );
 
-export const PopupDescription = forwardRef<
+export const PopupDescription = /* @__PURE__ */ forwardRef<
   HTMLParagraphElement,
   PopupDescriptionProps
 >(function PopupDescription({ className, classNames, ...props }, ref) {
@@ -95,7 +95,7 @@ export const PopupDescription = forwardRef<
   );
 });
 
-export const PopupBody = forwardRef<HTMLDivElement, PopupBodyProps>(
+export const PopupBody = /* @__PURE__ */ forwardRef<HTMLDivElement, PopupBodyProps>(
   function PopupBody({ className, classNames, children, ...props }, ref) {
     return (
       <div
@@ -109,7 +109,7 @@ export const PopupBody = forwardRef<HTMLDivElement, PopupBodyProps>(
   },
 );
 
-export const PopupFooter = forwardRef<HTMLDivElement, PopupFooterProps>(
+export const PopupFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, PopupFooterProps>(
   function PopupFooter(
     { className, classNames, layout = "row", children, ...props },
     ref,

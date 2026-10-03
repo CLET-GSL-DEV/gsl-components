@@ -11,7 +11,7 @@ import type { RouterAdapterValue } from "../types/router-adapter";
  *
  * The Next.js entry (`src/next-index.ts`) REQUIRES a provider.
  */
-export const RouterAdapterContext = createContext<RouterAdapterValue | null>(
+export const RouterAdapterContext = /* @__PURE__ */ createContext<RouterAdapterValue | null>(
 	null,
 );
 

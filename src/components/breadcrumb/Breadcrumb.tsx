@@ -18,7 +18,7 @@ import type {
 import { cn } from "../../utils/cn";
 import "./styles/breadcrumb.css";
 
-export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
+export const Breadcrumb = /* @__PURE__ */ forwardRef<HTMLElement, BreadcrumbProps>(
   function Breadcrumb(
     {
       classNames,
@@ -42,7 +42,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
   },
 );
 
-export const BreadcrumbList = forwardRef<HTMLOListElement, BreadcrumbListProps>(
+export const BreadcrumbList = /* @__PURE__ */ forwardRef<HTMLOListElement, BreadcrumbListProps>(
   function BreadcrumbList({ classNames, className, children, ...props }, ref) {
     return (
       <ol
@@ -56,7 +56,7 @@ export const BreadcrumbList = forwardRef<HTMLOListElement, BreadcrumbListProps>(
   },
 );
 
-export const BreadcrumbItem = forwardRef<HTMLLIElement, BreadcrumbItemProps>(
+export const BreadcrumbItem = /* @__PURE__ */ forwardRef<HTMLLIElement, BreadcrumbItemProps>(
   function BreadcrumbItem({ classNames, className, children, ...props }, ref) {
     return (
       <li
@@ -70,7 +70,7 @@ export const BreadcrumbItem = forwardRef<HTMLLIElement, BreadcrumbItemProps>(
   },
 );
 
-export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
+export const BreadcrumbLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
   function BreadcrumbLink(
     {
       asChild = false,
@@ -117,7 +117,7 @@ export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>
   },
 );
 
-export const BreadcrumbPage = forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
+export const BreadcrumbPage = /* @__PURE__ */ forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
   function BreadcrumbPage({ classNames, className, children, ...props }, ref) {
     return (
       <span
@@ -132,7 +132,7 @@ export const BreadcrumbPage = forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
   },
 );
 
-export const BreadcrumbSeparator = forwardRef<
+export const BreadcrumbSeparator = /* @__PURE__ */ forwardRef<
   HTMLLIElement,
   BreadcrumbSeparatorProps
 >(function BreadcrumbSeparator(
@@ -158,7 +158,7 @@ export const BreadcrumbSeparator = forwardRef<
   );
 });
 
-export const BreadcrumbEllipsis = forwardRef<
+export const BreadcrumbEllipsis = /* @__PURE__ */ forwardRef<
   HTMLSpanElement,
   BreadcrumbEllipsisProps
 >(function BreadcrumbEllipsis(

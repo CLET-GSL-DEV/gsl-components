@@ -18,10 +18,11 @@ import {
 } from "../command/Command";
 import type { AppHeaderSearchProps } from "../../types/app-header";
 import { cn } from "../../utils/cn";
+import { withComponentId } from "../../utils/componentId";
 import { useDebounce } from "../../hooks";
 import "./styles/app-header.css";
 
-export const AppHeaderSearch = forwardRef<
+const AppHeaderSearchBase = /* @__PURE__ */ forwardRef<
   HTMLInputElement,
   AppHeaderSearchProps
 >(function AppHeaderSearch(
@@ -229,4 +230,7 @@ export const AppHeaderSearch = forwardRef<
   );
 });
 
-(AppHeaderSearch as unknown as { componentId: string }).componentId = "AppHeaderSearch";
+export const AppHeaderSearch = /* @__PURE__ */ withComponentId(
+  AppHeaderSearchBase,
+  "AppHeaderSearch",
+);

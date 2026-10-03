@@ -1,19 +1,19 @@
-import adinkraHene from "./assets/adinkra-hene.png";
-import akofena from "./assets/akofena.png";
-import akokoNan from "./assets/akoko-nan.png";
-import akomaNtoaso from "./assets/akoma-ntoaso.png";
-import epa from "./assets/epa.png";
-import hwemudua from "./assets/hwemudua.png";
-import mateMasie from "./assets/mate-masie.png";
-import mpuannum from "./assets/mpuannum.png";
-import nkyimkyim from "./assets/nkyimkyim.png";
-import nkyimu from "./assets/nkyimu.png";
-import nyansapo from "./assets/nyansapo.png";
-import oheneAdwa from "./assets/ohene-adwa.png";
-import oheneAniwa from "./assets/ohene-aniwa.png";
-import okodeeMmowere from "./assets/okodee-mmowere.png";
-import osramNeNsroma from "./assets/osram-ne-nsroma.png";
-import sepow from "./assets/sepow.png";
+import adinkraHene from "./assets/adinkra-hene.png?no-inline";
+import akofena from "./assets/akofena.png?no-inline";
+import akokoNan from "./assets/akoko-nan.png?no-inline";
+import akomaNtoaso from "./assets/akoma-ntoaso.png?no-inline";
+import epa from "./assets/epa.png?no-inline";
+import hwemudua from "./assets/hwemudua.png?no-inline";
+import mateMasie from "./assets/mate-masie.png?no-inline";
+import mpuannum from "./assets/mpuannum.png?no-inline";
+import nkyimkyim from "./assets/nkyimkyim.png?no-inline";
+import nkyimu from "./assets/nkyimu.png?no-inline";
+import nyansapo from "./assets/nyansapo.png?no-inline";
+import oheneAdwa from "./assets/ohene-adwa.png?no-inline";
+import oheneAniwa from "./assets/ohene-aniwa.png?no-inline";
+import okodeeMmowere from "./assets/okodee-mmowere.png?no-inline";
+import osramNeNsroma from "./assets/osram-ne-nsroma.png?no-inline";
+import sepow from "./assets/sepow.png?no-inline";
 import type { MetricCardMark } from "../../types/metric-card";
 
 /** Order matters: `pickMark` indexes into MARK_IDS. Append new ones at the end. */

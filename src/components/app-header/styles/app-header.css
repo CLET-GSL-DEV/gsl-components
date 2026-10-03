@@ -650,7 +650,7 @@
 .clet-notif-popover {
   display: flex;
   flex-direction: column;
-  width: 340px;
+  width: var(--clet-notif-popover-width, 340px);
   max-height: 420px;
   overflow: hidden;
   border-radius: var(--gsl-radius-xl, var(--clet-radius-xl));

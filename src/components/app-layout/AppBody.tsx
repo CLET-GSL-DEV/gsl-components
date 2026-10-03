@@ -1,12 +1,13 @@
 import type { ReactNode } from "react";
+import { withComponentId } from "../../utils/componentId";
 
 export interface AppBodyProps {
   children?: ReactNode;
   className?: string;
 }
 
-export const AppBody = ({ children }: AppBodyProps) => {
+const AppBodyBase = ({ children }: AppBodyProps) => {
   return children as ReactNode;
 };
 
-(AppBody as unknown as { componentId: string }).componentId = "AppBody";
+export const AppBody = /* @__PURE__ */ withComponentId(AppBodyBase, "AppBody");

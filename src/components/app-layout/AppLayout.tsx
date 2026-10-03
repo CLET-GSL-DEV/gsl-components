@@ -46,7 +46,7 @@ export interface AppLayoutProps {
  * and SidebarProvider. Auto-positions AppHeader, AppSidebar, and AppBody
  * by componentId. Breadcrumbs render automatically from context.
  */
-export const AppLayout = forwardRef<HTMLDivElement, AppLayoutProps>(
+export const AppLayout = /* @__PURE__ */ forwardRef<HTMLDivElement, AppLayoutProps>(
   function AppLayout(
     { children, className, variant = "default", hideHeader, hideSidebar, version },
     ref,

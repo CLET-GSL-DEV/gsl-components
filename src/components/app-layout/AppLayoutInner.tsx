@@ -27,7 +27,7 @@ export interface AppLayoutInnerProps {
   version?: CletVersion;
 }
 
-export const AppLayoutInner = forwardRef<HTMLDivElement, AppLayoutInnerProps>(
+export const AppLayoutInner = /* @__PURE__ */ forwardRef<HTMLDivElement, AppLayoutInnerProps>(
   function AppLayoutInner(
     { children, className, variant = "default", hideHeader, hideSidebar, version },
     ref,

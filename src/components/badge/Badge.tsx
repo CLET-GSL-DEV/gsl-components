@@ -3,7 +3,7 @@ import type { BadgeProps } from "../../types/badge";
 import { cn } from "../../utils/cn";
 import "./styles/badge.css";
 
-export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
+export const Badge = /* @__PURE__ */ forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
   {
     variant = "default",
     size = "sm",

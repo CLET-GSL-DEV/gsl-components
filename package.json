@@ -9,7 +9,8 @@
   "types": "./dist/index.d.ts",
   "sideEffects": [
     "**/*.css",
-    "./dist/index.css"
+    "./dist/index.css",
+    "./dist/modules/react-router.js"
   ],
   "exports": {
     ".": {
@@ -32,6 +33,16 @@
       "require": "./dist/index.css",
       "default": "./dist/index.css"
     },
+    "./components.css": {
+      "import": "./dist/components.css",
+      "require": "./dist/components.css",
+      "default": "./dist/components.css"
+    },
+    "./fonts.css": {
+      "import": "./dist/fonts.css",
+      "require": "./dist/fonts.css",
+      "default": "./dist/fonts.css"
+    },
     "./next": {
       "import": {
         "types": "./dist/next-index.d.ts",
@@ -41,6 +52,14 @@
         "types": "./dist/next-index.d.ts",
         "default": "./dist/next.cjs"
       }
+    },
+    "./react-router": {
+      "types": "./dist/react-router.d.ts",
+      "import": "./dist/modules/react-router.js"
+    },
+    "./*": {
+      "types": "./dist/components/*/index.d.ts",
+      "import": "./dist/modules/components/*/index.js"
     }
   },
   "files": [
@@ -55,7 +74,8 @@
     "prepare": "npm run generate:tokens && node scripts/install-hooks.mjs",
     "postinstall": "node scripts/postinstall.mjs",
     "generate:tokens": "node scripts/generate-theme-tokens.mjs",
-    "build": "npm run generate:tokens && BUILD_TARGET=default npx vite build && BUILD_TARGET=next npx vite build && node -e \"var fs=require('fs');if(fs.existsSync('dist/next-index.css'))fs.renameSync('dist/next-index.css','dist/next.css')\" && node -e \"var fs=require('fs');['dist/next.js','dist/next.cjs'].forEach(f=>fs.writeFileSync(f,fs.readFileSync(f,'utf8').replace('./next-index.css','./next.css')))\" && tsc -p tsconfig.build.json && cp src/next.d.ts dist/next.d.ts && (cd mcp && npx tsc -p tsconfig.json) && node mcp/scripts/prepare-dist.mjs",
+    "build": "npm run generate:tokens && BUILD_TARGET=default npx vite build && BUILD_TARGET=next npx vite build && node -e \"var fs=require('fs');if(fs.existsSync('dist/next-index.css'))fs.renameSync('dist/next-index.css','dist/next.css')\" && node -e \"var fs=require('fs');['dist/next.js','dist/next.cjs'].forEach(f=>fs.writeFileSync(f,fs.readFileSync(f,'utf8').replace('./next-index.css','./next.css')))\" && BUILD_TARGET=modules npx vite build && node -e \"var fs=require('fs');fs.readdirSync('dist/modules').filter(f=>f.endsWith('.css')).forEach(f=>fs.unlinkSync('dist/modules/'+f))\" && node scripts/split-css.mjs && tsc -p tsconfig.build.json && cp src/next.d.ts dist/next.d.ts && (cd mcp && npx tsc -p tsconfig.json) && node mcp/scripts/prepare-dist.mjs",
+    "check:treeshake": "node scripts/check-treeshake.mjs",
     "build:mcp": "(cd mcp && npx tsc -p tsconfig.json) && node mcp/scripts/prepare-dist.mjs",
     "dev": "vite -c vite.demo.config.ts",
     "demo": "vite build -c vite.demo.config.ts",
@@ -130,6 +150,7 @@
     "lucide-react": "^1.48.0",
     "next": "^16.3.8",
     "papaparse": "^5.7.0",
+    "postcss": "^8.5.28",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.89.0",
@@ -167,8 +188,6 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@fontsource/lato": "^5.3.0",
-    "@fontsource/roboto-serif": "^5.3.0",
     "@modelcontextprotocol/sdk": "^1.30.1",
     "@phosphor-icons/react": "^2.1.10",
     "@radix-ui/react-checkbox": "1.3.11",
@@ -185,7 +204,7 @@
     "cmdk": "^1.1.1",
     "country-flag-icons": "^1.6.20",
     "libphonenumber-js": "^1.13.14",
-    "lottie-react": "^3.1.2",
+    "lottie-web": "^5.13.0",
     "sonner": "^2.0.8",
     "zod": "^4.6.5"
   }
