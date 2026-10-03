@@ -46,6 +46,7 @@ Select-style dropdown for choosing one option from a list. Built on `@radix-ui/r
 | `clearable` | `boolean` | `false` | Adds a menu item that resets to `null` |
 | `disabled` | `boolean` | `false` | Disables the trigger |
 | `aria-label` | `string` | — | Accessible name for the combobox trigger |
+| `aria-labelledby` | `string` | - | Id of a visible label; reaches the trigger. Pass this or `aria-label`, not both |
 | `formatOption` | `(option: DropdownOption \| null, state: "selected" \| "idle" \| "empty") => ReactNode` | — | Custom renderer for option content. Receives the full option (or `null` when empty) and a state flag: `"selected"` in the trigger, `"idle"` in the menu for unselected options, `"empty"` when no value is set. |
 | `classNames` | `DropdownClassNames` | — | Part-level class overrides |
 | `className` | `string` | — | Merged onto the root wrapper |

@@ -351,6 +351,7 @@ Props for `SidebarBadge`.
 
 ## Notes
 
+- On phones the sidebar is a drawer that behaves as a modal: closed, it is `inert` (out of the tab order); opening moves focus inside and traps Tab there; Escape closes it; closing returns focus to the button that opened it (`SidebarTrigger` or the AppHeader menu button).
 - Desktop renders a **card panel** (`--clet-bg` background, 24px radius, icon + label rows) by default. Active links use a neutral gray pill, not primary color.
 - `variant="plain"` swaps the card panel for a transparent background with a right border (`--clet-border`) and no radius.
 - `variant="primary"` repaints the same `--clet-sidebar-*` override points the other variants read, rather than introducing a parallel set: so `cletTheme({ components: { sidebar: { ... } } })` re-themes the rail through the documented token names. Its foreground scale is derived from `--clet-on-primary` at decreasing opacities, so it follows the brand in both themes. `--clet-primary-surface` is a separate token from `--clet-primary` precisely so the rail can deepen in dark mode, where `--clet-primary` lightens for contrast and would otherwise make the rail the brightest surface on screen.

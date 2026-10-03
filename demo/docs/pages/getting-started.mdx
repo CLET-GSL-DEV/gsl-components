@@ -59,6 +59,31 @@ import "@rfdtech/components/style.css";
 </ThemeProvider>
 ```
 
+## Smaller bundles
+
+`style.css` still holds everything, fonts included. To control the fonts yourself, import the two halves instead:
+
+```ts title="main.tsx"
+import "@rfdtech/components/components.css"; // every component style, no fonts
+import "@rfdtech/components/fonts.css"; // Lato, Roboto Serif and Matimo; leave out if you self-host
+```
+
+Images and fonts ship as separate files, so a page only downloads the ones it renders.
+
+To bundle one component at a time, import it from its own entry, and register the router adapter once at the app entry:
+
+```ts title="main.tsx"
+import "@rfdtech/components/react-router";
+import "@rfdtech/components/style.css";
+```
+
+```tsx
+import { Button } from "@rfdtech/components/button";
+import { Sidebar, SidebarLink } from "@rfdtech/components/sidebar";
+```
+
+Pick one import style per app. Never mix the root entry (`@rfdtech/components`) with per-component entries: mixing loads two copies of the React contexts, so a provider from one copy is invisible to components from the other.
+
 ## Requirements
 
 - React 18+
