@@ -26,6 +26,7 @@ import {
 } from "../utils/parseSpreadsheetFile";
 import { readSheet } from "read-excel-file/browser";
 import { validateRowsChunked } from "../utils/validateRowsChunked";
+import { validateRowFiles } from "../utils/validateMappedRows";
 import {
   PARSE_CHUNK_SIZE,
   REMAP_CHUNK_SIZE,
@@ -64,6 +65,7 @@ interface FlowState {
   excludedColumns: number[];
   discardedRows: number[];
   editableRows: Record<string, string>[];
+  rowFiles: Record<number, Record<string, File>>;
   isParsing: boolean;
   uploadedFile: File | null;
 }
@@ -78,6 +80,7 @@ const SEED: FlowState = {
   excludedColumns: [],
   discardedRows: [],
   editableRows: [],
+  rowFiles: {},
   isParsing: false,
   uploadedFile: null,
 };
@@ -120,7 +123,7 @@ export function useBulkImportFlow(
 
   const {
     step, parsed, parseError, headerRowIndex, sourceColumnMapping,
-    excludedColumns, discardedRows, editableRows,
+    excludedColumns, discardedRows, editableRows, rowFiles,
     uploadedFile,
   } = flow;
 
@@ -181,15 +184,30 @@ export function useBulkImportFlow(
       setFlow((prev) => ({
         ...prev,
         editableRows: remapped,
+        // Row indexes may have shifted, so attached files no longer line up.
+        rowFiles: {},
       }));
     }, 0);
 
     return () => clearTimeout(timer);
   }, [step, parsed, headerRowIndex, sourceColumnMapping, excludedColumns]);
 
+  // File-field errors track rowFiles live, so attaching a file clears its error
+  // without re-running the cached cell validation.
+  const fileErrors = useMemo(() => {
+    if (step !== BulkImportStep.VALIDATE_DATA) return [];
+    if (!fields.some((f) => f.type === "file" && f.required)) return [];
+    return editableRows.flatMap((_, index) =>
+      validateRowFiles(index, fields, rowFiles),
+    );
+  }, [step, fields, editableRows, rowFiles]);
+
   const validationErrors = useMemo(
-    () => validationCache.filter((e) => e.severity === "error"),
-    [validationCache],
+    () => [
+      ...validationCache.filter((e) => e.severity === "error"),
+      ...fileErrors,
+    ],
+    [validationCache, fileErrors],
   );
   const validationWarnings = useMemo(
     () => validationCache.filter((e) => e.severity === "warning"),
@@ -427,8 +445,36 @@ export function useBulkImportFlow(
     })();
   }, [step, validationCache.length, editableRows, fields, sourceColumnMapping, excludedColumns]);
 
-  const buildResultRef = useRef<UseBulkImportFlowReturn["buildResult"]>(() => ({ rows: [], errors: [], warnings: [] }));
-  buildResultRef.current = () => ({ rows: activeRows, errors: activeErrors, warnings: activeWarnings });
+  const setRowFile = useCallback(
+    (rowIndex: number, fieldKey: string, file: File | null) => {
+      setFlow((prev) => {
+        const rowEntry = { ...(prev.rowFiles[rowIndex] ?? {}) };
+        if (file) {
+          rowEntry[fieldKey] = file;
+        } else {
+          delete rowEntry[fieldKey];
+        }
+        return { ...prev, rowFiles: { ...prev.rowFiles, [rowIndex]: rowEntry } };
+      });
+    },
+    [],
+  );
+
+  const buildResultRef = useRef<UseBulkImportFlowReturn["buildResult"]>(() => ({ rows: [], errors: [], warnings: [], files: {} }));
+  buildResultRef.current = () => {
+    // Re-key files from editableRows indexes to their position in `rows`.
+    const files: BulkImportResult["files"] = {};
+    let outputIndex = 0;
+    resultRows.forEach((_, index) => {
+      if (discardedRows.includes(index + 1)) return;
+      const attached = rowFiles[index];
+      if (attached && Object.keys(attached).length > 0) {
+        files[outputIndex] = attached;
+      }
+      outputIndex += 1;
+    });
+    return { rows: activeRows, errors: activeErrors, warnings: activeWarnings, files };
+  };
   const buildResult = useCallback((): BulkImportResult => buildResultRef.current(), []);
 
   return {
@@ -461,5 +507,7 @@ export function useBulkImportFlow(
     reset,
     buildResult,
     removeFile,
+    rowFiles,
+    setRowFile,
   };
 }

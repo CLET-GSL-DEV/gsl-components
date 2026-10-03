@@ -3,6 +3,7 @@ import type { ChangeEvent, MutableRefObject } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Checkbox } from "../../checkbox/Checkbox";
 import { Button } from "../../button/Button";
+import { UploadField } from "../../upload-field/UploadField";
 import type {
   BulkImportField,
   BulkImportResult,
@@ -34,6 +35,48 @@ interface ValidateDataStepProps {
   onDiscardSelectedRows: (ids: number[]) => void;
   onResetDiscardedRows: () => void;
   onCanConfirmChange: (canConfirm: boolean) => void;
+  /** Files attached to file-type fields, keyed by index into `mappedRows`, then field key. */
+  rowFiles?: Record<number, Record<string, File>>;
+  /** Attach (or, with `null`, remove) one row's file for a file-type field. */
+  onRowFileChange?: (rowIndex: number, fieldKey: string, file: File | null) => void;
+}
+
+interface FileCellProps {
+  rowIndex: number;
+  field: BulkImportField;
+  file: File | undefined;
+  errorMessage: string | undefined;
+  onRowFileChange?: (rowIndex: number, fieldKey: string, file: File | null) => void;
+}
+
+/** A file-type field has no spreadsheet column: each row attaches its own file here. */
+function FileCell({ rowIndex, field, file, errorMessage, onRowFileChange }: FileCellProps) {
+  return (
+    <span className="clet-bulk-import__cell-inner gsl-bulk-import__cell-inner clet-bulk-import__file-cell gsl-bulk-import__file-cell">
+      <UploadField
+        variant="inline"
+        subtitle=""
+        accept={field.accept}
+        maxSize={field.maxFileSizeBytes}
+        value={file ?? null}
+        invalid={Boolean(errorMessage)}
+        disabled={!onRowFileChange}
+        aria-label={`${field.label}, row ${rowIndex + 1}`}
+        onChange={(next) =>
+          onRowFileChange?.(
+            rowIndex,
+            field.key,
+            Array.isArray(next) ? (next[0] ?? null) : next,
+          )
+        }
+      />
+      {errorMessage && (
+        <span className="clet-bulk-import__cell-error-tooltip gsl-bulk-import__cell-error-tooltip" role="tooltip">
+          {errorMessage}
+        </span>
+      )}
+    </span>
+  );
 }
 
 interface CellInputProps {
@@ -143,6 +186,8 @@ export function ValidateDataStep({
   onDiscardSelectedRows,
   onResetDiscardedRows,
   onCanConfirmChange,
+  rowFiles,
+  onRowFileChange,
 }: ValidateDataStepProps) {
   const [selection, setSelection] = useState<SelectionState>(new Set());
   const [showOnlyErrors, setShowOnlyErrors] = useState(false);
@@ -268,8 +313,13 @@ export function ValidateDataStep({
     return new Set(Object.keys(mappedRows[0]));
   }, [mappedRows]);
 
+  // File fields never come from a column, so they are shown whether or not
+  // they are required: the row is the only place to attach one.
   const visibleFields = useMemo(
-    () => fields.filter((f) => dataKeys.has(f.key) || f.required),
+    () =>
+      fields.filter(
+        (f) => dataKeys.has(f.key) || f.required || f.type === "file",
+      ),
     [fields, dataKeys],
   );
 
@@ -350,10 +400,22 @@ export function ValidateDataStep({
       const rows = patchRows(mappedRows, dirtyCellsRef.current).filter(
         (_, index) => !discardedRows.includes(index + 1),
       );
+      // Re-key attached files from mappedRows indexes to positions in `rows`.
+      const files: BulkImportResult["files"] = {};
+      let outputIndex = 0;
+      mappedRows.forEach((_, index) => {
+        if (discardedRows.includes(index + 1)) return;
+        const attached = rowFiles?.[index];
+        if (attached && Object.keys(attached).length > 0) {
+          files[outputIndex] = attached;
+        }
+        outputIndex += 1;
+      });
       return {
         rows,
         errors: activeErrorList.filter((e) => e.severity === "error"),
         warnings: activeErrorList.filter((e) => e.severity === "warning"),
+        files,
       };
     };
     onCanConfirmChange(
@@ -366,6 +428,7 @@ export function ValidateDataStep({
     discardedRows,
     activeErrorList,
     onCanConfirmChange,
+    rowFiles,
   ]);
 
   // Clear dirty cells on unmount / data change.
@@ -557,16 +620,26 @@ export function ValidateDataStep({
                                         .filter(Boolean)
                                         .join(" ")}
                                     >
-                                      <CellInput
-                                        rowId={rowId}
-                                        fieldKey={field.key}
-                                        field={field}
-                                        baseValue={String(row[field.key] ?? "")}
-                                        errorMessage={errorMessage}
-                                        ariaLabel={`${field.label}, row ${rowId}`}
-                                        dirtyCellsRef={dirtyCellsRef}
-                                        onDirty={handleDirty}
-                                      />
+                                      {field.type === "file" ? (
+                                        <FileCell
+                                          rowIndex={rowId - 1}
+                                          field={field}
+                                          file={rowFiles?.[rowId - 1]?.[field.key]}
+                                          errorMessage={errorMessage}
+                                          onRowFileChange={onRowFileChange}
+                                        />
+                                      ) : (
+                                        <CellInput
+                                          rowId={rowId}
+                                          fieldKey={field.key}
+                                          field={field}
+                                          baseValue={String(row[field.key] ?? "")}
+                                          errorMessage={errorMessage}
+                                          ariaLabel={`${field.label}, row ${rowId}`}
+                                          dirtyCellsRef={dirtyCellsRef}
+                                          onDirty={handleDirty}
+                                        />
+                                      )}
                                     </td>
                                   );
                                 })}

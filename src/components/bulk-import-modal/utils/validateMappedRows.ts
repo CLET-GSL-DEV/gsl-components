@@ -8,14 +8,46 @@ export function validateMappedRows(
   rows: Record<string, string>[],
   fields: BulkImportField[],
   changedRowIndex?: number,
+  files?: Record<number, Record<string, File>>,
 ): BulkImportValidationError[] {
   const uniqueFields = fields.filter((f) => f.unique);
 
   if (changedRowIndex !== undefined && changedRowIndex > 0) {
-    return incrementalValidation(rows, fields, uniqueFields, changedRowIndex);
+    return [
+      ...incrementalValidation(rows, fields, uniqueFields, changedRowIndex),
+      ...validateRowFiles(changedRowIndex - 1, fields, files),
+    ];
   }
 
-  return fullValidation(rows, fields, uniqueFields);
+  const issues = fullValidation(rows, fields, uniqueFields);
+  for (let i = 0; i < rows.length; i++) {
+    issues.push(...validateRowFiles(i, fields, files));
+  }
+  return issues;
+}
+
+/** Required file-type fields must have a file attached for the row. */
+export function validateRowFiles(
+  rowIndex: number,
+  fields: BulkImportField[],
+  files: Record<number, Record<string, File>> | undefined,
+): BulkImportValidationError[] {
+  const issues: BulkImportValidationError[] = [];
+
+  for (const field of fields) {
+    if (field.type !== "file" || !field.required) continue;
+    if (files?.[rowIndex]?.[field.key]) continue;
+
+    issues.push({
+      row: rowIndex + 1,
+      fieldKey: field.key,
+      fieldLabel: field.label,
+      message: "File is required",
+      severity: "error",
+    });
+  }
+
+  return issues;
 }
 
 function fullValidation(
@@ -123,8 +155,9 @@ function incrementalValidation(
 export function validateBatch(
   rows: Record<string, string>[],
   fields: BulkImportField[],
+  files?: Record<number, Record<string, File>>,
 ): BulkImportValidationError[] {
-  return validateMappedRows(rows, fields);
+  return validateMappedRows(rows, fields, undefined, files);
 }
 
 export function splitValidationIssues(issues: BulkImportValidationError[]) {

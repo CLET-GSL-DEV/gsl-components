@@ -6,7 +6,8 @@ export type BulkImportFieldType =
   | "date"
   | "boolean"
   | "url"
-  | "phone";
+  | "phone"
+  | "file";
 
 export interface BulkImportField {
   key: string;
@@ -30,6 +31,10 @@ export interface BulkImportField {
   /** Alternate strings for optimistic column matching (case-insensitive) */
   matchKeys?: string[];
   validate?: (value: string) => string | null;
+  /** file fields only: passed to UploadField `accept` */
+  accept?: string;
+  /** file fields only: passed to UploadField `maxSize` */
+  maxFileSizeBytes?: number;
 }
 
 export interface BulkImportValidationError {
@@ -44,6 +49,8 @@ export interface BulkImportResult {
   rows: Record<string, string>[];
   errors: BulkImportValidationError[];
   warnings: BulkImportValidationError[];
+  /** Files attached to file-type fields. Keyed by index into `rows`, then by field key. */
+  files: Record<number, Record<string, File>>;
 }
 
 export interface BulkImportModalProps {
@@ -130,5 +137,9 @@ export interface UseBulkImportFlowReturn {
   goToStep: (step: BulkImportStep) => void;
   reset: () => void;
   buildResult: () => BulkImportResult;
+  /** Files attached to file-type fields, keyed by index into `editableRows`, then by field key. */
+  rowFiles: Record<number, Record<string, File>>;
+  /** Attach (or, with `null`, remove) a file for one row's file-type field. */
+  setRowFile: (rowIndex: number, fieldKey: string, file: File | null) => void;
   removeFile: () => void;
 }

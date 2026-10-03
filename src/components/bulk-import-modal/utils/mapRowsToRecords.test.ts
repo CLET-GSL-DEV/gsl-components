@@ -5,6 +5,7 @@ import {
   isRequiredMappingComplete,
   mapRowsToRecords,
 } from "./mapRowsToRecords";
+import type { BulkImportField } from "../../../types/bulk-import-modal";
 
 const fields = [
   { key: "email", label: "Email", required: true },
@@ -83,5 +84,25 @@ describe("isRequiredMappingComplete", () => {
     expect(
       isRequiredMappingComplete(fields, { 0: "email", 1: "full_name" }, [1]),
     ).toBe(false);
+  });
+});
+
+describe("file fields", () => {
+  const fields: BulkImportField[] = [
+    { key: "email", label: "Email", required: true },
+    { key: "photo", label: "Photo", type: "file", required: true },
+  ];
+
+  it("does not let a required file field block the mapping", () => {
+    expect(isRequiredMappingComplete(fields, { 0: "email" }, [])).toBe(true);
+  });
+
+  it("never auto-matches a column to a file field", () => {
+    const mapping = autoMatchSourceColumns(fields, [
+      { index: 0, label: "Email" },
+      { index: 1, label: "Photo" },
+    ]);
+
+    expect(mapping).toEqual({ 0: "email", 1: null });
   });
 });

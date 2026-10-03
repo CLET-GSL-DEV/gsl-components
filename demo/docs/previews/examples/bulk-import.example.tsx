@@ -32,9 +32,20 @@ const fields: BulkImportField[] = [
   },
   {
     key: "date_submitted",
+    type: "date",
     label: "Date Submitted",
     required: false,
     example: "2024-01-15",
+  },
+  {
+    // A file field has no spreadsheet column: each row attaches its own file
+    // in the Validate step, and the files come back on `result.files`.
+    key: "supporting_document",
+    type: "file",
+    label: "Supporting Document",
+    required: true,
+    accept: ".pdf,image/*",
+    maxFileSizeBytes: 5 * 1024 * 1024,
   },
   {
     key: "status",

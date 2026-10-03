@@ -82,10 +82,13 @@ export function MatchColumnsStep({
     (column) => !excludedColumns.includes(column.index),
   );
   const previewLimit = previewRows.slice(0, 2);
-  const fieldOptions = fields.map((field) => ({
-    value: field.key,
-    label: field.label,
-  }));
+  // File fields are filled per row in the Validate step, never from a column.
+  const fieldOptions = fields
+    .filter((field) => field.type !== "file")
+    .map((field) => ({
+      value: field.key,
+      label: field.label,
+    }));
 
   const formatOption = useCallback(
     (

@@ -123,6 +123,11 @@ export function validateFieldValue(
   field: BulkImportField,
   rawValue: string,
 ): string | null {
+  // File fields hold no cell value: validateMappedRows checks the attached file.
+  if (field.type === "file") {
+    return null;
+  }
+
   const value = normalizeValue(rawValue, field);
 
   if (field.required && value.length === 0) {

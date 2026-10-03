@@ -1256,6 +1256,60 @@
   height: 100%;
 }
 
+/* File cells: the row's UploadField folds to one line inside the 44px row.
+   Empty, it is only its upload button; with a file, only the file card (name
+   truncated, remove button). The dropzone chrome steps aside, and the td's
+   own error tint carries the invalid state. */
+.clet-bulk-import__file-cell {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.clet-bulk-import__file-cell .clet-upload-field {
+  flex: 1;
+  flex-wrap: nowrap;
+  gap: 6px;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.clet-bulk-import__file-cell .clet-upload-field__icon,
+.clet-bulk-import__file-cell .clet-upload-field__text,
+.clet-bulk-import__file-cell .clet-upload-field--has-files .clet-upload-field__action {
+  display: none;
+}
+
+.clet-bulk-import__file-cell .clet-upload-field__action {
+  height: 28px;
+  margin-left: 0;
+  padding: 0 10px;
+  font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
+}
+
+.clet-bulk-import__file-cell .clet-upload-field__files {
+  flex: 1;
+  min-width: 0;
+}
+
+.clet-bulk-import__file-cell .clet-upload-field__file-card {
+  min-height: 28px;
+  padding: 2px 6px;
+}
+
+.clet-bulk-import__file-cell .clet-upload-field__file-card-size {
+  display: none;
+}
+
+.clet-bulk-import__file-cell .clet-upload-field__file-card-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--gsl-text-size-xs, var(--clet-text-size-xs));
+}
+
 .clet-bulk-import__cell-error-tooltip {
   position: absolute;
   bottom: calc(100% + 6px);

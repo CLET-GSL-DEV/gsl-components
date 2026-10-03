@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { ValidateDataStep } from "./ValidateDataStep";
 import type { BulkImportResult } from "../../../types/bulk-import-modal";
@@ -29,7 +30,7 @@ function makeRef() {
 
 function makeStepResultRef() {
   return {
-    current: (() => ({ rows: [], errors: [], warnings: [] })) as () => BulkImportResult,
+    current: (() => ({ rows: [], errors: [], warnings: [], files: {} })) as () => BulkImportResult,
   };
 }
 
@@ -248,5 +249,72 @@ describe("ValidateDataStep", () => {
     );
 
     expect(onDiscardSelectedRows).toHaveBeenCalledWith([2]);
+  });
+
+  describe("file fields", () => {
+    const fileFields = [
+      ...fields,
+      { key: "certificate", label: "Certificate", required: true, type: "file" as const },
+    ];
+    const certificate = new File(["%PDF"], "cert.pdf", { type: "application/pdf" });
+
+    it("renders a named upload per row and reports the attached file", async () => {
+      const onRowFileChange = vi.fn();
+      render(
+        <ValidateDataStep
+          {...defaultProps}
+          dirtyCellsRef={makeRef()}
+          fields={fileFields}
+          errors={[]}
+          onRowFileChange={onRowFileChange}
+        />,
+      );
+
+      const input = screen.getByLabelText("Certificate, row 2");
+      await userEvent.upload(input, certificate);
+
+      expect(onRowFileChange).toHaveBeenCalledWith(1, "certificate", certificate);
+    });
+
+    it("shows the missing-file error on the file cell", () => {
+      render(
+        <ValidateDataStep
+          {...defaultProps}
+          dirtyCellsRef={makeRef()}
+          fields={fileFields}
+          errors={[
+            {
+              row: 1,
+              fieldKey: "certificate",
+              fieldLabel: "Certificate",
+              message: "File is required",
+              severity: "error",
+            },
+          ]}
+        />,
+      );
+
+      expect(screen.getByRole("tooltip")).toHaveTextContent("File is required");
+      expect(screen.getByLabelText("Certificate, row 1")).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("returns attached files re-keyed past discarded rows", () => {
+      const stepResultRef = makeStepResultRef();
+      render(
+        <ValidateDataStep
+          {...defaultProps}
+          dirtyCellsRef={makeRef()}
+          fields={fileFields}
+          errors={[]}
+          discardedRows={[1]}
+          stepResultRef={stepResultRef}
+          rowFiles={{ 1: { certificate } }}
+        />,
+      );
+
+      const result = stepResultRef.current();
+      expect(result.rows).toEqual([mappedRows[1]]);
+      expect(result.files).toEqual({ 0: { certificate } });
+    });
   });
 });

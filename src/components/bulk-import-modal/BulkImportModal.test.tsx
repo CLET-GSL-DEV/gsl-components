@@ -60,6 +60,7 @@ describe("BulkImportModal", () => {
       rows: [{ email: "a@example.com", full_name: "Ada Lovelace" }],
       errors: [],
       warnings: [],
+      files: {},
     });
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
