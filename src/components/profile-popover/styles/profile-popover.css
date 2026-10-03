@@ -81,8 +81,13 @@
 .clet-app-header__profile {
   display: flex;
   align-items: center;
+  /* 2.4: no padding around the trigger; the avatar is bigger instead
+     (40px, the 2.3 pin keeps 32px and its 8px padding). */
+  --clet-avatar-size: 40px;
+  --clet-avatar-initials-size: calc(15px * var(--gsl-text-scale, var(--clet-text-scale, 1)));
+
   gap: 10px;
-  padding: 8px;
+  padding: 0;
   border: none;
   border-radius: 999px;
   background: transparent;
@@ -108,7 +113,7 @@
 /* Avatar-only variant: just the avatar, popover opens on click */
 .clet-app-header__profile--avatar {
   gap: 0;
-  padding: 4px;
+  padding: 0;
 }
 
 /* Below the sidebar breakpoint variant="full" folds to the avatar shape rather
@@ -117,7 +122,7 @@
 @media (width <= 768px) {
   .clet-app-header__profile {
     gap: 0;
-    padding: 4px;
+    padding: 0;
   }
 
   .clet-app-header__profile .clet-app-header__user-info,
@@ -168,8 +173,8 @@
 }
 
 .clet-app-header__skeleton-avatar {
-  width: 32px;
-  height: 32px;
+  width: var(--clet-avatar-size, 32px);
+  height: var(--clet-avatar-size, 32px);
   border-radius: 50%;
   flex-shrink: 0;
 }

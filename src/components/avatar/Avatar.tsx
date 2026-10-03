@@ -13,10 +13,12 @@ function nameToInitials(name: string): string {
 }
 
 /* Only a numeric `size` needs this: the named sizes carry a class and are sized
-   from the text tokens in avatar.css, so they follow the accessibility scale. */
+   from the text tokens in avatar.css, so they follow the accessibility scale.
+   `--clet-avatar-initials-size` lets a context restyle it together with
+   `--clet-avatar-size`; unset, the value is exactly the computed one. */
 function scaledInitialsSize(px: number): string {
   const base = Math.round(px * 0.38);
-  return `calc(${base}px * var(--gsl-text-scale, var(--clet-text-scale, 1)))`;
+  return `var(--clet-avatar-initials-size, calc(${base}px * var(--gsl-text-scale, var(--clet-text-scale, 1))))`;
 }
 
 function resolveSize(size: AvatarProps["size"]): number {
@@ -57,8 +59,10 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
         className,
       )}
       style={{
-        width: dimension,
-        height: dimension,
+        // A context (e.g. the header profile trigger) can resize the avatar
+        // from CSS; unset, this is the `size` prop as before.
+        width: `var(--clet-avatar-size, ${dimension}px)`,
+        height: `var(--clet-avatar-size, ${dimension}px)`,
       }}
       {...props}
     >
