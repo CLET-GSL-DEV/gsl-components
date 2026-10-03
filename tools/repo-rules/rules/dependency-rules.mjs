@@ -73,13 +73,13 @@ function versionOf(dir) {
 // nothing links to any more are never counted.
  */
 function installedSplit() {
-  const nm = path.join(ROOT, 'node_modules');
-  if (!fs.existsSync(nm)) return [];
+  const nodeModules = path.join(ROOT, 'node_modules');
+  if (!fs.existsSync(nodeModules)) return [];
   const versions = new Map(STATEFUL_RADIX.map((name) => [name, new Set()]));
   const queue = [];
-  const libLink = path.join(nm, '@rfdtech', 'components');
+  const libLink = path.join(nodeModules, '@rfdtech', 'components');
   if (fs.existsSync(libLink)) queue.push(libLink);
-  const radixRoot = path.join(nm, '@radix-ui');
+  const radixRoot = path.join(nodeModules, '@radix-ui');
   if (fs.existsSync(radixRoot)) {
     for (const entry of fs.readdirSync(radixRoot)) {
       queue.push(path.join(radixRoot, entry));
